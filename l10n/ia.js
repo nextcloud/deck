@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Personal",
     "Finished" : "Finite",
     "To review" : "A revider",
     "Action needed" : "Action necessari",
@@ -24,13 +23,13 @@ OC.L10N.register(
     "Edit" : "Modificar",
     "Members" : "Membros",
     "Download" : "Discargar",
+    "Modified" : "Modificate",
     "Attachments" : "Attachamentos",
     "Comments" : "Commentarios",
-    "Modified" : "Modificate",
     "Save" : "Salveguardar",
+    "Created:" : "Create:",
     "Reply" : "Responder",
     "Update" : "Actualisation",
-    "Created:" : "Create:",
     "Description" : "Description",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
@@ -39,9 +38,11 @@ OC.L10N.register(
     "Search" : "Cercar",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
+    "Advanced options" : "Optiones avantiate",
     "Today" : "Hodie",
     "Tomorrow" : "Deman",
     "Close" : "Clauder",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Personal" : "Personal"
 },
 "nplurals=2; plural=(n != 1);");

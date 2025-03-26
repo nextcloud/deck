@@ -496,6 +496,7 @@ export default {
 
 		input[type=text] {
 			flex-grow: 1;
+			padding-right: 16px;
 		}
 
 		input {

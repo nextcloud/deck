@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
@@ -122,7 +123,7 @@ class DeckProviderTest extends TestCase {
 		$this->provider->parse('en_US', $event, $event);
 	}
 
-	public function dataEventIcons() {
+	public static function dataEventIcons() {
 		return [
 			[ActivityManager::SUBJECT_LABEL_ASSIGN, 'core', 'actions/tag.svg'],
 			[ActivityManager::SUBJECT_CARD_CREATE, 'files', 'add-color.svg'],
@@ -165,7 +166,7 @@ class DeckProviderTest extends TestCase {
 			->with('deck.page.index')
 			->willReturn('http://localhost/index.php/apps/deck/');
 		$this->assertEquals(
-			'http://localhost/index.php/apps/deck/#board/1/card/1',
+			'http://localhost/index.php/apps/deck/board/1/card/1',
 			$this->provider->deckUrl('board/1/card/1')
 		);
 	}
@@ -201,7 +202,7 @@ class DeckProviderTest extends TestCase {
 				'type' => 'highlight',
 				'id' => 1,
 				'name' => 'Board',
-				'link' => '#/board/1',
+				'link' => 'board/1',
 			],
 			'user' => [
 				'type' => 'user',
@@ -318,9 +319,9 @@ class DeckProviderTest extends TestCase {
 		$expected = [
 			'board' => [
 				'type' => 'highlight',
-				'id' => 1,
+				'id' => '1',
 				'name' => 'Board name',
-				'link' => '#/board/1/',
+				'link' => 'board/1',
 			],
 		];
 		$actual = $this->invokePrivate($this->provider, 'parseParamForBoard', ['board', $subjectParams, $params]);

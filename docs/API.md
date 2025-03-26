@@ -347,6 +347,34 @@ A 403 response might be returned if the users ability to create new boards has b
 
 ##### 200 Success
 
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive - Archive a card
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+#### Response
+
+##### 200 Success
+
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive - Unarchive a card
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+#### Response
+
+##### 200 Success
+
 ### DELETE /boards/{boardId} - Delete a board
 
 #### Request parameters
@@ -418,6 +446,25 @@ A 403 response might be returned if the users ability to create new boards has b
 | permissionEdit  | Bool   | Setting if the participant has edit permissions |
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
+
+#### Response
+
+##### 200 Success
+
+### POST /boards/{boardId}/clone - Clone a board
+
+Creates a copy of the board.
+
+#### Request body
+
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| withCards  | Bool   | Setting if the cards should be copied (Default: false) |
+| withAssignments  | Bool   | Setting if the card assignments should be cloned (Default: false) |
+| withLabels  | Bool   | Setting if the card labels should be cloned (Default: false) |
+| withDueDate  | Bool   | Setting if the card due dates should be cloned (Default: false) |
+| moveCardsToLeftStack  | Bool   | Setting if all cards should be moved to the most left column (useful for To-Do / Doing / Done boards) (Default: false) |
+| restoreArchivedCards  | Bool   | Setting if the archived cards should be unarchived (Default: false) |
 
 #### Response
 

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Personol",
     "%s on %s" : "%s ar %s",
     "Done" : "Done",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Mae'r ffeil lwythwyd i fyny'n fwy na chyfarwyddeb MAX_FILE_SIZE bennwyd yn y ffurflen HTML",
@@ -21,8 +20,8 @@ OC.L10N.register(
     "Download" : "Llwytho i lawr",
     "Modified" : "Addaswyd",
     "Save" : "Cadw",
-    "Update" : "Diweddaru",
     "Created:" : "Crewyd:",
+    "Update" : "Diweddaru",
     "Description" : "Disgrifiad",
     "Select Date" : "Dewis Dyddiad",
     "seconds ago" : "eiliad yn ôl",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "An error occurred" : "Digwyddodd gwall",
     "Today" : "Heddiw",
     "Close" : "Cau",
-    "Share" : "Rhannu"
+    "Share" : "Rhannu",
+    "Personal" : "Personol"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

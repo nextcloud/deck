@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -46,7 +47,7 @@ class CardTest extends TestCase {
 		return $card;
 	}
 
-	public function dataDuedate() {
+	public static function dataDuedate() {
 		return [
 			[(new DateTime()), Card::DUEDATE_NOW],
 			[(new DateTime())->sub(new DateInterval('P1D')), Card::DUEDATE_OVERDUE],
@@ -89,6 +90,7 @@ class CardTest extends TestCase {
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 			'done' => null,
+			'referenceData' => null,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
@@ -117,6 +119,7 @@ class CardTest extends TestCase {
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 			'done' => false,
+			'referenceData' => null,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 
@@ -147,6 +150,7 @@ class CardTest extends TestCase {
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 			'done' => false,
+			'referenceData' => null,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 }

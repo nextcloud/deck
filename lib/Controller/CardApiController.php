@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -149,6 +150,30 @@ class CardApiController extends ApiController {
 	 */
 	public function unassignUser($cardId, $userId, $type = 0) {
 		$card = $this->assignmentService->unassignUser($cardId, $userId, $type);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Archive card
+	 */
+	public function archive($cardId) {
+		$card = $this->cardService->archive($cardId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Unarchive card
+	 */
+	public function unarchive($cardId) {
+		$card = $this->cardService->unarchive($cardId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 

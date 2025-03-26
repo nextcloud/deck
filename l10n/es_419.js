@@ -2,7 +2,6 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "Deck",
-    "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
     "%s on %s" : "%s en %s",
@@ -36,13 +35,13 @@ OC.L10N.register(
     "Edit" : "Editar",
     "Members" : "Miembros",
     "Download" : "Descargar",
-    "Comments" : "Comentarios",
     "Modified" : "Modificado",
     "Created" : "Creado",
+    "Comments" : "Comentarios",
     "Save" : "Guardar",
+    "Created:" : "Creado:",
     "Reply" : "Responder",
     "Update" : "Actualizar",
-    "Created:" : "Creado:",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Remove due date" : "Eliminar fecha de expiración",
@@ -60,9 +59,11 @@ OC.L10N.register(
     "Archive board" : "Archivar tablero",
     "No notifications" : "No hay notificaciones",
     "Delete board" : "Borrar tableros",
+    "Advanced options" : "Opciones avanzadas",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Personal" : "Personal"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

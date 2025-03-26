@@ -7,7 +7,7 @@
 /.editorconfig
 /.eslintrc.js
 /.nextcloudignore
-/webpack.*.js
+/webpack.js
 /.codecov.yml
 /composer.json
 /composer.lock
@@ -26,3 +26,10 @@
 /package-lock.json
 /node_modules/
 /src/
+/cypress/
+/cypress.config.js
+/.devcontainer/
+/.php-cs-fixer.dist.php
+/psalm.xml
+/relativeci.config.js
+/stylelint.config.js

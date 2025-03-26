@@ -12,7 +12,7 @@ SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = ["l10n/**.js", "l10n/**.json", "js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "lib/Service/Importer/fixtures/config-deckJson-schema.json", "lib/Service/Importer/fixtures/config-trelloApi-schema.json", "lib/Service/Importer/fixtures/config-trelloJson-schema.json", "screenshots/screenshot1.png", "src/assets/file-placeholder.svg", "img/favicon.ico", "img/favicon.png", "img/favicon.svg", "img/activity.svg", "img/activity-dark.svg", "img/deck.svg", "img/deck-current.svg", "img/deck-dark.svg", "img/details-white.svg", "img/card.svg"]
+path = ["l10n/**.js", "l10n/**.json", "js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "lib/Service/Importer/fixtures/config-deckJson-schema.json", "lib/Service/Importer/fixtures/config-trelloApi-schema.json", "lib/Service/Importer/fixtures/config-trelloJson-schema.json", "lib/Service/fixtures/default-board.json", "screenshots/screenshot1.png", "src/assets/file-placeholder.svg", "img/favicon.ico", "img/favicon.png", "img/favicon.svg", "img/activity.svg", "img/activity-dark.svg", "img/deck.svg", "img/deck-current.svg", "img/deck-dark.svg", "img/details-white.svg", "img/card.svg", "img/sample-image.jpg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"

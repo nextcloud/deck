@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -23,6 +24,7 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
@@ -102,6 +104,53 @@ class LabelServiceTest extends TestCase {
 		$this->assertEquals($b->getTitle(), 'NewTitle');
 		$this->assertEquals($b->getBoardId(), 123);
 		$this->assertEquals($b->getColor(), 'ffffff');
+	}
+
+	public function testCloneLabelIfNotExists() {
+		$label = new Label();
+		$label->setId(1);
+		$label->setTitle('title');
+		$label->setColor('00ff00');
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
+
+		$expectedLabel = new Label();
+		$expectedLabel->setTitle('title');
+		$expectedLabel->setColor('00ff00');
+		$expectedLabel->setBoardId(1);
+		$this->labelMapper->expects($this->once())
+			->method('insert')
+			->with($expectedLabel)
+			->willReturn($label);
+		$board = new Board();
+		$board->setLabels([]);
+		$this->boardService->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+		$this->labelService->cloneLabelIfNotExists(1, 1);
+	}
+
+	public function testCloneLabelIfExists() {
+		$label = new Label();
+		$label->setId(1);
+		$label->setTitle('title');
+		$label->setColor('00ff00');
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
+		$this->labelMapper->expects($this->never())
+			->method('insert')
+			->with($label);
+		$board = new Board();
+		$board->setLabels([$label]);
+		$this->boardService->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+		$this->labelService->cloneLabelIfNotExists(1, 1);
+
 	}
 
 	public function testDelete() {

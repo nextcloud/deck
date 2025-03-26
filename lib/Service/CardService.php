@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -28,6 +29,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\CardServiceValidator;
+use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
@@ -36,73 +38,34 @@ use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 class CardService {
-	private CardMapper $cardMapper;
-	private StackMapper $stackMapper;
-	private BoardMapper $boardMapper;
-	private LabelMapper $labelMapper;
-	private LabelService $labelService;
-	private PermissionService $permissionService;
-	private BoardService $boardService;
-	private NotificationHelper $notificationHelper;
-	private AssignmentMapper $assignedUsersMapper;
-	private AttachmentService $attachmentService;
-	private ?string $currentUser;
-	private ActivityManager $activityManager;
-	private ICommentsManager $commentsManager;
-	private ChangeHelper $changeHelper;
-	private IEventDispatcher $eventDispatcher;
-	private IUserManager $userManager;
-	private IURLGenerator $urlGenerator;
-	private LoggerInterface $logger;
-	private IRequest $request;
-	private CardServiceValidator $cardServiceValidator;
-
 	public function __construct(
-		CardMapper $cardMapper,
-		StackMapper $stackMapper,
-		BoardMapper $boardMapper,
-		LabelMapper $labelMapper,
-		LabelService $labelService,
-		PermissionService $permissionService,
-		BoardService $boardService,
-		NotificationHelper $notificationHelper,
-		AssignmentMapper $assignedUsersMapper,
-		AttachmentService $attachmentService,
-		ActivityManager $activityManager,
-		ICommentsManager $commentsManager,
-		IUserManager $userManager,
-		ChangeHelper $changeHelper,
-		IEventDispatcher $eventDispatcher,
-		IURLGenerator $urlGenerator,
-		LoggerInterface $logger,
-		IRequest $request,
-		CardServiceValidator $cardServiceValidator,
-		?string $userId,
+		private CardMapper $cardMapper,
+		private StackMapper $stackMapper,
+		private BoardMapper $boardMapper,
+		private LabelMapper $labelMapper,
+		private LabelService $labelService,
+		private PermissionService $permissionService,
+		private BoardService $boardService,
+		private NotificationHelper $notificationHelper,
+		private AssignmentMapper $assignedUsersMapper,
+		private AttachmentService $attachmentService,
+		private ActivityManager $activityManager,
+		private ICommentsManager $commentsManager,
+		private IUserManager $userManager,
+		private ChangeHelper $changeHelper,
+		private IEventDispatcher $eventDispatcher,
+		private IURLGenerator $urlGenerator,
+		private LoggerInterface $logger,
+		private IRequest $request,
+		private CardServiceValidator $cardServiceValidator,
+		private AssignmentService $assignmentService,
+		private IReferenceManager $referenceManager,
+		private ?string $userId,
 	) {
-		$this->cardMapper = $cardMapper;
-		$this->stackMapper = $stackMapper;
-		$this->boardMapper = $boardMapper;
-		$this->labelMapper = $labelMapper;
-		$this->labelService = $labelService;
-		$this->permissionService = $permissionService;
-		$this->boardService = $boardService;
-		$this->notificationHelper = $notificationHelper;
-		$this->assignedUsersMapper = $assignedUsersMapper;
-		$this->attachmentService = $attachmentService;
-		$this->activityManager = $activityManager;
-		$this->commentsManager = $commentsManager;
-		$this->userManager = $userManager;
-		$this->changeHelper = $changeHelper;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->currentUser = $userId;
-		$this->urlGenerator = $urlGenerator;
-		$this->logger = $logger;
-		$this->request = $request;
-		$this->cardServiceValidator = $cardServiceValidator;
 	}
 
 	public function enrichCards($cards) {
-		$user = $this->userManager->get($this->currentUser);
+		$user = $this->userManager->get($this->userId);
 
 		$cardIds = array_map(function (Card $card) use ($user) {
 			// Everything done in here might be heavy as it is executed for every card
@@ -142,11 +105,21 @@ class CardService {
 
 		return array_map(
 			function (Card $card): CardDetails {
-				return new CardDetails($card);
+				$cardDetails = new CardDetails($card);
+
+				$references = $this->referenceManager->extractReferences($card->getTitle());
+				$reference = array_shift($references);
+				if ($reference) {
+					$referenceData = $this->referenceManager->resolveReference($reference);
+					$cardDetails->setReferenceData($referenceData);
+				}
+
+				return $cardDetails;
 			},
 			$cards
 		);
 	}
+
 	public function fetchDeleted($boardId) {
 		$this->cardServiceValidator->check(compact('boardId'));
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
@@ -226,6 +199,8 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
+		[$card] = $this->enrichCards([$card]);
+
 		return $card;
 	}
 
@@ -300,7 +275,7 @@ class CardService {
 		}
 
 		$changes = new ChangeSet($card);
-		if ($card->getLastEditor() !== $this->currentUser && $card->getLastEditor() !== null) {
+		if ($card->getLastEditor() !== $this->userId && $card->getLastEditor() !== null) {
 			$this->activityManager->triggerEvent(
 				ActivityManager::DECK_OBJECT_CARD,
 				$card,
@@ -313,7 +288,7 @@ class CardService {
 			);
 
 			$card->setDescriptionPrev($card->getDescription());
-			$card->setLastEditor($this->currentUser);
+			$card->setLastEditor($this->userId);
 		}
 		$card->setTitle($title);
 		$card->setStackId($stackId);
@@ -387,7 +362,41 @@ class CardService {
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
+		[$card] = $this->enrichCards([$card]);
+
 		return $card;
+	}
+
+	public function cloneCard(int $id, ?int $targetStackId = null):Card {
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_READ);
+		$originCard = $this->cardMapper->find($id);
+		if ($targetStackId === null) {
+			$targetStackId = $originCard->getStackId();
+		}
+		$this->permissionService->checkPermission($this->stackMapper, $targetStackId, Acl::PERMISSION_EDIT);
+		$newCard = $this->create($originCard->getTitle(), $targetStackId, $originCard->getType(), $originCard->getOrder(), $originCard->getOwner());
+		$boardId = $this->stackMapper->findBoardId($targetStackId);
+		foreach ($this->labelMapper->findAssignedLabelsForCard($id) as $label) {
+			if ($boardId != $this->stackMapper->findBoardId($originCard->getStackId())) {
+				try {
+					$label = $this->labelService->cloneLabelIfNotExists($label->getId(), $boardId);
+				} catch (NoPermissionException $e) {
+					break;
+				}
+			}
+			$this->assignLabel($newCard->getId(), $label->getId());
+		}
+		foreach ($this->assignedUsersMapper->findAll($id) as $assignement) {
+			try {
+				$this->permissionService->checkPermission($this->cardMapper, $newCard->getId(), Acl::PERMISSION_READ, $assignement->getParticipant());
+			} catch (NoPermissionException $e) {
+				continue;
+			}
+			$this->assignmentService->assignUser($newCard->getId(), $assignement->getParticipant());
+		}
+		$newCard->setDescription($originCard->getDescription());
+		$card = $this->enrichCards([$this->cardMapper->update($newCard)]);
+		return $card[0];
 	}
 
 	/**
@@ -646,13 +655,13 @@ class CardService {
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 	}
 
-	public function getCardUrl($cardId) {
+	public function getCardUrl(int $cardId): string {
 		$boardId = $this->cardMapper->findBoardId($cardId);
 
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . "#/board/$boardId/card/$cardId";
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.indexCard', ['boardId' => $boardId, 'cardId' => $cardId]);
 	}
 
-	public function getRedirectUrlForCard($cardId) {
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . "card/$cardId";
+	public function getRedirectUrlForCard(int $cardId): string {
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $cardId]);
 	}
 }

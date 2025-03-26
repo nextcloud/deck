@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "தனிப்பட்ட",
     "Done" : "Done",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "பதிவேற்றப்பட்ட கோப்பானது HTML  படிவத்தில் குறிப்பிடப்பட்டுள்ள MAX_FILE_SIZE  directive ஐ விட கூடியது",
     "No file was uploaded" : "எந்த கோப்பும் பதிவேற்றப்படவில்லை",
@@ -18,8 +17,8 @@ OC.L10N.register(
     "Download" : "பதிவிறக்குக",
     "Modified" : "மாற்றப்பட்டது",
     "Save" : "சேமிக்க ",
-    "Update" : "இற்றைப்படுத்தல்",
     "Created:" : "உருவாக்கப்பட்டது:",
+    "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
     "seconds ago" : "செக்கன்களுக்கு முன்",
     "Keyboard shortcuts" : "விசைப்பலகை குறுக்குவழிகள்",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Today" : "இன்று",
     "Close" : "மூடுக",
-    "Share" : "பகிர்வு"
+    "Share" : "பகிர்வு",
+    "Personal" : "தனிப்பட்ட"
 },
 "nplurals=2; plural=(n != 1);");

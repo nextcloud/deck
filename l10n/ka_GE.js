@@ -2,7 +2,6 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "დასტა",
-    "Personal" : "პირადი",
     "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "The board \"%s\" has been shared with you by %s." : "დაფა \"%s\" თქვენთან გაზიარდა %s-ისთვის.",
     "%s on %s" : "%s %s-ზე",
@@ -36,13 +35,13 @@ OC.L10N.register(
     "Edit" : "შეცვლა",
     "Members" : "წევრები",
     "Download" : "ჩამოტვირთვა",
-    "Comments" : "კომენტარები",
     "Modified" : "შეიცვალა",
     "Created" : "შექმნილია",
+    "Comments" : "კომენტარები",
     "Save" : "შენახვა",
+    "Created:" : "შექმნილია:",
     "Reply" : "პასუხი",
     "Update" : "განახლება",
-    "Created:" : "შექმნილია:",
     "Description" : "აღწერა",
     "Formatting help" : "დახმარება ფორმატირებაზე",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
@@ -60,9 +59,11 @@ OC.L10N.register(
     "Archive board" : "დაფის არქივირება",
     "No notifications" : "შეტყობინებები არაა",
     "Delete board" : "დაფის გაუქმება",
+    "Advanced options" : "დამატებითი ოპციონები",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
     "Close" : "დახურვა",
-    "Share" : "გაზიარება"
+    "Share" : "გაზიარება",
+    "Personal" : "პირადი"
 },
 "nplurals=2; plural=(n!=1);");

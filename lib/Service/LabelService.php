@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -90,6 +91,18 @@ class LabelService {
 		$label->setBoardId($boardId);
 		$this->changeHelper->boardChanged($boardId);
 		return $this->labelMapper->insert($label);
+	}
+
+	public function cloneLabelIfNotExists(int $labelId, int $targetBoardId): Label {
+		$this->permissionService->checkPermission(null, $targetBoardId, Acl::PERMISSION_MANAGE);
+		$boardLabels = $this->boardService->find($targetBoardId)->getLabels();
+		$originLabel = $this->find($labelId);
+		$filteredValues = array_values(array_filter($boardLabels, fn ($item) => $item->getTitle() === $originLabel->getTitle()));
+		if (empty($filteredValues)) {
+			$label = $this->create($originLabel->getTitle(), $originLabel->getColor(), $targetBoardId);
+			return $label;
+		}
+		return $originLabel;
 	}
 
 	/**

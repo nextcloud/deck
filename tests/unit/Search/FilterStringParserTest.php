@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @copyright Copyright (c) 2021 Julius Härtl <jus@bitgrid.net>
  *
@@ -101,7 +102,7 @@ class FilterStringParserTest extends TestCase {
 		Assert::assertEquals($expected, $result);
 	}
 
-	public function dataParseDate() {
+	public static function dataParseDate() {
 		return [
 			['date:today', [new DateQueryParameter('date', SearchQuery::COMPARATOR_EQUAL, 'today')], []],
 			['date:>today', [new DateQueryParameter('date', SearchQuery::COMPARATOR_MORE, 'today')], []],

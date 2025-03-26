@@ -22,10 +22,10 @@ describe('Deck dashboard', function() {
 			.should($el => expect($el.text().trim()).to.equal('Upcoming cards'))
 	})
 
-	it('Can see the default "Personal Board" created for user by default', function() {
+	it('Can see the default "Welcome Board" created for user by default', function() {
 		cy.visit('/apps/deck')
 
-		const defaultBoard = 'Personal'
+		const defaultBoard = 'Welcome to Nextcloud Deck!'
 
 		cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
 			.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + defaultBoard + ')')

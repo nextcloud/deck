@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -26,7 +27,7 @@ class DefaultBoardMiddleware extends Middleware {
 	public function beforeController($controller, $methodName) {
 		try {
 			if ($this->userId !== null && $this->defaultBoardService->checkFirstRun($this->userId) && $this->permissionService->canCreate()) {
-				$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '0087C5');
+				$this->defaultBoardService->createDefaultBoard($this->l10n->t('Welcome to Nextcloud Deck!'), $this->userId, 'bf678b');
 			}
 		} catch (\Throwable $e) {
 			$this->logger->error('Could not create default board', ['exception' => $e]);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
@@ -283,7 +284,7 @@ class ActivityManagerTest extends TestCase {
 		$this->assertEquals($event, $actual);
 	}
 
-	public function dataSendToUsers() {
+	public static function dataSendToUsers() {
 		return [
 			[ActivityManager::DECK_OBJECT_BOARD],
 			[ActivityManager::DECK_OBJECT_CARD],
@@ -343,7 +344,7 @@ class ActivityManagerTest extends TestCase {
 		$this->invokePrivate($this->activityManager, 'sendToUsers', [$event]);
 	}
 
-	public function dataFindObjectForEntity() {
+	public static function dataFindObjectForEntity() {
 		$board = new Board();
 		$board->setId(1);
 		$stack = new Stack();

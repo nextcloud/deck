@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2023 Julius Härtl <jus@bitgrid.net>
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -57,7 +58,7 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 	}
 
 
-	public function dataAfterException() {
+	public static function dataAfterException() {
 		return [
 			[new NoPermissionException('No permission'), 403, 'No permission'],
 			[new NotFoundException('Not found'), 404, 'Not found']

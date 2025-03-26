@@ -84,7 +84,7 @@
 			provider-id="deck"
 			:item-id="board.id" />
 
-		<CollectionList v-if="projectsEnabled && board.id"
+		<NcCollectionList v-if="projectsEnabled && board.id"
 			:id="`${board.id}`"
 			:name="board.title"
 			type="deck" />
@@ -92,8 +92,7 @@
 </template>
 
 <script>
-import { NcAvatar, NcSelect, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
-import { CollectionList } from 'nextcloud-vue-collections'
+import { NcCollectionList, NcAvatar, NcSelect, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
@@ -108,7 +107,7 @@ export default {
 		NcActionButton,
 		NcActionCheckbox,
 		NcSelect,
-		CollectionList,
+		NcCollectionList,
 		NcRelatedResourcesPanel,
 	},
 	props: {
@@ -141,9 +140,13 @@ export default {
 		},
 		formatedSharees() {
 			return this.unallocatedSharees.map(item => {
+				const subname = item.label === item.shareWithDisplayNameUnique
+					? ''
+					: item.shareWithDisplayNameUnique
 				const sharee = {
 					user: item.value.shareWith,
 					displayName: item.label,
+					subname,
 					icon: 'icon-user',
 					multiselectKey: item.shareType + ':' + item.primaryKey,
 				}

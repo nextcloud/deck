@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -150,7 +151,7 @@ class PermissionServiceTest extends \Test\TestCase {
 		$this->assertEquals(false, $this->service->userIsBoardOwner(123));
 	}
 
-	public function dataTestUserCan() {
+	public static function dataTestUserCan() {
 		return [
 			// participant permissions type
 			['admin', false, false, false, 'user', true, false, false, false],
@@ -182,7 +183,7 @@ class PermissionServiceTest extends \Test\TestCase {
 		$this->assertFalse($this->service->userCan([], Acl::PERMISSION_EDIT));
 	}
 
-	public function dataCheckPermission() {
+	public static function dataCheckPermission() {
 		return [
 			// see getAcls() for set permissions
 			[1, Acl::PERMISSION_READ, true],

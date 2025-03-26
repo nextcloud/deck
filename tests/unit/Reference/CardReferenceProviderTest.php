@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2023 Julius Härtl <jus@bitgrid.net>
  *
@@ -41,7 +42,7 @@ class CardReferenceProviderTest extends TestCase {
 	private $l10n;
 	private $userId;
 	private $provider;
-	
+
 	public function setUp() : void {
 		parent::setUp();
 

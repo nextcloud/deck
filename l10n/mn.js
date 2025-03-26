@@ -2,7 +2,6 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "Ажлын талбар",
-    "Personal" : "Хувийн",
     "Finished" : "Дуусгасан",
     "To review" : "Дахин хянах",
     "Action needed" : "Үйлдэл шаардлагатай",
@@ -26,14 +25,14 @@ OC.L10N.register(
     "Edit" : "Засварлах",
     "Members" : "Гишүүд",
     "Download" : "Татах",
-    "Attachments" : "Хавсралт",
-    "Comments" : "Сэтгэгдлүүд",
     "Modified" : "Өөрчлөгдсөн",
     "Created" : "Үүсгэсэн",
+    "Attachments" : "Хавсралт",
+    "Comments" : "Сэтгэгдлүүд",
     "Save" : "Хадгалах",
+    "Created:" : "Үүсгэсэн:",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
-    "Created:" : "Үүсгэсэн:",
     "Description" : "Тайлбар",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
@@ -41,9 +40,11 @@ OC.L10N.register(
     "Search" : "Хайх",
     "Shared with you" : "тантай хуваалцсан",
     "No notifications" : "Мэдэгдэл байхгүй",
+    "Advanced options" : "Бусад сонголтууд",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",
-    "Share" : "Түгээх"
+    "Share" : "Түгээх",
+    "Personal" : "Хувийн"
 },
 "nplurals=2; plural=(n != 1);");

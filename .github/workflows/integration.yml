@@ -78,7 +78,7 @@ jobs:
               path: apps/activity
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.31.1
+        uses: shivammathur/setup-php@2.32.0
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql, apcu, gd
@@ -111,6 +111,10 @@ jobs:
       - name: Run behat
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: ./run.sh
+
+      - name: Print log
+        if: always()
+        run: cat data/nextcloud.log
 
       - name: Query count
         if: ${{ matrix.databases == 'mysql' }}

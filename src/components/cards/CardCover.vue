@@ -4,7 +4,10 @@
 -->
 
 <template>
-	<div v-if="cardId && ( attachments.length > 0 )" class="card-cover">
+	<div v-if="referencePreview" class="card-cover">
+		<div class="image-wrapper rounded-left rounded-right" :style="{ backgroundImage: `url(${referencePreview})`}" />
+	</div>
+	<div v-else-if="cardId && ( attachments.length > 0 )" class="card-cover">
 		<div v-for="(attachment, index) in attachments"
 			:key="attachment.id"
 			:class="['image-wrapper', { 'rounded-left': index === 0 }, { 'rounded-right': index === attachments.length - 1 }]"
@@ -42,6 +45,12 @@ export default {
 				// when cropping is enabled. Therefore use a=1 to not crop the image and let css handle the overflow
 				attachment.extendedData.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=${x}&y=${y}&a=1`) : null
 			)
+		},
+		card() {
+			return this.$store.getters.cardById(this.cardId)
+		},
+		referencePreview() {
+			return this.card?.referenceData?.richObject?.thumb
 		},
 	},
 	watch: {

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "ব্যক্তিগত",
     "Done" : "Done",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "আপলোড করা ফাইলটি  HTML  ফর্মে উল্লিখিত MAX_FILE_SIZE নির্ধারিত ফাইলের সর্বোচ্চ আকার  অতিক্রম করতে চলেছে ",
     "No file was uploaded" : "কোন ফাইল আপলোড করা হয় নি",
@@ -20,9 +19,9 @@ OC.L10N.register(
     "Download" : "ডাউনলোড",
     "Modified" : "পরিবর্তিত",
     "Save" : "সংরক্ষণ",
+    "Created:" : "তৈরীর নির্ঘন্টঃ",
     "Reply" : "জবাব",
     "Update" : "পরিবর্ধন",
-    "Created:" : "তৈরীর নির্ঘন্টঃ",
     "Description" : "বিবরণ",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Today" : "আজ",
     "Tomorrow" : "আগামীকাল",
     "Close" : "বন্ধ",
-    "Share" : "ভাগাভাগি কর"
+    "Share" : "ভাগাভাগি কর",
+    "Personal" : "ব্যক্তিগত"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Անձնական",
     "Done" : "Done",
     "The file was uploaded" : "Նիշքը վերբերռնված է",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Վերբեռնած նիշքը գերազանցում է upload_max_filesize սահմանված php.ini֊ում",
@@ -21,17 +20,18 @@ OC.L10N.register(
     "Delete" : "հեռացնել",
     "Edit" : "մշակել",
     "Download" : "Ներբեռնել",
-    "Comments" : "Կարծիքներ",
     "Modified" : "Փոփոխված",
+    "Comments" : "Կարծիքներ",
     "Save" : "Պահպանել",
-    "Update" : "Թարմացնել",
     "Created:" : "Ստեղծված.",
+    "Update" : "Թարմացնել",
     "Description" : "Նկարագրություն",
     "seconds ago" : "վրկ. առաջ",
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "այսօր",
     "Close" : "Փակել",
-    "Share" : "Կիսվել"
+    "Share" : "Կիսվել",
+    "Personal" : "Անձնական"
 },
 "nplurals=2; plural=(n != 1);");

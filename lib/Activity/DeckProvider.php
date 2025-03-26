@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -108,7 +109,7 @@ class DeckProvider implements IProvider {
 			}
 			$board = [
 				'type' => 'highlight',
-				'id' => $event->getObjectId(),
+				'id' => (string)$event->getObjectId(),
 				'name' => $event->getObjectName(),
 				'link' => $this->deckUrl('/board/' . $event->getObjectId()),
 			];
@@ -125,12 +126,12 @@ class DeckProvider implements IProvider {
 			}
 			$card = [
 				'type' => 'highlight',
-				'id' => $event->getObjectId(),
+				'id' => (string)$event->getObjectId(),
 				'name' => $event->getObjectName(),
 			];
 
 			if (array_key_exists('board', $subjectParams)) {
-				$card['link'] = $this->cardService->getRedirectUrlForCard($event->getObjectId());
+				$card['link'] = $this->cardService->getCardUrl($event->getObjectId());
 				$event->setLink($card['link']);
 			}
 			$params['card'] = $card;
@@ -212,7 +213,7 @@ class DeckProvider implements IProvider {
 		if (array_key_exists($paramName, $subjectParams)) {
 			$params[$paramName] = [
 				'type' => 'highlight',
-				'id' => $subjectParams[$paramName]['id'],
+				'id' => (string)$subjectParams[$paramName]['id'],
 				'name' => $subjectParams[$paramName]['title'],
 				'link' => $this->deckUrl('/board/' . $subjectParams[$paramName]['id'] . '/'),
 			];
@@ -223,7 +224,7 @@ class DeckProvider implements IProvider {
 		if (array_key_exists($paramName, $subjectParams)) {
 			$params[$paramName] = [
 				'type' => 'highlight',
-				'id' => $subjectParams[$paramName]['id'],
+				'id' => (string)$subjectParams[$paramName]['id'],
 				'name' => $subjectParams[$paramName]['title'],
 			];
 		}
@@ -234,7 +235,7 @@ class DeckProvider implements IProvider {
 		if (array_key_exists($paramName, $subjectParams)) {
 			$params[$paramName] = [
 				'type' => 'highlight',
-				'id' => $subjectParams[$paramName]['id'],
+				'id' => (string)$subjectParams[$paramName]['id'],
 				'name' => $subjectParams[$paramName]['data'],
 				'link' => $this->urlGenerator->linkToRoute('deck.attachment.display', ['cardId' => $subjectParams['card']['id'], 'attachmentId' => $subjectParams['attachment']['id']]),
 			];
@@ -258,7 +259,7 @@ class DeckProvider implements IProvider {
 		if (array_key_exists('label', $subjectParams)) {
 			$params['label'] = [
 				'type' => 'highlight',
-				'id' => $subjectParams['label']['id'],
+				'id' => (string)$subjectParams['label']['id'],
 				'name' => $subjectParams['label']['title']
 			];
 		}
@@ -277,7 +278,7 @@ class DeckProvider implements IProvider {
 			} else {
 				$params['acl'] = [
 					'type' => 'highlight',
-					'id' => $subjectParams['acl']['participant'],
+					'id' => (string)$subjectParams['acl']['participant'],
 					'name' => $subjectParams['acl']['participant']
 				];
 			}
@@ -293,7 +294,7 @@ class DeckProvider implements IProvider {
 				$event->setParsedMessage($comment->getMessage());
 				$params['comment'] = [
 					'type' => 'highlight',
-					'id' => $subjectParams['comment'],
+					'id' => (string)$subjectParams['comment'],
 					'name' => $comment->getMessage()
 				];
 			} catch (NotFoundException $e) {
@@ -342,28 +343,28 @@ class DeckProvider implements IProvider {
 		if (array_key_exists('before', $subjectParams)) {
 			$params['before'] = [
 				'type' => 'highlight',
-				'id' => $subjectParams['before'],
-				'name' => $subjectParams['before']
+				'id' => (string)$subjectParams['before'],
+				'name' => $subjectParams['before'] ?? ''
 			];
 		}
 		if (array_key_exists('after', $subjectParams)) {
 			$params['after'] = [
 				'type' => 'highlight',
-				'id' => $subjectParams['after'],
-				'name' => $subjectParams['after']
+				'id' => (string)$subjectParams['after'],
+				'name' => $subjectParams['after'] ?? ''
 			];
 		}
 		if (array_key_exists('card', $subjectParams) && $event->getSubject() === ActivityManager::SUBJECT_CARD_UPDATE_TITLE) {
 			$params['card'] = [
 				'type' => 'highlight',
-				'id' => $subjectParams['after'],
-				'name' => $subjectParams['after']
+				'id' => (string)$subjectParams['after'],
+				'name' => $subjectParams['after'] ?? ''
 			];
 		}
 		return $params;
 	}
 
 	public function deckUrl($endpoint) {
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . trim($endpoint, '/');
 	}
 }

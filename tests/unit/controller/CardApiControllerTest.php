@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2018 Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
@@ -116,6 +117,32 @@ class CardApiControllerTest extends \Test\TestCase {
 
 		$expected = new DataResponse($card, HTTP::STATUS_OK);
 		$actual = $this->controller->update('title', 'plain', 0, 'description', $this->userId, null);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testArchive() {
+		$card = new Card();
+		$card->setId($this->cardExample['id']);
+
+		$this->cardService->expects($this->once())
+			->method('archive')
+			->willReturn($card);
+
+		$expected = new DataResponse($card, HTTP::STATUS_OK);
+		$actual = $this->controller->archive($this->cardExample['id']);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUnArchive() {
+		$card = new Card();
+		$card->setId($this->cardExample['id']);
+
+		$this->cardService->expects($this->once())
+			->method('unarchive')
+			->willReturn($card);
+
+		$expected = new DataResponse($card, HTTP::STATUS_OK);
+		$actual = $this->controller->unarchive($this->cardExample['id']);
 		$this->assertEquals($expected, $actual);
 	}
 
