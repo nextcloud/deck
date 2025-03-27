@@ -169,7 +169,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-	$clickable-area: 44px;
+	$clickable-area: var(--default-clickable-area);
 
 	.labels li {
 		display: flex;

@@ -137,7 +137,7 @@ export default {
 			margin-left: 10px;
 		}
 		.activity--message {
-			margin-left: 44px;
+			margin-left: var(--default-clickable-area);
 			color: var(--color-text-light);
 			margin-bottom: 10px;
 		}

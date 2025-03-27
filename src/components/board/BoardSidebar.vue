@@ -117,3 +117,12 @@ export default {
 	},
 }
 </script>
+
+<style scoped lang="scss">
+:deep {
+	.app-sidebar-tabs__tab-caption,
+	.app-sidebar-tabs__nav .checkbox-content__text {
+		white-space: normal !important;
+	}
+}
+</style>

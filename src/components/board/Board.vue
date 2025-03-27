@@ -277,7 +277,7 @@ export default {
 	.board {
 		padding-left: $board-spacing;
 		position: relative;
-		max-height: calc(100% - 44px);
+		max-height: calc(100% - var(--default-clickable-area));
 		overflow: hidden;
 		overflow-x: auto;
 		flex-grow: 1;

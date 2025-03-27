@@ -493,8 +493,8 @@ export default {
 	.controls {
 		display: flex;
 		margin: 5px;
-		height: 44px;
-		padding-left: 44px;
+		height: var(--default-clickable-area);
+		padding-left: var(--default-clickable-area);
 
 		.board-title {
 			display: flex;
@@ -524,8 +524,8 @@ export default {
 
 	#app-navigation-toggle-custom {
 		position: static;
-		width: 44px;
-		height: 44px;
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
 		cursor: pointer;
 		opacity: 1;
 		display: inline-block !important;
@@ -584,8 +584,8 @@ export default {
 	.filter-button {
 		padding: 0;
 		border-radius: 50%;
-		width: 44px;
-		height: 44px;
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
 
 		&[data-popper-shown] {
 			background-color: var(--color-background-hover);

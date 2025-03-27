@@ -90,7 +90,7 @@ export default {
 	.board-create {
 		order: 1;
 		display: flex;
-		height: 44px;
+		height: var(--default-clickable-area);
 
 		form {
 			display: flex;
@@ -103,8 +103,8 @@ export default {
 	}
 
 	.app-navigation-entry-bullet-wrapper {
-		width: 44px;
-		height: 44px;
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
 		.color0 {
 			width: 30px !important;
 			margin: 5px;
