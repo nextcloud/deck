@@ -71,7 +71,7 @@ jobs:
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
         # Skip if no package.json
         if: ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        uses: actions/setup-node@40337cb8f758cccdfe3475af609daa63f81c7e23 # v4.1.0
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
