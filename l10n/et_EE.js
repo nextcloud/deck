@@ -6,6 +6,7 @@ OC.L10N.register(
     "Finished" : "Lõpetatud",
     "Later" : "Hiljem",
     "copy" : "koopia",
+    "To Do" : "Tegemiseks",
     "Done" : "Valmis",
     "The file was uploaded" : "Fail laaditi üles",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Üleslaetud fail on suurem, kui php.ini failis määratud upload_max_filesize",
