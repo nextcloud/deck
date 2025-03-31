@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Read package.json node and npm engines version
         uses: skjnldsv/read-package-engines-version-actions@06d6baf7d8f41934ab630e97d9e6c0bc9c9ac5e4 # v3
@@ -35,7 +37,7 @@ jobs:
           fallbackNpm: '^10'
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@802632921f8532d2409ae6eac3313b6f81f11122 # v4.1.0
+        uses: actions/setup-node@40337cb8f758cccdfe3475af609daa63f81c7e23 # v4.1.0
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 

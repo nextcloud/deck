@@ -148,6 +148,7 @@ OC.L10N.register(
     "Search" : "Pesquisa sobre",
     "Archived boards" : "Quadros arquivados",
     "Shared with you" : "Shared with you",
+    "Cancel edit" : "Cancelar edição",
     "No reminder" : "Nenhum lembrete",
     "An error occurred" : "Ocorreu um erro",
     "Board details" : "Detalhes do quadro",

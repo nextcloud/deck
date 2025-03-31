@@ -45,7 +45,7 @@ jobs:
           fallbackNpm: '^10'
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@802632921f8532d2409ae6eac3313b6f81f11122 # v4.1.0
+        uses: actions/setup-node@40337cb8f758cccdfe3475af609daa63f81c7e23 # v4.1.0
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
@@ -66,7 +66,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.checkout.outcome == 'success'
-        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
           token: ${{ secrets.COMMAND_BOT_PAT }}
           commit-message: 'fix(deps): Fix npm audit'

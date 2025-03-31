@@ -347,7 +347,7 @@ OC.L10N.register(
     "No notifications" : "Aucune notification",
     "Delete board" : "Supprimer le tableau",
     "Clone {boardTitle}" : "Cloner {boardTitle}",
-    "Clone cards" : "Dupliquer des cartes",
+    "Clone cards" : "Dupliquer les cartes",
     "Clone assignments" : "Cloner les affectations",
     "Clone labels" : "Cloner les étiquettes",
     "Clone due dates" : "Cloner les dates d'échéance",
