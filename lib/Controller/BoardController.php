@@ -10,10 +10,12 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\IL10N;
 use OCP\IRequest;
 
 class BoardController extends ApiController {
@@ -22,6 +24,8 @@ class BoardController extends ApiController {
 		IRequest $request,
 		private BoardService $boardService,
 		private PermissionService $permissionService,
+		private BoardImportService $boardImportService,
+		private IL10N $l10n,
 		private $userId,
 	) {
 		parent::__construct($appName, $request);
@@ -162,5 +166,63 @@ class BoardController extends ApiController {
 	 */
 	public function export($boardId) {
 		return $this->boardService->export($boardId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function import(): DataResponse {
+		$file = $this->request->getUploadedFile('file');
+		$error = null;
+		$phpFileUploadErrors = [
+			UPLOAD_ERR_OK => $this->l10n->t('The file was uploaded'),
+			UPLOAD_ERR_INI_SIZE => $this->l10n->t('The uploaded file exceeds the upload_max_filesize directive in php.ini'),
+			UPLOAD_ERR_FORM_SIZE => $this->l10n->t('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
+			UPLOAD_ERR_PARTIAL => $this->l10n->t('The file was only partially uploaded'),
+			UPLOAD_ERR_NO_FILE => $this->l10n->t('No file was uploaded'),
+			UPLOAD_ERR_NO_TMP_DIR => $this->l10n->t('Missing a temporary folder'),
+			UPLOAD_ERR_CANT_WRITE => $this->l10n->t('Could not write file to disk'),
+			UPLOAD_ERR_EXTENSION => $this->l10n->t('A PHP extension stopped the file upload'),
+		];
+
+		if (empty($file)) {
+			$error = $this->l10n->t('No file uploaded or file size exceeds maximum of %s', [\OCP\Util::humanFileSize(\OCP\Util::uploadLimit())]);
+		}
+		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
+			$error = $phpFileUploadErrors[$file['error']];
+		}
+		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !in_array($file['type'], ['application/json', 'text/plain'])) {
+			$error = $this->l10n->t('Invalid file type. Only JSON files are allowed.');
+		}
+		if ($error !== null) {
+			return new DataResponse([
+				'status' => 'error',
+				'message' => $error,
+			], Http::STATUS_BAD_REQUEST);
+		}
+
+		try {
+			$fileContent = file_get_contents($file['tmp_name']);
+			$this->boardImportService->setSystem('DeckJson');
+			$config = new \stdClass();
+			$config->owner = $this->userId;
+			$this->boardImportService->setConfigInstance($config);
+			$this->boardImportService->setData(json_decode($fileContent));
+			$this->boardImportService->import();
+			$importedBoard = $this->boardImportService->getBoard();
+			$board = $this->boardService->find($importedBoard->getId());
+
+			return new DataResponse($board, Http::STATUS_OK);
+		} catch (\TypeError $e) {
+			return new DataResponse([
+				'status' => 'error',
+				'message' => $this->l10n->t('Invalid JSON data'),
+			], Http::STATUS_BAD_REQUEST);
+		} catch (\Exception $e) {
+			return new DataResponse([
+				'status' => 'error',
+				'message' => $this->l10n->t('Failed to import board'),
+			], Http::STATUS_BAD_REQUEST);
+		}
 	}
 }
