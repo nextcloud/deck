@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.5
+### Fixed
+* [stable29] fix: design review issues by @backportbot in https://github.com/nextcloud/deck/pull/6857
+
+### Maintenance
+* chore(deps-dev): bump @nextcloud/cypress from 1.0.0-beta.13 to 1.0.0-beta.14 by @dependabot in https://github.com/nextcloud/deck/pull/6783
+* chore(deps-dev): bump @nextcloud/eslint-config from 8.4.1 to 8.4.2 by @dependabot in https://github.com/nextcloud/deck/pull/6782
+* [stable29] Update nextcloud/ocp dependency by @nextcloud-command in https://github.com/nextcloud/deck/pull/6790
+* chore(deps): bump @nextcloud/vue from 8.22.0 to 8.23.1 by @dependabot in https://github.com/nextcloud/deck/pull/6753
+* chore(deps): bump @nextcloud/event-bus from 3.3.1 to 3.3.2 by @dependabot in https://github.com/nextcloud/deck/pull/6810
+* [stable29] Update nextcloud/ocp dependency by @nextcloud-command in https://github.com/nextcloud/deck/pull/6824
+* Chore(deps): Bump @babel/runtime from 7.26.9 to 7.26.10 by @dependabot in https://github.com/nextcloud/deck/pull/6834
+* [stable29] Update nextcloud/ocp dependency by @nextcloud-command in https://github.com/nextcloud/deck/pull/6852
+
 ## 1.13.4
 ### Fixed
  - fix: skip exporting a deleted card #6721
