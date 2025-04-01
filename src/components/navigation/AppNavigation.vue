@@ -42,6 +42,7 @@
 				</template>
 			</AppNavigationBoardCategory>
 			<AppNavigationAddBoard v-if="canCreate" />
+			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
 		<template #footer>
 			<NcAppNavigationSettings :name="t('deck', 'Deck settings')">
@@ -116,6 +117,7 @@ import DeckIcon from './../icons/DeckIcon.vue'
 import ShareVariantIcon from 'vue-material-design-icons/Share.vue'
 import HelpModal from './../modals/HelpModal.vue'
 import { subscribe } from '@nextcloud/event-bus'
+import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -127,6 +129,7 @@ export default {
 		NcButton,
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
+		AppNavigationImportBoard,
 		NcSelect,
 		NcAppNavigationItem,
 		ArchiveIcon,

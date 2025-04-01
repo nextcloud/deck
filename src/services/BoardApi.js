@@ -139,10 +139,29 @@ export class BoardApi {
 		}
 	}
 
-	exportBoard(board) {
+	exportBoard(board, format) {
 		return axios.get(this.url(`/boards/${board.id}/export`))
 			.then(
 				(response) => {
+					if (format === 'json') {
+						const exportData = {
+							boards: [response.data],
+						}
+						const stacks = {}
+						for (const stack of response.data.stacks) {
+							stacks[stack.id] = stack
+						}
+						exportData.boards[0].stacks = stacks
+						const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+						const blobUrl = URL.createObjectURL(blob)
+						const a = document.createElement('a')
+						a.href = blobUrl
+						a.download = response.data.title + '.json'
+						a.click()
+						a.remove()
+						return Promise.resolve()
+					}
+
 					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), assignedUsers: t('deck', 'Assigned users'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
 					let row = ''
 					Object.keys(fields).forEach(field => {
@@ -205,6 +224,27 @@ export class BoardApi {
 					a.click()
 					a.remove()
 					return Promise.resolve()
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	importBoard(file) {
+		const formData = new FormData()
+		formData.append('file', file)
+		return axios.post(this.url('/boards/import'), formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
 				},
 				(err) => {
 					return Promise.reject(err)

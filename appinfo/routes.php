@@ -29,6 +29,7 @@ return [
 		['name' => 'board#clone', 'url' => '/boards/{boardId}/clone', 'verb' => 'POST'],
 		['name' => 'board#transferOwner', 'url' => '/boards/{boardId}/transferOwner', 'verb' => 'PUT'],
 		['name' => 'board#export', 'url' => '/boards/{boardId}/export', 'verb' => 'GET'],
+		['name' => 'board#import', 'url' => '/boards/import', 'verb' => 'POST'],
 
 		// stacks
 		['name' => 'stack#index', 'url' => '/stacks/{boardId}', 'verb' => 'GET'],
