@@ -132,7 +132,7 @@ export class BoardApi {
 		}
 	}
 
-	exportBoard(board) {
+	exportBoard(board, format) {
 		return axios.get(this.url(`/boards/${board.id}/export`))
 			.then(
 				(response) => {
@@ -187,6 +187,27 @@ export class BoardApi {
 					a.click()
 					a.remove()
 					return Promise.resolve()
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	importBoard(file) {
+		const formData = new FormData()
+		formData.append('file', file)
+		return axios.post(this.url('/boards/import'), formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
 				},
 				(err) => {
 					return Promise.reject(err)

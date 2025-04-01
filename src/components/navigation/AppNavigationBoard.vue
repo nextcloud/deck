@@ -340,7 +340,16 @@ export default {
 			this.updateDueSetting = null
 		},
 		actionExport() {
-			this.boardApi.exportBoard(this.board)
+			this.exportModalOpen = true
+		},
+		async onExportBoard(format) {
+			this.exportModalOpen = false
+			const loadingToast = showLoading(t('deck', 'Exporting board...'))
+			await this.boardApi.exportBoard(this.board, format)
+			loadingToast.hideToast()
+		},
+		onCloseExportBoard() {
+			this.exportModalOpen = false
 		},
 		onNavigate() {
 			if (this.isTouchDevice) {
