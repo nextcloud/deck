@@ -21,6 +21,7 @@ OC.L10N.register(
     "Cancel" : "Loobu",
     "File already exists" : "Fail on juba olemas",
     "Add list" : "Lisa loend",
+    "List name" : "Nimekirja nimi",
     "Active filters" : "Aktiivsed filtrid",
     "Open" : "Ava",
     "Completed" : "Lõpetatud",
@@ -60,6 +61,7 @@ OC.L10N.register(
     "Reply" : "Vasta",
     "Update" : "Uuenda",
     "Description" : "Kirjeldus",
+    "Mark as done" : "Märgi tehtuks",
     "(group)" : "(grupp)",
     "Delete card" : "Kustuta kaart",
     "seconds ago" : "sekundit tagasi",
@@ -73,6 +75,7 @@ OC.L10N.register(
     "Advanced options" : "Täpsemad valikud",
     "Today" : "Täna",
     "Tomorrow" : "Homme",
+    "No results found" : "Otsingutulemusi ei leidu",
     "Close" : "Sulge",
     "Share" : "Jaga",
     "Personal" : "Isiklik"
