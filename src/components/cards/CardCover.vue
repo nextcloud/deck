@@ -4,13 +4,10 @@
 -->
 
 <template>
-	<div v-if="referencePreview" class="card-cover">
-		<div class="image-wrapper rounded-left rounded-right" :style="{ backgroundImage: `url(${referencePreview})`}" />
-	</div>
-	<div v-else-if="cardId && ( attachments.length > 0 )" class="card-cover">
-		<div v-for="(attachment, index) in attachments"
+	<div v-if="cardId && ( attachments.length > 0 )" class="card-cover">
+		<div v-for="attachment in attachments"
 			:key="attachment.id"
-			:class="['image-wrapper', { 'rounded-left': index === 0 }, { 'rounded-right': index === attachments.length - 1 }]"
+			class="image-wrapper"
 			:style="{ backgroundImage: `url(${attachmentPreview(attachment)})` }" />
 	</div>
 </template>
@@ -77,9 +74,7 @@ export default {
 .card-cover {
 	height: 90px;
 	display: flex;
-	margin-top: -4px;
-	margin-left: -4px;
-	margin-right: -4px;
+	margin: $card-image-margin $card-image-margin 0;
 
 	.image-wrapper {
 		flex: 1;
@@ -87,12 +82,6 @@ export default {
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center center;
-		&.rounded-left {
-			border-top-left-radius: calc(var(--border-radius-large) - 1px);
-		}
-		&.rounded-right {
-			border-top-right-radius: calc(var(--border-radius-large) - 1px);
-		}
 	}
 }
 </style>
