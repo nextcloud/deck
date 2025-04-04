@@ -90,7 +90,7 @@ OC.L10N.register(
     "Deck boards, cards and comments" : "Tableaux, cartes et commentaires de Deck",
     "From %1$s, in %2$s/%3$s, owned by %4$s" : "De %1$s, dans %2$s / %3$s, appartenant à %4$s",
     "Create a new deck card" : "Créer une nouvelle carte Deck",
-    "Card comments" : "Commentaires de la carte",
+    "Card comments" : "Commentaires des cartes",
     "%s on %s" : "%s sur %s",
     "Deck boards and cards" : "Tableaux et cartes de Deck",
     "No data was provided to create an attachment." : "Aucune donnée n'a été fournie pour créer une pièce jointe.",
