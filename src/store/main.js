@@ -398,6 +398,14 @@ export default new Vuex.Store({
 				return err
 			}
 		},
+		async importBoard({ commit }, file) {
+			try {
+				const board = await apiClient.importBoard(file)
+				commit('addBoard', board)
+			} catch (err) {
+				return err
+			}
+		},
 		async cloneBoard({ commit }, { boardData, settings }) {
 			const { withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards } = settings
 
