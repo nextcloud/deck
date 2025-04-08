@@ -269,7 +269,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	private function applyBoardPermission($share, $permissions, $userId) {
 		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT, $userId);
+			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT, $userId, true);
 		} catch (NoPermissionException $e) {
 			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE;
 			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_CREATE;
@@ -277,7 +277,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 
 		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_SHARE, $userId);
+			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_SHARE, $userId, true);
 		} catch (NoPermissionException $e) {
 			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE;
 		}
@@ -745,6 +745,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 					$qb->expr()->eq('s.item_type', $qb->createNamedParameter('file')),
 					$qb->expr()->eq('s.item_type', $qb->createNamedParameter('folder'))
 				));
+
+			$qb->andWhere($qb->expr()->eq('dc.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
 			$cursor = $qb->execute();
 			while ($data = $cursor->fetch()) {
