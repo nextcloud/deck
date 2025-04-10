@@ -63,6 +63,7 @@ OC.L10N.register(
     "Description" : "Kirjeldus",
     "Mark as done" : "Märgi tehtuks",
     "(group)" : "(grupp)",
+    "Edit title" : "Muuda pealkirja",
     "Delete card" : "Kustuta kaart",
     "seconds ago" : "sekundit tagasi",
     "Keyboard shortcuts" : "Klaviatuuri otseteed",
@@ -76,6 +77,7 @@ OC.L10N.register(
     "Today" : "Täna",
     "Tomorrow" : "Homme",
     "No results found" : "Otsingutulemusi ei leidu",
+    "Due on {date}" : "Tähtaeg: {date}",
     "Close" : "Sulge",
     "Share" : "Jaga",
     "Personal" : "Isiklik"
