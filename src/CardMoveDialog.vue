@@ -59,6 +59,15 @@ export default {
 			return !(this.selectedBoard === '' || this.selectedStack === '')
 		},
 	},
+	watch: {
+		selectedBoard: {
+			immediate: true,
+			handler() {
+				this.selectedStack = ''
+				this.stacksFromBoard = []
+			},
+		},
+	},
 	mounted() {
 		subscribe('deck:card:show-move-dialog', this.openModal)
 	},
