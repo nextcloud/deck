@@ -106,21 +106,21 @@ class Notifier implements INotifier {
 					[
 						'deck-card' => [
 							'type' => 'deck-card',
-							'id' => $cardId,
+							'id' => (string)$cardId,
 							'name' => $params[0],
-							'boardname' => $params[1],
+							'boardname' => (string)$params[1],
 							'stackname' => $stack->getTitle(),
 							'link' => $this->getCardUrl($boardId, $cardId),
 						],
 						'deck-board' => [
 							'type' => 'deck-board',
-							'id' => $boardId,
-							'name' => $params[1],
+							'id' => (string)$boardId,
+							'name' => (string)$params[1],
 							'link' => $this->getBoardUrl($boardId),
 						],
 						'user' => [
 							'type' => 'user',
-							'id' => $params[2],
+							'id' => (string)$params[2],
 							'name' => $dn,
 						]
 					]
@@ -143,16 +143,16 @@ class Notifier implements INotifier {
 					[
 						'deck-card' => [
 							'type' => 'deck-card',
-							'id' => $cardId,
-							'name' => $params[0],
-							'boardname' => $params[1],
+							'id' => (string)$cardId,
+							'name' => (string)$params[0],
+							'boardname' => (string)$params[1],
 							'stackname' => $stack->getTitle(),
 							'link' => $this->getCardUrl($boardId, $cardId),
 						],
 						'deck-board' => [
 							'type' => 'deck-board',
-							'id' => $boardId,
-							'name' => $params[1],
+							'id' => (string)$boardId,
+							'name' => (string)$params[1],
 							'link' => $this->getBoardUrl($boardId),
 						],
 					]
@@ -181,15 +181,15 @@ class Notifier implements INotifier {
 					[
 						'deck-card' => [
 							'type' => 'deck-card',
-							'id' => $cardId,
-							'name' => $params[0],
-							'boardname' => $params[1],
+							'id' => (string)$cardId,
+							'name' => (string)$params[0],
+							'boardname' => (string)$params[1],
 							'stackname' => $stack->getTitle(),
 							'link' => $this->getCardUrl($boardId, $cardId),
 						],
 						'user' => [
 							'type' => 'user',
-							'id' => $params[2],
+							'id' => (string)$params[2],
 							'name' => $dn,
 						]
 					]
@@ -218,8 +218,8 @@ class Notifier implements INotifier {
 					[
 						'deck-board' => [
 							'type' => 'deck-board',
-							'id' => $boardId,
-							'name' => $params[0],
+							'id' => (string)$boardId,
+							'name' => (string)$params[0],
 							'link' => $this->getBoardUrl($boardId),
 						],
 						'user' => [
