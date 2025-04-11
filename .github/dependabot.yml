@@ -10,7 +10,7 @@ updates:
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
 
 - package-ecosystem: npm
@@ -90,7 +90,7 @@ updates:
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
 
 - package-ecosystem: composer
@@ -102,7 +102,7 @@ updates:
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
 
 - package-ecosystem: github-actions
@@ -114,5 +114,5 @@ updates:
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
