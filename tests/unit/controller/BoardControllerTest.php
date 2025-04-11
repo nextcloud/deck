@@ -36,6 +36,7 @@ class BoardControllerTest extends \Test\TestCase {
 	private $groupManager;
 	private $boardService;
 	private $permissionService;
+	private $boardImportService;
 	private $userId = 'user';
 
 	public function setUp(): void {
@@ -63,6 +64,10 @@ class BoardControllerTest extends \Test\TestCase {
 			'\OCA\Deck\Service\PermissionService')
 			->disableOriginalConstructor()
 			->getMock();
+		$this->boardImportService = $this->getMockBuilder(
+			'\OCA\Deck\Service\Importer\BoardImportService')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$user = $this->createMock(IUser::class);
 		$this->groupManager->method('getUserGroupIds')
@@ -76,6 +81,8 @@ class BoardControllerTest extends \Test\TestCase {
 			$this->request,
 			$this->boardService,
 			$this->permissionService,
+			$this->boardImportService,
+			$this->l10n,
 			$this->userId
 		);
 	}
