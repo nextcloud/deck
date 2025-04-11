@@ -18,6 +18,7 @@
 				:input-label="t('deck', 'Select a list')"
 				:options="stacksFromBoard"
 				:max-height="100"
+				data-cy="select-stack"
 				label="title" />
 		</div>
 		<template #actions>
@@ -57,6 +58,15 @@ export default {
 		},
 		isBoardAndStackChoosen() {
 			return !(this.selectedBoard === '' || this.selectedStack === '')
+		},
+	},
+	watch: {
+		selectedBoard: {
+			immediate: true,
+			handler() {
+				this.selectedStack = ''
+				this.stacksFromBoard = []
+			},
 		},
 	},
 	mounted() {
