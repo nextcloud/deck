@@ -448,10 +448,10 @@ class BoardServiceTest extends TestCase {
 		$assignment = new Assignment();
 		$assignment->setParticipant('admin');
 		$this->assignedUsersMapper->expects($this->once())
-			->method('findByParticipant')
-			->with('admin')
+			->method('deleteByParticipantOnBoard')
+			->with('admin', 123)
 			->willReturn([$assignment]);
-		$this->assignedUsersMapper->expects($this->once())
+		$this->assignedUsersMapper->expects($this->never())
 			->method('delete')
 			->with($assignment);
 		$this->aclMapper->expects($this->once())
