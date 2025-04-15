@@ -63,7 +63,10 @@
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
-						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
+						<Stack :stack="stack"
+							:dragging="draggingStack"
+							data-click-closes-sidebar="true"
+							@open-card="openCard" />
 					</Draggable>
 				</Container>
 			</div>
@@ -165,14 +168,14 @@ export default {
 	created() {
 		this.session = createSession(this.id)
 		this.fetchData()
-		this.$root.$on('open-card', (cardId) => {
-			this.localModal = cardId
-		})
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.session.close()
 	},
 	methods: {
+		openCard(cardId) {
+
+		},
 		async fetchData() {
 			this.loading = true
 			try {

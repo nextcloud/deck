@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton } from '@nextcloud/vue'
+import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
@@ -186,6 +186,7 @@ export default {
 		CheckIcon,
 		BoardCloneModal,
 		BoardExportModal,
+		NcLoadingIcon,
 	},
 	directives: {
 		ClickOutside,

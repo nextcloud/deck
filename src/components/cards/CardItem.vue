@@ -88,6 +88,7 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { emit } from '@nextcloud/event-bus'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -120,6 +121,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['open-card'],
 	data() {
 		return {
 			highlight: false,
@@ -226,8 +228,9 @@ export default {
 				this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 				return
 			}
-
-			this.$root.$emit('open-card', this.card.id)
+			emit('open-card', {
+				cardId: this.card.id,
+			})
 		},
 		triggerEditTitle() {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING

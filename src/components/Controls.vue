@@ -278,6 +278,7 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { onClickOutside } from '@vueuse/core'
 
 export default {
 	name: 'Controls',
@@ -363,6 +364,11 @@ export default {
 			}
 		},
 	},
+	created() {
+		onClickOutside(() => {
+			this.hideAddStack()
+		})
+	},
 	beforeMount() {
 		subscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		subscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
@@ -370,7 +376,7 @@ export default {
 		subscribe('deck:board:toggle-filter-by-me', this.triggerFilterByMe)
 
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		unsubscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
 		unsubscribe('deck:board:clear-filter', this.triggerClearFilter)
