@@ -7,6 +7,10 @@ import { NcAppContent, NcContent, NcModal } from '@nextcloud/vue'
 import CardMoveDialog from './CardMoveDialog.vue'
 import AppNavigation from './components/navigation/AppNavigation.vue'
 import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
+import {BoardApi} from './services/BoardApi.js'
+
+const boardApi = new BoardApi()
+
 export default {
 	name: 'App',
 	components: {
@@ -22,6 +26,12 @@ export default {
 			return this.$store.getters.config('cardDetailsInModal')
 		},
 	},
+	provide() {
+		return {
+			boardApi,
+		}
+	},
+
 	methods: {
 		hideModal() {
 			this.$router.push({ name: 'board' })
