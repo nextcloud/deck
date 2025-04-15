@@ -102,7 +102,10 @@
 				<transition :appear="animate && !card.animated && (card.animated=true)"
 					:appear-class="'zoom-appear-class'"
 					:appear-active-class="'zoom-appear-active-class'">
-					<CardItem :id="card.id" ref="card" :dragging="draggingCard" />
+					<CardItem :id="card.id"
+						ref="card"
+						:dragging="draggingCard"
+						@open-card="openCard" />
 				</transition>
 			</Draggable>
 		</Container>
@@ -171,6 +174,9 @@ export default {
 			default: undefined,
 		},
 	},
+	emits: [
+		'open-card',
+	],
 	data() {
 		return {
 			editing: false,
@@ -233,6 +239,9 @@ export default {
 	},
 
 	methods: {
+		openCard(cardId) {
+			this.$emit('open-card', cardId)
+		},
 		stopCardCreation(e) {
 			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
 			// so we have to ignore it
