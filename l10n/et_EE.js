@@ -39,6 +39,7 @@ OC.L10N.register(
     "Delete" : "Kustuta",
     "Delete list" : "Kustuta loend",
     "Edit" : "Redigeeri",
+    "Members" : "Liikmed",
     "Invalid path selected" : "Vigane asukoht on valitud",
     "Upload new files" : "Laadi uued failid üles",
     "Share from Files" : "Jaga failirakendusest",
