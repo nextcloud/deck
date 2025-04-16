@@ -38,7 +38,7 @@ OC.L10N.register(
     "Can edit" : "Var labot",
     "Can share" : "Var koplietot",
     "Owner" : "Īpašnieks",
-    "Delete" : "Dzēst",
+    "Delete" : "Izdzēst",
     "Edit" : "Labot",
     "Members" : "Biedri",
     "File to share" : "Kopīgojamā datne",
