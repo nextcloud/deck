@@ -159,9 +159,7 @@ class CardService {
 			$this->logger->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
 			return [];
 		}
-		$cards = $this->cardMapper->findCalendarEntries($boardId);
-		$this->enrichCards($cards);
-		return $cards;
+		return $this->cardMapper->findCalendarEntries($boardId);
 	}
 
 	/**
