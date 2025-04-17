@@ -201,6 +201,7 @@ OC.L10N.register(
     "Shift" : "Shift",
     "Ctrl" : "Ctrl",
     "Search" : "Søg",
+    "Enter" : "Indtast",
     "All boards" : "Alle tavler",
     "Archived boards" : "Arkiverede lister",
     "Shared with you" : "Delt med dig",
