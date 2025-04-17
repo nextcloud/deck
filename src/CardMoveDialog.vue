@@ -19,6 +19,7 @@
 				:input-label="t('deck', 'Select a list')"
 				:options="stacksFromBoard"
 				:max-height="100"
+				data-cy="select-stack"
 				label="title" />
 
 			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
@@ -55,6 +56,15 @@ export default {
 		},
 		isBoardAndStackChoosen() {
 			return !(this.selectedBoard === '' || this.selectedStack === '')
+		},
+	},
+	watch: {
+		selectedBoard: {
+			immediate: true,
+			handler() {
+				this.selectedStack = ''
+				this.stacksFromBoard = []
+			},
 		},
 	},
 	mounted() {
