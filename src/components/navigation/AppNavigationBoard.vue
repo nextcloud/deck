@@ -15,6 +15,10 @@
 		<template #icon>
 			<NcAppNavigationIconBullet :color="board.color" />
 			<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
+			<BoardExportModal v-if="exportModalOpen"
+				:board-title="board.title"
+				@export="onExportBoard"
+				@close="onCloseExportBoard" />
 		</template>
 
 		<template #counter>
@@ -161,6 +165,8 @@ import { emit } from '@nextcloud/event-bus'
 
 import isTouchDevice from '../../mixins/isTouchDevice.js'
 import BoardCloneModal from './BoardCloneModal.vue'
+import BoardExportModal from './BoardExportModal.vue'
+import { showLoading } from '@nextcloud/dialogs'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -179,6 +185,7 @@ export default {
 		CloseIcon,
 		CheckIcon,
 		BoardCloneModal,
+		BoardExportModal,
 	},
 	directives: {
 		ClickOutside,
@@ -207,6 +214,7 @@ export default {
 			updateDueSetting: null,
 			canCreate: canCreateState,
 			cloneModalOpen: false,
+			exportModalOpen: false,
 		}
 	},
 	computed: {
@@ -346,7 +354,16 @@ export default {
 			this.updateDueSetting = null
 		},
 		actionExport() {
-			this.boardApi.exportBoard(this.board)
+			this.exportModalOpen = true
+		},
+		async onExportBoard(format) {
+			this.exportModalOpen = false
+			const loadingToast = showLoading(t('deck', 'Exporting board...'))
+			await this.boardApi.exportBoard(this.board, format)
+			loadingToast.hideToast()
+		},
+		onCloseExportBoard() {
+			this.exportModalOpen = false
 		},
 		onNavigate() {
 			if (this.isTouchDevice) {
