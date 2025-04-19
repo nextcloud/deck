@@ -13,6 +13,9 @@ on:
   schedule:
     - cron: "5 2 * * 0"
 
+permissions:
+  contents: read
+
 jobs:
   update-nextcloud-ocp:
     runs-on: ubuntu-latest
@@ -28,6 +31,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
+          persist-credentials: false
           ref: ${{ matrix.branches }}
           submodules: true
         continue-on-error: true
