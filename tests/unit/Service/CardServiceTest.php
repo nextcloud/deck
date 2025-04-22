@@ -258,6 +258,17 @@ class CardServiceTest extends TestCase {
 			->method('find')
 			->willReturn($card, $clonedCard);
 
+		$this->cardMapper->expects($this->any())
+			->method('findBoardId')
+			->willReturn(1234);
+
+		$this->labelMapper->expects($this->any())
+			->method('find')
+			->willReturn(Label::fromRow([
+				'id' => 1,
+				'boardId' => 1234,
+			]));
+
 		// check if users are assigned
 		$this->assignmentService->expects($this->once())
 			->method('assignUser')
@@ -433,8 +444,17 @@ class CardServiceTest extends TestCase {
 	public function testAssignLabel() {
 		$card = new Card();
 		$card->setArchived(false);
+		$card->setId(123);
+		$label = new Label();
+		$label->setBoardId(1);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('assignLabel');
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->willReturn(1);
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
 		$this->cardService->assignLabel(123, 999);
 	}
 
@@ -450,8 +470,17 @@ class CardServiceTest extends TestCase {
 	public function testRemoveLabel() {
 		$card = new Card();
 		$card->setArchived(false);
+		$card->setId(123);
+		$label = new Label();
+		$label->setBoardId(1);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('removeLabel');
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->willReturn(1);
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
 		$this->cardService->removeLabel(123, 999);
 	}
 
