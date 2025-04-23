@@ -81,6 +81,7 @@ jobs:
 
     steps:
       - name: Set app env
+        if: ${{ env.APP_NAME == '' }}
         run: |
           # Split and keep last
           echo "APP_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
@@ -88,6 +89,7 @@ jobs:
       - name: Checkout server
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
+          persist-credentials: false
           submodules: true
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
@@ -95,6 +97,7 @@ jobs:
       - name: Checkout app
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
+          persist-credentials: false
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
@@ -105,6 +108,8 @@ jobs:
           extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, mysql, pdo_mysql
           coverage: none
           ini-file: development
+          # Temporary workaround for missing pcntl_* in PHP 8.3
+          ini-values: disable_functions=
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -123,7 +128,9 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_composer.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
+        run: |
+          composer remove nextcloud/ocp --dev
+          composer i
 
       - name: Set up Nextcloud
         env:
