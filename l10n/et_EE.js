@@ -69,6 +69,8 @@ OC.L10N.register(
     "seconds ago" : "sekundit tagasi",
     "Keyboard shortcuts" : "Klaviatuuri otseteed",
     "Keyboard shortcut" : "Klaviatuuri otsetee",
+    "Action" : "Tegevus",
+    "Shift" : "Nihuta",
     "Search" : "Otsi",
     "Shared with you" : "Sinuga jagatud",
     "Cancel edit" : "Loobu muutmisest",
