@@ -74,6 +74,7 @@ OC.L10N.register(
     "Search" : "Otsi",
     "Shared with you" : "Sinuga jagatud",
     "Cancel edit" : "Loobu muutmisest",
+    "No reminder" : "Meeldetuletust pole",
     "An error occurred" : "Tekkis tõrge",
     "No notifications" : "Märguandeid pole",
     "Advanced options" : "Täpsemad valikud",
