@@ -83,6 +83,7 @@ OC.L10N.register(
     "No results found" : "Otsingutulemusi ei leidu",
     "Due on {date}" : "Tähtaeg: {date}",
     "Close" : "Sulge",
+    "Error creating the share" : "Viga jaosmeedia loomisel",
     "Share" : "Jaga",
     "Personal" : "Isiklik"
 },
