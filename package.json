@@ -60,7 +60,7 @@
     "vue-easymde": "^2.0.0",
     "vue-infinite-loading": "^2.4.5",
     "vue-material-design-icons": "^5.3.1",
-    "vue-router": "^3.6.5",
+    "vue-router": "^4.5.1",
     "vue-smooth-dnd": "^0.8.1",
     "vuex": "^3.6.2",
     "vuex-router-sync": "^5.0.0"
