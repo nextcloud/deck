@@ -54,6 +54,9 @@
         <live-migration>
             <step>OCA\Deck\Migration\DeletedCircleCleanup</step>
         </live-migration>
+        <post-migration>
+            <step>OCA\Deck\Migration\LabelMismatchCleanup</step>
+        </post-migration>
     </repair-steps>
     <commands>
         <command>OCA\Deck\Command\UserExport</command>
