@@ -51,6 +51,7 @@ OC.L10N.register(
     "Mark as done" : "Bajarildi deb belgilang",
     "Not done" : "Bajarilmadi",
     "Archive card" : "Arxiv kartasi",
+    "Edit title" : "Sarlavhani tahrirlash",
     "Delete card" : "Kartani o'chirish",
     "seconds ago" : "seconds ago",
     "Search" : "Search",
