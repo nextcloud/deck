@@ -87,8 +87,8 @@ describe('Card', function () {
 		cy.get('.modal-mask.card-selector button.button-vue--vue-primary').should('be.visible').click()
 		cy.wait('@save', { timeout: 7000 })
 
-		cy.visit(`/apps/deck/#/board/${boardId}`)
 		cy.reload()
+		cy.visit(`/apps/deck/#/board/${boardId}`)
 		cy.get('.board .stack').eq(0).within(() => {
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
 		})
