@@ -37,7 +37,7 @@ jobs:
         uname -a
         RUST_BACKTRACE=1 krankerl --version
         RUST_BACKTRACE=1 krankerl package
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: Deck app tarball
         path: build/artifacts/deck.tar.gz
