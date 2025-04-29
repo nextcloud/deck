@@ -75,6 +75,21 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	public function deleteByParticipantOnBoard(string $participant, int $boardId, $type = Assignment::TYPE_USER) {
+		$qb = $this->db->getQueryBuilder();
+		$cardIdQuery = $this->db->getQueryBuilder();
+		$cardIdQuery->select('a.card_id')
+			->from('deck_assigned_users', 'a')
+			->innerJoin('a', 'deck_cards', 'c', 'c.id = a.card_id')
+			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->where($cardIdQuery->expr()->eq('a.participant', $qb->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
+			->andWhere($cardIdQuery->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($cardIdQuery->expr()->eq('a.type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)));
+		$qb->delete('deck_assigned_users')
+			->where($qb->expr()->in('card_id', $qb->createFunction($cardIdQuery->getSQL()), IQueryBuilder::PARAM_INT_ARRAY));
+		$qb->executeStatement();
+	}
+
 
 	public function isOwner($userId, $id): bool {
 		return $this->cardMapper->isOwner($userId, $id);
