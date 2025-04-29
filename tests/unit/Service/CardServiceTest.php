@@ -31,6 +31,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
@@ -347,8 +348,17 @@ class CardServiceTest extends TestCase {
 	public function testAssignLabel() {
 		$card = new Card();
 		$card->setArchived(false);
+		$card->setId(123);
+		$label = new Label();
+		$label->setBoardId(1);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('assignLabel');
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->willReturn(1);
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
 		$this->cardService->assignLabel(123, 999);
 	}
 
@@ -364,8 +374,17 @@ class CardServiceTest extends TestCase {
 	public function testRemoveLabel() {
 		$card = new Card();
 		$card->setArchived(false);
+		$card->setId(123);
+		$label = new Label();
+		$label->setBoardId(1);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('removeLabel');
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->willReturn(1);
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
 		$this->cardService->removeLabel(123, 999);
 	}
 
