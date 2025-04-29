@@ -5,6 +5,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.5
+### Fixed
+* [stable30] Clear selected stack when selected board changed by @backportbot in https://github.com/nextcloud/deck/pull/6914
+* [stable30] perf: Skip doing a query just to check if a board is deleted by @backportbot in https://github.com/nextcloud/deck/pull/6895
+* [stable30] fix: only delete assignments on unshared board by @grnd-alt in https://github.com/nextcloud/deck/pull/6935
+* [stable30] fix: Limit label actions to labels of the cards board by @backportbot in https://github.com/nextcloud/deck/pull/6953
+
+### Maintenance
+* Chore(deps): Bump @babel/runtime from 7.26.10 to 7.27.0 by @dependabot in https://github.com/nextcloud/deck/pull/6866
+* Chore(deps): Bump dompurify from 3.2.4 to 3.2.5 by @dependabot in https://github.com/nextcloud/deck/pull/6881
+* Chore(deps): Bump @nextcloud/vue from 8.23.1 to 8.24.0 by @dependabot in https://github.com/nextcloud/deck/pull/6882
+* [stable30] Fix npm audit by @nextcloud-command in https://github.com/nextcloud/deck/pull/6887
+* Chore(deps-dev): Bump @nextcloud/webpack-vue-config from 6.2.0 to 6.3.0 by @dependabot in https://github.com/nextcloud/deck/pull/6909
+* [stable30] Fix npm audit by @nextcloud-command in https://github.com/nextcloud/deck/pull/6911
+* Chore(deps): Bump @nextcloud/vue from 8.24.0 to 8.25.1 by @dependabot in https://github.com/nextcloud/deck/pull/6923
+* [stable30] chore: update workflows from templates by @backportbot in https://github.com/nextcloud/deck/pull/6921
+* Chore(deps): Bump @nextcloud/vue from 8.25.1 to 8.26.0 by @dependabot in https://github.com/nextcloud/deck/pull/6939
+* [stable30] Fix npm audit by @nextcloud-command in https://github.com/nextcloud/deck/pull/6948
+
 ## 1.14.4
 ### Fixed
  - fix: skip exporting a deleted card #6722
@@ -15,7 +34,7 @@ All notable changes to this project will be documented in this file.
  - Update nextcloud/ocp dependency #6718
  - Update nextcloud/ocp dependency #6700
  - Update nextcloud/ocp dependency #6656
- 
+
 ## 1.14.3
 ### Fixed
  - fix: two close buttons on card modal @app/backportbot [#6659](https://github.com/nextcloud/deck/pull/6659)
