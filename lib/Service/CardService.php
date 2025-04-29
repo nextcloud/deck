@@ -620,8 +620,9 @@ class CardService {
 	public function assignLabel($cardId, $labelId) {
 		$this->cardServiceValidator->check(compact('cardId', 'labelId'));
 
-
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
+
 		if ($this->boardService->isArchived($this->cardMapper, $cardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
@@ -630,6 +631,9 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$label = $this->labelMapper->find($labelId);
+		if ($label->getBoardId() !== $this->cardMapper->findBoardId($card->getId())) {
+			throw new StatusException('Operation not allowed. Label does not exist.');
+		}
 		$this->cardMapper->assignLabel($cardId, $labelId);
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
@@ -651,6 +655,8 @@ class CardService {
 
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
+
 		if ($this->boardService->isArchived($this->cardMapper, $cardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
@@ -659,6 +665,9 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$label = $this->labelMapper->find($labelId);
+		if ($label->getBoardId() !== $this->cardMapper->findBoardId($card->getId())) {
+			throw new StatusException('Operation not allowed. Label does not exist.');
+		}
 		$this->cardMapper->removeLabel($cardId, $labelId);
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
