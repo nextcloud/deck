@@ -5,6 +5,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.1
+### Fixed
+* [stable31] fix: Properly show attachment extension by @backportbot in https://github.com/nextcloud/deck/pull/6701
+* [stable31] Clear selected stack when selected board changed by @backportbot in https://github.com/nextcloud/deck/pull/6915
+* [stable31] fix: Use strings as rich object ids by @backportbot in https://github.com/nextcloud/deck/pull/6951
+* [stable31] fix: Limit label actions to labels of the cards board by @backportbot in https://github.com/nextcloud/deck/pull/6954
+* [stable31] fix: only delete assignments on unshared board by @grnd-alt in https://github.com/nextcloud/deck/pull/6934
+
+### Improvements
+* [stable31] perf: Skip doing a query just to check if a board is deleted by @backportbot in https://github.com/nextcloud/deck/pull/6894
+
 ## 1.15.0
 ### Fixed
  - Fix: Adapt URLs generated in the backend to new routes #6743
