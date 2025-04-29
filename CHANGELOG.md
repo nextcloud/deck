@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.6
+### Fixed
+* [stable29] Clear selected stack when selected board changed by @backportbot in https://github.com/nextcloud/deck/pull/6913
+* [stable29] fix: only delete assignments on unshared board by @grnd-alt in https://github.com/nextcloud/deck/pull/6936
+* [stable29] fix: Limit label actions to labels of the cards board by @backportbot in https://github.com/nextcloud/deck/pull/6952
+
+### Maintenance
+* Chore(deps): Bump @nextcloud/vue from 8.23.1 to 8.24.0 by @dependabot in https://github.com/nextcloud/deck/pull/6880
+* Chore(deps): Bump dompurify from 3.2.4 to 3.2.5 by @dependabot in https://github.com/nextcloud/deck/pull/6878
+* Chore(deps): Bump @babel/runtime from 7.26.10 to 7.27.0 by @dependabot in https://github.com/nextcloud/deck/pull/6864
+* Chore(deps-dev): Bump @nextcloud/webpack-vue-config from 6.2.0 to 6.3.0 by @dependabot in https://github.com/nextcloud/deck/pull/6905
+* [stable29] Update nextcloud/ocp dependency by @nextcloud-command in https://github.com/nextcloud/deck/pull/6886
+* Chore(deps): Bump @nextcloud/vue from 8.24.0 to 8.25.1 by @dependabot in https://github.com/nextcloud/deck/pull/6927
+* Chore(deps): Bump @nextcloud/vue from 8.25.1 to 8.26.0 by @dependabot in https://github.com/nextcloud/deck/pull/6941
+* [stable29] Fix npm audit by @nextcloud-command in https://github.com/nextcloud/deck/pull/6949
+
 ## 1.13.5
 ### Fixed
 * [stable29] fix: design review issues by @backportbot in https://github.com/nextcloud/deck/pull/6857
