@@ -23,6 +23,7 @@ OC.L10N.register(
     "seconds ago" : "វិនាទី​មុន",
     "Search" : "ស្វែងរក",
     "Shared with you" : "Shared with you",
+    "Export" : "នាំចេញ",
     "Today" : "ថ្ងៃ​នេះ",
     "Close" : "បិទ",
     "Share" : "ចែក​រំលែក",
