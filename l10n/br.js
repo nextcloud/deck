@@ -1,12 +1,12 @@
 OC.L10N.register(
     "deck",
     {
+    "The file was uploaded" : "Kaset eo bet ar restr",
+    "No file was uploaded" : "N'eus restr ebet a zo bet kaset",
     "Finished" : "Achuet",
     "copy" : "eil",
     "In Progress" : "War ar stern",
     "Done" : "Graet",
-    "The file was uploaded" : "Kaset eo bet ar restr",
-    "No file was uploaded" : "N'eus restr ebet a zo bet kaset",
     "Invalid date, date format must be YYYY-MM-DD" : "Deizat fall, stumm an deizat a zo ret bezhañ BBBB-MM-DD",
     "Cancel" : "Nullañ",
     "Drop your files to upload" : "Laoskit ho restroù evit pellkas",

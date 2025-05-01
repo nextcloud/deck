@@ -1,8 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "copy" : "copiar",
-    "Done" : "Done",
     "The file was uploaded" : "Lo fichièr es estat enviat",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Lo fichièr enviat despassa la directiva upload_max_filesize de php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Lo fichièr enviat despassa la directiva MAX_FILE_SIZE especificada dins lo formulari HTML",
@@ -11,6 +9,8 @@ OC.L10N.register(
     "Missing a temporary folder" : "Dossièr temporari absent",
     "Could not write file to disk" : "Escritura impossibla al disc",
     "A PHP extension stopped the file upload" : "Una extension PHP a arrestat lo mandadís de fichièr",
+    "copy" : "copiar",
+    "Done" : "Done",
     "Invalid date, date format must be YYYY-MM-DD" : "Invalida data, lo format de data deu èsser YYYY-MM-DD",
     "Cancel" : "Anullar",
     "Drop your files to upload" : "Depausatz los fichièrs d’enviar",
@@ -55,6 +55,7 @@ OC.L10N.register(
     "An error occurred" : "Una error s’es producha",
     "No notifications" : "Cap de notificacion",
     "Advanced options" : "Opcions avançadas",
+    "Export" : "Exportar",
     "Today" : "Uèi",
     "Tomorrow" : "Deman",
     "{stack} in {board}" : "{stack} dins {board}",

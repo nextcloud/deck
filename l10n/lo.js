@@ -1,10 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Finished" : "ສຳເລັດ",
-    "Done" : "ສໍາເລັດ",
     "The file was uploaded" : "ຟາຍຖຶກອັບໂຫລດສຳເລັດ",
     "No file was uploaded" : "ບໍ່ມີການອັບໂຫລດຟາຍ",
+    "Finished" : "ສຳເລັດ",
+    "Done" : "ສໍາເລັດ",
     "Cancel" : "ຍົກເລີກ",
     "Completed" : "ສຳເລັດ",
     "Details" : "ລາຍລະອຽດ",
