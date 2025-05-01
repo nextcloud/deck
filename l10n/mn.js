@@ -41,6 +41,7 @@ OC.L10N.register(
     "Shared with you" : "тантай хуваалцсан",
     "No notifications" : "Мэдэгдэл байхгүй",
     "Advanced options" : "Бусад сонголтууд",
+    "Export" : "Экспорт",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",

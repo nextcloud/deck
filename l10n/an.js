@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Done" : "Feito",
     "The file was uploaded" : "O fichero estió puyato",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "O fichero puyato sobrexe a directiva upload_max_filesize en php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "O fichero cargau supera a directiva MAX_FILE_SIZE que s'especificó en o formulario HTML",
@@ -10,6 +9,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "Falta una carpeta temporal",
     "Could not write file to disk" : "No se podió escribir o fichero en o disco",
     "A PHP extension stopped the file upload" : "Una estensión de PHP aturó a carga de fichers",
+    "Done" : "Feito",
     "Cancel" : "Cancelar",
     "Details" : "Detalles",
     "Tags" : "Etiquetas",
