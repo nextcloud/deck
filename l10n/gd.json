@@ -1,5 +1,4 @@
 { "translations": {
-    "Finished" : "Deiseil",
     "The file was uploaded" : "Chaidh am faidhle a luchdadh suas",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Tha am faidhle a luchdaich thu suas a’ dol thairis air an riaghailt upload_max_filesize ann am php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Tha am faidhle a luchdaich thu suas a’ dol thairis air an riaghailt MAX_FILE_SIZE a chaidh a shònrachadh san fhoirm HTML",
@@ -8,6 +7,7 @@
     "Missing a temporary folder" : "Tha pasgan sealach a dhìth",
     "Could not write file to disk" : "Cha b’ urrainn dhuinn am faidhle a sgrìobhadh dhan diosg",
     "A PHP extension stopped the file upload" : "Chur leudachan PHP stad air luchdadh suas an fhaidhle",
+    "Finished" : "Deiseil",
     "Cancel" : "Sguir dheth",
     "Completed" : "Coileanta",
     "Details" : "Mion-fhiosrachadh",

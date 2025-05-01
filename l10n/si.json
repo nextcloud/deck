@@ -1,8 +1,8 @@
 { "translations": {
-    "Later" : "පසුව",
-    "copy" : "පිටපත්",
     "No file was uploaded" : "කිසිදු ගොනුවක් උඩුගත කර නොමැත",
     "Missing a temporary folder" : "තාවකාලික බහාලුමක් අස්ථානගත වී ඇත",
+    "Later" : "පසුව",
+    "copy" : "පිටපත්",
     "Cancel" : "අවලංගු කරන්න",
     "File already exists" : "ගොනුව දැනටමත් පවතී",
     "Add list" : "ලැයිස්තුව එකතු කරන්න",

@@ -1,8 +1,4 @@
 { "translations": {
-    "Finished" : "เสร็จสิ้น",
-    "copy" : "คัดลอก",
-    "In Progress" : "อยู่ระหว่างการดำเนินการ",
-    "Done" : "เสร็จสิ้น",
     "The file was uploaded" : "ไฟล์อัปโหลดแล้ว",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "ขนาดไฟล์ที่อัปโหลดมีขนาดเกินค่า upload_max_filesize ที่ระบุไว้ใน php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "ไฟล์ที่อัปโหลดมีขนาดใหญ่เกินค่า MAX_FILE_SIZE ที่ระบุไว้ในรูปแบบของ HTML",
@@ -11,6 +7,10 @@
     "Missing a temporary folder" : "โฟลเดอร์ชั่วคราวขาดหาย",
     "Could not write file to disk" : "ไม่สามารถเขียนไฟล์ลงดิสก์",
     "A PHP extension stopped the file upload" : "ส่วนขยาย PHP ได้หยุดการอัปโหลดไฟล์",
+    "Finished" : "เสร็จสิ้น",
+    "copy" : "คัดลอก",
+    "In Progress" : "อยู่ระหว่างการดำเนินการ",
+    "Done" : "เสร็จสิ้น",
     "Card not found" : "ไม่พบการ์ด",
     "Invalid date, date format must be YYYY-MM-DD" : "วันที่ไม่ถูกต้อง รูปแบบวันที่จะต้องเป็น ปปปป-ดด-วว",
     "Cancel" : "ยกเลิก",
@@ -52,9 +52,11 @@
     "No notifications" : "ไม่มีการแจ้งเตือน",
     "Delete board" : "ลบกระดาน",
     "Advanced options" : "ตัวเลือกขั้นสูง",
+    "Export" : "ส่งออก",
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้",
     "Close" : "ปิด",
+    "Due date" : "วันที่ครบกำหนด",
     "Share" : "แชร์",
     "Personal" : "ส่วนตัว"
 },"pluralForm" :"nplurals=1; plural=0;"
