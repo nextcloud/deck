@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Done" : "Done",
     "The file was uploaded" : "Նիշքը վերբերռնված է",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Վերբեռնած նիշքը գերազանցում է upload_max_filesize սահմանված php.ini֊ում",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Վերբեռնած նիշքը գերազանցում է MAX_FILE_SIZE, որը սահմանված է HTML ձևաթղթում",
@@ -10,6 +9,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "Բացակայում է ժամանակավոր պանակը",
     "Could not write file to disk" : "Չհաջողվեց գրառել նիշքը սկավառակի վրա",
     "A PHP extension stopped the file upload" : "PHP֊ի ընդլայնումն կանգնեցրեց նիշքի վերբեռնումը",
+    "Done" : "Done",
     "Cancel" : "ընդհատել",
     "Completed" : "Ավարտվեց",
     "Details" : "Մանրամասներ",
@@ -29,6 +29,7 @@ OC.L10N.register(
     "seconds ago" : "վրկ. առաջ",
     "Search" : "Search",
     "Shared with you" : "Shared with you",
+    "Export" : "Արտահանում",
     "Today" : "այսօր",
     "Close" : "Փակել",
     "Share" : "Կիսվել",

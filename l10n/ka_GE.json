@@ -1,5 +1,9 @@
 { "translations": {
     "Deck" : "დასტა",
+    "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "ატვირთული ფაილი აჭარბებს php.ini-ში დაყენებულ upload_max_filesize დირექტივას",
+    "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "ატვირთული ფაილი აჭარბებს HTML ფორამაში მითითებულ MAX_FILE_SIZE დირექტივას",
+    "No file was uploaded" : "ფაილი არ აიტვირთა",
+    "Missing a temporary folder" : "დროებითი დირექტორია არ არსებობს",
     "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "The board \"%s\" has been shared with you by %s." : "დაფა \"%s\" თქვენთან გაზიარდა %s-ისთვის.",
     "%s on %s" : "%s %s-ზე",
@@ -8,10 +12,6 @@
     "Action needed" : "საჭიროა ქმედება",
     "Later" : "მოგვიანებით",
     "Done" : "დასრულებულია",
-    "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "ატვირთული ფაილი აჭარბებს php.ini-ში დაყენებულ upload_max_filesize დირექტივას",
-    "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "ატვირთული ფაილი აჭარბებს HTML ფორამაში მითითებულ MAX_FILE_SIZE დირექტივას",
-    "No file was uploaded" : "ფაილი არ აიტვირთა",
-    "Missing a temporary folder" : "დროებითი დირექტორია არ არსებობს",
     "Invalid date, date format must be YYYY-MM-DD" : "არასწორი თარიღი, თარიღის ფორმატი უნდა იყოს წწწწ-თთ-დდ",
     "Cancel" : "უარყოფა",
     "File already exists" : "ფაილი უკვე არსებობს",
@@ -58,9 +58,11 @@
     "No notifications" : "შეტყობინებები არაა",
     "Delete board" : "დაფის გაუქმება",
     "Advanced options" : "დამატებითი ოპციონები",
+    "Export" : "ექსპორტი",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
     "Close" : "დახურვა",
+    "Due date" : "განპირობებულია თარიღისთვის",
     "Share" : "გაზიარება",
     "Personal" : "პირადი"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
