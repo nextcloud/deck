@@ -30,6 +30,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "No reminder" : "Dim nodyn atgoffa",
     "An error occurred" : "Digwyddodd gwall",
+    "Export" : "Allforio",
     "Today" : "Heddiw",
     "Close" : "Cau",
     "Share" : "Rhannu",
