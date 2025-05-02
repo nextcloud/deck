@@ -34,6 +34,7 @@ OC.L10N.register(
     "seconds ago" : "saniyələr öncə",
     "Search" : "Axtarış",
     "Shared with you" : "Shared with you",
+    "Export" : "Çıxarış",
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah",
     "Close" : "Bağla",
