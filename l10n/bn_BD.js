@@ -28,6 +28,7 @@ OC.L10N.register(
     "Keyboard shortcuts" : "কী-বোর্ড শর্টকাট",
     "Search" : "Search",
     "Shared with you" : "Shared with you",
+    "Export" : "রপ্তানি",
     "Today" : "আজ",
     "Tomorrow" : "আগামীকাল",
     "Close" : "বন্ধ",

@@ -258,7 +258,7 @@ OC.L10N.register(
     "Add Attachment" : "Adicionar anexo",
     "Choose attachment" : "Escolher anexo",
     "Select Date" : "Selecionar Data",
-    "Later today – {timeLocale}" : "Mais tarde hoje – {timeLocale}",
+    "Later today – {timeLocale}" : "Hoje mais tarde – {timeLocale}",
     "Set due date for later today" : "Defina a data de vencimento para hoje mais tarde",
     "Tomorrow – {timeLocale}" : "Amanhã – {timeLocale}",
     "Set due date for tomorrow" : "Defina a data de vencimento para amanhã",
