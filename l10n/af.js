@@ -43,9 +43,11 @@ OC.L10N.register(
     "An error occurred" : "'n Fout het voorgekom",
     "No notifications" : "Geen kennisgewings",
     "Advanced options" : "Gevorderde opsies",
+    "Export" : "Voer uit",
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
     "Close" : "Sluit",
+    "Due date" : "Sperdatum",
     "Share" : "Deel",
     "Personal" : "Persoonlik"
 },

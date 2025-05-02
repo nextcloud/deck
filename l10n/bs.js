@@ -24,6 +24,7 @@ OC.L10N.register(
     "Keyboard shortcuts" : "Tipkovni prečaci",
     "Search" : "Search",
     "Shared with you" : "Shared with you",
+    "Export" : "Izvezi",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",
     "Close" : "Zatvori",
