@@ -399,7 +399,7 @@
     "Failed to upload {name}" : "{name} konnte nicht hochgeladen werden",
     "Maximum file size of {size} exceeded" : "Maximale Dateigröße von {size} überschritten",
     "Assigned users" : "Zugewiesene Benutzer",
-    "Due date" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Due date" : "Fälligkeitsdatum",
     "Error creating the share" : "Fehler beim Erstellen der Freigabe",
     "Share with a Deck card" : "Mit einer Deck-Karte teilen",
     "Share {file} with a Deck card" : "{file} mit einer Deck-Karte teilen",
