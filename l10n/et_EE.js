@@ -86,6 +86,7 @@ OC.L10N.register(
     "No results found" : "Otsingutulemusi ei leidu",
     "Due on {date}" : "Tähtaeg: {date}",
     "Close" : "Sulge",
+    "Failed to upload {name}" : "„{name}“ üleslaadimine ei õnnestunud",
     "Due date" : "Tähtaeg",
     "Error creating the share" : "Viga jaosmeedia loomisel",
     "Share" : "Jaga",
