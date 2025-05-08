@@ -12,6 +12,7 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "PHP laiendus peatas faili üleslaadimise",
     "No file uploaded or file size exceeds maximum of %s" : "Faili ei laaditud üles või selle suurus ületab maksimaalse %s",
     "Load more" : "Laadi veel",
+    "Deck board" : "Kanbani tahvel",
     "%s on %s" : "%s %s-l",
     "Finished" : "Lõpetatud",
     "Later" : "Hiljem",
