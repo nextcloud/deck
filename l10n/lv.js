@@ -58,7 +58,7 @@ OC.L10N.register(
     "Later today – {timeLocale}" : "Vēlāk šodien – {timeLocale}",
     "(group)" : "(grupa)",
     "Open link" : "Atvērt saiti",
-    "seconds ago" : "sekundēm",
+    "seconds ago" : "pirms vairākām sekundēm",
     "Keyboard shortcuts" : "Tastatūras saīsnes",
     "Keyboard shortcut" : "Tastatūras saīsne",
     "Action" : "Darbība",
