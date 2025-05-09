@@ -11,7 +11,8 @@
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived" tabindex="0">
-					{{ stack.title }}
+					<span class="stack__title-text">{{ stack.title }}</span>
+					<span class="stack__title-counter">{{ cardsCount }}</span>
 				</h3>
 				<h3 v-else-if="!editing"
 					title="stack.title"
@@ -21,7 +22,8 @@
 					class="stack__title"
 					@click="startEditing(stack)"
 					@keydown.enter="startEditing(stack)">
-					{{ stack.title }}
+					<span class="stack__title-text">{{ stack.title }}</span>
+					<span class="stack__title-counter">{{ cardsCount }}</span>
 				</h3>
 				<form v-else-if="editing"
 					v-click-outside="cancelEdit"
@@ -203,6 +205,9 @@ export default {
 				}
 				return !card.archived
 			})
+		},
+		cardsCount() {
+			return this.cardsByStack?.length || 0
 		},
 		dragHandleSelector() {
 			return this.canEdit && !this.showArchived ? null : '.no-drag'
@@ -422,10 +427,26 @@ export default {
 			border-radius: 3px;
 			padding: 4px 4px;
 			font-size: var(--default-font-size);
+			display: flex;
+			justify-content: space-between; /* Asegura separación entre título y contador */
 
 			&:focus-visible {
 				outline: 2px solid var(--color-border-dark);
 				border-radius: 3px;
+			}
+
+			.stack__title-text {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				flex-grow: 1; /* Ocupa el máximo espacio disponible */
+			}
+
+			.stack__title-counter {
+				flex-shrink: 0;
+				margin-left: 8px;
+				color: var(--color-info-text);
+				font-size: 0.9em;
 			}
 		}
 
