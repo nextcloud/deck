@@ -3,18 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createStore } from 'vuex/dist/vuex.cjs.js'
 import { OverviewApi } from '../services/OverviewApi.js'
 
 const apiClient = new OverviewApi()
-export default createStore({
+export default {
 	state: {
 		assignedCards: [],
 		loading: false,
 	},
 	getters: {
-		assignedCardsDashboard(state) {
-			return () => state.assignedCards
+		assignedCardsDashboard: state => {
+			return state.assignedCards
 		},
 	},
 	mutations: {
@@ -44,4 +43,4 @@ export default createStore({
 			return promise
 		},
 	},
-})
+}

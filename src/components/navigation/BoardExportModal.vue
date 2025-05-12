@@ -5,13 +5,13 @@
 <template>
 	<NcDialog :name="t('deck', 'Export {boardTitle}', {boardTitle: boardTitle})" @update:open="close">
 		<div class="modal__content">
-			<NcCheckboxRadioSwitch :checked.sync="exportFormat"
+			<NcCheckboxRadioSwitch v-model="exportFormat"
 				value="json"
 				type="radio"
 				name="board_export_format">
 				{{ t('deck', 'Export as JSON') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch :checked.sync="exportFormat"
+			<NcCheckboxRadioSwitch v-model="exportFormat"
 				value="csv"
 				type="radio"
 				name="board_export_format">
