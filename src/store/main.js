@@ -6,7 +6,6 @@
 import 'url-search-params-polyfill'
 
 import { loadState } from '@nextcloud/initial-state'
-import Vue from 'vue'
 import { createStore } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
@@ -129,7 +128,7 @@ const store = createStore({
 	},
 	mutations: {
 		setFullApp(state, isFullApp) {
-			Vue.set(state, 'isFullApp', isFullApp)
+			state.isFullApp = isFullApp
 		},
 		setHasCardSaveError(state, hasCardSaveError) {
 			Vue.set(state, 'hasCardSaveError', hasCardSaveError)
@@ -144,11 +143,11 @@ const store = createStore({
 				})
 
 				if (indexExisting > -1) {
-					Vue.set(state.boards[indexExisting].settings, configKey, value)
+					state.boards[indexExisting].settings[configKey] = value
 				}
 				break
 			default:
-				Vue.set(state.config, key, value)
+				state.config[key] = value
 			}
 		},
 		setSearchQuery(state, searchQuery) {
@@ -161,7 +160,7 @@ const store = createStore({
 			Object.keys(filter).forEach((key) => {
 				switch (key) {
 				case 'due':
-					Vue.set(state.filter, key, filter.due)
+					state.filter[key] = filter.due
 					break
 				default:
 					filter[key].forEach((item) => {
@@ -188,7 +187,7 @@ const store = createStore({
 			})
 
 			if (indexExisting > -1) {
-				Vue.set(state.boards, indexExisting, board)
+				state.boards[indexExisting] = board
 			} else {
 				state.boards.push(board)
 			}
@@ -200,7 +199,7 @@ const store = createStore({
 			})
 
 			if (indexExisting > -1) {
-				Vue.set(state.boards, indexExisting, board)
+				state.boards[indexExisting] = board
 			} else {
 				state.boards.push(board)
 			}
@@ -233,7 +232,7 @@ const store = createStore({
 			state.boards = boards
 		},
 		setSharees(state, shareesUsersAndGroups) {
-			Vue.set(state, 'sharees', shareesUsersAndGroups.exact.users)
+			state.sharees = shareesUsersAndGroups.exact.users
 			state.sharees.push(...shareesUsersAndGroups.exact.groups)
 			state.sharees.push(...shareesUsersAndGroups.exact.circles)
 
@@ -283,7 +282,7 @@ const store = createStore({
 		updateAclFromCurrentBoard(state, acl) {
 			for (const acl_ in state.currentBoard.acl) {
 				if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
-					Vue.set(state.currentBoard.acl, acl_, acl)
+					state.currentBoard.acl[acl_] = acl
 					break
 				}
 			}
@@ -299,7 +298,7 @@ const store = createStore({
 			}
 
 			if (removeIndex > -1) {
-				Vue.delete(state.currentBoard.acl, removeIndex)
+				state.currentBoard.acl.splice(removeIndex, 1)
 			}
 		},
 		TOGGLE_SHORTCUT_LOCK(state, lock) {

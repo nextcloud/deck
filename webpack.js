@@ -7,7 +7,7 @@ const isDevServer = process.env.WEBPACK_SERVE
 
 webpackConfig.entry = {
 	...webpackConfig.entry,
-	collections: path.join(__dirname, 'src', 'init-collections.js'),
+	// collections: path.join(__dirname, 'src', 'init-collections.js'),
 	dashboard: path.join(__dirname, 'src', 'init-dashboard.js'),
 	calendar: path.join(__dirname, 'src', 'init-calendar.js'),
 	talk: path.join(__dirname, 'src', 'init-talk.js'),
@@ -30,7 +30,5 @@ if (isDevServer) {
 		modules: true,
 	}
 }
-// Workaround for https://github.com/nextcloud/webpack-vue-config/pull/432 causing problems with nextcloud-vue-collections
-webpackConfig.resolve.alias = { vue: '@vue/compat' }
 
 module.exports = webpackConfig
