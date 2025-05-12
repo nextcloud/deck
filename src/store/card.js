@@ -179,7 +179,6 @@ export default {
 				.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 		},
 		cardById: state => (id) => {
-			alert('cardById')
 			return state.cards.find((card) => card.id === id)
 		},
 	},
