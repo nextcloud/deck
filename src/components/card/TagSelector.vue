@@ -7,7 +7,7 @@
 		<div class="selector-wrapper--icon">
 			<TagMultiple :size="20" />
 		</div>
-		<NcSelect :value="assignedLabels"
+		<NcSelect v-model="assignedLabels"
 			class="selector-wrapper--selector"
 			:multiple="true"
 			:disabled="disabled"
