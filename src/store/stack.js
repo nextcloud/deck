@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
 import { StackApi } from './../services/StackApi.js'
 import applyOrderToArray from './../helpers/applyOrderToArray.js'
 
@@ -26,7 +25,7 @@ export default {
 			const existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
 				const existingStack = state.stacks.find(_stack => _stack.id === stack.id)
-				Vue.set(state.stacks, existingIndex, Object.assign({}, existingStack, stack))
+				state.stacks[existingIndex] = { ...existingStack, ...stack }
 			} else {
 				state.stacks.push(stack)
 			}
