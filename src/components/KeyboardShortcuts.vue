@@ -260,7 +260,6 @@ export default {
 			this.$refs.shortcutModal?.focus()
 		},
 		close() {
-			console.log("HHHHH")
 			this.card = null
 			this.selector = null
 		},
