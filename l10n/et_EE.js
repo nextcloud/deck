@@ -89,6 +89,7 @@ OC.L10N.register(
     "An error occurred" : "Tekkis tõrge",
     "No notifications" : "Märguandeid pole",
     "Advanced options" : "Täpsemad valikud",
+    "Export {boardTitle}" : "Ekspordi „{boardTitle}“",
     "Export" : "Ekspordi",
     "Today" : "Täna",
     "Tomorrow" : "Homme",
