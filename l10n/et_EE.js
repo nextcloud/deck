@@ -29,6 +29,7 @@ OC.L10N.register(
     "Open" : "Ava",
     "Completed" : "Lõpetatud",
     "Overdue" : "Üle tähtaja",
+    "No due date" : "Tähtaega pole",
     "Clear filter" : "Tühjenda filter",
     "Open details" : "Ava üksikasjad",
     "Details" : "Üksikasjad",
