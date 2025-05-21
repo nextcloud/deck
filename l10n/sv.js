@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Exempeluppgift 3",
     "Example Task 2" : "Exempeluppgift 2",
     "Example Task 1" : "Exempeluppgift 1",
-    "Move card to another board" : "Flytta kort till en annan tavla",
-    "Filter by completed" : "Filtrera efter slutfört"
+    "Move card to another board" : "Flytta kort till en annan tavla"
 },
 "nplurals=2; plural=(n != 1);");

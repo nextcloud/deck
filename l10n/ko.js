@@ -383,7 +383,6 @@ OC.L10N.register(
     "Example Task 3" : "작업 예제 3",
     "Example Task 2" : "작업 예제 2",
     "Example Task 1" : "작업 예제 1",
-    "Move card to another board" : "카드를 다른 보드로 이동",
-    "Filter by completed" : "완료 기준으로 필터링"
+    "Move card to another board" : "카드를 다른 보드로 이동"
 },
 "nplurals=1; plural=0;");

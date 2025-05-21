@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Třetí úkol pro ukázku",
     "Example Task 2" : "Druhý úkol pro ukázku",
     "Example Task 1" : "První úkol pro ukázku",
-    "Move card to another board" : "Přesunout kartu na jinou tabuli",
-    "Filter by completed" : "Filtrovat podle dokončených"
+    "Move card to another board" : "Přesunout kartu na jinou tabuli"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

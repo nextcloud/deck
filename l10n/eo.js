@@ -119,6 +119,7 @@ OC.L10N.register(
     "No notifications" : "Neniu sciigo",
     "Delete board" : "Forigi tabulon",
     "Advanced options" : "Detalaj agordoj",
+    "Export" : "Eksporti",
     "Today" : "Hodiaŭ",
     "Tomorrow" : "Morgaŭ",
     "Close" : "Malfermi",
