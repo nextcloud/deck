@@ -384,7 +384,6 @@ OC.L10N.register(
     "Example Task 3" : "Eksempel oppgave 3",
     "Example Task 2" : "Eksempel oppgave 2",
     "Example Task 1" : "Eksempel oppgave 1",
-    "Move card to another board" : "Flytt kort til annen tavle",
-    "Filter by completed" : "Filtrer etter fullført"
+    "Move card to another board" : "Flytt kort til annen tavle"
 },
 "nplurals=2; plural=(n != 1);");

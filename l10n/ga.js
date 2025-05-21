@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Tasc Sampla 3",
     "Example Task 2" : "Tasc Sampla 2",
     "Example Task 1" : "Tasc Sampla 1",
-    "Move card to another board" : "Bog cárta go bord eile",
-    "Filter by completed" : "Scag de réir críochnaithe"
+    "Move card to another board" : "Bog cárta go bord eile"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

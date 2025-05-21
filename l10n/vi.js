@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Ví dụ công việc 3",
     "Example Task 2" : "Ví dụ công việc 2",
     "Example Task 1" : "Ví dụ công việc 1",
-    "Move card to another board" : "Di chuyển thẻ sang bảng khác",
-    "Filter by completed" : "Lọc theo công việc đã hoàn thành"
+    "Move card to another board" : "Di chuyển thẻ sang bảng khác"
 },
 "nplurals=1; plural=0;");

@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "示例任務 3",
     "Example Task 2" : "示例任務 2",
     "Example Task 1" : "示例任務 1",
-    "Move card to another board" : "將卡片移到其他面板",
-    "Filter by completed" : "按已完成篩選"
+    "Move card to another board" : "將卡片移到其他面板"
 },
 "nplurals=1; plural=0;");

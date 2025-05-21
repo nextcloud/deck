@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Attività di esempio 3",
     "Example Task 2" : "Attività di esempio 2",
     "Example Task 1" : "Attività di esempio 1",
-    "Move card to another board" : "Sposta scheda in un'altra lavagna",
-    "Filter by completed" : "Filtra per completate"
+    "Move card to another board" : "Sposta scheda in un'altra lavagna"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

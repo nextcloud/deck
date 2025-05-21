@@ -401,7 +401,6 @@ OC.L10N.register(
     "Example Task 3" : "3. örnek görev",
     "Example Task 2" : "2. örnek görev",
     "Example Task 1" : "1. örnek görev",
-    "Move card to another board" : "Kartı başka bir panoya taşı",
-    "Filter by completed" : "Tamamlanmaya göre sırala"
+    "Move card to another board" : "Kartı başka bir panoya taşı"
 },
 "nplurals=2; plural=(n > 1);");

@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Príklad úlohy 3",
     "Example Task 2" : "Príklad úlohy 2",
     "Example Task 1" : "Príklad úlohy 1",
-    "Move card to another board" : "Presunúť kartu na inú nástenku",
-    "Filter by completed" : "Filtrovať podľa dokončených"
+    "Move card to another board" : "Presunúť kartu na inú nástenku"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
