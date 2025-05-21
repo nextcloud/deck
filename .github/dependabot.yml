@@ -20,7 +20,7 @@ updates:
   schedule:
     interval: weekly
     day: saturday
-    time: "03:00"
+    time: "03:15"
     timezone: Europe/Paris
   ignore:
     - dependency-name: "*"
@@ -37,41 +37,7 @@ updates:
   schedule:
     interval: weekly
     day: saturday
-    time: "03:00"
-    timezone: Europe/Paris
-  ignore:
-    - dependency-name: "*"
-      update-types: ["version-update:semver-major"]
-  open-pull-requests-limit: 30
-  labels:
-  - 3. to review
-  - dependencies
-
-- package-ecosystem: npm
-  target-branch: stable29
-  versioning-strategy: lockfile-only
-  directory: "/"
-  schedule:
-    interval: weekly
-    day: saturday
-    time: "03:00"
-    timezone: Europe/Paris
-  ignore:
-    - dependency-name: "*"
-      update-types: ["version-update:semver-major"]
-  open-pull-requests-limit: 30
-  labels:
-  - 3. to review
-  - dependencies
-
-- package-ecosystem: npm
-  target-branch: stable28
-  versioning-strategy: lockfile-only
-  directory: "/"
-  schedule:
-    interval: weekly
-    day: saturday
-    time: "03:00"
+    time: "03:30"
     timezone: Europe/Paris
   ignore:
     - dependency-name: "*"
@@ -86,7 +52,7 @@ updates:
   schedule:
     interval: weekly
     day: saturday
-    time: "03:00"
+    time: "03:45"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   reviewers:
@@ -98,7 +64,7 @@ updates:
   schedule:
     interval: weekly
     day: saturday
-    time: "03:00"
+    time: "04:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   reviewers:
@@ -110,7 +76,7 @@ updates:
   schedule:
     interval: weekly
     day: saturday
-    time: "03:00"
+    time: "04:15"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   reviewers:
