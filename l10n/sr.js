@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Пример задатка 3",
     "Example Task 2" : "Пример задатка 2",
     "Example Task 1" : "Пример задатка 1",
-    "Move card to another board" : "Помери картицу на другу таблу",
-    "Filter by completed" : "Филтрирај по завршеном"
+    "Move card to another board" : "Помери картицу на другу таблу"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

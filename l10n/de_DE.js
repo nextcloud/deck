@@ -412,7 +412,6 @@ OC.L10N.register(
     "Example Task 3" : "Beispielaufgabe 3",
     "Example Task 2" : "Beispielaufgabe 2",
     "Example Task 1" : "Beispielaufgabe 1",
-    "Move card to another board" : "Karte auf ein anderes Board verschieben",
-    "Filter by completed" : "Nach Status filtern"
+    "Move card to another board" : "Karte auf ein anderes Board verschieben"
 },
 "nplurals=2; plural=(n != 1);");

@@ -401,7 +401,6 @@ OC.L10N.register(
     "Example Task 3" : "Tarefa de exemplo 3",
     "Example Task 2" : "Tarefa de exemplo 2",
     "Example Task 1" : "Tarefa de exemplo 1",
-    "Move card to another board" : "Mover a tarxeta a outro taboleiro",
-    "Filter by completed" : "Filtrar por completado"
+    "Move card to another board" : "Mover a tarxeta a outro taboleiro"
 },
 "nplurals=2; plural=(n != 1);");

@@ -337,6 +337,7 @@ OC.L10N.register(
     "Advanced options" : "Επιλογές για προχωρημένους",
     "Clone" : "Κλώνος",
     "Export as CSV" : "Εξαγωγή σε CSV",
+    "Export" : "Εξαγωγή",
     "Loading filtered view" : "Φόρτωση εμφάνισης με βάση το φίλτρο",
     "Today" : "Σήμερα",
     "Tomorrow" : "Αύριο",
@@ -380,7 +381,6 @@ OC.L10N.register(
     "Example Task 3" : "Παράδειγμα Εργασίας 3",
     "Example Task 2" : "Παράδειγμα Εργασίας 2",
     "Example Task 1" : "Παράδειγμα Εργασίας 1",
-    "Move card to another board" : "Μετακίνηση καρτέλας σε άλλο πίνακα",
-    "Filter by completed" : "Φίλτρο ανά ολοκλήρωση"
+    "Move card to another board" : "Μετακίνηση καρτέλας σε άλλο πίνακα"
 },
 "nplurals=2; plural=(n != 1);");

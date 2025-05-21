@@ -383,7 +383,6 @@ OC.L10N.register(
     "Example Task 3" : "タスク3の例",
     "Example Task 2" : "タスク2の例",
     "Example Task 1" : "タスク1の例",
-    "Move card to another board" : "カードを他のボードに移動",
-    "Filter by completed" : "完成したものをフィルターする"
+    "Move card to another board" : "カードを他のボードに移動"
 },
 "nplurals=1; plural=0;");

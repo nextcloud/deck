@@ -385,7 +385,6 @@ OC.L10N.register(
     "Example Task 3" : "مىسال 3",
     "Example Task 2" : "مىسال 2",
     "Example Task 1" : "مىسال 1",
-    "Move card to another board" : "كارتىنى باشقا تاختىغا يۆتكەڭ",
-    "Filter by completed" : "تاماملانغان سۈزگۈچ"
+    "Move card to another board" : "كارتىنى باشقا تاختىغا يۆتكەڭ"
 },
 "nplurals=2; plural=(n != 1);");

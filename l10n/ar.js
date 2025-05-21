@@ -401,7 +401,6 @@ OC.L10N.register(
     "Example Task 3" : "مثال المهمة 3",
     "Example Task 2" : "مثال المهمة 2",
     "Example Task 1" : "مثال المهمة 1",
-    "Move card to another board" : "حرك البطاقة الى لوح اخر",
-    "Filter by completed" : "تصفية بحسب الإنجاز"
+    "Move card to another board" : "حرك البطاقة الى لوح اخر"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
