@@ -48,6 +48,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
+use OCP\Share\IAttributes;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
 
@@ -150,6 +151,11 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			)
 		);*/
 
+		// set share attributes
+		$shareAttributes = $this->formatShareAttributes(
+			$share->getAttributes()
+		);
+
 		$shareId = $this->addShareToDB(
 			$share->getSharedWith(),
 			$share->getSharedBy(),
@@ -159,7 +165,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$share->getTarget(),
 			$share->getPermissions(),
 			$share->getToken() ?? '',
-			$share->getExpirationDate()
+			$share->getExpirationDate(),
+			$shareAttributes
 		);
 		$data = $this->getRawShare($shareId);
 
@@ -180,6 +187,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @param int $permissions
 	 * @param string $token
 	 * @param \DateTime|null $expirationDate
+	 * @param string|null $attributes
 	 * @return int
 	 */
 	private function addShareToDB(
@@ -209,6 +217,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		if ($expirationDate !== null) {
 			$qb->setValue('expiration', $qb->createNamedParameter($expirationDate, 'datetime'));
+		}
+
+		if ($attributes !== null) {
+			$qb->setValue('attributes', $qb->createNamedParameter($attributes));
 		}
 
 		$qb->executeStatement();
@@ -281,6 +293,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$entryData['parent'] = $entryData['f_parent'];
 			$share->setNodeCacheEntry(Cache::cacheEntryFromData($entryData, $this->mimeTypeLoader));
 		}
+
+		$share = $this->updateShareAttributes($share, $data['attributes'] ?? null);
+
 		return $share;
 	}
 
