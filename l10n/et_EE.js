@@ -49,6 +49,7 @@ OC.L10N.register(
     "Delete list" : "Kustuta loend",
     "Edit" : "Redigeeri",
     "Members" : "Liikmed",
+    "File to share" : "Jagatav fail",
     "Invalid path selected" : "Vigane asukoht on valitud",
     "Upload new files" : "Laadi uued failid üles",
     "Share from Files" : "Jaga failirakendusest",
