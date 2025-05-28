@@ -30,6 +30,8 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\Stack;
+use OCA\Deck\Db\StackMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\IAttachmentService;
@@ -49,6 +51,8 @@ class DeleteCronTest extends TestCase {
 	private $attachmentService;
 	/** @var AttachmentMapper|MockObject */
 	private $attachmentMapper;
+	/** @var StackMapper|MockObject */
+	private $stackMapper;
 	/** @var DeleteCron */
 	protected $deleteCron;
 
@@ -59,7 +63,8 @@ class DeleteCronTest extends TestCase {
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
-		$this->deleteCron = new DeleteCron($this->timeFactory, $this->boardMapper, $this->cardMapper, $this->attachmentService, $this->attachmentMapper);
+		$this->stackMapper = $this->createMock(StackMapper::class);
+		$this->deleteCron = new DeleteCron($this->timeFactory, $this->boardMapper, $this->cardMapper, $this->attachmentService, $this->attachmentMapper, $this->stackMapper);
 	}
 
 	protected function getBoard($id) {
@@ -72,6 +77,12 @@ class DeleteCronTest extends TestCase {
 		$card = new Card();
 		$card->setId($id);
 		return $card;
+	}
+
+	protected function getStack($id) {
+		$stack = new Stack();
+		$stack->setId($id);
+		return $stack;
 	}
 
 	public function testDeleteCron() {
@@ -118,6 +129,21 @@ class DeleteCronTest extends TestCase {
 		$this->attachmentMapper->expects($this->once())
 			->method('delete')
 			->with($attachment);
+
+		$stacks = [
+			$this->getStack(100),
+			$this->getStack(101),
+		];
+		$this->stackMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn($stacks);
+		$this->stackMapper->expects($this->exactly(count($stacks)))
+			->method('delete')
+			->withConsecutive(
+				[$stacks[0]],
+				[$stacks[1]]
+			);
+
 		$this->invokePrivate($this->deleteCron, 'run', [null]);
 	}
 
