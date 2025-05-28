@@ -43,6 +43,7 @@ OC.L10N.register(
     "Edit" : "Labot",
     "Members" : "Biedri",
     "File to share" : "Kopīgojamā datne",
+    "Invalid path selected" : "Atlasīts nederīgs ceļš",
     "Download" : "Lejupielādēt",
     "Modified" : "Mainīts",
     "Created" : "Izveidots",

@@ -73,6 +73,7 @@ OC.L10N.register(
     "Reply" : "Vasta",
     "Update" : "Uuenda",
     "Description" : "Kirjeldus",
+    "Formatting help" : "Abiteave vorminduse kohta",
     "Edit description" : "Muuda kirjeldust",
     "Later today – {timeLocale}" : "Täna hiljem – {timeLocale}",
     "Tomorrow – {timeLocale}" : "Homme – {timeLocale}",
