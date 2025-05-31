@@ -6,7 +6,7 @@
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+			:class="{'compact': compactMode, 'current-card': currentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
 			tag="div"
 			:tabindex="0"
 			class="card"
@@ -331,12 +331,13 @@ export default {
 		border-radius: var(--border-radius-large);
 		font-size: 100%;
 		background-color: var(--color-main-background);
-		margin-bottom: $card-spacing;
-		padding: var(--default-grid-baseline) $card-padding;
+		padding: $card-padding;
 		border: 2px solid var(--color-border-dark);
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		gap: $card-gap;
+		overflow: hidden;
 
 		&:deep(*) {
 			cursor: pointer;
@@ -359,12 +360,10 @@ export default {
 			h4 {
 				font-weight: normal;
 				margin: 0;
-				padding: var(--default-grid-baseline);
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
 				word-wrap: break-word;
-				padding-left: 4px;
 				align-self: center;
 
 				:deep(a) {
@@ -374,9 +373,6 @@ export default {
 				&.editable {
 					span {
 						cursor: text;
-						padding-right: 8px;
-						padding-top: 3px;
-						padding-bottom: 3px;
 
 						&:focus, &:focus-visible {
 							outline: none;
@@ -385,6 +381,7 @@ export default {
 
 					&:focus-within {
 						outline: 2px solid var(--color-border-dark);
+						outline-offset: 4px;
 						border-radius: 3px;
 					}
 				}
@@ -427,8 +424,6 @@ export default {
 		.card-labels {
 			display: flex;
 			align-items: end;
-			padding-left: var(--default-grid-baseline);
-			padding-top: var(--default-grid-baseline);
 
 			.labels {
 				flex-wrap: wrap;
@@ -444,7 +439,7 @@ export default {
 
 	.card-related {
 		display: flex;
-		padding: 12px;
+		padding: 4px;
 		padding-bottom: 0px;
 		color: var(--color-text-maxcontrast);
 
@@ -469,8 +464,8 @@ export default {
 			height: 32px;
 			width: 32px;
 		}
-		&.has-labels {
-			padding-bottom: $card-padding;
+		&.no-labels {
+			padding-bottom: var(--default-grid-baseline);
 		}
 		.labels {
 			height: 6px;
