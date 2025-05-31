@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build_and_publish:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository_owner == 'nextcloud-gmbh' && fromJSON('["self-hosted", "ubuntu-latest"]') || 'ubuntu-latest' }}
 
     # Only allowed to be run on nextcloud-releases repositories
     if: ${{ github.repository_owner == 'nextcloud-releases' }}
