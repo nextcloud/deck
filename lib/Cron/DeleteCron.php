@@ -11,6 +11,7 @@ namespace OCA\Deck\Cron;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\StackMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -27,13 +28,16 @@ class DeleteCron extends TimedJob {
 	private $attachmentService;
 	/** @var AttachmentMapper */
 	private $attachmentMapper;
+	/** @var StackMapper */
+	private $stackMapper;
 
-	public function __construct(ITimeFactory $time, BoardMapper $boardMapper, CardMapper $cardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
+	public function __construct(ITimeFactory $time, BoardMapper $boardMapper, CardMapper $cardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper, StackMapper $stackMapper) {
 		parent::__construct($time);
 		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
 		$this->attachmentService = $attachmentService;
 		$this->attachmentMapper = $attachmentMapper;
+		$this->stackMapper = $stackMapper;
 
 		$this->setInterval(60 * 60 * 24);
 		$this->setTimeSensitivity(IJob::TIME_INSENSITIVE);
@@ -64,6 +68,11 @@ class DeleteCron extends TimedJob {
 				// Just delete the attachment if no service is available
 			}
 			$this->attachmentMapper->delete($attachment);
+		}
+
+		$stacks = $this->stackMapper->findToDelete();
+		foreach ($stacks as $stack) {
+			$this->stackMapper->delete($stack);
 		}
 	}
 }
