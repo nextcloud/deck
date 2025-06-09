@@ -42,5 +42,7 @@ export default {
 
 		})
 	},
-	condition: self => true,
+	condition: self => {
+		return !!OC.appswebroots.deck
+	},
 }
