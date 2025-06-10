@@ -391,7 +391,7 @@ OC.L10N.register(
     "No upcoming cards" : "Pas de cartes à venir",
     "upcoming cards today" : "cartes à venir aujourd'hui",
     "upcoming cards tomorrow" : "cartes à venir demain",
-    "upcoming cards" : "prochaines cartes",
+    "upcoming cards" : "cartes à venir",
     "New card" : "Nouvelle carte",
     "Link to a board" : "Relier à un tableau",
     "Link to a card" : "Relier à une carte",
