@@ -133,6 +133,7 @@ describe('Card', function () {
 
 		// Rename link to plain title
 		cy.get('.card:contains("Example Domain")')
+			.last() // A duplicate card might be created in other test case, so we select the last one
 			.find('.action-item__menutoggle')
 			.click()
 		cy.get('.v-popper__popper button:contains("Edit title")')
@@ -301,12 +302,12 @@ describe('Card', function () {
 				.first().click()
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
 
-			cy.get('#app-sidebar-vue [data-test="tag-selector"]').should('be.visible').click()
+			cy.get('#app-sidebar-vue [data-test="tag-selector"]  .vs__dropdown-toggle').should('be.visible').click()
 			cy.get('.vs__dropdown-menu .tag:contains("Action needed")').should('be.visible').click()
-			cy.get('.vs__selected .tag:contains("Action needed")').should('be.visible')
 			cy.get('.vs__dropdown-menu .tag:contains("Later")').should('be.visible').click()
 
 			cy.get('.vs__selected .tag:contains("Action needed")').should('be.visible')
+			cy.get('.vs__selected .tag:contains("Later")').should('be.visible')
 			cy.get('.vs__selected .tag:contains("Action needed")')
 				.parent().find('button').click()
 
