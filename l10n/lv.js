@@ -1,6 +1,12 @@
 OC.L10N.register(
     "deck",
     {
+    "You have renamed the board {before} to {board}" : "Tu pārdēvēji dēli {before} par {board}",
+    "{user} has renamed the board {before} to {board}" : "{user} pārdēvēja dēli {before} par {board}",
+    "You have renamed list {before} to {stack} on board {board}" : "Tu pārdēvēji dēļa {board} sarakstu {before} par {stack}",
+    "{user} has renamed list {before} to {stack} on board {board}" : "{user} pārdēvēja dēļa {board} sarakstu {before} par {stack}",
+    "You have renamed the card {before} to {card}" : "Tu pārdēvēji kartīti {before} par {card}",
+    "{user} has renamed the card {before} to {card}" : "{user} pārdēvēja kartīti {before} par {card}",
     "You have added a description to card {card} in list {stack} on board {board}" : "Tu pievienoji kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
     "{user} has added a description to card {card} in list {stack} on board {board}" : "{user} pievienoja kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
     "The file was uploaded" : "Datne tika augšupielādēta",
@@ -17,6 +23,7 @@ OC.L10N.register(
     "Action needed" : "Nepieciešama darbība",
     "Later" : "Vēlāk",
     "copy" : "kopēt",
+    "Custom lists - click to rename!" : "Pielāgoti saraksti - klikšķināt, lai pārdēvētu.",
     "Done" : "Pabeigts",
     "Invalid date, date format must be YYYY-MM-DD" : "Nederīgs datums, datuma formātam jābūt YYYY-MM-DD",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck ir kanban veida organizēšanas rīks, kas paredzēts personīgai plānošanai un projektu orgenizēšanai komandām, kas ir iekļauts Nextcloud.\n\n\n- 📥 Uzdevumu pievienošana kartītēm un to sakārtošana\n- 📄 Papildu piezīmes var pierakstīt ar Markdown\n- 🔖 Vēl labākai pārraudzībai var piešķirt iezīmes\n- 👥 Koplietošana ar savu komandu, draugiem vai ģimeni\n- 📎 Datņu pievienošana un iekļaušana Markdown aprakstā\n- 💬 Apspriešana ar savu komandu ar piebildēm\n- ⚡ Izmaiņu izsekošana darbību plūsmā\n- 🚀 Sava projekta sakārtošana",

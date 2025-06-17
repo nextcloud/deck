@@ -237,6 +237,7 @@ OC.L10N.register(
     "Set a due date" : "Задаване на крайна дата",
     "Remove due date" : "Премахни крайната дата",
     "Mark as done" : "Маркирай като готово",
+    "Not done" : "Незавършен",
     "Unarchive card" : "Разархивиране на карта",
     "Archive card" : "Архивиране на  карта",
     "Assign a tag to this card…" : "Присвояване на етикет на тази карта ...",
