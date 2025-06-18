@@ -67,6 +67,7 @@ export default new Vuex.Store({
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
+		hasCardSaveError: false,
 		boards: loadState('deck', 'initialBoards', []),
 		sharees: [],
 		assignableUsers: [],
@@ -147,6 +148,9 @@ export default new Vuex.Store({
 	mutations: {
 		setFullApp(state, isFullApp) {
 			Vue.set(state, 'isFullApp', isFullApp)
+		},
+		setHasCardSaveError(state, hasCardSaveError) {
+			Vue.set(state, 'hasCardSaveError', hasCardSaveError)
 		},
 		SET_CONFIG(state, { key, value }) {
 			const [scope, id, configKey] = key.split(':', 3)
