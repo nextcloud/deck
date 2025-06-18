@@ -73,7 +73,9 @@ import AttachmentList from './AttachmentList.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
+import { showWarning } from '@nextcloud/dialogs'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
+import { mapState } from 'vuex'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -135,6 +137,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState({
+			hasCardSaveError: (state) => state.hasCardSaveError,
+		}),
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -285,15 +290,31 @@ export default {
 				return
 			}
 			this.descriptionSaving = true
-			if (this.card.id !== undefined) {
-				await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
+			try {
+				if (this.card.id !== undefined) {
+					await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
+				}
+				this.$emit('change', this.description)
+				this.descriptionLastEdit = 0
+				this.$store.commit('setHasCardSaveError', false)
+			} catch (e) {
+				this.$store.commit('setHasCardSaveError', true)
+				showWarning(t('deck', 'Could not save description'), { timeout: 2500 })
+				console.error(e)
+
+				// Retry of network error
+				if (['ERR_NETWORK', 'ETIMEDOUT'].includes(e.code)) {
+					this.setSaveTimeout()
+				}
+			} finally {
+				this.descriptionSaving = false
 			}
-			this.$emit('change', this.description)
-			this.descriptionLastEdit = 0
-			this.descriptionSaving = false
 		},
 		updateDescription() {
 			this.descriptionLastEdit = Date.now()
+			this.setSaveTimeout()
+		},
+		setSaveTimeout() {
 			clearTimeout(this.descriptionSaveTimeout)
 			this.descriptionSaveTimeout = setTimeout(async () => {
 				await this.saveDescription()
