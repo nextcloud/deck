@@ -94,7 +94,7 @@
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
 			data-dragscroll-enabled
-			@should-accept-drop="canEdit"
+			:should-accept-drop="() => canEdit"
 			@drag-start="draggingCard = true"
 			@drag-end="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">

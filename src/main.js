@@ -13,9 +13,7 @@ import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
 import './sessions.js'
-import { configureCompat } from '@vue/compat'
-
-configureCompat({ MODE: 3, INSTANCE_SCOPED_SLOTS: false, ATTR_ENUMERATED_COERCION: true, INSTANCE_EVENT_EMITTER: true, OPTIONS_BEFORE_DESTROY: true, CUSTOM_DIR: true, OPTIONS_DESTROYED: true, INSTANCE_LISTENERS: true, GLOBAL_SET: true })
+import { initCollections } from './init-collections.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
@@ -24,6 +22,9 @@ const app = createApp(App)
 
 app.config.globalProperties.t = translate
 app.config.globalProperties.n = translatePlural
+app.config.globalProperties.OC = OC
+
+initCollections({ t, n, OC })
 
 app.directive('click-outside', ClickOutside)
 

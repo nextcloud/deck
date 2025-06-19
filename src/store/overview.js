@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
-import Vuex from 'vuex'
 import { OverviewApi } from '../services/OverviewApi.js'
-Vue.use(Vuex)
 
 const apiClient = new OverviewApi()
 export default {
