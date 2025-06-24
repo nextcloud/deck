@@ -84,7 +84,7 @@ describe('Card', function () {
 		cy.get('.modal-mask.card-selector .multiselect-list').should('be.visible').click()
 		cy.get('.vs__dropdown-menu span[title="TestList"]').should('be.visible').click()
 
-		cy.get('.modal-mask.card-selector button.button-vue--vue-primary').should('be.visible').click()
+		cy.get('.modal-mask.card-selector button.button-vue--primary').contains('Create card').should('be.visible').click()
 		cy.wait('@save', { timeout: 7000 })
 
 		cy.reload()
@@ -302,8 +302,10 @@ describe('Card', function () {
 				.first().click()
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
 
-			cy.get('#app-sidebar-vue [data-test="tag-selector"]  .vs__dropdown-toggle').should('be.visible').click()
+			cy.get('#app-sidebar-vue [data-test="tag-selector"]  .vs__dropdown-toggle .vs__actions').should('be.visible').click()
 			cy.get('.vs__dropdown-menu .tag:contains("Action needed")').should('be.visible').click()
+			cy.get('.vs__dropdown-menu .tag:contains("Later")').should('not.exist')
+			cy.get('#app-sidebar-vue [data-test="tag-selector"]  .vs__dropdown-toggle .vs__actions').should('be.visible').click()
 			cy.get('.vs__dropdown-menu .tag:contains("Later")').should('be.visible').click()
 
 			cy.get('.vs__selected .tag:contains("Action needed")').should('be.visible')
