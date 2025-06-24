@@ -6,7 +6,7 @@
 <template>
 	<div v-if="card" class="card-menu" @click.stop.prevent>
 		<NcButton v-if="card.referenceData"
-			type="tertiary"
+			variant="tertiary"
 			:title="t('deck', 'Open link')"
 			@click="openLink">
 			<template #icon>

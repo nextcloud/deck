@@ -39,7 +39,7 @@
 			<NcButton @click="cancel">
 				{{ t('deck', 'Cancel') }}
 			</NcButton>
-			<NcButton type="primary" @click="save">
+			<NcButton variant="primary" @click="save">
 				{{ t('deck', 'Clone') }}
 			</NcButton>
 		</template>

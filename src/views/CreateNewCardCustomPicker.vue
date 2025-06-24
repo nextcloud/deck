@@ -82,7 +82,7 @@
 					{{ t('deck', 'Cancel') }}
 				</NcButton>
 				<NcButton :disabled="loading || !isBoardAndStackChoosen"
-					type="primary"
+					variant="primary"
 					@click="createCard">
 					{{ t('deck', 'Create card') }}
 				</NcButton>

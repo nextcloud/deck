@@ -84,7 +84,7 @@
 								:title="t('deck', 'Apply filter')"
 								:aria-label="t('deck', 'Apply filter')"
 								class="filter-button"
-								:type="isFilterActive ? 'primary' : 'tertiary'">
+								:variant="isFilterActive ? 'primary' : 'tertiary'">
 								<template #icon>
 									<FilterIcon v-if="isFilterActive" :size="20" decorative />
 									<FilterOffIcon v-else :size="20" decorative />
