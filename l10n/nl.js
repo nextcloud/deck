@@ -256,6 +256,7 @@ OC.L10N.register(
     "Remove due date" : "Verwijder vervaldatum",
     "Mark as done" : "Markeer als voltooid",
     "Due at:" : "Verloopt op:",
+    "Not done" : "Niet gedaan",
     "Unarchive card" : "Terughalen kaart uit archief",
     "Archive card" : "Archiveer kaart",
     "Assign a tag to this card…" : "Wijs een label toe aan deze kaart...",
