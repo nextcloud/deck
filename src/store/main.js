@@ -131,7 +131,7 @@ const store = createStore({
 			state.isFullApp = isFullApp
 		},
 		setHasCardSaveError(state, hasCardSaveError) {
-			Vue.set(state, 'hasCardSaveError', hasCardSaveError)
+			state.hasCardSaveError = hasCardSaveError
 		},
 		SET_CONFIG(state, { key, value }) {
 			const [scope, id, configKey] = key.split(':', 3)

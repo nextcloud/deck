@@ -343,7 +343,6 @@ export default {
 			commit('removeUserFromCard', user)
 		},
 		async addLabel({ commit }, data) {
-			alert('hello world')
 			await apiClient.assignLabelToCard(data)
 			commit('updateCardProperty', { property: 'labels', card: data.card })
 		},
