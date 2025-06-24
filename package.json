@@ -35,7 +35,7 @@
     "@nextcloud/auth": "^2.4.0",
     "@nextcloud/axios": "^2.5.1",
     "@nextcloud/capabilities": "^1.2.0",
-    "@nextcloud/dialogs": "github:nextcloud-libraries/nextcloud-dialogs#vue3",
+    "@nextcloud/dialogs": "^7.0.0-rc.1",
     "@nextcloud/event-bus": "^3.3.2",
     "@nextcloud/files": "^3.10.1",
     "@nextcloud/initial-state": "^2.2.0",
