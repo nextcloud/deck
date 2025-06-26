@@ -161,6 +161,7 @@ OC.L10N.register(
     "Today" : "Hoje",
     "Tomorrow" : "Amanhã",
     "No results found" : "No results found",
+    "Due on {date}" : "Due on {date}",
     "Create card" : "Criar cartão",
     "Close" : "Fechar",
     "Failed to upload {name}" : "Failed to upload {name}",
