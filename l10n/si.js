@@ -28,7 +28,6 @@ OC.L10N.register(
     "Search" : "සොයන්න",
     "Today" : "අද",
     "Tomorrow" : "හෙට",
-    "Close" : "වසන්න",
     "Share" : "බෙදාගන්න",
     "Personal" : "පුද්ගලික",
     "Example Task 3" : "උදාහරණ කාර්යය 3",

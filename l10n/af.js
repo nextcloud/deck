@@ -46,7 +46,6 @@ OC.L10N.register(
     "Export" : "Voer uit",
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
-    "Close" : "Sluit",
     "Due date" : "Sperdatum",
     "Share" : "Deel",
     "Personal" : "Persoonlik"

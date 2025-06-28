@@ -42,7 +42,6 @@ OC.L10N.register(
     "Export" : "Exportar",
     "Today" : "Hodie",
     "Tomorrow" : "Deman",
-    "Close" : "Clauder",
     "Share" : "Compartir",
     "Personal" : "Personal"
 },

@@ -34,7 +34,6 @@ OC.L10N.register(
     "An error occurred" : "Det oppstod ein feil.",
     "Export" : "Eksporter",
     "Today" : "I dag",
-    "Close" : "Lukk",
     "Share" : "Del",
     "Personal" : "Personleg"
 },

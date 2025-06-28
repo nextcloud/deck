@@ -32,7 +32,6 @@ OC.L10N.register(
     "Export" : "Exportéieren",
     "Today" : "Haut",
     "Tomorrow" : "Muer",
-    "Close" : "Zoumaachen",
     "Share" : "Deelen",
     "Personal" : "Perséinlech"
 },
