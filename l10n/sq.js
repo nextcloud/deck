@@ -64,7 +64,6 @@ OC.L10N.register(
     "Export" : "Eksport",
     "Today" : "Sot",
     "Tomorrow" : "Nesër",
-    "Close" : "Mbylleni",
     "Due date" : "Data e vendosur",
     "Share" : "Shpërndaje",
     "Personal" : "Personale",

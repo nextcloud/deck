@@ -32,7 +32,6 @@ OC.L10N.register(
     "An error occurred" : "Digwyddodd gwall",
     "Export" : "Allforio",
     "Today" : "Heddiw",
-    "Close" : "Cau",
     "Share" : "Rhannu",
     "Personal" : "Personol"
 },

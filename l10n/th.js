@@ -57,7 +57,6 @@ OC.L10N.register(
     "Export" : "ส่งออก",
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้",
-    "Close" : "ปิด",
     "Due date" : "วันที่ครบกำหนด",
     "Share" : "แชร์",
     "Personal" : "ส่วนตัว"

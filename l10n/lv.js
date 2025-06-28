@@ -79,7 +79,6 @@ OC.L10N.register(
     "Export" : "Izgūt",
     "Today" : "Šodien",
     "Tomorrow" : "Rīt",
-    "Close" : "Aizvērt",
     "Due date" : "Izpildes datums",
     "Share" : "Koplietot",
     "Personal" : "Personīgs"

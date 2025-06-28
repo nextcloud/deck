@@ -44,7 +44,6 @@ OC.L10N.register(
     "No notifications" : "Nema obaveštenja",
     "Delete board" : "Izbriši tablu",
     "Today" : "Danas",
-    "Close" : "Zatvori",
     "Due date" : "Rok",
     "Share" : "Podeli"
 },

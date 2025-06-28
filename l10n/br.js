@@ -42,7 +42,6 @@ OC.L10N.register(
     "No notifications" : "Kemennadenn ebet",
     "Today" : "Hiziv",
     "Tomorrow" : "Warc'hoaz",
-    "Close" : "Seriñ",
     "Share" : "Rannan",
     "Personal" : "Personel"
 },

@@ -122,7 +122,6 @@ OC.L10N.register(
     "Export" : "Eksporti",
     "Today" : "Hodiaŭ",
     "Tomorrow" : "Morgaŭ",
-    "Close" : "Malfermi",
     "Link to a board" : "Ligilo al tabulo",
     "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita",
     "Due date" : "Limdato",

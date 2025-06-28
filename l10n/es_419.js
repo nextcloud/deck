@@ -63,7 +63,6 @@ OC.L10N.register(
     "Export" : "Exportar",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
-    "Close" : "Cerrar",
     "Due date" : "Fecha de vencimiento",
     "Share" : "Compartir",
     "Personal" : "Personal"

@@ -104,7 +104,6 @@ OC.L10N.register(
     "Today" : "Güei",
     "Tomorrow" : "Mañana",
     "No results found" : "Nun s'atopó nengún resultáu",
-    "Close" : "Zarrar",
     "Message from {author} in {conversationName}" : "Mensaxe de {author} en {conversationName}",
     "Due date" : "Data de fin",
     "Error creating the share" : "Hebo un error al crear la compartición",
