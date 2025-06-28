@@ -27,7 +27,6 @@ OC.L10N.register(
     "Export" : "Izvezi",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",
-    "Close" : "Zatvori",
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
     "Share" : "Podjeli",
     "Personal" : "Osobno"

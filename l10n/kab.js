@@ -29,7 +29,6 @@ OC.L10N.register(
     "Cancel edit" : "Sefsex aseẓreg",
     "No notifications" : "Ulac tisezmal",
     "Today" : "Ass-a",
-    "Close" : "Mdel",
     "Share" : "Bḍu",
     "Personal" : "Udmawan"
 },

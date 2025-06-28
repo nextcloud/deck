@@ -188,7 +188,6 @@ OC.L10N.register(
     "Export" : "Exportar",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
-    "Close" : "Cerrar",
     "Due date" : "Fecha de vencimiento",
     "Error creating the share" : "Error creando el recurso compartido",
     "Share" : "Compartir",

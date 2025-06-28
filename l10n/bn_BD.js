@@ -31,7 +31,6 @@ OC.L10N.register(
     "Export" : "রপ্তানি",
     "Today" : "আজ",
     "Tomorrow" : "আগামীকাল",
-    "Close" : "বন্ধ",
     "Share" : "ভাগাভাগি কর",
     "Personal" : "ব্যক্তিগত"
 },

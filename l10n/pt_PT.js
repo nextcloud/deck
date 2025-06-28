@@ -163,7 +163,6 @@ OC.L10N.register(
     "No results found" : "No results found",
     "Due on {date}" : "Due on {date}",
     "Create card" : "Criar cartão",
-    "Close" : "Fechar",
     "Failed to upload {name}" : "Failed to upload {name}",
     "Due date" : "Data limite",
     "Share" : "Partilhar",

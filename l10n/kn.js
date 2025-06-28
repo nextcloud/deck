@@ -19,7 +19,6 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Export" : "ರಫ್ತು",
     "Today" : "Today",
-    "Close" : "ಮುಚ್ಚು",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
     "Personal" : "﻿ವೈಯಕ್ತಿಕ"
 },

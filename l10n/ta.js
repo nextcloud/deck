@@ -26,7 +26,6 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Export" : "ஏற்றுமதி",
     "Today" : "இன்று",
-    "Close" : "மூடுக",
     "Share" : "பகிர்வு",
     "Personal" : "தனிப்பட்ட"
 },

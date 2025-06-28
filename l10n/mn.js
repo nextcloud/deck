@@ -44,7 +44,6 @@ OC.L10N.register(
     "Export" : "Экспорт",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
-    "Close" : "Хаах",
     "Share" : "Түгээх",
     "Personal" : "Хувийн"
 },

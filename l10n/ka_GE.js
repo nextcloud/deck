@@ -63,7 +63,6 @@ OC.L10N.register(
     "Export" : "ექსპორტი",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
-    "Close" : "დახურვა",
     "Due date" : "განპირობებულია თარიღისთვის",
     "Share" : "გაზიარება",
     "Personal" : "პირადი"

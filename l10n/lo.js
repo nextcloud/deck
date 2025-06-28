@@ -25,7 +25,6 @@ OC.L10N.register(
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
     "Today" : "ມື້ນີ້",
-    "Close" : "ປິດ",
     "Share" : "ແບ່ງປັນ",
     "Personal" : "ສ່ວນບຸກຄົນ"
 },

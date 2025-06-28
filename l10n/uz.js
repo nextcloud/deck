@@ -69,7 +69,6 @@ OC.L10N.register(
     "Today" : "Today",
     "Tomorrow" : "Ertaga",
     "No results found" : "Hech qanday natija topilmadi",
-    "Close" : "Close",
     "Due date" : "Muddati",
     "Share" : "Ulashish",
     "Personal" : "Personal"

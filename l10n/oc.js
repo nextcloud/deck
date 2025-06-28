@@ -60,8 +60,6 @@ OC.L10N.register(
     "Tomorrow" : "Deman",
     "{stack} in {board}" : "{stack} dins {board}",
     "Create card" : "Crear una carta",
-    "Create a new card" : "Crear una carta novèla",
-    "Close" : "Tampar",
     "Create a card" : "Crear una carta",
     "Share" : "Partejar",
     "Personal" : "Personal"
