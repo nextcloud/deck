@@ -84,7 +84,7 @@
 								:title="t('deck', 'Apply filter')"
 								:aria-label="t('deck', 'Apply filter')"
 								class="filter-button"
-								:type="isFilterActive ? 'primary' : 'tertiary'">
+								:variant="isFilterActive ? 'primary' : 'tertiary'">
 								<template #icon>
 									<FilterIcon v-if="isFilterActive" :size="20" decorative />
 									<FilterOffIcon v-else :size="20" decorative />
@@ -231,12 +231,16 @@
 					</NcActionButton>
 					<NcActionButton v-if="compactMode"
 						@click="toggleCompactMode">
-						<ArrowExpandVerticalIcon slot="icon" :size="20" decorative />
+						<template #icon>
+							<ArrowExpandVerticalIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Toggle compact mode') }}
 					</NcActionButton>
 					<NcActionButton v-else
 						@click="toggleCompactMode">
-						<ArrowCollapseVerticalIcon slot="icon" :size="20" decorative />
+						<template #icon>
+							<ArrowCollapseVerticalIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Toggle compact mode') }}
 					</NcActionButton>
 					<NcActionButton @click="toggleShowCardCover">
@@ -274,6 +278,7 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { onClickOutside } from '@vueuse/core'
 
 export default {
 	name: 'Controls',
@@ -359,6 +364,11 @@ export default {
 			}
 		},
 	},
+	created() {
+		onClickOutside(() => {
+			this.hideAddStack()
+		})
+	},
 	beforeMount() {
 		subscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		subscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
@@ -366,7 +376,7 @@ export default {
 		subscribe('deck:board:toggle-filter-by-me', this.triggerFilterByMe)
 
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		unsubscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
 		unsubscribe('deck:board:clear-filter', this.triggerClearFilter)
