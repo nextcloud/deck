@@ -62,14 +62,13 @@ export default {
 $clickable-area: var(--default-clickable-area);
 
 .card--placeholder {
-	width: $stack-width;
-	margin-right: $stack-spacing;
+	min-width: $card-min-width;
+	max-width: $card-min-width;
 	padding: $card-padding;
 	transition: box-shadow 0.1s ease-in-out;
 	box-shadow: 0 0 2px 0 var(--color-box-shadow);
 	border-radius: var(--border-radius-large);
 	font-size: 100%;
-	margin-bottom: $card-spacing;
 	height: 100px;
 }
 
