@@ -19,6 +19,7 @@ OC.L10N.register(
     "Later" : "Después",
     "To Do" : "Por hacer",
     "Done" : "Terminado",
+    "File" : "Archivo",
     "Invalid date, date format must be YYYY-MM-DD" : "La fecha es inválida, por favor sigue el formato AAAA-MM-DD",
     "Cancel" : "Cancelar",
     "File already exists" : "El archivo ya existe",

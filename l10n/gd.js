@@ -10,6 +10,7 @@ OC.L10N.register(
     "Could not write file to disk" : "Cha b’ urrainn dhuinn am faidhle a sgrìobhadh dhan diosg",
     "A PHP extension stopped the file upload" : "Chur leudachan PHP stad air luchdadh suas an fhaidhle",
     "Finished" : "Deiseil",
+    "File" : "Faidhle",
     "Cancel" : "Sguir dheth",
     "Completed" : "Coileanta",
     "Details" : "Mion-fhiosrachadh",
@@ -26,6 +27,7 @@ OC.L10N.register(
     "Search" : "Lorg",
     "No notifications" : "Gun bhrath",
     "Today" : "An-diugh",
+    "Close" : "Dùin",
     "Share" : "Co-roinn"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");

@@ -5,6 +5,7 @@ OC.L10N.register(
     "No file was uploaded" : "ບໍ່ມີການອັບໂຫລດຟາຍ",
     "Finished" : "ສຳເລັດ",
     "Done" : "ສໍາເລັດ",
+    "File" : "ຟາຍ",
     "Cancel" : "ຍົກເລີກ",
     "Completed" : "ສຳເລັດ",
     "Details" : "ລາຍລະອຽດ",
@@ -25,6 +26,7 @@ OC.L10N.register(
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
     "Today" : "ມື້ນີ້",
+    "Close" : "ປິດ",
     "Share" : "ແບ່ງປັນ",
     "Personal" : "ສ່ວນບຸກຄົນ"
 },

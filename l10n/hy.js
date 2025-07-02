@@ -31,6 +31,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Export" : "Արտահանում",
     "Today" : "այսօր",
+    "Close" : "Փակել",
     "Share" : "Կիսվել",
     "Personal" : "Անձնական"
 },

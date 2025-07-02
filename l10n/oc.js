@@ -11,6 +11,7 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "Una extension PHP a arrestat lo mandadís de fichièr",
     "copy" : "copiar",
     "Done" : "Done",
+    "File" : "Fichier",
     "Invalid date, date format must be YYYY-MM-DD" : "Invalida data, lo format de data deu èsser YYYY-MM-DD",
     "Cancel" : "Anullar",
     "Drop your files to upload" : "Depausatz los fichièrs d’enviar",
@@ -60,6 +61,8 @@ OC.L10N.register(
     "Tomorrow" : "Deman",
     "{stack} in {board}" : "{stack} dins {board}",
     "Create card" : "Crear una carta",
+    "Create a new card" : "Crear una carta novèla",
+    "Close" : "Plegar",
     "Create a card" : "Crear una carta",
     "Share" : "Partejar",
     "Personal" : "Personal"
