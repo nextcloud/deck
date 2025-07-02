@@ -5,6 +5,7 @@ OC.L10N.register(
     "No file was uploaded" : "Ingen filer vart lasta opp",
     "Missing a temporary folder" : "Manglar ei mellombels mappe",
     "Done" : "Ferdig",
+    "File" : "Fil",
     "Cancel" : "Avbryt",
     "Completed" : "Fullført",
     "Details" : "Detaljar",
@@ -34,6 +35,7 @@ OC.L10N.register(
     "An error occurred" : "Det oppstod ein feil.",
     "Export" : "Eksporter",
     "Today" : "I dag",
+    "Close" : "Lat att",
     "Share" : "Del",
     "Personal" : "Personleg"
 },

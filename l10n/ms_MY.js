@@ -22,6 +22,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Export" : "Eksport",
     "Today" : "Hari ini",
+    "Close" : "Tutup",
     "Share" : "Kongsi",
     "Personal" : "Peribadi"
 },

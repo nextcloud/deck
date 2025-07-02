@@ -14,6 +14,7 @@ OC.L10N.register(
     "Action needed" : "საჭიროა ქმედება",
     "Later" : "მოგვიანებით",
     "Done" : "დასრულებულია",
+    "File" : "ფაილი",
     "Invalid date, date format must be YYYY-MM-DD" : "არასწორი თარიღი, თარიღის ფორმატი უნდა იყოს წწწწ-თთ-დდ",
     "Cancel" : "უარყოფა",
     "File already exists" : "ფაილი უკვე არსებობს",
@@ -63,6 +64,7 @@ OC.L10N.register(
     "Export" : "ექსპორტი",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
+    "Close" : "დახურვა",
     "Due date" : "განპირობებულია თარიღისთვის",
     "Share" : "გაზიარება",
     "Personal" : "პირადი"

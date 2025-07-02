@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "copy" : "ចម្លង",
     "Done" : "Done",
+    "File" : "ឯកសារ",
     "Cancel" : "បោះបង់",
     "Details" : "ព័ត៌មាន​លម្អិត",
     "Sharing" : "ការ​ចែក​រំលែក",
@@ -25,6 +26,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Export" : "នាំចេញ",
     "Today" : "ថ្ងៃ​នេះ",
+    "Close" : "បិទ",
     "Share" : "ចែក​រំលែក",
     "Personal" : "ផ្ទាល់​ខ្លួន"
 },

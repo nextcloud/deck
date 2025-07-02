@@ -15,6 +15,7 @@ OC.L10N.register(
     "Later" : "Después",
     "copy" : "copiar",
     "Done" : "Terminado",
+    "File" : "Archivo",
     "Invalid date, date format must be YYYY-MM-DD" : "La fecha es inválida, por favor sigue el formato AAAA-MM-DD",
     "Cancel" : "Cancelar",
     "File already exists" : "El archivo ya existe",
@@ -64,6 +65,7 @@ OC.L10N.register(
     "Export" : "Exportar",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
+    "Close" : "Cerrar",
     "Due date" : "Fecha de vencimiento",
     "Share" : "Compartir",
     "Personal" : "Personal"
