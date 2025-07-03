@@ -122,6 +122,7 @@
     "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "此評論超過%s個字符。\n作為附件添加到名稱為 %s 的卡片上。\n可於此 URL  存取：%s。",
     "Attachments" : "附件",
     "File" : "檔案",
+    "date" : "日期",
     "Card not found" : "未找到卡片",
     "Path is already shared with this card" : "已和這張卡片分享了路徑",
     "Invalid date, date format must be YYYY-MM-DD" : "無效的日期，需為 YYYY-MM-DD 格式",

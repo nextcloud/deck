@@ -124,6 +124,7 @@ OC.L10N.register(
     "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "此评论超过%s个字符。\n作为附件添加到名称为 %s 的卡片上。\n可通过 URL  访问：%s。",
     "Attachments" : "附件",
     "File" : "文件",
+    "date" : "日期",
     "Card not found" : "未找到卡片",
     "Path is already shared with this card" : "已和这张卡片分享了路径",
     "Invalid date, date format must be YYYY-MM-DD" : "无效日期，日期格式必须为 YYYY-MM-DD",

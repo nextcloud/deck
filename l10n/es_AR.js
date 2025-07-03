@@ -108,6 +108,7 @@ OC.L10N.register(
     "Tomorrow" : "Mañana",
     "No due" : "Sin finalizar",
     "Create card" : "Crear tarjeta",
+    "Create a new card" : "Crear una nueva tarjeta",
     "Card title" : "Título de la tarjeta",
     "Creating the new card …" : "Creando una nueva tarjeta …",
     "Card \"{card}\" was added to \"{board}\"" : "La tarjeta \"{card}\" fue añadida a \"{board}\"",
