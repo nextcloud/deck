@@ -302,6 +302,7 @@ OC.L10N.register(
     "Card title" : "Título de la tarjeta",
     "Creating the new card …" : "Creando la nueva tarjeta …",
     "Card \"{card}\" was added to \"{board}\"" : "La tarjeta \"{card}\" se ha añadido a \"{board}\"",
+    "Open card" : "Abrir tarjeta",
     "Close" : "Cerrar",
     "No upcoming cards" : "No hay tarjetas próximas",
     "upcoming cards" : "tarjetas próximas",
