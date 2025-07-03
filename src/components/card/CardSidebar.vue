@@ -81,7 +81,7 @@ import HomeIcon from 'vue-material-design-icons/Home.vue'
 import CommentIcon from 'vue-material-design-icons/Comment.vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError, showWarning } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/CardMenuEntries.vue'
 
@@ -185,6 +185,10 @@ export default {
 		},
 
 		closeSidebar() {
+			if (this.hasCardSaveError) {
+				showWarning(t('deck', 'Cannot close unsaved card!'))
+				return
+			}
 			this.$router?.push({ name: 'board' })
 			this.$emit('close')
 		},
