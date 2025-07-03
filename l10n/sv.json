@@ -122,6 +122,7 @@
     "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Den här kommentaren har mer än %s tecken.\nTillagd som en bilaga till kortet men namnet %s.\nÅtkomlig via URL: %s.",
     "Attachments" : "Bilagor",
     "File" : "Fil",
+    "date" : "datum",
     "Card not found" : "Kortet hittades inte",
     "Path is already shared with this card" : "Sökvägen är redan delad med detta kort",
     "Invalid date, date format must be YYYY-MM-DD" : "Ogiltigt datum, måste anges: ÅÅÅÅ-MM-DD",

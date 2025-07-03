@@ -124,6 +124,7 @@ OC.L10N.register(
     "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Maoni haya yana vibambo zaidi ya %s\nVimeongezwa kama kiambatanisho kwenye kadi na jina%s\nInapatikana katika URL%s",
     "Attachments" : "Viambatanisho",
     "File" : "Faili",
+    "date" : "tarehe",
     "Card not found" : "Kadi haipatikani",
     "Path is already shared with this card" : "Njia tayari imeshirikishwa na kadi hii",
     "Invalid date, date format must be YYYY-MM-DD" : "Tarehe batili, umbizo la tarehe lazima liwe YYYY-MM-DD",

@@ -122,6 +122,7 @@
     "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Tá níos mó ná %s carachtar sa nóta tráchta seo.\nCurtha leis mar cheangaltán leis an gcárta ar a bhfuil an t-ainm %s.\nInrochtana ar URL: %s.",
     "Attachments" : "Ceangaltáin",
     "File" : "Comhad",
+    "date" : "dáta",
     "Card not found" : "Cárta gan aimsiú",
     "Path is already shared with this card" : "Tá an chonair roinnte leis an gcárta seo cheana féin",
     "Invalid date, date format must be YYYY-MM-DD" : "Dáta neamhbhailí, caithfidh formáid an dáta a bheith BBBB-MM-DD",

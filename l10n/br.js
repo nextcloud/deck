@@ -7,6 +7,7 @@ OC.L10N.register(
     "copy" : "eil",
     "In Progress" : "War ar stern",
     "Done" : "Graet",
+    "File" : "Restr",
     "Invalid date, date format must be YYYY-MM-DD" : "Deizat fall, stumm an deizat a zo ret bezhañ BBBB-MM-DD",
     "Cancel" : "Nullañ",
     "Drop your files to upload" : "Laoskit ho restroù evit pellkas",
@@ -42,6 +43,7 @@ OC.L10N.register(
     "No notifications" : "Kemennadenn ebet",
     "Today" : "Hiziv",
     "Tomorrow" : "Warc'hoaz",
+    "Close" : "Serriñ",
     "Share" : "Rannan",
     "Personal" : "Personel"
 },

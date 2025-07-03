@@ -37,6 +37,7 @@ OC.L10N.register(
     "Export" : "Çıxarış",
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah",
+    "Close" : "Bağla",
     "Share" : "Paylaş",
     "Personal" : "Şəxsi"
 },
