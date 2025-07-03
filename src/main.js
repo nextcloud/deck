@@ -2,11 +2,10 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import store from './store/main.js'
-import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import { subscribe } from '@nextcloud/event-bus'
@@ -14,27 +13,33 @@ import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
 import './sessions.js'
+import { initCollections } from './init-collections.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
 
-sync(store, router)
+const app = createApp(App)
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
+app.config.globalProperties.t = translate
+app.config.globalProperties.n = translatePlural
+app.config.globalProperties.OC = OC
 
-Vue.directive('click-outside', ClickOutside)
+initCollections({ t, n, OC })
 
-Vue.directive('focus', {
-	inserted(el) {
+app.directive('click-outside', ClickOutside)
+
+app.directive('focus', {
+	mounted(el) {
 		el.focus()
 	},
 })
 
-Vue.config.errorHandler = (err, vm, info) => {
+app.config.errorHandler = (err, vm, info) => {
 	if (err.response && err.response.data.message) {
-		const errorMessage = t('deck', 'Something went wrong')
-		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
+		const errorMessage = translate('deck', 'Something went wrong')
+		showError(
+			`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`,
+		)
 	}
 	console.error(err)
 }
@@ -47,16 +52,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		window.OCA.Files = {}
 	}
 	// register unused client for the sidebar to have access to its parser methods
-	Object.assign(window.OCA.Files, { App: { fileList: { filesClient: OC.Files.getClient() } } }, window.OCA.Files)
+	Object.assign(
+		window.OCA.Files,
+		{ App: { fileList: { filesClient: OC.Files.getClient() } } },
+		window.OCA.Files,
+	)
 })
 
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
-	// eslint-disable-next-line vue/match-component-file-name
-	name: 'Deck',
-	router,
-	store,
+app.mixin({
 	data() {
 		return {
 			time: Date.now(),
@@ -75,7 +78,7 @@ new Vue({
 			this.time = Date.now()
 		}, 1000)
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		clearInterval(this.interval)
 	},
 	methods: {
@@ -86,8 +89,11 @@ new Vue({
 			this.$store.commit('setSearchQuery', '')
 		},
 	},
-	render: h => h(App),
 })
+
+app.use(router)
+app.use(store)
+app.mount('#content')
 
 if (!window.OCA.Deck) {
 	window.OCA.Deck = {}

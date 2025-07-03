@@ -4,7 +4,6 @@
  */
 
 import { AttachmentApi } from './../services/AttachmentApi.js'
-import Vue from 'vue'
 
 const apiClient = new AttachmentApi()
 
@@ -24,20 +23,20 @@ export default {
 	mutations: {
 		createAttachment(state, { cardId, attachment }) {
 			if (typeof state.attachments[cardId] === 'undefined') {
-				Vue.set(state.attachments, cardId, [attachment])
+				state.attachments[cardId] = [attachment]
 			} else {
 				state.attachments[cardId].push(attachment)
 			}
 		},
 
 		createAttachments(state, { cardId, attachments }) {
-			Vue.set(state.attachments, cardId, attachments)
+			state.attachments[cardId] = attachments
 		},
 
 		updateAttachment(state, { cardId, attachment }) {
 			const existingIndex = state.attachments[attachment.cardId].findIndex(a => a.id === attachment.id && a.type === attachment.type)
 			if (existingIndex !== -1) {
-				Vue.set(state.attachments[cardId], existingIndex, attachment)
+				state.attachments[cardId][existingIndex] = attachment
 			}
 		},
 
