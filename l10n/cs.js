@@ -124,6 +124,7 @@ OC.L10N.register(
     "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Tento komentář je delší než %s znaků.\nPřidán jako příloha ke kartě nazvané %s.\nDostupné na URL: %s.",
     "Attachments" : "Přílohy",
     "File" : "Soubor",
+    "date" : "datum",
     "Card not found" : "Karta nebyla nalezena",
     "Path is already shared with this card" : "Popis umístění už je touto kartou sdíleno",
     "Invalid date, date format must be YYYY-MM-DD" : "Neplatné datum – je třeba, aby formát data byl RRRR-MM-DD",
