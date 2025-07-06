@@ -17,6 +17,7 @@ OC.L10N.register(
     "Action needed" : "Aición necesaria",
     "copy" : "copia",
     "Done" : "Fecho",
+    "File" : "Ficheru",
     "Invalid date, date format must be YYYY-MM-DD" : "La data ye inválida, el so formatu ha ser AAAA-MM-DD",
     "Move card" : "Mover la tarxeta",
     "Cancel" : "Encaboxar",

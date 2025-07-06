@@ -10,6 +10,7 @@
     "copy" : "kopie",
     "To Do" : "Moet doen",
     "Done" : "Gereed",
+    "File" : "Lêer",
     "Cancel" : "Kanselleer",
     "File already exists" : "Lêer bestaan reeds",
     "Open" : "Open",
@@ -44,7 +45,6 @@
     "Export" : "Voer uit",
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
-    "Close" : "Sluit",
     "Due date" : "Sperdatum",
     "Share" : "Deel",
     "Personal" : "Persoonlik"

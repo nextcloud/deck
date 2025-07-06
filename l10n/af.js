@@ -12,6 +12,7 @@ OC.L10N.register(
     "copy" : "kopie",
     "To Do" : "Moet doen",
     "Done" : "Gereed",
+    "File" : "Lêer",
     "Cancel" : "Kanselleer",
     "File already exists" : "Lêer bestaan reeds",
     "Open" : "Open",
@@ -46,7 +47,6 @@ OC.L10N.register(
     "Export" : "Voer uit",
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
-    "Close" : "Sluit",
     "Due date" : "Sperdatum",
     "Share" : "Deel",
     "Personal" : "Persoonlik"

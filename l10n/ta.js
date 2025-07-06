@@ -5,6 +5,7 @@ OC.L10N.register(
     "No file was uploaded" : "எந்த கோப்பும் பதிவேற்றப்படவில்லை",
     "Missing a temporary folder" : "ஒரு தற்காலிகமான கோப்புறையை காணவில்லை",
     "Done" : "Done",
+    "File" : "File",
     "Cancel" : "இரத்து செய்க",
     "Details" : "விவரங்கள்",
     "Tags" : "சீட்டுகள்",

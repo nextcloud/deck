@@ -6,6 +6,7 @@
     "Later" : "Хойшлуулах",
     "copy" : "Хуулах ",
     "Done" : "Хийсэн",
+    "Attachments" : "Хавсралт",
     "Cancel" : "болиулах",
     "Open" : "Нээх",
     "Completed" : "Гүйцэтгэгдсэн",
@@ -25,7 +26,6 @@
     "Download" : "Татах",
     "Modified" : "Өөрчлөгдсөн",
     "Created" : "Үүсгэсэн",
-    "Attachments" : "Хавсралт",
     "Comments" : "Сэтгэгдлүүд",
     "Save" : "Хадгалах",
     "Created:" : "Үүсгэсэн:",
@@ -42,7 +42,6 @@
     "Export" : "Экспорт",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
-    "Close" : "Хаах",
     "Share" : "Түгээх",
     "Personal" : "Хувийн"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

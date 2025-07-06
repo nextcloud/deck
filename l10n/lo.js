@@ -5,6 +5,7 @@ OC.L10N.register(
     "No file was uploaded" : "ບໍ່ມີການອັບໂຫລດຟາຍ",
     "Finished" : "ສຳເລັດ",
     "Done" : "ສໍາເລັດ",
+    "File" : "ຟາຍ",
     "Cancel" : "ຍົກເລີກ",
     "Completed" : "ສຳເລັດ",
     "Details" : "ລາຍລະອຽດ",
