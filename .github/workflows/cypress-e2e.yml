@@ -14,7 +14,7 @@ env:
 jobs:
   cypress:
 
-    runs-on: 'ubuntu-latest'
+    runs-on: ${{ github.repository_owner == 'nextcloud-gmbh' && fromJSON('["self-hosted", "ubuntu-latest"]') || 'ubuntu-latest' }}
 
     strategy:
       fail-fast: false
