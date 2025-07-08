@@ -119,6 +119,7 @@ OC.L10N.register(
     "Archived cards" : "Архивирани картици",
     "Add list" : "Додади листа",
     "List name" : "Име на листа",
+    "Active filters" : "Активни филтри",
     "Apply filter" : "Додади филтер",
     "Filter by tag" : "Филтрирај по ознака",
     "Filter by assigned user" : "Филтрирај по назначени корисници",
