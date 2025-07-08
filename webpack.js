@@ -22,6 +22,9 @@ if (isDevServer) {
 		})
 	)
 } else {
+	webpackConfig.output.clean = {
+		keep: /\webpack-stats\.json$/,
+	}
 	webpackConfig.stats = {
 		context: path.resolve(__dirname, 'src'),
 		assets: true,
