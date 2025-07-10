@@ -27,7 +27,7 @@ describe('Deck dashboard', function() {
 
 		const defaultBoard = 'Welcome to Nextcloud Deck!'
 
-		cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
+		cy.get('#deck-navigation-all')
 			.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + defaultBoard + ')')
 			.first()
 			.contains(defaultBoard)

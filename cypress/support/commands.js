@@ -93,7 +93,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 })
 
 Cypress.Commands.add('getNavigationEntry', (boardTitle) => {
-	return cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
+	return cy.get('#deck-navigation-all')
 		.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + boardTitle + ')')
 		.find('a.app-navigation-entry-link')
 })

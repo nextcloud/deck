@@ -175,7 +175,7 @@ export default {
 	mounted() {
 		this.setupEditor()
 	},
-	async beforeDestroy() {
+	async beforeUnmount() {
 		await this.destroyEditor()
 	},
 	methods: {

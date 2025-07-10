@@ -4,7 +4,6 @@
  */
 
 import { CommentApi } from '../services/CommentApi.js'
-import Vue from 'vue'
 
 const apiClient = new CommentApi()
 
@@ -34,10 +33,10 @@ export default {
 		},
 		addComments(state, { comments, cardId }) {
 			if (state.comments[cardId] === undefined) {
-				Vue.set(state.comments, cardId, {
-					hasMore: comments.length > 0,
+				state.comments[cardId] = {
+					hasMore: comments.length >= 0,
 					comments: [...comments],
-				})
+				}
 			} else {
 				const newComments = comments.filter((comment) => {
 					return state.comments[cardId].comments.findIndex((item) => item.id === comment.id) === -1
@@ -59,11 +58,11 @@ export default {
 		},
 		markCommentsAsRead(state, cardId) {
 			state.comments[cardId].comments.forEach(_comment => {
-				Vue.set(_comment, 'isUnread', false)
+				_comment.isUnread = false
 			})
 		},
 		setReplyTo(state, comment) {
-			Vue.set(state, 'replyTo', comment)
+			state.replyTo = comment
 		},
 	},
 	actions: {

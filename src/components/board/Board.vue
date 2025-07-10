@@ -29,12 +29,12 @@
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
 						<NcTextField ref="newStackInput"
+							v-model="newStackTitle"
 							:disable="loading"
-							:value.sync="newStackTitle"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
-						<NcButton type="secondary"
-							native-type="submit"
+						<NcButton variant="secondary"
+							type="submit"
 							:disabled="loading"
 							:title="t('deck', 'Add list')">
 							<template #icon>
@@ -63,7 +63,10 @@
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
-						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
+						<Stack :stack="stack"
+							:dragging="draggingStack"
+							data-click-closes-sidebar="true"
+							@open-card="openCard" />
 					</Draggable>
 				</Container>
 			</div>
@@ -82,7 +85,7 @@
 </template>
 
 <script>
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
@@ -165,14 +168,14 @@ export default {
 	created() {
 		this.session = createSession(this.id)
 		this.fetchData()
-		this.$root.$on('open-card', (cardId) => {
-			this.localModal = cardId
-		})
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.session.close()
 	},
 	methods: {
+		openCard(cardId) {
+
+		},
 		async fetchData() {
 			this.loading = true
 			try {
@@ -253,8 +256,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import '../../css/animations';
-	@import '../../css/variables';
+	@use '../../css/animations';
+	@use '../../css/variables';
 
 	form {
 		text-align: center;
@@ -282,7 +285,7 @@ export default {
 	}
 
 	.board {
-		padding-left: $board-spacing;
+		padding-left: variables.$board-spacing;
 		position: relative;
 		max-height: calc(100% - var(--default-clickable-area));
 		overflow: hidden;
@@ -313,8 +316,8 @@ export default {
 					display: flex;
 					flex-direction: column;
 					// Margin left instead of padidng to avoid jumps on dropping a card
-					margin-left: $stack-spacing;
-					padding-right: $stack-spacing;
+					margin-left: variables.$stack-spacing;
+					padding-right: variables.$stack-spacing;
 					overflow-x: hidden;
 					overflow-y: auto;
 					padding-top: 15px;

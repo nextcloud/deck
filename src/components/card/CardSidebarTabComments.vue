@@ -23,11 +23,11 @@
 				:key="comment.id"
 				:comment="comment"
 				@doReload="loadComments" />
-			<InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
+			<!-- <InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
 				<div slot="spinner" class="icon-loading" />
 				<div slot="no-more" />
 				<div slot="no-results" />
-			</InfiniteLoading>
+			</InfiniteLoading> -->
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
@@ -42,7 +42,7 @@ import { mapState, mapGetters } from 'vuex'
 import { NcAvatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem.vue'
 import CommentForm from './CommentForm.vue'
-import InfiniteLoading from 'vue-infinite-loading'
+// import InfiniteLoading from 'v3-infinite-loading'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
@@ -51,7 +51,7 @@ export default {
 		NcAvatar,
 		CommentItem,
 		CommentForm,
-		InfiniteLoading,
+		// InfiniteLoading,
 	},
 	props: {
 		card: {

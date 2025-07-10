@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div v-if="searchQuery!==''" class="global-search">
+	<div v-if="searchQuery !== ''" class="global-search">
 		<h2>
 			<NcRichText :text="t('deck', 'Search for {searchQuery} in all boards')" :arguments="queryStringArgs" />
 			<div v-if="loading" class="icon-loading-small" />
@@ -19,13 +19,13 @@
 					:key="card.id"
 					:standalone="true" />
 				<Placeholder v-if="loading" />
-				<InfiniteLoading :identifier="searchQuery" @infinite="infiniteHandler">
+				<!-- <InfiniteLoading :identifier="searchQuery" @infinite="infiniteHandler">
 					<div slot="spinner" />
 					<div slot="no-more" />
 					<div slot="no-results">
 						{{ t('deck', 'No results found') }}
 					</div>
-				</InfiniteLoading>
+				</InfiniteLoading> -->
 			</div>
 			<div v-else>
 				<p>{{ t('deck', 'No results found') }}</p>
@@ -39,7 +39,7 @@ import CardItem from '../cards/CardItem.vue'
 import { mapState } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import InfiniteLoading from 'vue-infinite-loading'
+// import InfiniteLoading from 'v3-infinite-loading'
 import Placeholder from './Placeholder.vue'
 import { NcActions, NcActionButton, NcRichText } from '@nextcloud/vue'
 
@@ -70,7 +70,14 @@ function search({ query, cursor }) {
 
 export default {
 	name: 'GlobalSearchResults',
-	components: { CardItem, InfiniteLoading, NcRichText, Placeholder, NcActions, NcActionButton },
+	components: {
+		CardItem,
+		// InfiniteLoading,
+		NcRichText,
+		Placeholder,
+		NcActions,
+		NcActionButton,
+	},
 	data() {
 		return {
 			results: [],
@@ -155,11 +162,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@use '../../css/variables';
 
 .global-search {
 	width: 100%;
-	padding: $board-spacing + $stack-spacing;
+	padding: variables.$board-spacing + variables.$stack-spacing;
 	padding-bottom: 0;
 	overflow: hidden;
 	min-height: 35vh;
@@ -175,6 +182,7 @@ export default {
 		top: 10px;
 		right: 10px;
 	}
+
 	.search-wrapper {
 		overflow: scroll;
 		height: 100%;
@@ -182,13 +190,14 @@ export default {
 		padding: 10px;
 	}
 
-	h2 > div {
+	h2>div {
 		display: inline-block;
 
 		&.icon-loading-small {
 			margin-right: 20px;
 		}
 	}
+
 	h2:deep(span) {
 		background-color: var(--color-background-dark);
 		padding: 3px;
@@ -199,13 +208,14 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 
-		& > div {
+		&>div {
 			flex-grow: 0;
 		}
 	}
+
 	&:deep(.card) {
-		width: $stack-width;
-		margin-right: $stack-spacing;
+		width: variables.$stack-width;
+		margin-right: variables.$stack-spacing;
 	}
 }
 </style>
