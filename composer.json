@@ -16,8 +16,7 @@
 		"phpunit/phpunit": "^9",
 		"nextcloud/coding-standard": "^1.1",
 		"nextcloud/ocp": "dev-master",
-		"psalm/phar": "^5.13",
-		"friendsofphp/php-cs-fixer": "*"
+		"psalm/phar": "^5.13"
 	},
 	"config": {
 		"optimize-autoloader": true,
