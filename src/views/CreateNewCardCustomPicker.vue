@@ -82,7 +82,7 @@
 					{{ t('deck', 'Cancel') }}
 				</NcButton>
 				<NcButton :disabled="loading || !isBoardAndStackChoosen"
-					type="primary"
+					variant="primary"
 					@click="createCard">
 					{{ t('deck', 'Create card') }}
 				</NcButton>
@@ -212,8 +212,8 @@ export default {
 		},
 	},
 	beforeMount() {
-		this.$set(this.card, 'title', this.title)
-		this.$set(this.card, 'description', this.description)
+		this.card.title = this.title
+		this.card.description = this.description
 		this.fetchBoards()
 	},
 	mounted() {

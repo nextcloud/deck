@@ -10,9 +10,15 @@
 			:key="activity.activity_id"
 			:activity="activity" />
 		<InfiniteLoading :identifier="objectId" @infinite="infiniteHandler" @change="changeObject">
-			<div slot="spinner" class="icon-loading" />
-			<div slot="no-more" />
-			<div slot="no-results" />
+			<template #spinner>
+				<div class="icon-loading" />
+			</template>
+			<template #no-more>
+				<div />
+			</template>
+			<template #no-results>
+				<div />
+			</template>
 		</InfiniteLoading>
 	</div>
 </template>
@@ -21,7 +27,7 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import ActivityEntry from './ActivityEntry.vue'
-import InfiniteLoading from 'vue-infinite-loading'
+// import InfiniteLoading from 'v3-infinite-loading'
 
 const ACTIVITY_FETCH_LIMIT = 50
 
@@ -29,7 +35,6 @@ export default {
 	name: 'ActivityList',
 	components: {
 		ActivityEntry,
-		InfiniteLoading,
 	},
 	props: {
 		filter: {

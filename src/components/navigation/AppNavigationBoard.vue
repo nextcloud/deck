@@ -25,7 +25,7 @@
 			<AccountIcon v-if="board.acl.length > 0" />
 		</template>
 
-		<template v-if="!deleted" slot="actions">
+		<template v-if="!deleted" #actions>
 			<template v-if="!isDueSubmenuActive">
 				<NcActionButton icon="icon-info"
 					:close-after-click="true"
@@ -129,17 +129,17 @@
 				:placeholder="t('deck', 'Board name')"
 				type="text"
 				required />
-			<NcButton type="tertiary"
+			<NcButton variant="tertiary"
 				:disabled="loading"
-				native-type="submit"
+				type="submit"
 				:title="t('deck', 'Cancel edit')"
 				@click.stop.prevent="cancelEdit">
 				<template #icon>
 					<CloseIcon :size="20" />
 				</template>
 			</NcButton>
-			<NcButton type="tertiary"
-				native-type="submit"
+			<NcButton variant="tertiary"
+				type="submit"
 				:disabled="loading"
 				:title="t('deck', 'Save board')">
 				<template #icon>
@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton } from '@nextcloud/vue'
+import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
@@ -186,6 +186,7 @@ export default {
 		CheckIcon,
 		BoardCloneModal,
 		BoardExportModal,
+		NcLoadingIcon,
 	},
 	directives: {
 		ClickOutside,

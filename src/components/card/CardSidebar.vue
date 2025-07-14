@@ -3,15 +3,16 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<!-- eslint-disable vue/no-v-model-argument -->
 <template>
 	<NcAppSidebar v-if="currentBoard && currentCard"
 		ref="cardSidebar"
+		v-model:name-editable="isEditingTitle"
 		:active="tabId"
 		:name="displayTitle"
 		:subname="subtitle"
 		:subtitle="subtitleTooltip"
-		:name-editable.sync="isEditingTitle"
-		@update:name="(value) => titleEditing = value"
+		@update:name="value => titleEditing = value"
 		@dismiss-editing="titleEditing = currentCard.title"
 		@submit-name="handleSubmitTitle"
 		@opened="focusHeader"
@@ -24,35 +25,69 @@
 				{{ t('deck', 'Open in bigger view') }}
 			</NcActionButton>
 
-			<CardMenuEntries :card="currentCard" :hide-details-entry="true" />
+			<NcActionButton v-if="canEdit && !isCurrentUserAssigned"
+				icon="icon-user"
+				:close-after-click="true"
+				@click="assignCardToMe()">
+				{{ t('deck', 'Assign to me') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit && isCurrentUserAssigned"
+				icon="icon-user"
+				:close-after-click="true"
+				@click="unassignCardFromMe()">
+				{{ t('deck', 'Unassign myself') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit"
+				icon="icon-checkmark"
+				:close-after-click="true"
+				@click="changeCardDoneStatus()">
+				{{ currentCard.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit"
+				icon="icon-external"
+				:close-after-click="true"
+				@click="openCardMoveDialog">
+				{{ t('deck', 'Move/copy card') }}
+			</NcActionButton>
+			<NcActionButton v-for="action in cardActions"
+				:key="action.label"
+				:close-after-click="true"
+				:icon="action.icon"
+				@click="action.callback(cardRichObject)">
+				{{ action.label }}
+			</NcActionButton>
+			<NcActionButton v-if="canEditBoard" :close-after-click="true" @click="archiveUnarchiveCard()">
+				<template #icon>
+					<ArchiveIcon :size="20" decorative />
+				</template>
+				{{ currentCard.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit"
+				icon="icon-delete"
+				:close-after-click="true"
+				@click="deleteCard()">
+				{{ t('deck', 'Delete card') }}
+			</NcActionButton>
 		</template>
 		<template #description>
-			<NcReferenceList v-if="currentCard.referenceData"
-				:text="currentCard.title"
-				:interactive="false" />
+			<NcReferenceList v-if="currentCard.referenceData" :text="currentCard.title" :interactive="false" />
 		</template>
 
-		<NcAppSidebarTab id="details"
-			:order="0"
-			:name="t('deck', 'Details')">
+		<NcAppSidebarTab id="details" :order="0" :name="t('deck', 'Details')">
 			<CardSidebarTabDetails :card="currentCard" />
 			<template #icon>
 				<HomeIcon :size="20" />
 			</template>
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab id="attachments"
-			:order="1"
-			:name="t('deck', 'Attachments')">
+		<NcAppSidebarTab id="attachments" :order="1" :name="t('deck', 'Attachments')">
 			<template #icon>
 				<AttachmentIcon :size="20" />
 			</template>
 			<CardSidebarTabAttachments :card="currentCard" />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab id="comments"
-			:order="2"
-			:name="t('deck', 'Comments')">
+		<NcAppSidebarTab id="comments" :order="2" :name="t('deck', 'Comments')">
 			<template #icon>
 				<CommentIcon :size="20" />
 			</template>
@@ -73,7 +108,7 @@
 
 <script>
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
+import { NcReferenceList } from '@nextcloud/vue/components/NcRichText'
 import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
@@ -87,9 +122,15 @@ import HomeIcon from 'vue-material-design-icons/Home.vue'
 import CommentIcon from 'vue-material-design-icons/Comment.vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
-import { showError, showWarning } from '@nextcloud/dialogs'
+import { showError, showWarning, showUndo } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
-import CardMenuEntries from '../cards/CardMenuEntries.vue'
+import { emit } from '@nextcloud/event-bus'
+
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
+
+import '@nextcloud/dialogs/style.css'
 
 const capabilities = getCapabilities()
 
@@ -108,7 +149,7 @@ export default {
 		AttachmentIcon,
 		CommentIcon,
 		HomeIcon,
-		CardMenuEntries,
+		ArchiveIcon,
 	},
 	mixins: [relativeDate],
 	props: {
@@ -140,8 +181,17 @@ export default {
 			isFullApp: (state) => state.isFullApp,
 			currentBoard: (state) => state.currentBoard,
 			hasCardSaveError: (state) => state.hasCardSaveError,
+			showArchived: (state) => state.showArchived,
 		}),
-		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
+		...mapGetters([
+			'canEdit',
+			'assignables',
+			'cardActions',
+			'stackById',
+			'isArchived',
+			'boards',
+			'boardById',
+		]),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
@@ -167,6 +217,31 @@ export default {
 				const reference = this.currentCard.referenceData
 				return reference ? reference.openGraphObject.name : this.currentCard.title
 			},
+		},
+		canEdit() {
+			return !this.currentCard.archived
+		},
+		canEditBoard() {
+			if (this.currentBoard) {
+				return this.$store.getters.canEdit
+			}
+			const board = this.$store.getters.boards.find((item) => item.id === this.currentCard.boardId)
+			return !!board?.permissions?.PERMISSION_EDIT
+		},
+		isCurrentUserAssigned() {
+			return this.currentCard.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
+		},
+		boardId() {
+			return this.card?.boardId ? this.currentCard.boardId : Number(this.$route.params.id)
+		},
+		cardRichObject() {
+			return {
+				id: '' + this.currentCard.id,
+				name: this.currentCard.title,
+				boardname: this.boardById(this.boardId)?.title,
+				stackname: this.stackById(this.currentCard.stackId)?.title,
+				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `card/${this.currentCard.id}`,
+			}
 		},
 	},
 	watch: {
@@ -216,12 +291,46 @@ export default {
 		formatDate(timestamp) {
 			return moment.unix(timestamp).locale(this.locale).format('LLLL')
 		},
+		deleteCard() {
+			this.$store.dispatch('deleteCard', this.currentCard)
+			const undoCard = { ...this.currentCard, deletedAt: 0 }
+			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
+			if (this.$router.currentRoute.name === 'card') {
+				this.$router.push({ name: 'board' })
+			}
+		},
+		changeCardDoneStatus() {
+			this.$store.dispatch('changeCardDoneStatus', { ...this.currentCard, done: !this.currentCard.done })
+		},
+		archiveUnarchiveCard() {
+			this.$store.dispatch('archiveUnarchiveCard', { ...this.currentCard, archived: !this.currentCard.archived })
+		},
+		assignCardToMe() {
+			this.$store.dispatch('assignCardToUser', {
+				card: this.currentCard,
+				assignee: {
+					userId: getCurrentUser()?.uid,
+					type: 0,
+				},
+			})
+		},
+		unassignCardFromMe() {
+			this.$store.dispatch('removeUserFromCard', {
+				card: this.currentCard,
+				assignee: {
+					userId: getCurrentUser()?.uid,
+					type: 0,
+				},
+			})
+		},
+		openCardMoveDialog() {
+			emit('deck:card:show-move-dialog', this.currentCard)
+		},
 	},
 }
 </script>
 
 <style lang="scss">
-
 section.app-sidebar__tab--active {
 	min-height: auto;
 	display: flex;
@@ -273,6 +382,7 @@ section.app-sidebar__tab--active {
 			z-index: 100;
 			background-color: var(--color-main-background);
 		}
+
 		.app-sidebar-tabs__nav {
 			position: sticky;
 			top: 87px;
@@ -285,10 +395,10 @@ section.app-sidebar__tab--active {
 			overflow: initial;
 		}
 
-		#emptycontent, .emptycontent {
+		#emptycontent,
+		.emptycontent {
 			margin-top: 88px;
 		}
 	}
 }
-
 </style>
