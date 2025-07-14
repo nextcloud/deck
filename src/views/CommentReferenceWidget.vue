@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import CalendarBlankIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import CalendarBlankIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import CardBulletedOutlineIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import CommentProcessingOutlineIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'

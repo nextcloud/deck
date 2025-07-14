@@ -49,8 +49,8 @@ import CardId from './badges/CardId.vue'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
-import CommentIcon from 'vue-material-design-icons/Comment.vue'
-import CommentUnreadIcon from 'vue-material-design-icons/CommentAccount.vue'
+import CommentIcon from 'vue-material-design-icons/CommentOutline.vue'
+import CommentUnreadIcon from 'vue-material-design-icons/CommentAccountOutline.vue'
 import DueDate from './badges/DueDate.vue'
 
 export default {

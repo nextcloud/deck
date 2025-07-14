@@ -10,7 +10,8 @@
 				:exact="true"
 				to="/">
 				<template #icon>
-					<CalendarIcon :size="20" />
+					<CalendarIcon v-if="$route.path === '/'" :size="20" />
+					<CalendarOutlineIcon v-else :size="20" />
 				</template>
 			</NcAppNavigationItem>
 			<AppNavigationBoardCategory id="deck-navigation-all"
@@ -29,7 +30,8 @@
 				:text="t('deck', 'Archived boards')"
 				:boards="archivedBoards">
 				<template #icon>
-					<ArchiveIcon :size="20" decorative />
+					<ArchiveIcon v-if="$route.path === '/board/archived'" :size="20" decorative />
+					<ArchiveOutlineIcon v-else :size="20" decorative />
 				</template>
 			</AppNavigationBoardCategory>
 			<AppNavigationBoardCategory id="deck-navigation-shared"
@@ -112,9 +114,11 @@ import { loadState } from '@nextcloud/initial-state'
 import { generateOcsUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import ArchiveOutlineIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
+import CalendarOutlineIcon from 'vue-material-design-icons/CalendarOutline.vue'
 import DeckIcon from './../icons/DeckIcon.vue'
-import ShareVariantIcon from 'vue-material-design-icons/Share.vue'
+import ShareVariantIcon from 'vue-material-design-icons/ShareOutline.vue'
 import HelpModal from './../modals/HelpModal.vue'
 import { subscribe } from '@nextcloud/event-bus'
 import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
@@ -133,7 +137,9 @@ export default {
 		NcSelect,
 		NcAppNavigationItem,
 		ArchiveIcon,
+		ArchiveOutlineIcon,
 		CalendarIcon,
+		CalendarOutlineIcon,
 		DeckIcon,
 		ShareVariantIcon,
 		HelpModal,
