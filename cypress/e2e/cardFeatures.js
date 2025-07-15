@@ -302,6 +302,9 @@ describe('Card', function () {
 				.first().click()
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
 
+			// Add delay to ensure the events are bound
+			cy.wait(1000)
+
 			cy.get('#app-sidebar-vue [data-test="tag-selector"]  .vs__dropdown-toggle').should('be.visible').click()
 			cy.get('.vs__dropdown-menu .tag:contains("Action needed")').should('be.visible').click()
 			cy.get('.vs__dropdown-menu .tag:contains("Later")').should('be.visible').click()
