@@ -12,6 +12,7 @@
 		:subtitle="subtitleTooltip"
 		:name-editable.sync="isEditingTitle"
 		@update:name="(value) => titleEditing = value"
+		@update:active="(value) => activeTabId = value"
 		@dismiss-editing="titleEditing = currentCard.title"
 		@submit-name="handleSubmitTitle"
 		@opened="focusHeader"
@@ -37,7 +38,8 @@
 			:name="t('deck', 'Details')">
 			<CardSidebarTabDetails :card="currentCard" />
 			<template #icon>
-				<HomeIcon :size="20" />
+				<HomeIcon v-if="activeTabId === 'details'" :size="20" />
+				<HomeOutlineIcon v-else :size="20" />
 			</template>
 		</NcAppSidebarTab>
 
@@ -54,7 +56,8 @@
 			:order="2"
 			:name="t('deck', 'Comments')">
 			<template #icon>
-				<CommentIcon :size="20" />
+				<CommentIcon v-if="activeTabId === 'comments'" :size="20" />
+				<CommentOutlineIcon v-else :size="20" />
 			</template>
 			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
 		</NcAppSidebarTab>
@@ -84,7 +87,9 @@ import relativeDate from '../../mixins/relativeDate.js'
 import moment from '@nextcloud/moment'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import HomeIcon from 'vue-material-design-icons/Home.vue'
+import HomeOutlineIcon from 'vue-material-design-icons/HomeOutline.vue'
 import CommentIcon from 'vue-material-design-icons/Comment.vue'
+import CommentOutlineIcon from 'vue-material-design-icons/CommentOutline.vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import { showError, showWarning } from '@nextcloud/dialogs'
@@ -107,7 +112,9 @@ export default {
 		ActivityIcon,
 		AttachmentIcon,
 		CommentIcon,
+		CommentOutlineIcon,
 		HomeIcon,
+		HomeOutlineIcon,
 		CardMenuEntries,
 	},
 	mixins: [relativeDate],
@@ -133,6 +140,7 @@ export default {
 			titleEditing: '',
 			hasActivity: capabilities && capabilities.activity,
 			locale: getLocale(),
+			activeTabId: this.tabId || 'details',
 		}
 	},
 	computed: {

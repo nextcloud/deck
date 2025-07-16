@@ -70,7 +70,7 @@
 <script>
 import { NcAvatar, NcPopover } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
-import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
+import AccountMultiple from 'vue-material-design-icons/AccountMultipleOutline.vue'
 
 export default {
 	name: 'AvatarList',

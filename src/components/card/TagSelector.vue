@@ -44,7 +44,7 @@
 <script>
 import { NcSelect } from '@nextcloud/vue'
 import Color from '../../mixins/color.js'
-import TagMultiple from 'vue-material-design-icons/TagMultiple.vue'
+import TagMultiple from 'vue-material-design-icons/TagMultipleOutline.vue'
 
 export default {
 	name: 'TagSelector',
