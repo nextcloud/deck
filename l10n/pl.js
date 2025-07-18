@@ -312,6 +312,7 @@ OC.L10N.register(
     "Clone cards" : "Klonuj karty",
     "Advanced options" : "Opcje zaawansowane",
     "Clone" : "Klonuj",
+    "Export {boardTitle}" : "Eksportuj {boardTitle}",
     "Export" : "Eksportuj",
     "Loading filtered view" : "Wczytywanie przefiltrowanego widoku",
     "Today" : "Dzisiaj",

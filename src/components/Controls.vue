@@ -508,6 +508,20 @@ export default {
 
 		#stack-add form {
 			display: flex;
+
+			#new-stack-input-main {
+				margin-right: 8px;
+			}
+			.icon-confirm {
+				border: 2px solid var(--color-border-maxcontrast) !important;
+				border-left: none !important;
+			}
+			&:focus-within, &:focus, &:focus-visible,
+			&:hover {
+				.icon-confirm {
+					border-color: var(--color-main-text) !important;
+				}
+			}
 		}
 	}
 
