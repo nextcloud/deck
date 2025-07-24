@@ -63,9 +63,9 @@
 <script>
 import { NcActionButton } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
-import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
-import CardBulletedIcon from 'vue-material-design-icons/CardBulleted.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'

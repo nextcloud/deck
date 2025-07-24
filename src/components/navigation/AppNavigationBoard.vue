@@ -154,9 +154,9 @@
 <script>
 import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
-import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
-import AccountIcon from 'vue-material-design-icons/Account.vue'
+import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 

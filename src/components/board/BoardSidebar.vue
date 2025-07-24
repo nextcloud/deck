@@ -56,9 +56,9 @@ import DeletedTabSidebar from './DeletedTabSidebar.vue'
 import TimelineTabSidebar from './TimelineTabSidebar.vue'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-import SharingIcon from 'vue-material-design-icons/ShareVariant.vue'
-import TagsIcon from 'vue-material-design-icons/TagMultiple.vue'
-import TrashIcon from 'vue-material-design-icons/Delete.vue'
+import SharingIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import TagsIcon from 'vue-material-design-icons/TagMultipleOutline.vue'
+import TrashIcon from 'vue-material-design-icons/DeleteOutline.vue'
 const capabilities = window.OC.getCapabilities()
 
 export default {

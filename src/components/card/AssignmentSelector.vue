@@ -44,7 +44,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { NcAvatar, NcSelect } from '@nextcloud/vue'
-import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
+import AccountMultiple from 'vue-material-design-icons/AccountMultipleOutline.vue'
 
 export default defineComponent({
 	name: 'AssignmentSelector',
