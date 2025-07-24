@@ -482,7 +482,7 @@ class CardService {
 			$result[$card->getOrder()] = $card;
 		}
 		$this->changeHelper->cardChanged($id, false);
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($changes->getAfter(), $changes->getBefore()));
 
 		return array_values($result);
 	}
