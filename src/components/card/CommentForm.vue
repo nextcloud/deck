@@ -121,7 +121,12 @@ export default {
 				// do it or not based on the next element instead of always
 				// adding it.
 				// FIXME user names can contain spaces, in that case they need to be wrapped @"user name" [a-zA-Z0-9\ _\.@\-']+
-				const mentionValue = mention.firstElementChild.attributes['data-mention-id'].value
+				let mentionValue
+				if (mention.attributes['data-at-embedded'].value === 'true') {
+					mentionValue = mention.parentNode.parentNode.querySelector('.user-bubble__wrapper').attributes['data-mention-id'].value
+				} else {
+					mentionValue = mention.firstChild.attributes['data-mention-id'].value
+				}
 				if (mentionValue.indexOf(' ') !== -1) {
 					mention.replaceWith(' @"' + mentionValue + '" ')
 				} else {
