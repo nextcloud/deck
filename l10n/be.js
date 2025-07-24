@@ -21,6 +21,7 @@ OC.L10N.register(
     "Created:" : "Створана:",
     "seconds ago" : "с таму",
     "Keyboard shortcuts" : "Спалучэнні клавіш",
+    "Keyboard shortcut" : "Спалучэнне клавіш",
     "Search" : "Пошук",
     "Shared with you" : "Абагулена з вамі",
     "An error occurred" : "Узнікла памылка",
