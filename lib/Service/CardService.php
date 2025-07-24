@@ -645,9 +645,6 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$label = $this->labelMapper->find($labelId);
-		if ($label->getBoardId() !== $this->cardMapper->findBoardId($card->getId())) {
-			throw new StatusException('Operation not allowed. Label does not exist.');
-		}
 		$this->cardMapper->removeLabel($cardId, $labelId);
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
