@@ -368,14 +368,14 @@ class BoardService {
 		return $board;
 	}
 
-	private function applyPermissions($boardId, $edit, $share, $manage) {
+	private function applyPermissions($boardId, $edit, $share, $manage, $oldAcl = null) {
 		try {
 			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_MANAGE);
 		} catch (NoPermissionException $e) {
 			$acls = $this->aclMapper->findAll($boardId);
-			$edit = $this->permissionService->userCan($acls, Acl::PERMISSION_EDIT, $this->userId) && $edit;
-			$share = $this->permissionService->userCan($acls, Acl::PERMISSION_SHARE, $this->userId) && $share;
-			$manage = $this->permissionService->userCan($acls, Acl::PERMISSION_MANAGE, $this->userId) && $manage;
+			$edit = $this->permissionService->userCan($acls, Acl::PERMISSION_EDIT, $this->userId) ? $edit : $oldAcl?->getPermissionEdit() ?? false;
+			$share = $this->permissionService->userCan($acls, Acl::PERMISSION_SHARE, $this->userId) ? $share : $oldAcl?->getPermissionShare() ?? false;
+			$manage = $this->permissionService->userCan($acls, Acl::PERMISSION_MANAGE, $this->userId) ? $manage : $oldAcl?->getPermissionManage() ?? false;
 		}
 		return [$edit, $share, $manage];
 	}
@@ -465,7 +465,7 @@ class BoardService {
 
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
-		[$edit, $share, $manage] = $this->applyPermissions($acl->getBoardId(), $edit, $share, $manage);
+		[$edit, $share, $manage] = $this->applyPermissions($acl->getBoardId(), $edit, $share, $manage, $acl);
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
@@ -487,7 +487,7 @@ class BoardService {
 	 * @throws NotFoundExceptionInterface
 	 */
 	public function deleteAcl(int $id): ?Acl {
-		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
+		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_MANAGE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
 		$this->boardMapper->mapAcl($acl);
