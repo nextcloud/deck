@@ -475,9 +475,6 @@ class CardServiceTest extends TestCase {
 		$label->setBoardId(1);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('removeLabel');
-		$this->cardMapper->expects($this->once())
-			->method('findBoardId')
-			->willReturn(1);
 		$this->labelMapper->expects($this->once())
 			->method('find')
 			->willReturn($label);
