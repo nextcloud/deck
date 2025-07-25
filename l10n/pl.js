@@ -266,6 +266,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "Komentarze: {count}, nieprzeczytane: {unread}",
     "Todo items" : "Do zrobienia",
     "Edit card title" : "Edytuj nazwę karty",
+    "Open link" : "Otwórz link",
     "Card deleted" : "Karta usunięta",
     "Edit title" : "Edytuj tytuł",
     "Assign to me" : "Przydziel do mnie",
