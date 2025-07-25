@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Missing a temporary folder" : "Адсутнічае часовая папка",
+    "Could not write file to disk" : "Не ўдалося запісаць файл на дыск",
     "copy" : "копія",
     "Done" : "Гатова",
     "File" : "Файл",
@@ -19,6 +21,7 @@ OC.L10N.register(
     "Modified" : "Зменены",
     "Save" : "Захаваць",
     "Created:" : "Створана:",
+    "Open link" : "Адкрыць спасылку",
     "seconds ago" : "с таму",
     "Keyboard shortcuts" : "Спалучэнні клавіш",
     "Keyboard shortcut" : "Спалучэнне клавіш",
