@@ -5,6 +5,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.6
+### Fixed
+* [stable30] fix: update DeleteCron to remove deleted lists by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7028
+* [stable30] fix: not show Share with a Deck card for unauthorized users by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7060
+* [stable30] fix: add retry and show warning on description saving error by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7090
+* [stable30] fix: styling for new stack input field by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7112
+* [stable30] fix:allow foreign label deletion by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7129
+* [stable30] fix: acl check when delete, update board acl by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7133
+
 ## 1.14.5
 ### Fixed
 * [stable30] Clear selected stack when selected board changed by @backportbot in https://github.com/nextcloud/deck/pull/6914
