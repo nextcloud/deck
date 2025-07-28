@@ -5,6 +5,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.15.2
+### Fixed
+* [stable31] fix: update DeleteCron to remove deleted lists by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7029
+* [stable31] fix: not show Share with a Deck card for unauthorized users by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7061
+* [stable31] fix: unstable cypress test by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7063
+* [stable31] fix: add retry and show warning on description saving error by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7091
+* [stable31] fix: styling for new stack input field by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7113
+* [stable31] fix:allow foreign label deletion by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7130
+* [stable31] fix: acl check when delete, update board acl by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7132
+
+### Improvements
+* [stable31] perf: don't enrich cards when finding calendar entries by @backportbot[bot] in https://github.com/nextcloud/deck/pull/6959
+
 ## 1.15.1
 ### Fixed
 * [stable31] fix: Properly show attachment extension by @backportbot in https://github.com/nextcloud/deck/pull/6701
