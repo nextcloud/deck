@@ -280,7 +280,7 @@ export default {
 			this.card.labels.push(label)
 		},
 		onRemoveLabel(removedLabel) {
-			this.card.labels = this.card.label.filter(label => label.id !== removedLabel.id)
+			this.card.labels = this.card.labels.filter(label => label.id !== removedLabel.id)
 		},
 		onSelectUser(user) {
 			this.card.assignedUsers.push(user)
