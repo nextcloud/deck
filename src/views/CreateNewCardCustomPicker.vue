@@ -276,6 +276,7 @@ export default {
 			}
 		},
 		onSelectLabel(label) {
+			if (!label.id) return
 			this.card.labels.push(label)
 		},
 		onRemoveLabel(removedLabel) {
