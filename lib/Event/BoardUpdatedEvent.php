@@ -7,21 +7,23 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Event;
 
-use OCP\EventDispatcher\Event;
+use OCA\Deck\Db\Board;
 
-class BoardUpdatedEvent extends Event {
-	private $boardId;
-	
-	public function __construct(int $boardId) {
-		parent::__construct();
+class BoardUpdatedEvent extends ABoardEvent
+{
+	private Board $boardBefore;
 
-		$this->boardId = $boardId;
+	public function __construct(Board $board, Board $boardBefore)
+	{
+		parent::__construct($board);
+
+		$this->boardBefore = $boardBefore;
 	}
 
-	public function getBoardId(): int {
-		return $this->boardId;
+	public function getBoardBefore(): Board
+	{
+		return $this->boardBefore;
 	}
 }
