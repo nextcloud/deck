@@ -356,7 +356,7 @@ class CardService {
 		if ($resetDuedateNotification) {
 			$this->notificationHelper->markDuedateAsRead($card);
 		}
-		$this->changeHelper->cardChanged($card->getId(), true);
+		$this->changeHelper->cardChanged($card->getId());
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
@@ -418,11 +418,12 @@ class CardService {
 		if ($card->getArchived()) {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
+		$changes = new ChangeSet($card);
 		$card->setTitle($title);
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$update = $this->cardMapper->update($card);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $update;
 	}
@@ -441,7 +442,6 @@ class CardService {
 	public function reorder($id, $stackId, $order) {
 		$this->cardServiceValidator->check(compact('id', 'stackId', 'order'));
 
-
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 
@@ -459,30 +459,30 @@ class CardService {
 		$changes->setAfter($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
 
-		$cards = $this->cardMapper->findAll($stackId);
+		$cardsToReorder = $this->cardMapper->findAll($stackId);
 		$result = [];
 		$i = 0;
-		foreach ($cards as $card) {
-			if ($card->getArchived()) {
+		foreach ($cardsToReorder as $cardToReorder) {
+			if ($cardToReorder->getArchived()) {
 				throw new StatusException('Operation not allowed. This card is archived.');
 			}
-			if ($card->id === $id) {
-				$card->setOrder($order);
-				$card->setLastModified(time());
+			if ($cardToReorder->id === $id) {
+				$cardToReorder->setOrder($order);
+				$cardToReorder->setLastModified(time());
 			}
 
 			if ($i === $order) {
 				$i++;
 			}
 
-			if ($card->id !== $id) {
-				$card->setOrder($i++);
+			if ($cardToReorder->id !== $id) {
+				$cardToReorder->setOrder($i++);
 			}
-			$this->cardMapper->update($card);
-			$result[$card->getOrder()] = $card;
+			$this->cardMapper->update($cardToReorder);
+			$result[$cardToReorder->getOrder()] = $cardToReorder;
 		}
 		$this->changeHelper->cardChanged($id, false);
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return array_values($result);
 	}
@@ -499,19 +499,19 @@ class CardService {
 	public function archive($id) {
 		$this->cardServiceValidator->check(compact('id'));
 
-
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
+		$changes = new ChangeSet($card);
 		$card->setArchived(true);
 		$newCard = $this->cardMapper->update($card);
 		$this->notificationHelper->markDuedateAsRead($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $newCard;
 	}
@@ -534,12 +534,13 @@ class CardService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
+		$changes = new ChangeSet($card);
 		$card->setArchived(false);
 		$newCard = $this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $newCard;
 	}
@@ -559,13 +560,14 @@ class CardService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
+		$changes = new ChangeSet($card);
 		$card->setDone(new \DateTime());
 		$newCard = $this->cardMapper->update($card);
 		$this->notificationHelper->markDuedateAsRead($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_DONE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $newCard;
 	}
@@ -585,12 +587,13 @@ class CardService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
+		$changes = new ChangeSet($card);
 		$card->setDone(null);
 		$newCard = $this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNDONE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $newCard;
 	}
