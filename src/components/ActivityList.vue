@@ -87,7 +87,7 @@ export default {
 				// to tell the backend to fetch all activites related to cards of a given board
 				activities = activities.filter((activity) => {
 					return (activity.object_type === 'deck_board' && activity.object_id === this.objectId)
-							|| (activity.object_type === 'deck_card' && activity.subject_rich[1].board.id === this.objectId)
+							|| (activity.object_type === 'deck_card' && activity.subject_rich[1].board.id === this.objectId.toString())
 				})
 			}
 			this.activities.push(...activities)
