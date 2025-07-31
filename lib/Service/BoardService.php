@@ -29,6 +29,8 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
+use OCA\Deck\Event\BoardCreatedEvent;
+use OCA\Deck\Event\BoardDeletedEvent;
 use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\NoPermissionException;
@@ -223,6 +225,7 @@ class BoardService {
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
+		$this->eventDispatcher->dispatchTyped(new BoardCreatedEvent($new_board));
 		$this->changeHelper->boardChanged($new_board->getId());
 
 		return $new_board;
@@ -248,6 +251,7 @@ class BoardService {
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new BoardDeletedEvent($board));
 
 		return $board;
 	}
@@ -264,10 +268,12 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id, allowDeleted: true);
+		$changes = new ChangeSet($board);
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($board, $changes->getBefore()));
 
 		return $board;
 	}
@@ -286,6 +292,7 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id, allowDeleted: true);
 		$delete = $this->boardMapper->delete($board);
+		$this->eventDispatcher->dispatchTyped(new BoardDeletedEvent($board));
 
 		return $delete;
 	}
@@ -315,7 +322,7 @@ class BoardService {
 		$this->boardMapper->mapOwner($board);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
 		$this->changeHelper->boardChanged($board->getId());
-		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($board->getId()));
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($board, $changes->getBefore()));
 
 		return $board;
 	}
@@ -534,6 +541,8 @@ class BoardService {
 		if ($withCards) {
 			$this->cloneCards($board, $newBoard, $withAssignments, $withLabels, $withDueDate, $moveCardsToLeftStack, $restoreArchivedCards);
 		}
+
+		$this->eventDispatcher->dispatchTyped(new BoardCreatedEvent($newBoard));
 
 		return $this->find($newBoard->getId());
 	}
