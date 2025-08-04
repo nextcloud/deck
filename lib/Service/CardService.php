@@ -438,7 +438,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function reorder($id, $stackId, $order) {
+	public function reorder(int $id, int $stackId, int $order) {
 		$this->cardServiceValidator->check(compact('id', 'stackId', 'order'));
 
 
