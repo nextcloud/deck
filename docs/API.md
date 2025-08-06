@@ -151,7 +151,7 @@ This API version has become available with **Deck 1.3.0**.
 
 ### Boards
 
-#### List boards
+#### List boards {.ep-heading}
 
 Get a list of all user boards.
 
@@ -201,7 +201,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ]
 ```
 
-#### Create board
+#### Create board {.ep-heading}
 
 Create a new board. The user's ability to create new boards can be disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
 
@@ -277,7 +277,7 @@ Create a new board. The user's ability to create new boards can be disabled by t
 }
 ```
 
-#### Get board
+#### Get board {.ep-heading}
 
 Get a board by ID.
 
@@ -350,7 +350,7 @@ Get a board by ID.
 }
 ```
 
-#### Update board
+#### Update board {.ep-heading}
 
 Update a board by ID.
 
@@ -382,7 +382,7 @@ Update a board by ID.
 
 Returns the updated board.
 
-#### Delete board
+#### Delete board {.ep-heading}
 
 Delete a board by ID.
 
@@ -398,7 +398,7 @@ Delete a board by ID.
 
 Returns the deleted board. The `deletedAt`-key contains the UNIX timestamp at deletion.
 
-#### Restore board
+#### Restore board {.ep-heading}
 
 Restore a deleted board by ID.
 
@@ -414,7 +414,7 @@ Restore a deleted board by ID.
 
 Returns the restored board.
 
-#### Clone board
+#### Clone board {.ep-heading}
 
 Clone a board by ID.
 
@@ -441,7 +441,7 @@ Creates a copy of the board.
 
 Returns the restored board.
 
-#### Create ACL rule
+#### Create ACL rule {.ep-heading}
 
 Create an ACL for a board.
 
@@ -487,7 +487,7 @@ Create an ACL for a board.
 }]
 ```
 
-#### Update ACL rule
+#### Update ACL rule {.ep-heading}
 
 Update an ACL by ID.
 
@@ -508,11 +508,11 @@ Update an ACL by ID.
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
 
-#### Response
+#### Response {.ep-heading}
 
 Returns the updated ACL.
 
-#### Delete ACL rule
+#### Delete ACL rule {.ep-heading}
 
 Delete an ACL by ID.
 
@@ -531,7 +531,7 @@ Returns the deleted ACL.
 
 ### Stacks
 
-#### List stacks
+#### List stacks {.ep-heading}
 
 Get a list of all board stacks.
 
@@ -563,7 +563,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ]
 ```
 
-#### List archived stacks
+#### List archived stacks {.ep-heading}
 
 Get a list of archived stacks
 
@@ -591,7 +591,7 @@ Get a list of archived stacks
 ]
 ```
 
-#### Get stack
+#### Get stack {.ep-heading}
 
 Get a stack by ID.
 
@@ -618,7 +618,7 @@ Get a stack by ID.
 }
 ```
 
-#### Create stack
+#### Create stack {.ep-heading}
 
 Create a stack on the board.
 
@@ -641,7 +641,7 @@ Create a stack on the board.
 
 Returns the created stack.
 
-#### Update stack
+#### Update stack {.ep-heading}
 
 Update a stack by ID.
 
@@ -665,7 +665,7 @@ Update a stack by ID.
 
 Returns the updated stack.
 
-#### Delete stack
+#### Delete stack {.ep-heading}
 
 Delete a stack by ID.
 
@@ -684,7 +684,7 @@ Returns the deleted stack. The `deletedAt`-key contains the UNIX timestamp at de
 
 ### Cards
 
-#### Get card
+#### Get card {.ep-heading}
 
 Get a card by ID.
 
@@ -724,7 +724,7 @@ Get a card by ID.
 }
 ```
 
-#### Create card
+#### Create card {.ep-heading}
 
 Crreate a card on the board stack.
 
@@ -773,7 +773,7 @@ Crreate a card on the board stack.
 }
 ```
 
-#### Update card
+#### Update card {.ep-heading}
 
 Update a card by ID.
 
@@ -817,7 +817,7 @@ Update a card by ID.
 
 Returns the updated card.
 
-#### Delete card
+#### Delete card {.ep-heading}
 
 Delete a card by ID.
 
@@ -835,7 +835,7 @@ Delete a card by ID.
 
 Returns the deleted card. The `deletedAt`-key contains the UNIX timestamp at deletion.
 
-#### Assign label
+#### Assign label {.ep-heading}
 
 Assign a board label to a card.
 
@@ -859,7 +859,7 @@ Assign a board label to a card.
 
 Returns an empty response.
 
-#### Unassign label
+#### Unassign label {.ep-heading}
 
 Unassign a board label from a card.
 
@@ -883,7 +883,7 @@ Unassign a board label from a card.
 
 Returns an empty response.
 
-#### Assign user
+#### Assign user {.ep-heading}
 
 Assign a board user to a card.
 
@@ -917,7 +917,7 @@ Assign a board user to a card.
 }
 ```
 
-#### Unassign user
+#### Unassign user {.ep-heading}
 
 Unassing a user from a card.
 
@@ -941,7 +941,7 @@ Unassing a user from a card.
 
 Returns the removed user assignment.
 
-#### Move card
+#### Move card {.ep-heading}
 
 Update the order and/or the stack of the card.
 
@@ -966,7 +966,7 @@ Update the order and/or the stack of the card.
 
 Returns a list of stack cards in the updated order.
 
-#### Archive card
+#### Archive card {.ep-heading}
 
 Archive a card.
 
@@ -984,7 +984,7 @@ Archive a card.
 
 Returns the archived card.
 
-#### Unarchive card
+#### Unarchive card {.ep-heading}
 
 Unarchive a card.
 
@@ -1004,7 +1004,7 @@ Returns the unarchived card.
 
 ### Labels
 
-#### Get label
+#### Get label {.ep-heading}
 
 Get a label by ID.
 
@@ -1029,7 +1029,7 @@ Get a label by ID.
 }
 ```
 
-#### Create label
+#### Create label {.ep-heading}
 
 Create a label.
 
@@ -1062,7 +1062,7 @@ Create a label.
 }
 ```
 
-#### Update label
+#### Update label {.ep-heading}
 
 Update a label by ID.
 
@@ -1088,7 +1088,7 @@ Update a label by ID.
 
 Returns the updated label.
 
-#### Delete label
+#### Delete label {.ep-heading}
 
 Delete a label by ID.
 
@@ -1107,7 +1107,7 @@ Returns the deleted label.
 
 ### Attachments
 
-#### List attachments
+#### List attachments {.ep-heading}
 
 Get a list of all card attachments. When api-Version `v1.0` is used, then this endpoint returns only
 attachments of type `deck_file`.
@@ -1150,7 +1150,7 @@ attachments of type `deck_file`.
 
 ```
 
-#### Get attachment
+#### Get attachment {.ep-heading}
 
 Get a card attachment by ID.
 
@@ -1174,7 +1174,7 @@ v1.1
 
 Returns the card attachment.
 
-#### Upload attachment
+#### Upload attachment {.ep-heading}
 
 Upload a card attachment.
 
@@ -1202,7 +1202,7 @@ Upload a card attachment.
 
 Returns the card attachement.
 
-#### Update attachment
+#### Update attachment {.ep-heading}
 
 Update a card attachment by ID.
 
@@ -1235,7 +1235,7 @@ For now only `deck_file` is supported as an attachment type.
 
 Returns the updated card attachment.
 
-#### Delete attachment
+#### Delete attachment {.ep-heading}
 
 Delete a card attachment by ID.
 
@@ -1259,7 +1259,7 @@ v1.1
 
 Returns the deleted attachment.
 
-#### Restore attachment
+#### Restore attachment {.ep-heading}
 
 Restore a deleted card attachment by ID.
 
@@ -1285,7 +1285,7 @@ Returns the restored attachment.
 
 ### Import API
 
-#### Get Systems
+#### Get Systems {.ep-heading}
 
 Get the allowed import systems.
 
@@ -1299,7 +1299,7 @@ Get the allowed import systems.
 ]
 ```
 
-#### Get System Schema
+#### Get System Schema {.ep-heading}
 
 Get a system schema.
 
@@ -1317,7 +1317,7 @@ Get a system schema.
 {}
 ```
 
-#### Import board
+#### Import board {.ep-heading}
 
 Import a board from another system.
 
@@ -1344,7 +1344,7 @@ This has the benefit that both the web UI as well as external integrations can u
 
 Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints.
 
-#### Get app configuration
+#### Get app configuration {.ep-heading}
 
 Get the configuration of the deck app.
 
@@ -1383,7 +1383,7 @@ Get the configuration of the deck app.
 
 ```
 
-#### Set config value
+#### Set config value {.ep-heading}
 
 Set a configuration value by key.
 
@@ -1426,7 +1426,7 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
 
 ### Comments
 
-#### List comments
+#### List comments {.ep-heading}
 
 List comments for a card.
 
@@ -1518,7 +1518,7 @@ In case a comment is marked as a reply to another comment object, the parent com
 ]
 ```
 
-#### Create comment
+#### Create comment {.ep-heading}
 
 Create comment for a card.
 
@@ -1573,7 +1573,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-#### Update comment
+#### Update comment {.ep-heading}
 
 Update a card comment by ID.
 
@@ -1624,7 +1624,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-#### Delete comment
+#### Delete comment {.ep-heading}
 
 Delete a card comment by ID.
 
@@ -1664,7 +1664,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 ### Sessions
 
-#### Creates session
+#### Creates session {.ep-heading}
 
 Create a session.
 
@@ -1700,7 +1700,7 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 }
 ```
 
-#### Sync session
+#### Sync session {.ep-heading}
 
 Notify the server that the session is still open:
 
@@ -1736,7 +1736,7 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 }
 ```
 
-#### Close session
+#### Close session {.ep-heading}
 
 Close a session.
 

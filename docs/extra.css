@@ -18,3 +18,8 @@
 .headerlink {
   font-size: 1.125rem !important;
 }
+
+.ep-heading {
+  margin-block-start: 3rem;
+  border-bottom: 2px solid grey;
+}

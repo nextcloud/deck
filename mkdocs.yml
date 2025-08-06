@@ -17,5 +17,6 @@ nav:
             - Implement import: implement-import.md
             - Class diagram: import-class-diagram.md
 markdown_extensions:
+  - attr_list
   - toc:
       permalink: "#"
