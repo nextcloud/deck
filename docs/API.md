@@ -712,7 +712,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | done        | timestamp\|null | The ISO-8601 formatted date when the card is marked as done (optional, null indicates undone state) |
 
 
-```
+```json
 {
    "title": "Test card",
    "description": "A card description",
@@ -1203,7 +1203,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | cardIdBadge | Determines if the ID badges are displayed on cards (boolean) |
 | groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|
 
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1250,7 +1250,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 ##### Example request
 
-```
+```json
 curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar' -H 'Accept: application/json' -H "Content-Type: application/json" -H 'OCS-APIRequest: true' --data-raw '{"value":false}'
 
 {
@@ -1279,7 +1279,7 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
 | limit     | Integer | The maximum number of comments that should be returned, defaults to 20 |
 | offset    | Integer | The start offset used for pagination, defaults to 0 |
 
-```
+```bash
 curl 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
 ```
@@ -1290,7 +1290,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 ###### 200 Success
 
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1373,7 +1373,7 @@ In case a comment is marked as a reply to another comment object, the parent com
 
 Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
 
-```
+```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
@@ -1386,7 +1386,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 ###### 200 Success
 
-```
+```bash
 {
   "ocs": {
     "meta": {
@@ -1441,7 +1441,7 @@ Mentions will be parsed by the server. The server will return a list of mentions
 
 Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
 
-```
+```bash
 curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
@@ -1454,7 +1454,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 ###### 200 Success
 
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1499,7 +1499,7 @@ A not found response might be returned if:
 
 Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
 
-```
+```bash
 curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
@@ -1511,7 +1511,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 ###### 200 Success
 
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1546,7 +1546,7 @@ A not found response might be returned if:
 | --------- | ------- | ---------------------------------------------------- |
 | boardId   | Integer | The id of the opened board |
 
-```
+```bash
 curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
     -H 'Content-Type: application/json;charset=utf-8' \
@@ -1584,7 +1584,7 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 | token     | String  | The session token from the /sessions/create response |
 
 
-```
+```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
     -H 'Content-Type: application/json;charset=utf-8' \
@@ -1621,7 +1621,7 @@ the provided token is invalid or expired
 | boardId   | Integer | The id of the opened board                           |
 | token     | String  | The session token from the /sessions/create response |
 
-```
+```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/close' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
     -H 'Content-Type: application/json;charset=utf-8' \
