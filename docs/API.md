@@ -169,10 +169,6 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### Response
 
-###### 200 Success
-
-Returns an array of board items
-
 ```json
 [
     {
@@ -226,8 +222,6 @@ Create a new board. The user's ability to create new boards can be disabled by t
 ```
 
 ##### Response
-
-###### 200 Success
 
 ```json
 {
@@ -296,8 +290,6 @@ Get a board by ID.
 | boardId   | Integer | The id of the board to fetch |
 
 ##### Response
-
-###### 200 Success
 
 ```json
 {
@@ -388,7 +380,7 @@ Update a board by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the updated board.
 
 #### Delete board
 
@@ -404,7 +396,7 @@ Delete a board by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the deleted board. The `deletedAt`-key contains the UNIX timestamp at deletion.
 
 #### Restore board
 
@@ -420,7 +412,7 @@ Restore a deleted board by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the restored board.
 
 #### Clone board
 
@@ -447,7 +439,7 @@ Creates a copy of the board.
 
 ##### Response
 
-###### 200 Success
+Returns the restored board.
 
 #### Create ACL rule
 
@@ -477,8 +469,6 @@ Create an ACL for a board.
 - 7 Circle
 
 ##### Response
-
-###### 200 Success
 
 ```json
 [{
@@ -518,9 +508,9 @@ Update an ACL by ID.
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
 
-##### Response
+#### Response
 
-###### 200 Success
+Returns the updated ACL.
 
 #### Delete ACL rule
 
@@ -537,7 +527,7 @@ Delete an ACL by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the deleted ACL.
 
 ### Stacks
 
@@ -550,7 +540,6 @@ Get a list of all board stacks.
 ##### Headers
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
-
 
 ##### Request parameters
 
@@ -573,8 +562,6 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
   }
 ]
 ```
-
-###### 200 Success
 
 #### List archived stacks
 
@@ -604,8 +591,6 @@ Get a list of archived stacks
 ]
 ```
 
-###### 200 Success
-
 #### Get stack
 
 Get a stack by ID.
@@ -621,7 +606,17 @@ Get a stack by ID.
 
 ##### Response
 
-###### 200 Success
+```json
+{
+  "title": "ToDo",
+  "boardId": 2,
+  "deletedAt": 0,
+  "lastModified": 1541426139,
+  "cards": [...],
+  "order": 999,
+  "id": 4
+}
+```
 
 #### Create stack
 
@@ -644,7 +639,7 @@ Create a stack on the board.
 
 ##### Response
 
-###### 200 Success
+Returns the created stack.
 
 #### Update stack
 
@@ -668,7 +663,7 @@ Update a stack by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the updated stack.
 
 #### Delete stack
 
@@ -685,7 +680,7 @@ Delete a stack by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the deleted stack. The `deletedAt`-key contains the UNIX timestamp at deletion.
 
 ### Cards
 
@@ -705,7 +700,29 @@ Get a card by ID.
 
 ##### Response
 
-###### 200 Success
+```json
+{
+   "title":"Test",
+   "description":null,
+   "stackId":6,
+   "type":"plain",
+   "lastModified":1541528026,
+   "createdAt":1541528026,
+   "labels":null,
+   "assignedUsers":null,
+   "attachments":null,
+   "attachmentCount":null,
+   "owner":"admin",
+   "order":999,
+   "archived":false,
+   "done":null,
+   "duedate": "2019-12-24T19:29:30+00:00",
+   "deletedAt":0,
+   "commentsUnread":0,
+   "id":10,
+   "overdue":0
+}
+```
 
 #### Create card
 
@@ -756,8 +773,6 @@ Crreate a card on the board stack.
 }
 ```
 
-###### 200 Success
-
 #### Update card
 
 Update a card by ID.
@@ -785,7 +800,6 @@ Update a card by ID.
 | archived    | bool            | Whether the card is archived or not                                                                 |
 | done        | timestamp\|null | The ISO-8601 formatted date when the card is marked as done (optional, null indicates undone state) |
 
-
 ```json
 {
    "title": "Test card",
@@ -801,7 +815,7 @@ Update a card by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the updated card.
 
 #### Delete card
 
@@ -819,7 +833,7 @@ Delete a card by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the deleted card. The `deletedAt`-key contains the UNIX timestamp at deletion.
 
 #### Assign label
 
@@ -840,9 +854,10 @@ Assign a board label to a card.
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | labelId   | Integer | The label id to assign to the card      |
+
 ##### Response
 
-###### 200 Success
+Returns an empty response.
 
 #### Unassign label
 
@@ -866,7 +881,7 @@ Unassign a board label from a card.
 
 ##### Response
 
-###### 200 Success
+Returns an empty response.
 
 #### Assign user
 
@@ -890,8 +905,6 @@ Assign a board user to a card.
 
 ##### Response
 
-###### 200 Success
-
 ```json
 {
   "id": 3,
@@ -903,21 +916,6 @@ Assign a board user to a card.
   "cardId": 1
 }
 ```
-
-###### 400 Bad request
-
-```json
-{
-  "status": 400,
-  "message": "The user is already assigned to the card"
-}
-```
-
-The request can fail with a bad request response for the following reasons:
-
-- Missing or wrongly formatted request parameters
-- The user is already assigned to the card
-- The user is not part of the board
 
 #### Unassign user
 
@@ -941,7 +939,7 @@ Unassing a user from a card.
 
 ##### Response
 
-###### 200 Success
+Returns the removed user assignment.
 
 #### Move card
 
@@ -966,7 +964,7 @@ Update the order and/or the stack of the card.
 
 ##### Response
 
-###### 200 Success
+Returns a list of stack cards in the updated order.
 
 #### Archive card
 
@@ -984,7 +982,7 @@ Archive a card.
 
 ##### Response
 
-###### 200 Success
+Returns the archived card.
 
 #### Unarchive card
 
@@ -1002,7 +1000,7 @@ Unarchive a card.
 
 ##### Response
 
-###### 200 Success
+Returns the unarchived card.
 
 ### Labels
 
@@ -1020,8 +1018,6 @@ Get a label by ID.
 | labelId   | Integer | The id of the label                      |
 
 ##### Response
-
-###### 200 Success
 
 ```json
 {
@@ -1056,7 +1052,15 @@ Create a label.
 
 ##### Response
 
-###### 200 Success
+```json
+{
+  "title": "Finished",
+  "color": "31CC7C",
+  "boardId": "2",
+  "cardId": null,
+  "id": 5
+}
+```
 
 #### Update label
 
@@ -1071,7 +1075,6 @@ Update a label by ID.
 | boardId   | Integer | The id of the board the label belongs to |
 | labelId   | Integer | The id of the label                      |
 
-
 ##### Request body
 
 ```json
@@ -1083,7 +1086,7 @@ Update a label by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the updated label.
 
 #### Delete label
 
@@ -1100,7 +1103,7 @@ Delete a label by ID.
 
 ##### Response
 
-###### 200 Success
+Returns the deleted label.
 
 ### Attachments
 
@@ -1120,8 +1123,6 @@ attachments of type `deck_file`.
 | cardId    | Integer | The id of the card                      |
 
 ##### Response
-
-###### 200 Success
 
 ```json
 [
@@ -1171,7 +1172,7 @@ v1.1
 
 ##### Response
 
-###### 200 Success
+Returns the card attachment.
 
 #### Upload attachment
 
@@ -1199,7 +1200,7 @@ Upload a card attachment.
 
 ##### Response
 
-###### 200 Success
+Returns the card attachement.
 
 #### Update attachment
 
@@ -1232,7 +1233,7 @@ For now only `deck_file` is supported as an attachment type.
 
 ##### Response
 
-###### 200 Success
+Returns the updated card attachment.
 
 #### Delete attachment
 
@@ -1256,7 +1257,7 @@ v1.1
 
 ##### Response
 
-###### 200 Success
+Returns the deleted attachment.
 
 #### Restore attachment
 
@@ -1280,7 +1281,7 @@ v1.1
 
 ##### Response
 
-###### 200 Success
+Returns the restored attachment.
 
 ### Import API
 
@@ -1312,8 +1313,6 @@ Get a system schema.
 
 ##### Response
 
-Make a request to see the json schema of system
-
 ```json
 {}
 ```
@@ -1334,7 +1333,7 @@ Import a board from another system.
 
 ##### Response
 
-###### 200 Success
+Returns the imported board.
 
 ## OCS API
 
@@ -1450,8 +1449,6 @@ curl 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comme
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-###### 200 Success
-
 ```json
 {
   "ocs": {
@@ -1548,8 +1545,6 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-###### 200 Success
-
 ```bash
 {
   "ocs": {
@@ -1618,8 +1613,6 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/1
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-###### 200 Success
-
 ```json
 {
   "ocs": {
@@ -1678,8 +1671,6 @@ curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/card
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-###### 200 Success
-
 ```json
 {
   "ocs": {
@@ -1727,8 +1718,6 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 
 ##### Response
 
-###### 200 Success
-
 ```json
 {
   "ocs": {
@@ -1766,8 +1755,6 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 ```
 
 ##### Response
-
-###### 200 Success
 
 ```json
 {
@@ -1807,8 +1794,6 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 ```
 
 ##### Response
-
-###### 200 Success
 
 ```json
 {
