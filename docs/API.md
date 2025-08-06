@@ -115,14 +115,14 @@ This API version has become available with **Deck 1.3.0**.
 - The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
 - The attachments API endpoints will return other attachment types than deck_file
   - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
-  - Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
+  - Starting with Deck version 1.3.0 (API v1.1) files are stored within the user's regular Nextcloud files and the type `file` has been introduced for that
 
 ### API version 1.2 (unreleased)
 
 - Endpoints for the new import functionality have been added:
-  - [GET /boards/import/getSystems - Import a board](#get-boardsimportgetsystems-import-a-board)
-  - [GET /boards/import/config/system/{schema} - Import a board](#get-boardsimportconfigsystemschema-import-a-board)
-  - [POST /boards/import - Import a board](#post-boardsimport-import-a-board)
+    - [GET /boards/import/getSystems - Import a board](#get-boardsimportgetsystems-import-a-board)
+    - [GET /boards/import/config/system/{schema} - Import a board](#get-boardsimportconfigsystemschema-import-a-board)
+    - [POST /boards/import - Import a board](#post-boardsimport-import-a-board)
 - The `done` property was added to cards
 
 ## Endpoints
@@ -255,7 +255,7 @@ Returns an array of board items
 
 ###### 403 Forbidden
 
-A 403 response might be returned if the users ability to create new boards has been disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
+A 403 response might be returned if the user's ability to create new boards has been disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
 
 #### GET /boards/{boardId} - Get board details
 
@@ -740,7 +740,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel - Remove a label to a card
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel - Remove a label from a card
 
 ##### Request parameters
 
@@ -802,6 +802,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ```
 
 The request can fail with a bad request response for the following reasons:
+
 - Missing or wrongly formatted request parameters
 - The user is already assigned to the card
 - The user is not part of the board
@@ -1006,7 +1007,7 @@ The request can fail with a bad request response for the following reasons:
 | file      | Binary  | File data to add as an attachment             |
 
 - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
-- Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
+- Starting with Deck version 1.3.0 (API v1.1) files are stored within the user's regular Nextcloud files and the type `file` has been introduced for that
 
 ##### Response
 
@@ -1052,7 +1053,7 @@ For now only `deck_file` is supported as an attachment type.
 
 ###### 200 Success
 
-#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore - Resore a deleted attachment
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore - Restore a deleted attachment
 
 ##### Request parameters
 
@@ -1197,8 +1198,6 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
 #### GET /cards/{cardId}/comments - List comments
 
 ##### Request parameters
-
-string $cardId, int $limit = 20, int $offset = 0
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1347,6 +1346,7 @@ A bad request response is returned if invalid input values are provided. The res
 ###### 404 Not found
 
 A not found response might be returned if:
+
 - The card for the given cardId could not be found
 - The parent comment could not be found
 
@@ -1366,7 +1366,7 @@ Mentions will be parsed by the server. The server will return a list of mentions
 Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
 
 ```
-curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
     --data '{"message":"My message"}'
@@ -1407,6 +1407,7 @@ A bad request response is returned if invalid input values are provided. The res
 ###### 404 Not found
 
 A not found response might be returned if:
+
 - The card for the given cardId could not be found
 - The comment could not be found
 
@@ -1422,7 +1423,7 @@ A not found response might be returned if:
 Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
 
 ```
-curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
 ```
@@ -1453,9 +1454,9 @@ A bad request response is returned if invalid input values are provided. The res
 ###### 404 Not found
 
 A not found response might be returned if:
+
 - The card for the given cardId could not be found
 - The comment could not be found
-
 
 ### Sessions
 
