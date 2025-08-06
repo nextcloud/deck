@@ -1573,17 +1573,6 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-###### 400 Bad request
-
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
-
-###### 404 Not found
-
-A not found response might be returned if:
-
-- The card for the given cardId could not be found
-- The parent comment could not be found
-
 #### Update comment
 
 Update a card comment by ID.
@@ -1635,17 +1624,6 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-###### 400 Bad request
-
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
-
-###### 404 Not found
-
-A not found response might be returned if:
-
-- The card for the given cardId could not be found
-- The comment could not be found
-
 #### Delete comment
 
 Delete a card comment by ID.
@@ -1683,17 +1661,6 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
   }
 }
 ```
-
-###### 400 Bad request
-
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
-
-###### 404 Not found
-
-A not found response might be returned if:
-
-- The card for the given cardId could not be found
-- The comment could not be found
 
 ### Sessions
 
@@ -1768,10 +1735,6 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
   }
 }
 ```
-
-###### 404 Not Found
-
-the provided token is invalid or expired
 
 #### Close session
 
