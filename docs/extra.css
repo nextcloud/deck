@@ -14,3 +14,7 @@
 .wy-menu-vertical li.toctree-l2 li.toctree-l3.current li.toctree-l4>a {
   padding-inline-start: 3.5em;
 }
+
+.headerlink {
+  font-size: 1.125rem !important;
+}
