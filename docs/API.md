@@ -10,7 +10,7 @@ The REST API provides access for authenticated users to their data inside the De
 ## Prerequisites
 
 - All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
-- The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
+- The API is located at `/index.php/apps/deck/api/v1.0`
 - All request parameters are required, unless otherwise specified
 
 ### Glossary
@@ -20,11 +20,13 @@ The REST API provides access for authenticated users to their data inside the De
 - **Card** is the representation of a single task
 - **Label** is a board-level tag used to categorize and prioritize cards
 
-### Global responses
+### HTTP responses
+
+The REST API follows conventional HTTP status codes. Successful responses have a status code of `2xx`. Client side errors are indicated as `4xx`. The most common ones are:
 
 #### 400 Bad request
 
-In case the request is invalid, e.g. because a parameter is missing or an invalid value has been transmitted, a 400 error will be returned:
+The request is invalid, e.g. because a parameter is missing or an invalid value has been transmitted.
 
 ```json
 {
@@ -35,7 +37,7 @@ In case the request is invalid, e.g. because a parameter is missing or an invali
 
 #### 403 Permission denied
 
-In any case a user doesn't have access to a requested entity, a 403 error will be returned:
+The user doesn't have access to a requested entity.
 
 ```json
 {
@@ -44,11 +46,34 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 }
 ```
 
+#### 404 Not found
+
+The requested entity was not found.
+
+```json
+{
+    "status": 404,
+    "message": "Card not found"
+}
+```
+
+#### 405 Method not allowed
+
+The used combination of URL and HTTP method is not allowed. Most likely you have used a wrong HTTP method or URL.
+
+```json
+{
+    "status": 405,
+    "message": "Method not allowed"
+}
+```
+
 ### Formats
 
 #### Date
 
-Datetime values in request data need to be provided in ISO-8601. Example: 2020-01-20T09:52:43+00:00
+Datetime values in request data need to be provided in ISO-8601.<br>
+Example: `2020-01-20T09:52:43+00:00`
 
 ### Headers
 
@@ -57,9 +82,9 @@ Datetime values in request data need to be provided in ISO-8601. Example: 2020-0
 Some index endpoints support limiting the result set to entries that have been changed since the given time.
 The supported date formats are:
 
-* IMF-fixdate:                 `Sun, 03 Aug 2019 10:34:12 GMT`
-* (obsolete) RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
-* (obsolete) ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
+- IMF-fixdate:                 `Sun, 03 Aug 2019 10:34:12 GMT`
+- _(obsolete)_ RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
+- _(obsolete)_ ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
 
 It is highly recommended to only use the IMF-fixdate format. Note that according to [RFC2616](https://tools.ietf.org/html/rfc2616#section-3.3) all HTTP date/time stamps MUST be represented in Greenwich Mean Time (GMT), without exception.
 
@@ -117,9 +142,9 @@ This API version has become available with **Deck 1.3.0**.
 ### API version 1.2 (unreleased)
 
 - Endpoints for the new import functionality have been added:
-    - [GET /boards/import/getSystems - Import a board](#get-boardsimportgetsystems-import-a-board)
-    - [GET /boards/import/config/system/{schema} - Import a board](#get-boardsimportconfigsystemschema-import-a-board)
-    - [POST /boards/import - Import a board](#post-boardsimport-import-a-board)
+    - [GET /boards/import/getSystems - Get Systems](#get-systems)
+    - [GET /boards/import/config/system/{schema} - Get System Schema](#get-system-schema)
+    - [POST /boards/import - Import board](#import-board)
 - The `done` property was added to cards
 
 ## Endpoints
@@ -1164,7 +1189,7 @@ Make a request to see the json schema of system
 {}
 ```
 
-#### Import a board
+#### Import board
 `POST /boards/import`
 
 ##### Request parameters
