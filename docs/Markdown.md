@@ -2,6 +2,8 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+# Markdown composing
+
 ## What is Markdown
 
 The [wikipedia markdown entry](https://en.wikipedia.org/wiki/Markdown) introduced markdown as :
@@ -14,7 +16,7 @@ The Deck application plugin uses the [markdown-it](https://github.com/markdown-i
 ## Supported Markdown
 
 Markdown comes in many flavors. The best way to learn markdown and understand how to use it, is simply to [try it](https://markdown-it.github.io) on the original script official playground.
-That same link offers also a comprehensive list of what is supported, and what is not - rendering it unnecessary to duplicate that content in here.  
+That same link offers also a comprehensive list of what is supported, and what is not - rendering it unnecessary to duplicate that content in here.
 
 [CommonMark Markdown Reference](http://commonmark.org/help/)
 

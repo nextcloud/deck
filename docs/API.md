@@ -2,15 +2,18 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
+# REST API
+
 The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
 
-# Prerequisites
+## Prerequisites
 
 - All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
 - The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
 - All request parameters are required, unless otherwise specified
 
-## Naming
+### Naming
 
 - Board is the project like grouping of tasks that can be shared to different users and groups
 
@@ -20,9 +23,9 @@ The REST API provides access for authenticated users to their data inside the De
 
 - Labels are defined on a board level and can be assigned to any number of cards
 
-## Global responses
+### Global responses
 
-### 400 Bad request
+#### 400 Bad request
 
 In case the request is invalid, e.g. because a parameter is missing or an invalid value has been transmitted, a 400 error will be returned:
 
@@ -33,7 +36,7 @@ In case the request is invalid, e.g. because a parameter is missing or an invali
 }
 ```
 
-### 403 Permission denied
+#### 403 Permission denied
 
 In any case a user doesn't have access to a requested entity, a 403 error will be returned:
 
@@ -44,15 +47,15 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 }
 ```
 
-## Formats
+### Formats
 
-### Date
+#### Date
 
 Datetime values in request data need to be provided in ISO-8601. Example: 2020-01-20T09:52:43+00:00
 
-## Headers
+### Headers
 
-### If-Modified-Since
+#### If-Modified-Since
 
 Some index endpoints support limiting the result set to entries that have been changed since the given time.
 The supported date formats are:
@@ -72,7 +75,7 @@ curl -u admin:admin -X GET \
     -H "If-Modified-Since: Mon, 05 Nov 2018 09:28:00 GMT"
 ```
 
-### ETag
+#### ETag
 
 An ETag header is returned in order to determine if further child elements have been updated for the following endpoints:
 
@@ -97,14 +100,14 @@ If available the ETag will also be part of JSON response objects as shown below 
 }
 ```
 
-# Changelog
+## Changelog
 
-## API version 1.0
+### API version 1.0
 
 - Deck >=1.0.0: The maximum length of the card title has been extended from 100 to 255 characters
 - Deck >=1.0.0: The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
 
-## API version 1.1
+### API version 1.1
 
 This API version has become available with **Deck 1.3.0**.
 
@@ -114,7 +117,7 @@ This API version has become available with **Deck 1.3.0**.
   - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
   - Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
 
-## API version 1.2 (unreleased)
+### API version 1.2 (unreleased)
 
 - Endpoints for the new import functionality have been added:
   - [GET /boards/import/getSystems - Import a board](#get-boardsimportgetsystems-import-a-board)
@@ -122,25 +125,25 @@ This API version has become available with **Deck 1.3.0**.
   - [POST /boards/import - Import a board](#post-boardsimport-import-a-board)
 - The `done` property was added to cards
 
-# Endpoints
+## Endpoints
 
-## Boards
+### Boards
 
-### GET /boards - Get a list of boards
+#### GET /boards - Get a list of boards
 
-#### Headers
+##### Headers
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | details   | Bool    | **Optional** Enhance boards with details about labels, stacks and users |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 Returns an array of board items
 
@@ -176,9 +179,9 @@ Returns an array of board items
 ]
 ```
 
-### POST /boards - Create a new board
+#### POST /boards - Create a new board
 
-#### Request body
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -192,9 +195,9 @@ Returns an array of board items
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 ```json
 {
@@ -250,21 +253,21 @@ Returns an array of board items
 }
 ```
 
-##### 403 Forbidden
+###### 403 Forbidden
 
 A 403 response might be returned if the users ability to create new boards has been disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
 
-### GET /boards/{boardId} - Get board details
+#### GET /boards/{boardId} - Get board details
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 ```json
 {
@@ -325,9 +328,9 @@ A 403 response might be returned if the users ability to create new boards has b
 }
 ```
 
-### PUT /boards/{boardId} - Update board details
+#### PUT /boards/{boardId} - Update board details
 
-#### Request body
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -343,27 +346,13 @@ A 403 response might be returned if the users ability to create new boards has b
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive - Archive a card
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive - Archive a card
 
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-| cardId    | Integer | The id of the card                      |
-
-#### Response
-
-##### 200 Success
-
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive - Unarchive a card
-
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -371,37 +360,51 @@ A 403 response might be returned if the users ability to create new boards has b
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### DELETE /boards/{boardId} - Delete a board
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive - Unarchive a card
 
-#### Request parameters
+##### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+##### Response
+
+###### 200 Success
+
+#### DELETE /boards/{boardId} - Delete a board
+
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### POST /boards/{boardId}/undo_delete - Restore a deleted board
+#### POST /boards/{boardId}/undo_delete - Restore a deleted board
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### POST /boards/{boardId}/acl - Add new acl rule
+#### POST /boards/{boardId}/acl - Add new acl rule
 
-#### Request body
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -411,14 +414,14 @@ A 403 response might be returned if the users ability to create new boards has b
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
 
-##### Supported participant types:
+###### Supported participant types:
 - 0 User
 - 1 Group
 - 7 Circle
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 ```json
 [{
@@ -437,9 +440,9 @@ A 403 response might be returned if the users ability to create new boards has b
 }]
 ```
 
-### PUT /boards/{boardId}/acl/{aclId} - Update an acl rule
+#### PUT /boards/{boardId}/acl/{aclId} - Update an acl rule
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -447,15 +450,15 @@ A 403 response might be returned if the users ability to create new boards has b
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### POST /boards/{boardId}/clone - Clone a board
+#### POST /boards/{boardId}/clone - Clone a board
 
 Creates a copy of the board.
 
-#### Request body
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -466,32 +469,32 @@ Creates a copy of the board.
 | moveCardsToLeftStack  | Bool   | Setting if all cards should be moved to the most left column (useful for To-Do / Doing / Done boards) (Default: false) |
 | restoreArchivedCards  | Bool   | Setting if the archived cards should be unarchived (Default: false) |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### DELETE /boards/{boardId}/acl/{aclId} - Delete an acl rule
+#### DELETE /boards/{boardId}/acl/{aclId} - Delete an acl rule
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-## Stacks
+### Stacks
 
-### GET /boards/{boardId}/stacks - Get stacks
+#### GET /boards/{boardId}/stacks - Get stacks
 
-#### Headers
+##### Headers
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
 ```json
 [
@@ -507,17 +510,17 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ]
 ```
 
-##### 200 Success
+###### 200 Success
 
-### GET /boards/{boardId}/stacks/archived - Get list of archived stacks
+#### GET /boards/{boardId}/stacks/archived - Get list of archived stacks
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
 ```json
 [
@@ -533,78 +536,78 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ]
 ```
 
-##### 200 Success
+###### 200 Success
 
-### GET /boards/{boardId}/stacks/{stackId} - Get stack details
+#### GET /boards/{boardId}/stacks/{stackId} - Get stack details
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
 | stackId   | Integer | The id of the stack                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### POST /boards/{boardId}/stacks - Create a new stack
+#### POST /boards/{boardId}/stacks - Create a new stack
 
-#### Request body
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | title     | String | The title of the new stack, maximum length is limited to 100 characters |
 | order     | Integer | Order for sorting the stacks                         |
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/stacks/{stackId} - Update stack details
+#### PUT /boards/{boardId}/stacks/{stackId} - Update stack details
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
 | stackId   | Integer | The id of the stack                      |
 
-#### Request body
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | title     | String | The title of the stack, maximum length is limited to 100 characters |
 | order     | Integer | Order for sorting the stacks                         |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### DELETE /boards/{boardId}/stacks/{stackId} - Delete a stack
+#### DELETE /boards/{boardId}/stacks/{stackId} - Delete a stack
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
 | stackId   | Integer | The id of the stack                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-## Cards
+### Cards
 
-### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Get card details
+#### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Get card details
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -612,20 +615,20 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### POST /boards/{boardId}/stacks/{stackId}/cards - Create a new card
+#### POST /boards/{boardId}/stacks/{stackId}/cards - Create a new card
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
 | stackId   | Integer | The id of the stack the card belongs to |
 
-#### Request body
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
@@ -635,7 +638,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | description | String  | _(optional)_ The markdown description of the card  |
 | duedate   | timestamp | _(optional)_ The duedate of the card or null       |
 
-#### Response
+##### Response
 
 ```json
 {
@@ -661,11 +664,11 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 }
 ```
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Update card details
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Update card details
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -673,7 +676,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request data
 
 | Parameter   | Type            | Description                                                                                         |
 |-------------|-----------------|-----------------------------------------------------------------------------------------------------|
@@ -700,27 +703,13 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Delete a card
+#### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Delete a card
 
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-| cardId    | Integer | The id of the card                      |
-
-#### Response
-
-##### 200 Success
-
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel - Assign a label to a card
-
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -728,18 +717,32 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Response
+
+###### 200 Success
+
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel - Assign a label to a card
+
+##### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+##### Request data
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | labelId   | Integer | The label id to assign to the card      |
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel - Remove a label to a card
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel - Remove a label to a card
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -747,19 +750,19 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request data
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | labelId   | Integer | The label id to remove to the card      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser - Assign a user to a card
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser - Assign a user to a card
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -767,15 +770,15 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request data
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | userId    | String  | The user id to assign to the card       |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 ```json
 {
@@ -789,7 +792,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 }
 ```
 
-##### 400 Bad request
+###### 400 Bad request
 
 ```json
 {
@@ -804,9 +807,9 @@ The request can fail with a bad request response for the following reasons:
 - The user is not part of the board
 
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Unassign a user from a card
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Unassign a user from a card
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -814,19 +817,19 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request data
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | userId    | String  | The user id to unassign from the card   |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder - Change the sorting order of a card
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder - Change the sorting order of a card
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -834,7 +837,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request data
 
 | Parameter | Type    | Description                                                 |
 | --------- | ------- | ----------------------------------------------------------- |
@@ -842,24 +845,24 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack where the card should be moved to       |
 
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-## Labels
+### Labels
 
-### GET /boards/{boardId}/labels/{labelId} - Get label details
+#### GET /boards/{boardId}/labels/{labelId} - Get label details
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 | labelId   | Integer | The id of the label                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 ```json
 {
@@ -871,15 +874,15 @@ The request can fail with a bad request response for the following reasons:
 }
 ```
 
-### POST /boards/{boardId}/labels - Create a new label
+#### POST /boards/{boardId}/labels - Create a new label
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 
-#### Request data
+##### Request data
 
 ```json
 {
@@ -888,13 +891,13 @@ The request can fail with a bad request response for the following reasons:
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/labels/{labelId} - Update label details
+#### PUT /boards/{boardId}/labels/{labelId} - Update label details
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -902,7 +905,7 @@ The request can fail with a bad request response for the following reasons:
 | labelId   | Integer | The id of the label                      |
 
 
-#### Request data
+##### Request data
 
 ```json
 {
@@ -911,28 +914,28 @@ The request can fail with a bad request response for the following reasons:
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### DELETE /boards/{boardId}/labels/{labelId} - Delete a label
+#### DELETE /boards/{boardId}/labels/{labelId} - Delete a label
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 | labelId   | Integer | The id of the label                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-## Attachments
+### Attachments
 
-### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Get a list of attachments
+#### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Get a list of attachments
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -940,9 +943,9 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 ```json
 [
@@ -970,9 +973,9 @@ The request can fail with a bad request response for the following reasons:
 
 ```
 
-### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Get the attachment file
+#### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Get the attachment file
 
-#### Request parameters
+##### Request parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -981,13 +984,13 @@ The request can fail with a bad request response for the following reasons:
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Upload an attachment
+#### POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Upload an attachment
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -995,7 +998,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the attachment belongs to |
 | cardId    | Integer | The id of the card the attachment belongs to  |
 
-#### Request data
+##### Request data
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -1005,13 +1008,13 @@ The request can fail with a bad request response for the following reasons:
 - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
 - Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Update an attachment
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Update an attachment
 
-#### Request parameters
+##### Request parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1020,7 +1023,7 @@ The request can fail with a bad request response for the following reasons:
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
-#### Request data
+##### Request data
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -1029,29 +1032,14 @@ The request can fail with a bad request response for the following reasons:
 
 For now only `deck_file` is supported as an attachment type.
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Delete an attachment
+#### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Delete an attachment
 
 
-#### Request parameters
-
-| Parameter    | Type    | Description                                   |
-| ------------ | ------- | --------------------------------------------- |
-| boardId      | Integer | The id of the board the attachment belongs to |
-| stackId      | Integer | The id of the stack the attachment belongs to |
-| cardId       | Integer | The id of the card the attachment belongs to  |
-| attachmentId | Integer | The id of the attachment                      |
-
-#### Response
-
-##### 200 Success
-
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore - Resore a deleted attachment
-
-#### Request parameters
+##### Request parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1060,19 +1048,34 @@ For now only `deck_file` is supported as an attachment type.
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-### GET /boards/import/getSystems - Import a board
+#### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore - Resore a deleted attachment
 
-#### Request parameters
+##### Request parameters
+
+| Parameter    | Type    | Description                                   |
+| ------------ | ------- | --------------------------------------------- |
+| boardId      | Integer | The id of the board the attachment belongs to |
+| stackId      | Integer | The id of the stack the attachment belongs to |
+| cardId       | Integer | The id of the card the attachment belongs to  |
+| attachmentId | Integer | The id of the attachment                      |
+
+##### Response
+
+###### 200 Success
+
+#### GET /boards/import/getSystems - Import a board
+
+##### Request parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
 | system       | Integer | The system name. Example: trello              |
 
-#### Response
+##### Response
 
 Make a request to see the json schema of system
 
@@ -1081,11 +1084,11 @@ Make a request to see the json schema of system
 }
 ```
 
-### GET /boards/import/config/system/{schema} - Import a board
+#### GET /boards/import/config/system/{schema} - Import a board
 
-#### Request parameters
+##### Request parameters
 
-#### Response
+##### Response
 
 ```json
 [
@@ -1093,9 +1096,9 @@ Make a request to see the json schema of system
 ]
 ```
 
-### POST /boards/import - Import a board
+#### POST /boards/import - Import a board
 
-#### Request parameters
+##### Request parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1103,22 +1106,22 @@ Make a request to see the json schema of system
 | config       | Object  | The config object  (JSON)                     |
 | data         | Object  | The data object to import (JSON)              |
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
-# OCS API
+## OCS API
 
 The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`.
 This has the benefit that both the web UI as well as external integrations can use the same API.
 
-## Config
+### Config
 
 Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints.
 
-### GET /api/v1.0/config - Fetch app configuration values
+#### GET /api/v1.0/config - Fetch app configuration values
 
-#### Response
+##### Response
 
 | Config key | Description |
 | --- | --- |
@@ -1151,10 +1154,10 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 ```
 
-### POST /api/v1.0/config/{id}/{key} - Set a config value
+#### POST /api/v1.0/config/{id}/{key} - Set a config value
 
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1162,7 +1165,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | key     | String | The config key to set, prefixed with `board:{boardId}:` for board specific settings |
 | value    | String | The value that should be stored for the config key |
 
-##### Board configuration
+###### Board configuration
 
 | Key | Value |
 | --- | ----- |
@@ -1171,7 +1174,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
 
-#### Example request
+##### Example request
 
 ```
 curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar' -H 'Accept: application/json' -H "Content-Type: application/json" -H 'OCS-APIRequest: true' --data-raw '{"value":false}'
@@ -1189,11 +1192,11 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
 
 ```
 
-## Comments
+### Comments
 
-### GET /cards/{cardId}/comments - List comments
+#### GET /cards/{cardId}/comments - List comments
 
-#### Request parameters
+##### Request parameters
 
 string $cardId, int $limit = 20, int $offset = 0
 
@@ -1208,11 +1211,11 @@ curl 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comme
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
 ```
 
-#### Response
+##### Response
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-##### 200 Success
+###### 200 Success
 
 ```
 {
@@ -1284,9 +1287,9 @@ In case a comment is marked as a reply to another comment object, the parent com
 ```
 
 
-### POST /cards/{cardId}/comments - Create a new comment
+#### POST /cards/{cardId}/comments - Create a new comment
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1303,11 +1306,11 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/
     --data '{"message":"My message to @bob","parentId":null}'
 ```
 
-#### Response
+##### Response
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-##### 200 Success
+###### 200 Success
 
 ```
 {
@@ -1337,20 +1340,20 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-##### 400 Bad request
+###### 400 Bad request
 
 A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
 
-##### 404 Not found
+###### 404 Not found
 
 A not found response might be returned if:
 - The card for the given cardId could not be found
 - The parent comment could not be found
 
 
-### PUT /cards/{cardId}/comments/{commentId} - Update a comment
+#### PUT /cards/{cardId}/comments/{commentId} - Update a comment
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1369,11 +1372,11 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/
     --data '{"message":"My message"}'
 ```
 
-#### Response
+##### Response
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-##### 200 Success
+###### 200 Success
 
 ```
 {
@@ -1397,19 +1400,19 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-##### 400 Bad request
+###### 400 Bad request
 
 A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
 
-##### 404 Not found
+###### 404 Not found
 
 A not found response might be returned if:
 - The card for the given cardId could not be found
 - The comment could not be found
 
-### DELETE /cards/{cardId}/comments/{commentId} - Delete a comment
+#### DELETE /cards/{cardId}/comments/{commentId} - Delete a comment
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1424,11 +1427,11 @@ curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/card
     -H 'Content-Type: application/json;charset=utf-8'
 ```
 
-#### Response
+##### Response
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-##### 200 Success
+###### 200 Success
 
 ```
 {
@@ -1443,22 +1446,22 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-##### 400 Bad request
+###### 400 Bad request
 
 A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
 
-##### 404 Not found
+###### 404 Not found
 
 A not found response might be returned if:
 - The card for the given cardId could not be found
 - The comment could not be found
 
 
-## Sessions
+### Sessions
 
-### PUT /session/create - creates a new session
+#### PUT /session/create - creates a new session
 
-#### Request parameters
+##### Request parameters
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
@@ -1471,9 +1474,9 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
     --data '{"boardId":1}'
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 
 ```json
 {
@@ -1491,9 +1494,9 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 ```
 
 
-### POST /session/sync - notifies the server, that the session is still open
+#### POST /session/sync - notifies the server, that the session is still open
 
-#### Request body
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
@@ -1508,9 +1511,9 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
     --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 ```json
 {
   "ocs": {
@@ -1524,13 +1527,13 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 }
 ```
 
-##### 404 Not Found
+###### 404 Not Found
 the provided token is invalid or expired
 
 
-### POST /session/close - closes the session
+#### POST /session/close - closes the session
 
-#### Request body
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
@@ -1544,9 +1547,9 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
     --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+###### 200 Success
 ```json
 {
   "ocs": {
