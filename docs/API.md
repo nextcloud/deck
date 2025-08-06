@@ -155,7 +155,7 @@ This API version has become available with **Deck 1.3.0**.
 
 Get a list of all user boards.
 
-`GET /boards`
+`GET /boards`{.ep-path}
 
 ##### Headers
 
@@ -205,7 +205,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 Create a new board. The user's ability to create new boards can be disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
 
-`POST /boards`
+`POST /boards`{.ep-path}
 
 ##### Request body
 
@@ -281,7 +281,7 @@ Create a new board. The user's ability to create new boards can be disabled by t
 
 Get a board by ID.
 
-`GET /boards/{boardId}`
+`GET /boards/{boardId}`{.ep-path}
 
 ##### Request parameters
 
@@ -354,7 +354,7 @@ Get a board by ID.
 
 Update a board by ID.
 
-`PUT /boards/{boardId}`
+`PUT /boards/{boardId}`{.ep-path}
 
 ##### Request parameters
 
@@ -386,7 +386,7 @@ Returns the updated board.
 
 Delete a board by ID.
 
-`DELETE /boards/{boardId}`
+`DELETE /boards/{boardId}`{.ep-path}
 
 ##### Request parameters
 
@@ -402,7 +402,7 @@ Returns the deleted board. The `deletedAt`-key contains the UNIX timestamp at de
 
 Restore a deleted board by ID.
 
-`POST /boards/{boardId}/undo_delete`
+`POST /boards/{boardId}/undo_delete`{.ep-path}
 
 ##### Request parameters
 
@@ -418,7 +418,7 @@ Returns the restored board.
 
 Clone a board by ID.
 
-`POST /boards/{boardId}/clone`
+`POST /boards/{boardId}/clone`{.ep-path}
 
 Creates a copy of the board.
 
@@ -445,7 +445,7 @@ Returns the restored board.
 
 Create an ACL for a board.
 
-`POST /boards/{boardId}/acl`
+`POST /boards/{boardId}/acl`{.ep-path}
 
 ##### Request parameters
 
@@ -491,7 +491,7 @@ Create an ACL for a board.
 
 Update an ACL by ID.
 
-`PUT /boards/{boardId}/acl/{aclId}`
+`PUT /boards/{boardId}/acl/{aclId}`{.ep-path}
 
 ##### Request parameters
 
@@ -516,7 +516,7 @@ Returns the updated ACL.
 
 Delete an ACL by ID.
 
-`DELETE /boards/{boardId}/acl/{aclId}`
+`DELETE /boards/{boardId}/acl/{aclId}`{.ep-path}
 
 ##### Request parameters
 
@@ -535,7 +535,7 @@ Returns the deleted ACL.
 
 Get a list of all board stacks.
 
-`GET /boards/{boardId}/stacks`
+`GET /boards/{boardId}/stacks`{.ep-path}
 
 ##### Headers
 
@@ -567,7 +567,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 Get a list of archived stacks
 
-`GET /boards/{boardId}/stacks/archived`
+`GET /boards/{boardId}/stacks/archived`{.ep-path}
 
 ##### Request parameters
 
@@ -595,7 +595,7 @@ Get a list of archived stacks
 
 Get a stack by ID.
 
-`GET /boards/{boardId}/stacks/{stackId}`
+`GET /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
 ##### Request parameters
 
@@ -622,7 +622,7 @@ Get a stack by ID.
 
 Create a stack on the board.
 
-`POST /boards/{boardId}/stacks`
+`POST /boards/{boardId}/stacks`{.ep-path}
 
 ##### Request parameters
 
@@ -645,7 +645,7 @@ Returns the created stack.
 
 Update a stack by ID.
 
-`PUT /boards/{boardId}/stacks/{stackId}`
+`PUT /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
 ##### Request parameters
 
@@ -669,7 +669,7 @@ Returns the updated stack.
 
 Delete a stack by ID.
 
-`DELETE /boards/{boardId}/stacks/{stackId}`
+`DELETE /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
 ##### Request parameters
 
@@ -688,7 +688,7 @@ Returns the deleted stack. The `deletedAt`-key contains the UNIX timestamp at de
 
 Get a card by ID.
 
-`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}`
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
 ##### Request parameters
 
@@ -728,7 +728,7 @@ Get a card by ID.
 
 Crreate a card on the board stack.
 
-`POST /boards/{boardId}/stacks/{stackId}/cards`
+`POST /boards/{boardId}/stacks/{stackId}/cards`{.ep-path}
 
 ##### Request parameters
 
@@ -777,7 +777,7 @@ Crreate a card on the board stack.
 
 Update a card by ID.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
 ##### Request parameters
 
@@ -821,7 +821,7 @@ Returns the updated card.
 
 Delete a card by ID.
 
-`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}`
+`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
 ##### Request parameters
 
@@ -839,7 +839,7 @@ Returns the deleted card. The `deletedAt`-key contains the UNIX timestamp at del
 
 Assign a board label to a card.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel`{.ep-path}
 
 ##### Request parameters
 
@@ -863,7 +863,7 @@ Returns an empty response.
 
 Unassign a board label from a card.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel`{.ep-path}
 
 ##### Request parameters
 
@@ -887,7 +887,7 @@ Returns an empty response.
 
 Assign a board user to a card.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser`{.ep-path}
 
 ##### Request parameters
 
@@ -921,7 +921,7 @@ Assign a board user to a card.
 
 Unassing a user from a card.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser`{.ep-path}
 
 ##### Request parameters
 
@@ -945,7 +945,7 @@ Returns the removed user assignment.
 
 Update the order and/or the stack of the card.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder`{.ep-path}
 
 ##### Request parameters
 
@@ -970,7 +970,7 @@ Returns a list of stack cards in the updated order.
 
 Archive a card.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`{.ep-path}
 
 ##### Request parameters
 
@@ -988,7 +988,7 @@ Returns the archived card.
 
 Unarchive a card.
 
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`{.ep-path}
 
 ##### Request parameters
 
@@ -1008,7 +1008,7 @@ Returns the unarchived card.
 
 Get a label by ID.
 
-`GET /boards/{boardId}/labels/{labelId}`
+`GET /boards/{boardId}/labels/{labelId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1033,7 +1033,7 @@ Get a label by ID.
 
 Create a label.
 
-`POST /boards/{boardId}/labels`
+`POST /boards/{boardId}/labels`{.ep-path}
 
 ##### Request parameters
 
@@ -1066,7 +1066,7 @@ Create a label.
 
 Update a label by ID.
 
-`PUT /boards/{boardId}/labels/{labelId}`
+`PUT /boards/{boardId}/labels/{labelId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1092,7 +1092,7 @@ Returns the updated label.
 
 Delete a label by ID.
 
-`DELETE /boards/{boardId}/labels/{labelId}`
+`DELETE /boards/{boardId}/labels/{labelId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1112,7 +1112,7 @@ Returns the deleted label.
 Get a list of all card attachments. When api-Version `v1.0` is used, then this endpoint returns only
 attachments of type `deck_file`.
 
-`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
 
 ##### Request parameters
 
@@ -1155,10 +1155,10 @@ attachments of type `deck_file`.
 Get a card attachment by ID.
 
 v1.0  
-`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
-`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1178,7 +1178,7 @@ Returns the card attachment.
 
 Upload a card attachment.
 
-`POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`
+`POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
 
 ##### Request parameters
 
@@ -1207,10 +1207,10 @@ Returns the card attachement.
 Update a card attachment by ID.
 
 v1.0  
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1240,10 +1240,10 @@ Returns the updated card attachment.
 Delete a card attachment by ID.
 
 v1.0  
-`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
+`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
-`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`
+`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1264,10 +1264,10 @@ Returns the deleted attachment.
 Restore a deleted card attachment by ID.
 
 v1.0  
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore`{.ep-path}
 
 v1.1  
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}/restore`
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}/restore`{.ep-path}
 
 ##### Request parameters
 
@@ -1289,7 +1289,7 @@ Returns the restored attachment.
 
 Get the allowed import systems.
 
-`GET /boards/import/getSystems`
+`GET /boards/import/getSystems`{.ep-path}
 
 ##### Response
 
@@ -1303,7 +1303,7 @@ Get the allowed import systems.
 
 Get a system schema.
 
-`GET /boards/import/config/system/{system}`
+`GET /boards/import/config/system/{system}`{.ep-path}
 
 ##### Request parameters
 
@@ -1321,7 +1321,7 @@ Get a system schema.
 
 Import a board from another system.
 
-`POST /boards/import`
+`POST /boards/import`{.ep-path}
 
 ##### Request parameters
 
@@ -1348,7 +1348,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 Get the configuration of the deck app.
 
-`GET /api/v1.0/config`
+`GET /api/v1.0/config`{.ep-path}
 
 ##### Response
 
@@ -1387,7 +1387,7 @@ Get the configuration of the deck app.
 
 Set a configuration value by key.
 
-`POST /api/v1.0/config/{id}/{key}`
+`POST /api/v1.0/config/{id}/{key}`{.ep-path}
 
 ##### Request parameters
 
@@ -1430,7 +1430,7 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
 
 List comments for a card.
 
-`GET /cards/{cardId}/comments`
+`GET /cards/{cardId}/comments`{.ep-path}
 
 ##### Request parameters
 
@@ -1522,7 +1522,7 @@ In case a comment is marked as a reply to another comment object, the parent com
 
 Create comment for a card.
 
-`POST /cards/{cardId}/comments`
+`POST /cards/{cardId}/comments`{.ep-path}
 
 ##### Request parameters
 
@@ -1577,7 +1577,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 Update a card comment by ID.
 
-`PUT /cards/{cardId}/comments/{commentId}`
+`PUT /cards/{cardId}/comments/{commentId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1628,7 +1628,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 Delete a card comment by ID.
 
-`DELETE /cards/{cardId}/comments/{commentId}`
+`DELETE /cards/{cardId}/comments/{commentId}`{.ep-path}
 
 ##### Request parameters
 
@@ -1668,7 +1668,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 Create a session.
 
-`PUT /session/create`
+`PUT /session/create`{.ep-path}
 
 ##### Request parameters
 
@@ -1704,7 +1704,7 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 
 Notify the server that the session is still open:
 
-`POST /session/sync`
+`POST /session/sync`{.ep-path}
 
 ##### Request body
 
@@ -1740,7 +1740,7 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 
 Close a session.
 
-`POST /session/close`
+`POST /session/close`{.ep-path}
 
 ##### Request body
 

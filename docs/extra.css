@@ -23,3 +23,7 @@
   margin-block-start: 3rem;
   border-bottom: 2px solid grey;
 }
+
+.ep-path {
+  display: block;
+}
