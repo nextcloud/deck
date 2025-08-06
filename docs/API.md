@@ -1168,7 +1168,7 @@ v1.1
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
-| type | String | `file` \| `deck_app` |
+| type | String | `file` \| `deck_file` |
 
 ##### Response
 
@@ -1220,7 +1220,7 @@ v1.1
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
-| type | String | `file` \| `deck_app` |
+| type | String | `file` \| `deck_file` |
 
 ##### Request body
 
@@ -1253,7 +1253,7 @@ v1.1
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
-| type | String | `file` \| `deck_app` |
+| type | String | `file` \| `deck_file` |
 
 ##### Response
 
@@ -1277,7 +1277,7 @@ v1.1
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
-| type | String | `file` \| `deck_app` |
+| type | String | `file` \| `deck_file` |
 
 ##### Response
 
