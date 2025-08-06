@@ -2,6 +2,15 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-.subnav ul {
-	padding-left: 20px;
+
+.wy-menu li a {
+  font-size: 1rem;
+}
+
+.wy-menu-vertical li.toctree-l2.current li.toctree-l3>a {
+  padding-inline-start: 3em;
+}
+
+.wy-menu-vertical li.toctree-l2 li.toctree-l3.current li.toctree-l4>a {
+  padding-inline-start: 3.5em;
 }
