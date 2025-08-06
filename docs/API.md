@@ -72,7 +72,7 @@ The used combination of URL and HTTP method is not allowed. Most likely you have
 
 #### Date
 
-Datetime values in request data need to be provided in ISO-8601.<br>
+Datetime values in request data need to be provided in ISO-8601.  
 Example: `2020-01-20T09:52:43+00:00`
 
 ### Headers
@@ -1060,7 +1060,12 @@ The request can fail with a bad request response for the following reasons:
 ```
 
 #### Get the attachment file
+
+v1.0  
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
+
+v1.1  
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`
 
 ##### Request parameters
 
@@ -1070,6 +1075,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_app` |
 
 ##### Response
 
@@ -1101,7 +1107,12 @@ The request can fail with a bad request response for the following reasons:
 ###### 200 Success
 
 #### Update an attachment
+
+v1.0  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
+
+v1.1  
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`
 
 ##### Request parameters
 
@@ -1111,6 +1122,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_app` |
 
 ##### Request body
 
@@ -1126,8 +1138,12 @@ For now only `deck_file` is supported as an attachment type.
 ###### 200 Success
 
 #### Delete an attachment
+
+v1.0  
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
 
+v1.1  
+`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`
 
 ##### Request parameters
 
@@ -1137,13 +1153,19 @@ For now only `deck_file` is supported as an attachment type.
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_app` |
 
 ##### Response
 
 ###### 200 Success
 
 #### Restore a deleted attachment
+
+v1.0  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore`
+
+v1.1  
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}/restore`
 
 ##### Request parameters
 
@@ -1153,6 +1175,7 @@ For now only `deck_file` is supported as an attachment type.
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_app` |
 
 ##### Response
 
