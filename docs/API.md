@@ -334,6 +334,12 @@ A 403 response might be returned if the user's ability to create new boards has 
 #### Update board details
 `PUT /boards/{boardId}`
 
+##### Request parameters
+
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| boardId   | Integer | The id of the board |
+
 ##### Request body
 
 | Parameter | Type   | Description                                          |
@@ -349,36 +355,6 @@ A 403 response might be returned if the user's ability to create new boards has 
     "archived": false
 }
 ```
-
-##### Response
-
-###### 200 Success
-
-#### Archive a card
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`
-
-##### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-| cardId    | Integer | The id of the card                      |
-
-##### Response
-
-###### 200 Success
-
-#### Unarchive a card
-`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`
-
-##### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-| cardId    | Integer | The id of the card                      |
 
 ##### Response
 
@@ -410,8 +386,39 @@ A 403 response might be returned if the user's ability to create new boards has 
 
 ###### 200 Success
 
+#### Clone a board
+`POST /boards/{boardId}/clone`
+
+Creates a copy of the board.
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
+
+##### Request body
+
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| withCards  | Bool   | Setting if the cards should be copied (Default: false) |
+| withAssignments  | Bool   | Setting if the card assignments should be cloned (Default: false) |
+| withLabels  | Bool   | Setting if the card labels should be cloned (Default: false) |
+| withDueDate  | Bool   | Setting if the card due dates should be cloned (Default: false) |
+| moveCardsToLeftStack  | Bool   | Setting if all cards should be moved to the most left column (useful for To-Do / Doing / Done boards) (Default: false) |
+| restoreArchivedCards  | Bool   | Setting if the archived cards should be unarchived (Default: false) |
+
+##### Response
+
+###### 200 Success
+
+
 #### Add new acl rule
 `POST /boards/{boardId}/acl`
+
+##### Request parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
 
 ##### Request body
 
@@ -454,6 +461,13 @@ A 403 response might be returned if the user's ability to create new boards has 
 
 ##### Request parameters
 
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
+| aclId   | Integer | The id of the acl |
+
+##### Request body
+
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
 | permissionEdit  | Bool   | Setting if the participant has edit permissions |
@@ -464,28 +478,15 @@ A 403 response might be returned if the user's ability to create new boards has 
 
 ###### 200 Success
 
-#### Clone a board
-`POST /boards/{boardId}/clone`
-
-Creates a copy of the board.
-
-##### Request body
-
-| Parameter | Type   | Description                                          |
-| --------- | ------ | ---------------------------------------------------- |
-| withCards  | Bool   | Setting if the cards should be copied (Default: false) |
-| withAssignments  | Bool   | Setting if the card assignments should be cloned (Default: false) |
-| withLabels  | Bool   | Setting if the card labels should be cloned (Default: false) |
-| withDueDate  | Bool   | Setting if the card due dates should be cloned (Default: false) |
-| moveCardsToLeftStack  | Bool   | Setting if all cards should be moved to the most left column (useful for To-Do / Doing / Done boards) (Default: false) |
-| restoreArchivedCards  | Bool   | Setting if the archived cards should be unarchived (Default: false) |
-
-##### Response
-
-###### 200 Success
-
 #### Delete an acl rule
 `DELETE /boards/{boardId}/acl/{aclId}`
+
+##### Request parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
+| aclId   | Integer | The id of the acl |
 
 ##### Response
 
@@ -569,18 +570,18 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 #### Create a new stack
 `POST /boards/{boardId}/stacks`
 
+##### Request parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board to fetch |
+
 ##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | title     | String | The title of the new stack, maximum length is limited to 100 characters |
 | order     | Integer | Order for sorting the stacks                         |
-
-##### Request parameters
-
-| Parameter | Type    | Description                  |
-| --------- | ------- | ---------------------------- |
-| boardId   | Integer | The id of the board to fetch |
 
 ##### Response
 
@@ -697,7 +698,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-##### Request data
+##### Request body
 
 | Parameter   | Type            | Description                                                                                         |
 |-------------|-----------------|-----------------------------------------------------------------------------------------------------|
@@ -754,7 +755,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-##### Request data
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -774,7 +775,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-##### Request data
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -795,7 +796,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-##### Request data
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -844,7 +845,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-##### Request data
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -865,17 +866,47 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-##### Request data
+##### Request body
 
 | Parameter | Type    | Description                                                 |
 | --------- | ------- | ----------------------------------------------------------- |
 | order     | Integer | The position in the stack where the card should be moved to |
 | stackId   | Integer | The id of the stack where the card should be moved to       |
 
+##### Response
+
+###### 200 Success
+
+#### Archive a card
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`
+
+##### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
 
 ##### Response
 
 ###### 200 Success
+
+#### Unarchive a card
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`
+
+##### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+##### Response
+
+###### 200 Success
+
 
 ### Labels
 
@@ -912,7 +943,7 @@ The request can fail with a bad request response for the following reasons:
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 
-##### Request data
+##### Request body
 
 ```json
 {
@@ -936,7 +967,7 @@ The request can fail with a bad request response for the following reasons:
 | labelId   | Integer | The id of the label                      |
 
 
-##### Request data
+##### Request body
 
 ```json
 {
@@ -1033,7 +1064,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the attachment belongs to |
 | cardId    | Integer | The id of the card the attachment belongs to  |
 
-##### Request data
+##### Request body
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -1059,7 +1090,7 @@ The request can fail with a bad request response for the following reasons:
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
-##### Request data
+##### Request body
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -1105,28 +1136,10 @@ For now only `deck_file` is supported as an attachment type.
 
 ###### 200 Success
 
-#### Import a board
+### Import API
+
+#### Get Systems
 `GET /boards/import/getSystems`
-
-##### Request parameters
-
-| Parameter    | Type    | Description                                   |
-| ------------ | ------- | --------------------------------------------- |
-| system       | Integer | The system name. Example: trello              |
-
-##### Response
-
-Make a request to see the json schema of system
-
-```json
-{
-}
-```
-
-#### Import a board
-`GET /boards/import/config/system/{schema}`
-
-##### Request parameters
 
 ##### Response
 
@@ -1134,6 +1147,24 @@ Make a request to see the json schema of system
 [
   "trello"
 ]
+```
+
+#### Get System Schema
+`GET /boards/import/config/system/{system}`
+
+##### Request parameters
+
+| Parameter    | Type    | Description                                   |
+| ------------ | ------- | --------------------------------------------- |
+| system       | Integer | The system name. Example: trello              |
+
+
+##### Response
+
+Make a request to see the json schema of system
+
+```json
+{}
 ```
 
 #### Import a board
@@ -1542,7 +1573,7 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 ```
 
 
-#### notifies the server, that the session is still open
+#### notifies the server that the session is still open
 `POST /session/sync`
 
 ##### Request body
