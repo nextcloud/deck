@@ -151,7 +151,10 @@ This API version has become available with **Deck 1.3.0**.
 
 ### Boards
 
-#### Get a list of boards
+#### List boards
+
+Get a list of all user boards.
+
 `GET /boards`
 
 ##### Headers
@@ -162,7 +165,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
-| details   | Bool    | **Optional** Enhance boards with details about labels, stacks and users |
+| details   | Bool    | _(optional)_ enhance boards with details about labels, stacks and users |
 
 ##### Response
 
@@ -202,7 +205,10 @@ Returns an array of board items
 ]
 ```
 
-#### Create a new board
+#### Create board
+
+Create a new board. The user's ability to create new boards can be disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
+
 `POST /boards`
 
 ##### Request body
@@ -277,11 +283,10 @@ Returns an array of board items
 }
 ```
 
-###### 403 Forbidden
+#### Get board
 
-A 403 response might be returned if the user's ability to create new boards has been disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
+Get a board by ID.
 
-#### Get board details
 `GET /boards/{boardId}`
 
 ##### Request parameters
@@ -353,7 +358,10 @@ A 403 response might be returned if the user's ability to create new boards has 
 }
 ```
 
-#### Update board details
+#### Update board
+
+Update a board by ID.
+
 `PUT /boards/{boardId}`
 
 ##### Request parameters
@@ -382,7 +390,10 @@ A 403 response might be returned if the user's ability to create new boards has 
 
 ###### 200 Success
 
-#### Delete a board
+#### Delete board
+
+Delete a board by ID.
+
 `DELETE /boards/{boardId}`
 
 ##### Request parameters
@@ -395,7 +406,10 @@ A 403 response might be returned if the user's ability to create new boards has 
 
 ###### 200 Success
 
-#### Restore a deleted board
+#### Restore board
+
+Restore a deleted board by ID.
+
 `POST /boards/{boardId}/undo_delete`
 
 ##### Request parameters
@@ -408,7 +422,10 @@ A 403 response might be returned if the user's ability to create new boards has 
 
 ###### 200 Success
 
-#### Clone a board
+#### Clone board
+
+Clone a board by ID.
+
 `POST /boards/{boardId}/clone`
 
 Creates a copy of the board.
@@ -432,8 +449,10 @@ Creates a copy of the board.
 
 ###### 200 Success
 
+#### Create ACL rule
 
-#### Add new acl rule
+Create an ACL for a board.
+
 `POST /boards/{boardId}/acl`
 
 ##### Request parameters
@@ -478,7 +497,10 @@ Creates a copy of the board.
 }]
 ```
 
-#### Update an acl rule
+#### Update ACL rule
+
+Update an ACL by ID.
+
 `PUT /boards/{boardId}/acl/{aclId}`
 
 ##### Request parameters
@@ -500,7 +522,10 @@ Creates a copy of the board.
 
 ###### 200 Success
 
-#### Delete an acl rule
+#### Delete ACL rule
+
+Delete an ACL by ID.
+
 `DELETE /boards/{boardId}/acl/{aclId}`
 
 ##### Request parameters
@@ -516,7 +541,10 @@ Creates a copy of the board.
 
 ### Stacks
 
-#### Get stacks
+#### List stacks
+
+Get a list of all board stacks.
+
 `GET /boards/{boardId}/stacks`
 
 ##### Headers
@@ -548,7 +576,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Get list of archived stacks
+#### List archived stacks
+
+Get a list of archived stacks
+
 `GET /boards/{boardId}/stacks/archived`
 
 ##### Request parameters
@@ -575,7 +606,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Get stack details
+#### Get stack
+
+Get a stack by ID.
+
 `GET /boards/{boardId}/stacks/{stackId}`
 
 ##### Request parameters
@@ -589,7 +623,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Create a new stack
+#### Create stack
+
+Create a stack on the board.
+
 `POST /boards/{boardId}/stacks`
 
 ##### Request parameters
@@ -609,7 +646,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Update stack details
+#### Update stack
+
+Update a stack by ID.
+
 `PUT /boards/{boardId}/stacks/{stackId}`
 
 ##### Request parameters
@@ -630,7 +670,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Delete a stack
+#### Delete stack
+
+Delete a stack by ID.
+
 `DELETE /boards/{boardId}/stacks/{stackId}`
 
 ##### Request parameters
@@ -646,7 +689,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ### Cards
 
-#### Get card details
+#### Get card
+
+Get a card by ID.
+
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}`
 
 ##### Request parameters
@@ -661,7 +707,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Create a new card
+#### Create card
+
+Crreate a card on the board stack.
+
 `POST /boards/{boardId}/stacks/{stackId}/cards`
 
 ##### Request parameters
@@ -709,7 +758,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Update card details
+#### Update card
+
+Update a card by ID.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}`
 
 ##### Request parameters
@@ -751,7 +803,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Delete a card
+#### Delete card
+
+Delete a card by ID.
+
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}`
 
 ##### Request parameters
@@ -766,7 +821,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Assign a label to a card
+#### Assign label
+
+Assign a board label to a card.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel`
 
 ##### Request parameters
@@ -786,7 +844,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Remove a label from a card
+#### Unassign label
+
+Unassign a board label from a card.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel`
 
 ##### Request parameters
@@ -807,7 +868,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ###### 200 Success
 
-#### Assign a user to a card
+#### Assign user
+
+Assign a board user to a card.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser`
 
 ##### Request parameters
@@ -855,8 +919,10 @@ The request can fail with a bad request response for the following reasons:
 - The user is already assigned to the card
 - The user is not part of the board
 
+#### Unassign user
 
-#### Unassign a user from a card
+Unassing a user from a card.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser`
 
 ##### Request parameters
@@ -877,7 +943,10 @@ The request can fail with a bad request response for the following reasons:
 
 ###### 200 Success
 
-#### Change the sorting order of a card
+#### Move card
+
+Update the order and/or the stack of the card.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder`
 
 ##### Request parameters
@@ -899,7 +968,10 @@ The request can fail with a bad request response for the following reasons:
 
 ###### 200 Success
 
-#### Archive a card
+#### Archive card
+
+Archive a card.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`
 
 ##### Request parameters
@@ -914,7 +986,10 @@ The request can fail with a bad request response for the following reasons:
 
 ###### 200 Success
 
-#### Unarchive a card
+#### Unarchive card
+
+Unarchive a card.
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`
 
 ##### Request parameters
@@ -929,10 +1004,12 @@ The request can fail with a bad request response for the following reasons:
 
 ###### 200 Success
 
-
 ### Labels
 
-#### Get label details
+#### Get label
+
+Get a label by ID.
+
 `GET /boards/{boardId}/labels/{labelId}`
 
 ##### Request parameters
@@ -956,7 +1033,10 @@ The request can fail with a bad request response for the following reasons:
 }
 ```
 
-#### Create a new label
+#### Create label
+
+Create a label.
+
 `POST /boards/{boardId}/labels`
 
 ##### Request parameters
@@ -978,7 +1058,10 @@ The request can fail with a bad request response for the following reasons:
 
 ###### 200 Success
 
-#### Update label details
+#### Update label
+
+Update a label by ID.
+
 `PUT /boards/{boardId}/labels/{labelId}`
 
 ##### Request parameters
@@ -1002,7 +1085,10 @@ The request can fail with a bad request response for the following reasons:
 
 ###### 200 Success
 
-#### Delete a label
+#### Delete label
+
+Delete a label by ID.
+
 `DELETE /boards/{boardId}/labels/{labelId}`
 
 ##### Request parameters
@@ -1018,7 +1104,11 @@ The request can fail with a bad request response for the following reasons:
 
 ### Attachments
 
-#### Get a list of attachments
+#### List attachments
+
+Get a list of all card attachments. When api-Version `v1.0` is used, then this endpoint returns only
+attachments of type `deck_file`.
+
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`
 
 ##### Request parameters
@@ -1059,7 +1149,9 @@ The request can fail with a bad request response for the following reasons:
 
 ```
 
-#### Get the attachment file
+#### Get attachment
+
+Get a card attachment by ID.
 
 v1.0  
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
@@ -1081,7 +1173,10 @@ v1.1
 
 ###### 200 Success
 
-#### Upload an attachment
+#### Upload attachment
+
+Upload a card attachment.
+
 `POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`
 
 ##### Request parameters
@@ -1106,7 +1201,9 @@ v1.1
 
 ###### 200 Success
 
-#### Update an attachment
+#### Update attachment
+
+Update a card attachment by ID.
 
 v1.0  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
@@ -1137,7 +1234,9 @@ For now only `deck_file` is supported as an attachment type.
 
 ###### 200 Success
 
-#### Delete an attachment
+#### Delete attachment
+
+Delete a card attachment by ID.
 
 v1.0  
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`
@@ -1159,7 +1258,9 @@ v1.1
 
 ###### 200 Success
 
-#### Restore a deleted attachment
+#### Restore attachment
+
+Restore a deleted card attachment by ID.
 
 v1.0  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore`
@@ -1184,6 +1285,9 @@ v1.1
 ### Import API
 
 #### Get Systems
+
+Get the allowed import systems.
+
 `GET /boards/import/getSystems`
 
 ##### Response
@@ -1195,6 +1299,9 @@ v1.1
 ```
 
 #### Get System Schema
+
+Get a system schema.
+
 `GET /boards/import/config/system/{system}`
 
 ##### Request parameters
@@ -1202,7 +1309,6 @@ v1.1
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
 | system       | Integer | The system name. Example: trello              |
-
 
 ##### Response
 
@@ -1213,6 +1319,9 @@ Make a request to see the json schema of system
 ```
 
 #### Import board
+
+Import a board from another system.
+
 `POST /boards/import`
 
 ##### Request parameters
@@ -1236,7 +1345,10 @@ This has the benefit that both the web UI as well as external integrations can u
 
 Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints.
 
-#### Fetch app configuration values
+#### Get app configuration
+
+Get the configuration of the deck app.
+
 `GET /api/v1.0/config`
 
 ##### Response
@@ -1272,9 +1384,11 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 ```
 
-#### Set a config value
-`POST /api/v1.0/config/{id}/{key}`
+#### Set config value
 
+Set a configuration value by key.
+
+`POST /api/v1.0/config/{id}/{key}`
 
 ##### Request parameters
 
@@ -1314,6 +1428,9 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
 ### Comments
 
 #### List comments
+
+List comments for a card.
+
 `GET /cards/{cardId}/comments`
 
 ##### Request parameters
@@ -1404,8 +1521,10 @@ In case a comment is marked as a reply to another comment object, the parent com
 ]
 ```
 
+#### Create comment
 
-#### Create a new comment
+Create comment for a card.
+
 `POST /cards/{cardId}/comments`
 
 ##### Request parameters
@@ -1470,8 +1589,10 @@ A not found response might be returned if:
 - The card for the given cardId could not be found
 - The parent comment could not be found
 
+#### Update comment
 
-#### Update a comment
+Update a card comment by ID.
+
 `PUT /cards/{cardId}/comments/{commentId}`
 
 ##### Request parameters
@@ -1532,7 +1653,10 @@ A not found response might be returned if:
 - The card for the given cardId could not be found
 - The comment could not be found
 
-#### Delete a comment
+#### Delete comment
+
+Delete a card comment by ID.
+
 `DELETE /cards/{cardId}/comments/{commentId}`
 
 ##### Request parameters
@@ -1582,7 +1706,10 @@ A not found response might be returned if:
 
 ### Sessions
 
-#### creates a new session
+#### Creates session
+
+Create a session.
+
 `PUT /session/create`
 
 ##### Request parameters
@@ -1617,8 +1744,10 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 }
 ```
 
+#### Sync session
 
-#### notifies the server that the session is still open
+Notify the server that the session is still open:
+
 `POST /session/sync`
 
 ##### Request body
@@ -1639,6 +1768,7 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 ##### Response
 
 ###### 200 Success
+
 ```json
 {
   "ocs": {
@@ -1653,10 +1783,13 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 ```
 
 ###### 404 Not Found
+
 the provided token is invalid or expired
 
+#### Close session
 
-#### closes the session
+Close a session.
+
 `POST /session/close`
 
 ##### Request body
@@ -1676,6 +1809,7 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 ##### Response
 
 ###### 200 Success
+
 ```json
 {
   "ocs": {
