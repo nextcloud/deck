@@ -13,15 +13,12 @@ The REST API provides access for authenticated users to their data inside the De
 - The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
 - All request parameters are required, unless otherwise specified
 
-### Naming
+### Glossary
 
-- Board is the project like grouping of tasks that can be shared to different users and groups
-
-- Stack is the grouping of cards which is rendered in vertical columns in the UI
-
-- Card is the representation of a single task
-
-- Labels are defined on a board level and can be assigned to any number of cards
+- **Board** is the project like grouping of tasks that can be shared to different users and groups
+- **Stack** is the grouping of cards which is rendered in vertical columns in the UI
+- **Card** is the representation of a single task
+- **Label** is a board-level tag used to categorize and prioritize cards
 
 ### Global responses
 
