@@ -1485,24 +1485,19 @@ Set a configuration value by key.
 
 ##### Path
 
-`POST /api/v1.0/config/{id}/{key}`{.ep-path}
+`POST /api/v1.0/config/{key}`{.ep-path}
 
 ##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
-| id    | Integer | The id of the board                      |
-| key     | String | The config key to set, prefixed with `board:{boardId}:` for board specific settings |
-| value    | String | The value that should be stored for the config key |
+| key     | String | The config key to set, prefixed with `board:{boardId}:` to apply setting only for a specific board |
 
-###### Board configuration options
+##### Request body
 
-| Key | Value |
-| --- | ----- |
-| notify-due | `off`, `assigned` or `all` |
-| calendar | Boolean |
-| cardDetailsInModal | Boolean |
-| cardIdBadge | Boolean |
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| value    | Any | The value that should be stored for the config key |
 
 ###### Example
 
@@ -1513,6 +1508,15 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
  -H 'OCS-APIRequest: true'
  --data-raw '{"value":false}'
 ```
+
+###### Board configuration options
+
+| Key | Value |
+| --- | ----- |
+| notify-due | `off`, `assigned` or `all` |
+| calendar | Boolean |
+| cardDetailsInModal | Boolean |
+| cardIdBadge | Boolean |
 
 ##### Response
 
