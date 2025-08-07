@@ -392,7 +392,7 @@ Delete a board by ID.
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
-| boardId   | Integer | The id of the board to fetch |
+| boardId   | Integer | The id of the board to delete |
 
 ##### Response
 
@@ -421,6 +421,8 @@ Clone a board by ID.
 `POST /boards/{boardId}/clone`{.ep-path}
 
 Creates a copy of the board.
+
+##### Request parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -508,7 +510,7 @@ Update an ACL by ID.
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
 
-#### Response {.ep-heading}
+##### Response
 
 Returns the updated ACL.
 
@@ -796,9 +798,9 @@ Update a card by ID.
 | type        | String          | Type of the card (for later use) use 'plain' for now                                                |
 | owner       | String          | The user that owns the card                                                                         |
 | order       | Integer         | Order for sorting the stacks                                                                        |
-| duedate     | timestamp       | The ISO-8601 formatted duedate of the card or null                                                  |
+| duedate     | timestamp \| null       | The ISO-8601 formatted duedate of the card or null                                                  |
 | archived    | bool            | Whether the card is archived or not                                                                 |
-| done        | timestamp\|null | The ISO-8601 formatted date when the card is marked as done (optional, null indicates undone state) |
+| done        | timestamp \| null | _(optional)_ The ISO-8601 formatted date when the card is marked as done (null indicates undone state) |
 
 ```json
 {
@@ -1530,7 +1532,7 @@ Create comment for a card.
 | --------- | ------- | --------------------------------------- |
 | cardId    | Integer | The id of the card                      |
 | message     | String | The message of the comment, maximum length is limited to 1000 characters |
-| parentId    | Integer | _(optional)_ The start offset used for pagination, defaults to null |
+| parentId    | Integer \| null | _(optional)_ The id of the parent comment (when replying), defaults to null |
 
 Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
 
