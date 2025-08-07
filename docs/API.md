@@ -122,6 +122,14 @@ If available the ETag will also be part of JSON response objects as shown below 
 }
 ```
 
+#### x-nc-deck-session
+
+The `x-nc-deck-session` header can be used when the [notify push client](https://github.com/nextcloud/notify_push) is active to receive live updates via websockets in clients. This is useful when multiple users are working on the same board at the same time. 
+
+The header allows the server to detect who caused a certain update (e.g. create a card) and not notify the causing user about the change. This makes client logic easier, because the client has to do less work to understand which incoming live change was already applied locally.
+
+The value is the session token returned from the [create session endpoint](#create-session).
+
 ## Changelog
 
 ### API version 1.0
@@ -438,7 +446,7 @@ Clone a board by ID.
 
 `POST /boards/{boardId}/clone`{.ep-path}
 
-Creates a copy of the board.
+Create a copy of the board.
 
 ##### Path parameters
 
@@ -1787,7 +1795,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 ### Sessions
 
-#### Creates session {.ep-heading}
+#### Create session {.ep-heading}
 
 Create a session.
 
