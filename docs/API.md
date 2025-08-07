@@ -1912,3 +1912,44 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
   }
 }
 ```
+
+### Overview API
+
+#### List upcoming cards {.ep-heading}
+
+Get a list of cards across all user boards. The cards are grouped by their due dates:
+
+- overdue
+- today
+- tomorrow
+- next 7 days
+- later
+- no due
+
+##### Path
+
+`GET /overview/upcoming`{.ep-path}
+
+##### Response
+
+The `ocs.data` key contains card groups that map to card arrays. A group without any cards will not be present in the result. Unlike the cards returned from the other API endpoints, upcoming cards embed a `board` object that contains the board's ID and title.
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "overdue": [...],
+      "today": [...],
+      "tomorrow": [...],
+      "nextSevenDays": [...],
+      "later": [...],
+      "nodue": [...],
+    }
+  }
+}
+```
