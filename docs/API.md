@@ -161,7 +161,7 @@ Get a list of all user boards.
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
-##### Request parameters
+##### Query string parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -283,7 +283,7 @@ Get a board by ID.
 
 `GET /boards/{boardId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -356,7 +356,7 @@ Update a board by ID.
 
 `PUT /boards/{boardId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -388,7 +388,7 @@ Delete a board by ID.
 
 `DELETE /boards/{boardId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -404,7 +404,7 @@ Restore a deleted board by ID.
 
 `POST /boards/{boardId}/undo_delete`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -422,7 +422,7 @@ Clone a board by ID.
 
 Creates a copy of the board.
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -449,7 +449,7 @@ Create an ACL for a board.
 
 `POST /boards/{boardId}/acl`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -495,7 +495,7 @@ Update an ACL by ID.
 
 `PUT /boards/{boardId}/acl/{aclId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -520,7 +520,7 @@ Delete an ACL by ID.
 
 `DELETE /boards/{boardId}/acl/{aclId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -543,7 +543,7 @@ Get a list of all board stacks.
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -571,7 +571,7 @@ Get a list of archived stacks
 
 `GET /boards/{boardId}/stacks/archived`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -599,7 +599,7 @@ Get a stack by ID.
 
 `GET /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -626,7 +626,7 @@ Create a stack on the board.
 
 `POST /boards/{boardId}/stacks`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
@@ -649,7 +649,7 @@ Update a stack by ID.
 
 `PUT /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -673,7 +673,7 @@ Delete a stack by ID.
 
 `DELETE /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -692,7 +692,7 @@ Get a card by ID.
 
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -732,7 +732,7 @@ Crreate a card on the board stack.
 
 `POST /boards/{boardId}/stacks/{stackId}/cards`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -781,7 +781,7 @@ Update a card by ID.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -825,7 +825,7 @@ Delete a card by ID.
 
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -843,7 +843,7 @@ Assign a board label to a card.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -867,7 +867,7 @@ Unassign a board label from a card.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -891,7 +891,7 @@ Assign a board user to a card.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -925,7 +925,7 @@ Unassing a user from a card.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -949,7 +949,7 @@ Update the order and/or the stack of the card.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -974,7 +974,7 @@ Archive a card.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -992,7 +992,7 @@ Unarchive a card.
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1012,7 +1012,7 @@ Get a label by ID.
 
 `GET /boards/{boardId}/labels/{labelId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -1037,7 +1037,7 @@ Create a label.
 
 `POST /boards/{boardId}/labels`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -1070,7 +1070,7 @@ Update a label by ID.
 
 `PUT /boards/{boardId}/labels/{labelId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -1096,7 +1096,7 @@ Delete a label by ID.
 
 `DELETE /boards/{boardId}/labels/{labelId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
@@ -1116,7 +1116,7 @@ attachments of type `deck_file`.
 
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1162,7 +1162,7 @@ v1.0
 v1.1  
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1182,7 +1182,7 @@ Upload a card attachment.
 
 `POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -1214,7 +1214,7 @@ v1.0
 v1.1  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1247,7 +1247,7 @@ v1.0
 v1.1  
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1271,7 +1271,7 @@ v1.0
 v1.1  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}/restore`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1307,7 +1307,7 @@ Get a system schema.
 
 `GET /boards/import/config/system/{system}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1325,7 +1325,7 @@ Import a board from another system.
 
 `POST /boards/import`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1391,7 +1391,7 @@ Set a configuration value by key.
 
 `POST /api/v1.0/config/{id}/{key}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1434,7 +1434,7 @@ List comments for a card.
 
 `GET /cards/{cardId}/comments`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1526,7 +1526,7 @@ Create comment for a card.
 
 `POST /cards/{cardId}/comments`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1581,7 +1581,7 @@ Update a card comment by ID.
 
 `PUT /cards/{cardId}/comments/{commentId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1632,7 +1632,7 @@ Delete a card comment by ID.
 
 `DELETE /cards/{cardId}/comments/{commentId}`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1672,7 +1672,7 @@ Create a session.
 
 `PUT /session/create`{.ep-path}
 
-##### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
