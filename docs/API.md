@@ -730,6 +730,8 @@ Returns the deleted stack. The `deletedAt`-key contains the UNIX timestamp at de
 
 ### Cards
 
+For searching cards across boards and cloning a card, see the [OCS Card API](#cards_1).
+
 #### Get card {.ep-heading}
 
 Get a card by ID.
