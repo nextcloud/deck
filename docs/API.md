@@ -2012,3 +2012,64 @@ The `ocs.data` key contains the cloned card.
   }
 }
 ```
+
+#### Search cards {.ep-heading}
+
+Search cards across all user boards that match the search term in title or description. Returned cards are sorted in decreasing order by `last_modified`.
+
+##### Path
+
+`GET /search?term=test`{.ep-path}
+
+##### Query string parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| term    | String | search term                      |
+| limit    | Integer | _(optional)_ maximum number of returned results                    |
+| cursor    | Integer | _(optional)_ UNIX timestamp in second. When set, only cards which were modified before `cursor` will be retrieved |
+
+##### Response
+
+The `ocs.data` key contains the matching cards. Unlike cards from the other API endpoint, these cards contain richer data of their stack and board under `relatedStack` and `relatedBoard` resp.
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": { 
+      [
+        "title":"Clone",
+        "description":null,
+        "stackId":6,
+        "type":"plain",
+        "lastModified":1541528026,
+        "createdAt":1541528026,
+        "labels":null,
+        "assignedUsers":null,
+        "attachments":null,
+        "attachmentCount":null,
+        "owner":"admin",
+        "order":999,
+        "archived":false,
+        "done":null,
+        "duedate": "2019-12-24T19:29:30+00:00",
+        "deletedAt":0,
+        "commentsUnread":0,
+        "id":10,
+        "overdue":0,
+        "relatedBoard":  {
+          ...
+        },
+        "relatedStack": {
+          ...
+        }
+      ]
+    }
+  }
+}
+```
