@@ -424,7 +424,7 @@ Restore a deleted board by ID.
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
-| boardId   | Integer | The id of the board to fetch |
+| boardId   | Integer | The id of the board to restore |
 
 ##### Response
 
