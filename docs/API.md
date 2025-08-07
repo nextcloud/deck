@@ -1179,7 +1179,7 @@ Returns the deleted label.
 
 #### List attachments {.ep-heading}
 
-Get a list of all card attachments. When api-Version `v1.0` is used, then this endpoint returns only
+Get a list of all card attachments. When api version `v1.0` is used, then this endpoint returns only
 attachments of type `deck_file`.
 
 ##### Path
@@ -1226,14 +1226,12 @@ attachments of type `deck_file`.
 
 Get a card attachment by ID.
 
-v1.0  
 ##### Path
 
+v1.0  
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
-##### Path
-
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Path parameters
@@ -1284,14 +1282,11 @@ Returns the card attachement.
 
 Update a card attachment by ID.
 
-v1.0  
 ##### Path
-
+v1.0  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
-##### Path
-
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Path parameters
@@ -1321,14 +1316,12 @@ Returns the updated card attachment.
 
 Delete a card attachment by ID.
 
-v1.0  
 ##### Path
 
+v1.0  
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
-##### Path
-
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Path parameters
@@ -1349,14 +1342,11 @@ Returns the deleted attachment.
 
 Restore a deleted card attachment by ID.
 
-v1.0  
 ##### Path
-
+v1.0  
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore`{.ep-path}
 
 v1.1  
-##### Path
-
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}/restore`{.ep-path}
 
 ##### Path parameters
