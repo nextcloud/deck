@@ -1953,3 +1953,62 @@ The `ocs.data` key contains card groups that map to card arrays. A group without
   }
 }
 ```
+
+### Cards
+
+#### Clone card {.ep-heading}
+
+Clone a card.
+
+##### Path
+
+`POST /cards/${cardId}/clone`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| cardId    | Integer | The id of the card to be cloned                      |
+
+##### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| targetStackId   | Integer | _(optional)_ The id of the target stack, defaults to the current stack                           |
+
+##### Response
+
+The `ocs.data` key contains the cloned card.
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "title":"Clone",
+      "description":null,
+      "stackId":6,
+      "type":"plain",
+      "lastModified":1541528026,
+      "createdAt":1541528026,
+      "labels":null,
+      "assignedUsers":null,
+      "attachments":null,
+      "attachmentCount":null,
+      "owner":"admin",
+      "order":999,
+      "archived":false,
+      "done":null,
+      "duedate": "2019-12-24T19:29:30+00:00",
+      "deletedAt":0,
+      "commentsUnread":0,
+      "id":10,
+      "overdue":0
+    }
+  }
+}
+```
