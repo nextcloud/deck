@@ -844,6 +844,8 @@ Update a card by ID.
 | archived    | bool            | Whether the card is archived or not                                                                 |
 | done        | timestamp \| null | _(optional)_ The ISO-8601 formatted date when the card is marked as done (null indicates undone state) |
 
+###### Example
+
 ```json
 {
    "title": "Test card",
