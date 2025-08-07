@@ -3,6 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+ h5 {
+  font-size: 1rem;
+ }
+
+ h6 {
+  font-size: 0.875rem;
+ }
+
 .wy-menu li a {
   font-size: 1rem;
 }
@@ -20,7 +28,7 @@
 }
 
 .ep-heading {
-  margin-block-start: 3rem;
+  margin-block-start: 2.5rem;
   border-bottom: 2px solid grey;
 }
 
