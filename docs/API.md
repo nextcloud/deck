@@ -155,6 +155,8 @@ This API version has become available with **Deck 1.3.0**.
 
 Get a list of all user boards.
 
+##### Path
+
 `GET /boards`{.ep-path}
 
 ##### Headers
@@ -205,6 +207,8 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 Create a new board. The user's ability to create new boards can be disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
 
+##### Path
+
 `POST /boards`{.ep-path}
 
 ##### Request body
@@ -213,6 +217,8 @@ Create a new board. The user's ability to create new boards can be disabled by t
 | --------- | ------ | ---------------------------------------------------- |
 | title     | String | The title of the new board, maximum length is limited to 100 characters |
 | color     | String | The hexadecimal color of the new board (e.g. FF0000) |
+
+###### Example
 
 ```json
 {
@@ -280,6 +286,8 @@ Create a new board. The user's ability to create new boards can be disabled by t
 #### Get board {.ep-heading}
 
 Get a board by ID.
+
+##### Path
 
 `GET /boards/{boardId}`{.ep-path}
 
@@ -354,6 +362,8 @@ Get a board by ID.
 
 Update a board by ID.
 
+##### Path
+
 `PUT /boards/{boardId}`{.ep-path}
 
 ##### Path parameters
@@ -369,6 +379,8 @@ Update a board by ID.
 | title     | String | The title of the board, maximum length is limited to 100 characters |
 | color     | String | The hexadecimal color of the board (e.g. FF0000) |
 | archived  | Bool   | Whether or not this board should be archived. |
+
+###### Example
 
 ```json
 {
@@ -386,6 +398,8 @@ Returns the updated board.
 
 Delete a board by ID.
 
+##### Path
+
 `DELETE /boards/{boardId}`{.ep-path}
 
 ##### Path parameters
@@ -402,6 +416,8 @@ Returns the deleted board. The `deletedAt`-key contains the UNIX timestamp at de
 
 Restore a deleted board by ID.
 
+##### Path
+
 `POST /boards/{boardId}/undo_delete`{.ep-path}
 
 ##### Path parameters
@@ -417,6 +433,8 @@ Returns the restored board.
 #### Clone board {.ep-heading}
 
 Clone a board by ID.
+
+##### Path
 
 `POST /boards/{boardId}/clone`{.ep-path}
 
@@ -446,6 +464,8 @@ Returns the restored board.
 #### Create ACL rule {.ep-heading}
 
 Create an ACL for a board.
+
+##### Path
 
 `POST /boards/{boardId}/acl`{.ep-path}
 
@@ -493,6 +513,8 @@ Create an ACL for a board.
 
 Update an ACL by ID.
 
+##### Path
+
 `PUT /boards/{boardId}/acl/{aclId}`{.ep-path}
 
 ##### Path parameters
@@ -518,6 +540,8 @@ Returns the updated ACL.
 
 Delete an ACL by ID.
 
+##### Path
+
 `DELETE /boards/{boardId}/acl/{aclId}`{.ep-path}
 
 ##### Path parameters
@@ -536,6 +560,8 @@ Returns the deleted ACL.
 #### List stacks {.ep-heading}
 
 Get a list of all board stacks.
+
+##### Path
 
 `GET /boards/{boardId}/stacks`{.ep-path}
 
@@ -569,6 +595,8 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 Get a list of archived stacks
 
+##### Path
+
 `GET /boards/{boardId}/stacks/archived`{.ep-path}
 
 ##### Path parameters
@@ -597,6 +625,8 @@ Get a list of archived stacks
 
 Get a stack by ID.
 
+##### Path
+
 `GET /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
 ##### Path parameters
@@ -624,6 +654,8 @@ Get a stack by ID.
 
 Create a stack on the board.
 
+##### Path
+
 `POST /boards/{boardId}/stacks`{.ep-path}
 
 ##### Path parameters
@@ -646,6 +678,8 @@ Returns the created stack.
 #### Update stack {.ep-heading}
 
 Update a stack by ID.
+
+##### Path
 
 `PUT /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
@@ -671,6 +705,8 @@ Returns the updated stack.
 
 Delete a stack by ID.
 
+##### Path
+
 `DELETE /boards/{boardId}/stacks/{stackId}`{.ep-path}
 
 ##### Path parameters
@@ -689,6 +725,8 @@ Returns the deleted stack. The `deletedAt`-key contains the UNIX timestamp at de
 #### Get card {.ep-heading}
 
 Get a card by ID.
+
+##### Path
 
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
@@ -729,6 +767,8 @@ Get a card by ID.
 #### Create card {.ep-heading}
 
 Crreate a card on the board stack.
+
+##### Path
 
 `POST /boards/{boardId}/stacks/{stackId}/cards`{.ep-path}
 
@@ -779,6 +819,8 @@ Crreate a card on the board stack.
 
 Update a card by ID.
 
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
 ##### Path parameters
@@ -823,6 +865,8 @@ Returns the updated card.
 
 Delete a card by ID.
 
+##### Path
+
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
 ##### Path parameters
@@ -840,6 +884,8 @@ Returns the deleted card. The `deletedAt`-key contains the UNIX timestamp at del
 #### Assign label {.ep-heading}
 
 Assign a board label to a card.
+
+##### Path
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel`{.ep-path}
 
@@ -865,6 +911,8 @@ Returns an empty response.
 
 Unassign a board label from a card.
 
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel`{.ep-path}
 
 ##### Path parameters
@@ -888,6 +936,8 @@ Returns an empty response.
 #### Assign user {.ep-heading}
 
 Assign a board user to a card.
+
+##### Path
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser`{.ep-path}
 
@@ -923,6 +973,8 @@ Assign a board user to a card.
 
 Unassing a user from a card.
 
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser`{.ep-path}
 
 ##### Path parameters
@@ -946,6 +998,8 @@ Returns the removed user assignment.
 #### Move card {.ep-heading}
 
 Update the order and/or the stack of the card.
+
+##### Path
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder`{.ep-path}
 
@@ -972,6 +1026,8 @@ Returns a list of stack cards in the updated order.
 
 Archive a card.
 
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`{.ep-path}
 
 ##### Path parameters
@@ -989,6 +1045,8 @@ Returns the archived card.
 #### Unarchive card {.ep-heading}
 
 Unarchive a card.
+
+##### Path
 
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`{.ep-path}
 
@@ -1009,6 +1067,8 @@ Returns the unarchived card.
 #### Get label {.ep-heading}
 
 Get a label by ID.
+
+##### Path
 
 `GET /boards/{boardId}/labels/{labelId}`{.ep-path}
 
@@ -1034,6 +1094,8 @@ Get a label by ID.
 #### Create label {.ep-heading}
 
 Create a label.
+
+##### Path
 
 `POST /boards/{boardId}/labels`{.ep-path}
 
@@ -1068,6 +1130,8 @@ Create a label.
 
 Update a label by ID.
 
+##### Path
+
 `PUT /boards/{boardId}/labels/{labelId}`{.ep-path}
 
 ##### Path parameters
@@ -1094,6 +1158,8 @@ Returns the updated label.
 
 Delete a label by ID.
 
+##### Path
+
 `DELETE /boards/{boardId}/labels/{labelId}`{.ep-path}
 
 ##### Path parameters
@@ -1113,6 +1179,8 @@ Returns the deleted label.
 
 Get a list of all card attachments. When api-Version `v1.0` is used, then this endpoint returns only
 attachments of type `deck_file`.
+
+##### Path
 
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
 
@@ -1157,9 +1225,13 @@ attachments of type `deck_file`.
 Get a card attachment by ID.
 
 v1.0  
+##### Path
+
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
+##### Path
+
 `GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Path parameters
@@ -1179,6 +1251,8 @@ Returns the card attachment.
 #### Upload attachment {.ep-heading}
 
 Upload a card attachment.
+
+##### Path
 
 `POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
 
@@ -1209,9 +1283,13 @@ Returns the card attachement.
 Update a card attachment by ID.
 
 v1.0  
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Path parameters
@@ -1242,9 +1320,13 @@ Returns the updated card attachment.
 Delete a card attachment by ID.
 
 v1.0  
+##### Path
+
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
 v1.1  
+##### Path
+
 `DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
 ##### Path parameters
@@ -1266,9 +1348,13 @@ Returns the deleted attachment.
 Restore a deleted card attachment by ID.
 
 v1.0  
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore`{.ep-path}
 
 v1.1  
+##### Path
+
 `PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}/restore`{.ep-path}
 
 ##### Path parameters
@@ -1291,6 +1377,8 @@ Returns the restored attachment.
 
 Get the allowed import systems.
 
+##### Path
+
 `GET /boards/import/getSystems`{.ep-path}
 
 ##### Response
@@ -1304,6 +1392,8 @@ Get the allowed import systems.
 #### Get System Schema {.ep-heading}
 
 Get a system schema.
+
+##### Path
 
 `GET /boards/import/config/system/{system}`{.ep-path}
 
@@ -1322,6 +1412,8 @@ Get a system schema.
 #### Import board {.ep-heading}
 
 Import a board from another system.
+
+##### Path
 
 `POST /boards/import`{.ep-path}
 
@@ -1349,6 +1441,8 @@ Deck stores user and app configuration values globally and per board. The GET en
 #### Get app configuration {.ep-heading}
 
 Get the configuration of the deck app.
+
+##### Path
 
 `GET /api/v1.0/config`{.ep-path}
 
@@ -1389,6 +1483,8 @@ Get the configuration of the deck app.
 
 Set a configuration value by key.
 
+##### Path
+
 `POST /api/v1.0/config/{id}/{key}`{.ep-path}
 
 ##### Path parameters
@@ -1399,7 +1495,7 @@ Set a configuration value by key.
 | key     | String | The config key to set, prefixed with `board:{boardId}:` for board specific settings |
 | value    | String | The value that should be stored for the config key |
 
-###### Board configuration
+###### Board configuration options
 
 | Key | Value |
 | --- | ----- |
@@ -1408,11 +1504,19 @@ Set a configuration value by key.
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
 
-##### Example request
+###### Example
+
+```bash
+curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar'
+ -H 'Accept: application/json'
+ -H "Content-Type: application/json"
+ -H 'OCS-APIRequest: true'
+ --data-raw '{"value":false}'
+```
+
+##### Response
 
 ```json
-curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar' -H 'Accept: application/json' -H "Content-Type: application/json" -H 'OCS-APIRequest: true' --data-raw '{"value":false}'
-
 {
   "ocs": {
     "meta": {
@@ -1423,7 +1527,6 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
     "data": false
   }
 }
-
 ```
 
 ### Comments
@@ -1431,6 +1534,8 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
 #### List comments {.ep-heading}
 
 List comments for a card.
+
+##### Path
 
 `GET /cards/{cardId}/comments`{.ep-path}
 
@@ -1441,6 +1546,8 @@ List comments for a card.
 | cardId    | Integer | The id of the card                      |
 | limit     | Integer | The maximum number of comments that should be returned, defaults to 20 |
 | offset    | Integer | The start offset used for pagination, defaults to 0 |
+
+###### Example
 
 ```bash
 curl 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
@@ -1524,6 +1631,8 @@ In case a comment is marked as a reply to another comment object, the parent com
 
 Create comment for a card.
 
+##### Path
+
 `POST /cards/{cardId}/comments`{.ep-path}
 
 ##### Path parameters
@@ -1531,10 +1640,17 @@ Create comment for a card.
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | cardId    | Integer | The id of the card                      |
+
+##### Request body
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
 | message     | String | The message of the comment, maximum length is limited to 1000 characters |
-| parentId    | Integer \| null | _(optional)_ The id of the parent comment (when replying), defaults to null |
+| parentId    | Integer \| null | The id of the parent comment (when replying) |
 
 Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
+
+###### Example
 
 ```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
@@ -1545,9 +1661,9 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/
 
 ##### Response
 
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+The created comment will be provided under the `ocs.data` key.
 
-```bash
+```json
 {
   "ocs": {
     "meta": {
@@ -1577,7 +1693,9 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 #### Update comment {.ep-heading}
 
-Update a card comment by ID.
+Update a card comment by ID. Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+
+##### Path
 
 `PUT /cards/{cardId}/comments/{commentId}`{.ep-path}
 
@@ -1587,11 +1705,16 @@ Update a card comment by ID.
 | --------- | ------- | --------------------------------------- |
 | cardId    | Integer | The id of the card                      |
 | commentId    | Integer | The id of the comment                      |
+
+##### Request body
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
 | message     | String | The message of the comment, maximum length is limited to 1000 characters |
 
 Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
 
-Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+###### Example
 
 ```bash
 curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
@@ -1602,7 +1725,7 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/1
 
 ##### Response
 
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+The updated comment will be provided under the `ocs.data` key.
 
 ```json
 {
@@ -1628,7 +1751,9 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 #### Delete comment {.ep-heading}
 
-Delete a card comment by ID.
+Delete a card comment by ID. Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+
+##### Path
 
 `DELETE /cards/{cardId}/comments/{commentId}`{.ep-path}
 
@@ -1639,7 +1764,7 @@ Delete a card comment by ID.
 | cardId    | Integer | The id of the card                      |
 | commentId    | Integer | The id of the comment                      |
 
-Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+##### Example
 
 ```bash
 curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
@@ -1670,13 +1795,17 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 
 Create a session.
 
+##### Path
+
 `PUT /session/create`{.ep-path}
 
-##### Path parameters
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | boardId   | Integer | The id of the opened board |
+
+###### Example
 
 ```bash
 curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
@@ -1704,7 +1833,9 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 
 #### Sync session {.ep-heading}
 
-Notify the server that the session is still open:
+Notify the server that the session is still open.
+
+##### Path
 
 `POST /session/sync`{.ep-path}
 
@@ -1715,6 +1846,7 @@ Notify the server that the session is still open:
 | boardId   | Integer | The id of the opened board |
 | token     | String  | The session token from the /sessions/create response |
 
+###### Example
 
 ```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
@@ -1742,6 +1874,8 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 
 Close a session.
 
+##### Path
+
 `POST /session/close`{.ep-path}
 
 ##### Request body
@@ -1750,6 +1884,8 @@ Close a session.
 | --------- | ------- | ---------------------------------------------------- |
 | boardId   | Integer | The id of the opened board                           |
 | token     | String  | The session token from the /sessions/create response |
+
+###### Example
 
 ```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/close' \
