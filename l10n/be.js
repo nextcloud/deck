@@ -23,6 +23,7 @@ OC.L10N.register(
     "Modified" : "Зменены",
     "Save" : "Захаваць",
     "Created:" : "Створана:",
+    "Reply" : "Адказаць",
     "Open link" : "Адкрыць спасылку",
     "seconds ago" : "с таму",
     "Keyboard shortcuts" : "Спалучэнні клавіш",
