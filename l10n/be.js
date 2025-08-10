@@ -31,6 +31,7 @@ OC.L10N.register(
     "Search" : "Пошук",
     "Shared with you" : "Абагулена з вамі",
     "An error occurred" : "Узнікла памылка",
+    "No notifications" : "Няма апавяшчэнняў",
     "Today" : "Сёння",
     "Close" : "Закрыць",
     "Share" : "Абагуліць"
