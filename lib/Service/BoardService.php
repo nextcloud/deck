@@ -621,7 +621,9 @@ class BoardService {
 
 			if ($fullDetails) {
 				$this->enrichWithStacks($board);
-				$this->enrichWithLabels($board);
+				if ($board->getLabels() === null) {
+					$this->enrichWithLabels($board);
+				}
 				$this->enrichWithUsers($board);
 				$this->enrichWithBoardSettings($board);
 				$this->enrichWithActiveSessions($board);
