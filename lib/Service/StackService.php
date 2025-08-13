@@ -75,19 +75,22 @@ class StackService {
 		$this->stackServiceValidator = $stackServiceValidator;
 	}
 
-	private function enrichStackWithCards($stack, $since = -1) {
-		$cards = $this->cardMapper->findAll($stack->getId(), null, null, $since);
+	/** @param Stack[] $stacks */
+	private function enrichStacksWithCards(array $stacks, $since = -1): void {
+		$cardsByStackId = $this->cardMapper->findAllForStacks(array_map(fn (Stack $stack) => $stack->getId(), $stacks), null, null, $since);
 
-		if (\count($cards) === 0) {
-			return;
-		}
+		foreach ($cardsByStackId as $stackId => $cards) {
+			if (!$cards) {
+				continue;
+			}
 
-		$stack->setCards($this->cardService->enrichCards($cards));
-	}
 
-	private function enrichStacksWithCards($stacks, $since = -1) {
-		foreach ($stacks as $stack) {
-			$this->enrichStackWithCards($stack, $since);
+			foreach ($stacks as $stack) {
+				if ($stack->getId() === $stackId) {
+					$stack->setCards($this->cardService->enrichCards($cards));
+					break;
+				}
+			}
 		}
 	}
 
@@ -124,9 +127,9 @@ class StackService {
 	}
 
 	/**
-	 * @param $boardId
+	 * @param mixed $boardId
 	 *
-	 * @return array
+	 * @return Stack[]
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
 	 */
@@ -247,7 +250,7 @@ class StackService {
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
-		$this->enrichStackWithCards($stack);
+		$this->enrichStacksWithCards([$stack]);
 
 		return $stack;
 	}
