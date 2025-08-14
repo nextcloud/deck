@@ -19,6 +19,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
@@ -64,30 +65,46 @@ class CardService {
 	) {
 	}
 
-	public function enrichCards($cards) {
+	/**
+	 * @param Card[] $cards
+	 * @return CardDetails[]
+	 */
+	public function enrichCards(array $cards, Stack $stack = null): array {
+		if (!$cards) {
+			return [];
+		}
+
 		$user = $this->userManager->get($this->userId);
 
-		$cardIds = array_map(function (Card $card) use ($user) {
+		$cardIds = array_map(function (Card $card) use ($user, $stack) {
 			// Everything done in here might be heavy as it is executed for every card
 			$cardId = $card->getId();
 			$this->cardMapper->mapOwner($card);
 
 			$card->setAttachmentCount($this->attachmentService->count($cardId));
 
-			// TODO We should find a better way just to get the comment count so we can save 1-3 queries per card here
-			$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
-			$lastRead = $countComments > 0 ? $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user) : null;
-			$countUnreadComments = $lastRead ? $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead) : 0;
-			$card->setCommentsUnread($countUnreadComments);
-			$card->setCommentsCount($countComments);
-
-			$stack = $this->stackMapper->find($card->getStackId());
+			if ($stack === null) {
+				$stack = $this->stackMapper->find($card->getStackId());
+			}
 			$board = $this->boardService->find($stack->getBoardId(), false);
 			$card->setRelatedStack($stack);
 			$card->setRelatedBoard($board);
 
-			return $card->getId();
+			return $cardId;
 		}, $cards);
+
+		$commentsCountPerCardId = $this->commentsManager->getNumberOfCommentsForObjects('deckCard', $cardIds);
+		$unreadCommentsCountPerCardId = $this->commentsManager->getNumberOfUnreadCommentsForObjects('deckCard', $cardIds, $user);
+
+		foreach ($commentsCountPerCardId as $cardId => $commentCounts) {
+			foreach ($cards as $card) {
+				if ($card->getId() === $cardId) {
+					$card->setCommentsUnread($unreadCommentsCountPerCardId[$cardId]);
+					$card->setCommentsCount($commentCounts);
+					break;
+				}
+			}
+		}
 
 		$assignedLabels = $this->labelMapper->findAssignedLabelsForCards($cardIds);
 		$assignedUsers = $this->assignedUsersMapper->findIn($cardIds);
