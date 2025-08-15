@@ -274,6 +274,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "コメント {count} 件あり、 {unread} 件未読",
     "Todo items" : "Todo項目",
     "Edit card title" : "カードタイトルを編集する",
+    "Open link" : "リンクを開く",
     "Card deleted" : "カードが削除されました",
     "Edit title" : "タイトルを編集",
     "Assign to me" : "自分に割り当てる",
