@@ -31,6 +31,7 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\AssignmentServiceValidator;
@@ -123,14 +124,14 @@ class AssignmentServiceTest extends TestCase {
 
 	public function testAssignUser() {
 		$assignments = [];
-		$this->assignedUsersMapper->expects($this->once())
-			->method('findAll')
-			->with(123)
-			->willReturn($assignments);
 		$assignment = new Assignment();
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
 		$assignment->setType(Assignment::TYPE_USER);
+		$this->assignedUsersMapper->expects($this->exactly(2))
+			->method('findAll')
+			->with(123)
+			->willReturn([], [$assignment]);
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
 			->willReturn(1);
@@ -145,6 +146,15 @@ class AssignmentServiceTest extends TestCase {
 			->method('insert')
 			->with($assignment)
 			->willReturn($assignment);
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) use ($assignment) {
+				$this->assertInstanceOf(CardUpdatedEvent::class, $event);
+				$this->assertNotNull($event->getCard());
+				$this->assertNotNull($event->getCardBefore());
+				return true;
+			}));
 		$actual = $this->assignmentService->assignUser(123, 'admin');
 		$this->assertEquals($assignment, $actual);
 	}
@@ -200,14 +210,23 @@ class AssignmentServiceTest extends TestCase {
 		$assignments = [
 			$assignment
 		];
-		$this->assignedUsersMapper->expects($this->once())
+		$this->assignedUsersMapper->expects($this->exactly(2))
 			->method('findAll')
 			->with(123)
-			->willReturn($assignments);
+			->willReturn($assignments, []);
 		$this->assignedUsersMapper->expects($this->once())
 			->method('delete')
 			->with($assignment)
 			->willReturn($assignment);
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				$this->assertInstanceOf(CardUpdatedEvent::class, $event);
+				$this->assertNotNull($event->getCard());
+				$this->assertNotNull($event->getCardBefore());
+				return true;
+			}));
 		$actual = $this->assignmentService->unassignUser(123, 'admin');
 		$this->assertEquals($assignment, $actual);
 	}
