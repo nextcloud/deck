@@ -8,6 +8,7 @@ OC.L10N.register(
     "Done" : "Гатова",
     "File" : "Файл",
     "Cancel" : "Скасаваць",
+    "File already exists" : "Файл ужо існуе",
     "Active filters" : "Актыўныя фільтры",
     "Apply filter" : "Ужыць фільтр",
     "Open" : "Адкрыць",
