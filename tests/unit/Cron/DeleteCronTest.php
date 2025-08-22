@@ -34,6 +34,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\IAttachmentService;
+use OCA\Deck\Sharing\DeckShareProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
@@ -52,6 +53,8 @@ class DeleteCronTest extends TestCase {
 	private $attachmentMapper;
 	/** @var StackMapper|MockObject */
 	private $stackMapper;
+	/** @var DeckShareProvider */
+	private $deckShareProvider;
 	/** @var DeleteCron */
 	protected $deleteCron;
 
@@ -63,7 +66,16 @@ class DeleteCronTest extends TestCase {
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
-		$this->deleteCron = new DeleteCron($this->timeFactory, $this->boardMapper, $this->cardMapper, $this->attachmentService, $this->attachmentMapper, $this->stackMapper);
+		$this->deckShareProvider = $this->createMock(DeckShareProvider::class);
+		$this->deleteCron = new DeleteCron(
+			$this->timeFactory,
+			$this->boardMapper,
+			$this->cardMapper,
+			$this->attachmentService,
+			$this->attachmentMapper,
+			$this->stackMapper,
+			$this->deckShareProvider,
+		);
 	}
 
 	protected function getBoard($id) {
