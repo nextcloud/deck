@@ -14,6 +14,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
+use OCA\Deck\Sharing\DeckShareProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
@@ -30,14 +31,25 @@ class DeleteCron extends TimedJob {
 	private $attachmentMapper;
 	/** @var StackMapper */
 	private $stackMapper;
+	/** @var DeckShareProvider */
+	private $deckShareProvider;
 
-	public function __construct(ITimeFactory $time, BoardMapper $boardMapper, CardMapper $cardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper, StackMapper $stackMapper) {
+	public function __construct(
+		ITimeFactory $time,
+		BoardMapper $boardMapper,
+		CardMapper $cardMapper,
+		AttachmentService $attachmentService,
+		AttachmentMapper $attachmentMapper,
+		StackMapper $stackMapper,
+		DeckShareProvider $deckShareProvider,
+	) {
 		parent::__construct($time);
 		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
 		$this->attachmentService = $attachmentService;
 		$this->attachmentMapper = $attachmentMapper;
 		$this->stackMapper = $stackMapper;
+		$this->deckShareProvider = $deckShareProvider;
 
 		$this->setInterval(60 * 60 * 24);
 		$this->setTimeSensitivity(IJob::TIME_INSENSITIVE);
@@ -68,6 +80,12 @@ class DeleteCron extends TimedJob {
 				// Just delete the attachment if no service is available
 			}
 			$this->attachmentMapper->delete($attachment);
+		}
+
+		// Delete orphaned attachment shares
+		$shares = $this->deckShareProvider->getOrphanedAttachmentShares();
+		foreach ($shares as $share) {
+			$this->deckShareProvider->delete($share);
 		}
 
 		$stacks = $this->stackMapper->findToDelete();

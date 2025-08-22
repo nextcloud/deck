@@ -1046,4 +1046,21 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 		$cursor->closeCursor();
 	}
+
+	public function getOrphanedAttachmentShares(): array {
+		$allCardIds = $this->cardMapper->getAllCardIds();
+		$qb = $this->dbConnection->getQueryBuilder();
+		$qb->select('*')
+			->from('share', 's')
+			->where($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
+			->andWhere($qb->expr()->notIn('s.share_with', $qb->createNamedParameter($allCardIds, IQueryBuilder::PARAM_STR_ARRAY)));
+
+		$cursor = $qb->execute();
+		$shares = [];
+		while ($data = $cursor->fetch()) {
+			$shares[] = $this->createShareObject($data);
+		}
+
+		return $shares;
+	}
 }
