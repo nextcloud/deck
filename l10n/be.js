@@ -13,6 +13,7 @@ OC.L10N.register(
     "Apply filter" : "Ужыць фільтр",
     "Open" : "Адкрыць",
     "Clear filter" : "Ачысціць фільтр",
+    "Sharing" : "Абагульванне",
     "Tags" : "Тэгі",
     "Activity" : "Актыўнасць",
     "Undo" : "Адрабіць",
