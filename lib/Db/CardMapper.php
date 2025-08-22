@@ -645,4 +645,16 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 		$result->closeCursor();
 	}
+
+	public function getAllCardIds(): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id')
+			->from('deck_cards');
+		$result = $qb->executeQuery();
+		$ids = [];
+		while ($row = $result->fetch()) {
+			$ids[] = (int)$row['id'];
+		}
+		return $ids;
+	}
 }
