@@ -77,12 +77,10 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 
 	/**
 	 * @param numeric $boardId
-	 * @param int|null $limit
-	 * @param int|null $offset
 	 * @return Stack[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAll($boardId, $limit = null, $offset = null): array {
+	public function findAll($boardId, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
