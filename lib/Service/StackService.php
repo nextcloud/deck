@@ -20,6 +20,9 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\BoardUpdatedEvent;
+use OCA\Deck\Event\StackCreatedEvent;
+use OCA\Deck\Event\StackDeletedEvent;
+use OCA\Deck\Event\StackUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
@@ -217,6 +220,7 @@ class StackService {
 			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE
 		);
 		$this->changeHelper->boardChanged($boardId);
+		$this->eventDispatcher->dispatchTyped(new StackCreatedEvent($stack));
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
 
 		return $stack;
@@ -246,6 +250,7 @@ class StackService {
 			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new StackDeletedEvent($stack));
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
 		$this->enrichStackWithCards($stack);
 
@@ -288,6 +293,7 @@ class StackService {
 			ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new StackUpdatedEvent($stack, $changes->getBefore()));
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
 
 		return $stack;
@@ -308,6 +314,7 @@ class StackService {
 
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		$stackToSort = $this->stackMapper->find($id);
+		$changes = new ChangeSet($stackToSort);
 		$stacks = $this->stackMapper->findAll($stackToSort->getBoardId());
 		usort($stacks, static fn (Stack $stackA, Stack $stackB) => $stackA->getOrder() - $stackB->getOrder());
 		$result = [];
@@ -328,6 +335,7 @@ class StackService {
 			$result[$stack->getOrder()] = $stack;
 		}
 		$this->changeHelper->boardChanged($stackToSort->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new StackUpdatedEvent($stackToSort, $changes->getBefore()));
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stackToSort->getBoardId()));
 
 		return $result;
