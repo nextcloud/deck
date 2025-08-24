@@ -14,10 +14,10 @@
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
-					title="stack.title"
 					dir="auto"
 					tabindex="0"
 					:aria-label="stack.title"
+					:title="stack.title"
 					class="stack__title"
 					@click="startEditing(stack)"
 					@keydown.enter="startEditing(stack)">
@@ -108,7 +108,7 @@
 		</Container>
 
 		<transition name="slide-bottom" appear>
-			<div v-show="showAddCard" class="stack__card-add">
+			<div v-if="showAddCard" class="stack__card-add">
 				<form :class="{ 'icon-loading-small': stateCardCreating }"
 					@submit.prevent.stop="clickAddCard()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
@@ -365,37 +365,31 @@ export default {
 	@import './../../css/variables';
 
 	.stack {
-		width: $stack-width + $stack-spacing * 3;
+		width: 100%;
 	}
 
 	.stack__header {
 		display: flex;
 		position: sticky;
 		top: 0;
+		height: var(--default-clickable-area);
 		z-index: 100;
-		padding-left: $card-spacing;
-		padding-right: $card-spacing;
-		margin: 6px;
 		margin-top: 0;
 		cursor: grab;
 		background-color: var(--color-main-background);
 
 		// Smooth fade out of the cards at the top
 		&:before {
-			content: ' ';
+			content: '';
 			display: block;
 			position: absolute;
-			width: calc(100% - 16px);
-			height: 20px;
-			top: 30px;
-			left: 0px;
+			width: 100%;
+			height: $stack-gap;
+			bottom: 0;
 			z-index: 99;
 			transition: top var(--animation-slow);
-
-			background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(255, 255, 255, 0) 100%);
-			body.theme--dark & {
-				background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(0, 0, 0, 0) 100%);
-			}
+			background-image: linear-gradient(180deg, var(--color-main-background) 0%, transparent 100%);
+			transform: translateY(100%);
 		}
 
 		& > * {
@@ -404,8 +398,10 @@ export default {
 		}
 
 		h3, form {
-			flex-grow: 1;
+			flex: 1 1 auto;
+			min-width: 0;
 			display: flex;
+			align-items: center;
 			cursor: inherit;
 			margin: 0;
 
@@ -418,9 +414,8 @@ export default {
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			max-width: calc($stack-width - 60px);
 			border-radius: 3px;
-			padding: 4px 4px;
+			padding: $card-padding;
 			font-size: var(--default-font-size);
 
 			&:focus-visible {
@@ -430,7 +425,6 @@ export default {
 		}
 
 		form {
-			margin: -4px;
 			input {
 				font-weight: bold;
 				padding: 0 6px;
@@ -453,14 +447,25 @@ export default {
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
-		margin-bottom: 5px;
-		padding-top: var(--default-grid-baseline);
+		padding-bottom: $stack-gap;
 		background-color: var(--color-main-background);
+		position: relative;
+
+		// Smooth fade out of the cards at the top
+		&:before {
+			content: '';
+			display: block;
+			position: absolute;
+			width: 100%;
+			height: $stack-gap;
+			z-index: 99;
+			transition: bottom var(--animation-slow);
+			background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
+			transform: translateY(-100%);
+		}
 
 		form {
 			display: flex;
-			margin-left: $stack-spacing;
-			margin-right: $stack-spacing;
 			width: 100%;
 			border: 2px solid var(--color-border-maxcontrast);
 			border-radius: var(--border-radius-large);
@@ -481,7 +486,6 @@ export default {
 		input {
 			border: none;
 			margin: 0;
-			padding: 4px;
 		}
 	}
 
