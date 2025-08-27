@@ -2,29 +2,31 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
+# REST API
+
 The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
 
-# Prerequisites
+## Prerequisites
 
 - All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
-- The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
+- The API is located at `/index.php/apps/deck/api/v1.0`
 - All request parameters are required, unless otherwise specified
 
-## Naming
+### Glossary
 
-- Board is the project like grouping of tasks that can be shared to different users and groups
+- **Board** is the project like grouping of tasks that can be shared to different users and groups
+- **Stack** is the grouping of cards which is rendered in vertical columns in the UI
+- **Card** is the representation of a single task
+- **Label** is a board-level tag used to categorize and prioritize cards
 
-- Stack is the grouping of cards which is rendered in vertical columns in the UI
+### HTTP responses
 
-- Card is the representation of a single task
+The REST API follows conventional HTTP status codes. Successful responses have a status code of `2xx`. Client side errors are indicated as `4xx`. The most common ones are:
 
-- Labels are defined on a board level and can be assigned to any number of cards
+#### 400 Bad request
 
-## Global responses
-
-### 400 Bad request
-
-In case the request is invalid, e.g. because a parameter is missing or an invalid value has been transmitted, a 400 error will be returned:
+The request is invalid, e.g. because a parameter is missing or an invalid value has been transmitted.
 
 ```json
 {
@@ -33,9 +35,9 @@ In case the request is invalid, e.g. because a parameter is missing or an invali
 }
 ```
 
-### 403 Permission denied
+#### 403 Permission denied
 
-In any case a user doesn't have access to a requested entity, a 403 error will be returned:
+The user doesn't have access to a requested entity.
 
 ```json
 {
@@ -44,22 +46,45 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 }
 ```
 
-## Formats
+#### 404 Not found
 
-### Date
+The requested entity was not found.
 
-Datetime values in request data need to be provided in ISO-8601. Example: 2020-01-20T09:52:43+00:00
+```json
+{
+    "status": 404,
+    "message": "Card not found"
+}
+```
 
-## Headers
+#### 405 Method not allowed
 
-### If-Modified-Since
+The used combination of URL and HTTP method is not allowed. Most likely you have used a wrong HTTP method or URL.
+
+```json
+{
+    "status": 405,
+    "message": "Method not allowed"
+}
+```
+
+### Formats
+
+#### Date
+
+Datetime values in request data need to be provided in ISO-8601.  
+Example: `2020-01-20T09:52:43+00:00`
+
+### Headers
+
+#### If-Modified-Since
 
 Some index endpoints support limiting the result set to entries that have been changed since the given time.
 The supported date formats are:
 
-* IMF-fixdate:                 `Sun, 03 Aug 2019 10:34:12 GMT`
-* (obsolete) RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
-* (obsolete) ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
+- IMF-fixdate:                 `Sun, 03 Aug 2019 10:34:12 GMT`
+- _(obsolete)_ RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
+- _(obsolete)_ ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
 
 It is highly recommended to only use the IMF-fixdate format. Note that according to [RFC2616](https://tools.ietf.org/html/rfc2616#section-3.3) all HTTP date/time stamps MUST be represented in Greenwich Mean Time (GMT), without exception.
 
@@ -72,18 +97,18 @@ curl -u admin:admin -X GET \
     -H "If-Modified-Since: Mon, 05 Nov 2018 09:28:00 GMT"
 ```
 
-### ETag
+#### ETag
 
 An ETag header is returned in order to determine if further child elements have been updated for the following endpoints:
 
-- Fetch all user board `GET /api/v1.0/boards`
-- Fetch a single board `GET /api/v1.0/boards/{boardId}`
-- Fetch all stacks of a board `GET /api/v1.0/boards/{boardId}/stacks`
-- Fetch a single stacks of a board `GET /api/v1.0/boards/{boardId}/stacks/{stackId}`
-- Fetch a single card of a board `GET /api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}`
-- Fetch attachments of a card `GET /api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`
+- [List user boards](#list-boards)
+- [Get board by ID](#get-board)
+- [List board stacks](#list-stacks)
+- [Get stack by ID](#get-stack)
+- [Get card by ID](#get-card)
+- [List card attachments](#list-attachments)
 
-If a `If-None-Match` header is provided and the requested element has not changed a `304` Not Modified response will be returned.
+If a `If-None-Match` header is provided and the requested element has not changed a `304 Not Modified` response will be returned.
 
 Changes of child elements will propagate to their parents and also cause an update of the ETag which will be useful for determining if a sync is necessary on any client integration side. As an example, if a label is added to a card, the ETag of all related entities (the card, stack and board) will change.
 
@@ -97,14 +122,22 @@ If available the ETag will also be part of JSON response objects as shown below 
 }
 ```
 
-# Changelog
+#### x-nc-deck-session
 
-## API version 1.0
+The `x-nc-deck-session` header can be used when the [notify push client](https://github.com/nextcloud/notify_push) is active to receive live updates via websockets in clients. This is useful when multiple users are working on the same board at the same time. 
+
+The header allows the server to detect who caused a certain update (e.g. create a card) and not notify the causing user about the change. This makes client logic easier, because the client has to do less work to understand which incoming live change was already applied locally.
+
+The value is the session token returned from the [create session endpoint](#create-session).
+
+## Changelog
+
+### API version 1.0
 
 - Deck >=1.0.0: The maximum length of the card title has been extended from 100 to 255 characters
 - Deck >=1.0.0: The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
 
-## API version 1.1
+### API version 1.1
 
 This API version has become available with **Deck 1.3.0**.
 
@@ -112,37 +145,39 @@ This API version has become available with **Deck 1.3.0**.
 - The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
 - The attachments API endpoints will return other attachment types than deck_file
   - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
-  - Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
+  - Starting with Deck version 1.3.0 (API v1.1) files are stored within the user's regular Nextcloud files and the type `file` has been introduced for that
 
-## API version 1.2 (unreleased)
+### API version 1.2 (unreleased)
 
 - Endpoints for the new import functionality have been added:
-  - [GET /boards/import/getSystems - Import a board](#get-boardsimportgetsystems-import-a-board)
-  - [GET /boards/import/config/system/{schema} - Import a board](#get-boardsimportconfigsystemschema-import-a-board)
-  - [POST /boards/import - Import a board](#post-boardsimport-import-a-board)
+    - [GET /boards/import/getSystems - Get Systems](#get-systems)
+    - [GET /boards/import/config/system/{schema} - Get System Schema](#get-system-schema)
+    - [POST /boards/import - Import board](#import-board)
 - The `done` property was added to cards
 
-# Endpoints
+## Endpoints
 
-## Boards
+### Boards
 
-### GET /boards - Get a list of boards
+#### List boards {.ep-heading}
 
-#### Headers
+Get a list of all user boards.
+
+##### Path
+
+`GET /boards`{.ep-path}
+
+##### Headers
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
-#### Request parameters
+##### Query string parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
-| details   | Bool    | **Optional** Enhance boards with details about labels, stacks and users |
+| details   | Bool    | _(optional)_ enhance boards with details about labels, stacks and users |
 
-#### Response
-
-##### 200 Success
-
-Returns an array of board items
+##### Response
 
 ```json
 [
@@ -176,14 +211,22 @@ Returns an array of board items
 ]
 ```
 
-### POST /boards - Create a new board
+#### Create board {.ep-heading}
 
-#### Request body
+Create a new board. The user's ability to create new boards can be disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
+
+##### Path
+
+`POST /boards`{.ep-path}
+
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
 | title     | String | The title of the new board, maximum length is limited to 100 characters |
 | color     | String | The hexadecimal color of the new board (e.g. FF0000) |
+
+###### Example
 
 ```json
 {
@@ -192,9 +235,7 @@ Returns an array of board items
 }
 ```
 
-#### Response
-
-##### 200 Success
+##### Response
 
 ```json
 {
@@ -250,21 +291,21 @@ Returns an array of board items
 }
 ```
 
-##### 403 Forbidden
+#### Get board {.ep-heading}
 
-A 403 response might be returned if the users ability to create new boards has been disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
+Get a board by ID.
 
-### GET /boards/{boardId} - Get board details
+##### Path
 
-#### Request parameters
+`GET /boards/{boardId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
-
-##### 200 Success
+##### Response
 
 ```json
 {
@@ -325,15 +366,29 @@ A 403 response might be returned if the users ability to create new boards has b
 }
 ```
 
-### PUT /boards/{boardId} - Update board details
+#### Update board {.ep-heading}
 
-#### Request body
+Update a board by ID.
+
+##### Path
+
+`PUT /boards/{boardId}`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| boardId   | Integer | The id of the board |
+
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
 | title     | String | The title of the board, maximum length is limited to 100 characters |
 | color     | String | The hexadecimal color of the board (e.g. FF0000) |
 | archived  | Bool   | Whether or not this board should be archived. |
+
+###### Example
 
 ```json
 {
@@ -343,65 +398,92 @@ A 403 response might be returned if the users ability to create new boards has b
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the updated board.
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive - Archive a card
+#### Delete board {.ep-heading}
 
-#### Request parameters
+Delete a board by ID.
 
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-| cardId    | Integer | The id of the card                      |
+##### Path
 
-#### Response
+`DELETE /boards/{boardId}`{.ep-path}
 
-##### 200 Success
-
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive - Unarchive a card
-
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-| cardId    | Integer | The id of the card                      |
-
-#### Response
-
-##### 200 Success
-
-### DELETE /boards/{boardId} - Delete a board
-
-#### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
-| boardId   | Integer | The id of the board to fetch |
+| boardId   | Integer | The id of the board to delete |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the deleted board. The `deletedAt`-key contains the UNIX timestamp at deletion.
 
-### POST /boards/{boardId}/undo_delete - Restore a deleted board
+#### Restore board {.ep-heading}
 
-#### Request parameters
+Restore a deleted board by ID.
+
+##### Path
+
+`POST /boards/{boardId}/undo_delete`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
-| boardId   | Integer | The id of the board to fetch |
+| boardId   | Integer | The id of the board to restore |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the restored board.
 
-### POST /boards/{boardId}/acl - Add new acl rule
+#### Clone board {.ep-heading}
 
-#### Request body
+Clone a board by ID.
+
+##### Path
+
+`POST /boards/{boardId}/clone`{.ep-path}
+
+Create a copy of the board.
+
+##### Path parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
+
+##### Request body
+
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| withCards  | Bool   | Setting if the cards should be copied (Default: false) |
+| withAssignments  | Bool   | Setting if the card assignments should be cloned (Default: false) |
+| withLabels  | Bool   | Setting if the card labels should be cloned (Default: false) |
+| withDueDate  | Bool   | Setting if the card due dates should be cloned (Default: false) |
+| moveCardsToLeftStack  | Bool   | Setting if all cards should be moved to the most left column (useful for To-Do / Doing / Done boards) (Default: false) |
+| restoreArchivedCards  | Bool   | Setting if the archived cards should be unarchived (Default: false) |
+
+##### Response
+
+Returns the restored board.
+
+#### Create ACL rule {.ep-heading}
+
+Create an ACL for a board.
+
+##### Path
+
+`POST /boards/{boardId}/acl`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
+
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -411,14 +493,12 @@ A 403 response might be returned if the users ability to create new boards has b
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
 
-##### Supported participant types:
+###### Supported participant types:
 - 0 User
 - 1 Group
 - 7 Circle
 
-#### Response
-
-##### 200 Success
+##### Response
 
 ```json
 [{
@@ -437,9 +517,22 @@ A 403 response might be returned if the users ability to create new boards has b
 }]
 ```
 
-### PUT /boards/{boardId}/acl/{aclId} - Update an acl rule
+#### Update ACL rule {.ep-heading}
 
-#### Request parameters
+Update an ACL by ID.
+
+##### Path
+
+`PUT /boards/{boardId}/acl/{aclId}`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
+| aclId   | Integer | The id of the acl |
+
+##### Request body
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
@@ -447,51 +540,50 @@ A 403 response might be returned if the users ability to create new boards has b
 | permissionShare  | Bool   | Setting if the participant has sharing permissions |
 | permissionManage  | Bool   | Setting if the participant has management permissions |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the updated ACL.
 
-### POST /boards/{boardId}/clone - Clone a board
+#### Delete ACL rule {.ep-heading}
 
-Creates a copy of the board.
+Delete an ACL by ID.
 
-#### Request body
+##### Path
 
-| Parameter | Type   | Description                                          |
-| --------- | ------ | ---------------------------------------------------- |
-| withCards  | Bool   | Setting if the cards should be copied (Default: false) |
-| withAssignments  | Bool   | Setting if the card assignments should be cloned (Default: false) |
-| withLabels  | Bool   | Setting if the card labels should be cloned (Default: false) |
-| withDueDate  | Bool   | Setting if the card due dates should be cloned (Default: false) |
-| moveCardsToLeftStack  | Bool   | Setting if all cards should be moved to the most left column (useful for To-Do / Doing / Done boards) (Default: false) |
-| restoreArchivedCards  | Bool   | Setting if the archived cards should be unarchived (Default: false) |
+`DELETE /boards/{boardId}/acl/{aclId}`{.ep-path}
 
-#### Response
+##### Path parameters
 
-##### 200 Success
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board |
+| aclId   | Integer | The id of the acl |
 
-### DELETE /boards/{boardId}/acl/{aclId} - Delete an acl rule
+##### Response
 
-#### Response
+Returns the deleted ACL.
 
-##### 200 Success
+### Stacks
 
-## Stacks
+#### List stacks {.ep-heading}
 
-### GET /boards/{boardId}/stacks - Get stacks
+Get a list of all board stacks.
 
-#### Headers
+##### Path
+
+`GET /boards/{boardId}/stacks`{.ep-path}
+
+##### Headers
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
-
-#### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
 ```json
 [
@@ -507,17 +599,21 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ]
 ```
 
-##### 200 Success
+#### List archived stacks {.ep-heading}
 
-### GET /boards/{boardId}/stacks/archived - Get list of archived stacks
+Get a list of archived stacks
 
-#### Request parameters
+##### Path
+
+`GET /boards/{boardId}/stacks/archived`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
 
-#### Response
+##### Response
 
 ```json
 [
@@ -533,78 +629,118 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ]
 ```
 
-##### 200 Success
+#### Get stack {.ep-heading}
 
-### GET /boards/{boardId}/stacks/{stackId} - Get stack details
+Get a stack by ID.
 
-#### Request parameters
+##### Path
+
+`GET /boards/{boardId}/stacks/{stackId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
 | stackId   | Integer | The id of the stack                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+```json
+{
+  "title": "ToDo",
+  "boardId": 2,
+  "deletedAt": 0,
+  "lastModified": 1541426139,
+  "cards": [...],
+  "order": 999,
+  "id": 4
+}
+```
 
-### POST /boards/{boardId}/stacks - Create a new stack
+#### Create stack {.ep-heading}
 
-#### Request body
+Create a stack on the board.
+
+##### Path
+
+`POST /boards/{boardId}/stacks`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| boardId   | Integer | The id of the board to fetch |
+
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | title     | String | The title of the new stack, maximum length is limited to 100 characters |
 | order     | Integer | Order for sorting the stacks                         |
 
-#### Request parameters
+##### Response
 
-| Parameter | Type    | Description                  |
-| --------- | ------- | ---------------------------- |
-| boardId   | Integer | The id of the board to fetch |
+Returns the created stack.
 
-#### Response
+#### Update stack {.ep-heading}
 
-##### 200 Success
+Update a stack by ID.
 
-### PUT /boards/{boardId}/stacks/{stackId} - Update stack details
+##### Path
 
-#### Request parameters
+`PUT /boards/{boardId}/stacks/{stackId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
 | stackId   | Integer | The id of the stack                      |
 
-#### Request body
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | title     | String | The title of the stack, maximum length is limited to 100 characters |
 | order     | Integer | Order for sorting the stacks                         |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the updated stack.
 
-### DELETE /boards/{boardId}/stacks/{stackId} - Delete a stack
+#### Delete stack {.ep-heading}
 
-#### Request parameters
+Delete a stack by ID.
+
+##### Path
+
+`DELETE /boards/{boardId}/stacks/{stackId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
 | stackId   | Integer | The id of the stack                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the deleted stack. The `deletedAt`-key contains the UNIX timestamp at deletion.
 
-## Cards
+### Cards
 
-### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Get card details
+For searching cards across boards and cloning a card, see the [OCS Card API](#cards_1).
 
-#### Request parameters
+#### Get card {.ep-heading}
+
+Get a card by ID.
+
+##### Path
+
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -612,30 +748,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Response
-
-##### 200 Success
-
-### POST /boards/{boardId}/stacks/{stackId}/cards - Create a new card
-
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-
-#### Request body
-
-| Parameter | Type    | Description                                          |
-| --------- | ------- | ---------------------------------------------------- |
-| title     | String | The title of the card, maximum length is limited to 255 characters |
-| type      | String  | Type of the card (for later use) use 'plain' for now |
-| order     | Integer | Order for sorting the stacks                         |
-| description | String  | _(optional)_ The markdown description of the card  |
-| duedate   | timestamp | _(optional)_ The duedate of the card or null       |
-
-#### Response
+##### Response
 
 ```json
 {
@@ -661,11 +774,66 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 }
 ```
 
-##### 200 Success
+#### Create card {.ep-heading}
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Update card details
+Crreate a card on the board stack.
 
-#### Request parameters
+##### Path
+
+`POST /boards/{boardId}/stacks/{stackId}/cards`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+
+##### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| title     | String | The title of the card, maximum length is limited to 255 characters |
+| type      | String  | Type of the card (for later use) use 'plain' for now |
+| order     | Integer | Order for sorting the stacks                         |
+| description | String  | _(optional)_ The markdown description of the card  |
+| duedate   | timestamp | _(optional)_ The duedate of the card or null       |
+
+##### Response
+
+```json
+{
+   "title":"Test",
+   "description":null,
+   "stackId":6,
+   "type":"plain",
+   "lastModified":1541528026,
+   "createdAt":1541528026,
+   "labels":null,
+   "assignedUsers":null,
+   "attachments":null,
+   "attachmentCount":null,
+   "owner":"admin",
+   "order":999,
+   "archived":false,
+   "done":null,
+   "duedate": "2019-12-24T19:29:30+00:00",
+   "deletedAt":0,
+   "commentsUnread":0,
+   "id":10,
+   "overdue":0
+}
+```
+
+#### Update card {.ep-heading}
+
+Update a card by ID.
+
+##### Path
+
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -673,7 +841,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request body
 
 | Parameter   | Type            | Description                                                                                         |
 |-------------|-----------------|-----------------------------------------------------------------------------------------------------|
@@ -682,12 +850,13 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | type        | String          | Type of the card (for later use) use 'plain' for now                                                |
 | owner       | String          | The user that owns the card                                                                         |
 | order       | Integer         | Order for sorting the stacks                                                                        |
-| duedate     | timestamp       | The ISO-8601 formatted duedate of the card or null                                                  |
+| duedate     | timestamp \| null       | The ISO-8601 formatted duedate of the card or null                                                  |
 | archived    | bool            | Whether the card is archived or not                                                                 |
-| done        | timestamp\|null | The ISO-8601 formatted date when the card is marked as done (optional, null indicates undone state) |
+| done        | timestamp \| null | _(optional)_ The ISO-8601 formatted date when the card is marked as done (null indicates undone state) |
 
+###### Example
 
-```
+```json
 {
    "title": "Test card",
    "description": "A card description",
@@ -700,27 +869,19 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the updated card.
 
-### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Delete a card
+#### Delete card {.ep-heading}
 
-#### Request parameters
+Delete a card by ID.
 
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The id of the stack the card belongs to |
-| cardId    | Integer | The id of the card                      |
+##### Path
 
-#### Response
+`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}`{.ep-path}
 
-##### 200 Success
-
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel - Assign a label to a card
-
-#### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -728,18 +889,45 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Response
+
+Returns the deleted card. The `deletedAt`-key contains the UNIX timestamp at deletion.
+
+#### Assign label {.ep-heading}
+
+Assign a board label to a card.
+
+##### Path
+
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | labelId   | Integer | The label id to assign to the card      |
-#### Response
 
-##### 200 Success
+##### Response
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel - Remove a label to a card
+Returns an empty response.
 
-#### Request parameters
+#### Unassign label {.ep-heading}
+
+Unassign a board label from a card.
+
+##### Path
+
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -747,19 +935,25 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | labelId   | Integer | The label id to remove to the card      |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns an empty response.
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser - Assign a user to a card
+#### Assign user {.ep-heading}
 
-#### Request parameters
+Assign a board user to a card.
+
+##### Path
+
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -767,15 +961,13 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | userId    | String  | The user id to assign to the card       |
 
-#### Response
-
-##### 200 Success
+##### Response
 
 ```json
 {
@@ -789,24 +981,15 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 }
 ```
 
-##### 400 Bad request
+#### Unassign user {.ep-heading}
 
-```json
-{
-  "status": 400,
-  "message": "The user is already assigned to the card"
-}
-```
+Unassing a user from a card.
 
-The request can fail with a bad request response for the following reasons:
-- Missing or wrongly formatted request parameters
-- The user is already assigned to the card
-- The user is not part of the board
+##### Path
 
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser`{.ep-path}
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Unassign a user from a card
-
-#### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -814,19 +997,25 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request body
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | userId    | String  | The user id to unassign from the card   |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the removed user assignment.
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder - Change the sorting order of a card
+#### Move card {.ep-heading}
 
-#### Request parameters
+Update the order and/or the stack of the card.
+
+##### Path
+
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -834,32 +1023,75 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Request data
+##### Request body
 
 | Parameter | Type    | Description                                                 |
 | --------- | ------- | ----------------------------------------------------------- |
 | order     | Integer | The position in the stack where the card should be moved to |
 | stackId   | Integer | The id of the stack where the card should be moved to       |
 
+##### Response
 
-#### Response
+Returns a list of stack cards in the updated order.
 
-##### 200 Success
+#### Archive card {.ep-heading}
 
-## Labels
+Archive a card.
 
-### GET /boards/{boardId}/labels/{labelId} - Get label details
+##### Path
 
-#### Request parameters
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+##### Response
+
+Returns the archived card.
+
+#### Unarchive card {.ep-heading}
+
+Unarchive a card.
+
+##### Path
+
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+##### Response
+
+Returns the unarchived card.
+
+### Labels
+
+#### Get label {.ep-heading}
+
+Get a label by ID.
+
+##### Path
+
+`GET /boards/{boardId}/labels/{labelId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 | labelId   | Integer | The id of the label                      |
 
-#### Response
-
-##### 200 Success
+##### Response
 
 ```json
 {
@@ -871,15 +1103,21 @@ The request can fail with a bad request response for the following reasons:
 }
 ```
 
-### POST /boards/{boardId}/labels - Create a new label
+#### Create label {.ep-heading}
 
-#### Request parameters
+Create a label.
+
+##### Path
+
+`POST /boards/{boardId}/labels`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 
-#### Request data
+##### Request body
 
 ```json
 {
@@ -888,21 +1126,34 @@ The request can fail with a bad request response for the following reasons:
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+```json
+{
+  "title": "Finished",
+  "color": "31CC7C",
+  "boardId": "2",
+  "cardId": null,
+  "id": 5
+}
+```
 
-### PUT /boards/{boardId}/labels/{labelId} - Update label details
+#### Update label {.ep-heading}
 
-#### Request parameters
+Update a label by ID.
+
+##### Path
+
+`PUT /boards/{boardId}/labels/{labelId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 | labelId   | Integer | The id of the label                      |
 
-
-#### Request data
+##### Request body
 
 ```json
 {
@@ -911,28 +1162,41 @@ The request can fail with a bad request response for the following reasons:
 }
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the updated label.
 
-### DELETE /boards/{boardId}/labels/{labelId} - Delete a label
+#### Delete label {.ep-heading}
 
-#### Request parameters
+Delete a label by ID.
+
+##### Path
+
+`DELETE /boards/{boardId}/labels/{labelId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 | labelId   | Integer | The id of the label                      |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the deleted label.
 
-## Attachments
+### Attachments
 
-### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Get a list of attachments
+#### List attachments {.ep-heading}
 
-#### Request parameters
+Get a list of all card attachments. When api version `v1.0` is used, then this endpoint returns only
+attachments of type `deck_file`.
+
+##### Path
+
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -940,9 +1204,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
-#### Response
-
-##### 200 Success
+##### Response
 
 ```json
 [
@@ -970,9 +1232,19 @@ The request can fail with a bad request response for the following reasons:
 
 ```
 
-### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Get the attachment file
+#### Get attachment {.ep-heading}
 
-#### Request parameters
+Get a card attachment by ID.
+
+##### Path
+
+v1.0  
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
+
+v1.1  
+`GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -980,14 +1252,21 @@ The request can fail with a bad request response for the following reasons:
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_file` |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the card attachment.
 
-### POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Upload an attachment
+#### Upload attachment {.ep-heading}
 
-#### Request parameters
+Upload a card attachment.
+
+##### Path
+
+`POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -995,7 +1274,7 @@ The request can fail with a bad request response for the following reasons:
 | stackId   | Integer | The id of the stack the attachment belongs to |
 | cardId    | Integer | The id of the card the attachment belongs to  |
 
-#### Request data
+##### Request body
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -1003,15 +1282,24 @@ The request can fail with a bad request response for the following reasons:
 | file      | Binary  | File data to add as an attachment             |
 
 - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
-- Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
+- Starting with Deck version 1.3.0 (API v1.1) files are stored within the user's regular Nextcloud files and the type `file` has been introduced for that
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the card attachement.
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Update an attachment
+#### Update attachment {.ep-heading}
 
-#### Request parameters
+Update a card attachment by ID.
+
+##### Path
+v1.0  
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
+
+v1.1  
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
+
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1019,8 +1307,9 @@ The request can fail with a bad request response for the following reasons:
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_file` |
 
-#### Request data
+##### Request body
 
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
@@ -1029,29 +1318,23 @@ The request can fail with a bad request response for the following reasons:
 
 For now only `deck_file` is supported as an attachment type.
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the updated card attachment.
 
-### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Delete an attachment
+#### Delete attachment {.ep-heading}
 
+Delete a card attachment by ID.
 
-#### Request parameters
+##### Path
 
-| Parameter    | Type    | Description                                   |
-| ------------ | ------- | --------------------------------------------- |
-| boardId      | Integer | The id of the board the attachment belongs to |
-| stackId      | Integer | The id of the stack the attachment belongs to |
-| cardId       | Integer | The id of the card the attachment belongs to  |
-| attachmentId | Integer | The id of the attachment                      |
+v1.0  
+`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}`{.ep-path}
 
-#### Response
+v1.1  
+`DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}`{.ep-path}
 
-##### 200 Success
-
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore - Resore a deleted attachment
-
-#### Request parameters
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1059,33 +1342,48 @@ For now only `deck_file` is supported as an attachment type.
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_file` |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the deleted attachment.
 
-### GET /boards/import/getSystems - Import a board
+#### Restore attachment {.ep-heading}
 
-#### Request parameters
+Restore a deleted card attachment by ID.
+
+##### Path
+v1.0  
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore`{.ep-path}
+
+v1.1  
+`PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{type}/{attachmentId}/restore`{.ep-path}
+
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
-| system       | Integer | The system name. Example: trello              |
+| boardId      | Integer | The id of the board the attachment belongs to |
+| stackId      | Integer | The id of the stack the attachment belongs to |
+| cardId       | Integer | The id of the card the attachment belongs to  |
+| attachmentId | Integer | The id of the attachment                      |
+| type | String | `file` \| `deck_file` |
 
-#### Response
+##### Response
 
-Make a request to see the json schema of system
+Returns the restored attachment.
 
-```json
-{
-}
-```
+### Import API
 
-### GET /boards/import/config/system/{schema} - Import a board
+#### Get Systems {.ep-heading}
 
-#### Request parameters
+Get the allowed import systems.
 
-#### Response
+##### Path
+
+`GET /boards/import/getSystems`{.ep-path}
+
+##### Response
 
 ```json
 [
@@ -1093,9 +1391,35 @@ Make a request to see the json schema of system
 ]
 ```
 
-### POST /boards/import - Import a board
+#### Get System Schema {.ep-heading}
 
-#### Request parameters
+Get a system schema.
+
+##### Path
+
+`GET /boards/import/config/system/{system}`{.ep-path}
+
+##### Path parameters
+
+| Parameter    | Type    | Description                                   |
+| ------------ | ------- | --------------------------------------------- |
+| system       | Integer | The system name. Example: trello              |
+
+##### Response
+
+```json
+{}
+```
+
+#### Import board {.ep-heading}
+
+Import a board from another system.
+
+##### Path
+
+`POST /boards/import`{.ep-path}
+
+##### Path parameters
 
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
@@ -1103,22 +1427,28 @@ Make a request to see the json schema of system
 | config       | Object  | The config object  (JSON)                     |
 | data         | Object  | The data object to import (JSON)              |
 
-#### Response
+##### Response
 
-##### 200 Success
+Returns the imported board.
 
-# OCS API
+## OCS API
 
 The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`.
 This has the benefit that both the web UI as well as external integrations can use the same API.
 
-## Config
+### Config
 
 Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints.
 
-### GET /api/v1.0/config - Fetch app configuration values
+#### Get app configuration {.ep-heading}
 
-#### Response
+Get the configuration of the deck app.
+
+##### Path
+
+`GET /api/v1.0/config`{.ep-path}
+
+##### Response
 
 | Config key | Description |
 | --- | --- |
@@ -1127,7 +1457,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | cardIdBadge | Determines if the ID badges are displayed on cards (boolean) |
 | groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|
 
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1151,18 +1481,37 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 ```
 
-### POST /api/v1.0/config/{id}/{key} - Set a config value
+#### Set config value {.ep-heading}
 
+Set a configuration value by key.
 
-#### Request parameters
+##### Path
+
+`POST /api/v1.0/config/{key}`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
-| id    | Integer | The id of the board                      |
-| key     | String | The config key to set, prefixed with `board:{boardId}:` for board specific settings |
-| value    | String | The value that should be stored for the config key |
+| key     | String | The config key to set, prefixed with `board:{boardId}:` to apply setting only for a specific board |
 
-##### Board configuration
+##### Request body
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| value    | Any | The value that should be stored for the config key |
+
+###### Example
+
+```bash
+curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar'
+ -H 'Accept: application/json'
+ -H "Content-Type: application/json"
+ -H 'OCS-APIRequest: true'
+ --data-raw '{"value":false}'
+```
+
+###### Board configuration options
 
 | Key | Value |
 | --- | ----- |
@@ -1171,11 +1520,9 @@ Deck stores user and app configuration values globally and per board. The GET en
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
 
-#### Example request
+##### Response
 
-```
-curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar' -H 'Accept: application/json' -H "Content-Type: application/json" -H 'OCS-APIRequest: true' --data-raw '{"value":false}'
-
+```json
 {
   "ocs": {
     "meta": {
@@ -1186,16 +1533,19 @@ curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/
     "data": false
   }
 }
-
 ```
 
-## Comments
+### Comments
 
-### GET /cards/{cardId}/comments - List comments
+#### List comments {.ep-heading}
 
-#### Request parameters
+List comments for a card.
 
-string $cardId, int $limit = 20, int $offset = 0
+##### Path
+
+`GET /cards/{cardId}/comments`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
@@ -1203,18 +1553,18 @@ string $cardId, int $limit = 20, int $offset = 0
 | limit     | Integer | The maximum number of comments that should be returned, defaults to 20 |
 | offset    | Integer | The start offset used for pagination, defaults to 0 |
 
-```
+###### Example
+
+```bash
 curl 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
 ```
 
-#### Response
+##### Response
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-##### 200 Success
-
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1283,33 +1633,43 @@ In case a comment is marked as a reply to another comment object, the parent com
 ]
 ```
 
+#### Create comment {.ep-heading}
 
-### POST /cards/{cardId}/comments - Create a new comment
+Create comment for a card.
 
-#### Request parameters
+##### Path
+
+`POST /cards/{cardId}/comments`{.ep-path}
+
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | cardId    | Integer | The id of the card                      |
+
+##### Request body
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
 | message     | String | The message of the comment, maximum length is limited to 1000 characters |
-| parentId    | Integer | _(optional)_ The start offset used for pagination, defaults to null |
+| parentId    | Integer \| null | The id of the parent comment (when replying) |
 
 Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
 
-```
+###### Example
+
+```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
     --data '{"message":"My message to @bob","parentId":null}'
 ```
 
-#### Response
+##### Response
 
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+The created comment will be provided under the `ocs.data` key.
 
-##### 200 Success
-
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1337,45 +1697,43 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-##### 400 Bad request
+#### Update comment {.ep-heading}
 
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
+Update a card comment by ID. Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
 
-##### 404 Not found
+##### Path
 
-A not found response might be returned if:
-- The card for the given cardId could not be found
-- The parent comment could not be found
+`PUT /cards/{cardId}/comments/{commentId}`{.ep-path}
 
-
-### PUT /cards/{cardId}/comments/{commentId} - Update a comment
-
-#### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | cardId    | Integer | The id of the card                      |
 | commentId    | Integer | The id of the comment                      |
+
+##### Request body
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
 | message     | String | The message of the comment, maximum length is limited to 1000 characters |
 
 Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
 
-Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+###### Example
 
-```
-curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+```bash
+curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
     --data '{"message":"My message"}'
 ```
 
-#### Response
+##### Response
 
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+The updated comment will be provided under the `ocs.data` key.
 
-##### 200 Success
-
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1397,40 +1755,34 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-##### 400 Bad request
+#### Delete comment {.ep-heading}
 
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
+Delete a card comment by ID. Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
 
-##### 404 Not found
+##### Path
 
-A not found response might be returned if:
-- The card for the given cardId could not be found
-- The comment could not be found
+`DELETE /cards/{cardId}/comments/{commentId}`{.ep-path}
 
-### DELETE /cards/{cardId}/comments/{commentId} - Delete a comment
-
-#### Request parameters
+##### Path parameters
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | cardId    | Integer | The id of the card                      |
 | commentId    | Integer | The id of the comment                      |
 
-Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+##### Example
 
-```
-curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+```bash
+curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments/123' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true'
     -H 'Content-Type: application/json;charset=utf-8'
 ```
 
-#### Response
+##### Response
 
 A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
 
-##### 200 Success
-
-```
+```json
 {
   "ocs": {
     "meta": {
@@ -1443,37 +1795,32 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-##### 400 Bad request
+### Sessions
 
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
+#### Create session {.ep-heading}
 
-##### 404 Not found
+Create a session.
 
-A not found response might be returned if:
-- The card for the given cardId could not be found
-- The comment could not be found
+##### Path
 
+`PUT /session/create`{.ep-path}
 
-## Sessions
-
-### PUT /session/create - creates a new session
-
-#### Request parameters
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | boardId   | Integer | The id of the opened board |
 
-```
+###### Example
+
+```bash
 curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
     -H 'Content-Type: application/json;charset=utf-8' \
     --data '{"boardId":1}'
 ```
 
-#### Response
-
-##### 200 Success
+##### Response
 
 ```json
 {
@@ -1490,27 +1837,32 @@ curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session
 }
 ```
 
+#### Sync session {.ep-heading}
 
-### POST /session/sync - notifies the server, that the session is still open
+Notify the server that the session is still open.
 
-#### Request body
+##### Path
+
+`POST /session/sync`{.ep-path}
+
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | boardId   | Integer | The id of the opened board |
 | token     | String  | The session token from the /sessions/create response |
 
+###### Example
 
-```
+```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
     -H 'Content-Type: application/json;charset=utf-8' \
     --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
 ```json
 {
   "ocs": {
@@ -1524,29 +1876,32 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
 }
 ```
 
-##### 404 Not Found
-the provided token is invalid or expired
+#### Close session {.ep-heading}
 
+Close a session.
 
-### POST /session/close - closes the session
+##### Path
 
-#### Request body
+`POST /session/close`{.ep-path}
+
+##### Request body
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
 | boardId   | Integer | The id of the opened board                           |
 | token     | String  | The session token from the /sessions/create response |
 
-```
+###### Example
+
+```bash
 curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/close' \
     -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
     -H 'Content-Type: application/json;charset=utf-8' \
     --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
 ```
 
-#### Response
+##### Response
 
-##### 200 Success
 ```json
 {
   "ocs": {
@@ -1556,6 +1911,167 @@ curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/sessio
       "message": "OK"
     },
     "data": []
+  }
+}
+```
+
+### Overview API
+
+#### List upcoming cards {.ep-heading}
+
+Get a list of cards across all user boards. The cards are grouped by their due dates:
+
+- overdue
+- today
+- tomorrow
+- next 7 days
+- later
+- no due
+
+##### Path
+
+`GET /overview/upcoming`{.ep-path}
+
+##### Response
+
+The `ocs.data` key contains card groups that map to card arrays. A group without any cards will not be present in the result. Unlike the cards returned from the other API endpoints, upcoming cards embed a `board` object that contains the board's ID and title.
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "overdue": [...],
+      "today": [...],
+      "tomorrow": [...],
+      "nextSevenDays": [...],
+      "later": [...],
+      "nodue": [...],
+    }
+  }
+}
+```
+
+### Cards
+
+#### Clone card {.ep-heading}
+
+Clone a card.
+
+##### Path
+
+`POST /cards/${cardId}/clone`{.ep-path}
+
+##### Path parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| cardId    | Integer | The id of the card to be cloned                      |
+
+##### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| targetStackId   | Integer | _(optional)_ The id of the target stack, defaults to the current stack                           |
+
+##### Response
+
+The `ocs.data` key contains the cloned card.
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "title":"Clone",
+      "description":null,
+      "stackId":6,
+      "type":"plain",
+      "lastModified":1541528026,
+      "createdAt":1541528026,
+      "labels":null,
+      "assignedUsers":null,
+      "attachments":null,
+      "attachmentCount":null,
+      "owner":"admin",
+      "order":999,
+      "archived":false,
+      "done":null,
+      "duedate": "2019-12-24T19:29:30+00:00",
+      "deletedAt":0,
+      "commentsUnread":0,
+      "id":10,
+      "overdue":0
+    }
+  }
+}
+```
+
+#### Search cards {.ep-heading}
+
+Search cards across all user boards that match the search term in title or description. Returned cards are sorted in decreasing order by `last_modified`.
+
+##### Path
+
+`GET /search?term=test`{.ep-path}
+
+##### Query string parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| term    | String | search term                      |
+| limit    | Integer | _(optional)_ maximum number of returned results                    |
+| cursor    | Integer | _(optional)_ UNIX timestamp in second. When set, only cards which were modified before `cursor` will be retrieved |
+
+##### Response
+
+The `ocs.data` key contains the matching cards. Unlike cards from the other API endpoint, these cards contain richer data of their stack and board under `relatedStack` and `relatedBoard` resp.
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": { 
+      [
+        "title":"Clone",
+        "description":null,
+        "stackId":6,
+        "type":"plain",
+        "lastModified":1541528026,
+        "createdAt":1541528026,
+        "labels":null,
+        "assignedUsers":null,
+        "attachments":null,
+        "attachmentCount":null,
+        "owner":"admin",
+        "order":999,
+        "archived":false,
+        "done":null,
+        "duedate": "2019-12-24T19:29:30+00:00",
+        "deletedAt":0,
+        "commentsUnread":0,
+        "id":10,
+        "overdue":0,
+        "relatedBoard":  {
+          ...
+        },
+        "relatedStack": {
+          ...
+        }
+      ]
+    }
   }
 }
 ```
