@@ -26,6 +26,7 @@ OC.L10N.register(
     "Delete" : "Выдаліць",
     "Edit" : "Рэдагаваць",
     "Members" : "Удзельнікі",
+    "Show in Files" : "Паказаць у Файлах",
     "Download" : "Спампаваць",
     "Modified" : "Зменены",
     "Comments" : "Каментарыі",
