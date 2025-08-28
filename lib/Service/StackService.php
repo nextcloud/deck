@@ -82,7 +82,7 @@ class StackService {
 			return;
 		}
 
-		$stack->setCards($this->cardService->enrichCards($cards));
+		$stack->setCards($this->cardService->enrichCards($cards, $stack));
 	}
 
 	private function enrichStacksWithCards($stacks, $since = -1) {
