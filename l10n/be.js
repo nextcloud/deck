@@ -2,6 +2,8 @@ OC.L10N.register(
     "deck",
     {
     "The file was uploaded" : "Файл быў запампаваны.",
+    "The file was only partially uploaded" : "Файл быў запампаваны толькі часткова",
+    "No file was uploaded" : "Ніводзін файл не быў запампаваны",
     "Missing a temporary folder" : "Адсутнічае часовая папка",
     "Could not write file to disk" : "Не ўдалося запісаць файл на дыск",
     "A PHP extension stopped the file upload" : "Пашырэнне PHP спыніла запампоўванне файла",
@@ -14,6 +16,7 @@ OC.L10N.register(
     "Apply filter" : "Ужыць фільтр",
     "Open" : "Адкрыць",
     "Clear filter" : "Ачысціць фільтр",
+    "Details" : "Падрабязнасці",
     "Sharing" : "Абагульванне",
     "Tags" : "Тэгі",
     "Activity" : "Актыўнасць",
