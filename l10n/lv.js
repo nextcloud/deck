@@ -63,7 +63,7 @@ OC.L10N.register(
     "Reply" : "Atbildēt",
     "Update" : "Atjaunināt",
     "Description" : "Apraksts",
-    "Select Date" : "Izvēlieties datumu",
+    "Select Date" : "Atlasīt datumu",
     "Later today – {timeLocale}" : "Vēlāk šodien – {timeLocale}",
     "Set due date for later today" : "Iestatīt beigu datumu vēlāk šodienā",
     "(group)" : "(grupa)",
