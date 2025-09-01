@@ -231,11 +231,11 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->from('deck_cards', 'c')
 			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
 			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
-			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('b.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->setMaxResults($limit)
 			->setFirstResult($offset)
-			->orderBy('c.lastmodified')
+			->orderBy('c.last_modified')
 			->addOrderBy('c.id');
 		return $this->findEntities($qb);
 	}
