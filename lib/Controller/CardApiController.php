@@ -185,7 +185,7 @@ class CardApiController extends ApiController {
 	 * Reorder cards
 	 */
 	public function reorder($stackId, $order) {
-		$card = $this->cardService->reorder($this->request->getParam('cardId'), $stackId, $order);
+		$card = $this->cardService->reorder((int)$this->request->getParam('cardId'), (int)$stackId, (int)$order);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 }
