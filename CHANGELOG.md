@@ -5,6 +5,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.0-beta.1
+
+### Added
+- feat: update default content @luka-nextcloud [#6740](https://github.com/nextcloud/deck/pull/6740)
+- feat: add board import and export @luka-nextcloud [#6872](https://github.com/nextcloud/deck/pull/6872)
+- feat: use outline icons @luka-nextcloud [#7114](https://github.com/nextcloud/deck/pull/7114)
+- Add OCC commands for global calendar feature opt-in and opt-out in Deck @Fledermaus-20 [#7080](https://github.com/nextcloud/deck/pull/7080)
+
+### Fixed
+- CSV export fixes @gidan80 [#6800](https://github.com/nextcloud/deck/pull/6800)
+
 ## 1.15.0-beta.1
 ### Fixed
 - fix: Catch not found card @juliusknorr [#6646](https://github.com/nextcloud/deck/pull/6646)
