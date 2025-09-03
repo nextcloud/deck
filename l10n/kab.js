@@ -26,6 +26,7 @@ OC.L10N.register(
     "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
+    "Ctrl" : "Ctrl",
     "Search" : "Nadi",
     "Cancel edit" : "Sefsex aseẓreg",
     "No notifications" : "Ulac tisezmal",
