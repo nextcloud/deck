@@ -101,6 +101,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	@import './../../css/variables';
+
 	.badges {
 		display: flex;
 		width: 100%;
@@ -111,6 +113,7 @@ export default {
 		.icon-badge {
 			color: var(--color-text-maxcontrast);
 			display: flex;
+			align-items: center;
 			margin-right: 2px;
 
 			span,
@@ -125,6 +128,7 @@ export default {
 		flex-direction: row;
 		flex-wrap: wrap;
 		gap: 3px;
+		height: var(--default-clickable-area);
 	}
 
 	.badges .icon.due {
