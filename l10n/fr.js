@@ -389,7 +389,7 @@ OC.L10N.register(
     "Create a new card" : "Créer une nouvelle carte",
     "Card title" : "Titre de la carte",
     "Creating the new card …" : "Création de la nouvelle carte…",
-    "Card \"{card}\" was added to \"{board}\"" : "La carte « {card} » a été ajoutée au tableau « {board} »",
+    "Card \"{card}\" was added to \"{board}\"" : "La carte \"{card}\" a été ajoutée au tableau  \"{board}\"",
     "Open card" : "Ouvrir la carte",
     "Close" : "Fermer",
     "No upcoming cards" : "Pas de cartes à venir",
