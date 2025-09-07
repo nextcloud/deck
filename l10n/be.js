@@ -36,6 +36,7 @@ OC.L10N.register(
     "Delete" : "Выдаліць",
     "Edit" : "Рэдагаваць",
     "Members" : "Удзельнікі",
+    "Invalid path selected" : "Выбраны памылковы шлях",
     "Show in Files" : "Паказаць у Файлах",
     "Download" : "Спампаваць",
     "Modified" : "Зменены",
