@@ -212,28 +212,32 @@ Returns an array of board items
             "color": "31CC7C",
             "boardId": 10,
             "cardId": null,
-            "id": 37
+            "id": 37,
+			"customSettings": {}
         },
         {
             "title": "To review",
             "color": "317CCC",
             "boardId": 10,
             "cardId": null,
-            "id": 38
+            "id": 38,
+			"customSettings": {}
         },
         {
             "title": "Action needed",
             "color": "FF7A66",
             "boardId": 10,
             "cardId": null,
-            "id": 39
+            "id": 39,
+			"customSettings": { "isImportant": true }
         },
         {
             "title": "Later",
             "color": "F1DB50",
             "boardId": 10,
             "cardId": null,
-            "id": 40
+            "id": 40,
+			"customSettings": {}
         }
     ],
     "acl": [],
@@ -282,28 +286,32 @@ A 403 response might be returned if the users ability to create new boards has b
             "color": "31CC7C",
             "boardId": "10",
             "cardId": null,
-            "id": 37
+            "id": 37,
+			"customSettings": {}
         },
         {
             "title": "To review",
             "color": "317CCC",
             "boardId": "10",
             "cardId": null,
-            "id": 38
+            "id": 38,
+			"customSettings": {}
         },
         {
             "title": "Action needed",
             "color": "FF7A66",
             "boardId": "10",
             "cardId": null,
-            "id": 39
+            "id": 39,
+			"customSettings": {}
         },
         {
             "title": "Later",
             "color": "F1DB50",
             "boardId": "10",
             "cardId": null,
-            "id": 40
+            "id": 40,
+			"customSettings": {}
         }
     ],
     "acl": [],
@@ -867,7 +875,8 @@ The request can fail with a bad request response for the following reasons:
   "color": "31CC7C",
   "boardId": "2",
   "cardId": null,
-  "id": 5
+  "id": 5,
+  "customSettings": { "isImportant": false }
 }
 ```
 
@@ -875,16 +884,18 @@ The request can fail with a bad request response for the following reasons:
 
 #### Request parameters
 
-| Parameter | Type    | Description                              |
-| --------- | ------- | ---------------------------------------- |
-| boardId   | Integer | The id of the board the label belongs to |
+| Parameter      | Type    | Description                                                                  |
+|----------------|---------|------------------------------------------------------------------------------|
+| boardId        | Integer | The id of the board the label belongs to                                     |
+| customSettings | Object  | An key-value structure, currently supported only bool property `isImportant` |
 
 #### Request data
 
 ```json
 {
   "title": "Finished",
-  "color": "31CC7C"
+  "color": "31CC7C",
+  "customSettings": { "isImportant": false }
 }
 ```
 
@@ -896,10 +907,11 @@ The request can fail with a bad request response for the following reasons:
 
 #### Request parameters
 
-| Parameter | Type    | Description                              |
-| --------- | ------- | ---------------------------------------- |
-| boardId   | Integer | The id of the board the label belongs to |
-| labelId   | Integer | The id of the label                      |
+| Parameter | Type    | Description                                                                       |
+| --------- | ------- |-----------------------------------------------------------------------------------|
+| boardId   | Integer | The id of the board the label belongs to                                          |
+| labelId   | Integer | The id of the label                                                               |
+| customSettings | Object  | An key-value structure, currently supported only bool property `isImportant` |
 
 
 #### Request data
@@ -907,7 +919,8 @@ The request can fail with a bad request response for the following reasons:
 ```json
 {
   "title": "Finished",
-  "color": "31CC7C"
+  "color": "31CC7C",
+  "customSettings": {  }
 }
 ```
 

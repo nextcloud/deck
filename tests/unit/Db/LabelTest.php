@@ -45,11 +45,13 @@ class LabelTest extends TestCase {
 			'lastModified' => null,
 			'color' => '000000',
 			'ETag' => $label->getETag(),
+			'customSettings' => new \stdClass(),
 		], $label->jsonSerialize());
 	}
 	public function testJsonSerializeCard() {
 		$label = $this->createLabel();
 		$label->setCardId(123);
+		$label->setCustomSettingsArray(['isImportant' => true]);
 		$this->assertEquals([
 			'id' => 1,
 			'title' => 'My Label',
@@ -58,6 +60,7 @@ class LabelTest extends TestCase {
 			'lastModified' => null,
 			'color' => '000000',
 			'ETag' => $label->getETag(),
+			'customSettings' => ['isImportant' => true]
 		], $label->jsonSerialize());
 	}
 }

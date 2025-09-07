@@ -15,7 +15,11 @@
 							@input="updateColor">
 							<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker" />
 						</NcColorPicker>
-						<input v-model="editingLabel.title" type="text">
+						<NcCheckboxRadioSwitch v-model="editingLabelIsImportant"
+							type="switch">
+							{{ t('deck', 'Important') }}
+						</NcCheckboxRadioSwitch>
+						<input v-model="editingLabel.title" type="text" style="margin-right: 20px;">
 						<input :disabled="!editLabelObjValidated"
 							type="submit"
 							value=""
@@ -34,10 +38,18 @@
 				</template>
 				<template v-else>
 					<div v-if="canManage && !isArchived" class="label-title" @click="clickEdit(label)">
-						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
+						<span :style="{
+							backgroundColor: `#${label.color}`,
+							color: textColor(label.color),
+							fontWeight: label.customSettings.isImportant ? 'bold' : 'normal'
+						}">{{ label.title }}</span>
 					</div>
 					<div v-else class="label-title">
-						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
+						<span :style="{
+							backgroundColor: `#${label.color}`,
+							color: textColor(label.color),
+							fontWeight: label.customSettings.isImportant ? 'bold' : 'normal'
+						}">{{ label.title }}</span>
 					</div>
 
 					<NcActions v-if="canManage && !isArchived">
@@ -62,7 +74,11 @@
 						@input="updateColor">
 						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
 					</NcColorPicker>
-					<input v-model="addLabelObj.title" type="text">
+					<NcCheckboxRadioSwitch v-model="addLabelIsImportant"
+						type="switch">
+						{{ t('deck', 'Important') }}
+					</NcCheckboxRadioSwitch>
+					<input v-model="addLabelObj.title" type="text" style="margin-right: 20px;">
 					<input :disabled="!addLabelObjValidated"
 						type="submit"
 						value=""
@@ -88,7 +104,7 @@
 
 import { mapGetters } from 'vuex'
 import Color from '../../mixins/color.js'
-import { NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
+import { NcColorPicker, NcActions, NcActionButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'TagsTabSidebar',
@@ -96,6 +112,7 @@ export default {
 		NcColorPicker,
 		NcActions,
 		NcActionButton,
+		NcCheckboxRadioSwitch,
 	},
 	mixins: [Color],
 	data() {
@@ -139,7 +156,22 @@ export default {
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => a.title.localeCompare(b.title))
 		},
-
+		addLabelIsImportant: {
+			get() {
+				return this.addLabelObj?.customSettings?.isImportant || false
+			},
+			set(isImportant) {
+				this.addLabelObj.customSettings = { ...this.addLabelObj.customSettings, isImportant }
+			},
+		},
+		editingLabelIsImportant: {
+			get() {
+				return this.editingLabel?.customSettings?.isImportant
+			},
+			set(isImportant) {
+				this.editingLabel.customSettings = { ...this.editingLabel.customSettings, isImportant }
+			},
+		},
 	},
 	methods: {
 		updateColor(c) {
@@ -157,15 +189,23 @@ export default {
 			this.$store.dispatch('removeLabelFromCurrentBoard', id)
 		},
 		updateLabel(label) {
-			this.$store.dispatch('updateLabelFromCurrentBoard', this.editingLabel)
+			const payload = {
+				...this.editingLabel,
+				customSettings: { ...this.editingLabel.customSettings },
+			}
+			this.$store.dispatch('updateLabelFromCurrentBoard', payload)
 			this.editingLabelId = null
 		},
 		clickShowAddLabel() {
-			this.addLabelObj = { cardId: null, color: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)], title: '' }
+			this.addLabelObj = { cardId: null, color: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)], title: '', customSettings: {} }
 			this.addLabel = true
 		},
 		clickAddLabel() {
-			this.$store.dispatch('addLabelToCurrentBoard', this.addLabelObj)
+			const payload = {
+				...this.addLabelObj,
+				customSettings: { ...this.addLabelObj.customSettings },
+			}
+			this.$store.dispatch('addLabelToCurrentBoard', payload)
 			this.addLabel = false
 			this.addLabelObj = null
 		},

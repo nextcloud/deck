@@ -6,10 +6,19 @@
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': currentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+			:class="{
+				'compact': compactMode,
+				'current-card': currentCard,
+				'no-labels': !hasLabels,
+				'card__editable': canEdit,
+				'card__archived': card.archived,
+				'card__highlight': highlight,
+				'card__important': !!importantColor,
+			}"
 			tag="div"
 			:tabindex="0"
 			class="card"
+			:style="{'box-shadow': importantColor ? `-5px 0px 0px 0px ${importantColor}` : null}"
 			@click="openCard"
 			@keyup.self="handleCardKeyboardShortcut"
 			@mouseenter="focus(card.id)">
@@ -133,6 +142,14 @@ export default {
 			currentBoard: state => state.currentBoard,
 			showCardCover: state => state.showCardCover,
 			shortcutLock: state => state.shortcutLock,
+			importantColor() {
+				for (const label of this.card.labels) {
+					if (label.customSettings.isImportant) {
+						return '#' + label.color
+					}
+				}
+				return null
+			},
 		}),
 		...mapGetters([
 			'isArchived',
@@ -420,6 +437,10 @@ export default {
 		}
 		&.card__highlight {
 			animation: highlight 2s;
+		}
+
+		&:not(.card__important) {
+			box-shadow: -5px 0px 0px 0px var(--color-main-background);
 		}
 		.card-labels {
 			display: flex;
