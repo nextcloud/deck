@@ -27,8 +27,10 @@ use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
+use OCA\Deck\Event\StackUpdatedEvent;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
+use OCA\Deck\Listeners\DeckStackUpdatedListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
@@ -47,6 +49,7 @@ use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
+use OCA\Deck\Listeners\DeckCardUpdatedListener;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -88,6 +91,9 @@ class Application extends App implements IBootstrap {
 				$eventDispatcher->dispatchTyped(new LoadEditor());
 			}
 		});
+		$eventDispatcher->addServiceListener(CardUpdatedEvent::class, DeckCardUpdatedListener::class);
+		// @TODO; Disabled as incomplete feature
+//		$eventDispatcher->addServiceListener(StackUpdatedEvent::class, DeckStackUpdatedListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
