@@ -24,14 +24,16 @@ class DeckCommentActivityService
      * @throws \OCA\Deck\NoPermissionException
      * @throws \OCA\Deck\NotFoundException
      */
-    public function cardChangesStack(Card $card, string $previousStackTitle, string $currentStackTitle): void
+    public function cardChangesStack(Card $card, string $previousBoardTitle, string $previousStackTitle, string $currentBoardTitle, string $currentStackTitle): void
     {
         $this->commentToCard(
             card: $card,
-            message: sprintf('%s Changed stack from %s to %s',
+            message: sprintf('%s Changed stack from [**%s**] - %s  to [**%s**] - %s',
                 $this->getPrepend(),
+				$previousBoardTitle,
                 $previousStackTitle,
-                $currentStackTitle
+				$currentBoardTitle,
+                $currentStackTitle,
             )
         );
     }

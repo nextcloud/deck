@@ -76,7 +76,12 @@ class DeckCardUpdatedListener implements IEventListener
 
         if (($currentCard->getStackId() !== $previousCard->getStackId())) {
             // We always want to comment when card changes stack
-            $this->deckCommentActivityService->cardChangesStack($currentCard, $previousStack->getTitle(), $subjectStack->getTitle());
+            $this->deckCommentActivityService->cardChangesStack($currentCard,
+				$previousBoard->getTitle(),
+				$previousStack->getTitle(),
+				$subjectBoard->getTitle(),
+				$subjectStack->getTitle()
+			);
 
             // We only want to send notifications to current and previous assigned user
             if ($currentAssignedUsers !== [] && $previousAssignedUsers !== []) {
