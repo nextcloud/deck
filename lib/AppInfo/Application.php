@@ -92,8 +92,7 @@ class Application extends App implements IBootstrap {
 			}
 		});
 		$eventDispatcher->addServiceListener(CardUpdatedEvent::class, DeckCardUpdatedListener::class);
-		// @TODO; Disabled as incomplete feature
-//		$eventDispatcher->addServiceListener(StackUpdatedEvent::class, DeckStackUpdatedListener::class);
+		$eventDispatcher->addServiceListener(StackUpdatedEvent::class, DeckStackUpdatedListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
