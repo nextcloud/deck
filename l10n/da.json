@@ -242,7 +242,7 @@
     "Deck board {name}\n* Last modified on {lastMod}" : "Opslagstavle {name}\n* Senest ændret den {lastMod}",
     "Create card" : "Opret kort",
     "Create a new card" : "Opret et nyt kort",
-    "Creating the new card …" : "Oprette det nye kort ...",
+    "Creating the new card …" : "Opretter det nye kort ...",
     "Close" : "Luk",
     "No upcoming cards" : "Ingen kommende kort",
     "upcoming cards" : "kommende kort",
