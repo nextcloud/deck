@@ -90,6 +90,7 @@ class CommentReferenceProvider implements IReferenceProvider {
 				$reference->setTitle($comment['message']);
 				$boardOwnerDisplayName = $board['owner']['displayname'] ?? $board['owner']['uid'] ?? '???';
 				$reference->setDescription(
+					// TRANSLATORS From {userName}, in {boardTitle}/{stackTitle}, owned by {boardOwnerName}
 					$this->l10n->t('From %1$s, in %2$s/%3$s, owned by %4$s', [
 						$comment['actorDisplayName'],
 						$board['title'],

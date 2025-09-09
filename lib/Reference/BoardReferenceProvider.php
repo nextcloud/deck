@@ -64,6 +64,7 @@ class BoardReferenceProvider implements IReferenceProvider {
 				$reference = new Reference($referenceText);
 				$reference->setTitle($this->l10n->t('Deck board') . ': ' . $board['title']);
 				$ownerDisplayName = $board['owner']['displayname'] ?? $board['owner']['uid'] ?? '???';
+				// TRANSLATORS Owned by {boardOwnerName}
 				$reference->setDescription($this->l10n->t('Owned by %1$s', [$ownerDisplayName]));
 				$imageUrl = $this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->imagePath(Application::APP_ID, 'deck-dark.svg')
