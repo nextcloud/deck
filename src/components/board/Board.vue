@@ -314,6 +314,7 @@ export default {
 					flex-direction: column;
 					// Margin left instead of padidng to avoid jumps on dropping a card
 					margin-left: $stack-spacing;
+					padding-left: 5px;
 					padding-right: $stack-spacing;
 					overflow-x: hidden;
 					overflow-y: auto;

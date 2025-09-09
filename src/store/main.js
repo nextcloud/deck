@@ -272,6 +272,7 @@ export default new Vuex.Store({
 
 			labelToUpdate.title = newLabel.title
 			labelToUpdate.color = newLabel.color
+			labelToUpdate.customSettings = newLabel.customSettings
 		},
 		addLabelToCurrentBoard(state, newLabel) {
 			state.currentBoard.labels.push(newLabel)

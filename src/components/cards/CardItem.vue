@@ -6,10 +6,19 @@
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+			:class="{
+				'compact': compactMode,
+				'current-card': currentCard,
+				'has-labels': card.labels && card.labels.length > 0,
+				'card__editable': canEdit,
+				'card__archived': card.archived,
+				'card__highlight': highlight,
+				'is-important': !!importantColor,
+			}"
 			tag="div"
 			:tabindex="0"
 			class="card"
+			:style="{'box-shadow': importantColor ? `-5px 0px 0px 0px ${importantColor}` : null}"
 			@click="openCard"
 			@keyup.self="handleCardKeyboardShortcut"
 			@mouseenter="focus(card.id)">
@@ -149,6 +158,15 @@ export default {
 			}
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
+		},
+		importantColor() {
+			for (const label of this.card.labels) {
+				if (label.customSettings.isImportant) {
+					return '#' + label.color
+				}
+			}
+
+			return null
 		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
@@ -337,6 +355,10 @@ export default {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+
+		&:not(.is-important) {
+			box-shadow: -5px 0px 0px 0px var(--color-main-background);
+		}
 
 		&:deep(*) {
 			cursor: pointer;

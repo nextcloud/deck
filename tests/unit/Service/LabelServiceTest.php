@@ -75,14 +75,16 @@ class LabelServiceTest extends TestCase {
 		$label->setTitle('Label title');
 		$label->setBoardId(123);
 		$label->setColor('00ff00');
+		$label->setCustomSettingsArray(['isImportant' => true]);
 		$this->labelMapper->expects($this->once())
 			->method('insert')
 			->willReturn($label);
-		$b = $this->labelService->create('Label title', '00ff00', 123);
+		$b = $this->labelService->create('Label title', '00ff00', 123, ['isImportant' => true]);
 
 		$this->assertEquals($b->getTitle(), 'Label title');
 		$this->assertEquals($b->getBoardId(), 123);
 		$this->assertEquals($b->getColor(), '00ff00');
+		$this->assertEquals($b->getCustomSettingsArray(), ['isImportant' => true]);
 	}
 
 
@@ -111,6 +113,7 @@ class LabelServiceTest extends TestCase {
 		$label->setId(1);
 		$label->setTitle('title');
 		$label->setColor('00ff00');
+		$label->setCustomSettingsArray(['isImportant' => true]);
 		$this->labelMapper->expects($this->once())
 			->method('find')
 			->willReturn($label);
@@ -119,6 +122,7 @@ class LabelServiceTest extends TestCase {
 		$expectedLabel->setTitle('title');
 		$expectedLabel->setColor('00ff00');
 		$expectedLabel->setBoardId(1);
+		$expectedLabel->setCustomSettingsArray(['isImportant' => true]);
 		$this->labelMapper->expects($this->once())
 			->method('insert')
 			->with($expectedLabel)
