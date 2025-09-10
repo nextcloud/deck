@@ -77,18 +77,33 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function deleteByParticipantOnBoard(string $participant, int $boardId, $type = Assignment::TYPE_USER) {
-		$qb = $this->db->getQueryBuilder();
+		// Step 1: Get all card IDs for the board that have assignments for this participant
+		// This avoids MySQL Error 1093 by separating the SELECT from the DELETE operation
 		$cardIdQuery = $this->db->getQueryBuilder();
 		$cardIdQuery->select('a.card_id')
 			->from('deck_assigned_users', 'a')
 			->innerJoin('a', 'deck_cards', 'c', 'c.id = a.card_id')
 			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
-			->where($cardIdQuery->expr()->eq('a.participant', $qb->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
-			->andWhere($cardIdQuery->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
-			->andWhere($cardIdQuery->expr()->eq('a.type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)));
-		$qb->delete('deck_assigned_users')
-			->where($qb->expr()->in('card_id', $qb->createFunction($cardIdQuery->getSQL()), IQueryBuilder::PARAM_INT_ARRAY));
-		$qb->executeStatement();
+			->where($cardIdQuery->expr()->eq('a.participant', $cardIdQuery->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
+			->andWhere($cardIdQuery->expr()->eq('s.board_id', $cardIdQuery->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($cardIdQuery->expr()->eq('a.type', $cardIdQuery->createNamedParameter($type, IQueryBuilder::PARAM_INT)));
+
+		$result = $cardIdQuery->executeQuery();
+		$cardIds = [];
+		while ($row = $result->fetch()) {
+			$cardIds[] = $row['card_id'];
+		}
+		$result->closeCursor();
+
+		// Step 2: If we have card IDs, delete the assignments
+		if (!empty($cardIds)) {
+			$deleteQuery = $this->db->getQueryBuilder();
+			$deleteQuery->delete('deck_assigned_users')
+				->where($deleteQuery->expr()->eq('participant', $deleteQuery->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
+				->andWhere($deleteQuery->expr()->eq('type', $deleteQuery->createNamedParameter($type, IQueryBuilder::PARAM_INT)))
+				->andWhere($deleteQuery->expr()->in('card_id', $deleteQuery->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)));
+			$deleteQuery->executeStatement();
+		}
 	}
 
 
