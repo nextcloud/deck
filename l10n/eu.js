@@ -274,6 +274,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "{count} iruzkin, {unread} irakurri gabe",
     "Todo items" : "Elementuak egiteke",
     "Edit card title" : "Editatu txartelaren izenburua",
+    "Open link" : "Ireki esteka",
     "Card deleted" : "Txartela ezabatuta",
     "Edit title" : "Editatu izenburua",
     "Assign to me" : "Esleitu niri",
@@ -343,9 +344,6 @@ OC.L10N.register(
     "Export as CSV" : "Esportatu CSV gisa",
     "Export" : "Esportatu",
     "Loading filtered view" : "Kargatzen iragazitako ikuspegia",
-    "Today" : "Gaur",
-    "Tomorrow" : "Bihar",
-    "No due" : "Epemugarik ez",
     "Search for {searchQuery} in all boards" : "Bilatu {searchQuery} taula guztietan",
     "No results found" : "Ez da emaitzarik aurkitu",
     "Deck board {name}\n* Last modified on {lastMod}" : " Deck-eko {izena} taula\n* Azken aldaketa {lastMod}-n",
@@ -385,6 +383,9 @@ OC.L10N.register(
     "Example Task 3" : "Adibidetarako ataza 3",
     "Example Task 2" : "Adibidetarako ataza 2",
     "Example Task 1" : "Adibidetarako ataza 1",
-    "Move card to another board" : "Mugitu txartela beste taula batera"
+    "Move card to another board" : "Mugitu txartela beste taula batera",
+    "Today" : "Gaur",
+    "Tomorrow" : "Bihar",
+    "No due" : "Epemugarik ez"
 },
 "nplurals=2; plural=(n != 1);");

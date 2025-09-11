@@ -62,11 +62,11 @@ OC.L10N.register(
     "Delete board" : "დაფის გაუქმება",
     "Advanced options" : "დამატებითი ოპციონები",
     "Export" : "ექსპორტი",
-    "Today" : "დღეს",
-    "Tomorrow" : "ხვალ",
     "Close" : "დახურვა",
     "Due date" : "განპირობებულია თარიღისთვის",
     "Share" : "გაზიარება",
-    "Personal" : "პირადი"
+    "Personal" : "პირადი",
+    "Today" : "დღეს",
+    "Tomorrow" : "ხვალ"
 },
 "nplurals=2; plural=(n!=1);");

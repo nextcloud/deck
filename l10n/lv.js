@@ -79,13 +79,13 @@ OC.L10N.register(
     "No notifications" : "Nav paziņojumu",
     "Advanced options" : "Papildu iespējas",
     "Export" : "Izgūt",
-    "Today" : "Šodien",
-    "Tomorrow" : "Rīt",
     "Deck board {name}\n* Last modified on {lastMod}" : "Kavas dēlis {name}\n* Pēdējoreiz izmainīts {lastMod}",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Izveidots {created}\n* Pēdējoreiz izmainīts {lastMod}\n* {nbAttachments} pielikumi\n* {nbComments} piebildes",
     "Close" : "Aizvērt",
     "Due date" : "Izpildes datums",
     "Share" : "Koplietot",
-    "Personal" : "Personīgs"
+    "Personal" : "Personīgs",
+    "Today" : "Šodien",
+    "Tomorrow" : "Rīt"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

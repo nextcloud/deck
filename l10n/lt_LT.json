@@ -258,9 +258,6 @@
     "Clone" : "Dubliuoti",
     "Export as CSV" : "Eksportuoti kaip CSV",
     "Export" : "Eksportuoti",
-    "Today" : "Šiandien",
-    "Tomorrow" : "Rytoj",
-    "No due" : "Be galutinio termino",
     "No results found" : "Nerasta jokių rezultatų",
     "Due on {date}" : "Galutinis terminas {date}",
     "Click to expand description" : "Spustelėkite norėdami išskleisti aprašą",
@@ -287,6 +284,9 @@
     "Example Task 3" : "Pavyzdinė užduotis 3",
     "Example Task 2" : "Pavyzdinė užduotis 2",
     "Example Task 1" : "Pavyzdinė užduotis 1",
-    "Move card to another board" : "Perkelti kortelę į kitą lentą"
+    "Move card to another board" : "Perkelti kortelę į kitą lentą",
+    "Today" : "Šiandien",
+    "Tomorrow" : "Rytoj",
+    "No due" : "Be galutinio termino"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }

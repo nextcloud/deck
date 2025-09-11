@@ -313,9 +313,6 @@ OC.L10N.register(
     "Clone" : "Klonen",
     "Export" : "Exporteren",
     "Loading filtered view" : "Gefilterde weergave wordt geladen",
-    "Today" : "Vandaag",
-    "Tomorrow" : "Morgen",
-    "No due" : "Geen vervallen",
     "Search for {searchQuery} in all boards" : "Zoek naar {searchQuery} in alle borden",
     "No results found" : "Geen resultaten gevonden",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deckplank {name}\n* Laatst gewijzigd op {lastMod}",
@@ -355,6 +352,9 @@ OC.L10N.register(
     "Example Task 3" : "Voorbeeld Taak 3",
     "Example Task 2" : "Voorbeeld Taak 2",
     "Example Task 1" : "Voorbeeld Taak 1",
-    "Move card to another board" : "Verplaats kaart naar een ander bord"
+    "Move card to another board" : "Verplaats kaart naar een ander bord",
+    "Today" : "Vandaag",
+    "Tomorrow" : "Morgen",
+    "No due" : "Geen vervallen"
 },
 "nplurals=2; plural=(n != 1);");

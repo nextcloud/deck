@@ -21,9 +21,9 @@ OC.L10N.register(
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Export" : "Eksport",
-    "Today" : "Hari ini",
     "Close" : "Tutup",
     "Share" : "Kongsi",
-    "Personal" : "Peribadi"
+    "Personal" : "Peribadi",
+    "Today" : "Hari ini"
 },
 "nplurals=1; plural=0;");

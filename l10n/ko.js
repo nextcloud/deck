@@ -342,9 +342,6 @@ OC.L10N.register(
     "Export as CSV" : "CSV로 내보내기",
     "Export" : "내보내기",
     "Loading filtered view" : "필터링된 보기 불러오는 중",
-    "Today" : "오늘",
-    "Tomorrow" : "내일",
-    "No due" : "기한 없음",
     "Search for {searchQuery} in all boards" : "모든 게시판에서 {searchQuery}를 검색하세요",
     "No results found" : "결과 없음",
     "Deck board {name}\n* Last modified on {lastMod}" : "데크 보드 {name}\n* 마지막 수정일 {lastMod}",
@@ -384,6 +381,9 @@ OC.L10N.register(
     "Example Task 3" : "작업 예제 3",
     "Example Task 2" : "작업 예제 2",
     "Example Task 1" : "작업 예제 1",
-    "Move card to another board" : "카드를 다른 보드로 이동"
+    "Move card to another board" : "카드를 다른 보드로 이동",
+    "Today" : "오늘",
+    "Tomorrow" : "내일",
+    "No due" : "기한 없음"
 },
 "nplurals=1; plural=0;");

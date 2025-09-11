@@ -159,8 +159,6 @@ OC.L10N.register(
     "Delete board" : "Eliminar quadro",
     "Advanced options" : "Opções avançadas",
     "Export" : "Exportar",
-    "Today" : "Hoje",
-    "Tomorrow" : "Amanhã",
     "No results found" : "No results found",
     "Due on {date}" : "Due on {date}",
     "Create card" : "Criar cartão",
@@ -173,6 +171,8 @@ OC.L10N.register(
     "Doing" : "A fazer",
     "Example Task 3" : "Tarefa de exemplo 3",
     "Example Task 2" : "Tarefa de exemplo 2",
-    "Example Task 1" : "Tarefa de exemplo 1"
+    "Example Task 1" : "Tarefa de exemplo 1",
+    "Today" : "Hoje",
+    "Tomorrow" : "Amanhã"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

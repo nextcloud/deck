@@ -25,9 +25,9 @@ OC.L10N.register(
     "Search" : "ຄົ້ນຫາ",
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
-    "Today" : "ມື້ນີ້",
     "Close" : "ປິດ",
     "Share" : "ແບ່ງປັນ",
-    "Personal" : "ສ່ວນບຸກຄົນ"
+    "Personal" : "ສ່ວນບຸກຄົນ",
+    "Today" : "ມື້ນີ້"
 },
 "nplurals=1; plural=0;");

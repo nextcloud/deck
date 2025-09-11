@@ -340,9 +340,6 @@ OC.L10N.register(
     "Export as CSV" : "Εξαγωγή σε CSV",
     "Export" : "Εξαγωγή",
     "Loading filtered view" : "Φόρτωση εμφάνισης με βάση το φίλτρο",
-    "Today" : "Σήμερα",
-    "Tomorrow" : "Αύριο",
-    "No due" : "Χωρίς λήξη",
     "Search for {searchQuery} in all boards" : "Αναζήτηση για {searchQuery} σε όλους τους πίνακες",
     "No results found" : "Δεν βρέθηκαν αποτελέσματα",
     "Deck board {name}\n* Last modified on {lastMod}" : "Πίνακας Deck {name}\n* Τελευταία τροποποίηση στις {lastMod}",
@@ -382,6 +379,9 @@ OC.L10N.register(
     "Example Task 3" : "Παράδειγμα Εργασίας 3",
     "Example Task 2" : "Παράδειγμα Εργασίας 2",
     "Example Task 1" : "Παράδειγμα Εργασίας 1",
-    "Move card to another board" : "Μετακίνηση καρτέλας σε άλλο πίνακα"
+    "Move card to another board" : "Μετακίνηση καρτέλας σε άλλο πίνακα",
+    "Today" : "Σήμερα",
+    "Tomorrow" : "Αύριο",
+    "No due" : "Χωρίς λήξη"
 },
 "nplurals=2; plural=(n != 1);");

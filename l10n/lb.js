@@ -30,10 +30,10 @@ OC.L10N.register(
     "Shared with you" : "Mat dir gedeelt",
     "Advanced options" : "Erweidert Astellungen",
     "Export" : "Exportéieren",
-    "Today" : "Haut",
-    "Tomorrow" : "Muer",
     "Close" : "Zoumaachen",
     "Share" : "Deelen",
-    "Personal" : "Perséinlech"
+    "Personal" : "Perséinlech",
+    "Today" : "Haut",
+    "Tomorrow" : "Muer"
 },
 "nplurals=2; plural=(n != 1);");

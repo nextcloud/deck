@@ -31,9 +31,9 @@ OC.L10N.register(
     "No reminder" : "Dim nodyn atgoffa",
     "An error occurred" : "Digwyddodd gwall",
     "Export" : "Allforio",
-    "Today" : "Heddiw",
     "Close" : "Cau",
     "Share" : "Rhannu",
-    "Personal" : "Personol"
+    "Personal" : "Personol",
+    "Today" : "Heddiw"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

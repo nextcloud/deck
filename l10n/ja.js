@@ -343,9 +343,6 @@ OC.L10N.register(
     "Export as CSV" : "CSV にエクスポート",
     "Export" : "エクスポート",
     "Loading filtered view" : "フィルタされたビューを読み込み中",
-    "Today" : "今日",
-    "Tomorrow" : "明日",
-    "No due" : "日付なし",
     "Search for {searchQuery} in all boards" : "すべてのボードで{searchQuery}を検索します",
     "No results found" : "結果が見つかりません",
     "Deck board {name}\n* Last modified on {lastMod}" : "デッキボード{name}\n最終更新日：{lastMod}",
@@ -385,6 +382,9 @@ OC.L10N.register(
     "Example Task 3" : "タスク3の例",
     "Example Task 2" : "タスク2の例",
     "Example Task 1" : "タスク1の例",
-    "Move card to another board" : "カードを他のボードに移動"
+    "Move card to another board" : "カードを他のボードに移動",
+    "Today" : "今日",
+    "Tomorrow" : "明日",
+    "No due" : "日付なし"
 },
 "nplurals=1; plural=0;");

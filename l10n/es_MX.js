@@ -187,12 +187,12 @@ OC.L10N.register(
     "Advanced options" : "Opciones avanzadas",
     "Clone" : "Clonar",
     "Export" : "Exportar",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
     "Due date" : "Fecha de vencimiento",
     "Error creating the share" : "Error creando el recurso compartido",
     "Share" : "Compartir",
-    "Personal" : "Personal"
+    "Personal" : "Personal",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

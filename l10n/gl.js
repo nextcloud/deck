@@ -360,9 +360,6 @@ OC.L10N.register(
     "Export as CSV" : "Exportar como CSV",
     "Export" : "Exportar",
     "Loading filtered view" : "Cargando a vista filtrada",
-    "Today" : "Hoxe",
-    "Tomorrow" : "Mañá",
-    "No due" : "Sen caducidade",
     "Search for {searchQuery} in all boards" : "Resultados de busca para {searchQuery} en todos os taboleiros",
     "No results found" : "Non se atopou ningún resultado",
     "Deck board {name}\n* Last modified on {lastMod}" : "Taboleiro da Gabeta {name}\n* Última modificación en {lastMod}",
@@ -402,6 +399,9 @@ OC.L10N.register(
     "Example Task 3" : "Tarefa de exemplo 3",
     "Example Task 2" : "Tarefa de exemplo 2",
     "Example Task 1" : "Tarefa de exemplo 1",
-    "Move card to another board" : "Mover a tarxeta a outro taboleiro"
+    "Move card to another board" : "Mover a tarxeta a outro taboleiro",
+    "Today" : "Hoxe",
+    "Tomorrow" : "Mañá",
+    "No due" : "Sen caducidade"
 },
 "nplurals=2; plural=(n != 1);");

@@ -40,10 +40,10 @@ OC.L10N.register(
     "No notifications" : "Nulle notificationes",
     "Advanced options" : "Optiones avantiate",
     "Export" : "Exportar",
-    "Today" : "Hodie",
-    "Tomorrow" : "Deman",
     "Close" : "Clauder",
     "Share" : "Compartir",
-    "Personal" : "Personal"
+    "Personal" : "Personal",
+    "Today" : "Hodie",
+    "Tomorrow" : "Deman"
 },
 "nplurals=2; plural=(n != 1);");

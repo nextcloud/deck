@@ -306,9 +306,6 @@
     "Clone" : "Clonează",
     "Export" : "Exportă",
     "Loading filtered view" : "Se încarcă vizualizarea filtrată",
-    "Today" : "Azi",
-    "Tomorrow" : "Mâine",
-    "No due" : "Fără scadență",
     "Search for {searchQuery} in all boards" : "Căutare {searchQuery} în toate panourile",
     "No results found" : "Nu s-a găsit nimic",
     "Deck board {name}\n* Last modified on {lastMod}" : "Panoul Deck {name}\n* Ultima modificare în {lastMod}",
@@ -348,6 +345,9 @@
     "Example Task 3" : "Exemplu de sarcină 3",
     "Example Task 2" : "Exemplu de sarcină 2",
     "Example Task 1" : "Exemplu de sarcină 1",
-    "Move card to another board" : "Mută cardul în alt panou"
+    "Move card to another board" : "Mută cardul în alt panou",
+    "Today" : "Azi",
+    "Tomorrow" : "Mâine",
+    "No due" : "Fără scadență"
 },"pluralForm" :"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));"
 }
