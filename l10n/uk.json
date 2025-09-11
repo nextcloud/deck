@@ -371,9 +371,6 @@
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Примітка: Для імпорту в додаток Deck підтримується лише формат JSON.",
     "Export" : "Експортувати",
     "Loading filtered view" : "Завантаження відфільтрованого перегляду",
-    "Today" : "Сьогодні",
-    "Tomorrow" : "Завтра",
-    "No due" : "Без призначеної дати",
     "Search for {searchQuery} in all boards" : "Шукати {searchQuery} на всіх дошках оголошень",
     "No results found" : "Не знайдено жодного результату",
     "Deck board {name}\n* Last modified on {lastMod}" : "Колода {name}\n* Востаннє змінено на {lastMod}",
@@ -414,6 +411,9 @@
     "Example Task 3" : "Приклад завдання 3",
     "Example Task 2" : "Приклад завдання 2",
     "Example Task 1" : "Приклад завдання 1",
-    "Move card to another board" : "Перемістити картку до іншої дошки"
+    "Move card to another board" : "Перемістити картку до іншої дошки",
+    "Today" : "Сьогодні",
+    "Tomorrow" : "Завтра",
+    "No due" : "Без призначеної дати"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

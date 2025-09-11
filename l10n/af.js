@@ -45,10 +45,10 @@ OC.L10N.register(
     "No notifications" : "Geen kennisgewings",
     "Advanced options" : "Gevorderde opsies",
     "Export" : "Voer uit",
-    "Today" : "Vandag",
-    "Tomorrow" : "Môre",
     "Due date" : "Sperdatum",
     "Share" : "Deel",
-    "Personal" : "Persoonlik"
+    "Personal" : "Persoonlik",
+    "Today" : "Vandag",
+    "Tomorrow" : "Môre"
 },
 "nplurals=2; plural=(n != 1);");

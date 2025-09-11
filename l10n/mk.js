@@ -252,9 +252,6 @@ OC.L10N.register(
     "Clone" : "Клонирај",
     "Export" : "Извези",
     "Loading filtered view" : "Вчитување на филтриран поглед",
-    "Today" : "Денес",
-    "Tomorrow" : "Утре",
-    "No due" : "Не истекува",
     "No results found" : "Нема пронајдено резултати",
     "{stack} in {board}" : "{stack} во {board}",
     "Create card" : "Креирајте картица",
@@ -282,6 +279,9 @@ OC.L10N.register(
     "Example Task 3" : "Пример задача 3",
     "Example Task 2" : "Пример задача 2",
     "Example Task 1" : "Пример задача 1",
-    "Move card to another board" : "Премести ја картицата на друга табла"
+    "Move card to another board" : "Премести ја картицата на друга табла",
+    "Today" : "Денес",
+    "Tomorrow" : "Утре",
+    "No due" : "Не истекува"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

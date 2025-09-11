@@ -368,9 +368,6 @@
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Lưu ý: Chỉ hỗ trợ định dạng JSON để nhập lại dữ liệu vào ứng dụng Deck.",
     "Export" : "Xuất ra",
     "Loading filtered view" : "Đang tải kết quả đã lọc",
-    "Today" : "Hôm nay",
-    "Tomorrow" : "Ngày mai",
-    "No due" : "Không có ngày hết hạn",
     "Search for {searchQuery} in all boards" : "Tìm kiếm {searchQuery} trong tất cả các bảng",
     "No results found" : "Không tìm thấy kết quả",
     "Deck board {name}\n* Last modified on {lastMod}" : "Bảng Deck có tên {name}\n* Được sửa lần cuối vào lúc {lastMod}",
@@ -411,6 +408,9 @@
     "Example Task 3" : "Ví dụ công việc 3",
     "Example Task 2" : "Ví dụ công việc 2",
     "Example Task 1" : "Ví dụ công việc 1",
-    "Move card to another board" : "Di chuyển thẻ sang bảng khác"
+    "Move card to another board" : "Di chuyển thẻ sang bảng khác",
+    "Today" : "Hôm nay",
+    "Tomorrow" : "Ngày mai",
+    "No due" : "Không có ngày hết hạn"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -104,9 +104,6 @@ OC.L10N.register(
     "Delete board" : "Eliminar Tablero",
     "Advanced options" : "Opciones avanzadas",
     "Export" : "Exportar",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
-    "No due" : "Sin finalizar",
     "Create card" : "Crear tarjeta",
     "Create a new card" : "Crear una nueva tarjeta",
     "Card title" : "Título de la tarjeta",
@@ -117,6 +114,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir con una tarjeta del Tablero",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
     "Share" : "Compartir",
-    "Personal" : "Personal"
+    "Personal" : "Personal",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
+    "No due" : "Sin finalizar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

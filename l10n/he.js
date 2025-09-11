@@ -249,9 +249,6 @@ OC.L10N.register(
     "Advanced options" : "אפשרויות מתקדמות",
     "Export" : "ייצוא",
     "Loading filtered view" : "טוען תצוגה מסוננת",
-    "Today" : "היום",
-    "Tomorrow" : "מחר",
-    "No due" : "אין תאריך יעד",
     "No results found" : "לא נמצאו תוצאות",
     "Create card" : "יצירת כרטיס",
     "Close" : "סגירה",
@@ -273,6 +270,9 @@ OC.L10N.register(
     "Example Task 3" : "משימה לדוגמה 3",
     "Example Task 2" : "משימה לדוגמה 2",
     "Example Task 1" : "משימה לדוגמה 1",
-    "Move card to another board" : "העברת כרטיס ללוח אחר"
+    "Move card to another board" : "העברת כרטיס ללוח אחר",
+    "Today" : "היום",
+    "Tomorrow" : "מחר",
+    "No due" : "אין תאריך יעד"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

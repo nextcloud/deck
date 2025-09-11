@@ -35,10 +35,10 @@ OC.L10N.register(
     "Search" : "Axtarış",
     "Shared with you" : "Shared with you",
     "Export" : "Çıxarış",
-    "Today" : "Bu gün",
-    "Tomorrow" : "Sabah",
     "Close" : "Bağla",
     "Share" : "Paylaş",
-    "Personal" : "Şəxsi"
+    "Personal" : "Şəxsi",
+    "Today" : "Bu gün",
+    "Tomorrow" : "Sabah"
 },
 "nplurals=2; plural=(n != 1);");

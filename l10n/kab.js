@@ -30,9 +30,9 @@ OC.L10N.register(
     "Search" : "Nadi",
     "Cancel edit" : "Sefsex aseẓreg",
     "No notifications" : "Ulac tisezmal",
-    "Today" : "Ass-a",
     "Close" : "Mdel",
     "Share" : "Bḍu",
-    "Personal" : "Udmawan"
+    "Personal" : "Udmawan",
+    "Today" : "Ass-a"
 },
 "nplurals=2; plural=(n != 1);");

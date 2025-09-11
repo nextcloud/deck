@@ -121,8 +121,6 @@ OC.L10N.register(
     "Delete board" : "Forigi tabulon",
     "Advanced options" : "Detalaj agordoj",
     "Export" : "Eksporti",
-    "Today" : "Hodiaŭ",
-    "Tomorrow" : "Morgaŭ",
     "Close" : "Malfermi",
     "Link to a board" : "Ligilo al tabulo",
     "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita",
@@ -134,6 +132,8 @@ OC.L10N.register(
     "Doing" : "Farata",
     "Example Task 3" : "Ekzempla tasko 3",
     "Example Task 2" : "Ekzempla tasko 2",
-    "Example Task 1" : "Ekzempla tasko 1"
+    "Example Task 1" : "Ekzempla tasko 1",
+    "Today" : "Hodiaŭ",
+    "Tomorrow" : "Morgaŭ"
 },
 "nplurals=2; plural=(n != 1);");

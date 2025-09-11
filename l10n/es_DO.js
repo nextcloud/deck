@@ -65,11 +65,11 @@ OC.L10N.register(
     "Delete board" : "Borrar tableros",
     "Advanced options" : "Opciones avanzadas",
     "Export" : "Exportar",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
     "Due date" : "Fecha de vencimiento",
     "Share" : "Compartir",
-    "Personal" : "Personal"
+    "Personal" : "Personal",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -285,9 +285,6 @@ OC.L10N.register(
     "Export as CSV" : "Exportar como CSV",
     "Export" : "Exportar",
     "Loading filtered view" : "Cargando vista filtrada",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
-    "No due" : "Sin vencimiento",
     "Search for {searchQuery} in all boards" : "Buscar {searchQuery} en todos los tableros",
     "No results found" : "No se encontraron resultados",
     "Deck board {name}\n* Last modified on {lastMod}" : "Tablero de Deck {name}\n      * Última modificación el {lastMod}",
@@ -325,6 +322,9 @@ OC.L10N.register(
     "Example Task 3" : "Tarea de ejemplo 3",
     "Example Task 2" : "Tarea de ejemplo 2",
     "Example Task 1" : "Tarea de ejemplo 1",
-    "Move card to another board" : "Mover tarjeta a otro tablero"
+    "Move card to another board" : "Mover tarjeta a otro tablero",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
+    "No due" : "Sin vencimiento"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
