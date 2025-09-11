@@ -258,9 +258,6 @@ OC.L10N.register(
     "Clone" : "Kloniraj",
     "Export" : "Izvoz",
     "Loading filtered view" : "Učitavanje filtriranog prikaza",
-    "Today" : "Danas",
-    "Tomorrow" : "Sutra",
-    "No due" : "Nema nezavršenih",
     "Search for {searchQuery} in all boards" : "Traži {searchQuery} na svim pločama",
     "No results found" : "Nema rezultata",
     "{stack} in {board}" : "{stack} u {board}",
@@ -291,6 +288,9 @@ OC.L10N.register(
     "Example Task 3" : "Primjer zadatka 3.",
     "Example Task 2" : "Primjer zadatka 2.",
     "Example Task 1" : "Primjer zadatka 1.",
-    "Move card to another board" : "Premjesti karticu na drugu ploču"
+    "Move card to another board" : "Premjesti karticu na drugu ploču",
+    "Today" : "Danas",
+    "Tomorrow" : "Sutra",
+    "No due" : "Nema nezavršenih"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

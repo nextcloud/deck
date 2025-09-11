@@ -373,9 +373,6 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Nota: Solo el formato JSON es soportar al importar de vuelta en la app Deck.",
     "Export" : "Exportar",
     "Loading filtered view" : "Cargando vista filtrada",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
-    "No due" : "Sin finalizar",
     "Search for {searchQuery} in all boards" : "Buscar {searchQuery} en todos los tableros",
     "No results found" : "No se encontraron resultados",
     "Deck board {name}\n* Last modified on {lastMod}" : "Tablero Deck {name}\n* Se modificó por última vez el {lastMod}",
@@ -416,6 +413,9 @@ OC.L10N.register(
     "Example Task 3" : "Tarea de ejemplo 3",
     "Example Task 2" : "Tarea de ejemplo 2",
     "Example Task 1" : "Tarea de ejemplo 1",
-    "Move card to another board" : "Mover la tarjeta a otro tablero"
+    "Move card to another board" : "Mover la tarjeta a otro tablero",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
+    "No due" : "Sin finalizar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

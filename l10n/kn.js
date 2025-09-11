@@ -18,9 +18,9 @@ OC.L10N.register(
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Export" : "ರಫ್ತು",
-    "Today" : "Today",
     "Close" : "ಮುಚ್ಚು",
     "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
-    "Personal" : "﻿ವೈಯಕ್ತಿಕ"
+    "Personal" : "﻿ವೈಯಕ್ತಿಕ",
+    "Today" : "Today"
 },
 "nplurals=2; plural=(n > 1);");

@@ -57,14 +57,14 @@ OC.L10N.register(
     "No notifications" : "Cap de notificacion",
     "Advanced options" : "Opcions avançadas",
     "Export" : "Exportar",
-    "Today" : "Uèi",
-    "Tomorrow" : "Deman",
     "{stack} in {board}" : "{stack} dins {board}",
     "Create card" : "Crear una carta",
     "Create a new card" : "Crear una carta novèla",
     "Close" : "Plegar",
     "Create a card" : "Crear una carta",
     "Share" : "Partejar",
-    "Personal" : "Personal"
+    "Personal" : "Personal",
+    "Today" : "Uèi",
+    "Tomorrow" : "Deman"
 },
 "nplurals=2; plural=(n > 1);");

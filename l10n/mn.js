@@ -42,9 +42,9 @@ OC.L10N.register(
     "No notifications" : "Мэдэгдэл байхгүй",
     "Advanced options" : "Бусад сонголтууд",
     "Export" : "Экспорт",
-    "Today" : "өнөөдөр",
-    "Tomorrow" : "маргааш",
     "Share" : "Түгээх",
-    "Personal" : "Хувийн"
+    "Personal" : "Хувийн",
+    "Today" : "өнөөдөр",
+    "Tomorrow" : "маргааш"
 },
 "nplurals=2; plural=(n != 1);");

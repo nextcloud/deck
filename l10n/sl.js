@@ -297,9 +297,6 @@ OC.L10N.register(
     "Export as CSV" : "Izvozi v zapis CSV",
     "Export" : "Izvozi",
     "Loading filtered view" : "Poteka nalaganje filtriranega pogleda",
-    "Today" : "Danes",
-    "Tomorrow" : "Jutri",
-    "No due" : "Ni datuma preteka",
     "Search for {searchQuery} in all boards" : "Poišči {searchQuery} med vsemi zbirkami nalog.",
     "No results found" : "Ni najdenih zadetkov",
     "Due on {date}" : "Poteče {date}",
@@ -333,6 +330,9 @@ OC.L10N.register(
     "Example Task 3" : "Primer naloge 3",
     "Example Task 2" : "Primer naloge 2",
     "Example Task 1" : "Primer naloge 1",
-    "Move card to another board" : "Premakni nalogo v drugo zbirko"
+    "Move card to another board" : "Premakni nalogo v drugo zbirko",
+    "Today" : "Danes",
+    "Tomorrow" : "Jutri",
+    "No due" : "Ni datuma preteka"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

@@ -34,9 +34,9 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "An error occurred" : "Det oppstod ein feil.",
     "Export" : "Eksporter",
-    "Today" : "I dag",
     "Close" : "Lat att",
     "Share" : "Del",
-    "Personal" : "Personleg"
+    "Personal" : "Personleg",
+    "Today" : "I dag"
 },
 "nplurals=2; plural=(n != 1);");

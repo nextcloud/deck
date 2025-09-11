@@ -43,11 +43,13 @@ OC.L10N.register(
     "Comments" : "Каментарыі",
     "Save" : "Захаваць",
     "Created:" : "Створана:",
+    "Cancel reply" : "Скасаваць адказ",
     "Reply" : "Адказаць",
     "Update" : "Абнавіць",
     "Description" : "Апісанне",
     "(group)" : "(група)",
     "Open link" : "Адкрыць спасылку",
+    "Edit title" : "Рэдагаваць загаловак",
     "seconds ago" : "с таму",
     "Keyboard shortcuts" : "Спалучэнні клавіш",
     "Keyboard shortcut" : "Спалучэнне клавіш",
@@ -58,8 +60,10 @@ OC.L10N.register(
     "An error occurred" : "Узнікла памылка",
     "No notifications" : "Няма апавяшчэнняў",
     "Export" : "Экспарт",
-    "Today" : "Сёння",
     "Close" : "Закрыць",
-    "Share" : "Абагуліць"
+    "Failed to upload {name}" : "Не ўдалося запампаваць {name}",
+    "Share" : "Абагуліць",
+    "Today" : "Сёння",
+    "Tomorrow" : "Заўтра"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

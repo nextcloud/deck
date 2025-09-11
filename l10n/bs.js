@@ -25,11 +25,11 @@ OC.L10N.register(
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Export" : "Izvezi",
-    "Today" : "Danas",
-    "Tomorrow" : "Sutra",
     "Close" : "Zatvori",
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
     "Share" : "Podjeli",
-    "Personal" : "Osobno"
+    "Personal" : "Osobno",
+    "Today" : "Danas",
+    "Tomorrow" : "Sutra"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

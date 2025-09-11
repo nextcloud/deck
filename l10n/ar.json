@@ -358,9 +358,6 @@
     "Export as CSV" : "صدِّر كـ CSV",
     "Export" : "تصدير",
     "Loading filtered view" : "جارِ تحميل التصفية ",
-    "Today" : "اليوم",
-    "Tomorrow" : "غدا",
-    "No due" : "غير محدد",
     "Search for {searchQuery} in all boards" : "البحث عن {searchQuery} في جميع اللوح",
     "No results found" : "لا يتم العثور على أي نتائج ",
     "Deck board {name}\n* Last modified on {lastMod}" : "اسم اللوحة {name} \n* آخر تعديل لها في {lastMod}",
@@ -400,6 +397,9 @@
     "Example Task 3" : "مثال المهمة 3",
     "Example Task 2" : "مثال المهمة 2",
     "Example Task 1" : "مثال المهمة 1",
-    "Move card to another board" : "حرك البطاقة الى لوح اخر"
+    "Move card to another board" : "حرك البطاقة الى لوح اخر",
+    "Today" : "اليوم",
+    "Tomorrow" : "غدا",
+    "No due" : "غير محدد"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

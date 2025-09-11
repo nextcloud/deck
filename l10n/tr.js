@@ -373,9 +373,6 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Not: Yeniden Tahta uygulaması içine aktarmak için yalnızca JSON biçimi desteklenir.",
     "Export" : "Dışa aktar",
     "Loading filtered view" : "Süzülmüş görünüm yükleniyor",
-    "Today" : "Bugün",
-    "Tomorrow" : "Yarın",
-    "No due" : "Bitiş yok",
     "Search for {searchQuery} in all boards" : "Tüm panolarda {searchQuery} araması için sonuçlar",
     "No results found" : "Herhangi bir sonuç bulunamadı",
     "Deck board {name}\n* Last modified on {lastMod}" : "{name} tahta panosu\n* Son değişiklik: {lastMod}",
@@ -416,6 +413,9 @@ OC.L10N.register(
     "Example Task 3" : "3. örnek görev",
     "Example Task 2" : "2. örnek görev",
     "Example Task 1" : "1. örnek görev",
-    "Move card to another board" : "Kartı başka bir panoya taşı"
+    "Move card to another board" : "Kartı başka bir panoya taşı",
+    "Today" : "Bugün",
+    "Tomorrow" : "Yarın",
+    "No due" : "Bitiş yok"
 },
 "nplurals=2; plural=(n > 1);");

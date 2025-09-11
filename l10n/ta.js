@@ -26,9 +26,9 @@ OC.L10N.register(
     "Search" : "தேடுதல்",
     "Shared with you" : "Shared with you",
     "Export" : "ஏற்றுமதி",
-    "Today" : "இன்று",
     "Close" : "மூடுக",
     "Share" : "பகிர்வு",
-    "Personal" : "தனிப்பட்ட"
+    "Personal" : "தனிப்பட்ட",
+    "Today" : "இன்று"
 },
 "nplurals=2; plural=(n != 1);");

@@ -30,9 +30,9 @@ OC.L10N.register(
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Export" : "Արտահանում",
-    "Today" : "այսօր",
     "Close" : "Փակել",
     "Share" : "Կիսվել",
-    "Personal" : "Անձնական"
+    "Personal" : "Անձնական",
+    "Today" : "այսօր"
 },
 "nplurals=2; plural=(n != 1);");

@@ -27,13 +27,13 @@ OC.L10N.register(
     "Select Date" : "දිනය තෝරන්න",
     "seconds ago" : "තත්පර කිහිපයකට පෙර",
     "Search" : "සොයන්න",
-    "Today" : "අද",
-    "Tomorrow" : "හෙට",
     "Close" : "වසන්න",
     "Share" : "බෙදාගන්න",
     "Personal" : "පුද්ගලික",
     "Example Task 3" : "උදාහරණ කාර්යය 3",
     "Example Task 2" : "උදාහරණ කාර්යය 2",
-    "Example Task 1" : "උදාහරණ කාර්යය 1"
+    "Example Task 1" : "උදාහරණ කාර්යය 1",
+    "Today" : "අද",
+    "Tomorrow" : "හෙට"
 },
 "nplurals=2; plural=(n != 1);");

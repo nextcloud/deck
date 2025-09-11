@@ -259,9 +259,6 @@ OC.L10N.register(
     "Clone" : "Clona",
     "Export" : "Esporta",
     "Loading filtered view" : "Carrigamentu de sa bista cun su filtru",
-    "Today" : "Oe",
-    "Tomorrow" : "Cras",
-    "No due" : "Peruna iscadèntzia",
     "Search for {searchQuery} in all boards" : "Chirca {searchQuery} in totu is lavagnas",
     "No results found" : "Perunu resurtadu agatadu",
     "{stack} in {board}" : "{stack} in {board}",
@@ -293,6 +290,9 @@ OC.L10N.register(
     "Example Task 3" : "Atividade de esempru 3",
     "Example Task 2" : "Atividade de esempru 2",
     "Example Task 1" : "Atividade de esempru 1",
-    "Move card to another board" : "Tràmuda s'ischeda a un'àtera lavagna"
+    "Move card to another board" : "Tràmuda s'ischeda a un'àtera lavagna",
+    "Today" : "Oe",
+    "Tomorrow" : "Cras",
+    "No due" : "Peruna iscadèntzia"
 },
 "nplurals=2; plural=(n != 1);");
