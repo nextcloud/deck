@@ -26,8 +26,8 @@ OC.L10N.register(
     "seconds ago" : "diog air ais",
     "Search" : "Lorg",
     "No notifications" : "Gun bhrath",
-    "Today" : "An-diugh",
     "Close" : "Dùin",
-    "Share" : "Co-roinn"
+    "Share" : "Co-roinn",
+    "Today" : "An-diugh"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");

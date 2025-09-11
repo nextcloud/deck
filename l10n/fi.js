@@ -254,8 +254,6 @@ OC.L10N.register(
     "Clone" : "Kloonaa",
     "Export as CSV" : "Vie CSV:nä",
     "Export" : "Vie",
-    "Today" : "Tänään",
-    "Tomorrow" : "Huomenna",
     "Search for {searchQuery} in all boards" : "Hae ehtoja {searchQuery} kaikilta tauluilta",
     "No results found" : "Ei tuloksia",
     "{nbCards} cards" : "{nbCards} korttia    ",
@@ -287,6 +285,8 @@ OC.L10N.register(
     "Example Task 3" : "Esimerkkitehtävä 3",
     "Example Task 2" : "Esimerkkitehtävä 2",
     "Example Task 1" : "Esimerkkitehtävä 1",
-    "Move card to another board" : "Siirrä kortti toiselle taululle"
+    "Move card to another board" : "Siirrä kortti toiselle taululle",
+    "Today" : "Tänään",
+    "Tomorrow" : "Huomenna"
 },
 "nplurals=2; plural=(n != 1);");

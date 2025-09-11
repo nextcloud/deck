@@ -344,9 +344,6 @@ OC.L10N.register(
     "Export as CSV" : "CSV قىلىپ چىقىرىش",
     "Export" : "ئېكسپورت",
     "Loading filtered view" : "سۈزۈلگەن كۆرۈنۈشنى يۈكلەۋاتىدۇ",
-    "Today" : "بۈگۈن",
-    "Tomorrow" : "ئەتە",
-    "No due" : "مۇۋاپىق ئەمەس",
     "Search for {searchQuery} in all boards" : "بارلىق تاختايلاردا {searchQuery} نى ئىزدەڭ",
     "No results found" : "ھېچقانداق نەتىجە تېپىلمىدى",
     "Deck board {name}\n* Last modified on {lastMod}" : "پالۋان تاختىسى {name}\n* ئاخىرقى قېتىم {lastMod} on دا ئۆزگەرتىلدى",
@@ -386,6 +383,9 @@ OC.L10N.register(
     "Example Task 3" : "مىسال 3",
     "Example Task 2" : "مىسال 2",
     "Example Task 1" : "مىسال 1",
-    "Move card to another board" : "كارتىنى باشقا تاختىغا يۆتكەڭ"
+    "Move card to another board" : "كارتىنى باشقا تاختىغا يۆتكەڭ",
+    "Today" : "بۈگۈن",
+    "Tomorrow" : "ئەتە",
+    "No due" : "مۇۋاپىق ئەمەس"
 },
 "nplurals=2; plural=(n != 1);");

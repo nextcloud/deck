@@ -370,9 +370,6 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Poznámka: Na import späť do aplikácie Deck je podporovaný iba formát JSON.",
     "Export" : "Export",
     "Loading filtered view" : "Načítavanie filtrovaného pohľadu",
-    "Today" : "Dnes",
-    "Tomorrow" : "Zajtra",
-    "No due" : "Žiadny termín dokončenia",
     "Search for {searchQuery} in all boards" : "Vyhľadať {searchQuery} na všetkých plochách",
     "No results found" : "Neboli nájdené žiadne výsledky",
     "Deck board {name}\n* Last modified on {lastMod}" : "Nástenka Deck {name}\n* Naposledy upravené {lastMod}",
@@ -413,6 +410,9 @@ OC.L10N.register(
     "Example Task 3" : "Príklad úlohy 3",
     "Example Task 2" : "Príklad úlohy 2",
     "Example Task 1" : "Príklad úlohy 1",
-    "Move card to another board" : "Presunúť kartu na inú nástenku"
+    "Move card to another board" : "Presunúť kartu na inú nástenku",
+    "Today" : "Dnes",
+    "Tomorrow" : "Zajtra",
+    "No due" : "Žiadny termín dokončenia"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

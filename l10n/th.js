@@ -56,11 +56,11 @@ OC.L10N.register(
     "Delete board" : "ลบกระดาน",
     "Advanced options" : "ตัวเลือกขั้นสูง",
     "Export" : "ส่งออก",
-    "Today" : "วันนี้",
-    "Tomorrow" : "พรุ่งนี้",
     "Close" : "ปิด",
     "Due date" : "วันที่ครบกำหนด",
     "Share" : "แชร์",
-    "Personal" : "ส่วนตัว"
+    "Personal" : "ส่วนตัว",
+    "Today" : "วันนี้",
+    "Tomorrow" : "พรุ่งนี้"
 },
 "nplurals=1; plural=0;");

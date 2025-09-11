@@ -373,9 +373,6 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Megjegyzés: Csak a JSON formátum támogatott a Kártyák alkalmazásba való importáláskor.",
     "Export" : "Exportálás",
     "Loading filtered view" : "Szűrt nézet betöltése",
-    "Today" : "Ma",
-    "Tomorrow" : "Holnap",
-    "No due" : "Nincs határidő",
     "Search for {searchQuery} in all boards" : "Keresés a(z) {searchQuery} kifejezésre az összes táblában",
     "No results found" : "Nincs találat",
     "Deck board {name}\n* Last modified on {lastMod}" : "{name} kártyatábla\n* Legutóbb módosítva: {lastMod}",
@@ -416,6 +413,9 @@ OC.L10N.register(
     "Example Task 3" : "3. példafeladat",
     "Example Task 2" : "2. példafeladat",
     "Example Task 1" : "1. példafeladat",
-    "Move card to another board" : "Kártya áthelyezése egy másik táblára"
+    "Move card to another board" : "Kártya áthelyezése egy másik táblára",
+    "Today" : "Ma",
+    "Tomorrow" : "Holnap",
+    "No due" : "Nincs határidő"
 },
 "nplurals=2; plural=(n != 1);");

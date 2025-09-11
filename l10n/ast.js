@@ -102,8 +102,6 @@ OC.L10N.register(
     "Clone cards" : "Clonar les tarxetes",
     "Advanced options" : "Opciones avanzaes",
     "Export" : "Esportar",
-    "Today" : "Güei",
-    "Tomorrow" : "Mañana",
     "No results found" : "Nun s'atopó nengún resultáu",
     "Close" : "Zarrar",
     "Message from {author} in {conversationName}" : "Mensaxe de {author} en {conversationName}",
@@ -114,6 +112,8 @@ OC.L10N.register(
     "To do" : "Xera pendiente",
     "Example Task 3" : "Xera d'exemplu 3",
     "Example Task 2" : "Xera d'exemplu 2",
-    "Example Task 1" : "Xera d'exemplu 1"
+    "Example Task 1" : "Xera d'exemplu 1",
+    "Today" : "Güei",
+    "Tomorrow" : "Mañana"
 },
 "nplurals=2; plural=(n != 1);");

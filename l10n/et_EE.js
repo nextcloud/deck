@@ -342,9 +342,6 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Märkus: vaid JSON-vorming on toetatud tagasi importimiseks kanbani-rakendusse.",
     "Export" : "Ekspordi",
     "Loading filtered view" : "Laadin filtreeritud vaadet",
-    "Today" : "Täna",
-    "Tomorrow" : "Homme",
-    "No due" : "Tähtaega pole",
     "Search for {searchQuery} in all boards" : "Otsi kõikidelt tahvlitelt: „{searchQuery}“",
     "No results found" : "Otsingutulemusi ei leidu",
     "Deck board {name}\n* Last modified on {lastMod}" : "Kanbani tahvel {name}\n* Viimati muudetud {lastMod}",
@@ -385,6 +382,9 @@ OC.L10N.register(
     "Example Task 3" : "Näidisülesanne 3",
     "Example Task 2" : "Näidisülesanne 2",
     "Example Task 1" : "Näidisülesanne 1",
-    "Move card to another board" : "Tõsta kaart teisele tahvlile"
+    "Move card to another board" : "Tõsta kaart teisele tahvlile",
+    "Today" : "Täna",
+    "Tomorrow" : "Homme",
+    "No due" : "Tähtaega pole"
 },
 "nplurals=2; plural=(n != 1);");

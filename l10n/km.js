@@ -25,9 +25,9 @@ OC.L10N.register(
     "Search" : "ស្វែងរក",
     "Shared with you" : "Shared with you",
     "Export" : "នាំចេញ",
-    "Today" : "ថ្ងៃ​នេះ",
     "Close" : "បិទ",
     "Share" : "ចែក​រំលែក",
-    "Personal" : "ផ្ទាល់​ខ្លួន"
+    "Personal" : "ផ្ទាល់​ខ្លួន",
+    "Today" : "ថ្ងៃ​នេះ"
 },
 "nplurals=1; plural=0;");

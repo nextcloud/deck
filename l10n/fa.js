@@ -292,9 +292,6 @@ OC.L10N.register(
     "Export as CSV" : "Export as CSV",
     "Export" : "دریافت خروجی",
     "Loading filtered view" : "Loading filtered view",
-    "Today" : "Today",
-    "Tomorrow" : "فردا",
-    "No due" : "No due",
     "Search for {searchQuery} in all boards" : "Search for {searchQuery} in all boards",
     "No results found" : "هیچ نتیجه ای یافت نشد",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deck board {name}\n* Last modified on {lastMod}",
@@ -332,6 +329,9 @@ OC.L10N.register(
     "Example Task 3" : "نمونه کار ۳",
     "Example Task 2" : "نمونه کار ۲",
     "Example Task 1" : "نمونه کار ۱",
-    "Move card to another board" : "انتقال برگه به تخته‌ای دیگر"
+    "Move card to another board" : "انتقال برگه به تخته‌ای دیگر",
+    "Today" : "Today",
+    "Tomorrow" : "فردا",
+    "No due" : "No due"
 },
 "nplurals=2; plural=(n > 1);");

@@ -343,9 +343,6 @@ OC.L10N.register(
     "Export as CSV" : "Eksporter som CSV",
     "Export" : "Eksporter",
     "Loading filtered view" : "Laster filtrert visning",
-    "Today" : "I dag",
-    "Tomorrow" : "I morgen",
-    "No due" : "Ingen forfall",
     "Search for {searchQuery} in all boards" : "Søk etter {searchQuery} i alle tavler",
     "No results found" : "Ingen resultater funnet",
     "Deck board {name}\n* Last modified on {lastMod}" : "Stokktavle {name}\n* Sist endret {lastMod}",
@@ -385,6 +382,9 @@ OC.L10N.register(
     "Example Task 3" : "Eksempel oppgave 3",
     "Example Task 2" : "Eksempel oppgave 2",
     "Example Task 1" : "Eksempel oppgave 1",
-    "Move card to another board" : "Flytt kort til annen tavle"
+    "Move card to another board" : "Flytt kort til annen tavle",
+    "Today" : "I dag",
+    "Tomorrow" : "I morgen",
+    "No due" : "Ingen forfall"
 },
 "nplurals=2; plural=(n != 1);");

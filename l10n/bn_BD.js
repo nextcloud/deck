@@ -29,10 +29,10 @@ OC.L10N.register(
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Export" : "রপ্তানি",
-    "Today" : "আজ",
-    "Tomorrow" : "আগামীকাল",
     "Close" : "বন্ধ",
     "Share" : "ভাগাভাগি কর",
-    "Personal" : "ব্যক্তিগত"
+    "Personal" : "ব্যক্তিগত",
+    "Today" : "আজ",
+    "Tomorrow" : "আগামীকাল"
 },
 "nplurals=2; plural=(n != 1);");
