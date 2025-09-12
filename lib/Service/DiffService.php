@@ -168,103 +168,111 @@ class DiffService {
 			}
 		}
 		
-	// Second pass: detect moves first (exact content matches at different line positions)
-	$enhancedOps = [];
-	$moveDetectedAdds = [];
-	$moveDetectedRemoves = [];
+		// Second pass: detect moves first (exact content matches at different line positions)
+		$enhancedOps = [];
+		$moveDetectedAdds = [];
+		$moveDetectedRemoves = [];
 	
-	// Find exact content matches between removes and adds (moves)
-	foreach ($removes as $removeIndex => $removeOp) {
-		$oldLine = $oldLines[$removeOp['old_line']] ?? '';
-		$oldLineNum = $removeOp['old_line'] + 1;
+		// Find exact content matches between removes and adds (moves)
+		foreach ($removes as $removeIndex => $removeOp) {
+			$oldLine = $oldLines[$removeOp['old_line']] ?? '';
+			$oldLineNum = $removeOp['old_line'] + 1;
 		
-		// Skip empty lines for move detection
-		if (empty(trim($oldLine))) continue;
+			// Skip empty lines for move detection
+			if (empty(trim($oldLine))) {
+				continue;
+			}
 		
-		// Look for exact match in adds
-		foreach ($adds as $addIndex => $addOp) {
-			if (in_array($addIndex, $moveDetectedAdds)) continue;
+			// Look for exact match in adds
+			foreach ($adds as $addIndex => $addOp) {
+				if (in_array($addIndex, $moveDetectedAdds)) {
+					continue;
+				}
 			
-			$newLine = $newLines[$addOp['new_line']] ?? '';
-			$newLineNum = $addOp['new_line'] + 1;
+				$newLine = $newLines[$addOp['new_line']] ?? '';
+				$newLineNum = $addOp['new_line'] + 1;
 			
-			// Exact content match but different line positions = move
-			if (trim($oldLine) === trim($newLine) && $oldLineNum !== $newLineNum) {
+				// Exact content match but different line positions = move
+				if (trim($oldLine) === trim($newLine) && $oldLineNum !== $newLineNum) {
+					$enhancedOps[] = [
+						'type' => 'move',
+						'old_line' => $removeOp['old_line'],
+						'new_line' => $addOp['new_line'],
+						'content' => $newLine
+					];
+					$moveDetectedAdds[] = $addIndex;
+					$moveDetectedRemoves[] = $removeIndex;
+					break; // Found a move for this remove, stop looking
+				}
+			}
+		}
+	
+		// Third pass: detect modifications from remaining removes/adds
+		$usedAdds = $moveDetectedAdds; // Start with adds already used in moves
+	
+		// Process remaining removes and try to find matching adds for modifications
+		foreach ($removes as $removeIndex => $removeOp) {
+			// Skip removes already used in moves
+			if (in_array($removeIndex, $moveDetectedRemoves)) {
+				continue;
+			}
+		
+			$bestMatch = null;
+			$bestScore = -1;
+			$bestAddIndex = -1;
+		
+			$oldLine = $oldLines[$removeOp['old_line']] ?? '';
+			$oldLineNum = $removeOp['old_line'] + 1;
+		
+			// Look for best matching add operation
+			foreach ($adds as $addIndex => $addOp) {
+				if (in_array($addIndex, $usedAdds)) {
+					continue;
+				}
+			
+				$newLine = $newLines[$addOp['new_line']] ?? '';
+				$newLineNum = $addOp['new_line'] + 1;
+			
+				// Calculate matching score
+				$score = 0;
+			
+				// Same line number gets highest priority
+				if ($oldLineNum === $newLineNum) {
+					$score += 100;
+				}
+			
+				// Similar content gets secondary priority
+				if ($this->shouldUseWordLevelDiff($oldLine, $newLine)) {
+					$maxLen = max(strlen($oldLine), strlen($newLine));
+					$distance = levenshtein($oldLine, $newLine);
+					$similarity = 1 - ($distance / $maxLen);
+					$score += $similarity * 50; // Up to 50 points for similarity
+				}
+			
+				// Proximity bonus (closer line numbers get bonus)
+				$proximityBonus = max(0, 10 - abs($oldLineNum - $newLineNum));
+				$score += $proximityBonus;
+			
+				if ($score > $bestScore) {
+					$bestScore = $score;
+					$bestMatch = $addOp;
+					$bestAddIndex = $addIndex;
+				}
+			}
+		
+			// If we found a good match, create a modify operation
+			if ($bestMatch && $bestScore > 10) { // Minimum threshold
 				$enhancedOps[] = [
-					'type' => 'move',
+					'type' => 'modify',
 					'old_line' => $removeOp['old_line'],
-					'new_line' => $addOp['new_line'],
-					'content' => $newLine
+					'new_line' => $bestMatch['new_line']
 				];
-				$moveDetectedAdds[] = $addIndex;
-				$moveDetectedRemoves[] = $removeIndex;
-				break; // Found a move for this remove, stop looking
+				$usedAdds[] = $bestAddIndex;
+			} else {
+				// No good match, keep as remove
+				$enhancedOps[] = $removeOp;
 			}
 		}
-	}
-	
-	// Third pass: detect modifications from remaining removes/adds
-	$usedAdds = $moveDetectedAdds; // Start with adds already used in moves
-	
-	// Process remaining removes and try to find matching adds for modifications
-	foreach ($removes as $removeIndex => $removeOp) {
-		// Skip removes already used in moves
-		if (in_array($removeIndex, $moveDetectedRemoves)) continue;
-		
-		$bestMatch = null;
-		$bestScore = -1;
-		$bestAddIndex = -1;
-		
-		$oldLine = $oldLines[$removeOp['old_line']] ?? '';
-		$oldLineNum = $removeOp['old_line'] + 1;
-		
-		// Look for best matching add operation
-		foreach ($adds as $addIndex => $addOp) {
-			if (in_array($addIndex, $usedAdds)) continue;
-			
-			$newLine = $newLines[$addOp['new_line']] ?? '';
-			$newLineNum = $addOp['new_line'] + 1;
-			
-			// Calculate matching score
-			$score = 0;
-			
-			// Same line number gets highest priority
-			if ($oldLineNum === $newLineNum) {
-				$score += 100;
-			}
-			
-			// Similar content gets secondary priority
-			if ($this->shouldUseWordLevelDiff($oldLine, $newLine)) {
-				$maxLen = max(strlen($oldLine), strlen($newLine));
-				$distance = levenshtein($oldLine, $newLine);
-				$similarity = 1 - ($distance / $maxLen);
-				$score += $similarity * 50; // Up to 50 points for similarity
-			}
-			
-			// Proximity bonus (closer line numbers get bonus)
-			$proximityBonus = max(0, 10 - abs($oldLineNum - $newLineNum));
-			$score += $proximityBonus;
-			
-			if ($score > $bestScore) {
-				$bestScore = $score;
-				$bestMatch = $addOp;
-				$bestAddIndex = $addIndex;
-			}
-		}
-		
-		// If we found a good match, create a modify operation
-		if ($bestMatch && $bestScore > 10) { // Minimum threshold
-			$enhancedOps[] = [
-				'type' => 'modify',
-				'old_line' => $removeOp['old_line'],
-				'new_line' => $bestMatch['new_line']
-			];
-			$usedAdds[] = $bestAddIndex;
-		} else {
-			// No good match, keep as remove
-			$enhancedOps[] = $removeOp;
-		}
-	}
 		
 		// Fourth pass: add remaining unused operations
 		// Add remaining unused add operations (not involved in moves or modifications)
