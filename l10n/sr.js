@@ -373,6 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Напомена: само JSON формат се подржава за увоз назад у апликацију Шпил.",
     "Export" : "Извези",
     "Loading filtered view" : "Учитам филтрирани преглед",
+    "Search for {searchQuery} in other boards" : "Претражи {searchQuery} у осталим таблама",
     "Search for {searchQuery} in all boards" : "Тражи се {searchQuery} у свим таблама",
     "No results found" : "Нема пронађених резултата",
     "Deck board {name}\n* Last modified on {lastMod}" : "Шпил табла {name}\n* Последњи пут измењена дана {lastMod}",
