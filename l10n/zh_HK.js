@@ -373,6 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "注意：僅支援 JSON 格式以便重新導入到 Deck 應用程式。",
     "Export" : "導出",
     "Loading filtered view" : "正在加載已過濾視圖",
+    "Search for {searchQuery} in other boards" : "在其他看板中搜尋 {searchQuery}",
     "Search for {searchQuery} in all boards" : "在所有面板中搜索 {searchQuery}",
     "No results found" : "未找到結果",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deck 面板 {name}\n* 最後修改於  {lastMod}",
