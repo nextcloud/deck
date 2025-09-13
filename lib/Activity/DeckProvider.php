@@ -9,6 +9,7 @@ namespace OCA\Deck\Activity;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\DiffService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\Comments\IComment;
@@ -37,6 +38,8 @@ class DeckProvider implements IProvider {
 	private $config;
 	/** @var CardService */
 	private $cardService;
+	/** @var DiffService */
+	private $diffService;
 
 	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService) {
 		$this->userId = $userId;
@@ -47,6 +50,7 @@ class DeckProvider implements IProvider {
 		$this->l10nFactory = $l10n;
 		$this->config = $config;
 		$this->cardService = $cardService;
+		$this->diffService = new DiffService();
 	}
 
 	/**
@@ -335,6 +339,20 @@ class DeckProvider implements IProvider {
 	 * @return mixed
 	 */
 	private function parseParamForChanges($subjectParams, $params, $event) {
+		// Handle card description changes with visual diff
+		if ($event->getSubject() === ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION &&
+			array_key_exists('before', $subjectParams) && array_key_exists('after', $subjectParams)) {
+			
+			$before = (string)($subjectParams['before'] ?? '');
+			$after = (string)($subjectParams['after'] ?? '');
+			
+			// Generate visual diff and set as parsed message
+			$diffHtml = $this->diffService->generateDiff($before, $after);
+			$event->setParsedMessage($diffHtml);
+			
+			return $params;
+		}
+		
 		if (array_key_exists('diff', $subjectParams) && $subjectParams['diff'] && !empty($subjectParams['after'])) {
 			// Don't add diff as message since we are limited to 255 chars here
 			$event->setParsedMessage($subjectParams['after']);
