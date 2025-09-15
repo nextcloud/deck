@@ -19,6 +19,22 @@ class DeckCommentActivityService
         //
     }
 
+	/**
+	 * @throws \OCA\Deck\BadRequestException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCA\Deck\NotFoundException
+	 */
+	public function cardNewAttachment(Card $card, string $attachmentTitle): void
+	{
+		$this->commentToCard(
+			card: $card,
+			message: sprintf('%s Added attachment: **%s**',
+				$this->getPrepend(),
+				$attachmentTitle
+			),
+		);
+	}
+
     /**
      * @throws \OCA\Deck\BadRequestException
      * @throws \OCA\Deck\NoPermissionException
