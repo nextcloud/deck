@@ -2,6 +2,36 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-.subnav ul {
-	padding-left: 20px;
+
+ h5 {
+  font-size: 1rem;
+ }
+
+ h6 {
+  font-size: 0.875rem;
+ }
+
+.wy-menu li a {
+  font-size: 1rem;
+}
+
+.wy-menu-vertical li.toctree-l2.current li.toctree-l3>a {
+  padding-inline-start: 3em;
+}
+
+.wy-menu-vertical li.toctree-l2 li.toctree-l3.current li.toctree-l4>a {
+  padding-inline-start: 3.5em;
+}
+
+.headerlink {
+  font-size: 1.125rem !important;
+}
+
+.ep-heading {
+  margin-block-start: 2.5rem;
+  border-bottom: 2px solid grey;
+}
+
+.ep-path {
+  display: block;
 }
