@@ -6,7 +6,7 @@
 <template>
 	<div v-if="activity" class="activity">
 		<div class="activity--header">
-			<img :src="activity.icon" class="activity--icon">
+			<img :src="activity.icon" class="activity--icon" :class="applyMonochromeIconColor">
 			<NcRichText class="activity--subject" :text="message.subject" :arguments="message.parameters" />
 			<div class="activity--timestamp" :name="formatReadableDate(activity.datetime)">
 				{{ relativeDate(activity.datetime) }}
@@ -94,6 +94,15 @@ export default {
 			}
 		},
 
+		applyMonochromeIconColor() {
+			// copied from https://github.com/nextcloud/activity/blob/db919d45c45356082b17104614018e2c7e691996/js/script.js#L225
+			const monochromeIcon = this.activity.type !== 'file_created' && this.activity.type !== 'file_deleted' && this.activity.type !== 'favorite' && !this.activity.icon.endsWith('-color.svg')
+			if (monochromeIcon) {
+				return 'monochrome'
+			}
+			return ''
+		},
+
 		sanitizedMessage() {
 			return DOMPurify.sanitize(this.activity.message, { ALLOWED_TAGS: ['ins', 'del'], ALLOWED_ATTR: ['class'] })
 		},
@@ -115,6 +124,12 @@ export default {
 			height: 16px;
 			flex-shrink: 0;
 			flex-grow: 0;
+
+			/* colored icons, in addition to core ones */
+			&.monochrome {
+				opacity: 0.8;
+				filter: var(--background-invert-if-dark);
+			}
 		}
 		.activity--subject {
 			margin-left: 10px;
