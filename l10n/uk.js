@@ -373,6 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Примітка: Для імпорту в додаток Deck підтримується лише формат JSON.",
     "Export" : "Експортувати",
     "Loading filtered view" : "Завантаження відфільтрованого перегляду",
+    "Search for {searchQuery} in other boards" : "Шукати {searchQuery} на інших дошках",
     "Search for {searchQuery} in all boards" : "Шукати {searchQuery} на всіх дошках оголошень",
     "No results found" : "Не знайдено жодного результату",
     "Deck board {name}\n* Last modified on {lastMod}" : "Колода {name}\n* Востаннє змінено на {lastMod}",
