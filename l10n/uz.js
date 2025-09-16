@@ -55,6 +55,7 @@ OC.L10N.register(
     "Edit title" : "Sarlavhani tahrirlash",
     "Delete card" : "Kartani o'chirish",
     "seconds ago" : "seconds ago",
+    "Keyboard shortcuts" : "Klaviatura yorliqlari",
     "Search" : "Qidirish",
     "Archived boards" : "Arxivlangan taxtalar",
     "Shared with you" : "Shared with you",
