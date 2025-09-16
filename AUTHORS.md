@@ -6,6 +6,7 @@
 
 - Adrian Missy <adrian.missy@onewavestudios.com>
 - Alexandru Puiu <alexpuiu20@yahoo.com>
+- Arne Bartelt <arne.bartelt@gmail.com>
 - Chandi Langecker <git@chandi.it>
 - Christoph Wurst <christoph@winzerhof-wurst.at>
 - Gary Kim <gary@garykim.dev>
