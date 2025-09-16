@@ -131,42 +131,6 @@ export default {
 		height: var(--default-clickable-area);
 	}
 
-	.badges .icon.due {
-		background-position: 4px center;
-		border-radius: var(--border-radius);
-		padding: 4px;
-		font-size: 13px;
-		display: flex;
-		align-items: center;
-		opacity: .5;
-		flex-shrink: 1;
-
-		.icon {
-			background-size: contain;
-		}
-
-		&.overdue {
-			background-color: var(--color-error);
-			color: var(--color-primary-element-text);
-			opacity: .7;
-		}
-		&.now {
-			background-color: var(--color-warning);
-			opacity: .7;
-		}
-		&.next {
-			background-color: var(--color-background-dark);
-			opacity: .7;
-		}
-
-		span {
-			margin-left: 20px;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
-		}
-	}
-
 	.badge-left, .badge-right {
 		display: flex;
 	}
