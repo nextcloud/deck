@@ -15,6 +15,7 @@ use Sabre\VObject\Component\VCalendar;
  * @method int getDeletedAt()
  * @method int getLastModified()
  * @method int getOrder()
+ * @method Card[] getCards()
  */
 class Stack extends RelationalEntity {
 	protected $title;

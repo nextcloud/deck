@@ -131,7 +131,11 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $card;
 	}
 
-	public function findAll($stackId, $limit = null, $offset = null, $since = -1) {
+	/**
+	 * @return Card[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAll($stackId, ?int $limit = null, ?int $offset = null, int $since = -1) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -144,6 +148,32 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->orderBy('order')
 			->addOrderBy('id');
 		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @param int[] $stackIds
+	 * @return array<int, null|Card[]>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAllForStacks(array $stackIds, ?int $limit = null, ?int $offset = null, int $since = -1): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards')
+			->where($qb->expr()->in('stack_id', $qb->createNamedParameter($stackIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)))
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->orderBy('order')
+			->addOrderBy('id');
+
+		$rawCards = $this->findEntities($qb);
+		$cards = array_fill_keys($stackIds, null);
+		foreach ($rawCards as $card) {
+			$cards[$card->getStackId()][] = $card;
+		}
+		return $cards;
 	}
 
 	public function queryCardsByBoard(int $boardId): IQueryBuilder {

@@ -129,12 +129,17 @@ class StackServiceTest extends TestCase {
 				}
 			)
 		);
-		$this->cardMapper->expects($this->any())->method('findAll')->willReturn($this->getCards(222));
-
+		$this->cardMapper->expects($this->any())->method('findAllForStacks')->willReturnCallback(function (array $stackIds) {
+			$r = [];
+			foreach ($stackIds as $stackId) {
+				$r[$stackId] = $this->getCards(222);
+			}
+			return $r;
+		});
 
 		$actual = $this->stackService->findAll(123);
 		for ($stackId = 0; $stackId < 3; $stackId++) {
-			for ($cardId = 0;$cardId < 10;$cardId++) {
+			for ($cardId = 0; $cardId < 10; $cardId++) {
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getId(), $cardId);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getStackId(), 222);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getLabels(), $this->getLabels()[$cardId]);
@@ -211,7 +216,7 @@ class StackServiceTest extends TestCase {
 		$stackToBeDeleted->setBoardId(1);
 		$this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
 		$this->stackMapper->expects($this->once())->method('update')->willReturn($stackToBeDeleted);
-		$this->cardMapper->expects($this->once())->method('findAll')->willReturn([]);
+		$this->cardMapper->expects($this->once())->method('findAllForStacks')->willReturn([]);
 		$this->stackService->delete(123);
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), 'deletedAt is in the past');
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() > 0, 'deletedAt is set');
