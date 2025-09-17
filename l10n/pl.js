@@ -373,6 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Uwaga: tylko format JSON jest obsługiwany przy imporcie z powrotem do aplikacji Deck.",
     "Export" : "Eksportuj",
     "Loading filtered view" : "Wczytywanie przefiltrowanego widoku",
+    "Search for {searchQuery} in other boards" : "Szukaj {searchQuery} na innych tablicach",
     "Search for {searchQuery} in all boards" : "Wyszukaj dla {searchQuery} na wszystkich tablicach",
     "No results found" : "Nie znaleziono wyników",
     "Deck board {name}\n* Last modified on {lastMod}" : "Tablica {name}\n* Ostatnia modyfikacja w dniu {lastMod}",
