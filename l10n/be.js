@@ -66,6 +66,7 @@ OC.L10N.register(
     "Export" : "Экспарт",
     "{stack} in {board}" : "{stack} у {board}",
     "Close" : "Закрыць",
+    "Message from {author} in {conversationName}" : "Паведамленне ад {author} у {conversationName}",
     "Failed to upload {name}" : "Не ўдалося запампаваць {name}",
     "Share" : "Абагуліць",
     "Today" : "Сёння",
