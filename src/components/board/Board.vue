@@ -281,6 +281,7 @@ export default {
 	}
 
 	.board {
+		padding-left: $board-gap;
 		position: relative;
 		overflow-x: auto;
 		flex-grow: 1;
