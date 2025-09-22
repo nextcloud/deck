@@ -272,6 +272,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "{count} σχόλια, {unread} μη αναγνωσμένα",
     "Todo items" : "Στοιχεία todo",
     "Edit card title" : "Επεξεργασία τίτλου κάρτας",
+    "Open link" : "Άνοιγμα συνδέσμου",
     "Card deleted" : "Η καρτέλα διαγράφηκε",
     "Edit title" : "Επεξεργασία τίτλου",
     "Assign to me" : "Ανάθεση σε εμένα",
