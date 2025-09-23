@@ -11,10 +11,16 @@ use Sabre\VObject\Component\VCalendar;
 
 /**
  * @method int getId()
+ * @method string getTitle()
+ * @method void setTitle(string $title)
  * @method int getBoardId()
+ * @method void setBoardId(int $boardId)
  * @method int getDeletedAt()
+ * @method void setDeletedAt(int $deletedAt)
  * @method int getLastModified()
- * @method int getOrder()
+ * @method void setLastModified(int $lastModified)
+ * @method \int getOrder()
+ * @method void setOrder(int $order)
  * @method Card[] getCards()
  */
 class Stack extends RelationalEntity {

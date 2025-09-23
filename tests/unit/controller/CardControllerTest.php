@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -24,6 +26,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Card;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\IRequest;
@@ -32,17 +35,11 @@ use Test\TestCase;
 
 class CardControllerTest extends TestCase {
 
-	/** @var CardController|MockObject */
-	private $controller;
-	/** @var IRequest|MockObject */
-	private $request;
-	/** @var CardService|MockObject */
-	private $cardService;
-	/** @var AssignmentService|MockObject */
-	private $assignmentService;
-	/** @var string */
-	private $userId = 'user';
-
+	private CardController $controller;
+	private IRequest&MockObject $request;
+	private CardService&MockObject $cardService;
+	private AssignmentService&MockObject $assignmentService;
+	private string $userId = 'user';
 
 	public function setUp(): void {
 		$this->request = $this->createMock(IRequest::class);
@@ -58,39 +55,43 @@ class CardControllerTest extends TestCase {
 	}
 
 	public function testRead() {
+		$card = $this->createMock(Card::class);
 		$this->cardService->expects($this->once())
 			->method('find')
 			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->read(123));
+			->willReturn($card);
+		$this->assertEquals($card, $this->controller->read(123));
 	}
 
-	public function testCreate() {
+	public function testCreate(): void {
+		$card = $this->createMock(Card::class);
 		$this->cardService->expects($this->once())
 			->method('create')
 			->with('foo', 1, 'text', 3, $this->userId)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->create('foo', 1, 'text', 3));
+			->willReturn($card);
+		$this->assertEquals($card, $this->controller->create('foo', 1, 'text', 3));
 	}
 
-	public function testUpdate() {
+	public function testUpdate(): void {
+		$card = $this->createMock(Card::class);
 		$this->cardService->expects($this->once())
 			->method('update')
 			->with(1, 'title', 3, 'text', $this->userId, 'foo', 5, '2017-01-01 00:00:00')
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 'title', 3, 'text', 5, 'foo', '2017-01-01 00:00:00', null));
+			->willReturn($card);
+		$this->assertEquals($card, $this->controller->update(1, 'title', 3, 'text', 5, 'foo', '2017-01-01 00:00:00', null));
 	}
 
-	public function testDelete() {
+	public function testDelete(): void {
+		$card = $this->createMock(Card::class);
 		$this->cardService->expects($this->once())
 			->method('delete')
 			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->delete(123));
+			->willReturn($card);
+		$this->assertEquals($card, $this->controller->delete(123));
 	}
 
 	public function testArchive() {
-		$this->cardService->expects($this->once())->method('archive')->willReturn(true);
+		$this->cardService->expects($this->once())->method('archive');
 		$this->controller->archive(1);
 	}
 	public function testUnarchive() {

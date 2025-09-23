@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -24,6 +26,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
@@ -67,34 +70,38 @@ class StackControllerTest extends \Test\TestCase {
 	}
 
 	public function testCreate() {
+		$stack = $this->createMock(Stack::class);
 		$this->stackService->expects($this->once())
 			->method('create')
-			->with(1, 2, 3)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->create(1, 2, 3));
+			->with('abc', 2, 3)
+			->willReturn($stack);
+		$this->assertEquals($stack, $this->controller->create('abc', 2, 3));
 	}
 
 	public function testUpdate() {
+		$stack = $this->createMock(Stack::class);
 		$this->stackService->expects($this->once())
 			->method('update')
-			->with(1, 2, 3, 4)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2, 3, 4, null));
+			->with(1, 'abc', 3, 4)
+			->willReturn($stack);
+		$this->assertEquals($stack, $this->controller->update(1, 'abc', 3, 4, null));
 	}
 
 	public function testReorder() {
+		$stack = $this->createMock(Stack::class);
 		$this->stackService->expects($this->once())
 			->method('reorder')
 			->with(1, 2)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->reorder(1, 2));
+			->willReturn([$stack]);
+		$this->assertEquals([$stack], $this->controller->reorder(1, 2));
 	}
 
 	public function testDelete() {
+		$stack = $this->createMock(Stack::class);
 		$this->stackService->expects($this->once())
 			->method('delete')
 			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->delete(123));
+			->willReturn($stack);
+		$this->assertEquals($stack, $this->controller->delete(123));
 	}
 }

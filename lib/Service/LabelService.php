@@ -43,33 +43,24 @@ class LabelService {
 	}
 
 	/**
-	 * @param $labelId
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find($labelId) {
-		if (is_numeric($labelId) === false) {
-			throw new BadRequestException('label id must be a number');
-		}
+	public function find(int $labelId): Label {
 		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
 		return $this->labelMapper->find($labelId);
 	}
 
 	/**
-	 * @param $title
-	 * @param $color
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function create($title, $color, $boardId) {
+	public function create(string $title, string $color, int $boardId): Label {
 		$this->labelServiceValidator->check(compact('title', 'color', 'boardId'));
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
@@ -106,15 +97,13 @@ class LabelService {
 	}
 
 	/**
-	 * @param $id
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function delete($id) {
+	public function delete(int $id): Label {
 		$this->labelServiceValidator->check(compact('id'));
 
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
@@ -127,17 +116,13 @@ class LabelService {
 	}
 
 	/**
-	 * @param $id
-	 * @param $title
-	 * @param $color
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $color) {
+	public function update(int $id, string $title, string $color): Label {
 		$this->labelServiceValidator->check(compact('title', 'color', 'id'));
 
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);

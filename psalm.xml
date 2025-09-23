@@ -6,6 +6,8 @@
 		xmlns="https://getpsalm.org/schema/config"
 		xsi:schemaLocation="https://getpsalm.org/schema/config"
 		errorBaseline="tests/psalm-baseline.xml"
+		findUnusedBaselineEntry="true"
+		findUnusedCode="false"
     	phpVersion="8.1"
 >
 	<stubs>
@@ -15,6 +17,7 @@
 		<directory name="lib" />
 		<ignoreFiles>
 			<directory name="vendor" />
+			<directory name="vendor-bin" />
 		</ignoreFiles>
 	</projectFiles>
 	<extraFiles>
@@ -26,13 +29,6 @@
 				<referencedMethod name="/Db\\.*::.*/" />
 			</errorLevel>
 		</UndefinedMagicMethod>
-		<UndefinedInterfaceMethod>
-			<errorLevel type="suppress">
-				<!-- FIXME Deprecated event handling -->
-				<referencedMethod name="OCP\IUserManager::listen" />
-				<referencedMethod name="OCP\IGroupManager::listen" />
-			</errorLevel>
-		</UndefinedInterfaceMethod>
 		<UndefinedClass>
 			<errorLevel type="suppress">
 				<referencedClass name="OC\*" />

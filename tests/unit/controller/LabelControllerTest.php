@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Label;
 use OCA\Deck\Service\LabelService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
@@ -56,27 +57,30 @@ class LabelControllerTest extends \Test\TestCase {
 	}
 
 
-	public function testCreate() {
+	public function testCreate(): void {
+		$label = $this->createMock(Label::class);
 		$this->labelService->expects($this->once())
 			->method('create')
 			->with(1, 2, 3)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->create(1, 2, 3));
+			->willReturn($label);
+		$this->assertEquals($label, $this->controller->create(1, 2, 3));
 	}
 
-	public function testUpdate() {
+	public function testUpdate(): void {
+		$label = $this->createMock(Label::class);
 		$this->labelService->expects($this->once())
 			->method('update')
 			->with(1, 2, 3)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2, 3));
+			->willReturn($label);
+		$this->assertEquals($label, $this->controller->update(1, 2, 3));
 	}
 
-	public function testDelete() {
+	public function testDelete(): void {
+		$label = $this->createMock(Label::class);
 		$this->labelService->expects($this->once())
 			->method('delete')
 			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->delete(123));
+			->willReturn($label);
+		$this->assertEquals($label, $this->controller->delete(123));
 	}
 }

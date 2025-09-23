@@ -8,6 +8,8 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\ConfigService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\AppFramework\OCSController;
@@ -22,19 +24,15 @@ class ConfigController extends OCSController {
 		parent::__construct($AppName, $request);
 	}
 
-	/**
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function get(): DataResponse {
 		return new DataResponse($this->configService->getAll());
 	}
 
-	/**
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function setValue(string $key, $value) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function setValue(string $key, mixed $value): DataResponse|NotFoundResponse {
 		$result = $this->configService->set($key, $value);
 		if ($result === null) {
 			return new NotFoundResponse();

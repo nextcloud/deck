@@ -19,12 +19,11 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 abstract class DeckMapper extends QBMapper {
 
 	/**
-	 * @param $id
 	 * @return T
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
-	public function find($id) {
+	public function find(int $id): Entity {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -37,7 +36,7 @@ abstract class DeckMapper extends QBMapper {
 	 * Helper function to split passed array into chunks of 1000 elements and
 	 * call a given callback for fetching query results
 	 *
-	 * Can be useful to limit to 1000 results per query for oracle compatiblity
+	 * Can be useful to limit to 1000 results per query for oracle compatibility
 	 * but still iterate over all results
 	 */
 	public function chunkQuery(array $ids, callable $callback): Generator {

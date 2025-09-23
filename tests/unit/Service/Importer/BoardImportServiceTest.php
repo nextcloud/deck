@@ -192,14 +192,17 @@ class BoardImportServiceTest extends \Test\TestCase {
 			->expects($this->once())
 			->method('save');
 
+		$assignment = new Assignment();
+		$assignment->setId(1);
 		$this->trelloJsonService
 			->method('getCardAssignments')
 			->willReturn([
-				'fakecardid' => [new Assignment()]
+				'fakecardid' => [$assignment]
 			]);
 		$this->assignmentMapper
 			->expects($this->once())
-			->method('insert');
+			->method('insert')
+			->willReturn($assignment);
 
 		$this->boardImportService->import();
 		self::assertTrue(true);

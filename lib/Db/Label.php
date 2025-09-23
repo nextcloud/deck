@@ -8,7 +8,16 @@
 namespace OCA\Deck\Db;
 
 /**
- * @method getTitle(): string
+ * @method string getTitle()
+ * @method void setTitle(string $title)
+ * @method string getColor()
+ * @method void setColor(string $color)
+ * @method int getBoardId()
+ * @method void setBoardId(int $boardId)
+ * @method int getCardId()
+ * @method void setCardId(int $cardId)
+ * @method int getLastModified()
+ * @method void setLastModified(int $lastModified)
  */
 class Label extends RelationalEntity {
 	protected $title;
@@ -24,7 +33,7 @@ class Label extends RelationalEntity {
 		$this->addType('lastModified', 'integer');
 	}
 
-	public function getETag() {
+	public function getETag(): string {
 		return md5((string)$this->getLastModified());
 	}
 }
