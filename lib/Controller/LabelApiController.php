@@ -10,6 +10,9 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Service\LabelService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
@@ -26,59 +29,50 @@ class LabelApiController extends ApiController {
 		$appName,
 		IRequest $request,
 		private LabelService $labelService,
-		private $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Get a specific label.
 	 */
-	public function get() {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function get(): DataResponse {
 		$label = $this->labelService->find($this->request->getParam('labelId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * @params $title
-	 * @params $color
 	 * Create a new label
 	 */
-	public function create($title, $color) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function create(string $title, string $color): DataResponse {
 		$label = $this->labelService->create($title, $color, $this->request->getParam('boardId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * @params $title
-	 * @params $color
 	 * Update a specific label
 	 */
-	public function update($title, $color) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function update(string $title, string $color): DataResponse {
 		$label = $this->labelService->update($this->request->getParam('labelId'), $title, $color);
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Delete a specific label
 	 */
-	public function delete() {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function delete(): DataResponse {
 		$label = $this->labelService->delete($this->request->getParam('labelId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}

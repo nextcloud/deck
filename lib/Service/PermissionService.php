@@ -29,6 +29,7 @@ class PermissionService {
 	private array $users = [];
 
 	private CappedMemoryCache $boardCache;
+	/** @var CappedMemoryCache<array<Acl::PERMISSION_*, bool>> */
 	private CappedMemoryCache $permissionCache;
 
 	public function __construct(
@@ -49,15 +50,16 @@ class PermissionService {
 	/**
 	 * Get current user permissions for a board by id
 	 *
-	 * @return bool|array
+	 * @return array<Acl::PERMISSION_*, bool>
 	 */
-	public function getPermissions(int $boardId, ?string $userId = null) {
+	public function getPermissions(int $boardId, ?string $userId = null): array {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
 
 		$cacheKey = $boardId . '-' . $userId;
 		if ($cached = $this->permissionCache->get($cacheKey)) {
+			/** @var array<Acl::PERMISSION_*, bool> $cached */
 			return $cached;
 		}
 

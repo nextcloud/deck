@@ -20,13 +20,10 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $boardId
-	 * @param int|null $limit
-	 * @param int|null $offset
 	 * @return Label[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAll($boardId, $limit = null, $offset = null): array {
+	public function findAll(int $boardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -44,13 +41,10 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $cardId
-	 * @param int|null $limit
-	 * @param int|null $offset
 	 * @return Label[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAssignedLabelsForCard($cardId, $limit = null, $offset = null): array {
+	public function findAssignedLabelsForCard(int $cardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.*', 'card_id')
 			->from($this->getTableName(), 'l')
@@ -63,7 +57,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAssignedLabelsForCards($cardIds, $limit = null, $offset = null): array {
+	public function findAssignedLabelsForCards(array $cardIds, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.*', 'card_id')
 			->from($this->getTableName(), 'l')
@@ -77,13 +71,10 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $boardId
-	 * @param int|null $limit
-	 * @param int|null $offset
 	 * @return Label[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAssignedLabelsForBoard($boardId, $limit = null, $offset = null): array {
+	public function findAssignedLabelsForBoard(int $boardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.id as id', 'l.title as title', 'l.color as color')
 			->selectAlias('c.id', 'card_id')
@@ -113,11 +104,10 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $boardId
-	 * @return array
+	 * @return array<int, list<Label>>
 	 * @throws \OCP\DB\Exception
 	 */
-	public function getAssignedLabelsForBoard($boardId) {
+	public function getAssignedLabelsForBoard(int $boardId): array {
 		$labels = $this->findAssignedLabelsForBoard($boardId);
 		$result = [];
 		foreach ($labels as $label) {
@@ -130,11 +120,9 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $labelId
-	 * @return void
 	 * @throws \OCP\DB\Exception
 	 */
-	public function deleteLabelAssignments($labelId) {
+	public function deleteLabelAssignments(int $labelId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete('deck_assigned_labels')
 			->where($qb->expr()->eq('label_id', $qb->createNamedParameter($labelId, IQueryBuilder::PARAM_INT)));
@@ -142,11 +130,9 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $cardId
-	 * @return void
 	 * @throws \OCP\DB\Exception
 	 */
-	public function deleteLabelAssignmentsForCard($cardId) {
+	public function deleteLabelAssignmentsForCard(int $cardId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete('deck_assigned_labels')
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));
@@ -154,33 +140,25 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param numeric $labelId
-	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
-	public function isOwner($userId, $labelId): bool {
+	public function isOwner(string $userId, int $id): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_boards', 'b', 'l.board_id = b.id')
-			->where($qb->expr()->eq('l.id', $qb->createNamedParameter($labelId, IQueryBuilder::PARAM_INT)))
+			->where($qb->expr()->eq('l.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
 		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
-	/**
-	 * @param numeric $id
-	 * @return int|null
-	 */
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		try {
 			$entity = $this->find($id);
 			return $entity->getBoardId();
-		} catch (DoesNotExistException $e) {
-		} catch (MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
+			return null;
 		}
-		return null;
 	}
 }

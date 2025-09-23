@@ -13,7 +13,6 @@ namespace OCA\Deck\Sharing;
 use OC\Files\Cache\Cache;
 use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
@@ -99,9 +98,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @inheritDoc
 	 */
 	public function create(IShare $share) {
-		$cardId = $share->getSharedWith();
+		$cardId = (int)$share->getSharedWith();
 		$boardId = $this->cardMapper->findBoardId($cardId);
 		$valid = $boardId !== null;
+		if (!$valid) {
+			throw new GenericShareException('Card not found', $this->l->t('Card not found'), 404);
+		}
+
 		try {
 			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_EDIT);
 		} catch (NoPermissionException $e) {
@@ -147,7 +150,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		);
 		$data = $this->getRawShare($shareId);
 
-		$this->attachmentCacheHelper->clearAttachmentCount((int)$cardId);
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
 
 		return $this->createShareObject($data);
 	}
@@ -213,7 +216,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->from('share')
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($id)));
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		$data = $cursor->fetch();
 		$cursor->closeCursor();
 
@@ -297,7 +300,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
 			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
 			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE))
-			->execute();
+			->executeStatement();
 
 		/*
 		 * Update all user defined group shares
@@ -310,7 +313,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
 			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
 			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE))
-			->execute();
+			->executeStatement();
 
 		/*
 		 * Now update the permissions for all children that have not set it to 0
@@ -320,7 +323,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
 			->andWhere($qb->expr()->neq('permissions', $qb->createNamedParameter(0)))
 			->set('permissions', $qb->createNamedParameter($share->getPermissions()))
-			->execute();
+			->executeStatement();
 
 		return $share;
 	}
@@ -335,7 +338,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$qb->orWhere($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())));
 
-		$qb->execute();
+		$qb->executeStatement();
 
 		$this->attachmentCacheHelper->clearAttachmentCount((int)$share->getSharedWith());
 	}
@@ -355,7 +358,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				$qb->expr()->eq('item_type', $qb->createNamedParameter('file')),
 				$qb->expr()->eq('item_type', $qb->createNamedParameter('folder'))
 			))
-			->execute();
+			->executeQuery();
 
 		$data = $stmt->fetch();
 		$stmt->closeCursor();
@@ -376,14 +379,14 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 					'file_target' => $qb->createNamedParameter($share->getTarget()),
 					'permissions' => $qb->createNamedParameter(0),
 					'stime' => $qb->createNamedParameter($share->getShareTime()->getTimestamp()),
-				])->execute();
+				])->executeStatement();
 		} elseif ($data['permissions'] !== 0) {
 			// Already a userroom share. Update it.
 			$qb = $this->dbConnection->getQueryBuilder();
 			$qb->update('share')
 				->set('permissions', $qb->createNamedParameter(0))
 				->where($qb->expr()->eq('id', $qb->createNamedParameter($data['id'])))
-				->execute();
+				->executeStatement();
 		}
 	}
 
@@ -397,7 +400,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->where(
 				$qb->expr()->eq('id', $qb->createNamedParameter($share->getId()))
 			);
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		$data = $cursor->fetch();
 		$cursor->closeCursor();
 
@@ -414,7 +417,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				$qb->expr()->eq('share_with', $qb->createNamedParameter($recipient))
 			);
 
-		$qb->execute();
+		$qb->executeStatement();
 
 		return $this->getShareById((int)$share->getId(), $recipient);
 	}
@@ -435,7 +438,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				$qb->expr()->eq('item_type', $qb->createNamedParameter('folder'))
 			))
 			->setMaxResults(1)
-			->execute();
+			->executeQuery();
 
 		$data = $stmt->fetch();
 		$stmt->closeCursor();
@@ -509,7 +512,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$qb->orderBy('s.id');
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		$shares = [];
 		while ($data = $cursor->fetch()) {
 			$shares[$data['fileid']][] = $this->createShareObject($data);
@@ -554,7 +557,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		$qb->setFirstResult($offset);
 		$qb->orderBy('id');
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		$shares = [];
 		while ($data = $cursor->fetch()) {
 			$shares[] = $this->createShareObject($data);
@@ -582,7 +585,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->where($qb->expr()->eq('s.id', $qb->createNamedParameter($id)))
 			->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)));
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		$data = $cursor->fetch();
 		$cursor->closeCursor();
 
@@ -647,7 +650,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 					$qb->expr()->eq('item_type', $qb->createNamedParameter('folder'))
 				));
 
-			$stmt = $query->execute();
+			$stmt = $query->executeQuery();
 
 			while ($data = $stmt->fetch()) {
 				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId);
@@ -677,7 +680,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->from('share')
 			->andWhere($qb->expr()->eq('file_source', $qb->createNamedParameter($path->getId())))
 			->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
-			->execute();
+			->executeQuery();
 
 		$shares = [];
 		while ($data = $cursor->fetch()) {
@@ -749,7 +752,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 			$qb->andWhere($qb->expr()->eq('dc.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
-			$cursor = $qb->execute();
+			$cursor = $qb->executeQuery();
 			while ($data = $cursor->fetch()) {
 				if (!$this->isAccessibleResult($data)) {
 					continue;
@@ -842,6 +845,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	/**
 	 * @inheritDoc
+	 * @psalm-suppress InvalidReturnType Not returning anything
 	 */
 	public function getShareByToken($token) {
 		throw new ShareNotFound();
@@ -851,7 +855,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->from('share')
 			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_ROOM)))
 			->andWhere($qb->expr()->eq('token', $qb->createNamedParameter($token)))
-			->execute();
+			->executeQuery();
 
 		$data = $cursor->fetch();
 
@@ -1015,7 +1019,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
 			->orderBy('id');
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		while ($data = $cursor->fetch()) {
 			$children[] = $this->createShareObject($data);
 		}
@@ -1038,7 +1042,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				)
 			);
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		while ($data = $cursor->fetch()) {
 			$share = $this->createShareObject($data);
 
@@ -1055,7 +1059,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->where($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
 			->andWhere($qb->expr()->notIn('s.share_with', $qb->createNamedParameter($allCardIds, IQueryBuilder::PARAM_STR_ARRAY)));
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		$shares = [];
 		while ($data = $cursor->fetch()) {
 			$shares[] = $this->createShareObject($data);

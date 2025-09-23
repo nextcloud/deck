@@ -10,10 +10,20 @@ namespace OCA\Deck\Db;
 /**
  * @method int getId()
  * @method string getTitle()
+ * @method void setTitle(string $title)
  * @method int getShared()
+ * @method void setShared(int $shared)
+ * @method bool isArchived()
  * @method bool getArchived()
+ * @method void setArchived(bool $archived)
  * @method int getDeletedAt()
+ * @method void setDeletedAt(int $deletedAt)
  * @method int getLastModified()
+ * @method void setLastModified(int $lastModified)
+ * @method string getOwner()
+ * @method void setOwner(string $owner)
+ * @method string getColor()
+ * @method void setColor(string $color)
  */
 class Board extends RelationalEntity {
 	protected $title;

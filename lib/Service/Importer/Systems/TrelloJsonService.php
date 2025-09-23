@@ -159,6 +159,7 @@ class TrelloJsonService extends ABoardImportService {
 				$comments[$cardId][$commentId] = $comment;
 			}
 		}
+		/** @var array<int, array<string, IComment>> */
 		return $comments;
 	}
 

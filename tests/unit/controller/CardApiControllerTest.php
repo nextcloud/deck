@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2018 Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
@@ -30,15 +32,16 @@ use OCP\AppFramework\Http;
 
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CardApiControllerTest extends \Test\TestCase {
-	private $controller;
-	private $request;
-	private $cardService;
-	private $userId = 'admin';
-	private $cardExample;
-	private $stackExample;
-	private $assignmentService;
+	private CardApiController $controller;
+	private IRequest&MockObject $request;
+	private CardService&MockObject $cardService;
+	private string $userId = 'admin';
+	private array $cardExample;
+	private array $stackExample;
+	private AssignmentService&MockObject $assignmentService;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -51,7 +54,7 @@ class CardApiControllerTest extends \Test\TestCase {
 		$this->stackExample['id'] = 1;
 
 		$this->controller = new CardApiController(
-			$appName = 'deck',
+			'deck',
 			$this->request,
 			$this->cardService,
 			$this->assignmentService,
@@ -59,7 +62,7 @@ class CardApiControllerTest extends \Test\TestCase {
 		);
 	}
 
-	public function testGet() {
+	public function testGet(): void {
 		$card = new Card();
 		$card->setId($this->cardExample['id']);
 
@@ -116,7 +119,7 @@ class CardApiControllerTest extends \Test\TestCase {
 			->willReturn($card);
 
 		$expected = new DataResponse($card, HTTP::STATUS_OK);
-		$actual = $this->controller->update('title', 'plain', 0, 'description', $this->userId, null);
+		$actual = $this->controller->update('title', 'plain', $this->userId, 'description', 0, null);
 		$this->assertEquals($expected, $actual);
 	}
 

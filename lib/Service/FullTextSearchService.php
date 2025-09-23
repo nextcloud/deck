@@ -124,18 +124,15 @@ class FullTextSearchService {
 
 
 	/**
-	 * @param int $cardId
-	 *
-	 * @return Board
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 */
 	public function getBoardFromCardId(int $cardId): Board {
-		$boardId = (int)$this->cardMapper->findBoardId($cardId);
-		/** @var Board $board */
-		$board = $this->boardMapper->find($boardId);
-
-		return $board;
+		$boardId = $this->cardMapper->findBoardId($cardId);
+		if ($boardId === null) {
+			throw new DoesNotExistException("Board '$cardId' does not exist");
+		}
+		return $this->boardMapper->find($boardId);
 	}
 
 
@@ -145,7 +142,7 @@ class FullTextSearchService {
 	 * @return Card[]
 	 */
 	private function getCardsFromStack(int $stackId): array {
-		return $this->cardMapper->findAll($stackId, null, null);
+		return $this->cardMapper->findAll($stackId);
 	}
 
 
@@ -155,7 +152,7 @@ class FullTextSearchService {
 	 * @return Stack[]
 	 */
 	private function getStacksFromBoard(int $boardId): array {
-		return $this->stackMapper->findAll($boardId, null, null);
+		return $this->stackMapper->findAll($boardId);
 	}
 
 
@@ -165,6 +162,6 @@ class FullTextSearchService {
 	 * @return Board[]
 	 */
 	private function getBoardsFromUser(string $userId): array {
-		return $this->boardMapper->findAllByUser($userId, null, null, null);
+		return $this->boardMapper->findAllByUser($userId);
 	}
 }

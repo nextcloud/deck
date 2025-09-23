@@ -35,13 +35,11 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 
 
 	/**
-	 * @param numeric $id
-	 * @return Stack
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws \OCP\DB\Exception
 	 */
-	public function find($id): Stack {
+	public function find(int $id): Stack {
 		if (isset($this->stackCache[(string)$id])) {
 			return $this->stackCache[(string)$id];
 		}
@@ -56,11 +54,9 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param $cardId
-	 * @return Stack|null
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findStackFromCardId($cardId): ?Stack {
+	public function findStackFromCardId(int $cardId): ?Stack {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('s.*')
 			->from($this->getTableName(), 's')
@@ -76,11 +72,10 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $boardId
 	 * @return Stack[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAll($boardId, ?int $limit = null, ?int $offset = null): array {
+	public function findAll(int $boardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -93,13 +88,9 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $boardId
-	 * @param int|null $limit
-	 * @param int|null $offset
-	 * @return Stack[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findDeleted($boardId, $limit = null, $offset = null) {
+	public function findDeleted(int $boardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -125,12 +116,9 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $userId
-	 * @param numeric $stackId
-	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('s.id')
 			->from($this->getTableName(), 's')
@@ -142,11 +130,9 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $id
-	 * @return int|null
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		$result = $this->cache->get('findBoardId:' . $id);
 		if ($result !== null) {
 			return $result !== false ? $result : null;
@@ -163,6 +149,10 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $result !== false ? $result : null;
 	}
 
+	/**
+	 * @return array<Stack>
+	 * @throws \OCP\DB\Exception
+	 */
 	public function findToDelete(): array {
 		// add buffer of 5 min
 		$timeLimit = time() - (60 * 5);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -240,6 +242,7 @@ class BoardServiceTest extends TestCase {
 
 	public function testDelete() {
 		$board = new Board();
+		$board->setId(42);
 		$board->setOwner('admin');
 		$board->setDeletedAt(0);
 		$this->boardMapper->expects($this->once())
@@ -252,7 +255,7 @@ class BoardServiceTest extends TestCase {
 			]);
 		$this->sessionMapper->expects($this->once())
 			->method('findAllActive')
-			->with(null)
+			->with(42)
 			->willReturn([]);
 		$boardDeleted = clone $board;
 		$boardDeleted->setDeletedAt(1);
@@ -267,7 +270,7 @@ class BoardServiceTest extends TestCase {
 		$user->method('getUID')->willReturn('admin');
 		$acl = new Acl();
 		$acl->setBoardId(123);
-		$acl->setType('user');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
 		$acl->setParticipant('admin');
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
@@ -287,7 +290,7 @@ class BoardServiceTest extends TestCase {
 				'admin' => 'admin',
 			]);
 		$this->assertEquals($acl, $this->service->addAcl(
-			123, 'user', 'admin', true, true, true
+			123, Acl::PERMISSION_TYPE_USER, 'admin', true, true, true
 		));
 	}
 
@@ -323,7 +326,7 @@ class BoardServiceTest extends TestCase {
 	public function testAddAclExtendPermission($currentUserAcl, $providedAcl, $resultingAcl) {
 		$existingAcl = new Acl();
 		$existingAcl->setBoardId(123);
-		$existingAcl->setType('user');
+		$existingAcl->setType(Acl::PERMISSION_TYPE_USER);
 		$existingAcl->setParticipant('admin');
 		$existingAcl->setPermissionEdit($currentUserAcl[0]);
 		$existingAcl->setPermissionShare($currentUserAcl[1]);
@@ -391,14 +394,14 @@ class BoardServiceTest extends TestCase {
 			->method('dispatchTyped')
 			->with(new AclCreatedEvent($acl));
 		$this->assertEquals($expected, $this->service->addAcl(
-			123, 'user', 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
+			123, Acl::PERMISSION_TYPE_USER, 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
 		));
 	}
 
 	public function testUpdateAcl() {
 		$acl = new Acl();
 		$acl->setBoardId(123);
-		$acl->setType('user');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
 		$acl->setParticipant('admin');
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);

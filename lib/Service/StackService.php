@@ -77,7 +77,7 @@ class StackService {
 
 	/** @param Stack[] $stacks */
 	private function enrichStacksWithCards(array $stacks, $since = -1): void {
-		$cardsByStackId = $this->cardMapper->findAllForStacks(array_map(fn (Stack $stack) => $stack->getId(), $stacks), null, null, $since);
+		$cardsByStackId = $this->cardMapper->findAllForStacks(array_map(fn (Stack $stack) => $stack->getId(), $stacks), null, 0, $since);
 
 		foreach ($cardsByStackId as $stackId => $cards) {
 			if (!$cards) {
@@ -95,18 +95,11 @@ class StackService {
 	}
 
 	/**
-	 * @param $stackId
-	 *
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find($stackId) {
-		if (is_numeric($stackId) === false) {
-			throw new BadRequestException('stack id must be a number');
-		}
-
+	public function find(int $stackId): Stack {
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_READ);
 		$stack = $this->stackMapper->find($stackId);
 
@@ -127,17 +120,11 @@ class StackService {
 	}
 
 	/**
-	 * @param mixed $boardId
-	 *
 	 * @return Stack[]
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
 	 */
-	public function findAll($boardId, $since = -1) {
-		if (is_numeric($boardId) === false) {
-			throw new BadRequestException('boardId must be a number');
-		}
-
+	public function findAll(int $boardId, int $since = -1): array {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$this->enrichStacksWithCards($stacks, $since);
@@ -145,7 +132,11 @@ class StackService {
 		return $stacks;
 	}
 
-	public function findCalendarEntries($boardId) {
+	/**
+	 * @return Stack[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findCalendarEntries(int $boardId): array {
 		try {
 			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		} catch (NoPermissionException $e) {
@@ -155,7 +146,11 @@ class StackService {
 		return $this->stackMapper->findAll($boardId);
 	}
 
-	public function fetchDeleted($boardId) {
+	/**
+	 * @return Stack[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function fetchDeleted(int $boardId): array {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findDeleted($boardId);
 		$this->enrichStacksWithCards($stacks);
@@ -164,17 +159,11 @@ class StackService {
 	}
 
 	/**
-	 * @param $boardId
-	 *
-	 * @return array
+	 * @return Stack[]
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
 	 */
-	public function findAllArchived($boardId) {
-		if (is_numeric($boardId) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
-
+	public function findAllArchived(int $boardId): array {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
@@ -189,22 +178,18 @@ class StackService {
 			$stacks[$stackIndex]->setCards($cards);
 		}
 
+		/** @var Stack[] $stacks */
 		return $stacks;
 	}
 
 	/**
-	 * @param $title
-	 * @param $boardId
-	 * @param integer $order
-	 *
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function create($title, $boardId, $order) {
+	public function create(string $title, int $boardId, int $order): Stack {
 		$this->stackServiceValidator->check(compact('title', 'boardId', 'order'));
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
@@ -226,19 +211,13 @@ class StackService {
 	}
 
 	/**
-	 * @param $id
-	 *
-	 * @return \OCP\AppFramework\Db\Entity
+	 * @return Stack The deleted stack.
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function delete($id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('stack id must be a number');
-		}
-
+	public function delete(int $id): Stack {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 
 		$stack = $this->stackMapper->find($id);
@@ -256,20 +235,13 @@ class StackService {
 	}
 
 	/**
-	 * @param $id
-	 * @param $title
-	 * @param $boardId
-	 * @param $order
-	 * @param $deletedAt
-	 *
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $boardId, $order, $deletedAt) {
+	public function update(int $id, string $title, int $boardId, int $order, ?int $deletedAt): Stack {
 		$this->stackServiceValidator->check(compact('id', 'title', 'boardId', 'order'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
@@ -297,16 +269,13 @@ class StackService {
 	}
 
 	/**
-	 * @param $id
-	 * @param $order
-	 *
-	 * @return array
+	 * @return array<int, Stack> The stacks in the correct order.
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function reorder($id, $order) {
+	public function reorder(int $id, int $order): array {
 		$this->stackServiceValidator->check(compact('id', 'order'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
@@ -327,7 +296,7 @@ class StackService {
 			if ($stack->id !== $id) {
 				$stack->setOrder($i++);
 			}
-			$this->stackMapper->update($stack);
+			$stack = $this->stackMapper->update($stack);
 			$result[$stack->getOrder()] = $stack;
 		}
 		$this->changeHelper->boardChanged($stackToSort->getBoardId());

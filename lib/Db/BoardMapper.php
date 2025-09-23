@@ -469,16 +469,16 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return parent::delete($entity);
 	}
 
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		$board = $this->find($id);
 		return ($board->getOwner() === $userId);
 	}
 
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		return $id;
 	}
 
-	public function mapAcl(Acl &$acl) {
+	public function mapAcl(Acl &$acl): void {
 		$acl->resolveRelation('participant', function ($participant) use (&$acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 				if ($this->userManager->userExists($acl->getParticipant())) {

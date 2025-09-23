@@ -66,7 +66,7 @@ class CirclesService {
 			$circlesManager->startSession($federatedUser);
 			$circle = $circlesManager->getCircle($circleId);
 			$member = $circle->getInitiator();
-			$isUserInCircle = $member !== null && $member->getLevel() >= Member::LEVEL_MEMBER;
+			$isUserInCircle = $member->getLevel() >= Member::LEVEL_MEMBER;
 
 			if (!isset($this->userCircleCache[$circleId])) {
 				$this->userCircleCache[$circleId] = [];
