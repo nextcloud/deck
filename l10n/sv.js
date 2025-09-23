@@ -373,6 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Observera: Endast JSON-formatet stöds för import tillbaka till Deck-appen.",
     "Export" : "Exportera",
     "Loading filtered view" : "Laddar filtrerad vy",
+    "Search for {searchQuery} in other boards" : "Sök efter {searchQuery} i andra tavlor",
     "Search for {searchQuery} in all boards" : "Sök efter {searchQuery} i alla tavlor",
     "No results found" : "Inga resultat funna",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deck tavla {name}\n* Senast ändrad den {lastMod}",
