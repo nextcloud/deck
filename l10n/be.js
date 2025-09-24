@@ -78,6 +78,7 @@ OC.L10N.register(
     "Message from {author} in {conversationName}" : "Паведамленне ад {author} у {conversationName}",
     "Failed to upload {name}" : "Не ўдалося запампаваць {name}",
     "Share" : "Абагуліць",
+    "Personal" : "Асабістыя",
     "Today" : "Сёння",
     "Tomorrow" : "Заўтра"
 },
