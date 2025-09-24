@@ -338,9 +338,9 @@ export default {
 		display: flex;
 		flex-direction: column;
 
-		&:deep(*) {
-			cursor: pointer;
-		}
+		&:deep(*:not(.dragDisabled)) {
+            cursor: pointer;
+        }
 
 		&.current-card {
 			border: 2px solid var(--color-primary-element);
