@@ -183,6 +183,7 @@ class CardServiceTest extends TestCase {
 			->willReturn($boardMock);
 		$card = new Card();
 		$card->setId(1337);
+		$card->setStackId(123);
 		$this->cardMapper->expects($this->any())
 			->method('find')
 			->with(123)
@@ -200,6 +201,7 @@ class CardServiceTest extends TestCase {
 			->with([1337])
 			->willReturn([$a1, $a2]);
 		$cardExpected = new Card();
+		$cardExpected->setStackId(123);
 		$cardExpected->setId(1337);
 		$cardExpected->setAssignedUsers([$a1, $a2]);
 		$cardExpected->setRelatedBoard($boardMock);
@@ -218,6 +220,7 @@ class CardServiceTest extends TestCase {
 			'stackId' => 123,
 			'order' => 999,
 			'type' => 'text',
+			'id' => 0,
 		]);
 		$stack = Stack::fromParams([
 			'id' => 123,
@@ -243,6 +246,8 @@ class CardServiceTest extends TestCase {
 		$card = new Card();
 		$card->setId(1);
 		$card->setTitle('Card title');
+		$card->setType('test');
+		$card->setOrder(0);
 		$card->setOwner('admin');
 		$card->setStackId(12345);
 		$clonedCard = clone $card;
@@ -290,8 +295,7 @@ class CardServiceTest extends TestCase {
 			->willReturn([$label]);
 		$this->cardMapper->expects($this->once())
 			->method('assignLabel')
-			->with($clonedCard->getId(), $label->getId())
-			->willReturn($label);
+			->with($clonedCard->getId(), $label->getId());
 
 		$stackMock = new Stack();
 		$stackMock->setBoardId(1234);
@@ -329,6 +333,7 @@ class CardServiceTest extends TestCase {
 		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+			$c->setId(1);
 			return $c;
 		});
 		$this->stackMapper->expects($this->once())

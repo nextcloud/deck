@@ -35,6 +35,10 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		Util::addStyle('deck', 'deck');
 
 		$pathInfo = $this->request->getPathInfo();
+		if (!$pathInfo) {
+			return;
+		}
+
 		if (str_starts_with($pathInfo, '/apps/calendar')) {
 			Util::addScript('deck', 'deck-calendar');
 		}

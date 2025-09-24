@@ -160,6 +160,7 @@ class ActivityManagerTest extends TestCase {
 			'id' => 123,
 			'title' => 'My card',
 			'description' => str_repeat('A', 1000),
+			'stackId' => 42,
 		]);
 		$this->cardMapper->expects(self::any())
 			->method('find')
@@ -170,6 +171,7 @@ class ActivityManagerTest extends TestCase {
 		]);
 		$this->stackMapper->expects(self::any())
 			->method('find')
+			->with(42)
 			->willReturn($stack);
 
 		$expectedCard = $card->jsonSerialize();
@@ -207,6 +209,7 @@ class ActivityManagerTest extends TestCase {
 		$card->setDescription(str_repeat('A', 5000));
 		$card->setTitle('My card');
 		$card->setId(123);
+		$card->setStackId(42);
 		$this->cardMapper->expects(self::any())
 			->method('find')
 			->willReturn($card);
@@ -254,6 +257,7 @@ class ActivityManagerTest extends TestCase {
 		$card->setDescription(str_repeat('A', 5000));
 		$card->setTitle('My card');
 		$card->setId(123);
+		$card->setStackId(42);
 		$this->cardMapper->expects(self::any())
 			->method('find')
 			->willReturn($card);

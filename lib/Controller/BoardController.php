@@ -14,6 +14,7 @@ use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -31,68 +32,38 @@ class BoardController extends ApiController {
 		parent::__construct($appName, $request);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function index() {
 		return $this->boardService->findAll();
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function read(int $boardId) {
+	#[NoAdminRequired]
+	public function read(int $boardId): Board {
 		return $this->boardService->find($boardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $title
-	 * @param $color
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function create($title, $color) {
+	#[NoAdminRequired]
+	public function create(string $title, string $color): Board {
 		return $this->boardService->create($title, $this->userId, $color);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $id
-	 * @param $title
-	 * @param $color
-	 * @param $archived
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function update($id, $title, $color, $archived) {
+	#[NoAdminRequired]
+	public function update(int $id, string $title, string $color, bool $archived): Board {
 		return $this->boardService->update($id, $title, $color, $archived);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function delete($boardId) {
+	#[NoAdminRequired]
+	public function delete(int $boardId): Board {
 		return $this->boardService->delete($boardId);
 	}
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function deleteUndo($boardId) {
+
+	#[NoAdminRequired]
+	public function deleteUndo(int $boardId): Board {
 		return $this->boardService->deleteUndo($boardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return array|bool
-	 * @internal param $userId
-	 */
-	public function getUserPermissions($boardId) {
+	#[NoAdminRequired]
+	public function getUserPermissions(int $boardId): array {
 		$permissions = $this->permissionService->getPermissions($boardId);
 		return [
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
@@ -103,16 +74,10 @@ class BoardController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @param $type
 	 * @param $participant
-	 * @param $permissionEdit
-	 * @param $permissionShare
-	 * @param $permissionManage
-	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage) {
+	#[NoAdminRequired]
+	public function addAcl(int $boardId, int $type, $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage): Acl {
 		return $this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage);
 	}
 

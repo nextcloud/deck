@@ -15,13 +15,18 @@ use Sabre\VObject\Component\VCalendar;
 
 /**
  * @method string getTitle()
+ * @method void setTitle(string $title)
  * @method string getDescription()
  * @method string getDescriptionPrev()
  * @method int getStackId()
+ * @method void setStackId(int $stackId)
  * @method int getOrder()
+ * @method void setOrder(int $order)
  * @method int getLastModified()
  * @method int getCreatedAt()
  * @method bool getArchived()
+ * @method string getType()
+ * @method void setType(string $type)
  * @method int getDeletedAt()
  * @method void setDeletedAt(int $deletedAt)
  * @method bool getNotified()
@@ -68,8 +73,8 @@ class Card extends RelationalEntity {
 	protected $createdAt;
 	protected $labels;
 	protected $assignedUsers;
-	protected $attachments;
-	protected $attachmentCount;
+	protected array $attachments = [];
+	protected int $attachmentCount = 0;
 	protected $owner;
 	protected $order;
 	protected $archived = false;

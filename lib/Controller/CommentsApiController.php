@@ -9,11 +9,15 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\CommentService;
 use OCA\Deck\StatusException;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
+/**
+ * @psalm-api
+ */
 class CommentsApiController extends OCSController {
 	public function __construct(
 		string $appName,
@@ -27,33 +31,33 @@ class CommentsApiController extends OCSController {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @throws StatusException
 	 */
-	public function list(string $cardId, int $limit = 20, int $offset = 0): DataResponse {
+	#[NoAdminRequired]
+	public function list(int $cardId, int $limit = 20, int $offset = 0): DataResponse {
 		return $this->commentService->list($cardId, $limit, $offset);
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @throws StatusException
 	 */
+	#[NoAdminRequired]
 	public function create(int $cardId, string $message, int $parentId = 0): DataResponse {
 		return $this->commentService->create($cardId, $message, $parentId);
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @throws StatusException
 	 */
+	#[NoAdminRequired]
 	public function update(int $cardId, int $commentId, string $message): DataResponse {
 		return $this->commentService->update($cardId, $commentId, $message);
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @throws StatusException
 	 */
+	#[NoAdminRequired]
 	public function delete(int $cardId, int $commentId): DataResponse {
 		return $this->commentService->delete($cardId, $commentId);
 	}

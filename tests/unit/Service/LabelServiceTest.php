@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -29,6 +31,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Validators\LabelServiceValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class LabelServiceTest extends TestCase {
@@ -42,9 +45,8 @@ class LabelServiceTest extends TestCase {
 	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $boardService;
 	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
-	private $changeHelper;
-	/** @var LabelServiceValidator\MockObject */
-	private $labelServiceValidator;
+	private ChangeHelper&MockObject $changeHelper;
+	private LabelServiceValidator&MockObject $labelServiceValidator;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -66,8 +68,9 @@ class LabelServiceTest extends TestCase {
 	}
 
 	public function testFind() {
-		$this->labelMapper->expects($this->once())->method('find')->willReturn(true);
-		$this->assertTrue($this->labelService->find(123));
+		$label = $this->createMock(Label::class);
+		$this->labelMapper->expects($this->once())->method('find')->willReturn($label);
+		$this->assertEquals($label, $this->labelService->find(123));
 	}
 
 	public function testCreate() {
