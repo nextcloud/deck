@@ -77,7 +77,7 @@ class Notifier implements INotifier {
 	 */
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		$l = $this->l10nFactory->get('deck', $languageCode);
-		if ($notification->getApp() !== 'deck') {
+		if ($notification->getApp() !== 'deck' || $notification->getObjectType() === 'activity_notification') {
 			throw new UnknownNotificationException();
 		}
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('deck', 'deck-dark.svg')));
