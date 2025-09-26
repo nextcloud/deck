@@ -338,10 +338,11 @@ export default {
 		flex-direction: column;
 		gap: $card-gap;
 		overflow: hidden;
+		cursor: pointer;
 
-		&:deep(*) {
-			cursor: pointer;
-		}
+		&:deep(*:not(.dragDisabled)) {
+            cursor: pointer;
+        }
 
 		&.current-card {
 			border: 2px solid var(--color-primary-element);
