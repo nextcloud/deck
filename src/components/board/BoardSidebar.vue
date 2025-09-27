@@ -7,6 +7,7 @@
 	<NcAppSidebar v-if="board != null"
 		:actions="[]"
 		:name="board.title"
+		style="width: 400px"
 		@close="closeSidebar">
 		<NcAppSidebarTab id="sharing"
 			:order="0"

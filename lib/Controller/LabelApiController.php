@@ -50,10 +50,12 @@ class LabelApiController extends ApiController {
 	 *
 	 * @params $title
 	 * @params $color
+	 * @param array<string, scalar> $customSettings
+	 *
 	 * Create a new label
 	 */
-	public function create($title, $color) {
-		$label = $this->labelService->create($title, $color, $this->request->getParam('boardId'));
+	public function create($title, $color, array $customSettings = []) {
+		$label = $this->labelService->create($title, $color, $this->request->getParam('boardId'), $customSettings);
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
@@ -64,10 +66,12 @@ class LabelApiController extends ApiController {
 	 *
 	 * @params $title
 	 * @params $color
+	 * @param array<string, scalar> $customSettings
+	 *
 	 * Update a specific label
 	 */
-	public function update($title, $color) {
-		$label = $this->labelService->update($this->request->getParam('labelId'), $title, $color);
+	public function update($title, $color, array $customSettings = []) {
+		$label = $this->labelService->update($this->request->getParam('labelId'), $title, $color, $customSettings);
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 

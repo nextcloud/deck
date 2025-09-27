@@ -340,7 +340,7 @@ class CardService {
 				// clone labels that are assigned to card but don't exist in new board
 				if (empty($filteredLabels)) {
 					if ($this->permissionService->getPermissions($boardId)[Acl::PERMISSION_MANAGE] === true) {
-						$newLabel = $this->labelService->create($label->getTitle(), $label->getColor(), $board->getId());
+						$newLabel = $this->labelService->create($label->getTitle(), $label->getColor(), $board->getId(), $label->getCustomSettingsArray());
 						$boardLabels[] = $label;
 						$this->assignLabel($card->getId(), $newLabel->getId());
 					}

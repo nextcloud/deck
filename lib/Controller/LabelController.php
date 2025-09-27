@@ -25,10 +25,11 @@ class LabelController extends Controller {
 	 * @param $title
 	 * @param $color
 	 * @param $boardId
+	 * @param array<string, scalar> $customSettings
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function create($title, $color, $boardId) {
-		return $this->labelService->create($title, $color, $boardId);
+	public function create($title, $color, $boardId, array $customSettings = []) {
+		return $this->labelService->create($title, $color, $boardId, $customSettings);
 	}
 
 	/**
@@ -36,10 +37,11 @@ class LabelController extends Controller {
 	 * @param $id
 	 * @param $title
 	 * @param $color
+	 * @param array<string, scalar> $customSettings
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $color) {
-		return $this->labelService->update($id, $title, $color);
+	public function update($id, $title, $color, array $customSettings = []) {
+		return $this->labelService->update($id, $title, $color, $customSettings);
 	}
 
 	/**
