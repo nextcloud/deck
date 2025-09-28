@@ -29,6 +29,8 @@ OC.L10N.register(
     "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
+    "Description" : "Aglam",
+    "Open link" : "Nɣel aseɣwen",
     "Keyboard shortcuts" : "Inegzumen n unasiw",
     "Ctrl" : "Ctrl",
     "Search" : "Nadi",
