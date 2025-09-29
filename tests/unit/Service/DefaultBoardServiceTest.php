@@ -220,8 +220,9 @@ class DefaultBoardServiceTest extends TestCase {
 		return $stack;
 	}
 
-	private function assembleTestCard($title, $stackId, $userId) {
+	private function assembleTestCard(string $title, int $stackId, string $userId): Card {
 		$card = new Card();
+		$card->setId(1);
 		$card->setTitle($title);
 		$card->setStackId($stackId);
 		$card->setType('text');

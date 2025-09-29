@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -48,8 +50,7 @@ use Test\TestCase;
  */
 class StackServiceTest extends TestCase {
 
-	/** @var StackService */
-	private $stackService;
+	private StackService $stackService;
 	/** @var \PHPUnit\Framework\MockObject\MockObject|StackMapper */
 	private $stackMapper;
 	/** @var \PHPUnit\Framework\MockObject\MockObject|CardMapper */
@@ -251,6 +252,9 @@ class StackServiceTest extends TestCase {
 		$this->stackMapper->expects($this->once())
 			->method('findAll')
 			->willReturn($stacks);
+		$this->stackMapper->expects($this->any())
+			->method('update')
+			->willReturnCallback(fn (Stack $stack): Stack => $stack);
 		$actual = $this->stackService->reorder(1, 2);
 		$a = $this->createStack(1, 2);
 		$b = $this->createStack(2, 0);
@@ -259,7 +263,7 @@ class StackServiceTest extends TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
-	private function createStack($id, $order) {
+	private function createStack(int $id, int $order) {
 		$stack = new Stack();
 		$stack->setId($id);
 		$stack->setBoardId(1);

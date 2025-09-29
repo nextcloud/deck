@@ -107,11 +107,11 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		return $this->cardMapper->isOwner($userId, $id);
 	}
 
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		return $this->cardMapper->findBoardId($id);
 	}
 
@@ -123,6 +123,9 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws NotFoundException
 	 */
 	public function insert(Entity $entity): Entity {
+		if (!($entity instanceof Assignment)) {
+			throw new \LogicException('Trying to insert a ' . get_class($entity) . ' in the assignment mapper');
+		}
 		$origin = $this->getOrigin($entity);
 		if ($origin === null) {
 			throw new NotFoundException('No origin found for assignment');
@@ -141,7 +144,7 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 		});
 	}
 
-	public function isUserAssigned($cardId, $userId): bool {
+	public function isUserAssigned(int $cardId, string $userId): bool {
 		$assignments = $this->findAll($cardId);
 		foreach ($assignments as $assignment) {
 			$origin = $this->getOrigin($assignment);

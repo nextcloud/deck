@@ -516,7 +516,7 @@ class ActivityManager {
 		];
 	}
 
-	private function findDetailsForCard($cardId, $subject = null) {
+	private function findDetailsForCard(int $cardId, ?string $subject = null): array {
 		$card = $this->cardMapper->find($cardId);
 		$stack = $this->stackMapper->find($card->getStackId());
 		$board = $this->boardMapper->find($stack->getBoardId());

@@ -36,13 +36,11 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $id
-	 * @return Attachment
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws \OCP\DB\Exception
 	 */
-	public function find($id) {
+	public function find(int $id): Attachment {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -52,14 +50,11 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $cardId
-	 * @param string $data
-	 * @return Attachment
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findByData($cardId, $data) {
+	public function findByData(int $cardId, string $data): Attachment {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -70,11 +65,10 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param $cardId
 	 * @return Entity[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAll($cardId) {
+	public function findAll(int $cardId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -86,11 +80,9 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param null $cardId
-	 * @param bool $withOffset
-	 * @return array
+	 * @return Attachment[]
 	 */
-	public function findToDelete($cardId = null, $withOffset = true) {
+	public function findToDelete(?int $cardId = null, bool $withOffset = true): array {
 		// add buffer of 5 min
 		$timeLimit = time() - (60 * 5);
 		$qb = $this->db->getQueryBuilder();
@@ -112,12 +104,8 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 	/**
 	 * Check if $userId is owner of Entity with $id
-	 *
-	 * @param $userId string userId
-	 * @param $id int|string unique entity identifier
-	 * @return boolean
 	 */
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		try {
 			$attachment = $this->find($id);
 			return $this->cardMapper->isOwner($userId, $attachment->getCardId());
@@ -130,10 +118,10 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	/**
 	 * Query boardId for Entity of given $id
 	 *
-	 * @param $id int|string unique entity identifier
+	 * @param $id int unique entity identifier
 	 * @return int|null id of Board
 	 */
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		try {
 			$attachment = $this->find($id);
 		} catch (\Exception $e) {

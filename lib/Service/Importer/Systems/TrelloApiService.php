@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 class TrelloApiService extends TrelloJsonService {
 	/** @var string */
 	public static $name = 'Trello API';
-	protected $needValidateData = false;
+	protected bool $needValidateData = false;
 	/** @var IClient */
 	private $httpClient;
 	/** @var LoggerInterface */
@@ -176,7 +176,7 @@ class TrelloApiService extends TrelloJsonService {
 		if (empty($queryString['limit'])) {
 			return [];
 		}
-		if (count($data) < $queryString['limit']) {
+		if ((count($data) < $queryString['limit']) || (count($data) === 0)) {
 			return [];
 		}
 		$queryString['before'] = end($data)->id;

@@ -7,10 +7,12 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\StackService;
 
 use OCP\AppFramework\Controller;
 
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\IRequest;
 
 class StackController extends Controller {
@@ -18,78 +20,54 @@ class StackController extends Controller {
 		string $appName,
 		IRequest $request,
 		private StackService $stackService,
-		private $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return array
+	 * @return Stack[]
 	 */
-	public function index($boardId) {
+	#[NoAdminRequired]
+	public function index(int $boardId): array {
 		return $this->stackService->findAll($boardId);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return array
+	 * @return Stack[]
 	 */
-	public function archived($boardId) {
+	#[NoAdminRequired]
+	public function archived(int $boardId): array {
 		return $this->stackService->findAllArchived($boardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $title
-	 * @param $boardId
-	 * @param int $order
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function create($title, $boardId, $order = 999) {
+	#[NoAdminRequired]
+	public function create(string $title, int $boardId, int $order = 999): Stack {
 		return $this->stackService->create($title, $boardId, $order);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $id
-	 * @param $title
-	 * @param $boardId
-	 * @param $order
-	 * @param $deletedAt
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function update($id, $title, $boardId, $order, $deletedAt) {
+	#[NoAdminRequired]
+	public function update(int $id, string $title, int $boardId, int $order, ?int $deletedAt = null): Stack {
 		return $this->stackService->update($id, $title, $boardId, $order, $deletedAt);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $stackId
-	 * @param $order
-	 * @return array
+	 * @return array<int, Stack>
 	 */
-	public function reorder($stackId, $order) {
-		return $this->stackService->reorder((int)$stackId, (int)$order);
+	#[NoAdminRequired]
+	public function reorder(int $stackId, int $order): array {
+		return $this->stackService->reorder($stackId, $order);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $stackId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function delete($stackId) {
+	#[NoAdminRequired]
+	public function delete(int $stackId): Stack {
 		return $this->stackService->delete($stackId);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
+	 * @return Stack[]
 	 */
-	public function deleted($boardId) {
+	#[NoAdminRequired]
+	public function deleted(int $boardId): array {
 		return $this->stackService->fetchDeleted($boardId);
 	}
 }
