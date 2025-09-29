@@ -421,11 +421,11 @@ class CardService {
 		$changes = new ChangeSet($card);
 		$card->setTitle($title);
 		$this->changeHelper->cardChanged($card->getId(), false);
-		$update = $this->cardMapper->update($card);
+		$newCard = $this->cardMapper->update($card);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($newCard, $changes->getBefore()));
 
-		return $update;
+		return $newCard;
 	}
 
 	/**
@@ -511,7 +511,7 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($newCard, $changes->getBefore()));
 
 		return $newCard;
 	}
@@ -540,7 +540,7 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($newCard, $changes->getBefore()));
 
 		return $newCard;
 	}
@@ -567,7 +567,7 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_DONE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($newCard, $changes->getBefore()));
 
 		return $newCard;
 	}
@@ -593,7 +593,7 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNDONE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($newCard, $changes->getBefore()));
 
 		return $newCard;
 	}
@@ -624,11 +624,13 @@ class CardService {
 		if ($label->getBoardId() !== $this->cardMapper->findBoardId($card->getId())) {
 			throw new StatusException('Operation not allowed. Label does not exist.');
 		}
+
 		$this->cardMapper->assignLabel($cardId, $labelId);
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$newCard = $this->cardMapper->find($cardId);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($newCard, $card));
 	}
 
 	/**
@@ -655,11 +657,13 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$label = $this->labelMapper->find($labelId);
+
 		$this->cardMapper->removeLabel($cardId, $labelId);
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$newCard = $this->cardMapper->find($cardId);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($newCard, $card));
 	}
 
 	public function getCardUrl(int $cardId): string {

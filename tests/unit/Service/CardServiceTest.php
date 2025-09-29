@@ -36,6 +36,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
@@ -164,6 +165,23 @@ class CardServiceTest extends TestCase {
 			->with($event);
 	}
 
+	private function expectCardUpdatedEvent(?callable $assertions = null): void {
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) use ($assertions) {
+				$this->assertInstanceOf(CardUpdatedEvent::class, $event);
+				$this->assertNotNull($event->getCard());
+				$this->assertNotNull($event->getCardBefore());
+
+				if ($assertions !== null) {
+					$assertions($event);
+				}
+
+				return true;
+			}));
+	}
+
 	public function testFind() {
 		$user = $this->createMock(IUser::class);
 		$this->userManager->expects($this->once())
@@ -254,9 +272,9 @@ class CardServiceTest extends TestCase {
 
 		$this->cardMapper->expects($this->once())
 			->method('update')->willReturn($clonedCard);
-		$this->cardMapper->expects($this->exactly(2))
+		$this->cardMapper->expects($this->exactly(3))
 			->method('find')
-			->willReturn($card, $clonedCard);
+			->willReturn($card, $clonedCard, $clonedCard);
 
 		$this->cardMapper->expects($this->any())
 			->method('findBoardId')
@@ -335,6 +353,7 @@ class CardServiceTest extends TestCase {
 			->method('find')
 			->with(234)
 			->willReturn($stack);
+		$this->expectCardUpdatedEvent();
 		$actual = $this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, '2017-01-01 00:00:00', null);
 		$this->assertEquals('newtitle', $actual->getTitle());
 		$this->assertEquals(234, $actual->getStackId());
@@ -362,6 +381,7 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->expectCardUpdatedEvent();
 		$actual = $this->cardService->rename(123, 'newtitle');
 		$this->assertEquals('newtitle', $actual->getTitle());
 	}
@@ -391,6 +411,7 @@ class CardServiceTest extends TestCase {
 		$card = new Card();
 		$card->setStackId(123);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->expectCardUpdatedEvent();
 		$result = $this->cardService->reorder($cardId, 123, $newPosition);
 		foreach ($result as $card) {
 			$actual[$card->getOrder()] = $card->getId();
@@ -428,6 +449,7 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->expectCardUpdatedEvent();
 		$this->assertTrue($this->cardService->archive(123)->getArchived());
 	}
 	public function testUnarchive() {
@@ -438,6 +460,7 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->expectCardUpdatedEvent();
 		$this->assertFalse($this->cardService->unarchive(123)->getArchived());
 	}
 
@@ -447,7 +470,7 @@ class CardServiceTest extends TestCase {
 		$card->setId(123);
 		$label = new Label();
 		$label->setBoardId(1);
-		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->exactly(2))->method('find')->willReturn($card, $card);
 		$this->cardMapper->expects($this->once())->method('assignLabel');
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
@@ -455,6 +478,7 @@ class CardServiceTest extends TestCase {
 		$this->labelMapper->expects($this->once())
 			->method('find')
 			->willReturn($label);
+		$this->expectCardUpdatedEvent();
 		$this->cardService->assignLabel(123, 999);
 	}
 
@@ -473,11 +497,12 @@ class CardServiceTest extends TestCase {
 		$card->setId(123);
 		$label = new Label();
 		$label->setBoardId(1);
-		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->exactly(2))->method('find')->willReturn($card, $card);
 		$this->cardMapper->expects($this->once())->method('removeLabel');
 		$this->labelMapper->expects($this->once())
 			->method('find')
 			->willReturn($label);
+		$this->expectCardUpdatedEvent();
 		$this->cardService->removeLabel(123, 999);
 	}
 
