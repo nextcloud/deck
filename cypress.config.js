@@ -12,5 +12,6 @@ module.exports = defineConfig({
 		},
 		baseUrl: 'http://nextcloud.local/index.php',
 		specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
+		experimentalMemoryManagement: true,
 	},
 })
