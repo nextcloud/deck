@@ -62,6 +62,7 @@ class LabelService {
 	 * @param $title
 	 * @param $color
 	 * @param $boardId
+	 * @param array<string, scalar> $customSettings
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
@@ -69,7 +70,7 @@ class LabelService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function create($title, $color, $boardId) {
+	public function create($title, $color, $boardId, array $customSettings = []) {
 		$this->labelServiceValidator->check(compact('title', 'color', 'boardId'));
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
@@ -89,6 +90,7 @@ class LabelService {
 		$label->setTitle($title);
 		$label->setColor($color);
 		$label->setBoardId($boardId);
+		$label->setCustomSettingsArray($customSettings);
 		$this->changeHelper->boardChanged($boardId);
 		return $this->labelMapper->insert($label);
 	}
@@ -99,7 +101,7 @@ class LabelService {
 		$originLabel = $this->find($labelId);
 		$filteredValues = array_values(array_filter($boardLabels, fn ($item) => $item->getTitle() === $originLabel->getTitle()));
 		if (empty($filteredValues)) {
-			$label = $this->create($originLabel->getTitle(), $originLabel->getColor(), $targetBoardId);
+			$label = $this->create($originLabel->getTitle(), $originLabel->getColor(), $targetBoardId, $originLabel->getCustomSettingsArray());
 			return $label;
 		}
 		return $originLabel;
@@ -130,6 +132,7 @@ class LabelService {
 	 * @param $id
 	 * @param $title
 	 * @param $color
+	 * @param array<string, scalar> $customSettings
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
@@ -137,7 +140,7 @@ class LabelService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $color) {
+	public function update($id, $title, $color, array $customSettings = []) {
 		$this->labelServiceValidator->check(compact('title', 'color', 'id'));
 
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
@@ -161,6 +164,7 @@ class LabelService {
 
 		$label->setTitle($title);
 		$label->setColor($color);
+		$label->setCustomSettingsArray($customSettings);
 		$this->changeHelper->boardChanged($label->getBoardId());
 		return $this->labelMapper->update($label);
 	}
