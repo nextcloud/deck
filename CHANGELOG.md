@@ -5,6 +5,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.15.3
+### Fixed
+* [stable31] fix: Use getId() method for card ID retrieval by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7144
+* [stable31]fix: ensure correct type when filtering events by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7148
+* [stable31] fix: do not change focus when card id stays the same by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7173
+* [stable31] fix(darkmode): Fix activity icon colors by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7240
+* [stable31] fix: make comments with mention editable @backportbot[bot] in https://github.com/nextcloud/deck/pull/7198
+* [stable31] fix: redirect to cleaner URL if RewriteBase is enabled by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7267
+* [stable31] fix: missing push notifications by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7269
+* [stable31] fix: use text cursor for card title on dashboard by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7274
+* [stable31] fix: parse arguments to CardService.reorder correctly to int by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7275
+
+### Improvements
+* [stable31] Clean attachment sharing records after permanent deleted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7180
+* Chore(deps): Bump @nextcloud/vue from 8.22.0 to 8.31.0 by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7272
+
 # 1.15.2
 ### Fixed
 * [stable31] fix: update DeleteCron to remove deleted lists by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7029
