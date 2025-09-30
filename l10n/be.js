@@ -12,6 +12,7 @@ OC.L10N.register(
     "copy" : "копія",
     "Done" : "Гатова",
     "File" : "Файл",
+    "Invalid date, date format must be YYYY-MM-DD" : "Памылковая дата, дата павінна быць у фармаце ГГГГ-ММ-ДД",
     "Cancel" : "Скасаваць",
     "Drop your files to upload" : "Перацягніце файлы для запампоўвання",
     "File already exists" : "Файл ужо існуе",
