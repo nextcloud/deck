@@ -371,6 +371,7 @@
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Megjegyzés: Csak a JSON formátum támogatott a Kártyák alkalmazásba való importáláskor.",
     "Export" : "Exportálás",
     "Loading filtered view" : "Szűrt nézet betöltése",
+    "Search for {searchQuery} in other boards" : "Keresés a(z) {searchQuery} kifejezésre a többi táblában",
     "Search for {searchQuery} in all boards" : "Keresés a(z) {searchQuery} kifejezésre az összes táblában",
     "No results found" : "Nincs találat",
     "Deck board {name}\n* Last modified on {lastMod}" : "{name} kártyatábla\n* Legutóbb módosítva: {lastMod}",
