@@ -41,7 +41,7 @@ class DeckProvider implements IProvider {
 	/** @var DiffService */
 	private $diffService;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService) {
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService, DiffService $diffService) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
@@ -50,7 +50,7 @@ class DeckProvider implements IProvider {
 		$this->l10nFactory = $l10n;
 		$this->config = $config;
 		$this->cardService = $cardService;
-		$this->diffService = new DiffService();
+		$this->diffService = $diffService;
 	}
 
 	/**
