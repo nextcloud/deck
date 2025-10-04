@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -13,6 +13,41 @@ namespace OCA\Deck\Service;
  * Service for generating visual diffs between two text strings with intelligent word-level diffing
  */
 class DiffService {
+
+	/**
+	 * Pattern for markdown checkboxes: - [ ] or - [x] or - [X]
+	 */
+	private const CHECKBOX_PATTERN = '/^(\s*-\s*)\[([ xX])\](.*)/i';
+
+	/**
+	 * Pattern for code blocks: ``` or ```language
+	 */
+	private const CODE_BLOCK_PATTERN = '/^```/';
+
+	/**
+	 * Pattern for callout blocks: ::: info, ::: success, ::: warn, ::: error
+	 */
+	private const CALLOUT_BLOCK_PATTERN = '/^:::\s*(info|success|warn|error)/i';
+
+	/**
+	 * Pattern for block endings: :::
+	 */
+	private const BLOCK_END_PATTERN = '/^:::$/';
+
+	/**
+	 * Pattern for blockquotes: > at start of line
+	 */
+	private const QUOTE_PATTERN = '/^>\s*/';
+
+	/**
+	 * Callout block emojis
+	 */
+	private const CALLOUT_EMOJIS = [
+		'info' => 'ℹ️',
+		'success' => '✅',
+		'warn' => '⚠️',
+		'error' => '🔴',
+	];
 
 	/**
 	 * Generate a visual diff between two text strings
@@ -135,19 +170,18 @@ class DiffService {
 		}
 
 		// Handle intelligent word-level diffing for modified lines
-		return $this->enhanceWithWordLevelDiff('', $operations, $oldLines, $newLines);
+		return $this->enhanceWithWordLevelDiff($operations, $oldLines, $newLines);
 	}
 
 	/**
 	 * Enhance diff with word-level granularity for similar lines
 	 *
-	 * @param string $html Current HTML diff
 	 * @param array $operations
 	 * @param array $oldLines
 	 * @param array $newLines
 	 * @return string
 	 */
-	private function enhanceWithWordLevelDiff(string $html, array $operations, array $oldLines, array $newLines): string {
+	private function enhanceWithWordLevelDiff(array $operations, array $oldLines, array $newLines): string {
 		// Find remove/add pairs that might be line modifications
 		// First pass: collect all removes and adds
 		$removes = [];
@@ -209,38 +243,39 @@ class DiffService {
 	
 		// Third pass: detect modifications from remaining removes/adds
 		$usedAdds = $moveDetectedAdds; // Start with adds already used in moves
-	
+		$usedRemoves = $moveDetectedRemoves; // Start with removes already used in moves
+
 		// Process remaining removes and try to find matching adds for modifications
 		foreach ($removes as $removeIndex => $removeOp) {
 			// Skip removes already used in moves
-			if (in_array($removeIndex, $moveDetectedRemoves)) {
+			if (in_array($removeIndex, $usedRemoves)) {
 				continue;
 			}
-		
+
 			$bestMatch = null;
 			$bestScore = -1;
 			$bestAddIndex = -1;
-		
+
 			$oldLine = $oldLines[$removeOp['old_line']] ?? '';
 			$oldLineNum = $removeOp['old_line'] + 1;
-		
+
 			// Look for best matching add operation
 			foreach ($adds as $addIndex => $addOp) {
 				if (in_array($addIndex, $usedAdds)) {
 					continue;
 				}
-			
+
 				$newLine = $newLines[$addOp['new_line']] ?? '';
 				$newLineNum = $addOp['new_line'] + 1;
-			
+
 				// Calculate matching score
 				$score = 0;
-			
+
 				// Same line number gets highest priority
 				if ($oldLineNum === $newLineNum) {
 					$score += 100;
 				}
-			
+
 				// Similar content gets secondary priority
 				if ($this->shouldUseWordLevelDiff($oldLine, $newLine)) {
 					$maxLen = max(strlen($oldLine), strlen($newLine));
@@ -248,18 +283,18 @@ class DiffService {
 					$similarity = 1 - ($distance / $maxLen);
 					$score += $similarity * 50; // Up to 50 points for similarity
 				}
-			
+
 				// Proximity bonus (closer line numbers get bonus)
 				$proximityBonus = max(0, 10 - abs($oldLineNum - $newLineNum));
 				$score += $proximityBonus;
-			
+
 				if ($score > $bestScore) {
 					$bestScore = $score;
 					$bestMatch = $addOp;
 					$bestAddIndex = $addIndex;
 				}
 			}
-		
+
 			// If we found a good match, create a modify operation
 			if ($bestMatch && $bestScore > 10) { // Minimum threshold
 				$enhancedOps[] = [
@@ -268,9 +303,11 @@ class DiffService {
 					'new_line' => $bestMatch['new_line']
 				];
 				$usedAdds[] = $bestAddIndex;
+				$usedRemoves[] = $removeIndex;
 			} else {
 				// No good match, keep as remove
 				$enhancedOps[] = $removeOp;
+				$usedRemoves[] = $removeIndex;
 			}
 		}
 		
@@ -284,15 +321,7 @@ class DiffService {
 		
 		// Add remaining unused remove operations (not involved in moves or modifications)
 		foreach ($removes as $removeIndex => $removeOp) {
-			// Skip removes already used in moves or modifications
-			$alreadyUsed = false;
-			foreach ($enhancedOps as $op) {
-				if (($op['type'] === 'modify' || $op['type'] === 'move') && $op['old_line'] === $removeOp['old_line']) {
-					$alreadyUsed = true;
-					break;
-				}
-			}
-			if (!$alreadyUsed) {
+			if (!in_array($removeIndex, $usedRemoves)) {
 				$enhancedOps[] = $removeOp;
 			}
 		}
@@ -303,24 +332,32 @@ class DiffService {
 		}
 
 		// Now rebuild HTML with only changed lines and line number prefixes
+		// Format each operation for display, using actual line positions in NEW text
 		$lines = [];
-		
+
 		foreach ($enhancedOps as $operation) {
 			switch ($operation['type']) {
 				case 'add':
 					$line = $newLines[$operation['new_line']] ?? '';
-					$lineNumber = $operation['new_line'] + 1; // 1-based line numbers
+					$newLineNumber = $operation['new_line'] + 1; // 1-based line numbers
 					// Skip empty line additions
 					if (!empty(trim($line))) {
-						$lines[] = '➕' . $lineNumber . ' <ins>' . htmlspecialchars($line, ENT_QUOTES, 'UTF-8') . '</ins>';
+						$formatted = $this->formatSpecialLine($line);
+						if ($formatted !== null) {
+							$lines[] = '✨' . $newLineNumber . ' <ins>' . $formatted . '</ins>';
+						}
 					}
 					break;
 				case 'remove':
 					$line = $oldLines[$operation['old_line']] ?? '';
-					$lineNumber = $operation['old_line'] + 1; // 1-based line numbers
+					$oldLineNumber = $operation['old_line'] + 1; // 1-based line numbers
 					// Skip empty line removals
 					if (!empty(trim($line))) {
-						$lines[] = '🗑️' . $lineNumber . ' <del>' . htmlspecialchars($line, ENT_QUOTES, 'UTF-8') . '</del>';
+						$formatted = $this->formatSpecialLine($line);
+						if ($formatted !== null) {
+							// Show old line number with strikethrough to indicate it's from old version
+							$lines[] = '🗑️<del>' . $oldLineNumber . '</del> <del>' . $formatted . '</del>';
+						}
 					}
 					break;
 				case 'keep':
@@ -329,25 +366,25 @@ class DiffService {
 				case 'modify':
 					$oldLine = $oldLines[$operation['old_line']] ?? '';
 					$newLine = $newLines[$operation['new_line']] ?? '';
-					$lineNumber = $operation['old_line'] + 1; // Use old line number as reference
-					$lines[] = '✏️' . $lineNumber . ' ' . $this->generateWordLevelDiff($oldLine, $newLine);
+					$newLineNumber = $operation['new_line'] + 1; // 1-based line numbers
+					$lines[] = '✏️' . $newLineNumber . ' ' . $this->generateWordLevelDiff($oldLine, $newLine);
 					break;
 				case 'move':
 					$oldLineNum = $operation['old_line'] + 1;
 					$newLineNum = $operation['new_line'] + 1;
 					$content = htmlspecialchars($operation['content'], ENT_QUOTES, 'UTF-8');
-					$lines[] = '🚚' . $newLineNum . ' ' . $content . ' (moved from line ' . $oldLineNum . ')';
+					$lines[] = '🚚' . $newLineNum . ' (from ' . $oldLineNum . ') ' . $content;
 					break;
 			}
 		}
 		
-		// Join all lines without line breaks for clean inline appearance
+		// Join all lines for display
 		if (empty($lines)) {
 			return '';
 		}
-		
-		// Concatenate lines with spaces for inline display
-		return implode(' ', $lines);
+
+		// Concatenate lines with bullet separator for better readability in single line
+		return implode(' | ', $lines);
 	}
 
 	/**
@@ -404,16 +441,13 @@ class DiffService {
 	 * @return bool
 	 */
 	private function isCheckboxChange(string $oldLine, string $newLine): bool {
-		// Pattern for markdown checkboxes: - [ ] or - [x] or - [X]
-		$checkboxPattern = '/^(\s*-\s*)\[([ xX])\](.*)/i';
-		
-		preg_match($checkboxPattern, $oldLine, $oldMatches);
-		preg_match($checkboxPattern, $newLine, $newMatches);
-		
-		// Both lines must be checkboxes with same prefix/suffix but different checkbox state
+		preg_match(self::CHECKBOX_PATTERN, $oldLine, $oldMatches);
+		preg_match(self::CHECKBOX_PATTERN, $newLine, $newMatches);
+
+		// Both lines must be checkboxes with different states
+		// We only require same prefix and different state - suffix can change
 		return !empty($oldMatches) && !empty($newMatches) &&
-			   $oldMatches[1] === $newMatches[1] && // Same prefix
-			   $oldMatches[3] === $newMatches[3] && // Same suffix (text after checkbox)
+			   $oldMatches[1] === $newMatches[1] && // Same prefix (indentation and dash)
 			   $oldMatches[2] !== $newMatches[2];   // Different checkbox state
 	}
 
@@ -425,20 +459,61 @@ class DiffService {
 	 * @return string
 	 */
 	private function generateCheckboxDiff(string $oldLine, string $newLine): string {
-		$checkboxPattern = '/^(\s*-\s*)\[([ xX])\](.*)/i';
-		
-		preg_match($checkboxPattern, $oldLine, $oldMatches);
-		preg_match($checkboxPattern, $newLine, $newMatches);
-		
-		$prefix = htmlspecialchars($oldMatches[1], ENT_QUOTES, 'UTF-8');
-		$suffix = htmlspecialchars($oldMatches[3], ENT_QUOTES, 'UTF-8');
-		
-		// Convert checkbox states to emoji symbols
-		$oldCheckbox = (trim(strtolower($oldMatches[2])) === 'x') ? '☑' : '☐';
-		$newCheckbox = (trim(strtolower($newMatches[2])) === 'x') ? '☑' : '☐';
-		
+		preg_match(self::CHECKBOX_PATTERN, $oldLine, $oldMatches);
+		preg_match(self::CHECKBOX_PATTERN, $newLine, $newMatches);
+
+		$prefix = $oldMatches[1];
+		$oldSuffix = $oldMatches[3];
+		$newSuffix = $newMatches[3];
+
+		// Convert checkbox states to checkbox symbols
+		$oldCheckbox = (trim(strtolower($oldMatches[2])) === 'x') ? '☑️' : '🔲';
+		$newCheckbox = (trim(strtolower($newMatches[2])) === 'x') ? '☑️' : '🔲';
+
+		// If suffix changed too, show that as well
+		if ($oldSuffix !== $newSuffix) {
+			return $prefix . $oldCheckbox . '→' . $newCheckbox . ' ' . $this->generateWordLevelDiff($oldSuffix, $newSuffix);
+		}
+
 		// Show clean transition without del/ins tags on the checkboxes themselves
-		return $prefix . $oldCheckbox . '→' . $newCheckbox . $suffix;
+		return $prefix . $oldCheckbox . '→' . $newCheckbox . $oldSuffix;
+	}
+
+	/**
+	 * Format special lines (code blocks, callouts, quotes) with emojis
+	 *
+	 * @param string $line
+	 * @return string|null Returns formatted string or null if line should be ignored
+	 */
+	private function formatSpecialLine(string $line): ?string {
+		$trimmed = trim($line);
+
+		// Ignore block ending markers
+		if (preg_match(self::BLOCK_END_PATTERN, $trimmed)) {
+			return null;
+		}
+
+		// Format code block markers
+		if (preg_match(self::CODE_BLOCK_PATTERN, $trimmed)) {
+			return '→📝';
+		}
+
+		// Format callout block markers
+		if (preg_match(self::CALLOUT_BLOCK_PATTERN, $trimmed, $matches)) {
+			$type = strtolower($matches[1]);
+			$emoji = self::CALLOUT_EMOJIS[$type] ?? 'ℹ️';
+			return '→' . $emoji;
+		}
+
+		// Format blockquotes
+		if (preg_match(self::QUOTE_PATTERN, $trimmed)) {
+			// Remove the > marker and return the quoted text with emoji
+			$quotedText = preg_replace(self::QUOTE_PATTERN, '', $line);
+			return '→💬 ' . htmlspecialchars($quotedText, ENT_QUOTES, 'UTF-8');
+		}
+
+		// Return original line if not a special pattern
+		return htmlspecialchars($line, ENT_QUOTES, 'UTF-8');
 	}
 
 	/**
