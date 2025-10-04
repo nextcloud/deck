@@ -24,7 +24,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 ### Mobile apps
 
 - [Nextcloud Deck app for Android](https://github.com/stefan-niedermann/nextcloud-deck) - It is available in [F-Droid](https://f-droid.org/de/packages/it.niedermann.nextcloud.deck/) and the [Google Play Store](https://play.google.com/store/apps/details?id=it.niedermann.nextcloud.deck.play)
-- [Nextcloud Deck app for iOS](https://github.com/StCyr/deck-react-native) - It is available in [Apple App store](https://apps.apple.com/ml/app/nextcloud-deck/id1570892788)
+- Nextcloud Deck app for iOS - It is available in [Apple App store](https://apps.apple.com/de/app/next-deck/id6752478755)
 
 ### 3rd-Party Integrations
 
