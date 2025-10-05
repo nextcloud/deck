@@ -344,7 +344,7 @@ class DiffService {
 					if (!empty(trim($line))) {
 						$formatted = $this->formatSpecialLine($line);
 						if ($formatted !== null) {
-							$lines[] = '✨' . $newLineNumber . ' <ins>' . $formatted . '</ins>';
+							$lines[] = '✨' . $newLineNumber . ' ' . $formatted;
 						}
 					}
 					break;
@@ -355,8 +355,7 @@ class DiffService {
 					if (!empty(trim($line))) {
 						$formatted = $this->formatSpecialLine($line);
 						if ($formatted !== null) {
-							// Show old line number with strikethrough to indicate it's from old version
-							$lines[] = '🗑️<del>' . $oldLineNumber . '</del> <del>' . $formatted . '</del>';
+							$lines[] = '🗑️' . $oldLineNumber . ' ' . $formatted;
 						}
 					}
 					break;
@@ -421,14 +420,19 @@ class DiffService {
 		if ($this->isCheckboxChange($oldLine, $newLine)) {
 			return $this->generateCheckboxDiff($oldLine, $newLine);
 		}
-		
+
+		// Check if this is a callout block type change
+		if ($this->isCalloutBlockChange($oldLine, $newLine)) {
+			return $this->generateCalloutBlockDiff($oldLine, $newLine);
+		}
+
 		// Split lines into words for comparison
 		$oldWords = $this->splitIntoWords($oldLine);
 		$newWords = $this->splitIntoWords($newLine);
-		
+
 		// Get word-level diff operations
 		$wordOps = $this->calculateDiff($oldWords, $newWords);
-		
+
 		// Render word-level diff
 		return $this->renderWordLevelHtml($wordOps, $oldWords, $newWords);
 	}
@@ -477,6 +481,38 @@ class DiffService {
 
 		// Show clean transition without del/ins tags on the checkboxes themselves
 		return $prefix . $oldCheckbox . '→' . $newCheckbox . $oldSuffix;
+	}
+
+	/**
+	 * Check if this is a callout block type change
+	 *
+	 * @param string $oldLine
+	 * @param string $newLine
+	 * @return bool
+	 */
+	private function isCalloutBlockChange(string $oldLine, string $newLine): bool {
+		return preg_match(self::CALLOUT_BLOCK_PATTERN, trim($oldLine)) &&
+		       preg_match(self::CALLOUT_BLOCK_PATTERN, trim($newLine));
+	}
+
+	/**
+	 * Generate diff for callout block type changes
+	 *
+	 * @param string $oldLine
+	 * @param string $newLine
+	 * @return string
+	 */
+	private function generateCalloutBlockDiff(string $oldLine, string $newLine): string {
+		preg_match(self::CALLOUT_BLOCK_PATTERN, trim($oldLine), $oldMatches);
+		preg_match(self::CALLOUT_BLOCK_PATTERN, trim($newLine), $newMatches);
+
+		$oldType = strtolower($oldMatches[1]);
+		$newType = strtolower($newMatches[1]);
+
+		$oldEmoji = self::CALLOUT_EMOJIS[$oldType] ?? 'ℹ️';
+		$newEmoji = self::CALLOUT_EMOJIS[$newType] ?? 'ℹ️';
+
+		return $oldEmoji . '→' . $newEmoji;
 	}
 
 	/**
@@ -552,17 +588,17 @@ class DiffService {
 			switch ($operation['type']) {
 				case 'add':
 					$word = $newWords[$operation['new_line']] ?? '';
-					// Add arrow if previous operation was a deletion
+					// Add arrow if previous operation was a deletion (showing replacement)
 					if ($lastWasDel) {
-						$html .= '→<ins>' . htmlspecialchars($word, ENT_QUOTES, 'UTF-8') . '</ins>';
+						$html .= '→' . htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
 					} else {
-						$html .= '<ins>' . htmlspecialchars($word, ENT_QUOTES, 'UTF-8') . '</ins>';
+						$html .= htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
 					}
 					$lastWasDel = false;
 					break;
 				case 'remove':
 					$word = $oldWords[$operation['old_line']] ?? '';
-					$html .= '<del>' . htmlspecialchars($word, ENT_QUOTES, 'UTF-8') . '</del>';
+					$html .= htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
 					$lastWasDel = true;
 					break;
 				case 'keep':
@@ -572,7 +608,7 @@ class DiffService {
 					break;
 			}
 		}
-		
+
 		return $html;
 	}
 }
