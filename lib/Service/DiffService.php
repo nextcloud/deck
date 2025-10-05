@@ -46,7 +46,7 @@ class DiffService {
 		'info' => 'ℹ️',
 		'success' => '✅',
 		'warn' => '⚠️',
-		'error' => '🔴',
+		'error' => '❗',
 	];
 
 	/**
@@ -426,6 +426,11 @@ class DiffService {
 			return $this->generateCalloutBlockDiff($oldLine, $newLine);
 		}
 
+		// Check if either line is a quote line
+		if ($this->isQuoteLine($oldLine) || $this->isQuoteLine($newLine)) {
+			return $this->generateQuoteDiff($oldLine, $newLine);
+		}
+
 		// Split lines into words for comparison
 		$oldWords = $this->splitIntoWords($oldLine);
 		$newWords = $this->splitIntoWords($newLine);
@@ -516,6 +521,42 @@ class DiffService {
 	}
 
 	/**
+	 * Check if a line is a quote line
+	 *
+	 * @param string $line
+	 * @return bool
+	 */
+	private function isQuoteLine(string $line): bool {
+		return preg_match(self::QUOTE_PATTERN, trim($line)) === 1;
+	}
+
+	/**
+	 * Generate diff for quote line changes
+	 *
+	 * @param string $oldLine
+	 * @param string $newLine
+	 * @return string
+	 */
+	private function generateQuoteDiff(string $oldLine, string $newLine): string {
+		$oldText = preg_replace(self::QUOTE_PATTERN, '', $oldLine);
+		$newText = preg_replace(self::QUOTE_PATTERN, '', $newLine);
+
+		// If both are quotes, show the text change
+		if ($this->isQuoteLine($oldLine) && $this->isQuoteLine($newLine)) {
+			return '→❞ ' . htmlspecialchars(trim($oldText), ENT_QUOTES, 'UTF-8') .
+			       '→' . htmlspecialchars(trim($newText), ENT_QUOTES, 'UTF-8');
+		}
+
+		// If only new line is a quote
+		if ($this->isQuoteLine($newLine)) {
+			return '→❞ ' . htmlspecialchars(trim($newText), ENT_QUOTES, 'UTF-8');
+		}
+
+		// If only old line was a quote
+		return '❞→ ' . htmlspecialchars(trim($newText), ENT_QUOTES, 'UTF-8');
+	}
+
+	/**
 	 * Format special lines (code blocks, callouts, quotes) with emojis
 	 *
 	 * @param string $line
@@ -531,7 +572,7 @@ class DiffService {
 
 		// Format code block markers
 		if (preg_match(self::CODE_BLOCK_PATTERN, $trimmed)) {
-			return '→📝';
+			return '→‹›';
 		}
 
 		// Format callout block markers
@@ -545,7 +586,7 @@ class DiffService {
 		if (preg_match(self::QUOTE_PATTERN, $trimmed)) {
 			// Remove the > marker and return the quoted text with emoji
 			$quotedText = preg_replace(self::QUOTE_PATTERN, '', $line);
-			return '→💬 ' . htmlspecialchars($quotedText, ENT_QUOTES, 'UTF-8');
+			return '→❞ ' . htmlspecialchars($quotedText, ENT_QUOTES, 'UTF-8');
 		}
 
 		// Return original line if not a special pattern
@@ -582,30 +623,59 @@ class DiffService {
 	 */
 	private function renderWordLevelHtml(array $operations, array $oldWords, array $newWords): string {
 		$html = '';
-		$lastWasDel = false;
-		
+		$buffer = '';
+		$lastType = null;
+
 		foreach ($operations as $operation) {
-			switch ($operation['type']) {
+			$currentType = $operation['type'];
+			$word = '';
+
+			// Get the word for this operation
+			switch ($currentType) {
 				case 'add':
 					$word = $newWords[$operation['new_line']] ?? '';
-					// Add arrow if previous operation was a deletion (showing replacement)
-					if ($lastWasDel) {
-						$html .= '→' . htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
-					} else {
-						$html .= htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
-					}
-					$lastWasDel = false;
 					break;
 				case 'remove':
 					$word = $oldWords[$operation['old_line']] ?? '';
-					$html .= htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
-					$lastWasDel = true;
 					break;
 				case 'keep':
 					$word = $oldWords[$operation['old_line']] ?? '';
-					$html .= htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
-					$lastWasDel = false;
 					break;
+			}
+
+			// If current operation is 'keep' and it's only whitespace, and we have a buffer of add/remove,
+			// then add it to the buffer to merge tags
+			if ($currentType === 'keep' && trim($word) === '' && $lastType !== null && $lastType !== 'keep') {
+				$buffer .= htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
+				// Don't change lastType, so we continue with the same operation type
+				continue;
+			}
+
+			// If type changed (and not a whitespace-only keep), flush the buffer with appropriate tags
+			if ($lastType !== null && $lastType !== $currentType && $buffer !== '') {
+				if ($lastType === 'add') {
+					$html .= '<ins>' . $buffer . '</ins>';
+				} elseif ($lastType === 'remove') {
+					$html .= '<del>' . $buffer . '</del>';
+				} else {
+					$html .= $buffer;
+				}
+				$buffer = '';
+			}
+
+			// Add current word to buffer
+			$buffer .= htmlspecialchars($word, ENT_QUOTES, 'UTF-8');
+			$lastType = $currentType;
+		}
+
+		// Flush remaining buffer
+		if ($buffer !== '') {
+			if ($lastType === 'add') {
+				$html .= '<ins>' . $buffer . '</ins>';
+			} elseif ($lastType === 'remove') {
+				$html .= '<del>' . $buffer . '</del>';
+			} else {
+				$html .= $buffer;
 			}
 		}
 
