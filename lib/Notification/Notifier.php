@@ -231,6 +231,16 @@ class Notifier implements INotifier {
 				);
 				$notification->setLink($this->getBoardUrl($boardId));
 				break;
+			case 'remote-board-shared':
+				$boardId = (int)$notification->getObjectId();
+				if (!$boardId) {
+					throw new AlreadyProcessedException();
+				}
+				$federationOwnerDisplayName = $params[1];
+				$notification->setParsedSubject(
+					$l->t('The remote board %s has been shared with you by %s', [$params[0], $federationOwnerDisplayName])
+				);
+				break;
 		}
 		return $notification;
 	}

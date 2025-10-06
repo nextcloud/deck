@@ -32,6 +32,7 @@ use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
+use OCA\Deck\Federation\DeckFederationProvider;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
@@ -40,12 +41,16 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationProvider;
+use OCP\Federation\ICloudFederationProviderManager;
+use OCP\Federation\ICloudFederationFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\Server;
+use OCP\Security\ISecureRandom;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -66,6 +71,8 @@ class BoardService {
 		private NotificationHelper $notificationHelper,
 		private AssignmentMapper $assignedUsersMapper,
 		private ActivityManager $activityManager,
+		private readonly ICloudFederationProviderManager $cloudFederationProviderManager,
+		private readonly ICloudFederationFactory $federationFactory,
 		private IEventDispatcher $eventDispatcher,
 		private ChangeHelper $changeHelper,
 		private IURLGenerator $urlGenerator,
@@ -73,6 +80,7 @@ class BoardService {
 		private BoardServiceValidator $boardServiceValidator,
 		private SessionMapper $sessionMapper,
 		private IUserManager $userManager,
+		private ISecureRandom $random,
 		private ?string $userId,
 	) {
 	}
@@ -364,6 +372,27 @@ class BoardService {
 		[$edit, $share, $manage] = $this->applyPermissions($boardId, $edit, $share, $manage);
 
 		$acl = new Acl();
+		if ($type === Acl::PERMISSION_TYPE_REMOTE) {
+			$sharedBy = $this->userManager->get($this->userId);
+			$board = $this->find($boardId);
+			$token = $this->random->generate(32);
+			$cloudShare = $this->federationFactory->getCloudFederationShare(
+				$participant, 							// shareWith
+				$boardId,								// name
+				$board->getTitle(),						// description
+				DeckFederationProvider::PROVIDER_ID,	// providerID
+				$sharedBy->getCloudId(),				// owner 				(this instance)
+				$sharedBy->getDisplayName(),			// ownerDisplayName 	(this instance)
+				$sharedBy->getCloudId(),				// sharedBy 			(this instance)
+				$sharedBy->getDisplayName(),			// sharedByDisplayName 	(this instance)
+				$token,									// sharedSecret
+				'user',									// shareType
+				'deck'									// resourceType
+			);
+			$resp = $this->cloudFederationProviderManager->sendCloudShare($cloudShare);
+			$acl->setToken($token);
+		}
+
 		$acl->setBoardId($boardId);
 		$acl->setType($type);
 		$acl->setParticipant($participant);
