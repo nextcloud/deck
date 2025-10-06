@@ -241,6 +241,7 @@ export default new Vuex.Store({
 			state.sharees.push(...shareesUsersAndGroups.users)
 			state.sharees.push(...shareesUsersAndGroups.groups)
 			state.sharees.push(...shareesUsersAndGroups.circles)
+			state.sharees.push(...shareesUsersAndGroups.remotes)
 		},
 		setAssignableUsers(state, users) {
 			state.assignableUsers = users
@@ -436,7 +437,7 @@ export default new Vuex.Store({
 			params.append('search', query)
 			params.append('format', 'json')
 			params.append('perPage', 20)
-			params.append('itemType', [0, 1, 4, 7])
+			params.append('itemType', 'deck')
 			params.append('lookup', false)
 
 			const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), { params })
