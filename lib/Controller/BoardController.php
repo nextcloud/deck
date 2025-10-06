@@ -83,8 +83,8 @@ class BoardController extends ApiController {
 	 * @param $participant
 	 */
 	#[NoAdminRequired]
-	public function addAcl(int $boardId, int $type, $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage): Acl {
-		return $this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage);
+	public function addAcl(int $boardId, int $type, $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): Acl {
+		return $this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage, $remote);
 	}
 
 	/**
