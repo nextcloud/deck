@@ -319,6 +319,7 @@ export class BoardApi {
 	// Acl API Calls
 
 	addAcl(acl) {
+		console.log(acl.participant)
 		return axios.post(this.url(`/boards/${acl.boardId}/acl`), acl)
 			.then(
 				(response) => {

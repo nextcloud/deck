@@ -39,10 +39,12 @@
 				<NcAvatar v-if="acl.type===0" :user="acl.participant.uid" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
+				<div v-if="acl.type===6" class="avatardiv icon" />
 				<span class="username">
-					{{ acl.participant.displayname }}
+					{{ acl.participant.displayname || acl.participant }}
 					<span v-if="acl.type===1">{{ t('deck', '(Group)') }}</span>
 					<span v-if="acl.type===7">{{ t('deck', '(Team)') }}</span>
+					<span v-if="acl.type===6">{{ t('deck', '(remote)') }}</span>
 				</span>
 
 				<NcActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))"
@@ -165,6 +167,7 @@ export default {
 			}).slice(0, 10)
 		},
 		unallocatedSharees() {
+			console.log(this.board.acl)
 			return this.sharees.filter((sharee) => {
 				const foundIndex = this.board.acl.findIndex((acl) => {
 					return acl.participant.uid === sharee.value.shareWith && acl.participant.type === sharee.value.shareType
@@ -191,6 +194,7 @@ export default {
 			loading(false)
 		},
 		async clickAddAcl() {
+			console.log(this.addAcl)
 			this.addAclForAPI = {
 				type: this.addAcl.value.shareType,
 				participant: this.addAcl.value.shareWith,
