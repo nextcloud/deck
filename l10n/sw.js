@@ -373,9 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Nukuu: Umbizo la JSON pekee ndilo linalotumika kuleta tena kwenye app ya Deck",
     "Export" : "Safirisha",
     "Loading filtered view" : "Inapakia mwonekano uliochujwa",
-    "Today" : "Leo",
-    "Tomorrow" : "Kesho",
-    "No due" : "Hakuna ukomo",
+    "Search for {searchQuery} in other boards" : "Tafuta {searchQuery} katika vibao vingine",
     "Search for {searchQuery} in all boards" : "Tafuta kwa {searchQuery}katika bodi zote",
     "No results found" : "Hakuna matokeo yaliyopatikana",
     "Deck board {name}\n* Last modified on {lastMod}" : "Bodi ya deki{name}\nMaboresho ya mwisho katika {lastMod}",
@@ -416,6 +414,9 @@ OC.L10N.register(
     "Example Task 3" : "Kazi ya mfano 3",
     "Example Task 2" : "Kazi ya mfano 2",
     "Example Task 1" : "Kazi ya mfano 1",
-    "Move card to another board" : "Hamisha kadi kwenye bodi nyingine"
+    "Move card to another board" : "Hamisha kadi kwenye bodi nyingine",
+    "Today" : "Leo",
+    "Tomorrow" : "Kesho",
+    "No due" : "Hakuna ukomo"
 },
 "nplurals=2; plural=(n != 1);");

@@ -55,6 +55,7 @@ OC.L10N.register(
     "Edit title" : "Sarlavhani tahrirlash",
     "Delete card" : "Kartani o'chirish",
     "seconds ago" : "seconds ago",
+    "Keyboard shortcuts" : "Klaviatura yorliqlari",
     "Search" : "Qidirish",
     "Archived boards" : "Arxivlangan taxtalar",
     "Shared with you" : "Shared with you",
@@ -67,12 +68,12 @@ OC.L10N.register(
     "Clone cards" : "Klon kartalari",
     "Clone" : "Klonlash",
     "Export" : "Eksport",
-    "Today" : "Today",
-    "Tomorrow" : "Ertaga",
     "No results found" : "Hech qanday natija topilmadi",
     "Close" : "Yopish",
     "Due date" : "Muddati",
     "Share" : "Ulashish",
-    "Personal" : "Personal"
+    "Personal" : "Personal",
+    "Today" : "Today",
+    "Tomorrow" : "Ertaga"
 },
 "nplurals=1; plural=0;");

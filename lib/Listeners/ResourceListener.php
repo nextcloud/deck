@@ -18,14 +18,10 @@ use OCP\EventDispatcher\IEventListener;
 /** @template-implements IEventListener<Event|AclDeletedEvent|AclCreatedEvent> */
 class ResourceListener implements IEventListener {
 
-	/** @var IManager */
-	private $resourceManager;
-	/** @var ResourceProviderCard */
-	private $resourceProviderCard;
-
-	public function __construct(IManager $resourceManager, ResourceProviderCard $resourceProviderCard) {
-		$this->resourceManager = $resourceManager;
-		$this->resourceProviderCard = $resourceProviderCard;
+	public function __construct(
+		private readonly IManager $resourceManager,
+		private readonly ResourceProviderCard $resourceProviderCard,
+	) {
 	}
 
 	public function handle(Event $event): void {
@@ -38,10 +34,10 @@ class ResourceListener implements IEventListener {
 		$this->resourceManager->invalidateAccessCacheForProvider($this->resourceProviderCard);
 
 		try {
-			$resource = $this->resourceManager->getResourceForUser(ResourceProvider::RESOURCE_TYPE, $boardId, null);
+			$resource = $this->resourceManager->getResourceForUser(ResourceProvider::RESOURCE_TYPE, (string)$boardId, null);
 			$this->resourceManager->invalidateAccessCacheForResource($resource);
 		} catch (ResourceException $e) {
-			// If there is no resource we don't need to invalidate anything, but this should not happen anyways
+			// If there is no resource we don't need to invalidate anything, but this should not happen anyway
 		}
 	}
 }

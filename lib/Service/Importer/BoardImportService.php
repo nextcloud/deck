@@ -209,14 +209,15 @@ class BoardImportService {
 
 	public function importBoard(): void {
 		$board = $this->getImportSystem()->getBoard();
+		if ($board === null) {
+			throw new \LogicException('Import board not found');
+		}
 		if (!$this->userManager->userExists($board->getOwner())) {
 			throw new \Exception('Target owner ' . $board->getOwner() . ' not found. Please provide a mapping through the import config.');
 		}
 
-		if ($board) {
-			$this->boardMapper->insert($board);
-			$this->board = $board;
-		}
+		$this->boardMapper->insert($board);
+		$this->board = $board;
 	}
 
 	public function getBoard(bool $reset = false): Board {
@@ -292,12 +293,7 @@ class BoardImportService {
 		}
 	}
 
-	/**
-	 * @param mixed $cardId
-	 * @param mixed $labelId
-	 * @return self
-	 */
-	public function assignCardToLabel($cardId, $labelId): self {
+	public function assignCardToLabel(int $cardId, int $labelId): self {
 		$this->cardMapper->assignLabel(
 			$cardId,
 			$labelId
@@ -307,14 +303,14 @@ class BoardImportService {
 
 	public function assignCardsToLabels(): void {
 		$data = $this->getImportSystem()->getCardLabelAssignment();
-		foreach ($data as $cardId => $assignemnt) {
-			foreach ($assignemnt as $assignmentId => $labelId) {
+		foreach ($data as $cardId => $assignment) {
+			foreach ($assignment as $assignmentId => $labelId) {
 				try {
 					$this->assignCardToLabel(
-						$cardId,
+						(int)$cardId,
 						$labelId
 					);
-					$this->getImportSystem()->updateCardLabelsAssignment($cardId, $assignmentId, $labelId);
+					$this->getImportSystem()->updateCardLabelsAssignment((int)$cardId, (int)$assignmentId, $labelId);
 				} catch (\Exception $e) {
 					$this->addError('Failed to assign label ' . $labelId . ' to ' . $cardId, $e);
 				}
@@ -326,20 +322,20 @@ class BoardImportService {
 		$allComments = $this->getImportSystem()->getComments();
 		foreach ($allComments as $cardId => $comments) {
 			foreach ($comments as $commentId => $comment) {
-				$this->insertComment($cardId, $comment);
-				$this->getImportSystem()->updateComment($cardId, $commentId, $comment);
+				$this->insertComment((int)$cardId, $comment);
+				$this->getImportSystem()->updateComment((int)$cardId, $commentId, $comment);
 			}
 		}
 	}
 
-	private function insertComment(string $cardId, IComment $comment): void {
-		$comment->setObject('deckCard', $cardId);
+	private function insertComment(int $cardId, IComment $comment): void {
+		$comment->setObject('deckCard', (string)$cardId);
 		$comment->setVerb('comment');
 		// Check if parent is a comment on the same card
 		if ($comment->getParentId() !== '0') {
 			try {
 				$parent = $this->commentsManager->get($comment->getParentId());
-				if ($parent->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $parent->getObjectId() !== $cardId) {
+				if ($parent->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int)$parent->getObjectId() !== $cardId) {
 					throw new CommentNotFoundException();
 				}
 			} catch (CommentNotFoundException $e) {
@@ -362,7 +358,7 @@ class BoardImportService {
 			foreach ($assignments as $assignment) {
 				try {
 					$assignment = $this->assignmentMapper->insert($assignment);
-					$this->getImportSystem()->updateCardAssignment($cardId, (string)$assignment->getId(), $assignment);
+					$this->getImportSystem()->updateCardAssignment((int)$cardId, $assignment->getId(), $assignment);
 					$this->addOutput('Assignment ' . $assignment->getParticipant() . ' added');
 				} catch (NotFoundException $e) {
 					$this->addError('No origin or mapping found for card "' . $cardId . '" and ' . $assignment->getTypeString() . ' assignment "' . $assignment->getParticipant(), $e);

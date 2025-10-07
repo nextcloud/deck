@@ -27,6 +27,7 @@ use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Http\Response;
 use OCP\IL10N;
 use OCP\IUserManager;
+use Psr\Container\ContainerExceptionInterface;
 
 class AttachmentService {
 	private $attachmentMapper;
@@ -85,20 +86,16 @@ class AttachmentService {
 	}
 
 	/**
-	 * @param string $type
-	 * @param string $class
-	 * @throws \OCP\AppFramework\QueryException
+	 * @throws ContainerExceptionInterface
 	 */
-	public function registerAttachmentService($type, $class) {
-		$this->services[$type] = $this->application->getContainer()->query($class);
+	public function registerAttachmentService(string $type, string $class): void {
+		$this->services[$type] = $this->application->getContainer()->get($class);
 	}
 
 	/**
-	 * @param string $type
-	 * @return IAttachmentService
 	 * @throws InvalidAttachmentType
 	 */
-	public function getService($type) {
+	public function getService(string $type): IAttachmentService {
 		if (isset($this->services[$type])) {
 			return $this->services[$type];
 		}
@@ -106,16 +103,11 @@ class AttachmentService {
 	}
 
 	/**
-	 * @param $cardId
-	 * @return array
+	 * @return Attachment[]
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
 	 */
-	public function findAll($cardId, $withDeleted = false) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
+	public function findAll(int $cardId, bool $withDeleted = false): array {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 
 		$attachments = $this->attachmentMapper->findAll($cardId);
@@ -127,7 +119,7 @@ class AttachmentService {
 			/** @var IAttachmentService $service */
 			$service = $this->getService($attachmentType);
 			if ($service instanceof ICustomAttachmentService) {
-				$attachments = array_merge($attachments, $service->listAttachments((int)$cardId));
+				$attachments = array_merge($attachments, $service->listAttachments($cardId));
 			}
 		}
 
@@ -145,49 +137,40 @@ class AttachmentService {
 	}
 
 	/**
-	 * @param $cardId
-	 * @return int|mixed
 	 * @throws BadRequestException
 	 * @throws InvalidAttachmentType
 	 * @throws \OCP\DB\Exception
 	 */
-	public function count($cardId) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
-		$count = $this->attachmentCacheHelper->getAttachmentCount((int)$cardId);
+	public function count(int $cardId): int {
+		$count = $this->attachmentCacheHelper->getAttachmentCount($cardId);
 		if ($count === null) {
 			$count = count($this->attachmentMapper->findAll($cardId));
 
 			foreach (array_keys($this->services) as $attachmentType) {
 				$service = $this->getService($attachmentType);
 				if ($service instanceof ICustomAttachmentService) {
-					$count += $service->getAttachmentCount((int)$cardId);
+					$count += $service->getAttachmentCount($cardId);
 				}
 			}
 
-			$this->attachmentCacheHelper->setAttachmentCount((int)$cardId, $count);
+			$this->attachmentCacheHelper->setAttachmentCount($cardId, $count);
 		}
 
 		return $count;
 	}
 
 	/**
-	 * @param $cardId
-	 * @param $type
-	 * @param $data
 	 * @return Attachment|\OCP\AppFramework\Db\Entity
 	 * @throws NoPermissionException
 	 * @throws StatusException
 	 * @throws BadRequestException
 	 */
-	public function create($cardId, $type, $data) {
+	public function create(int $cardId, string $type, string $data) {
 		$this->attachmentServiceValidator->check(compact('cardId', 'type'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
-		$this->attachmentCacheHelper->clearAttachmentCount((int)$cardId);
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
 		$attachment = new Attachment();
 		$attachment->setCardId($cardId);
 		$attachment->setType($type);
@@ -224,12 +207,10 @@ class AttachmentService {
 	/**
 	 * Display the attachment
 	 *
-	 * @param $attachmentId
-	 * @return Response
 	 * @throws NoPermissionException
 	 * @throws NotFoundException
 	 */
-	public function display($cardId, $attachmentId, $type = 'deck_file') {
+	public function display(int $cardId, int $attachmentId, string $type = 'deck_file'): Response {
 		try {
 			$service = $this->getService($type);
 		} catch (InvalidAttachmentType $e) {
@@ -263,13 +244,10 @@ class AttachmentService {
 	/**
 	 * Update an attachment with custom data
 	 *
-	 * @param $attachmentId
-	 * @param $data
-	 * @return mixed
 	 * @throws BadRequestException
 	 * @throws NoPermissionException
 	 */
-	public function update($cardId, $attachmentId, $data, $type = 'deck_file') {
+	public function update(int $cardId, int $attachmentId, string $data, string $type = 'deck_file'): Attachment {
 		$this->attachmentServiceValidator->check(compact('cardId', 'type', 'data'));
 
 		try {
@@ -390,8 +368,6 @@ class AttachmentService {
 	}
 
 	/**
-	 * @param Attachment $attachment
-	 * @return Attachment
 	 * @throws \ReflectionException
 	 */
 	private function addCreator(Attachment $attachment): Attachment {

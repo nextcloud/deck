@@ -373,9 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "注意：匯入回 Deck 應用程式時僅支援 JSON 格式。",
     "Export" : "匯出",
     "Loading filtered view" : "正在載入過濾的檢視",
-    "Today" : "今天",
-    "Tomorrow" : "明天",
-    "No due" : "無到期日",
+    "Search for {searchQuery} in other boards" : "在其他看板中搜尋 {searchQuery}",
     "Search for {searchQuery} in all boards" : "在所有佈告欄中搜尋 {searchQuery}",
     "No results found" : "找不到結果",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deck 看板 {name}\n* 最後修改於 {lastMod}",
@@ -416,6 +414,9 @@ OC.L10N.register(
     "Example Task 3" : "範例工作 3",
     "Example Task 2" : "範例工作 2",
     "Example Task 1" : "範例工作 1",
-    "Move card to another board" : "將卡片移動到其他佈告欄"
+    "Move card to another board" : "將卡片移動到其他佈告欄",
+    "Today" : "今天",
+    "Tomorrow" : "明天",
+    "No due" : "無到期日"
 },
 "nplurals=1; plural=0;");

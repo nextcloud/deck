@@ -19,13 +19,10 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $boardId
-	 * @param int|null $limit
-	 * @param int|null $offset
 	 * @return Acl[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAll($boardId, $limit = null, $offset = null) {
+	public function findAll(int $boardId, ?int $limit = null, ?int $offset = null) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage')
 			->from('deck_board_acl')
@@ -51,12 +48,9 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $userId
-	 * @param numeric $id
-	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		$aclId = $id;
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('acl.id')
@@ -68,11 +62,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
-	/**
-	 * @param numeric $id
-	 * @return int|null
-	 */
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		try {
 			$entity = $this->find($id);
 			return $entity->getBoardId();
@@ -87,7 +77,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 * @return Acl[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findByParticipant($type, $participant): array {
+	public function findByParticipant(int $type, string $participant): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

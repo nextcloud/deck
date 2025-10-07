@@ -373,9 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Напомена: само JSON формат се подржава за увоз назад у апликацију Шпил.",
     "Export" : "Извези",
     "Loading filtered view" : "Учитам филтрирани преглед",
-    "Today" : "Данас",
-    "Tomorrow" : "сутра",
-    "No due" : "Нема рокова",
+    "Search for {searchQuery} in other boards" : "Претражи {searchQuery} у осталим таблама",
     "Search for {searchQuery} in all boards" : "Тражи се {searchQuery} у свим таблама",
     "No results found" : "Нема пронађених резултата",
     "Deck board {name}\n* Last modified on {lastMod}" : "Шпил табла {name}\n* Последњи пут измењена дана {lastMod}",
@@ -416,6 +414,9 @@ OC.L10N.register(
     "Example Task 3" : "Пример задатка 3",
     "Example Task 2" : "Пример задатка 2",
     "Example Task 1" : "Пример задатка 1",
-    "Move card to another board" : "Помери картицу на другу таблу"
+    "Move card to another board" : "Помери картицу на другу таблу",
+    "Today" : "Данас",
+    "Tomorrow" : "сутра",
+    "No due" : "Нема рокова"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

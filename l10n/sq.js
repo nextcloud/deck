@@ -63,13 +63,13 @@ OC.L10N.register(
     "Delete board" : "Fshij bordin",
     "Advanced options" : "Opsione të avancuara",
     "Export" : "Eksport",
-    "Today" : "Sot",
-    "Tomorrow" : "Nesër",
     "Close" : "Mbylleni",
     "Due date" : "Data e vendosur",
     "Share" : "Shpërndaje",
     "Personal" : "Personale",
     "To do" : "Për t'u bërë",
-    "Doing" : "Duke e bërë"
+    "Doing" : "Duke e bërë",
+    "Today" : "Sot",
+    "Tomorrow" : "Nesër"
 },
 "nplurals=2; plural=(n != 1);");

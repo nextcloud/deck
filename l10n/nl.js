@@ -266,6 +266,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "{count} reacties, {unread} ongelezen",
     "Todo items" : "Te doen onderwerpen",
     "Edit card title" : "Wijzig de titel van de kaart",
+    "Open link" : "Open link",
     "Card deleted" : "Kaart verwijderd",
     "Edit title" : "Titel bewerken",
     "Assign to me" : "Aan mij toewijzen",
@@ -279,6 +280,7 @@ OC.L10N.register(
     "Shift" : "Shift",
     "Ctrl" : "Ctrl",
     "Search" : "Zoeken",
+    "Enter" : "Enter",
     "All boards" : "Alle borden",
     "Archived boards" : "Gearchiveerde borden",
     "Shared with you" : "Deelde met jou",
@@ -313,9 +315,6 @@ OC.L10N.register(
     "Clone" : "Klonen",
     "Export" : "Exporteren",
     "Loading filtered view" : "Gefilterde weergave wordt geladen",
-    "Today" : "Vandaag",
-    "Tomorrow" : "Morgen",
-    "No due" : "Geen vervallen",
     "Search for {searchQuery} in all boards" : "Zoek naar {searchQuery} in alle borden",
     "No results found" : "Geen resultaten gevonden",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deckplank {name}\n* Laatst gewijzigd op {lastMod}",
@@ -355,6 +354,9 @@ OC.L10N.register(
     "Example Task 3" : "Voorbeeld Taak 3",
     "Example Task 2" : "Voorbeeld Taak 2",
     "Example Task 1" : "Voorbeeld Taak 1",
-    "Move card to another board" : "Verplaats kaart naar een ander bord"
+    "Move card to another board" : "Verplaats kaart naar een ander bord",
+    "Today" : "Vandaag",
+    "Tomorrow" : "Morgen",
+    "No due" : "Geen vervallen"
 },
 "nplurals=2; plural=(n != 1);");

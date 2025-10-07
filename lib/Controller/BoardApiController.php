@@ -12,10 +12,13 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
-
 use OCP\IRequest;
-use Sabre\HTTP\Util;
+
+use function Sabre\HTTP\parseDate;
 
 /**
  * Class BoardApiController
@@ -36,21 +39,18 @@ class BoardApiController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * Return all of the boards that the current user has access to.
-	 *
-	 * @param bool $details
+	 * Return all the boards that the current user has access to.
 	 * @throws StatusException
 	 */
-	public function index(bool $details = false) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function index(bool $details = false): DataResponse {
 		$modified = $this->request->getHeader('If-Modified-Since');
-		if ($modified === null || $modified === '') {
+		if ($modified === '') {
 			$boards = $this->boardService->findAll(0, $details === true);
 		} else {
-			$date = Util::parseHTTPDate($modified);
+			$date = parseDate($modified);
 			if (!$date) {
 				throw new StatusException('Invalid If-Modified-Since header provided.');
 			}
@@ -64,14 +64,12 @@ class BoardApiController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 *
 	 * Return the board specified by $this->request->getParam('boardId').
 	 */
-	public function get() {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function get(): DataResponse {
 		$board = $this->boardService->find($this->request->getParam('boardId'));
 		$response = new DataResponse($board, HTTP::STATUS_OK);
 		$response->setETag($board->getEtag());
@@ -79,68 +77,53 @@ class BoardApiController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * @params $title
-	 * @params $color
-	 *
 	 * Create a board with the specified title and color.
 	 */
-	public function create($title, $color) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function create(string $title, string $color): DataResponse {
 		$board = $this->boardService->create($title, $this->userId, $color);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * @params $title
-	 * @params $color
-	 * @params $archived
-	 *
 	 * Update a board with the specified boardId, title and color, and archived state.
 	 */
-	public function update($title, $color, $archived = false) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function update(string $title, string $color, bool $archived = false): DataResponse {
 		$board = $this->boardService->update($this->request->getParam('boardId'), $title, $color, $archived);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 *
 	 * Delete the board specified by $boardId.  Return the board that was deleted.
 	 */
-	public function delete() {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function delete(): DataResponse {
 		$board = $this->boardService->delete($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 *
 	 * Undo the deletion of the board specified by $boardId.
 	 */
-	public function undoDelete() {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function undoDelete(): DataResponse {
 		$board = $this->boardService->deleteUndo($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 */
-	public function addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function addAcl(int $boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage) {
 		$acl = $this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage);
 		return new DataResponse($acl, HTTP::STATUS_OK);
 	}

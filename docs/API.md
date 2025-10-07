@@ -6,7 +6,7 @@ The REST API provides access for authenticated users to their data inside the De
 
 # Prerequisites
 
-- All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
+- All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`. This does not apply to the endpoint for uploading attachments, which consumes `multipart/form-data`.
 - The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
 - All request parameters are required, unless otherwise specified
 
@@ -733,6 +733,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | labelId   | Integer | The label id to assign to the card      |
+
 #### Response
 
 ##### 200 Success
@@ -997,10 +998,12 @@ The request can fail with a bad request response for the following reasons:
 
 #### Request data
 
-| Parameter | Type    | Description                                   |
-| --------- | ------- | --------------------------------------------- |
-| type      | String  | The type of the attachement                   |
-| file      | Binary  | File data to add as an attachment             |
+The request is performed as `multipart/form-data`.
+
+| Parameter | Type    | Description                                                                                     |
+| --------- | ------- | ----------------------------------------------------------------------------------------------- |
+| type      | String  | The type of the attachement. Use `file` or `deck_file`.                                         |
+| file      | Binary  | File data to add as an attachment together with the `filename` parameter according to RFC 7578. |
 
 - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
 - Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
@@ -1022,12 +1025,13 @@ The request can fail with a bad request response for the following reasons:
 
 #### Request data
 
-| Parameter | Type    | Description                                   |
-| --------- | ------- | --------------------------------------------- |
-| type      | String  | The type of the attachement                   |
-| file      | Binary  | File data to add as an attachment             |
+The request is performed as `multipart/form-data`.
 
-For now only `deck_file` is supported as an attachment type.
+| Parameter | Type    | Description                                                                                     |
+| --------- | ------- | ----------------------------------------------------------------------------------------------- |
+| type      | String  | The type of the attachement. For now only `deck_file` is supported as an attachment type.       |
+| file      | Binary  | File data to add as an attachment together with the `filename` parameter according to RFC 7578. |
+
 
 #### Response
 

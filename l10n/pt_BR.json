@@ -371,9 +371,7 @@
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Observação: somente o formato JSON é compatível com a importação de volta para o aplicativo Deck.",
     "Export" : "Exportar",
     "Loading filtered view" : "Carregando exibição filtrada",
-    "Today" : "Hoje",
-    "Tomorrow" : "Amanhã",
-    "No due" : "Sem vencimento",
+    "Search for {searchQuery} in other boards" : "Pesquisar {searchQuery} em outros painéis.",
     "Search for {searchQuery} in all boards" : "Pesquisar por {searchQuery} em todos os painéis",
     "No results found" : "Nenhum resultado encontrado",
     "Deck board {name}\n* Last modified on {lastMod}" : "Painel de Deck {name}\n* Última modificação em {lastMod}",
@@ -414,6 +412,9 @@
     "Example Task 3" : "Tarefa exemplo 3",
     "Example Task 2" : "Tarefa exemplo 2",
     "Example Task 1" : "Tarefa exemplo 1",
-    "Move card to another board" : "Mover o cartão para outro painel"
+    "Move card to another board" : "Mover o cartão para outro painel",
+    "Today" : "Hoje",
+    "Tomorrow" : "Amanhã",
+    "No due" : "Sem vencimento"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

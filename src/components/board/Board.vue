@@ -276,18 +276,15 @@ export default {
 		position: relative;
 		width: 100%;
 		height: 100%;
-		max-height: calc(100vh - 50px);
 		display: flex;
 		flex-direction: column;
 	}
 
 	.board {
-		padding-left: $board-spacing;
 		position: relative;
-		max-height: calc(100% - var(--default-clickable-area));
-		overflow: hidden;
 		overflow-x: auto;
 		flex-grow: 1;
+		scrollbar-gutter: stable;
 	}
 
 	/**
@@ -297,11 +294,15 @@ export default {
 	.smooth-dnd-container.horizontal {
 		display: flex;
 		align-items: stretch;
+		gap: $board-gap;
+		padding: 0 $board-gap;
 		height: 100%;
 
 		&:deep(.stack-draggable-wrapper.smooth-dnd-draggable-wrapper) {
 			display: flex;
 			height: auto;
+			flex: 0 1 $card-max-width;
+			min-width: $card-min-width;
 
 			.stack {
 				display: flex;
@@ -309,16 +310,13 @@ export default {
 				position: relative;
 
 				.smooth-dnd-container.vertical {
-					flex-grow: 1;
+					$margin-x: calc($stack-gap * -1);
 					display: flex;
 					flex-direction: column;
-					// Margin left instead of padidng to avoid jumps on dropping a card
-					margin-left: $stack-spacing;
-					padding-right: $stack-spacing;
-					overflow-x: hidden;
+					gap: $stack-gap;
+					padding: $stack-gap;
+					margin: 0 $margin-x;
 					overflow-y: auto;
-					padding-top: 15px;
-					margin-top: -10px;
 					scrollbar-gutter: stable;
 				}
 

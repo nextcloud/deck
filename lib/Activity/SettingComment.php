@@ -7,6 +7,9 @@
 
 namespace OCA\Deck\Activity;
 
+/**
+ * @psalm-api SettingComment
+ */
 class SettingComment extends SettingBase {
 
 	/**

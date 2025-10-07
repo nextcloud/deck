@@ -12,6 +12,9 @@ use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
@@ -27,7 +30,7 @@ class CardApiController extends ApiController {
 	 * @param IRequest $request
 	 * @param CardService $cardService
 	 * @param AssignmentService $assignmentService
-	 * @param $userId
+	 * @param string $userId
 	 */
 	public function __construct(
 		string $appName,
@@ -80,112 +83,102 @@ class CardApiController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 *
 	 * Update a card
 	 */
-	public function update($title, $type, $owner, $description = '', $order = 0, $duedate = null, $archived = null) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function update(string $title, $type, string $owner, string $description = '', int $order = 0, $duedate = null, $archived = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams()) ? new OptionalNullableValue($this->request->getParam('done', null)) : null;
 		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Delete a specific card.
 	 */
-	public function delete() {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function delete(): DataResponse {
 		$card = $this->cardService->delete($this->request->getParam('cardId'));
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Assign a label to a card.
 	 */
-	public function assignLabel($labelId) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function assignLabel(int $labelId): DataResponse {
 		$card = $this->cardService->assignLabel($this->request->getParam('cardId'), $labelId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Assign a label to a card.
 	 */
-	public function removeLabel($labelId) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function removeLabel(int $labelId): DataResponse {
 		$card = $this->cardService->removeLabel($this->request->getParam('cardId'), $labelId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Assign a user to a card
 	 */
-	public function assignUser($cardId, $userId, $type = 0) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function assignUser(int $cardId, string $userId, int $type = 0): DataResponse {
 		$card = $this->assignmentService->assignUser($cardId, $userId, $type);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Unassign a user from a card
 	 */
-	public function unassignUser($cardId, $userId, $type = 0) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function unassignUser(int $cardId, string $userId, int $type = 0): DataResponse {
 		$card = $this->assignmentService->unassignUser($cardId, $userId, $type);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Archive card
 	 */
-	public function archive($cardId) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function archive(int $cardId): DataResponse {
 		$card = $this->cardService->archive($cardId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Unarchive card
 	 */
-	public function unarchive($cardId) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function unarchive(int $cardId): DataResponse {
 		$card = $this->cardService->unarchive($cardId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Reorder cards
 	 */
-	public function reorder($stackId, $order) {
-		$card = $this->cardService->reorder($this->request->getParam('cardId'), $stackId, $order);
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function reorder(int $stackId, int $order): DataResponse {
+		$card = $this->cardService->reorder((int)$this->request->getParam('cardId'), $stackId, $order);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 }

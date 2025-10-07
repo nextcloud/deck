@@ -18,6 +18,7 @@
     "{user} has created a new list {stack} on board {board}" : "{user} on „{board}“ tahvlil koostanud uue loendi „{stack}“ ",
     "You have renamed the card {before} to {card}" : "Sa oled muutnud kaardi nime: {before} → {card}",
     "{user} has renamed the card {before} to {card}" : "{user} on muutnud kaardi nime: {before} → {card}",
+    "You have added a description to card {card} in list {stack} on board {board}" : "Sa oled {board} tahvli {stack} loendi {card} kaardile lisanud kirjelduse",
     "You have marked the card {card} as done in list {stack} on board {board}" : "Sa oled märkinud {board} tahvli {stack} loendi {card} kaardi tehtuks",
     "{user} has marked card {card} as done in list {stack} on board {board}" : "{user} on märkinud {board} tahvli {stack} loendi {card} kaardi tehtuks",
     "You have marked the card {card} as undone in list {stack} on board {board}" : "Sa oled märkinud {board} tahvli {stack} loendi {card} kaardi mittetehtuks",
@@ -28,6 +29,11 @@
     "{user} has set the due date of card {card} to {after}" : "{user} on määranud „{card}“ kaardi tähtajaks {after}",
     "You have updated the due date of card {card} to {after}" : "Sina oled muutnud „{card}“ kaardi tähtajaks {after}",
     "{user} has updated the due date of card {card} to {after}" : "{user} on muutnud „{card}“ kaardi tähtajaks {after}",
+    "You have assigned {assigneduser} to card {card} on board {board}" : "Sa oled määranud {board} tahvli {card} kaardi täitjaks {assigneduser}",
+    "{user} has assigned {assigneduser} to card {card} on board {board}" : "{user} on määranud {board} tahvli {card} kaardi täitjaks {assigneduser}",
+    "You have unassigned {assigneduser} from card {card} on board {board}" : "Sa oled {board} tahvli {card} kaardi täitja rollist eemaldanud kasutaja {assigneduser}",
+    "{user} has unassigned {assigneduser} from card {card} on board {board}" : "{user} on  {board} tahvli {card} kaardi täitja rollist eemaldanud kasutaja {assigneduser}",
+    "{user} has moved the card {card} from list {stackBefore} to {stack}" : "{user} on tõstnud {card} kaardi ühest loendist teise: {stackBefore} → {stack}",
     "You have added the attachment {attachment} to card {card}" : "Sa oled lisanud „{card}“ kaardile „{attachment}“ manuse",
     "{user} has added the attachment {attachment} to card {card}" : "{user} on lisanud „{card}“ kaardile „{attachment}“ manuse",
     "You have updated the attachment {attachment} on card {card}" : "Sina oled uuendanud „{card}“ kaardil „{attachment}“ manust",
@@ -340,9 +346,7 @@
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Märkus: vaid JSON-vorming on toetatud tagasi importimiseks kanbani-rakendusse.",
     "Export" : "Ekspordi",
     "Loading filtered view" : "Laadin filtreeritud vaadet",
-    "Today" : "Täna",
-    "Tomorrow" : "Homme",
-    "No due" : "Tähtaega pole",
+    "Search for {searchQuery} in other boards" : "Otsi muudelt tahvlitelt: „{searchQuery}“",
     "Search for {searchQuery} in all boards" : "Otsi kõikidelt tahvlitelt: „{searchQuery}“",
     "No results found" : "Otsingutulemusi ei leidu",
     "Deck board {name}\n* Last modified on {lastMod}" : "Kanbani tahvel {name}\n* Viimati muudetud {lastMod}",
@@ -383,6 +387,9 @@
     "Example Task 3" : "Näidisülesanne 3",
     "Example Task 2" : "Näidisülesanne 2",
     "Example Task 1" : "Näidisülesanne 1",
-    "Move card to another board" : "Tõsta kaart teisele tahvlile"
+    "Move card to another board" : "Tõsta kaart teisele tahvlile",
+    "Today" : "Täna",
+    "Tomorrow" : "Homme",
+    "No due" : "Tähtaega pole"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -373,9 +373,7 @@ OC.L10N.register(
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Nóta: Ní thacaítear ach leis an bhformáid JSON le haghaidh iompórtála ar ais isteach san aip Deck.",
     "Export" : "Easpórtáil",
     "Loading filtered view" : "Amharc scagtha á lódáil",
-    "Today" : "Inniu",
-    "Tomorrow" : "Amárach",
-    "No due" : "Níl dlite",
+    "Search for {searchQuery} in other boards" : "Cuardaigh le haghaidh {searchQuery} i gcláir eile",
     "Search for {searchQuery} in all boards" : "Cuardaigh {searchQuery} i ngach clár",
     "No results found" : "Níor aimsíodh aon torthaí",
     "Deck board {name}\n* Last modified on {lastMod}" : "Bord deic {name}\n* Athraithe go deireanach ar {lastMod}",
@@ -416,6 +414,9 @@ OC.L10N.register(
     "Example Task 3" : "Tasc Sampla 3",
     "Example Task 2" : "Tasc Sampla 2",
     "Example Task 1" : "Tasc Sampla 1",
-    "Move card to another board" : "Bog cárta go bord eile"
+    "Move card to another board" : "Bog cárta go bord eile",
+    "Today" : "Inniu",
+    "Tomorrow" : "Amárach",
+    "No due" : "Níl dlite"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

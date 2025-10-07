@@ -64,10 +64,10 @@
     "Delete board" : "Borrar tableros",
     "Advanced options" : "Opciones avanzadas",
     "Export" : "Exportar",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "Due date" : "Fecha de vencimiento",
     "Share" : "Compartir",
-    "Personal" : "Personal"
+    "Personal" : "Personal",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

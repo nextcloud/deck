@@ -371,9 +371,7 @@
     "Note: Only the JSON format is supported for importing back into the Deck app." : "Observera: Endast JSON-formatet stöds för import tillbaka till Deck-appen.",
     "Export" : "Exportera",
     "Loading filtered view" : "Laddar filtrerad vy",
-    "Today" : "Idag",
-    "Tomorrow" : "Imorgon",
-    "No due" : "Inget slut",
+    "Search for {searchQuery} in other boards" : "Sök efter {searchQuery} i andra tavlor",
     "Search for {searchQuery} in all boards" : "Sök efter {searchQuery} i alla tavlor",
     "No results found" : "Inga resultat funna",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deck tavla {name}\n* Senast ändrad den {lastMod}",
@@ -414,6 +412,9 @@
     "Example Task 3" : "Exempeluppgift 3",
     "Example Task 2" : "Exempeluppgift 2",
     "Example Task 1" : "Exempeluppgift 1",
-    "Move card to another board" : "Flytta kort till en annan tavla"
+    "Move card to another board" : "Flytta kort till en annan tavla",
+    "Today" : "Idag",
+    "Tomorrow" : "Imorgon",
+    "No due" : "Inget slut"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

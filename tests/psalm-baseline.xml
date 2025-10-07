@@ -1,152 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+<files psalm-version="6.5.0@38fc8444edf0cebc9205296ee6e30e906ade783b">
   <file src="lib/Activity/Filter.php">
     <MethodSignatureMismatch>
-      <code>$types</code>
+      <code><![CDATA[$types]]></code>
     </MethodSignatureMismatch>
   </file>
-  <file src="lib/Command/UserExport.php">
-    <ImplementedReturnTypeMismatch>
-      <code>void</code>
-    </ImplementedReturnTypeMismatch>
-    <UndefinedThisPropertyAssignment>
-      <code>$this-&gt;boardMapper</code>
-      <code>$this-&gt;stackMapper</code>
-    </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch>
-      <code>$this-&gt;boardMapper</code>
-      <code>$this-&gt;stackMapper</code>
-    </UndefinedThisPropertyFetch>
-  </file>
   <file src="lib/Controller/BoardApiController.php">
-    <TypeDoesNotContainNull>
-      <code>$modified === null</code>
-      <code>$modified === null</code>
-    </TypeDoesNotContainNull>
-    <UndefinedClass>
-      <code>Util</code>
-    </UndefinedClass>
-    <UndefinedThisPropertyAssignment>
-      <code>$this-&gt;userId</code>
-    </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch>
-      <code>$this-&gt;userId</code>
-    </UndefinedThisPropertyFetch>
-  </file>
-  <file src="lib/Controller/CommentsApiController.php">
-    <InvalidScalarArgument>
-      <code>$cardId</code>
-      <code>$cardId</code>
-      <code>$cardId</code>
-      <code>$commentId</code>
-      <code>$commentId</code>
-      <code>$parentId</code>
-    </InvalidScalarArgument>
+    <UndefinedFunction>
+      <code><![CDATA[parseDate($modified)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="lib/Controller/PageController.php">
     <UndefinedClass>
-      <code>LoadSidebar</code>
+      <code><![CDATA[LoadSidebar]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Controller/StackApiController.php">
-    <RedundantCondition>
-      <code>$modified !== null</code>
-    </RedundantCondition>
-    <UndefinedClass>
-      <code>Util</code>
-    </UndefinedClass>
+    <UndefinedFunction>
+      <code><![CDATA[parseDate($modified)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="lib/DAV/Calendar.php">
     <UndefinedClass>
-      <code>ExternalCalendar</code>
+      <code><![CDATA[ExternalCalendar]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/CalendarObject.php">
     <UndefinedClass>
-      <code>ICalendarObject</code>
+      <code><![CDATA[ICalendarObject]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/CalendarPlugin.php">
     <UndefinedClass>
-      <code>ICalendarProvider</code>
+      <code><![CDATA[ICalendarProvider]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/DeckCalendarBackend.php">
     <UndefinedClass>
-      <code>NotFound</code>
+      <code><![CDATA[NotFound]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/Card.php">
     <UndefinedClass>
-      <code>VCalendar</code>
-      <code>VCalendar</code>
+      <code><![CDATA[VCalendar]]></code>
+      <code><![CDATA[VCalendar]]></code>
     </UndefinedClass>
-  </file>
-  <file src="lib/Db/CardMapper.php">
-    <InvalidScalarArgument>
-      <code>$entity-&gt;getId()</code>
-    </InvalidScalarArgument>
-    <UndefinedInterfaceMethod>
-      <code>getUserIdGroups</code>
-    </UndefinedInterfaceMethod>
-  </file>
-  <file src="lib/Db/LabelMapper.php">
-    <ParamNameMismatch>
-      <code>$labelId</code>
-    </ParamNameMismatch>
   </file>
   <file src="lib/Db/Stack.php">
     <UndefinedClass>
-      <code>VCalendar</code>
-      <code>VCalendar</code>
+      <code><![CDATA[VCalendar]]></code>
+      <code><![CDATA[VCalendar]]></code>
     </UndefinedClass>
-  </file>
-  <file src="lib/Model/BoardSummary.php">
-    <ConstructorSignatureMismatch>
-      <code>public function __construct(Board $board) {</code>
-      <code>public function __construct(Board $board) {</code>
-    </ConstructorSignatureMismatch>
-  </file>
-  <file src="lib/Model/CardDetails.php">
-    <ConstructorSignatureMismatch>
-      <code>public function __construct(Card $card, ?Board $board = null) {</code>
-      <code>public function __construct(Card $card, ?Board $board = null) {</code>
-    </ConstructorSignatureMismatch>
-  </file>
-  <file src="lib/Service/AttachmentService.php">
-    <InvalidCatch>
-      <code>try {
-				$attachment = $this-&gt;attachmentMapper-&gt;find($attachmentId);
-			} catch (IMapperException $e) {
-				throw new NoPermissionException('Permission denied');
-			}</code>
-    </InvalidCatch>
-  </file>
-  <file src="lib/Service/BoardService.php">
-    <TooManyArguments>
-      <code>findAll</code>
-      <code>findAll</code>
-    </TooManyArguments>
-  </file>
-  <file src="lib/Service/CirclesService.php">
-    <RedundantCondition>
-      <code>$member !== null</code>
-    </RedundantCondition>
   </file>
   <file src="lib/Service/FileService.php">
     <RedundantCondition>
-      <code>is_resource($content)</code>
-      <code>is_resource($content)</code>
+      <code><![CDATA[is_resource($content)]]></code>
+      <code><![CDATA[is_resource($content)]]></code>
     </RedundantCondition>
   </file>
-  <file src="lib/Sharing/DeckShareProvider.php">
-    <InvalidReturnType>
-      <code>getShareByToken</code>
-    </InvalidReturnType>
+  <file src="lib/Service/Importer/BoardImportCommandService.php">
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[ask]]></code>
+      <code><![CDATA[ask]]></code>
+      <code><![CDATA[ask]]></code>
+    </UndefinedInterfaceMethod>
   </file>
-  <file src="lib/Sharing/Listener.php">
-    <InvalidArgument>
-      <code>[self::class, 'listenPreShare']</code>
-    </InvalidArgument>
+  <file src="lib/Service/Importer/Systems/TrelloJsonService.php">
+    <InvalidPropertyFetch>
+      <code><![CDATA[$createCardDate->date]]></code>
+    </InvalidPropertyFetch>
+  </file>
+  <file src="lib/Teams/DeckTeamResourceProvider.php">
+    <FalsableReturnStatement>
+      <code><![CDATA[file_get_contents(__DIR__ . '/../../img/deck-current.svg')]]></code>
+    </FalsableReturnStatement>
   </file>
 </files>

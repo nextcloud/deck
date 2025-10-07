@@ -13,6 +13,7 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\SearchService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -26,9 +27,7 @@ class SearchController extends OCSController {
 		parent::__construct($appName, $request);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function search(string $term, ?int $limit = null, ?int $cursor = null): DataResponse {
 		$cards = $this->searchService->searchCards($term, $limit, $cursor);
 		return new DataResponse(array_map(function (Card $card) {

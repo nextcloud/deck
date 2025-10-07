@@ -293,9 +293,6 @@ OC.L10N.register(
     "Export as CSV" : "Експортиране като CSV файл",
     "Export" : "Експорт /изнасям/",
     "Loading filtered view" : "Зареждане на филтриран изглед",
-    "Today" : "Днес",
-    "Tomorrow" : "Утре",
-    "No due" : "Не се дължи",
     "Search for {searchQuery} in all boards" : "Търсене на {searchQuery} във всички табла",
     "No results found" : "Няма намерени резултати",
     "Deck board {name}\n* Last modified on {lastMod}" : "Табло {name}\n* Последна промяна на {lastMod}",
@@ -333,6 +330,9 @@ OC.L10N.register(
     "Example Task 3" : "Примерна задача 3",
     "Example Task 2" : "Примерна задача 2",
     "Example Task 1" : "Примерна задача 1",
-    "Move card to another board" : "Преместване на картата на друго табло"
+    "Move card to another board" : "Преместване на картата на друго табло",
+    "Today" : "Днес",
+    "Tomorrow" : "Утре",
+    "No due" : "Не се дължи"
 },
 "nplurals=2; plural=(n != 1);");

@@ -65,10 +65,14 @@ class CardService {
 	) {
 	}
 
-	public function enrichCards($cards) {
+	/**
+	 * @param Card[] $cards
+	 * @return CardDetails[]
+	 */
+	public function enrichCards(array $cards): array {
 		$user = $this->userManager->get($this->userId);
 
-		$cardIds = array_map(function (Card $card) use ($user) {
+		$cardIds = array_map(function (Card $card) use ($user): int {
 			// Everything done in here might be heavy as it is executed for every card
 			$cardId = $card->getId();
 			$this->cardMapper->mapOwner($card);
@@ -121,7 +125,8 @@ class CardService {
 		);
 	}
 
-	public function fetchDeleted($boardId) {
+	/** @return Card[] */
+	public function fetchDeleted($boardId): array {
 		$this->cardServiceValidator->check(compact('boardId'));
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		$cards = $this->cardMapper->findDeleted($boardId);
@@ -130,13 +135,12 @@ class CardService {
 	}
 
 	/**
-	 * @return \OCA\Deck\Db\RelationalEntity
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find(int $cardId) {
+	public function find(int $cardId): Card {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
 		[$card] = $this->enrichCards([$card]);
@@ -153,7 +157,10 @@ class CardService {
 		return $card;
 	}
 
-	public function findCalendarEntries($boardId) {
+	/**
+	 * @return Card[]
+	 */
+	public function findCalendarEntries(int $boardId): array {
 		try {
 			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		} catch (NoPermissionException $e) {
@@ -164,20 +171,13 @@ class CardService {
 	}
 
 	/**
-	 * @param $title
-	 * @param $stackId
-	 * @param $type
-	 * @param integer $order
-	 * @param $description
-	 * @param $owner
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create($title, $stackId, $type, $order, $owner, $description = '', $duedate = null) {
+	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null): Card {
 		if ($this->deckExcelPasteService->excelStringCheck($title)) {
 			$formattedExcelArray = $this->deckExcelPasteService->formatString($title);
 
@@ -211,19 +211,13 @@ class CardService {
 	}
 
 	/**
-	 * @param $id
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function delete($id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
+	public function delete(int $id): Card {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -241,25 +235,13 @@ class CardService {
 	}
 
 	/**
-	 * @param $id
-	 * @param $title
-	 * @param $stackId
-	 * @param $type
-	 * @param $owner
-	 * @param $description
-	 * @param $order
-	 * @param $duedate
-	 * @param $deletedAt
-	 * @param $archived
-	 * @param $done
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null, ?OptionalNullableValue $done = null) {
+	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null): Card {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
@@ -406,16 +388,13 @@ class CardService {
 	}
 
 	/**
-	 * @param $id
-	 * @param $title
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function rename($id, $title) {
+	public function rename(int $id, string $title): Card {
 		$this->cardServiceValidator->check(compact('id', 'title'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
@@ -437,17 +416,14 @@ class CardService {
 	}
 
 	/**
-	 * @param $id
-	 * @param $stackId
-	 * @param $order
-	 * @return array
+	 * @return list<Card>
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function reorder($id, $stackId, $order) {
+	public function reorder(int $id, int $stackId, int $order): array {
 		$this->cardServiceValidator->check(compact('id', 'stackId', 'order'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
@@ -496,15 +472,13 @@ class CardService {
 	}
 
 	/**
-	 * @param $id
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function archive($id) {
+	public function archive(int $id): Card {
 		$this->cardServiceValidator->check(compact('id'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
@@ -525,15 +499,13 @@ class CardService {
 	}
 
 	/**
-	 * @param $id
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function unarchive($id) {
+	public function unarchive(int $id): Card {
 		$this->cardServiceValidator->check(compact('id'));
 
 
@@ -554,8 +526,6 @@ class CardService {
 	}
 
 	/**
-	 * @param $id
-	 * @return \OCA\Deck\Db\Card
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
@@ -607,15 +577,13 @@ class CardService {
 	}
 
 	/**
-	 * @param $cardId
-	 * @param $labelId
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function assignLabel($cardId, $labelId) {
+	public function assignLabel(int $cardId, int $labelId): Card {
 		$this->cardServiceValidator->check(compact('cardId', 'labelId'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
@@ -637,18 +605,16 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		return $card;
 	}
 
 	/**
-	 * @param $cardId
-	 * @param $labelId
-	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function removeLabel($cardId, $labelId) {
+	public function removeLabel(int $cardId, int $labelId): Card {
 		$this->cardServiceValidator->check(compact('cardId', 'labelId'));
 
 
@@ -668,6 +634,7 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		return $card;
 	}
 
 	public function getCardUrl(int $cardId): string {

@@ -15,6 +15,7 @@ class CardDetails extends Card {
 	private ?Board $board;
 	private ?Reference $referenceData = null;
 
+	/** @psalm-suppress ConstructorSignatureMismatch */
 	public function __construct(Card $card, ?Board $board = null) {
 		parent::__construct();
 		$this->card = $card;
