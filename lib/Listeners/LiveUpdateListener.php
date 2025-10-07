@@ -70,8 +70,8 @@ class LiveUpdateListener implements IEventListener {
 				$event instanceof BoardUpdatedEvent ||
 				$event instanceof AAclEvent
 			) {
-				$this->sessionService->notifyAllSessions($this->queue, $event->getBoardId(), NotifyPushEvents::DeckBoardUpdate, [
-					'id' => $event->getBoardId()
+				$this->sessionService->notifyAllSessions($this->queue, $event->getBoard()->getId(), NotifyPushEvents::DeckBoardUpdate, [
+					'id' => $event->getBoard()->getId(),
 				], $causingSessionToken);
 			} elseif ($event instanceof ACardEvent) {
 				$boardId = $this->stackMapper->findBoardId($event->getCard()->getStackId());

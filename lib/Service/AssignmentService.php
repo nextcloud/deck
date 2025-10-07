@@ -15,6 +15,8 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Event\AssignmentCreatedEvent;
+use OCA\Deck\Event\AssignmentDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
@@ -134,6 +136,8 @@ class AssignmentService {
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
 
+		$this->eventDispatcher->dispatchTyped(new AssignmentCreatedEvent($assignment));
+		// TODO: Is the updated card event still needed if we have an assignment event now?
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 		return $assignment;
@@ -161,7 +165,8 @@ class AssignmentService {
 				}
 				$this->changeHelper->cardChanged($cardId);
 
-
+				$this->eventDispatcher->dispatchTyped(new AssignmentDeletedEvent($assignment));
+				// TODO: Is the updated card event still needed if we have an assignment event now?
 				$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 				return $assignment;

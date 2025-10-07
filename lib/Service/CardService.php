@@ -60,6 +60,7 @@ class CardService {
 		private CardServiceValidator $cardServiceValidator,
 		private AssignmentService $assignmentService,
 		private IReferenceManager $referenceManager,
+		private DeckExcelPasteService $deckExcelPasteService,
 		private ?string $userId,
 	) {
 	}
@@ -177,6 +178,13 @@ class CardService {
 	 * @throws BadrequestException
 	 */
 	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null): Card {
+		if ($this->deckExcelPasteService->excelStringCheck($title)) {
+			$formattedExcelArray = $this->deckExcelPasteService->formatString($title);
+
+			$title = $formattedExcelArray['title'];
+			$description = $formattedExcelArray['description'];
+		}
+
 		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);

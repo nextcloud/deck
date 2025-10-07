@@ -10,6 +10,8 @@ namespace OCA\Deck\Notification;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Notification\Subjects\CardStackUpdated;
+use OCA\Deck\Notification\Subjects\DueDateAlarm;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
@@ -230,6 +232,12 @@ class Notifier implements INotifier {
 					]
 				);
 				$notification->setLink($this->getBoardUrl($boardId));
+				break;
+			case CardStackUpdated::SUBJECT:
+				$notification = CardStackUpdated::make(notification: $notification, l: $this->factory->get('deck', $languageCode));
+				break;
+			case DueDateAlarm::SUBJECT:
+				$notification = DueDateAlarm::make(notification: $notification, l: $this->factory->get('deck', $languageCode));
 				break;
 		}
 		return $notification;

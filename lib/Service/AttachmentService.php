@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\EventDispatcher\EventDispatcher;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
@@ -16,6 +17,7 @@ use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Event\CardCreatedAttachmentEvent;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
@@ -48,6 +50,7 @@ class AttachmentService {
 	private IUserManager $userManager;
 	/** @var AttachmentServiceValidator */
 	private AttachmentServiceValidator $attachmentServiceValidator;
+	private EventDispatcher $eventDispatcher;
 
 	public function __construct(
 		AttachmentMapper $attachmentMapper,
@@ -61,6 +64,7 @@ class AttachmentService {
 		IL10N $l10n,
 		ActivityManager $activityManager,
 		AttachmentServiceValidator $attachmentServiceValidator,
+		EventDispatcher $eventDispatcher,
 	) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
@@ -73,6 +77,7 @@ class AttachmentService {
 		$this->changeHelper = $changeHelper;
 		$this->userManager = $userManager;
 		$this->attachmentServiceValidator = $attachmentServiceValidator;
+		$this->eventDispatcher = $eventDispatcher;
 
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -194,6 +199,7 @@ class AttachmentService {
 
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
+		$this->eventDispatcher->dispatchTyped(new CardCreatedAttachmentEvent($this->cardMapper->find($cardId), $attachment));
 		return $attachment;
 	}
 
