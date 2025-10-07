@@ -84,6 +84,9 @@ OC.L10N.register(
     "Failed to upload {name}" : "Не ўдалося запампаваць {name}",
     "Share" : "Абагуліць",
     "Personal" : "Асабістыя",
+    "Example Task 3" : "Прыклад задання 3",
+    "Example Task 2" : "Прыклад задання 2",
+    "Example Task 1" : "Прыклад задання 1",
     "Today" : "Сёння",
     "Tomorrow" : "Заўтра"
 },
