@@ -288,7 +288,7 @@ OC.L10N.register(
     "Create a new tag:" : "Направи нова ознака:",
     "(group)" : "(group)",
     "{count} comments, {unread} unread" : "{count} коментари, {unread} непрочитани",
-    "Todo items" : "Работи за правење",
+    "Todo items" : "Задачи",
     "Edit card title" : "Измени наслов на картица",
     "Open link" : "Отвори линк",
     "Card deleted" : "Картицата е избришана",
