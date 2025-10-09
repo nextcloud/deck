@@ -125,7 +125,7 @@ export default {
 				if (mention.attributes['data-at-embedded'].value === 'true') {
 					mentionValue = mention.parentNode.parentNode.querySelector('.user-bubble__wrapper').attributes['data-mention-id'].value
 				} else {
-					mentionValue = mention.firstChild.attributes['data-mention-id'].value
+					mentionValue = mention.firstElementChild.attributes['data-mention-id'].value
 				}
 				if (mentionValue.indexOf(' ') !== -1) {
 					mention.replaceWith(' @"' + mentionValue + '" ')
