@@ -10,7 +10,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "Falta una carpeta temporal",
     "Could not write file to disk" : "No fue posible escribir a disco",
     "A PHP extension stopped the file upload" : "Una extensión de PHP detuvo la carga del archivo",
-    "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
     "%s on %s" : "%s en %s",
     "Finished" : "Terminado",
@@ -72,6 +71,7 @@ OC.L10N.register(
     "Due date" : "Fecha de vencimiento",
     "Share" : "Compartir",
     "Personal" : "Personal",
+    "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana"
 },
