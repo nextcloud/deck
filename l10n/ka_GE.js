@@ -6,7 +6,6 @@ OC.L10N.register(
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "ატვირთული ფაილი აჭარბებს HTML ფორამაში მითითებულ MAX_FILE_SIZE დირექტივას",
     "No file was uploaded" : "ფაილი არ აიტვირთა",
     "Missing a temporary folder" : "დროებითი დირექტორია არ არსებობს",
-    "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "The board \"%s\" has been shared with you by %s." : "დაფა \"%s\" თქვენთან გაზიარდა %s-ისთვის.",
     "%s on %s" : "%s %s-ზე",
     "Finished" : "დასრულდა",
@@ -66,6 +65,7 @@ OC.L10N.register(
     "Due date" : "განპირობებულია თარიღისთვის",
     "Share" : "გაზიარება",
     "Personal" : "პირადი",
+    "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ"
 },
