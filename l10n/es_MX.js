@@ -85,7 +85,6 @@ OC.L10N.register(
     "Cards due tomorrow" : "Tarjetas para mañana",
     "Upcoming cards" : "Tarjetas próximas",
     "Load more" : "Cargar más",
-    "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
     "Deck board" : "Tablero de Deck",
     "%s on %s" : "%s en %s",
@@ -192,6 +191,7 @@ OC.L10N.register(
     "Error creating the share" : "Error creando el recurso compartido",
     "Share" : "Compartir",
     "Personal" : "Personal",
+    "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana"
 },
