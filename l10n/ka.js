@@ -367,7 +367,6 @@ OC.L10N.register(
     "Example Task 3" : "Example Task 3",
     "Example Task 2" : "Example Task 2",
     "Example Task 1" : "Example Task 1",
-    "Move card to another board" : "Move card to another board",
     "Today" : "Today",
     "Tomorrow" : "Tomorrow",
     "No due" : "No due"

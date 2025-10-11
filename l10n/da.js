@@ -285,7 +285,6 @@ OC.L10N.register(
     "Example Task 3" : "Eksempel opgave 3",
     "Example Task 2" : "Eksempel opgave 2",
     "Example Task 1" : "Eksempel opgave 1",
-    "Move card to another board" : "Flyt kort til en anden tavle",
     "Today" : "I dag",
     "Tomorrow" : "I morgen",
     "No due" : "Ikke forfalden"

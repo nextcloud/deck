@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "3. példafeladat",
     "Example Task 2" : "2. példafeladat",
     "Example Task 1" : "1. példafeladat",
-    "Move card to another board" : "Kártya áthelyezése egy másik táblára",
     "Today" : "Ma",
     "Tomorrow" : "Holnap",
     "No due" : "Nincs határidő"

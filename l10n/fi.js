@@ -285,7 +285,6 @@ OC.L10N.register(
     "Example Task 3" : "Esimerkkitehtävä 3",
     "Example Task 2" : "Esimerkkitehtävä 2",
     "Example Task 1" : "Esimerkkitehtävä 1",
-    "Move card to another board" : "Siirrä kortti toiselle taululle",
     "Today" : "Tänään",
     "Tomorrow" : "Huomenna"
 },

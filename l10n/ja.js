@@ -382,7 +382,6 @@ OC.L10N.register(
     "Example Task 3" : "タスク3の例",
     "Example Task 2" : "タスク2の例",
     "Example Task 1" : "タスク1の例",
-    "Move card to another board" : "カードを他のボードに移動",
     "Today" : "今日",
     "Tomorrow" : "明日",
     "No due" : "日付なし"

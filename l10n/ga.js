@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "Tasc Sampla 3",
     "Example Task 2" : "Tasc Sampla 2",
     "Example Task 1" : "Tasc Sampla 1",
-    "Move card to another board" : "Bog cárta go bord eile",
     "Today" : "Inniu",
     "Tomorrow" : "Amárach",
     "No due" : "Níl dlite"

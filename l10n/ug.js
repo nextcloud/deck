@@ -383,7 +383,6 @@ OC.L10N.register(
     "Example Task 3" : "مىسال 3",
     "Example Task 2" : "مىسال 2",
     "Example Task 1" : "مىسال 1",
-    "Move card to another board" : "كارتىنى باشقا تاختىغا يۆتكەڭ",
     "Today" : "بۈگۈن",
     "Tomorrow" : "ئەتە",
     "No due" : "مۇۋاپىق ئەمەس"
