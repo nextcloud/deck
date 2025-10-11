@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "Παράδειγμα Εργασίας 3",
     "Example Task 2" : "Παράδειγμα Εργασίας 2",
     "Example Task 1" : "Παράδειγμα Εργασίας 1",
-    "Move card to another board" : "Μετακίνηση καρτέλας σε άλλο πίνακα",
     "Today" : "Σήμερα",
     "Tomorrow" : "Αύριο",
     "No due" : "Χωρίς λήξη"

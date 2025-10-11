@@ -347,7 +347,6 @@ OC.L10N.register(
     "Example Task 3" : "Exemplu de sarcină 3",
     "Example Task 2" : "Exemplu de sarcină 2",
     "Example Task 1" : "Exemplu de sarcină 1",
-    "Move card to another board" : "Mută cardul în alt panou",
     "Today" : "Azi",
     "Tomorrow" : "Mâine",
     "No due" : "Fără scadență"

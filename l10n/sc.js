@@ -290,7 +290,6 @@ OC.L10N.register(
     "Example Task 3" : "Atividade de esempru 3",
     "Example Task 2" : "Atividade de esempru 2",
     "Example Task 1" : "Atividade de esempru 1",
-    "Move card to another board" : "Tràmuda s'ischeda a un'àtera lavagna",
     "Today" : "Oe",
     "Tomorrow" : "Cras",
     "No due" : "Peruna iscadèntzia"

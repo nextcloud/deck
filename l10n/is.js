@@ -397,7 +397,6 @@ OC.L10N.register(
     "Example Task 3" : "Dæmi um verkefni 3",
     "Example Task 2" : "Dæmi um verkefni 2",
     "Example Task 1" : "Dæmi um verkefni 1",
-    "Move card to another board" : "Færa spjald á annað borð",
     "Today" : "Í dag",
     "Tomorrow" : "Á morgun",
     "No due" : "Enginn skilatími"

@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "Приклад завдання 3",
     "Example Task 2" : "Приклад завдання 2",
     "Example Task 1" : "Приклад завдання 1",
-    "Move card to another board" : "Перемістити картку до іншої дошки",
     "Today" : "Сьогодні",
     "Tomorrow" : "Завтра",
     "No due" : "Без призначеної дати"

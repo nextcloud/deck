@@ -383,7 +383,6 @@ OC.L10N.register(
     "Example Task 3" : "Adibidetarako ataza 3",
     "Example Task 2" : "Adibidetarako ataza 2",
     "Example Task 1" : "Adibidetarako ataza 1",
-    "Move card to another board" : "Mugitu txartela beste taula batera",
     "Today" : "Gaur",
     "Tomorrow" : "Bihar",
     "No due" : "Epemugarik ez"

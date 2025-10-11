@@ -62,6 +62,7 @@ OC.L10N.register(
     "Set due date for next week" : "Задаць дату выканання на наступны тыдзень",
     "Create a new tag:" : "Стварыць новы тэг:",
     "(group)" : "(група)",
+    "Todo items" : "Элементы спісу задач",
     "Open link" : "Адкрыць спасылку",
     "Edit title" : "Рэдагаваць загаловак",
     "seconds ago" : "с таму",

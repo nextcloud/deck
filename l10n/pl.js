@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "Przykład Zadanie 3",
     "Example Task 2" : "Przykład Zadanie 2",
     "Example Task 1" : "Przykład Zadanie 1",
-    "Move card to another board" : "Przenieś kartę na inną tablicę",
     "Today" : "Dzisiaj",
     "Tomorrow" : "Jutro",
     "No due" : "Bez ważności"

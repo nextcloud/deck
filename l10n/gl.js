@@ -91,6 +91,7 @@ OC.L10N.register(
     "Welcome to Nextcloud Deck!" : "Dámoslle a benvida á Gabeta de Nextcloud",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "A tarxeta «%s» en «%s» foi asignada a Vde. por %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} asignoulle a tarxeta {deck-card} en {deck-board} a Vde.",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "A tarxeta «%1$s» en «%2$s» acadou a súa data de caducidade.",
     "The card {deck-card} on {deck-board} has reached its due date." : "A tarxeta {deck-card} en {deck-board} chegou á súa data de caducidade.",
     "%s has mentioned you in a comment on \"%s\"." : "%s mencionouno a Vde. nun comentario en «%s».",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} mencionouno a Vde. nun comentario en {deck-card}.",
@@ -414,7 +415,6 @@ OC.L10N.register(
     "Example Task 3" : "Tarefa de exemplo 3",
     "Example Task 2" : "Tarefa de exemplo 2",
     "Example Task 1" : "Tarefa de exemplo 1",
-    "Move card to another board" : "Mover a tarxeta a outro taboleiro",
     "Today" : "Hoxe",
     "Tomorrow" : "Mañá",
     "No due" : "Sen caducidade"

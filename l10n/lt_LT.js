@@ -286,7 +286,6 @@ OC.L10N.register(
     "Example Task 3" : "Pavyzdinė užduotis 3",
     "Example Task 2" : "Pavyzdinė užduotis 2",
     "Example Task 1" : "Pavyzdinė užduotis 1",
-    "Move card to another board" : "Perkelti kortelę į kitą lentą",
     "Today" : "Šiandien",
     "Tomorrow" : "Rytoj",
     "No due" : "Be galutinio termino"

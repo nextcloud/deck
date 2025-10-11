@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "示例任务 3",
     "Example Task 2" : "示例任务 2",
     "Example Task 1" : "示例任务 1",
-    "Move card to another board" : "将卡片移到其他面板",
     "Today" : "今天",
     "Tomorrow" : "明天",
     "No due" : "没有到期的"

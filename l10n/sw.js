@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "Kazi ya mfano 3",
     "Example Task 2" : "Kazi ya mfano 2",
     "Example Task 1" : "Kazi ya mfano 1",
-    "Move card to another board" : "Hamisha kadi kwenye bodi nyingine",
     "Today" : "Leo",
     "Tomorrow" : "Kesho",
     "No due" : "Hakuna ukomo"
