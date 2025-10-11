@@ -414,7 +414,6 @@ OC.L10N.register(
     "Example Task 3" : "Třetí úkol pro ukázku",
     "Example Task 2" : "Druhý úkol pro ukázku",
     "Example Task 1" : "První úkol pro ukázku",
-    "Move card to another board" : "Přesunout kartu na jinou tabuli",
     "Today" : "Dnes",
     "Tomorrow" : "Zítra",
     "No due" : "Žádný termín"

@@ -270,7 +270,6 @@ OC.L10N.register(
     "Example Task 3" : "משימה לדוגמה 3",
     "Example Task 2" : "משימה לדוגמה 2",
     "Example Task 1" : "משימה לדוגמה 1",
-    "Move card to another board" : "העברת כרטיס ללוח אחר",
     "Today" : "היום",
     "Tomorrow" : "מחר",
     "No due" : "אין תאריך יעד"

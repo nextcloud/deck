@@ -89,6 +89,7 @@
     "Welcome to Nextcloud Deck!" : "Välkommen till Nextcloud Deck!",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortet \"%s\" på \"%s\" har tilldelats dig av %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} har tilldelat kortet {deck-card} från {deck-board} till dig.",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "Kortet \"%1$s\" på \"%2$s\" har nått sitt slutdatum.",
     "The card {deck-card} on {deck-board} has reached its due date." : "Kortet {deck-card} från {deck-board} har nått sitt slutdatum.",
     "%s has mentioned you in a comment on \"%s\"." : "%s har nämnt dig i en kommentar på \"%s\".",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} har nämnt dig i en kommentar i {deck-card}.",
@@ -412,7 +413,6 @@
     "Example Task 3" : "Exempeluppgift 3",
     "Example Task 2" : "Exempeluppgift 2",
     "Example Task 1" : "Exempeluppgift 1",
-    "Move card to another board" : "Flytta kort till en annan tavla",
     "Today" : "Idag",
     "Tomorrow" : "Imorgon",
     "No due" : "Inget slut"

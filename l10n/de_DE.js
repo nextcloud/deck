@@ -91,6 +91,7 @@ OC.L10N.register(
     "Welcome to Nextcloud Deck!" : "Willkommen bei Nextcloud Deck!",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" auf \"%s\" wurde Ihnen von %s zugewiesen.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} hat Ihnen die Karte {deck-card} auf {deck-board} zugewiesen.",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "Die Karte \"%1$s\" in \"%2$s\" ist überfällig.",
     "The card {deck-card} on {deck-board} has reached its due date." : "Die Karte {deck-card} in {deck-board} ist überfällig.",
     "%s has mentioned you in a comment on \"%s\"." : "%s hat Sie in einem Kommentar zu \"%s\" erwähnt.",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} hat Sie in einem Kommentar zu {deck-card} erwähnt.",
@@ -414,7 +415,6 @@ OC.L10N.register(
     "Example Task 3" : "Beispielaufgabe 3",
     "Example Task 2" : "Beispielaufgabe 2",
     "Example Task 1" : "Beispielaufgabe 1",
-    "Move card to another board" : "Karte auf ein anderes Board verschieben",
     "Today" : "Heute",
     "Tomorrow" : "Morgen",
     "No due" : "Kein Fälligkeitsdatum"

@@ -228,7 +228,6 @@ OC.L10N.register(
     "Example Task 3" : "Contoh tugas 3",
     "Example Task 2" : "Contoh tugas 2",
     "Example Task 1" : "Contoh tugas 1",
-    "Move card to another board" : "Pindahkan kartu ke papan lain",
     "Today" : "Hari ini",
     "Tomorrow" : "Besok"
 },

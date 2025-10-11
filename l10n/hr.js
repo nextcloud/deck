@@ -288,7 +288,6 @@ OC.L10N.register(
     "Example Task 3" : "Primjer zadatka 3.",
     "Example Task 2" : "Primjer zadatka 2.",
     "Example Task 1" : "Primjer zadatka 1.",
-    "Move card to another board" : "Premjesti karticu na drugu ploču",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",
     "No due" : "Nema nezavršenih"
