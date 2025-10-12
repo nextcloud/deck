@@ -83,7 +83,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
 import relativeDate from '../../mixins/relativeDate.js'
 import ReplyIcon from 'vue-material-design-icons/ReplyOutline.vue'
-import moment from 'moment'
+import { format } from 'date-fns'
 
 const AtMention = {
 	name: 'AtMention',
@@ -173,7 +173,7 @@ export default {
 			}
 		},
 		formattedTimestamp() {
-			return t('deck', 'Created:') + ' ' + moment(this.comment.creationDateTime).format('LLLL')
+			return t('deck', 'Created:') + ' ' + format(new Date(this.comment.creationDateTime), 'PPPP p')
 		},
 	},
 

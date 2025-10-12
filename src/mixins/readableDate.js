@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import moment from '@nextcloud/moment'
+import { format } from 'date-fns'
 
 export default {
-	computed: {
-		formatReadableDate() {
-			return (timestamp) => {
-				return moment(timestamp).format('lll')
-			}
+	methods: {
+		readableDate(timestamp) {
+			// timestamp might be a number or an ISO string; new Date handles both
+			return format(new Date(timestamp), 'PPp') // localized date + time
 		},
 	},
 }
