@@ -43,6 +43,15 @@
 					<ShareVariantIcon :size="20" decorative />
 				</template>
 			</AppNavigationBoardCategory>
+			<AppNavigationBoardCategory id="deck-navigation-external"
+				to="/board/external"
+				:text="t('deck', 'Remotely Shared with you')"
+				:boards="externalBoards"
+				icon="icon-shared">
+				<template #icon>
+					<ShareVariantIcon :size="20" decorative />
+				</template>
+			</AppNavigationBoardCategory>
 			<AppNavigationAddBoard v-if="canCreate" />
 			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
@@ -122,6 +131,7 @@ import ShareVariantIcon from 'vue-material-design-icons/ShareOutline.vue'
 import HelpModal from './../modals/HelpModal.vue'
 import { subscribe } from '@nextcloud/event-bus'
 import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
+import { mapState } from 'vuex/dist/vuex.common.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -169,6 +179,11 @@ export default {
 			'archivedBoards',
 			'sharedBoards',
 		]),
+		...mapState({
+			externalBoards: state => {
+				return state.externalBoards
+			},
+		}),
 		isAdmin() {
 			return !!getCurrentUser()?.isAdmin
 		},

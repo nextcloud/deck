@@ -358,9 +358,9 @@ class BoardService {
 			$token = $this->random->generate(32);
 			$cloudShare = $this->federationFactory->getCloudFederationShare(
 				$participant, 							// shareWith
-				$boardId,								// name
-				$board->getTitle(),						// description
-				DeckFederationProvider::PROVIDER_ID,	// providerID
+				$board->getTitle(),						// name
+				'',										// description
+				$boardId,								// providerID
 				$sharedBy->getCloudId(),				// owner 				(this instance)
 				$sharedBy->getDisplayName(),			// ownerDisplayName 	(this instance)
 				$sharedBy->getCloudId(),				// sharedBy 			(this instance)

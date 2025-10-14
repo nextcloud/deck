@@ -10,6 +10,7 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
@@ -24,6 +25,7 @@ class BoardController extends ApiController {
 		$appName,
 		IRequest $request,
 		private BoardService $boardService,
+		private ExternalBoardService $externalBoardService,
 		private PermissionService $permissionService,
 		private BoardImportService $boardImportService,
 		private IL10N $l10n,
@@ -34,7 +36,12 @@ class BoardController extends ApiController {
 
 	#[NoAdminRequired]
 	public function index() {
-		return $this->boardService->findAll();
+		$internalBoards = $this->boardService->findAll();
+		$externalBoards = $this->externalBoardService->findAll();
+		return [
+			'internal' => $internalBoards,
+			'external' => $externalBoards,
+		];
 	}
 
 	#[NoAdminRequired]
