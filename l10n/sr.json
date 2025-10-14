@@ -89,6 +89,7 @@
     "Welcome to Nextcloud Deck!" : "Добродошли у Nextcloud шпил!",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Корисник %s Вам је доделио картицу „%s“ са табле „%s“.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} вам је доделио картицу {deck-card} на {deck-board}.",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "Картица „%1$s” на „%2$s” је достигла свој рок за завршетак.",
     "The card {deck-card} on {deck-board} has reached its due date." : "Картица {deck-card} на {deck-board} је дошла достигла датум када треба да се реши.",
     "%s has mentioned you in a comment on \"%s\"." : "%s Вас је поменуо у коментару на „%s“.",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} вас је поменуо у коментару на {deck-card}.",
