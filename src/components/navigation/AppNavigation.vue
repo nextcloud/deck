@@ -43,6 +43,15 @@
 					<ShareVariantIcon :size="20" decorative />
 				</template>
 			</AppNavigationBoardCategory>
+			<AppNavigationBoardCategory id="deck-navigation-external"
+				to="/board/external"
+				:text="t('deck', 'Remotely Shared with you')"
+				:boards="externalBoards"
+				icon="icon-shared">
+				<template #icon>
+					<ShareVariantIcon :size="20" decorative />
+				</template>
+			</AppNavigationBoardCategory>
 			<AppNavigationAddBoard v-if="canCreate" />
 			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
@@ -80,6 +89,7 @@ import { subscribe } from '@nextcloud/event-bus'
 import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
 import DeckAppSettings from '../DeckAppSettings.vue'
 import IconCog from 'vue-material-design-icons/CogOutline.vue'
+import { mapState } from 'vuex/dist/vuex.common.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -126,6 +136,38 @@ export default {
 			'archivedBoards',
 			'sharedBoards',
 		]),
+		...mapState({
+			externalBoards: state => {
+				return state.externalBoards
+			},
+		}),
+		isAdmin() {
+			return !!getCurrentUser()?.isAdmin
+		},
+		cardDetailsInModal: {
+			get() {
+				return this.$store.getters.config('cardDetailsInModal')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
+		},
+		cardIdBadge: {
+			get() {
+				return this.$store.getters.config('cardIdBadge')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
+			},
+		},
+		configCalendar: {
+			get() {
+				return this.$store.getters.config('calendar')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { calendar: newValue })
+			},
+		},
 	},
 	mounted() {
 		subscribe('deck:global:toggle-help-dialog', () => {
