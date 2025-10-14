@@ -52,7 +52,8 @@ export default function storeFactory() {
 			currentBoard: null,
 			currentCard: null,
 			hasCardSaveError: false,
-			boards: loadState('deck', 'initialBoards', []),
+			boards: loadState('deck', 'initialBoards', {internal:[]}).internal,
+		externalBoards: loadState('deck', 'initialBoards', {external:[]}).external,
 			sharees: [],
 			assignableUsers: [],
 			boardFilter: BOARD_FILTERS.ALL,
@@ -428,7 +429,7 @@ export default function storeFactory() {
 			},
 			async loadBoards({ commit }) {
 				const boards = await apiClient.loadBoards()
-				commit('setBoards', boards)
+				commit('setBoards', boards.internal)
 			},
 			async loadSharees({ commit }, query) {
 				const params = new URLSearchParams()
