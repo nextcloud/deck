@@ -1,7 +1,8 @@
 <?php
 
 namespace OCA\Deck\Federation;
-
+use OCA\Deck\Db\ExternalBoard;
+use OCA\Deck\Db\ExternalBoardMapper;
 use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationShare;
 use OCP\Federation\ICloudIdManager;
@@ -14,6 +15,7 @@ class DeckFederationProvider implements ICloudFederationProvider{
 	public function __construct(
 		private readonly ICloudIdmanager $cloudIdManager,
 		private INotificationManager $notificationManager,
+		private ExternalBoardMapper $externalBoardMapper,
 	){
 	}
 
@@ -27,10 +29,16 @@ class DeckFederationProvider implements ICloudFederationProvider{
 		$notification->setUser($share->getShareWith());
 		$notification->setDateTime(new \DateTime());
 		$notification->setObject('remote-board-shared', (string) rand(0,9999999));
-		$notification->setSubject('remote-board-shared',[$share->getDescription(), $share->getSharedBy()]);
+		$notification->setSubject('remote-board-shared',[$share->getResourceName(), $share->getSharedBy()]);
 
 		$this->notificationManager->notify($notification);
 
+		$externalBoard = new ExternalBoard();
+		$externalBoard->setTitle($share->getResourceName());
+		$externalBoard->setExternalId($share->getProviderId());
+		$externalBoard->setOwner($share->getSharedBy());
+		$externalBoard->setParticipant($share->getShareWith());
+		$this->externalBoardMapper->insert($externalBoard);
 		return 'PLACE_HOLDER_ID';
 	}
 
