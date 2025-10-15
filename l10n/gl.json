@@ -25,7 +25,7 @@
     "{user} has created card {card} in list {stack} on board {board}" : "{user} creou a tarxeta {card} na lista {stack} no taboleiro {board}",
     "You have deleted card {card} in list {stack} on board {board}" : "Vde. eliminou a tarxeta {card} na lista {stack} no taboleiro {board}",
     "{user} has deleted card {card} in list {stack} on board {board}" : "{user} eliminou a tarxeta {card} na lista {stack} no taboleiro {board}",
-    "You have renamed the card {before} to {card}" : "Renomeou a tarxeta {before} a {card}",
+    "You have renamed the card {before} to {card}" : "Vde. renomeou a tarxeta {before} a {card}",
     "{user} has renamed the card {before} to {card}" : "{user} renomeou a tarxeta {before} a {card}",
     "You have added a description to card {card} in list {stack} on board {board}" : "Vde. engadiu a descrición á tarxeta {card} na lista {stack} no taboleiro {board}",
     "{user} has added a description to card {card} in list {stack} on board {board}" : "{user} engadiu a descrición á tarxeta {card} na lista {stack} no taboleiro {board}",
