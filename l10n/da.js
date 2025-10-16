@@ -65,7 +65,7 @@ OC.L10N.register(
     "To review" : "Til gennemgang",
     "Action needed" : "Handling påkrævet",
     "Later" : "Senere",
-    "copy" : "kopier",
+    "copy" : "kopiér",
     "To Do" : "To-do liste",
     "In Progress" : "I gang",
     "Done" : "Afsluttet",
