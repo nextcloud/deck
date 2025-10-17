@@ -4,7 +4,7 @@
  */
 import { randUser } from '../utils/index.js'
 import { sampleBoard } from '../utils/sampleBoard'
-import moment from '@nextcloud/moment'
+import { addDays, setHours, setMinutes, setSeconds, format } from 'date-fns'
 
 const user = randUser()
 const boardData = sampleBoard()
@@ -271,16 +271,15 @@ describe('Card', function () {
 			// Set a due date through shortcut
 			cy.get('[data-cy-due-date-shortcut="tomorrow"] button').should('be.visible').click()
 
-			const tomorrow = moment().add(1, 'days').hour(8).minutes(0).seconds(0)
-			cy.get('#card-duedate-picker').should('have.value', tomorrow.format('YYYY-MM-DDTHH:mm'))
+			const tomorrow = setSeconds(setMinutes(setHours(addDays(new Date(), 1), 8), 0), 0)
+			cy.get('#card-duedate-picker').should('have.value', format(tomorrow, "yyyy-MM-dd'T'HH:mm"))
 
-			const now = moment().hour(11).minutes(0).seconds(0).toDate()
+			const now = setSeconds(setMinutes(setHours(new Date(), 11), 0), 0)
 			cy.clock(now)
 			cy.log(now)
 			cy.tick(60_000)
 
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state="Now"]').should('be.visible').should('contain', '21 hours')
-
 
 			// Remove the due date again
 			cy.get('#app-sidebar-vue [data-cy-due-date-actions]').should('be.visible').click()

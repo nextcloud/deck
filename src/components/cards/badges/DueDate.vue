@@ -18,7 +18,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import moment from '@nextcloud/moment'
+import { differenceInSeconds, formatDistanceToNow, format } from 'date-fns'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
@@ -51,7 +51,7 @@ export default {
 			if (this.card.done) {
 				return DueState.Done
 			}
-			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
+			const days = Math.floor(differenceInSeconds(new Date(this.card.duedate), new Date(this.$root.time)) / 60 / 60 / 24)
 			if (days < 0) {
 				return DueState.Overdue
 			}
@@ -69,15 +69,15 @@ export default {
 		},
 		relativeDate() {
 			const date = this.card.done ? this.card.done : this.card.duedate
-			const diff = moment(this.$root.time).diff(date, 'seconds')
+			const diff = differenceInSeconds(new Date(this.$root.time), new Date(date))
 			if (diff >= 0 && diff < 45) {
 				return t('core', 'seconds ago')
 			}
-			return moment(date).fromNow()
+			return formatDistanceToNow(new Date(date), { addSuffix: true })
 		},
 		absoluteDate() {
 			const date = this.card.done ? this.card.done : this.card.duedate
-			return moment(date).format('LLLL')
+			return format(new Date(date), 'PPpp')
 		},
 	},
 }
