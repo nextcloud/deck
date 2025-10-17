@@ -91,6 +91,7 @@ OC.L10N.register(
     "Welcome to Nextcloud Deck!" : "欢迎使用 Nextcloud Deck！",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "卡片  \"%s\" （在 \"%s\" 中）已由%s指派给您。",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} 已将卡片 {deck-card}， 其位于 {deck-board} ，分配给了你",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "“%2$s”上的卡片“%1$s”已到期。",
     "The card {deck-card} on {deck-board} has reached its due date." : "卡片 {deck-card}， 其位于 {deck-board} ，已到期",
     "%s has mentioned you in a comment on \"%s\"." : "%s 在 “%s” 的评论中提到了您。",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} 在 {deck-card} 的一条评论中提到了你",
