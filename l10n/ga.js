@@ -91,6 +91,7 @@ OC.L10N.register(
     "Welcome to Nextcloud Deck!" : "Fáilte go dtí Deic Nextcloud!",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Tá an cárta \"%s\" ar \"%s\" tugtha duit ag %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "Shann {user} an cárta {deck-card} ar {deck-board} duit.",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "Tá an cárta \"%1$s\" ar \"%2$s\" sroichte a dháta dlite.",
     "The card {deck-card} on {deck-board} has reached its due date." : "Tá an dáta dlite sroichte ag an gcárta {deck-card} ar {deck-board}.",
     "%s has mentioned you in a comment on \"%s\"." : "Luaigh %s tú i nóta tráchta ar \"%s\".",
     "{user} has mentioned you in a comment on {deck-card}." : "Luaigh {user} thú i nóta tráchta ar {deck-card}.",
