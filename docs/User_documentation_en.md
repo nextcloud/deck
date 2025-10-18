@@ -5,7 +5,7 @@
 ## Introduction
 
 ### What about Deck ?
-You may know Kanban website like Trello? Deck is about the same thing but secured and respectful of your privacy!  
+You may know Kanban website like Trello? Deck is about the same thing but secured and respectful of your privacy!
 Integrated in Nextcloud, you can easily manage your projects while having your data secured.
 
 ### Use cases
@@ -33,14 +33,14 @@ In this example, we're going to create a board and share it with an other nextcl
 
 
 ### 2. Create stacks and cards
-Stacks are simply columns with list of cards. It can represent a category of tasks or any step in your projects for example.   
+Stacks are simply columns with list of cards. It can represent a category of tasks or any step in your projects for example.
 **Check this out :**
 
 ![Gif for creating columns](resources/gifs/EN_create_columns.gif)
 
-What about the cards? Cards are tasks, objects or ideas that fit into a stack. You can put a lot of cards in a stack! An infinity? Who knows! Who knows!   
+What about the cards? Cards are tasks, objects or ideas that fit into a stack. You can put a lot of cards in a stack! An infinity? Who knows! Who knows!
 
-And all the magic of this software consists on moving your cards from a stack to an other.  
+And all the magic of this software consists on moving your cards from a stack to an other.
 **Check this out :**
 
 ![Gif for creating tasks](resources/gifs/EN_create_task.gif)
@@ -73,18 +73,20 @@ Once obsolete, a task could be archived. The task is not deleted, it's just arch
 ![Gif for archiving a task](resources/gifs/EN_archive.gif)
 
 ### 6. Manage your board
-You can manage the settings of your Deck once you are inside it, by clicking on the small wheel at the top right.
+You can manage the settings of your Deck once you are inside it, by clicking on the small sidebar menu icon at the top right.
 Once in this menu, you have access to several things:
 
 - Sharing
 - Tags
 - Deleted objects
-- Timeline
+- Activity
 
-The **sharing tab** allows you to add users or even groups to your boards.  
-**Tags** allows you to modify the tags available for the cards.  
-**Deleted objects** allows you to return previously deleted stacks or cards.  
-The **Timeline** allows you to see everything that happened in your boards. Everything!
+The **sharing tab** allows you to add users or even groups to your boards.
+**Tags** allows you to modify the tags available for the cards.
+**Deleted objects** allows you to return previously deleted stacks or cards.
+The **Activity** allows you to see everything that happened in your boards. Everything!
+
+![Gif for board sidebar](resources/gifs/EN_board_sidebar.gif)
 
 ### 7. Sharing boards
 You can share boards with a user, a group, or, if you are using the [Circles](https://apps.nextcloud.com/apps/circles) app, with a circle.
