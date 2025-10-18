@@ -277,7 +277,7 @@ OC.L10N.register(
     "Set a due date" : "Встановити дату завершення",
     "Add due date" : "Додати термін сплати",
     "Choose a date" : "Виберіть дату",
-    "Remove due date" : "Вилучити до",
+    "Remove due date" : "Вилучити кінцеву дату",
     "Mark as done" : "Позначити як виконане",
     "Due at:" : "На часі:",
     "Not done" : "Ще не все.",
