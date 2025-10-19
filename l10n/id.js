@@ -182,6 +182,7 @@ OC.L10N.register(
     "Set a due date" : "Tentukan tenggat",
     "Remove due date" : "Hapus tenggat",
     "Mark as done" : "Tandai sebagai selesai",
+    "Not done" : "Belum selesai",
     "Unarchive card" : "Memulihkan kartu",
     "Archive card" : "Mengarsipkan kartu",
     "Assign a tag to this card…" : "Berikan tag pada kartu ini...",
