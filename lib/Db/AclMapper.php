@@ -24,7 +24,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function findAll(int $boardId, ?int $limit = null, ?int $offset = null) {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage')
+		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage', 'token')
 			->from('deck_board_acl')
 			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)

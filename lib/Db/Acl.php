@@ -20,7 +20,7 @@ namespace OCA\Deck\Db;
  * @method bool isOwner()
  * @method void setOwner(int $owner)
  * @method void setToken(string $token)
- * @method string getToken(string $token)
+ * @method string getToken()
  *
  */
 class Acl extends RelationalEntity {

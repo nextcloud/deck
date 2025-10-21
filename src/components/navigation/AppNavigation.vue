@@ -43,15 +43,6 @@
 					<ShareVariantIcon :size="20" decorative />
 				</template>
 			</AppNavigationBoardCategory>
-			<AppNavigationBoardCategory id="deck-navigation-external"
-				to="/board/external"
-				:text="t('deck', 'Remotely Shared with you')"
-				:boards="externalBoards"
-				icon="icon-shared">
-				<template #icon>
-					<ShareVariantIcon :size="20" decorative />
-				</template>
-			</AppNavigationBoardCategory>
 			<AppNavigationAddBoard v-if="canCreate" />
 			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
@@ -136,11 +127,6 @@ export default {
 			'archivedBoards',
 			'sharedBoards',
 		]),
-		...mapState({
-			externalBoards: state => {
-				return state.externalBoards
-			},
-		}),
 		isAdmin() {
 			return !!getCurrentUser()?.isAdmin
 		},

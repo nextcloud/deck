@@ -115,7 +115,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find(int $boardId, bool $fullDetails = true, bool $allowDeleted = false): Board {
+	public function find(int $boardId, bool $fullDetails = true, bool $allowDeleted = false, $accessToken = null): Board {
 		$this->boardServiceValidator->check(compact('boardId'));
 
 		if (isset($this->boardsCacheFull[$boardId]) && $fullDetails) {
@@ -126,9 +126,9 @@ class BoardService {
 			return $this->boardsCachePartial[$boardId];
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ, null, false, $accessToken);
 		$board = $this->boardMapper->find($boardId, true, true, $allowDeleted);
-		[$board] = $this->enrichBoards([$board], $fullDetails);
+		[$board] = $this->enrichBoards([$board], $fullDetails, $accessToken);
 		return $board;
 	}
 
@@ -644,7 +644,7 @@ class BoardService {
 	 * @param Board[] $boards
 	 * @return Board[]
 	 */
-	private function enrichBoards(array $boards, bool $fullDetails = true): array {
+	private function enrichBoards(array $boards, bool $fullDetails = true, $accessToken = null): array {
 		$result = [];
 		foreach ($boards as $board) {
 			// FIXME The enrichment in here could make use of combined queries
@@ -655,7 +655,7 @@ class BoardService {
 				}
 			}
 
-			$permissions = $this->permissionService->matchPermissions($board);
+			$permissions = $this->permissionService->matchPermissions($board, $accessToken);
 			$board->setPermissions([
 				'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
