@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.7
+### Fixed
+* [stable29] chore: update workflows from templates by @backportbot[bot] in https://github.com/nextcloud/deck/pull/6920
+* [stable29] fix: add retry and show warning on description saving error by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7089
+* [stable29] Fix: Prevent error in Whiteboard when adding a Deckboard by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7329
+
 ## 1.13.6
 ### Fixed
 * [stable29] Clear selected stack when selected board changed by @backportbot in https://github.com/nextcloud/deck/pull/6913
