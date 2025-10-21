@@ -22,9 +22,9 @@
 					@close="onCloseExportBoard" />
 			</template>
 
-			<template #counter>
-				<AccountIcon v-if="board.acl.length > 0" />
-			</template>
+		<template #counter>
+			<AccountIcon v-if="board.acl?.length > 0" />
+		</template>
 
 			<template v-if="!deleted" slot="actions">
 				<template v-if="!isDueSubmenuActive">
@@ -69,7 +69,7 @@
 						@click="actionExport">
 						{{ t('deck', 'Export board') }}
 					</NcActionButton>
-					<NcActionButton v-if="!board.archived && board.acl.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
+					<NcActionButton v-if="!board.archived && board.acl?.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
 						{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
 					</NcActionButton>
 				</template>
@@ -104,7 +104,7 @@
 						{{ t('deck', 'No notifications') }}
 					</NcActionButton>
 				</template>
-				<NcActionButton v-else-if="!board.archived && board.acl.length > 0"
+				<NcActionButton v-else-if="!board.archived && board.acl?.length > 0"
 					:name="t('deck', 'Due date reminders')"
 					:icon="dueDateReminderIcon"
 					@click="isDueSubmenuActive=true">
@@ -251,6 +251,9 @@ export default {
 		},
 		canManage() {
 			return this.board.permissions.PERMISSION_MANAGE
+		},
+		canLeave() {
+			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined
 		},
 		canLeave() {
 			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined

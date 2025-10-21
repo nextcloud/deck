@@ -56,8 +56,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState('config', $this->configService->getAll());
 
 		$this->initialState->provideInitialState('initialBoards', [
-			"internal" => $this->boardService->findAll(),
-			"external" => $this->externalBoardService->findAll(),
+			$this->boardService->findAll(),
 		]);
 
 		$this->eventDispatcher->dispatchTyped(new LoadSidebar());
