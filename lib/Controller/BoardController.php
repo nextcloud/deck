@@ -37,12 +37,7 @@ class BoardController extends ApiController {
 
 	#[NoAdminRequired]
 	public function index() {
-		$internalBoards = $this->boardService->findAll();
-		$externalBoards = $this->externalBoardService->findAll();
-		return [
-			'internal' => $internalBoards,
-			'external' => $externalBoards,
-		];
+		return $this->boardService->findAll();
 	}
 
 	#[NoAdminRequired]
