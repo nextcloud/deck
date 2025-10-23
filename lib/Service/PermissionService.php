@@ -52,8 +52,8 @@ class PermissionService {
 	 *
 	 * @return array<Acl::PERMISSION_*, bool>
 	 */
-	public function getPermissions(int $boardId, ?string $userId = null): array {
-		if ($userId === null) {
+	public function getPermissions(int $boardId, ?string $userId = null, ?string $accessToken = null): array {
+		if ($userId === null && $accessToken === null) {
 			$userId = $this->userId;
 		}
 
@@ -71,14 +71,23 @@ class PermissionService {
 			$owner = false;
 			$acls = [];
 		}
-
-		$permissions = [
-			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
-			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
-			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
-			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId))
-				&& (!$this->shareManager->sharingDisabledForUser($userId))
+		$permissions = [];
+		if ($userId !== null) {
+			$permissions = [
+				Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
+				Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
+				Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
+				Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId))
+					&& (!$this->shareManager->sharingDisabledForUser($userId))
+			];
+		} else if ($accessToken !== null ) {
+			$permissions = [
+				Acl::PERMISSION_READ => $owner || $this->externalUserCan($acls, Acl::PERMISSION_READ, $accessToken),
+				Acl::PERMISSION_EDIT => $owner || $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $accessToken),
+				Acl::PERMISSION_MANAGE => $owner || $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $accessToken),
+				Acl::PERMISSION_SHARE => ($owner || $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $accessToken))
 		];
+		}
 		$this->permissionCache->set($cacheKey, $permissions);
 		return $permissions;
 	}
@@ -90,9 +99,17 @@ class PermissionService {
 	 * @return array|bool
 	 * @internal param $boardId
 	 */
-	public function matchPermissions(Board $board) {
+	public function matchPermissions(Board $board, $accessToken = null) {
 		$owner = $this->userIsBoardOwner($board->getId());
 		$acls = $board->getAcl() ?? [];
+		if ($accessToken !== null) {
+			return [
+				Acl::PERMISSION_READ => $owner || $this->externalUserCan($acls, Acl::PERMISSION_READ, $accessToken),
+				Acl::PERMISSION_EDIT => $owner || $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $accessToken),
+				Acl::PERMISSION_MANAGE => $owner || $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $accessToken),
+				Acl::PERMISSION_SHARE => ($owner || $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $accessToken))
+		];
+		}
 		return [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
@@ -107,7 +124,7 @@ class PermissionService {
 	 *
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false): bool {
+	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, $accessToken = null): bool {
 		$boardId = (int)$id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -117,7 +134,7 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId, $userId);
+		$permissions = $this->getPermissions($boardId, $userId, $accessToken);
 		if ($permissions[$permission] === true) {
 
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
@@ -163,6 +180,18 @@ class PermissionService {
 			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true);
 		}
 		return $this->boardCache[(string)$boardId];
+	}
+
+
+	public function externalUserCan(array $acls, $permission, $shareToken = null) {
+		foreach($acls as $acl) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				$token = $acl->getToken();
+				if ($acl->getToken() === $shareToken) {
+					return $acl->getPermission($permission);
+				}
+			}
+		}
 	}
 
 	/**

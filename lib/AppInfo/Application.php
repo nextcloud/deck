@@ -27,6 +27,7 @@ use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
+use OCA\Deck\Federation\DeckFederationProvider;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
@@ -59,9 +60,11 @@ use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\CommentsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\Server;
 use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
@@ -101,6 +104,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
 			$listener->register($eventDispatcher);
 		});
+		$context->injectFn($this->registerCloudFederationProvider(...));
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -188,5 +192,15 @@ class Application extends App implements IBootstrap {
 	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
+	}
+
+	public function registerCloudFederationProvider(
+		ICloudFederationProviderManager $manager,
+	): void {
+		$manager->addCloudFederationProvider(
+			DeckFederationProvider::PROVIDER_ID,
+			"Deck Federation",
+			static fn () => Server::get(DeckFederationProvider::class),
+		);
 	}
 }

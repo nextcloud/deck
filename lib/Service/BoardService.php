@@ -31,6 +31,7 @@ use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
+use OCA\Deck\Federation\DeckFederationProvider;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
@@ -38,11 +39,16 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationProvider;
+use OCP\Federation\ICloudFederationProviderManager;
+use OCP\Federation\ICloudFederationFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 use OCP\Server;
+use OCP\Security\ISecureRandom;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -63,12 +69,16 @@ class BoardService {
 		private NotificationHelper $notificationHelper,
 		private AssignmentMapper $assignedUsersMapper,
 		private ActivityManager $activityManager,
+		private readonly ICloudFederationProviderManager $cloudFederationProviderManager,
+		private readonly ICloudFederationFactory $federationFactory,
 		private IEventDispatcher $eventDispatcher,
 		private ChangeHelper $changeHelper,
 		private IURLGenerator $urlGenerator,
 		private IDBConnection $connection,
 		private BoardServiceValidator $boardServiceValidator,
 		private SessionMapper $sessionMapper,
+		private IUserManager $userManager,
+		private ISecureRandom $random,
 		private ?string $userId,
 	) {
 	}
@@ -103,7 +113,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find(int $boardId, bool $fullDetails = true, bool $allowDeleted = false): Board {
+	public function find(int $boardId, bool $fullDetails = true, bool $allowDeleted = false, $accessToken = null): Board {
 		$this->boardServiceValidator->check(compact('boardId'));
 
 		if (isset($this->boardsCacheFull[$boardId]) && $fullDetails) {
@@ -114,9 +124,9 @@ class BoardService {
 			return $this->boardsCachePartial[$boardId];
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ, null, false, $accessToken);
 		$board = $this->boardMapper->find($boardId, true, true, $allowDeleted);
-		[$board] = $this->enrichBoards([$board], $fullDetails);
+		[$board] = $this->enrichBoards([$board], $fullDetails, $accessToken);
 		return $board;
 	}
 
@@ -342,6 +352,27 @@ class BoardService {
 		[$edit, $share, $manage] = $this->applyPermissions($boardId, $edit, $share, $manage);
 
 		$acl = new Acl();
+		if ($type === Acl::PERMISSION_TYPE_REMOTE) {
+			$sharedBy = $this->userManager->get($this->userId);
+			$board = $this->find($boardId);
+			$token = $this->random->generate(32);
+			$cloudShare = $this->federationFactory->getCloudFederationShare(
+				$participant, 							// shareWith
+				$board->getTitle(),						// name
+				'',										// description
+				$boardId,								// providerID
+				$sharedBy->getCloudId(),				// owner 				(this instance)
+				$sharedBy->getDisplayName(),			// ownerDisplayName 	(this instance)
+				$sharedBy->getCloudId(),				// sharedBy 			(this instance)
+				$sharedBy->getDisplayName(),			// sharedByDisplayName 	(this instance)
+				$token,									// sharedSecret
+				'user',									// shareType
+				'deck'									// resourceType
+			);
+			$resp = $this->cloudFederationProviderManager->sendCloudShare($cloudShare);
+			$acl->setToken($token);
+		}
+
 		$acl->setBoardId($boardId);
 		$acl->setType($type);
 		$acl->setParticipant($participant);
@@ -562,7 +593,7 @@ class BoardService {
 	 * @param Board[] $boards
 	 * @return Board[]
 	 */
-	private function enrichBoards(array $boards, bool $fullDetails = true): array {
+	private function enrichBoards(array $boards, bool $fullDetails = true, $accessToken = null): array {
 		$result = [];
 		foreach ($boards as $board) {
 			// FIXME The enrichment in here could make use of combined queries
@@ -573,7 +604,7 @@ class BoardService {
 				}
 			}
 
-			$permissions = $this->permissionService->matchPermissions($board);
+			$permissions = $this->permissionService->matchPermissions($board, $accessToken);
 			$board->setPermissions([
 				'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
