@@ -406,7 +406,7 @@ class ActivityManager {
 
 			if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION && isset($params['after'])) {
 				$newContent = $params['after'];
-				unset($params['before'], $params['after'], $params['card']['description']);
+				unset($params['before'], $params['after'], $params['card']['description'], $params['card']['descriptionPrev']);
 
 				$params['after'] = mb_substr($newContent, 0, self::SHORTENED_DESCRIPTION_MAX_LENGTH);
 				if (mb_strlen($newContent) > self::SHORTENED_DESCRIPTION_MAX_LENGTH) {
@@ -520,6 +520,13 @@ class ActivityManager {
 		$card = $this->cardMapper->find($cardId);
 		$stack = $this->stackMapper->find($card->getStackId());
 		$board = $this->boardMapper->find($stack->getBoardId());
+
+		// Reduce the data size in activity table
+		$boardArray = [
+			'id' => $board->getId(),
+			'title' => $board->getTitle(),
+		];
+
 		if ($subject !== self::SUBJECT_CARD_UPDATE_DESCRIPTION) {
 			$card = [
 				'id' => $card->getId(),
@@ -530,7 +537,7 @@ class ActivityManager {
 		return [
 			'card' => $card,
 			'stack' => $stack,
-			'board' => $board
+			'board' => $boardArray,
 		];
 	}
 
