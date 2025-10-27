@@ -149,9 +149,11 @@ class ActivityManagerTest extends TestCase {
 	}
 
 	public function testCreateEventDescription() {
-		$board = new Board();
-		$board->setId(123);
-		$board->setTitle('');
+		$boardData = [
+			'id' => 123,
+			'title' => ''
+		];
+		$board = Board::fromRow($boardData);
 		$this->boardMapper->expects(self::once())
 			->method('find')
 			->willReturn($board);
@@ -173,11 +175,11 @@ class ActivityManagerTest extends TestCase {
 			->willReturn($stack);
 
 		$expectedCard = $card->jsonSerialize();
-		unset($expectedCard['description']);
+		unset($expectedCard['description'], $expectedCard['descriptionPrev']);
 		$event = $this->expectEventCreation(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, [
 			'card' => $expectedCard,
 			'stack' => $stack->jsonSerialize(),
-			'board' => $board->jsonSerialize(),
+			'board' => $boardData,
 			'diff' => true,
 			'author' => 'admin',
 			'after' => str_repeat('C', 2000),
@@ -196,9 +198,11 @@ class ActivityManagerTest extends TestCase {
 	}
 
 	public function testCreateEventLongDescription() {
-		$board = new Board();
-		$board->setId(123);
-		$board->setTitle('');
+		$boardData = [
+			'id' => 123,
+			'title' => ''
+		];
+		$board = Board::fromRow($boardData);
 		$this->boardMapper->expects(self::once())
 			->method('find')
 			->willReturn($board);
@@ -219,11 +223,11 @@ class ActivityManagerTest extends TestCase {
 			->willReturn($stack);
 
 		$expectedCard = $card->jsonSerialize();
-		unset($expectedCard['description']);
+		unset($expectedCard['description'], $expectedCard['descriptionPrev']);
 		$event = $this->expectEventCreation(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, [
 			'card' => $expectedCard,
 			'stack' => $stack->jsonSerialize(),
-			'board' => $board->jsonSerialize(),
+			'board' => $boardData,
 			'diff' => true,
 			'author' => 'admin',
 			'after' => str_repeat('C', 2000) . '...',
@@ -242,10 +246,11 @@ class ActivityManagerTest extends TestCase {
 	}
 
 	public function testCreateEventLabel() {
-		$board = Board::fromRow([
+		$boardData = [
 			'id' => 123,
 			'title' => 'My board'
-		]);
+		];
+		$board = Board::fromRow($boardData);
 		$this->boardMapper->expects(self::once())
 			->method('find')
 			->willReturn($board);
@@ -272,7 +277,7 @@ class ActivityManagerTest extends TestCase {
 				'archived' => false,
 			],
 			'stack' => $stack,
-			'board' => $board,
+			'board' => $boardData,
 			'author' => 'admin',
 		]);
 
@@ -426,8 +431,11 @@ class ActivityManagerTest extends TestCase {
 		$stack = new Stack();
 		$stack->setId(123);
 		$stack->setBoardId(999);
-		$board = new Board();
-		$board->setId(999);
+		$boardData = [
+			'id' => 999,
+			'title' => 'Title',
+		];
+		$board = Board::fromRow($boardData);
 		$this->cardMapper->expects(self::once())
 			->method('find')
 			->with(555)
@@ -441,7 +449,7 @@ class ActivityManagerTest extends TestCase {
 			->willReturn($board);
 		$this->assertEquals([
 			'stack' => $stack,
-			'board' => $board,
+			'board' => $boardData,
 			'card' => [
 				'id' => $card->getId(),
 				'title' => $card->getTitle(),
@@ -460,8 +468,11 @@ class ActivityManagerTest extends TestCase {
 		$stack = new Stack();
 		$stack->setId(123);
 		$stack->setBoardId(999);
-		$board = new Board();
-		$board->setId(999);
+		$boardData = [
+			'id' => 999,
+			'title' => 'Title',
+		];
+		$board = Board::fromRow($boardData);
 		$this->cardMapper->expects(self::once())
 			->method('find')
 			->with(555)
@@ -475,7 +486,7 @@ class ActivityManagerTest extends TestCase {
 			->willReturn($board);
 		$this->assertEquals([
 			'stack' => $stack,
-			'board' => $board,
+			'board' => $boardData,
 			'card' => [
 				'id' => $card->getId(),
 				'title' => $card->getTitle(),
