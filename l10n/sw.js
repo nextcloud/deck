@@ -91,6 +91,7 @@ OC.L10N.register(
     "Welcome to Nextcloud Deck!" : "Karibu katika deki ya Nextcloud",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kadi \"%s\" katika \"%s\" imekabithiwa kwako na %s",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} amekabithi kadi {deck-card}juu ya {deck-board} kwako",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "Kadi \"%1$s\" kwenye \"%2$s\" imefikia tarehe yake ya kukamilisha.",
     "The card {deck-card} on {deck-board} has reached its due date." : "Kadi {deck-card}katika {deck-board}imefikia tarehe yake ya mwisho",
     "%s has mentioned you in a comment on \"%s\"." : "%s amekutaja kwenye maoni katika \"%s\"",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} amekutaja katika maoni katika {deck-card}",
