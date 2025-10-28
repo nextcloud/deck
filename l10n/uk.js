@@ -234,7 +234,7 @@ OC.L10N.register(
     "Add this attachment" : "Долучити вкладення",
     "Show in Files" : "Показати в Файлах",
     "Download" : "Звантажити",
-    "Remove attachment" : "Зніміть вкладення",
+    "Remove attachment" : "Вилучити",
     "Delete Attachment" : "Забрати вкладення",
     "Restore Attachment" : "Відновити вкладення",
     "Modified" : "Змінено",
