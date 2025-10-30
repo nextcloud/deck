@@ -28,24 +28,22 @@ class DeckFederationProxy {
 		?string $accessToken,
 	): array {
 		   $options = [
-			   'verify' => !$this->config->getSystemValueBool('sharing.federation.allowSelfSignedCertificates'),
-			   'nextcloud' => [
-				   'allow_local_address' => $this->config->getSystemValueBool('allow_local_remote_servers'),
-			   ],
-			   'headers' => [
-				   'Accept' => 'application/json',
-				   'X-Nextcloud-Federation' => 'true',
-				   'OCS-APIRequest' => 'true',
-				   'Accept-Language' => $this->l10nFactory->getUserLanguage($this->userSession->getUser()),
-			   ],
-			   'cookies' => CookieJar::fromArray([
-    				'XDEBUG_SESSION' => 'PHPSTORM'
-					], 'nextcloud2.local'),
+				'verify' => !$this->config->getSystemValueBool('sharing.federation.allowSelfSignedCertificates'),
+				'nextcloud' => [
+					'allow_local_address' => $this->config->getSystemValueBool('allow_local_remote_servers'),
+				],
+				'headers' => [
+					'Cookie' => 'XDEBUG_SESSION=PHPSTORM',
+					'Accept' => 'application/json',
+					'x-nextcloud-federation' => 'true',
+					'OCS-APIRequest' => 'true',
+					'Accept-Language' => $this->l10nFactory->getUserLanguage($this->userSession->getUser()),
+					'deck-federation-accesstoken' => $accessToken,
+				],
 				'timeout' => 5,
 		   ];
 
 		if ($cloudId !== null && $accessToken !== null) {
-			$options['auth'] = [urlencode($cloudId), $accessToken];
 		}
 
 		return $options;
@@ -106,6 +104,9 @@ class DeckFederationProxy {
 
 	public function get(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
 		return $this->request("get", $cloudId, $shareToken, $url, $params);
+	}
+	public function post(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
+		return $this->request("post", $cloudId, $shareToken, $url, $params);
 	}
 	public function getOCSData(IResponse $response, array $allowedStatusCodes = [Http::STATUS_OK]): array {
 		if (!in_array($response->getStatusCode(), $allowedStatusCodes, true)) {

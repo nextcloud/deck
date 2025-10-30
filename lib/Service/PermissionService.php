@@ -28,6 +28,9 @@ use Psr\Log\LoggerInterface;
 class PermissionService {
 	private array $users = [];
 
+	// accessToken to check permission for federated shares
+	private ?string $accessToken = null;
+
 	private CappedMemoryCache $boardCache;
 	/** @var CappedMemoryCache<array<Acl::PERMISSION_*, bool>> */
 	private CappedMemoryCache $permissionCache;
@@ -48,46 +51,57 @@ class PermissionService {
 	}
 
 	/**
+	 * Set AccessToken for requests from federation shares
+	 */
+	public function setAccessToken(string $token) {
+		$this->accessToken = $token;
+	}
+
+	/**
 	 * Get current user permissions for a board by id
 	 *
 	 * @return array<Acl::PERMISSION_*, bool>
 	 */
-	public function getPermissions(int $boardId, ?string $userId = null, ?string $accessToken = null): array {
-		if ($userId === null && $accessToken === null) {
+	public function getPermissions(int $boardId, ?string $userId = null): array {
+		if ($userId === null) {
 			$userId = $this->userId;
 		}
 
-		$cacheKey = $boardId . '-' . $userId;
-		if ($cached = $this->permissionCache->get($cacheKey)) {
-			/** @var array<Acl::PERMISSION_*, bool> $cached */
-			return $cached;
+		// check chache if not a federated request
+		if ($this->accessToken === null) {
+			$cacheKey = $boardId . '-' . $userId;
+			if ($cached = $this->permissionCache->get($cacheKey)) {
+				/** @var array<Acl::PERMISSION_*, bool> $cached */
+				return $cached;
+			}
+		}
+		$board = $this->getBoard($boardId);
+		if ($this->accessToken !== null) {
+			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
+			$permissions = [
+				Acl::PERMISSION_READ => $this->externalUserCan($acls, Acl::PERMISSION_READ, $this->accessToken),
+				Acl::PERMISSION_EDIT => $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $this->accessToken),
+				Acl::PERMISSION_MANAGE => $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $this->accessToken),
+				Acl::PERMISSION_SHARE => $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $this->accessToken)
+			];
+			return $permissions;
 		}
 
+
 		try {
-			$board = $this->getBoard($boardId);
 			$owner = $this->userIsBoardOwner($boardId, $userId);
 			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
 			$owner = false;
 			$acls = [];
 		}
-		$permissions = [];
-		if ($userId !== null) {
-			$permissions = [
-				Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
-				Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
-				Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
-				Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId))
-					&& (!$this->shareManager->sharingDisabledForUser($userId))
-			];
-		} else if ($accessToken !== null ) {
-			$permissions = [
-				Acl::PERMISSION_READ => $owner || $this->externalUserCan($acls, Acl::PERMISSION_READ, $accessToken),
-				Acl::PERMISSION_EDIT => $owner || $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $accessToken),
-				Acl::PERMISSION_MANAGE => $owner || $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $accessToken),
-				Acl::PERMISSION_SHARE => ($owner || $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $accessToken))
+		$permissions = [
+			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
+			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
+			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId))
+				&& (!$this->shareManager->sharingDisabledForUser($userId))
 		];
-		}
 		$this->permissionCache->set($cacheKey, $permissions);
 		return $permissions;
 	}
@@ -99,15 +113,15 @@ class PermissionService {
 	 * @return array|bool
 	 * @internal param $boardId
 	 */
-	public function matchPermissions(Board $board, $accessToken = null) {
+	public function matchPermissions(Board $board) {
 		$owner = $this->userIsBoardOwner($board->getId());
 		$acls = $board->getAcl() ?? [];
-		if ($accessToken !== null) {
+		if ($this->accessToken !== null) {
 			return [
-				Acl::PERMISSION_READ => $owner || $this->externalUserCan($acls, Acl::PERMISSION_READ, $accessToken),
-				Acl::PERMISSION_EDIT => $owner || $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $accessToken),
-				Acl::PERMISSION_MANAGE => $owner || $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $accessToken),
-				Acl::PERMISSION_SHARE => ($owner || $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $accessToken))
+				Acl::PERMISSION_READ => $this->externalUserCan($acls, Acl::PERMISSION_READ, $this->accessToken),
+				Acl::PERMISSION_EDIT => $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $this->accessToken),
+				Acl::PERMISSION_MANAGE => $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $this->accessToken),
+				Acl::PERMISSION_SHARE => $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $this->accessToken)
 		];
 		}
 		return [
@@ -124,7 +138,7 @@ class PermissionService {
 	 *
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, $accessToken = null): bool {
+	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false): bool {
 		$boardId = (int)$id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -134,7 +148,7 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId, $userId, $accessToken);
+		$permissions = $this->getPermissions($boardId, $userId);
 		if ($permissions[$permission] === true) {
 
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
