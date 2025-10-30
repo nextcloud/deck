@@ -32,13 +32,17 @@ class NewCardController extends OCSController {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function create(string $title, int $stackId, ?string $type = 'plain',?string $owner = null,?int $order = 999, ?string $description = '', $duedate = null, ?array $labels = [], ?array $users = [],?int $boardId=null) {
+	public function create(string $title, int $stackId, ?int $boardId=null, ?string $type = 'plain',?string $owner = null,?int $order = 999, ?string $description = '', $duedate = null, ?array $labels = [], ?array $users = []) {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
 			if ($board->getExternalId()) {
 				$card = $this->externalBoardService->createCardOnRemote($board, $title, $stackId, $type, $order, $description, $duedate, $users);
 				return new DataResponse($card);
 			}
+		}
+
+		if (!$owner) {
+			$owner = $this->userId;
 		}
 		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate);
 
