@@ -38,6 +38,7 @@ use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
+use OCA\Deck\Middleware\FederationMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Reference\BoardReferenceProvider;
 use OCA\Deck\Reference\CardReferenceProvider;
@@ -114,6 +115,7 @@ class Application extends App implements IBootstrap {
 		}
 
 		$context->registerCapability(Capabilities::class);
+		$context->registerMiddleWare(FederationMiddleware::class);
 		$context->registerMiddleWare(ExceptionMiddleware::class);
 		$context->registerMiddleWare(DefaultBoardMiddleware::class);
 
