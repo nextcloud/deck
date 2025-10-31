@@ -359,7 +359,7 @@ OC.L10N.register(
     "Board imported successfully" : "Таблата е успешно увезена",
     "Import board" : "Увези табла",
     "Clone {boardTitle}" : "Клонирај {boardTitle}",
-    "Clone cards" : "Клинирај картици",
+    "Clone cards" : "Клонирај картици",
     "Clone assignments" : "Клонирај задачи",
     "Clone labels" : "Клонирај ознаки",
     "Clone due dates" : "Клонирај крајни рокови",
