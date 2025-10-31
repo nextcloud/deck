@@ -35,7 +35,7 @@ import store from './../store/main.js'
 
 import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 
-import moment from '@nextcloud/moment'
+import { fromUnixTime, format } from 'date-fns'
 import { generateUrl } from '@nextcloud/router'
 
 const boardApi = new BoardApi()
@@ -86,7 +86,7 @@ export default {
 		boardTooltip() {
 			return t('deck', 'Deck board {name}\n* Last modified on {lastMod}', {
 				name: this.board.title,
-				lastMod: moment.unix(this.board.lastModified).format('LLL'),
+				lastMod: format(fromUnixTime(this.board.lastModified), 'PPpp'),
 			})
 		},
 		boardOwnerUserId() {

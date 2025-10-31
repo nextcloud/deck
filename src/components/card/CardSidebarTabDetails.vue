@@ -40,7 +40,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import moment from '@nextcloud/moment'
+import { format } from 'date-fns'
 import { loadState } from '@nextcloud/initial-state'
 
 import { NcCollectionList } from '@nextcloud/vue'
@@ -185,10 +185,10 @@ export default {
 			this.$store.dispatch('removeLabel', data)
 		},
 		stringify(date) {
-			return moment(date).locale(this.locale).format('LLL')
+			return format(new Date(date), 'PPp')
 		},
 		parse(value) {
-			return moment(value).toDate()
+			return new Date(value)
 		},
 	},
 }

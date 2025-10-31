@@ -98,7 +98,7 @@ import {
 } from '@nextcloud/vue'
 import readableDate from '../../mixins/readableDate.js'
 import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
+import { addDays, addWeeks, getHours, setHours, setDay, getDay, format, set } from 'date-fns'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Calendar from 'vue-material-design-icons/CalendarOutline.vue'
@@ -165,44 +165,44 @@ export default defineComponent({
 		},
 
 		reminderOptions() {
-			const currentDateTime = moment()
+			const currentDateTime = new Date()
 			// Same day 18:00 PM (or hidden)
-			const laterTodayTime = (currentDateTime.hour() < 18)
-				? moment().hour(18)
-				: null
+			const laterTodayTime = (getHours(currentDateTime) < 18)
+			    ? setHours(new Date(), 18)
+			    : null
 			// Tomorrow 08:00 AM
-			const tomorrowTime = moment().add(1, 'days').hour(8)
+			const tomorrowTime = setHours(addDays(currentDateTime, 1), 8)
 			// Saturday 08:00 AM (or hidden)
-			const thisWeekendTime = (currentDateTime.day() !== 6 && currentDateTime.day() !== 0)
-				? moment().day(6).hour(8)
-				: null
+			const thisWeekendTime = (getDay(currentDateTime) !== 6 && getDay(currentDateTime) !== 0)
+			    ? setHours(setDay(new Date(), 6), 8)
+			    : null
 			// Next Monday 08:00 AM
-			const nextWeekTime = moment().add(1, 'weeks').day(1).hour(8)
+			const nextWeekTime = setHours(setDay(addWeeks(new Date(), 1), 1), 8)
 			return [
-				{
-					key: 'laterToday',
-					timestamp: this.getTimestamp(laterTodayTime),
-					label: t('deck', 'Later today – {timeLocale}', { timeLocale: laterTodayTime?.format('LT') }),
-					ariaLabel: t('deck', 'Set due date for later today'),
-				},
-				{
-					key: 'tomorrow',
-					timestamp: this.getTimestamp(tomorrowTime),
-					label: t('deck', 'Tomorrow – {timeLocale}', { timeLocale: tomorrowTime?.format('ddd LT') }),
-					ariaLabel: t('deck', 'Set due date for tomorrow'),
-				},
-				{
-					key: 'thisWeekend',
-					timestamp: this.getTimestamp(thisWeekendTime),
-					label: t('deck', 'This weekend – {timeLocale}', { timeLocale: thisWeekendTime?.format('ddd LT') }),
-					ariaLabel: t('deck', 'Set due date for this weekend'),
-				},
-				{
-					key: 'nextWeek',
-					timestamp: this.getTimestamp(nextWeekTime),
-					label: t('deck', 'Next week – {timeLocale}', { timeLocale: nextWeekTime?.format('ddd LT') }),
-					ariaLabel: t('deck', 'Set due date for next week'),
-				},
+			    {
+			        key: 'laterToday',
+			        timestamp: this.getTimestamp(laterTodayTime),
+			        label: t('deck', 'Later today – {timeLocale}', { timeLocale: laterTodayTime ? format(laterTodayTime, 'p') : '' }),
+		            ariaLabel: t('deck', 'Set due date for later today'),
+	            },
+	            {
+		            key: 'tomorrow',
+		            timestamp: this.getTimestamp(tomorrowTime),
+		            label: t('deck', 'Tomorrow – {timeLocale}', { timeLocale: tomorrowTime ? format(tomorrowTime, 'EEE p') : '' }),
+		            ariaLabel: t('deck', 'Set due date for tomorrow'),
+	            },
+	            {
+		            key: 'thisWeekend',
+		            timestamp: this.getTimestamp(thisWeekendTime),
+		            label: t('deck', 'This weekend – {timeLocale}', { timeLocale: thisWeekendTime ? format(thisWeekendTime, 'EEE p') : '' }),
+		            ariaLabel: t('deck', 'Set due date for this weekend'),
+	            },
+	            {
+		            key: 'nextWeek',
+		            timestamp: this.getTimestamp(nextWeekTime),
+		            label: t('deck', 'Next week – {timeLocale}', { timeLocale: format(nextWeekTime, 'EEE p') }),
+		            ariaLabel: t('deck', 'Set due date for next week'),
+	            },
 			].filter(option => option.timestamp !== null)
 		},
 	},
@@ -227,9 +227,9 @@ export default defineComponent({
 			this.duedate = shortcut.timestamp
 			this.$emit('change', shortcut.timestamp)
 		},
-		getTimestamp(momentObject) {
-			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
-		},
+		getTimestamp(date) {
+	            return date ? set(date, { minutes: 0, seconds: 0, milliseconds: 0 }) : null
+			 },
 		changeCardDoneStatus() {
 			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
 		},
