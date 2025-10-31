@@ -24,6 +24,10 @@ namespace OCA\Deck\Db;
  * @method void setOwner(string $owner)
  * @method string getColor()
  * @method void setColor(string $color)
+ * @method void setShareToken(string $shareToken)
+ * @method string getShareToken()
+ * @method void setExternalId(int $externalId)
+ * @method int getExternalId()
  */
 class Board extends RelationalEntity {
 	protected $title;
@@ -41,6 +45,8 @@ class Board extends RelationalEntity {
 	protected $activeSessions = [];
 	protected $deletedAt = 0;
 	protected $lastModified = 0;
+	protected $shareToken = null;
+	protected $externalId = null;
 
 	protected $settings = [];
 
@@ -50,6 +56,8 @@ class Board extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addType('lastModified', 'integer');
+		$this->addType('shareToken', 'string');
+		$this->addType('externalId', 'integer');
 		$this->addRelation('labels');
 		$this->addRelation('acl');
 		$this->addRelation('shared');
