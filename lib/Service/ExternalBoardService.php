@@ -96,4 +96,13 @@ class ExternalBoardService {
 		$stack = $this->proxy->getOcsData($resp);
 		return $this->localizeRemoteStacks([$stack], $localBoard)[0];
 	}
+
+    public function deleteStackOnRemote(Board $localBoard, int $stackId): array {
+       $shareToken = $localBoard->getShareToken();
+       $participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+       $ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+       $url = $ownerCloudId->getRemote() . "/ocs/v2.php/apps/deck/api/v1.0/stacks/" . $stackId;
+       $resp = $this->proxy->delete($participantCloudId->getId(), $shareToken, $url, []);
+       return $this->proxy->getOcsData($resp);
+    }
 }

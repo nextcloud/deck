@@ -38,4 +38,21 @@ class NewStackController extends OCSController {
 			return new DataResponse($stack);
 		};
 	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
+	public function delete(int $stackId, ?int $boardId = null) {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				$result = $this->externalBoardService->deleteStackOnRemote($board, $stackId);
+				return new DataResponse($result);
+			}
+		}
+		$result = $this->stackService->delete($stackId);
+		return new DataResponse($result);
+	}
+
 }
