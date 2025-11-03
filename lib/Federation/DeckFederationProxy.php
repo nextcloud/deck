@@ -108,6 +108,9 @@ class DeckFederationProxy {
 	public function post(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
 		return $this->request("post", $cloudId, $shareToken, $url, $params);
 	}
+	public function delete(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
+		return $this->request("delete", $cloudId, $shareToken, $url, $params);
+	}
 	public function getOCSData(IResponse $response, array $allowedStatusCodes = [Http::STATUS_OK]): array {
 		if (!in_array($response->getStatusCode(), $allowedStatusCodes, true)) {
 			$this->logUnexpectedStatusCode(__METHOD__, $response->getStatusCode());
