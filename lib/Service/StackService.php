@@ -202,7 +202,7 @@ class StackService {
 		$stack->setOrder($order);
 		$stack = $this->stackMapper->insert($stack);
 		$this->activityManager->triggerEvent(
-			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE
+			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE, [], $this->permissionService->getUserId()
 		);
 		$this->changeHelper->boardChanged($boardId);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));

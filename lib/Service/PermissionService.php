@@ -138,7 +138,7 @@ class PermissionService {
 	 *
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false): bool {
+	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false): string {
 		$boardId = (int)$id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -243,6 +243,10 @@ class PermissionService {
 			}
 		}
 		return $hasGroupPermission;
+	}
+
+	public function getUserId() {
+		return $this->userId || $this->aclMapper->findByAccessToken($this->accessToken)->getParticipant();
 	}
 
 	/**
