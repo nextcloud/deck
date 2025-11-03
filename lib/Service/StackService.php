@@ -225,7 +225,7 @@ class StackService {
 		$stack = $this->stackMapper->update($stack);
 
 		$this->activityManager->triggerEvent(
-			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE
+			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE, [], $this->permissionService->getUserId()
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
