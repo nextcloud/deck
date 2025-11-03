@@ -51,7 +51,7 @@ class DeckFederationProvider implements ICloudFederationProvider{
 		$acl->setParticipant($share->getShareWith());
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(false);
-		$acl->setPermissionManage(false);
+		$acl->setPermissionManage(true);
 		$this->aclMapper->insert($acl);
 
 		$this->changeHelper->boardChanged($insertedBoard->getId());

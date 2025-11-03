@@ -247,6 +247,10 @@ class PermissionService {
 		return $hasGroupPermission;
 	}
 
+	public function getUserId() {
+		return $this->userId || $this->aclMapper->findByAccessToken($this->accessToken)->getParticipant();
+	}
+
 	/**
 	 * Find a list of all users (including the ones from groups)
 	 * Required to allow assigning them to cards
