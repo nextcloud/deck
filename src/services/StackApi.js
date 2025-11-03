@@ -97,11 +97,11 @@ export class StackApi {
 			})
 	}
 
-	deleteStack(stackId) {
-		return axios.delete(this.url(`/stacks/${stackId}`))
+	deleteStack(stackId, boardId) {
+		return axios.delete(this.ocsUrl(`/stacks/${stackId}/${boardId}`))
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
