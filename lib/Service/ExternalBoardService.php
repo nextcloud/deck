@@ -77,4 +77,23 @@ class ExternalBoardService {
 		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, $params);
 		return $this->proxy->getOcsData($resp);
 	}
+
+	public function createStackOnRemote(
+		Board $localBoard,
+		string $title,
+		int $order = 0,
+	): array {
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . "/ocs/v2.php/apps/deck/api/v1.0/stacks";
+		$params = [
+			'title' => $title,
+			'boardId' => $localBoard->getExternalId(),
+			'order' => $order,
+		];
+		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, $params);
+		$stack = $this->proxy->getOcsData($resp);
+		return $this->localizeRemoteStacks([$stack], $localBoard)[0];
+	}
 }
