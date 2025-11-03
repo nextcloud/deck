@@ -139,6 +139,8 @@ return [
 
         ['name' => 'new_card#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
 
+        ['name' => 'new_stack#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
+
 		['name' => 'Config#get', 'url' => '/api/v{apiVersion}/config', 'verb' => 'GET'],
 		['name' => 'Config#setValue', 'url' => '/api/v{apiVersion}/config/{key}', 'verb' => 'POST'],
 
