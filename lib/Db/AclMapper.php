@@ -18,6 +18,16 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		parent::__construct($db, 'deck_board_acl', Acl::class);
 	}
 
+	public function findByAccessToken(string $accessToken){
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage', 'token')
+			->from('deck_board_acl')
+			->where($qb->expr()->eq('token', $qb->createNamedParameter($accessToken, IQueryBuilder::PARAM_STR)))
+			->setMaxResults(1);
+
+		return $this->findEntity($qb);
+	}
+
 	/**
 	 * @return Acl[]
 	 * @throws \OCP\DB\Exception
