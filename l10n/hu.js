@@ -91,6 +91,7 @@ OC.L10N.register(
     "Welcome to Nextcloud Deck!" : "Üdvözli a Nextcloud Kártyák!",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "A(z) „%s” kártyát a(z) „%s” táblán %s hozzárendelte Önhöz.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} hozzárendelte Önhöz a(z) {deck-board} táblán lévő {deck-card} kártyát.",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "A(z) „%1$s” kártya a(z) „%2$s” táblán elérte a határidejét.",
     "The card {deck-card} on {deck-board} has reached its due date." : "A(z) {deck-board} táblán lévő {deck-card} kártya elérte a határidejét.",
     "%s has mentioned you in a comment on \"%s\"." : "%s megemlítette egy hozzászólásban ennél: „%s”.",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} megemlítette egy hozzászólásban a(z) {deck-card} kártyán.",
