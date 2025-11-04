@@ -9,6 +9,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
