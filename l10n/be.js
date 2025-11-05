@@ -77,6 +77,7 @@ OC.L10N.register(
     "Cancel edit" : "Скасаваць рэдагаванне",
     "An error occurred" : "Узнікла памылка",
     "No notifications" : "Няма апавяшчэнняў",
+    "Export as CSV" : "Экспарт у CSV",
     "Export" : "Экспарт",
     "No results found" : "Вынікаў не знойдзена",
     "{stack} in {board}" : "{stack} у {board}",
