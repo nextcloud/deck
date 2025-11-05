@@ -7,7 +7,9 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\Importer\BoardImportService;
+use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -21,6 +23,7 @@ class BoardImportApiController extends OCSController {
 		string $appName,
 		IRequest $request,
 		private BoardImportService $boardImportService,
+		private PermissionService $permissionService,
 		private string $userId,
 	) {
 		parent::__construct($appName, $request);
@@ -30,6 +33,9 @@ class BoardImportApiController extends OCSController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function import(string $system, array $config, array $data): DataResponse {
+		if (!$this->permissionService->canCreate()) {
+			throw new NoPermissionException('Creating boards has been disabled for your account.');
+		}
 		$this->boardImportService->setSystem($system);
 		$config = json_decode(json_encode($config));
 		$config->owner = $this->userId;

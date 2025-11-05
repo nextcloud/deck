@@ -9,6 +9,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
@@ -137,6 +138,10 @@ class BoardController extends ApiController {
 	 * @NoAdminRequired
 	 */
 	public function import(): DataResponse {
+		if (!$this->permissionService->canCreate()) {
+			throw new NoPermissionException('Creating boards has been disabled for your account.');
+		}
+
 		$file = $this->request->getUploadedFile('file');
 		$error = null;
 		$phpFileUploadErrors = [
