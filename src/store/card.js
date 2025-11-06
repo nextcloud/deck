@@ -4,7 +4,7 @@
  */
 
 import { CardApi } from './../services/CardApi.js'
-import moment from 'moment'
+import { parseISO } from 'date-fns'
 import Vue from 'vue'
 
 const apiClient = new CardApi()
@@ -138,8 +138,8 @@ export default {
 							}
 							const comparator = query[0] + (query[1] === '=' ? '=' : '')
 							const isValidComparator = ['<', '<=', '>', '>='].indexOf(comparator) !== -1
-							const parsedCardDate = moment(card.duedate)
-							const parsedDate = moment(query.slice(isValidComparator ? comparator.length : 0))
+							const parsedCardDate = parseISO(card.duedate)
+							const parsedDate = parseISO(query.slice(isValidComparator ? comparator.length : 0))
 							switch (comparator) {
 							case '<':
 								hasMatch = hasMatch && parsedCardDate.isBefore(parsedDate)

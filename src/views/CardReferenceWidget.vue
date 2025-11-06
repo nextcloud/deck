@@ -75,7 +75,7 @@ import AvatarList from '../components/cards/AvatarList.vue'
 import labelStyle from '../mixins/labelStyle.js'
 
 import { NcRichText } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
+import { formatDistanceToNow, format, fromUnixTime } from 'date-fns'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
@@ -131,8 +131,8 @@ export default {
 		},
 		cardTooltip() {
 			return t('deck', '* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments', {
-			  created: moment.unix(this.card.createdAt).format('LLL'),
-				lastMod: moment.unix(this.card.lastModified).format('LLL'),
+			  created: format(fromUnixTime(this.card.createdAt), 'PPpp'),
+		        lastMod: format(fromUnixTime(this.card.lastModified), 'PPpp'),
 				nbAttachments: this.card.attachments.length,
 				nbComments: this.card.commentsCount,
 			})
@@ -142,12 +142,12 @@ export default {
 		},
 		dueDate() {
 			return this.card.duedate
-				? moment(this.card.duedate).fromNow()
+				? formatDistanceToNow(new Date(this.card.duedate), { addSuffix: true })
 				: null
 		},
 		formattedDueDate() {
 			return this.card.duedate
-				? t('deck', 'Due on {date}', { date: moment(this.card.duedate).format('LLL') })
+				? t('deck', 'Due on {date}', { date: format(new Date(this.card.duedate), 'PPpp') })
 				: null
 		},
 		labelsSorted() {

@@ -19,7 +19,7 @@
 
 <script>
 import { NcRichText, NcUserBubble } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
+import { format } from 'date-fns'
 import DOMPurify from 'dompurify'
 import relativeDate from '../mixins/relativeDate.js'
 import formatReadableDate from '../mixins/readableDate.js'
@@ -59,7 +59,7 @@ export default {
 			const parameters = JSON.parse(JSON.stringify(this.activity.subject_rich[1]))
 			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
 				const dateTime = parameters.after.id.slice(3)
-				parameters.after.name = moment(dateTime).format('L LTS')
+				parameters.after.name = format(new Date(dateTime), 'P pp')
 			}
 
 			Object.keys(parameters).forEach(function(key, index) {

@@ -84,7 +84,7 @@ import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
 import CardSidebarTabComments from './CardSidebarTabComments.vue'
 import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
 import relativeDate from '../../mixins/relativeDate.js'
-import moment from '@nextcloud/moment'
+import { fromUnixTime, format } from 'date-fns'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import HomeIcon from 'vue-material-design-icons/Home.vue'
 import HomeOutlineIcon from 'vue-material-design-icons/HomeOutline.vue'
@@ -223,7 +223,7 @@ export default {
 			this.$store.dispatch('setConfig', { cardDetailsInModal: false })
 		},
 		formatDate(timestamp) {
-			return moment.unix(timestamp).locale(this.locale).format('LLLL')
+			return format(fromUnixTime(Number(timestamp)), 'PPPP p')
 		},
 	},
 }
