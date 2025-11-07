@@ -179,7 +179,7 @@ export default {
 				await this.$store.dispatch('loadBoardById', this.id)
 				await this.$store.dispatch('loadStacks', this.id)
 
-				const routeCardId = parseInt(this.$route.params.cardId)
+				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
 				if (routeCardId && !this.$store.getters.cardById(routeCardId)) {
 					await this.$store.dispatch('loadArchivedStacks', this.id)

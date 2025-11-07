@@ -25,6 +25,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Board;
 use OCA\Deck\Service\Importer\BoardImportService;
+use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
@@ -37,16 +38,20 @@ class BoardImportApiControllerTest extends \Test\TestCase {
 	private $controller;
 	/** @var BoardImportService|MockObject */
 	private $boardImportService;
+	/** @var PermissionService|MockObject */
+	private $permissionService;
 
 	public function setUp(): void {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->boardImportService = $this->createMock(BoardImportService::class);
+		$this->permissionService = $this->createMock(PermissionService::class);
 
 		$this->controller = new BoardImportApiController(
 			$this->appName,
 			$this->request,
 			$this->boardImportService,
+			$this->permissionService,
 			$this->userId
 		);
 	}
@@ -75,9 +80,27 @@ class BoardImportApiControllerTest extends \Test\TestCase {
 		$data = [
 			'name' => 'test'
 		];
+		$this->permissionService
+			->method('canCreate')
+			->willReturn(true);
 		$actual = $this->controller->import($system, $config, $data);
 		$board = $this->createMock(Board::class);
 		$this->assertInstanceOf(Board::class, $board);
 		$this->assertEquals(HTTP::STATUS_OK, $actual->getStatus());
+	}
+
+	public function testImportWithoutPermission() {
+		$system = 'trelloJson';
+		$config = [
+			'owner' => 'test'
+		];
+		$data = [
+			'name' => 'test'
+		];
+		$this->permissionService
+			->method('canCreate')
+			->willReturn(false);
+		$this->expectException(\OCA\Deck\NoPermissionException::class);
+		$this->controller->import($system, $config, $data);
 	}
 }
