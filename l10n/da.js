@@ -255,7 +255,7 @@ OC.L10N.register(
     "Clone due dates" : "Klon forfaldsdatoer",
     "Advanced options" : "Avancerede indstillinger",
     "Clone" : "Klon",
-    "Export {boardTitle}" : "Eksportér {boardTitle}",
+    "Export {boardTitle}" : "Eksporter {boardTitle}",
     "Export as CSV" : "Eksportér som CSV",
     "Export" : "Eksportér",
     "Loading filtered view" : "Indlæser filtreret visning",
