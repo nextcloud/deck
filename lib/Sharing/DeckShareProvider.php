@@ -49,39 +49,18 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	public const SHARE_TYPE_DECK_USER = IShare::TYPE_DECK_USER;
 
-	private IDBConnection $dbConnection;
-	private IManager $shareManager;
-	private AttachmentCacheHelper $attachmentCacheHelper;
-	private BoardMapper $boardMapper;
-	private CardMapper $cardMapper;
-	private PermissionService $permissionService;
-	private ITimeFactory $timeFactory;
-	private IL10N $l;
-	private IMimeTypeLoader $mimeTypeLoader;
-	private ?string $userId;
-
 	public function __construct(
-		IDBConnection $connection,
-		IManager $shareManager,
-		BoardMapper $boardMapper,
-		CardMapper $cardMapper,
-		PermissionService $permissionService,
-		AttachmentCacheHelper $attachmentCacheHelper,
-		IL10N $l,
-		ITimeFactory $timeFactory,
-		IMimeTypeLoader $mimeTypeLoader,
-		?string $userId,
+		private IDBConnection $connection,
+		private IManager $shareManager,
+		private BoardMapper $boardMapper,
+		private CardMapper $cardMapper,
+		private PermissionService $permissionService,
+		private AttachmentCacheHelper $attachmentCacheHelper,
+		private IL10N $l,
+		private ITimeFactory $timeFactory,
+		private IMimeTypeLoader $mimeTypeLoader,
+		private ?string $userId,
 	) {
-		$this->dbConnection = $connection;
-		$this->shareManager = $shareManager;
-		$this->boardMapper = $boardMapper;
-		$this->cardMapper = $cardMapper;
-		$this->attachmentCacheHelper = $attachmentCacheHelper;
-		$this->permissionService = $permissionService;
-		$this->l = $l;
-		$this->timeFactory = $timeFactory;
-		$this->mimeTypeLoader = $mimeTypeLoader;
-		$this->userId = $userId;
 	}
 
 	public static function register(IEventDispatcher $dispatcher): void {
@@ -1049,11 +1028,18 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	public function getOrphanedAttachmentShares(): array {
 		$allCardIds = $this->cardMapper->getAllCardIds();
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share', 's')
-			->where($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
-			->andWhere($qb->expr()->notIn('s.share_with', $qb->createNamedParameter($allCardIds, IQueryBuilder::PARAM_STR_ARRAY)));
+			->where($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)));
+
+		$chunks = array_chunk($allCardIds, 1000);
+		foreach ($chunks as $chunk) {
+			$qb->andWhere(
+				$qb->expr()->notIn('s.share_with', $qb->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY))
+			);
+		}
 
 		$cursor = $qb->execute();
 		$shares = [];
