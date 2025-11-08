@@ -51,7 +51,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	public const SHARE_TYPE_DECK_USER = IShare::TYPE_DECK_USER;
 
 	public function __construct(
-		private IDBConnection $connection,
+		private IDBConnection $dbConnection,
 		private IManager $shareManager,
 		private BoardMapper $boardMapper,
 		private CardMapper $cardMapper,
@@ -60,7 +60,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		private IL10N $l,
 		private ITimeFactory $timeFactory,
 		private IMimeTypeLoader $mimeTypeLoader,
-		private ?string $userId,
+		private ?string $userId = null,
 	) {
 	}
 
