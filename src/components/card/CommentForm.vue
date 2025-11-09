@@ -123,7 +123,7 @@ export default {
 				// FIXME user names can contain spaces, in that case they need to be wrapped @"user name" [a-zA-Z0-9\ _\.@\-']+
 				let mentionValue
 				if (mention.attributes['data-at-embedded'].value === 'true') {
-					mentionValue = mention.parentNode.parentNode.querySelector('.user-bubble__wrapper').attributes['data-mention-id'].value
+					mentionValue = mention.parentNode.querySelector('.user-bubble__wrapper').attributes['data-mention-id'].value
 				} else {
 					mentionValue = mention.firstChild.attributes['data-mention-id'].value
 				}
