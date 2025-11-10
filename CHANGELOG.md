@@ -5,6 +5,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.1
+## Fixed
+* [stable32] fix: comments with mentions cant be submitted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7297
+* [stable32] Fix: Prevent error in Whiteboard when adding a Deckboard by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7326
+* [stable32] fix(activity): Reduce stored data size for activity entries by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7335
+* [stable32] fix: Check owner can create boards when importing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7344
+
+
 ## 1.16.0
 ### Added
 - feat: update default content @luka-nextcloud [#6740](https://github.com/nextcloud/deck/pull/6740)
