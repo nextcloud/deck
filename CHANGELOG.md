@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.15.4
+### Fixed
+* [stable31] fix: comments with mentions cant be submitted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7296
+* [stable31] Fix: Prevent error in Whiteboard when adding a Deckboard by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7327
+* [stable31] fix: Check owner can create boards when importing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7343
+
 # 1.15.3
 ### Fixed
 * [stable31] fix: Use getId() method for card ID retrieval by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7144
