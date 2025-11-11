@@ -5,6 +5,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.7
+### Fixed
+* [stable30] fix:  Use getId() method for card ID retrieval by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7145
+* [stable30] fix: do not change focus when card id stays the same by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7174
+* [stable30] Clean attachment sharing records after permanent deleted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7179
+* [stable30] fix: make comments with mention editable by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7197
+* [stable30] fix: comments with mentions cant be submitted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7295
+* [stable30] Fix: Prevent error in Whiteboard when adding a Deckboard by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7328
+
+
+**Full Changelog**: https://github.com/nextcloud/deck/compare/v1.14.6...v1.14.7
+
 ## 1.14.6
 ### Fixed
 * [stable30] fix: update DeleteCron to remove deleted lists by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7028
