@@ -54,10 +54,10 @@ export class BoardApi {
 	 * @return {Promise}
 	 */
 	createBoard(boardData) {
-		return axios.post(this.url('/boards'), boardData)
+		return axios.post(this.ocsUrl('/boards'), boardData)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

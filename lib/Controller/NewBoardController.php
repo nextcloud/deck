@@ -21,6 +21,7 @@ class NewBoardController extends OCSController{
 		private ExternalBoardService $externalBoardService,
 		private LoggerInterface $logger,
 		private StackService $stackService,
+		private $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -43,6 +44,12 @@ class NewBoardController extends OCSController{
 		}
 		// Board on other instance -> get it from other instance
 		return new DataResponse($localBoard);
+	}
+
+	#[NoAdminrequired]
+	#[NoCSRFRequired]
+	public function create(string $title, string $color,): DataResponse {
+		return new DataResponse( $this->boardService->create($title, $this->userId, $color));
 	}
 
 	#[NoAdminRequired]
