@@ -136,6 +136,7 @@ return [
 		['name' => 'new_board#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
 		['name' => 'new_board#read', 'url' => '/api/v{apiVersion}/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'new_board#stacks', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
+		['name' => 'new_board#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
 
         ['name' => 'new_card#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
 
