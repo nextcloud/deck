@@ -91,6 +91,7 @@ OC.L10N.register(
     "Welcome to Nextcloud Deck!" : "Bienvenue dans Nextcloud Deck !",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La carte \"%s\" de \"%s\" vous a été assignée par %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vous a attribué la carte {deck-card} du tableau {deck-board}.",
+    "The card \"%1$s\" on \"%2$s\" has reached its due date." : "La carte \"%1$s\" sur \"%2$s\" est arrivée à échéance.",
     "The card {deck-card} on {deck-board} has reached its due date." : "La carte {deck-card} sur {deck-board} a atteint sa date d'échéance.",
     "%s has mentioned you in a comment on \"%s\"." : "%s vous a mentionné dans un commentaire sur \"%s\".",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} vous a cité dans un commentaire sur {deck-card}.",
