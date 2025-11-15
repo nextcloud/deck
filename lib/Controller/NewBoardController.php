@@ -65,4 +65,10 @@ class NewBoardController extends OCSController{
 			return new DataResponse($this->stackService->findAll($boardId));
 		}
 	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function addAcl(int $boardId, int $type, $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): DataResponse {
+		return new DataResponse($this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage, $remote));
+	}
 }
