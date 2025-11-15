@@ -325,10 +325,10 @@ export class BoardApi {
 
 	addAcl(acl) {
 		console.log(acl.participant)
-		return axios.post(this.url(`/boards/${acl.boardId}/acl`), acl)
+		return axios.post(this.ocsUrl(`/boards/${acl.boardId}/acl`), acl)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
