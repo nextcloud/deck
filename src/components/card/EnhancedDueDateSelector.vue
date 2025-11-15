@@ -1,0 +1,367 @@
+<!--
+  - SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<template>
+	<CardDetailEntry :label="t('deck', 'Assign a due date to this card…')" data-test="due-date-selector">
+		<Calendar v-if="!card.done" slot="icon" :size="20" />
+		<CalendarCheck v-else slot="icon" :size="20" />
+		<template v-if="!card.done && !card.archived">
+			<NcDateTimePickerNative v-if="duedate"
+				id="card-duedate-picker"
+				v-model="duedate"
+				:placeholder="t('deck', 'Set a due date')"
+				:hide-label="true"
+				type="datetime-local" />
+			<NcActions v-if="canEdit"
+				:menu-title="!duedate ? t('deck', 'Add due date') : null"
+				type="tertiary"
+				data-cy-due-date-actions>
+				<template v-if="!duedate" #icon>
+					<Plus :size="20" />
+				</template>
+				<NcActionButton v-for="shortcut in reminderOptions"
+					:key="shortcut.key"
+					close-after-click
+					:data-cy-due-date-shortcut="shortcut.key"
+					@click="() => selectShortcut(shortcut)">
+					{{ shortcut.label }}
+				</NcActionButton>
+				<NcActionSeparator />
+
+				<NcActionButton v-if="!duedate"
+					close-after-click
+					data-cy-due-date-pick
+					@click="initDate">
+					<template #icon>
+						<Plus :size="20" />
+					</template>
+					{{ t('deck', 'Choose a date') }}
+				</NcActionButton>
+				<NcActionButton v-else
+					icon="icon-delete"
+					close-after-click
+					data-cy-due-date-remove
+					@click="removeDue">
+					{{ t('deck', 'Remove due date') }}
+				</NcActionButton>
+			</NcActions>
+
+			<NcButton v-if="!card.done"
+				type="secondary"
+				class="completed-button"
+				@click="changeCardDoneStatus()">
+				<template #icon>
+					<CheckIcon :size="20" />
+				</template>
+				{{ t('deck', 'Mark as done') }}
+			</NcButton>
+		</template>
+		<template v-else>
+			<div class="done-info">
+				<span v-if="card.done" class="done-info--done">
+					{{ formatEnhancedDate(card.done) }}
+				</span>
+				<span v-if="duedate" class="done-info--duedate" :class="{ 'dimmed': card.done }">
+					{{ t('deck', 'Due at:') }}
+					{{ formatEnhancedDate(duedate) }}
+				</span>
+			</div>
+			<div class="due-actions">
+				<NcButton v-if="!card.archived"
+					type="tertiary"
+					:name="t('deck', 'Not done')"
+					@click="changeCardDoneStatus()">
+					<template #icon>
+						<ClearIcon :size="20" />
+					</template>
+				</NcButton>
+				<NcButton type="secondary" @click="archiveUnarchiveCard()">
+					<template #icon>
+						<ArchiveIcon :size="20" />
+					</template>
+					{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+				</NcButton>
+			</div>
+		</template>
+	</CardDetailEntry>
+</template>
+
+<script>
+import { defineComponent } from 'vue'
+import {
+	NcActionButton,
+	NcActions,
+	NcActionSeparator,
+	NcButton,
+	NcDateTimePickerNative,
+} from '@nextcloud/vue'
+import enhancedReadableDate from '../../mixins/enhancedReadableDate.js'
+import { 
+	getPersianShortDayNames,
+	getPersianShortMonthNames,
+	getPersianFirstDayOfWeek,
+	isPersianLocale
+} from '../../helpers/jalaliCalendar.js'
+import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
+import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
+import Calendar from 'vue-material-design-icons/CalendarOutline.vue'
+import CalendarCheck from 'vue-material-design-icons/CalendarCheckOutline.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import ClearIcon from 'vue-material-design-icons/Close.vue'
+import CardDetailEntry from './CardDetailEntry.vue'
+
+export default defineComponent({
+	name: 'EnhancedDueDateSelector',
+	components: {
+		NcButton,
+		ArchiveIcon,
+		ClearIcon,
+		CardDetailEntry,
+		Plus,
+		Calendar,
+		CalendarCheck,
+		CheckIcon,
+		NcActions,
+		NcActionButton,
+		NcActionSeparator,
+		NcDateTimePickerNative,
+	},
+	mixins: [
+		enhancedReadableDate,
+	],
+	props: {
+		card: {
+			type: Object,
+			default: null,
+		},
+		canEdit: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data() {
+		return {
+			lang: {
+				days: this.getLocalizedDayNames(),
+				months: this.getLocalizedMonthNames(),
+				formatLocale: {
+					firstDayOfWeek: this.getLocalizedFirstDayOfWeek(),
+				},
+				placeholder: {
+					date: t('deck', 'Select Date'),
+				},
+			},
+			format: {
+				stringify: this.stringify,
+				parse: this.parse,
+			},
+		}
+	},
+	computed: {
+		duedate: {
+			get() {
+				return this.card?.duedate ? new Date(this.card.duedate) : null
+			},
+			set(val) {
+				this.$emit('input', val ? new Date(val) : null)
+			},
+		},
+
+		reminderOptions() {
+			const currentDateTime = moment()
+			// Same day 18:00 PM (or hidden)
+			const laterTodayTime = (currentDateTime.hour() < 18)
+				? moment().hour(18)
+				: null
+			// Tomorrow 08:00 AM
+			const tomorrowTime = moment().add(1, 'days').hour(8)
+			// Saturday 08:00 AM (or hidden)
+			const thisWeekendTime = (currentDateTime.day() !== 6 && currentDateTime.day() !== 0)
+				? moment().day(6).hour(8)
+				: null
+			// Next Monday 08:00 AM
+			const nextWeekTime = moment().add(1, 'weeks').day(1).hour(8)
+
+			return [
+				{
+					key: 'laterToday',
+					timestamp: this.getTimestamp(laterTodayTime),
+					label: this.getLocalizedReminderLabel('laterToday', laterTodayTime),
+					ariaLabel: t('deck', 'Set due date for later today'),
+				},
+				{
+					key: 'tomorrow',
+					timestamp: this.getTimestamp(tomorrowTime),
+					label: this.getLocalizedReminderLabel('tomorrow', tomorrowTime),
+					ariaLabel: t('deck', 'Set due date for tomorrow'),
+				},
+				{
+					key: 'thisWeekend',
+					timestamp: this.getTimestamp(thisWeekendTime),
+					label: this.getLocalizedReminderLabel('thisWeekend', thisWeekendTime),
+					ariaLabel: t('deck', 'Set due date for this weekend'),
+				},
+				{
+					key: 'nextWeek',
+					timestamp: this.getTimestamp(nextWeekTime),
+					label: this.getLocalizedReminderLabel('nextWeek', nextWeekTime),
+					ariaLabel: t('deck', 'Set due date for next week'),
+				},
+			].filter(option => option.timestamp !== null)
+		},
+	},
+	methods: {
+		/**
+		 * Get localized day names based on current calendar
+		 */
+		getLocalizedDayNames() {
+			if (isPersianLocale()) {
+				return getPersianShortDayNames()
+			}
+			return getDayNamesMin()
+		},
+
+		/**
+		 * Get localized month names based on current calendar
+		 */
+		getLocalizedMonthNames() {
+			if (isPersianLocale()) {
+				return getPersianShortMonthNames()
+			}
+			return getMonthNamesShort()
+		},
+
+		/**
+		 * Get localized first day of week based on current calendar
+		 */
+		getLocalizedFirstDayOfWeek() {
+			if (isPersianLocale()) {
+				return getPersianFirstDayOfWeek()
+			}
+			return getFirstDay() === 0 ? 7 : getFirstDay()
+		},
+
+		/**
+		 * Get localized reminder label based on current calendar
+		 */
+		getLocalizedReminderLabel(type, time) {
+			if (!time) return ''
+
+			if (isPersianLocale()) {
+				// Use Persian calendar for formatting
+				const jalaliTime = time.jMoment()
+
+				switch (type) {
+					case 'laterToday':
+						return t('deck', 'Later today – {timeLocale}', {
+							timeLocale: jalaliTime.format('HH:mm'),
+						})
+					case 'tomorrow':
+						return t('deck', 'Tomorrow – {timeLocale}', {
+							timeLocale: jalaliTime.format('ddd HH:mm'),
+						})
+					case 'thisWeekend':
+						return t('deck', 'This weekend – {timeLocale}', {
+							timeLocale: jalaliTime.format('ddd HH:mm'),
+						})
+					case 'nextWeek':
+						return t('deck', 'Next week – {timeLocale}', {
+							timeLocale: jalaliTime.format('ddd HH:mm'),
+						})
+					default:
+						return time.format('LT')
+				}
+			}
+
+			// Default Gregorian formatting
+			switch (type) {
+				case 'laterToday':
+					return t('deck', 'Later today – {timeLocale}', { timeLocale: time.format('LT') })
+				case 'tomorrow':
+					return t('deck', 'Tomorrow – {timeLocale}', { timeLocale: time.format('ddd LT') })
+				case 'thisWeekend':
+					return t('deck', 'This weekend – {timeLocale}', { timeLocale: time.format('ddd LT') })
+				case 'nextWeek':
+					return t('deck', 'Next week – {timeLocale}', { timeLocale: time.format('ddd LT') })
+				default:
+					return time.format('LT')
+			}
+		},
+
+		initDate() {
+			if (this.duedate === null) {
+				// We initialize empty dates with a time once clicked to make picking a day easier
+				const now = new Date()
+				now.setDate(now.getDate() + 1)
+				now.setHours(8)
+				now.setMinutes(0)
+				now.setMilliseconds(0)
+				this.duedate = now
+			}
+		},
+		removeDue() {
+			this.duedate = null
+			this.$emit('change', null)
+		},
+		selectShortcut(shortcut) {
+			this.duedate = shortcut.timestamp
+			this.$emit('change', shortcut.timestamp)
+		},
+		getTimestamp(momentObject) {
+			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
+		},
+		changeCardDoneStatus() {
+			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+		},
+		archiveUnarchiveCard() {
+			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+		},
+		stringify(date) {
+			if (isPersianLocale()) {
+				// Use Jalali calendar formatting for Persian locale
+				const jalaliDate = moment(date).jMoment()
+				return jalaliDate.format('jYYYY/jM/jD HH:mm')
+			}
+			return moment(date).locale(this.locale).format('LLL')
+		},
+		parse(value) {
+			if (isPersianLocale()) {
+				// Parse Jalali date format
+				try {
+					return moment(value, 'jYYYY/jM/jD HH:mm').toDate()
+				} catch (e) {
+					// Fallback to standard parsing
+					return moment(value).toDate()
+				}
+			}
+			return moment(value).toDate()
+		},
+	},
+})
+</script>
+
+<style scoped lang="scss">
+.done-info {
+	flex-grow: 1;
+}
+
+.done-info--duedate,
+.done-info--done {
+	display: flex;
+	&.dimmed {
+		color: var(--color-text-maxcontrast);
+	}
+}
+
+.completed-button {
+	margin-left: auto;
+}
+
+.due-actions {
+	display: flex;
+	align-items: flex-start;
+}
+</style>

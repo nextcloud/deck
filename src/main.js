@@ -14,6 +14,7 @@ import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
 import './sessions.js'
+import './init-jalali-calendar.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
