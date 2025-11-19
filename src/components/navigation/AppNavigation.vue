@@ -122,6 +122,7 @@ import ShareVariantIcon from 'vue-material-design-icons/ShareOutline.vue'
 import HelpModal from './../modals/HelpModal.vue'
 import { subscribe } from '@nextcloud/event-bus'
 import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
+import { mapState } from 'vuex/dist/vuex.common.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
