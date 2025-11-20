@@ -9,6 +9,7 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "Completed" : "Fullført",
     "Details" : "Detaljar",
+    "Search" : "Søk",
     "Sharing" : "Deling",
     "Tags" : "Emneord",
     "Activity" : "Aktivitet",
@@ -29,14 +30,13 @@ OC.L10N.register(
     "Update" : "Oppdater",
     "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
-    "Keyboard shortcuts" : "Tastatursnarvegar",
-    "Search" : "Søk",
     "Shared with you" : "Shared with you",
     "An error occurred" : "Det oppstod ein feil.",
     "Export" : "Eksporter",
     "Close" : "Lat att",
     "Share" : "Del",
     "Personal" : "Personleg",
+    "Keyboard shortcuts" : "Tastatursnarvegar",
     "Today" : "I dag"
 },
 "nplurals=2; plural=(n != 1);");
