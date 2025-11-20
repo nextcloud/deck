@@ -17,6 +17,7 @@
     "Open" : "Dobrir",
     "Completed" : "Acabat",
     "Details" : "Detalhs",
+    "Search" : "Recercar",
     "Sharing" : "Partiment",
     "Tags" : "Etiquetas",
     "Deleted items" : "Elements suprimits",
@@ -46,9 +47,6 @@
     "Tomorrow – {timeLocale}" : "Deman – {timeLocale}",
     "Edit title" : "Modificar lo títol",
     "seconds ago" : "fa qualques segondas",
-    "Keyboard shortcuts" : "Acorchis de clavièr",
-    "Keyboard shortcut" : "Acorchis de clavièr",
-    "Search" : "Recercar",
     "Shared with you" : "Shared with you",
     "Cancel edit" : "Anullar la modificacion",
     "An error occurred" : "Una error s’es producha",
@@ -62,6 +60,8 @@
     "Create a card" : "Crear una carta",
     "Share" : "Partejar",
     "Personal" : "Personal",
+    "Keyboard shortcuts" : "Acorchis de clavièr",
+    "Keyboard shortcut" : "Acorchis de clavièr",
     "Today" : "Uèi",
     "Tomorrow" : "Deman"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

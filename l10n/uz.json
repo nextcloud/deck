@@ -29,6 +29,7 @@
     "Next 30 days" : "Keyingi 30 kun",
     "No due date" : "Muddati yo'q",
     "Details" : "Details",
+    "Search" : "Qidirish",
     "Sharing" : "Ulashish",
     "Tags" : "Tags",
     "Activity" : "Faollik",
@@ -53,8 +54,6 @@
     "Edit title" : "Sarlavhani tahrirlash",
     "Delete card" : "Kartani o'chirish",
     "seconds ago" : "seconds ago",
-    "Keyboard shortcuts" : "Klaviatura yorliqlari",
-    "Search" : "Qidirish",
     "Archived boards" : "Arxivlangan taxtalar",
     "Shared with you" : "Shared with you",
     "No reminder" : "Eslatma yo'q",
@@ -71,6 +70,7 @@
     "Due date" : "Muddati",
     "Share" : "Ulashish",
     "Personal" : "Personal",
+    "Keyboard shortcuts" : "Klaviatura yorliqlari",
     "Today" : "Today",
     "Tomorrow" : "Ertaga"
 },"pluralForm" :"nplurals=1; plural=0;"
