@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.15.5
+### Fixed
+* [stable31] fix: Check owner can create boards when importing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7343
+
 # 1.15.4
 ### Fixed
 * [stable31] fix: comments with mentions cant be submitted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7296
