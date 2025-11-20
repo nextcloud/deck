@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.2
+### Added
+- [stable32] feat: refactor settings to new design by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7378
+- [stable32] perf: Hide user status on avatars where they are not needed by @backportbot[bot] https://github.com/nextcloud/deck/pull/7381
+
 ## 1.16.1
 ## Fixed
 * [stable32] fix: comments with mentions cant be submitted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7297
