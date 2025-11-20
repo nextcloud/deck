@@ -13,6 +13,7 @@
     "Hide archived cards" : "Архивлагдсан картуудыг нуух",
     "Show archived cards" : "Архивлагдсан картуудыг харах",
     "Details" : "Дэлгэрэнгүй",
+    "Search" : "Хайх",
     "Sharing" : "Түгээх",
     "Tags" : "Tag-үүд",
     "Activity" : "Үйлдлүүд",
@@ -34,14 +35,13 @@
     "Description" : "Тайлбар",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
-    "Keyboard shortcut" : "Keyboard товчлуур",
-    "Search" : "Хайх",
     "Shared with you" : "тантай хуваалцсан",
     "No notifications" : "Мэдэгдэл байхгүй",
     "Advanced options" : "Бусад сонголтууд",
     "Export" : "Экспорт",
     "Share" : "Түгээх",
     "Personal" : "Хувийн",
+    "Keyboard shortcut" : "Keyboard товчлуур",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

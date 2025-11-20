@@ -23,6 +23,7 @@
     "Show archived cards" : "Trego kartat e arkivuara",
     "Open details" : "Hapni detajet",
     "Details" : "Detajet",
+    "Search" : "Kërko",
     "Sharing" : "Ndarje",
     "Tags" : "Etiketa",
     "Activity" : "Aktiviteti",
@@ -47,10 +48,6 @@
     "Remove due date" : "Hiq datën e mbarimit",
     "(group)" : "(grup)",
     "seconds ago" : "sekonda më parë",
-    "Keyboard shortcuts" : "Shkurtoret e tastierës",
-    "Keyboard shortcut" : "Shkurtore tastiere",
-    "Action" : "Veprim",
-    "Search" : "Kërko",
     "Archived boards" : "Borde të arkivuara",
     "Shared with you" : "E ndarë me ju",
     "Board details" : "Detajet e Tabeles ",
@@ -67,6 +64,9 @@
     "Personal" : "Personale",
     "To do" : "Për t'u bërë",
     "Doing" : "Duke e bërë",
+    "Keyboard shortcuts" : "Shkurtoret e tastierës",
+    "Keyboard shortcut" : "Shkurtore tastiere",
+    "Action" : "Veprim",
     "Today" : "Sot",
     "Tomorrow" : "Nesër"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

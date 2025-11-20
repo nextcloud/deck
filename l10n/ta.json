@@ -6,6 +6,7 @@
     "File" : "File",
     "Cancel" : "இரத்து செய்க",
     "Details" : "விவரங்கள்",
+    "Search" : "தேடுதல்",
     "Tags" : "சீட்டுகள்",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -20,13 +21,12 @@
     "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
     "seconds ago" : "செக்கன்களுக்கு முன்",
-    "Keyboard shortcuts" : "விசைப்பலகை குறுக்குவழிகள்",
-    "Search" : "தேடுதல்",
     "Shared with you" : "Shared with you",
     "Export" : "ஏற்றுமதி",
     "Close" : "மூடுக",
     "Share" : "பகிர்வு",
     "Personal" : "தனிப்பட்ட",
+    "Keyboard shortcuts" : "விசைப்பலகை குறுக்குவழிகள்",
     "Today" : "இன்று"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -22,6 +22,7 @@
     "Completed" : "เสร็จแล้ว",
     "Overdue" : "เกินกำหนด",
     "Details" : "รายละเอียด",
+    "Search" : "ค้นหา",
     "Sharing" : "การแชร์",
     "Tags" : "แท็ก",
     "Activity" : "กิจกรรม",
@@ -44,9 +45,6 @@
     "Description" : "รายละเอียด",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาทีที่ผ่านมา",
-    "Keyboard shortcuts" : "แป้นพิมพ์ลัด",
-    "Keyboard shortcut" : "แป้นพิมพ์ลัด",
-    "Search" : "ค้นหา",
     "Shared with you" : "แชร์กับคุณ",
     "An error occurred" : "เกิดข้อผิดพลาด",
     "Edit board" : "แก้ไขกระดาน",
@@ -58,6 +56,8 @@
     "Due date" : "วันที่ครบกำหนด",
     "Share" : "แชร์",
     "Personal" : "ส่วนตัว",
+    "Keyboard shortcuts" : "แป้นพิมพ์ลัด",
+    "Keyboard shortcut" : "แป้นพิมพ์ลัด",
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้"
 },"pluralForm" :"nplurals=1; plural=0;"
