@@ -13,7 +13,7 @@
 			<NcAvatar :user="session.uid"
 				:display-name="session.displayname"
 				:disable-menu="true"
-				:show-user-status="false"
+				:hide-status="true"
 				:disable-tooltip="true"
 				:size="size" />
 		</div>
