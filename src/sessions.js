@@ -20,7 +20,7 @@
 
 import { listen } from '@nextcloud/notify_push'
 import { sessionApi } from './services/SessionApi.js'
-import store from './store/main.js'
+import storeFactory from './store/main.js'
 import axios from '@nextcloud/axios'
 
 const SESSION_INTERVAL = 90 // in seconds
@@ -28,6 +28,8 @@ const SESSION_INTERVAL = 90 // in seconds
 let hasPush = false
 
 let syncRunning = false
+
+const store = storeFactory()
 
 /**
  * used to verify, whether an event is originated by ourselves

@@ -21,6 +21,7 @@
 
 import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from '@nextcloud/vue/dist/Functions/registerReference.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
+import storeFactory from './store/main.js'
 
 import './shared-init.js'
 
@@ -67,6 +68,7 @@ registerWidget('deck-board', async (el, { richObjectType, richObject, accessible
 	const { default: BoardReferenceWidget } = await import('./views/BoardReferenceWidget.vue')
 	const Widget = await prepareVue(BoardReferenceWidget)
 	boardWidgets[el] = new Widget({
+		store: storeFactory(),
 		propsData: {
 			richObjectType,
 			richObject,
