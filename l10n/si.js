@@ -13,6 +13,7 @@ OC.L10N.register(
     "Open" : "විවෘත",
     "Completed" : "සම්පුර්ණයි",
     "Details" : "විස්තර",
+    "General" : "සමාන්‍යය",
     "Search" : "සොයන්න",
     "Activity" : "ක්‍රියාකාරකම",
     "Undo" : "පෙරසේ",

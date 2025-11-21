@@ -124,6 +124,8 @@ OC.L10N.register(
     "Show archived cards" : "Mostrar tarjetas archivadas",
     "Open details" : "Abrir detalles",
     "Details" : "Detalles",
+    "General" : "General",
+    "Appearance" : "Apariencia",
     "Search" : "Buscar",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",

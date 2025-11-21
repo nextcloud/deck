@@ -25,6 +25,7 @@ OC.L10N.register(
     "Show archived cards" : "Trego kartat e arkivuara",
     "Open details" : "Hapni detajet",
     "Details" : "Detajet",
+    "General" : "Të përgjithshme",
     "Search" : "Kërko",
     "Sharing" : "Ndarje",
     "Tags" : "Etiketa",

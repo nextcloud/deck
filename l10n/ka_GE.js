@@ -24,6 +24,7 @@ OC.L10N.register(
     "Hide archived cards" : "არქივირებული ბარათების დამალვა",
     "Show archived cards" : "არქივირებული ბარათების ჩვენება",
     "Details" : "დეტალები",
+    "General" : "ზოგადი",
     "Search" : "ძიება",
     "Sharing" : "გაზიარება",
     "Tags" : "ტეგები",

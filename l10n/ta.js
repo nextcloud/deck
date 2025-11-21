@@ -8,6 +8,7 @@ OC.L10N.register(
     "File" : "File",
     "Cancel" : "இரத்து செய்க",
     "Details" : "விவரங்கள்",
+    "General" : "பொதுவான",
     "Search" : "தேடுதல்",
     "Tags" : "சீட்டுகள்",
     "Can edit" : "Can edit",

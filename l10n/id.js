@@ -131,6 +131,8 @@ OC.L10N.register(
     "Show archived cards" : "Tampilan arsip kartu",
     "Toggle compact mode" : "Beralih mode ringkas",
     "Details" : "Detail",
+    "General" : "Umum",
+    "Appearance" : "Tampilan",
     "Search" : "Cari",
     "Loading board" : "Memuat papan",
     "Board not found" : "Papan tidak ditemukan",

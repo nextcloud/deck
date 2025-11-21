@@ -14,6 +14,7 @@ OC.L10N.register(
     "Cancel" : "Sguir dheth",
     "Completed" : "Coileanta",
     "Details" : "Mion-fhiosrachadh",
+    "General" : "Coitcheann",
     "Search" : "Lorg",
     "Sharing" : "Co-roinneadh",
     "Tags" : "Tagaichean",

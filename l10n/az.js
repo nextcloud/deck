@@ -14,6 +14,7 @@ OC.L10N.register(
     "Cancel" : "Dayandır",
     "Completed" : "Bitmişdir",
     "Details" : "Detallar",
+    "General" : "Ümumi",
     "Search" : "Axtarış",
     "Sharing" : "Paylaşılır",
     "Tags" : "Işarələr",

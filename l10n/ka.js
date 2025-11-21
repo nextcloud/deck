@@ -164,6 +164,7 @@ OC.L10N.register(
     "Open details" : "Open details",
     "Details" : "Details",
     "Deck settings" : "Deck settings",
+    "General" : "General",
     "Use bigger card view" : "Use bigger card view",
     "Show card ID badge" : "Show card ID badge",
     "Show boards in calendar/tasks" : "Show boards in calendar/tasks",

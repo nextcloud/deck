@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "Completed" : "Fullført",
     "Details" : "Detaljar",
+    "General" : "Generelt",
+    "Appearance" : "Utsjånad",
     "Search" : "Søk",
     "Sharing" : "Deling",
     "Tags" : "Emneord",

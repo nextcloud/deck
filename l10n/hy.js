@@ -13,6 +13,7 @@ OC.L10N.register(
     "Cancel" : "ընդհատել",
     "Completed" : "Ավարտվեց",
     "Details" : "Մանրամասներ",
+    "General" : "Ընդհանուր",
     "Search" : "Search",
     "Activity" : "Գործունեություն",
     "Can edit" : "Can edit",

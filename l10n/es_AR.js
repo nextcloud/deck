@@ -65,6 +65,7 @@ OC.L10N.register(
     "Show archived cards" : "Mostrar tarjetas archivadas",
     "Details" : "Detalles",
     "Deck settings" : "Configuración del Tablero",
+    "General" : "General",
     "Search" : "Buscar",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",
