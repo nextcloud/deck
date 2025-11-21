@@ -15,6 +15,7 @@ OC.L10N.register(
     "Hide archived cards" : "Архивлагдсан картуудыг нуух",
     "Show archived cards" : "Архивлагдсан картуудыг харах",
     "Details" : "Дэлгэрэнгүй",
+    "General" : "ерөнхий",
     "Search" : "Хайх",
     "Sharing" : "Түгээх",
     "Tags" : "Tag-үүд",

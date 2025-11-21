@@ -78,6 +78,7 @@ OC.L10N.register(
     "Toggle compact mode" : "Baskuligi densigan vidon",
     "Open details" : "Montri detalojn",
     "Details" : "Detaloj",
+    "General" : "Ĝenerala",
     "Search" : "Serĉi",
     "Sharing" : "Kunhavigo",
     "Tags" : "Etikedoj",

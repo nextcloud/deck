@@ -6,6 +6,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "Direktori sementara hilang",
     "Done" : "Done",
     "Cancel" : "Batal",
+    "General" : "Umum",
     "Search" : "Search",
     "Activity" : "Aktiviti",
     "Can edit" : "Can edit",

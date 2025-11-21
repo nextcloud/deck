@@ -31,6 +31,8 @@ OC.L10N.register(
     "Next 30 days" : "Keyingi 30 kun",
     "No due date" : "Muddati yo'q",
     "Details" : "Details",
+    "General" : "Umumiy",
+    "Appearance" : "Tashqi ko'rinish",
     "Search" : "Qidirish",
     "Sharing" : "Ulashish",
     "Tags" : "Tags",

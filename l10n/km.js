@@ -6,6 +6,7 @@ OC.L10N.register(
     "File" : "ឯកសារ",
     "Cancel" : "បោះបង់",
     "Details" : "ព័ត៌មាន​លម្អិត",
+    "General" : "ទូទៅ",
     "Search" : "ស្វែងរក",
     "Sharing" : "ការ​ចែក​រំលែក",
     "Tags" : "ស្លាក",

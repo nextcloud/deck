@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add card" : "Dodaj karticu",
     "Completed" : "Završeno",
     "Details" : "Detalji",
+    "Appearance" : "Izgled",
     "Search" : "Traži",
     "Sharing" : "Deljenje",
     "Tags" : "Oznake",

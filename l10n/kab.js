@@ -15,6 +15,8 @@ OC.L10N.register(
     "Completed" : "Yemmed",
     "Open details" : "Ldi talqayt",
     "Details" : "Talqayt",
+    "General" : "Amatu",
+    "Appearance" : "Udem",
     "Search" : "Nadi",
     "Sharing" : "Beṭṭu",
     "Tags" : "Tibzimin",

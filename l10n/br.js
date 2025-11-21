@@ -14,6 +14,7 @@ OC.L10N.register(
     "Open" : "Digeriñ",
     "Completed" : "Achuet",
     "Details" : "Munudoù",
+    "General" : "Hollek",
     "Search" : "Klask",
     "Sharing" : "Rannan",
     "Tags" : "Klavioù",

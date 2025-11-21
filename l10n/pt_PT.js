@@ -114,6 +114,7 @@ OC.L10N.register(
     "Hide archived cards" : "Esconder cartões arquivados",
     "Show archived cards" : "Mostrar cartões arquivados",
     "Details" : "Detalhes",
+    "General" : "Geral",
     "Search" : "Pesquisa sobre",
     "Sharing" : "Partilha",
     "Tags" : "Etiquetas",

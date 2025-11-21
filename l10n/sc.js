@@ -144,6 +144,7 @@ OC.L10N.register(
     "Open details" : "Aberi is detàllios",
     "Details" : "Detàllios",
     "Use bigger card view" : "Imprea bista cun ischedas prus mannas",
+    "Appearance" : "Aspetu",
     "Show boards in calendar/tasks" : "Mustra lavagnas in calendàriu/fainas",
     "Search" : "Chirca",
     "Loading board" : "Carrighende lavagna",

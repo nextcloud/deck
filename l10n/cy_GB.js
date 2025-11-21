@@ -9,6 +9,7 @@ OC.L10N.register(
     "Cancel" : "Diddymu",
     "Open" : "Ar Agor",
     "Details" : "Manylion",
+    "General" : "Cyffredinol",
     "Search" : "Chwilio",
     "Tags" : "Tagiau",
     "Activity" : "Gweithred",
