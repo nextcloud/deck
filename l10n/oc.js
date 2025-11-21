@@ -19,6 +19,7 @@ OC.L10N.register(
     "Open" : "Dobrir",
     "Completed" : "Acabat",
     "Details" : "Detalhs",
+    "General" : "Generals",
     "Search" : "Recercar",
     "Sharing" : "Partiment",
     "Tags" : "Etiquetas",

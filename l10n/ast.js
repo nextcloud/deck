@@ -34,6 +34,8 @@ OC.L10N.register(
     "Next 30 days" : "Los próximos 30 díes",
     "Open details" : "Abrir los detalles",
     "Details" : "Detalles",
+    "General" : "Xeneral",
+    "Appearance" : "Aspeutu",
     "Search" : "Guetar",
     "Sharing" : "Comparticiñon",
     "Tags" : "Etiquetes",

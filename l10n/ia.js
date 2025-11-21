@@ -13,6 +13,7 @@ OC.L10N.register(
     "Cancel" : "Cancellar",
     "Completed" : "Completate",
     "Details" : "Detalios",
+    "General" : "General",
     "Search" : "Cercar",
     "Sharing" : "Compartente",
     "Tags" : "Etiquettas",

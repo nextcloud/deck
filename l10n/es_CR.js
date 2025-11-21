@@ -27,6 +27,7 @@ OC.L10N.register(
     "Hide archived cards" : "Ocultar tarjetas archivadas",
     "Show archived cards" : "Mostrar tarjetas archivadas",
     "Details" : "Detalles",
+    "General" : "General",
     "Search" : "Buscar",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",

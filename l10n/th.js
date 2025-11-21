@@ -24,6 +24,8 @@ OC.L10N.register(
     "Completed" : "เสร็จแล้ว",
     "Overdue" : "เกินกำหนด",
     "Details" : "รายละเอียด",
+    "General" : "ทั่วไป",
+    "Appearance" : "ลักษณะที่ปรากฏ",
     "Search" : "ค้นหา",
     "Sharing" : "การแชร์",
     "Tags" : "แท็ก",

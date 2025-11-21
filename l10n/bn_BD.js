@@ -8,6 +8,7 @@ OC.L10N.register(
     "Cancel" : "বাতির",
     "Completed" : "সুসম্পন্ন",
     "Details" : "বিসতারিত",
+    "General" : "সাধারণ",
     "Search" : "Search",
     "Sharing" : "ভাগাভাগিরত",
     "Tags" : "ট্যাগ",

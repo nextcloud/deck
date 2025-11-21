@@ -39,6 +39,8 @@ OC.L10N.register(
     "Show archived cards" : "Rādīt arhivētās kartes",
     "Open details" : "Atvērt informāciju",
     "Details" : "Informācija",
+    "General" : "Vispārīgi",
+    "Appearance" : "Izskats",
     "Search" : "Meklēt",
     "Sharing" : "Koplietošana",
     "Tags" : "Birkas",

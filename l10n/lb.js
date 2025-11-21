@@ -9,6 +9,7 @@ OC.L10N.register(
     "Cancel" : "Ofbriechen",
     "Completed" : "Erfëllt",
     "Details" : "Detailer",
+    "General" : "Allgemeng",
     "Search" : "Search",
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",
