@@ -187,7 +187,7 @@ OC.L10N.register(
     "Appearance" : "Aparência",
     "Show card ID badge" : "Exibir o distintivo de identificação do cartão",
     "Show boards in calendar/tasks" : "Exibir os painéis em calendários/tarefas",
-    "Admin settings" : "Configurações de administrador",
+    "Admin settings" : "Configurações administrativas",
     "Limit board creation to some groups" : "Limitar a criação de painéis a alguns grupos",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Os usuários fora desses grupos não poderão criar seus próprios painéis, mas ainda poderão trabalhar nos painéis que foram compartilhados com eles.",
     "Board actions" : "Ações de painel",
