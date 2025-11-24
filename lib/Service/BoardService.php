@@ -186,7 +186,7 @@ class BoardService {
 		$board->setOwner($userId);
 		$board->setColor($color);
 		/** @var Board $board */
-		$board = $this->boardMapper->insert($board);
+		$new_board = $this->boardMapper->insert($board);
 
 		// create new labels
 		$default_labels = [
@@ -200,23 +200,23 @@ class BoardService {
 			$label = new Label();
 			$label->setColor($labelColor);
 			$label->setTitle($labelTitle);
-			$label->setBoardId($board->getId());
+			$label->setBoardId($new_board->getId());
 			$labels[] = $this->labelMapper->insert($label);
 		}
-		$board->setLabels($labels);
-		$this->boardMapper->mapOwner($board);
-		$permissions = $this->permissionService->matchPermissions($board);
-		$board->setPermissions([
+		$new_board->setLabels($labels);
+		$this->boardMapper->mapOwner($new_board);
+		$permissions = $this->permissionService->matchPermissions($new_board);
+		$new_board->setPermissions([
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->eventDispatcher->dispatchTyped(new BoardCreatedEvent($new_board));
 		$this->changeHelper->boardChanged($new_board->getId());
 
-		return $board;
+		return $new_board;
 	}
 
 	/**
