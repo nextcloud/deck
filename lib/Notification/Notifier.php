@@ -138,7 +138,7 @@ class Notifier implements INotifier {
 				}
 
 				$notification->setParsedSubject(
-					$l->t('The card "%s" on "%s" has reached its due date.', $params)
+					$l->t('The card "%1$s" on "%2$s" has reached its due date.', $params)
 				);
 				$notification->setRichSubject(
 					$l->t('The card {deck-card} on {deck-board} has reached its due date.'),

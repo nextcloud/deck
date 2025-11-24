@@ -8,6 +8,8 @@ OC.L10N.register(
     "File" : "File",
     "Cancel" : "இரத்து செய்க",
     "Details" : "விவரங்கள்",
+    "General" : "பொதுவான",
+    "Search" : "தேடுதல்",
     "Tags" : "சீட்டுகள்",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -22,13 +24,12 @@ OC.L10N.register(
     "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
     "seconds ago" : "செக்கன்களுக்கு முன்",
-    "Keyboard shortcuts" : "விசைப்பலகை குறுக்குவழிகள்",
-    "Search" : "தேடுதல்",
     "Shared with you" : "Shared with you",
     "Export" : "ஏற்றுமதி",
     "Close" : "மூடுக",
     "Share" : "பகிர்வு",
     "Personal" : "தனிப்பட்ட",
+    "Keyboard shortcuts" : "விசைப்பலகை குறுக்குவழிகள்",
     "Today" : "இன்று"
 },
 "nplurals=2; plural=(n != 1);");

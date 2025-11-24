@@ -13,6 +13,9 @@
     "Completed" : "Yemmed",
     "Open details" : "Ldi talqayt",
     "Details" : "Talqayt",
+    "General" : "Amatu",
+    "Appearance" : "Udem",
+    "Search" : "Nadi",
     "Sharing" : "Beṭṭu",
     "Tags" : "Tibzimin",
     "Activity" : "Armud",
@@ -29,14 +32,13 @@
     "Reply" : "Err",
     "Description" : "Aglam",
     "Open link" : "Nɣel aseɣwen",
-    "Keyboard shortcuts" : "Inegzumen n unasiw",
-    "Ctrl" : "Ctrl",
-    "Search" : "Nadi",
     "Cancel edit" : "Sefsex aseẓreg",
     "No notifications" : "Ulac tisezmal",
     "Close" : "Mdel",
     "Share" : "Bḍu",
     "Personal" : "Udmawan",
+    "Keyboard shortcuts" : "Inegzumen n unasiw",
+    "Ctrl" : "Ctrl",
     "Today" : "Ass-a"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

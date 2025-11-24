@@ -11,6 +11,8 @@
     "Cancel" : "Cancellar",
     "Completed" : "Completate",
     "Details" : "Detalios",
+    "General" : "General",
+    "Search" : "Cercar",
     "Sharing" : "Compartente",
     "Tags" : "Etiquettas",
     "Activity" : "Activitate",
@@ -31,9 +33,6 @@
     "Description" : "Description",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
-    "Keyboard shortcuts" : "Combinationes de claves",
-    "Keyboard shortcut" : "Combination de claves",
-    "Search" : "Cercar",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
     "Advanced options" : "Optiones avantiate",
@@ -41,6 +40,8 @@
     "Close" : "Clauder",
     "Share" : "Compartir",
     "Personal" : "Personal",
+    "Keyboard shortcuts" : "Combinationes de claves",
+    "Keyboard shortcut" : "Combination de claves",
     "Today" : "Hodie",
     "Tomorrow" : "Deman"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

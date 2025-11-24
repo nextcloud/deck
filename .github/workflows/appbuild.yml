@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4.2.2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4.4.0
+      uses: actions/setup-node@v6.0.0
       with:
         node-version: ${{ matrix.node-version }}
     - name: Set up npm7
@@ -37,7 +37,7 @@ jobs:
         uname -a
         RUST_BACKTRACE=1 krankerl --version
         RUST_BACKTRACE=1 krankerl package
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: Deck app tarball
         path: build/artifacts/deck.tar.gz

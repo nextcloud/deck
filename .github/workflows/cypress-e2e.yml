@@ -20,9 +20,11 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20.x]
-        # containers: [1, 2, 3]
+        containers: [1, 2, 3]
         php-versions: [ '8.2' ]
         server-versions: [ 'master' ]
+
+    name: runner ${{ matrix.containers }}
 
     env:
       extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu
@@ -41,7 +43,7 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.4.0
+        uses: actions/setup-node@v6.0.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -135,9 +137,11 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           npm_package_name: ${{ env.APP_NAME }}
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
 
       - name: Upload test failure screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: failure()
         with:
           name: Upload screenshots
@@ -145,9 +149,21 @@ jobs:
           retention-days: 5
 
       - name: Upload nextcloud logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: failure()
         with:
           name: Upload nextcloud log
           path: data/nextcloud.log
           retention-days: 5
+
+  summary:
+      runs-on: ubuntu-latest-low
+      needs: [ cypress ]
+
+      if: always()
+
+      name: cypress-summary
+
+      steps:
+        - name: Summary status
+          run: if ${{ needs.cypress.result != 'success' && needs.cypress.result != 'skipped' }}; then exit 1; fi

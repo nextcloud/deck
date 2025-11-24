@@ -122,7 +122,10 @@
 									class="checkbox"
 									:value="user.uid"
 									@change="setFilter">
-								<label :for="user.uid"><NcAvatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
+								<label :for="user.uid"><NcAvatar :user="user.uid"
+									:size="24"
+									:disable-menu="true"
+									:hide-status="true" /> {{ user.displayname }}</label>
 							</div>
 
 							<h3>{{ t('deck', 'Filter by status') }}</h3>
