@@ -188,39 +188,13 @@ export default function cardModuleFactory() {
 				return state.cards.find((card) => card.id === id)
 			},
 		},
-		cardById: state => (id) => {
-			return state.cards.find((card) => card.id === id)
-		},
-	},
-	mutations: {
-		addCard(state, card) {
-			card.labels = card.labels || []
-			card.assignedUsers = card.assignedUsers || []
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				const existingCard = state.cards.find(_card => _card.id === card.id)
-				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
-			} else {
-				state.cards.push(card)
-			}
-		},
-		deleteCard(state, card) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				state.cards.splice(existingIndex, 1)
-			}
-		},
-		updateCard(state, card) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				Vue.set(state.cards, existingIndex, Object.assign({}, state.cards[existingIndex], card))
-			}
-		},
-		updateCardsReorder(state, cards) {
-			for (const newCard of cards) {
-				const existingIndex = state.cards.findIndex(_card => _card.id === newCard.id)
+		mutations: {
+			addCard(state, card) {
+				card.labels = card.labels || []
+				card.assignedUsers = card.assignedUsers || []
+				const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 				if (existingIndex !== -1) {
-					const existingCard = state.cards[existingIndex]
+					const existingCard = state.cards.find(_card => _card.id === card.id)
 					Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
 				} else {
 					state.cards.push(card)
