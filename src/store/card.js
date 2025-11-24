@@ -205,39 +205,13 @@ export default function cardModuleFactory() {
 				return state.cards.find((card) => card.id === id)
 			},
 		},
-		cardById: state => (id) => {
-			return state.cards.find((card) => card.id === id)
-		},
-	},
-	mutations: {
-		addCard(state, card) {
-			card.labels = card.labels || []
-			card.assignedUsers = card.assignedUsers || []
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				const existingCard = state.cards.find(_card => _card.id === card.id)
-				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
-			} else {
-				state.cards.push(card)
-			}
-		},
-		deleteCard(state, card) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				state.cards.splice(existingIndex, 1)
-			}
-		},
-		updateCard(state, card) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				Vue.set(state.cards, existingIndex, Object.assign({}, state.cards[existingIndex], card))
-			}
-		},
-		updateCardsReorder(state, cards) {
-			for (const newCard of cards) {
-				const existingIndex = state.cards.findIndex(_card => _card.id === newCard.id)
+		mutations: {
+			addCard(state, card) {
+				card.labels = card.labels || []
+				card.assignedUsers = card.assignedUsers || []
+				const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 				if (existingIndex !== -1) {
-					const existingCard = state.cards[existingIndex]
+					const existingCard = state.cards.find(_card => _card.id === card.id)
 					Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
 				} else {
 					state.cards.push(card)
@@ -248,68 +222,11 @@ export default function cardModuleFactory() {
 				if (existingIndex !== -1) {
 					state.cards.splice(existingIndex, 1)
 				}
-			}
-		},
-		updateCardProperty(state, { card, property }) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				Vue.set(state.cards[existingIndex], property, card[property])
-				Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
-			}
-		},
-		cardSetAttachmentCount(state, { cardId, count }) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
-			if (existingIndex !== -1) {
-				Vue.set(state.cards[existingIndex], 'attachmentCount', count)
-			}
-		},
-		cardIncreaseAttachmentCount(state, cardId) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
-			if (existingIndex !== -1) {
-				Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount + 1)
-			}
-		},
-		cardDecreaseAttachmentCount(state, cardId) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
-			if (existingIndex !== -1) {
-				Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount - 1)
-			}
-		},
-		addNewCard(state, card) {
-			state.cards.push(card)
-		},
-		setCards(state, cards) {
-			const deletedCards = state.cards.filter(_card => {
-				return cards.findIndex(c => _card.id === c.id) === -1
-			})
-			for (const card of deletedCards) {
-				this.commit('deleteCard', card)
-			}
-			for (const card of cards) {
-				this.commit('addCard', card)
-			}
-		},
-	},
-	actions: {
-		async addCard({ commit }, card) {
-			const createdCard = await apiClient.addCard(card)
-			commit('addCard', createdCard)
-			return createdCard
-		},
-		async updateCardTitle({ commit }, card) {
-			const updatedCard = await apiClient.updateCard(card)
-			commit('updateCardProperty', { property: 'title', card: updatedCard })
-		},
-		async moveCard({ commit }, card) {
-			const updatedCard = await apiClient.updateCard(card)
-			commit('deleteCard', updatedCard)
-		},
-		async reorderCard({ commit, getters }, card) {
-			let i = 0
-			const newCards = []
-			for (const c of getters.cardsByStack(card.stackId)) {
-				if (c.id === card.id) {
-					newCards.push(card)
+			},
+			updateCard(state, card) {
+				const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+				if (existingIndex !== -1) {
+					Vue.set(state.cards, existingIndex, Object.assign({}, state.cards[existingIndex], card))
 				}
 			},
 			updateCardsReorder(state, cards) {
@@ -377,11 +294,6 @@ export default function cardModuleFactory() {
 			},
 		},
 		actions: {
-			async cloneCard({ commit }, { cardId, targetStackId }) {
-				const createdCard = await apiClient.cloneCard(cardId, targetStackId)
-				commit('addCard', createdCard)
-				return createdCard
-			},
 			async addCard({ commit }, card) {
 				const createdCard = await apiClient.addCard(card)
 				commit('addCard', createdCard)
@@ -390,7 +302,6 @@ export default function cardModuleFactory() {
 			async updateCardTitle({ commit }, card) {
 				const updatedCard = await apiClient.updateCard(card)
 				commit('updateCardProperty', { property: 'title', card: updatedCard })
-				commit('updateCardProperty', { property: 'referenceData', card: updatedCard })
 			},
 			async moveCard({ commit }, card) {
 				const updatedCard = await apiClient.updateCard(card)

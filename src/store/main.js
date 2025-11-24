@@ -102,8 +102,14 @@ export default function storeFactory() {
 			assignables: state => {
 				return [
 					...state.assignableUsers.map((user) => ({ ...user, type: 0 })),
-					...state.currentBoard.acl.filter((acl) => acl.type === 1 && typeof acl.participant === 'object').map((group) => ({ ...group.participant, type: 1 })),
-					...state.currentBoard.acl.filter((acl) => acl.type === 7 && typeof acl.participant === 'object').map((circle) => ({ ...circle.participant, type: 7 })),
+					...state.currentBoard.acl.filter((acl) => acl.type === 1 && typeof acl.participant === 'object').map((group) => ({
+						...group.participant,
+						type: 1,
+					})),
+					...state.currentBoard.acl.filter((acl) => acl.type === 7 && typeof acl.participant === 'object').map((circle) => ({
+						...circle.participant,
+						type: 7,
+					})),
 				]
 			},
 			noneArchivedBoards: state => {
@@ -420,72 +426,32 @@ export default function storeFactory() {
 					return err
 				}
 			},
-			async importBoard({ commit }, file) {
+			async cloneBoard({ commit }, boardData) {
 				try {
-					const board = await apiClient.importBoard(file)
-					commit('addBoard', board)
-				})
-		},
-		/**
-		 * @param commit.commit
-		 * @param commit
-		 * @param state
-		 * @param {Board} board
-		 */
-		unarchiveBoard({ commit }, board) {
-			const boardCopy = JSON.parse(JSON.stringify(board))
-			boardCopy.archived = false
-			apiClient.updateBoard(boardCopy)
-				.then((board) => {
-					commit('addBoard', board)
-				})
-		},
-		/**
-		 * Updates a board API side.
-		 *
-		 * @param commit.commit
-		 * @param commit
-		 * @param board The board to update.
-		 * @return {Promise<void>}
-		 */
-		async updateBoard({ commit }, board) {
-			const storedBoard = await apiClient.updateBoard(board)
-			commit('addBoard', storedBoard)
-		},
-		async createBoard({ commit }, boardData) {
-			try {
-				const board = await apiClient.createBoard(boardData)
-				commit('addBoard', board)
-			} catch (err) {
-				return err
-			}
-		},
-		async cloneBoard({ commit }, boardData) {
-			try {
-				const newBoard = await apiClient.cloneBoard(boardData)
-				commit('cloneBoard', newBoard)
-				return newBoard
-			} catch (err) {
-				return err
-			}
-		},
-		removeBoard({ commit }, board) {
-			commit('removeBoard', board)
-		},
-		async loadBoards({ commit }) {
-			const boards = await apiClient.loadBoards()
-			commit('setBoards', boards)
-		},
-		async loadSharees({ commit }, query) {
-			const params = new URLSearchParams()
-			if (typeof query === 'undefined') {
-				return
-			}
-			params.append('search', query)
-			params.append('format', 'json')
-			params.append('perPage', 20)
-			params.append('itemType', [0, 1, 4, 7])
-			params.append('lookup', false)
+					const newBoard = await apiClient.cloneBoard(boardData)
+					commit('cloneBoard', newBoard)
+					return newBoard
+				} catch (err) {
+					return err
+				}
+			},
+			removeBoard({ commit }, board) {
+				commit('removeBoard', board)
+			},
+			async loadBoards({ commit }) {
+				const boards = await apiClient.loadBoards()
+				commit('setBoards', boards)
+			},
+			async loadSharees({ commit }, query) {
+				const params = new URLSearchParams()
+				if (typeof query === 'undefined') {
+					return
+				}
+				params.append('search', query)
+				params.append('format', 'json')
+				params.append('perPage', 20)
+				params.append('itemType', [0, 1, 4, 7])
+				params.append('lookup', false)
 
 				const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), { params })
 				commit('setSharees', response.data.ocs.data)
