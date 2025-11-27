@@ -5,40 +5,11 @@
 
 <template>
 	<div class="comment-form">
-		<form @submit.prevent="submit">
-			<At ref="at"
-				v-model="commentText"
-				:members="members"
-				name-key="displayname"
-				:tab-select="true">
-				<template #item="s">
-					<NcAvatar class="atwho-li--avatar" :user="s.item.uid" :size="24" />
-					<span class="atwho-li--name" v-text="s.item.displayname" />
-				</template>
-				<template #embeddedItem="scope">
-					<span>
-						<NcUserBubble v-if="scope.current.uid"
-							:data-mention-id="scope.current.uid"
-							:user="scope.current.uid"
-							:display-name="scope.current.displayname" />
-					</span>
-				</template>
-				<div ref="contentEditable"
-					dir="auto"
-					class="comment-form__contenteditable"
-					contenteditable
-					@keydown.enter="handleKeydown"
-					@paste="onPaste"
-					@blur="error = null"
-					@input="validate()" />
-			</At>
-			<input :title="t('deck', 'Save')"
-				class="icon-confirm"
-				type="submit"
-				value=""
-				:disabled="commentText.length === null || error">
-			<slot />
-		</form>
+		<NcRichContenteditable v-model="commentText"
+			:auto-complete="autoComplete"
+			:maxlength="1000"
+			:user-data="members"
+			@submit="submit" />
 		<p v-if="error">
 			{{ error }}
 		</p>
@@ -47,16 +18,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import { NcUserBubble, NcAvatar } from '@nextcloud/vue'
-import At from 'vue-at'
-import { rawToParsed } from '../../helpers/mentions.js'
+import { NcRichContenteditable } from '@nextcloud/vue'
 
 export default {
 	name: 'CommentForm',
 	components: {
-		At,
-		NcAvatar,
-		NcUserBubble,
+		NcRichContenteditable,
 	},
 	props: {
 		value: {
@@ -75,7 +42,16 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 		members() {
-			return this.currentBoard.users
+			const obj = {}
+			this.currentBoard.users.forEach(user => {
+				obj[user.uid] = {
+					icon: 'icon-user',
+					id: user.uid,
+					label: user.displayname,
+					source: 'users',
+				}
+			})
+			return obj
 		},
 	},
 	watch: {
@@ -84,9 +60,12 @@ export default {
 		},
 	},
 	methods: {
+		autoComplete(search, callback) {
+			callback(Object.values(this.members))
+		},
 		validate(submit) {
 			this.error = null
-			const content = this.contentEditableToParsed()
+			const content = this.commentText
 			if (submit && content.length === 0) {
 				this.error = t('deck', 'The comment cannot be empty.')
 			}
@@ -107,93 +86,16 @@ export default {
 				this.$emit('submit', text)
 			}
 		},
-		/* All credits for this go to the talk app
-		 * https://github.com/nextcloud/spreed/blob/e69740b372e17eec4541337b47baa262a5766510/src/components/NewMessageForm/NewMessageForm.vue#L100-L143
-		 */
-		contentEditableToParsed() {
-			if (!this.$refs.contentEditable) {
-				return
-			}
-			const node = this.$refs.contentEditable.cloneNode(true)
-			const mentions = node.querySelectorAll('span[data-at-embedded]')
-			mentions.forEach(mention => {
-				// FIXME Adding a space after the mention should be improved to
-				// do it or not based on the next element instead of always
-				// adding it.
-				// FIXME user names can contain spaces, in that case they need to be wrapped @"user name" [a-zA-Z0-9\ _\.@\-']+
-				let mentionValue
-				if (mention.attributes['data-at-embedded'].value === 'true') {
-					mentionValue = mention.parentNode.parentNode.querySelector('.user-bubble__wrapper').attributes['data-mention-id'].value
-				} else {
-					mentionValue = mention.firstChild.attributes['data-mention-id'].value
-				}
-				if (mentionValue.indexOf(' ') !== -1) {
-					mention.replaceWith(' @"' + mentionValue + '" ')
-				} else {
-					mention.replaceWith(' @' + mentionValue + ' ')
-				}
-			})
-
-			return rawToParsed(node.innerHTML)
-		},
-
-		/**
-		 * Emits the submit event when enter is pressed (look
-		 * at the v-on in the template) unless shift is pressed:
-		 * in this case a new line will be created.
-		 *
-		 * @param {object} event the event object;
-		 */
-		handleKeydown(event) {
-			// Prevent submit event when vue-at panel is open, as that should
-			// just select the mention from the panel.
-			if (this.atwho) {
-				return
-			}
-
-			// TODO: add support for CTRL+ENTER new line
-			if (!(event.shiftKey)) {
-				event.preventDefault()
-				this.submit()
-			}
-		},
-
-		onPaste(e) {
-			e.preventDefault()
-			const text = e.clipboardData.getData('text/plain')
-			document.execCommand('insertText', false, text)
-		},
 	},
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 	@import '../../css/comments';
 
-	.comment-form__contenteditable {
-		word-break: break-word;
-		border-radius: var(--border-radius-large);
-		padding: var(--default-grid-baseline);
-		max-height: 200px;
-		overflow: auto;
-	}
-
-	.atwho-wrap {
-		width: 100%;
-		& > div[contenteditable] {
-			width: 100%;
-
-			&:deep > span > div {
-				vertical-align: middle;
-			}
-		}
-	}
-
-	.comment-form:deep(.atwho-li) {
-		height: 32px;
-	}
-
-	.atwho-li--avatar {
-		margin-right: 10px;
+	[class^="_tribute-container-autocomplete_"],
+	[class*=" _tribute-container-autocomplete_"],
+	[class*="_tribute-container-autocomplete_"] {
+		z-index: 9999 !important;
 	}
 </style>
