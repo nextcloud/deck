@@ -251,6 +251,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "{count} نظر، { خوانده نشده} خوانده نشده",
     "Todo items" : "Todo items",
     "Edit card title" : "Edit card title",
+    "Open link" : "لینک را باز کنید",
     "Card deleted" : "برگه پاک شد",
     "Edit title" : "ویرایش عنوان",
     "Assign to me" : "به من اختصاص دهید",
