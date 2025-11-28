@@ -93,6 +93,21 @@ export class BoardApi {
 			})
 	}
 
+	leaveBoard(board) {
+		return axios.post(this.url(`/boards/${board.id}/leave`))
+			.then(
+				() => {
+					return Promise.resolve()
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	loadBoards() {
 		return axios.get(this.url('/boards'))
 			.then(

@@ -64,6 +64,11 @@ class BoardController extends ApiController {
 	}
 
 	#[NoAdminRequired]
+	public function leave(int $boardId) {
+		return $this->boardService->leave($boardId);
+	}
+
+	#[NoAdminRequired]
 	public function getUserPermissions(int $boardId): array {
 		$permissions = $this->permissionService->getPermissions($boardId);
 		return [
