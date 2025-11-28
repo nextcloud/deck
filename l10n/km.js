@@ -18,7 +18,6 @@ OC.L10N.register(
     "Edit" : "កែប្រែ",
     "Download" : "ទាញយក",
     "Modified" : "បាន​កែ​ប្រែ",
-    "Save" : "រក្សាទុក",
     "Created:" : "បាន​បង្កើត៖",
     "Reply" : "ឆ្លើយតប",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Close" : "បិទ",
     "Share" : "ចែក​រំលែក",
     "Personal" : "ផ្ទាល់​ខ្លួន",
+    "Save" : "រក្សាទុក",
     "Today" : "ថ្ងៃ​នេះ"
 },
 "nplurals=1; plural=0;");

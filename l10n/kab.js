@@ -29,7 +29,6 @@ OC.L10N.register(
     "Modified" : "Yettwabeddel",
     "Created" : "Yettwarna.",
     "Comments" : "Commentaires",
-    "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
     "Description" : "Aglam",
@@ -39,6 +38,7 @@ OC.L10N.register(
     "Close" : "Mdel",
     "Share" : "Bḍu",
     "Personal" : "Udmawan",
+    "Save" : "Sekles",
     "Keyboard shortcuts" : "Inegzumen n unasiw",
     "Ctrl" : "Ctrl",
     "Today" : "Ass-a"

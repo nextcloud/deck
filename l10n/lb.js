@@ -22,7 +22,6 @@ OC.L10N.register(
     "Download" : "Eroflueden",
     "Modified" : "Geännert",
     "Comments" : "Kommentarer",
-    "Save" : "Späicheren",
     "Created:" : "Erstallt:",
     "Reply" : "Äntwerten",
     "Update" : "Update",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Close" : "Zoumaachen",
     "Share" : "Deelen",
     "Personal" : "Perséinlech",
+    "Save" : "Späicheren",
     "Today" : "Haut",
     "Tomorrow" : "Muer"
 },

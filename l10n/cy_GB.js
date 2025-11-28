@@ -21,7 +21,6 @@ OC.L10N.register(
     "Edit" : "Golygu",
     "Download" : "Llwytho i lawr",
     "Modified" : "Addaswyd",
-    "Save" : "Cadw",
     "Created:" : "Crewyd:",
     "Update" : "Diweddaru",
     "Description" : "Disgrifiad",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Close" : "Cau",
     "Share" : "Rhannu",
     "Personal" : "Personol",
+    "Save" : "Cadw",
     "Keyboard shortcuts" : "Llwybrau byr bysellfwrdd",
     "Today" : "Heddiw"
 },

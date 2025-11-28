@@ -22,7 +22,6 @@ OC.L10N.register(
     "Edit" : "සංස්කරණය",
     "Download" : "බාගන්න",
     "Comments" : "අදහස්",
-    "Save" : "සුරකින්න",
     "Reply" : "පිළිතුර",
     "Update" : "යාවත්කාල",
     "Description" : "විස්තරය",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Example Task 3" : "උදාහරණ කාර්යය 3",
     "Example Task 2" : "උදාහරණ කාර්යය 2",
     "Example Task 1" : "උදාහරණ කාර්යය 1",
+    "Save" : "සුරකින්න",
     "Today" : "අද",
     "Tomorrow" : "හෙට"
 },

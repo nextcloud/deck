@@ -16,7 +16,6 @@ OC.L10N.register(
     "Edit" : "Sunting",
     "Download" : "Muat turun",
     "Modified" : "Dimodifikasi",
-    "Save" : "Simpan",
     "Created:" : "Telah dibina:",
     "Update" : "Kemaskini",
     "Description" : "Keterangan",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Close" : "Tutup",
     "Share" : "Kongsi",
     "Personal" : "Peribadi",
+    "Save" : "Simpan",
     "Today" : "Hari ini"
 },
 "nplurals=1; plural=0;");

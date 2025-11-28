@@ -27,7 +27,6 @@ OC.L10N.register(
     "Download" : "Yüklə",
     "Modified" : "Dəyişdirildi",
     "Comments" : "Şərhlər",
-    "Save" : "Saxla",
     "Created:" : "Yaradıldı:",
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
@@ -39,6 +38,7 @@ OC.L10N.register(
     "Close" : "Bağla",
     "Share" : "Paylaş",
     "Personal" : "Şəxsi",
+    "Save" : "Saxla",
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah"
 },
