@@ -44,7 +44,6 @@
     "Download" : "Yuklab olish",
     "Modified" : "Modified",
     "Comments" : "Comments",
-    "Save" : "Saqlash",
     "In reply to" : "ga javoban",
     "Reply" : "Javob bering",
     "Update" : "Update",
@@ -72,6 +71,7 @@
     "Due date" : "Muddati",
     "Share" : "Ulashish",
     "Personal" : "Personal",
+    "Save" : "Saqlash",
     "Keyboard shortcuts" : "Klaviatura yorliqlari",
     "Today" : "Today",
     "Tomorrow" : "Ertaga"

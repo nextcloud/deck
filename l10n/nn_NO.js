@@ -25,7 +25,6 @@ OC.L10N.register(
     "Modified" : "Endra",
     "Created" : "Lagd",
     "Comments" : "Kommentarar",
-    "Save" : "Lagre",
     "Created:" : "Oppretta:",
     "Cancel reply" : "Avbryt svar",
     "Reply" : "Svare",
@@ -38,6 +37,7 @@ OC.L10N.register(
     "Close" : "Lat att",
     "Share" : "Del",
     "Personal" : "Personleg",
+    "Save" : "Lagre",
     "Keyboard shortcuts" : "Tastatursnarvegar",
     "Today" : "I dag"
 },

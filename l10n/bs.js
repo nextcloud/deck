@@ -19,7 +19,6 @@ OC.L10N.register(
     "Download" : "Preuzmi",
     "Modified" : "Izmijenjeno",
     "Comments" : "Komentari",
-    "Save" : "Spremi",
     "Update" : "Ažuriraj",
     "Description" : "Opis",
     "Shared with you" : "Shared with you",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
     "Share" : "Podjeli",
     "Personal" : "Osobno",
+    "Save" : "Spremi",
     "Keyboard shortcuts" : "Tipkovni prečaci",
     "Today" : "Danas",
     "Tomorrow" : "Sutra"

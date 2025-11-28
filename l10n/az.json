@@ -25,7 +25,6 @@
     "Download" : "Yüklə",
     "Modified" : "Dəyişdirildi",
     "Comments" : "Şərhlər",
-    "Save" : "Saxla",
     "Created:" : "Yaradıldı:",
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
@@ -37,6 +36,7 @@
     "Close" : "Bağla",
     "Share" : "Paylaş",
     "Personal" : "Şəxsi",
+    "Save" : "Saxla",
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

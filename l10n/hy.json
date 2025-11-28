@@ -22,7 +22,6 @@
     "Download" : "Ներբեռնել",
     "Modified" : "Փոփոխված",
     "Comments" : "Կարծիքներ",
-    "Save" : "Պահպանել",
     "Created:" : "Ստեղծված.",
     "Update" : "Թարմացնել",
     "Description" : "Նկարագրություն",
@@ -32,6 +31,7 @@
     "Close" : "Փակել",
     "Share" : "Կիսվել",
     "Personal" : "Անձնական",
+    "Save" : "Պահպանել",
     "Today" : "այսօր"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

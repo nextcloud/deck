@@ -20,7 +20,6 @@ OC.L10N.register(
     "Edit" : "সম্পাদনা",
     "Download" : "ডাউনলোড",
     "Modified" : "পরিবর্তিত",
-    "Save" : "সংরক্ষণ",
     "Created:" : "তৈরীর নির্ঘন্টঃ",
     "Reply" : "জবাব",
     "Update" : "পরিবর্ধন",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Close" : "বন্ধ",
     "Share" : "ভাগাভাগি কর",
     "Personal" : "ব্যক্তিগত",
+    "Save" : "সংরক্ষণ",
     "Keyboard shortcuts" : "কী-বোর্ড শর্টকাট",
     "Today" : "আজ",
     "Tomorrow" : "আগামীকাল"

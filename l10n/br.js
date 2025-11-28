@@ -33,7 +33,6 @@ OC.L10N.register(
     "Modified" : "Cheñchet",
     "Created" : "Krouet",
     "Comments" : "Displegadennoù",
-    "Save" : "Enrollañ",
     "Created:" : "Krouet :",
     "Reply" : "Respont",
     "Update" : "Adnevesaat",
@@ -45,6 +44,7 @@ OC.L10N.register(
     "Close" : "Serriñ",
     "Share" : "Rannan",
     "Personal" : "Personel",
+    "Save" : "Enrollañ",
     "Today" : "Hiziv",
     "Tomorrow" : "Warc'hoaz"
 },

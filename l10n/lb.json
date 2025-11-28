@@ -20,7 +20,6 @@
     "Download" : "Eroflueden",
     "Modified" : "Geännert",
     "Comments" : "Kommentarer",
-    "Save" : "Späicheren",
     "Created:" : "Erstallt:",
     "Reply" : "Äntwerten",
     "Update" : "Update",
@@ -32,6 +31,7 @@
     "Close" : "Zoumaachen",
     "Share" : "Deelen",
     "Personal" : "Perséinlech",
+    "Save" : "Späicheren",
     "Today" : "Haut",
     "Tomorrow" : "Muer"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

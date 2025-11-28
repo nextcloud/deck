@@ -24,7 +24,6 @@ OC.L10N.register(
     "Download" : "Ներբեռնել",
     "Modified" : "Փոփոխված",
     "Comments" : "Կարծիքներ",
-    "Save" : "Պահպանել",
     "Created:" : "Ստեղծված.",
     "Update" : "Թարմացնել",
     "Description" : "Նկարագրություն",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Close" : "Փակել",
     "Share" : "Կիսվել",
     "Personal" : "Անձնական",
+    "Save" : "Պահպանել",
     "Today" : "այսօր"
 },
 "nplurals=2; plural=(n != 1);");
