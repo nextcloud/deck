@@ -97,7 +97,6 @@ OC.L10N.register(
     "Modified" : "Modifita",
     "Created" : "Kreita",
     "Comments" : "Komentoj",
-    "Save" : "Konservi",
     "Created:" : "Kreita:",
     "Reply" : "Respondi",
     "Update" : "Ĝisdatigi",
@@ -133,6 +132,7 @@ OC.L10N.register(
     "Example Task 3" : "Ekzempla tasko 3",
     "Example Task 2" : "Ekzempla tasko 2",
     "Example Task 1" : "Ekzempla tasko 1",
+    "Save" : "Konservi",
     "Keyboard shortcuts" : "Fulmoklavoj",
     "Today" : "Hodiaŭ",
     "Tomorrow" : "Morgaŭ"

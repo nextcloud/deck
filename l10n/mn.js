@@ -31,7 +31,6 @@ OC.L10N.register(
     "Modified" : "Өөрчлөгдсөн",
     "Created" : "Үүсгэсэн",
     "Comments" : "Сэтгэгдлүүд",
-    "Save" : "Хадгалах",
     "Created:" : "Үүсгэсэн:",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
@@ -44,6 +43,7 @@ OC.L10N.register(
     "Export" : "Экспорт",
     "Share" : "Түгээх",
     "Personal" : "Хувийн",
+    "Save" : "Хадгалах",
     "Keyboard shortcut" : "Keyboard товчлуур",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш"

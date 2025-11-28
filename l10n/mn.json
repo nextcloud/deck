@@ -29,7 +29,6 @@
     "Modified" : "Өөрчлөгдсөн",
     "Created" : "Үүсгэсэн",
     "Comments" : "Сэтгэгдлүүд",
-    "Save" : "Хадгалах",
     "Created:" : "Үүсгэсэн:",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
@@ -42,6 +41,7 @@
     "Export" : "Экспорт",
     "Share" : "Түгээх",
     "Personal" : "Хувийн",
+    "Save" : "Хадгалах",
     "Keyboard shortcut" : "Keyboard товчлуур",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш"

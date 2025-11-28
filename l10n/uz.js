@@ -46,7 +46,6 @@ OC.L10N.register(
     "Download" : "Yuklab olish",
     "Modified" : "Modified",
     "Comments" : "Comments",
-    "Save" : "Saqlash",
     "In reply to" : "ga javoban",
     "Reply" : "Javob bering",
     "Update" : "Update",
@@ -74,6 +73,7 @@ OC.L10N.register(
     "Due date" : "Muddati",
     "Share" : "Ulashish",
     "Personal" : "Personal",
+    "Save" : "Saqlash",
     "Keyboard shortcuts" : "Klaviatura yorliqlari",
     "Today" : "Today",
     "Tomorrow" : "Ertaga"
