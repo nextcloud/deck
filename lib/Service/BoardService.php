@@ -432,6 +432,37 @@ class BoardService {
 		return $deletedAcl;
 	}
 
+	public function leave(int $boardId): ?Acl {
+		if ($this->permissionService->userIsBoardOwner($boardId)) {
+			throw new BadRequestException('Board owner cannot leave board');
+		}
+
+		$acl = $this->aclMapper->findParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $this->userId);
+
+		if (!$acl) {
+			throw new BadRequestException('Not a participant of this board');
+		}
+
+		$this->assignedUsersMapper->deleteByParticipantOnBoard($acl->getParticipant(), $acl->getBoardId());
+
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
+		$this->changeHelper->boardChanged($acl->getBoardId());
+
+		$version = \OCP\Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($acl->getBoardId());
+			} catch (\Exception $e) {
+			}
+		}
+
+		$deletedAcl = $this->aclMapper->delete($acl);
+		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
+
+		return $deletedAcl;
+	}
+
 	/**
 	 * @throws BadRequestException
 	 * @throws DbException
