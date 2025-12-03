@@ -312,7 +312,6 @@ export default {
 			newStackTitle: '',
 			stack: '',
 			filterVisible: false,
-			showArchived: false,
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
@@ -331,6 +330,7 @@ export default {
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 			searchQuery: state => state.searchQuery,
+			showArchived: state => state.showArchived,
 		}),
 		detailsRoute() {
 			return {
@@ -405,7 +405,6 @@ export default {
 		},
 		toggleShowArchived() {
 			this.$store.dispatch('toggleShowArchived')
-			this.showArchived = !this.showArchived
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }
