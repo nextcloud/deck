@@ -333,6 +333,7 @@ OC.L10N.register(
     "An error occurred" : "發生錯誤",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "您確定要刪除佈告欄 {title} 嗎？這將會刪除所有此佈告欄的資料，包含封存的卡片。",
     "Delete the board?" : "刪除佈告欄？",
+    "Leave" : "離開",
     "Exporting board..." : "正在匯出看板……",
     "Board details" : "佈告欄詳細資訊",
     "Edit board" : "編輯佈告欄",

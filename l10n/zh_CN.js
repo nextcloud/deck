@@ -332,6 +332,7 @@ OC.L10N.register(
     "An error occurred" : "发生错误",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "您确定要删除面板 {title} 吗？这将删除该面板的所有数据，包括已归档卡片。",
     "Delete the board?" : "是否删除面板？",
+    "Leave" : "离开",
     "Exporting board..." : "正在导出面板…",
     "Board details" : "面板详情",
     "Edit board" : "编辑面板",

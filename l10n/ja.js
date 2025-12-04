@@ -314,6 +314,7 @@ OC.L10N.register(
     "An error occurred" : "エラーが発生しました",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "ボード{title}を削除しますか? これにより、アーカイブされたカードを含むこのボードのすべてのデータが削除されます。",
     "Delete the board?" : "ボードを削除しますか？",
+    "Leave" : "出る",
     "Board details" : "ボードの詳細",
     "Edit board" : "ボードを編集",
     "Clone board" : "ボードを複製",

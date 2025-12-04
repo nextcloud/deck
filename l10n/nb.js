@@ -315,6 +315,7 @@ OC.L10N.register(
     "An error occurred" : "En feil oppsto",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Are du sikker på sletting av tavlen {title}? Handlingen vil slette all data i denne tavlen, inkludert arkiverte kort.",
     "Delete the board?" : "Slett tavlen?",
+    "Leave" : "Forlat",
     "Board details" : "Forumseksjonsdetaljer",
     "Edit board" : "Rediger tavle",
     "Clone board" : "Klon tavle",

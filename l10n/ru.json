@@ -315,6 +315,7 @@
     "An error occurred" : "Произошла ошибка",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Подтвердите удаление доски «{title}»; это действие приведёт к удалению также все данных, принадлежащих этой доске, включая карточки в архиве.",
     "Delete the board?" : "Удалить доску?",
+    "Leave" : "Выйти",
     "Board details" : "Свойства доски",
     "Edit board" : "Редактировать",
     "Clone board" : "Скопировать доску",

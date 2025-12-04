@@ -333,6 +333,7 @@ OC.L10N.register(
     "An error occurred" : "Tharla earráid",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "An bhfuil tú cinnte gur mhaith leat an clár {title} a scriosadh? Scriosfaidh sé seo sonraí uile an bhoird seo lena n-áirítear cártaí cartlainne.",
     "Delete the board?" : "An bhfuil fonn ort an clár a scriosadh?",
+    "Leave" : "Fág",
     "Exporting board..." : "Ag easpórtáil an bhoird...",
     "Board details" : "Sonraí an Bhoird",
     "Edit board" : "Cuir bord in eagar",

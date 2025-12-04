@@ -328,6 +328,7 @@ OC.L10N.register(
     "An error occurred" : "Vyskytla sa chyba",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Naozaj chcete chcete vymazať nástenku {title}? Toto zmaže všetky údaje o tejto nástenke vrátane archivovaných kariet.",
     "Delete the board?" : "Vymazať nástenku?",
+    "Leave" : "Odísť",
     "Exporting board..." : "Exportovanie nástenky...",
     "Board details" : "Podrobnosti o nástenke",
     "Edit board" : "Upraviť nástenku",

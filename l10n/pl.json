@@ -330,6 +330,7 @@
     "An error occurred" : "Wystąpił błąd",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Czy na pewno chcesz usunąć tablicę {title}? Spowoduje to usunięcie wszystkich danych z tej tablicy łącznie z zarchiwizowanymi kartami.",
     "Delete the board?" : "Usunąć tablicę?",
+    "Leave" : "Opuść",
     "Exporting board..." : "Eksportowanie tablicy…",
     "Board details" : "Szczegóły tablicy",
     "Edit board" : "Edytuj tablicę",

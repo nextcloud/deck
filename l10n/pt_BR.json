@@ -331,6 +331,7 @@
     "An error occurred" : "Ocorreu um erro",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Deseja realmente excluir o painel {title}? Isso excluirá todos os dados deste painel, inclusive os cartões arquivados.",
     "Delete the board?" : "Excluir o painel?",
+    "Leave" : "Sair",
     "Exporting board..." : "Exportando painel...",
     "Board details" : "Detalhes do painel",
     "Edit board" : "Editar painel",

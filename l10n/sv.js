@@ -333,6 +333,7 @@ OC.L10N.register(
     "An error occurred" : "Ett fel uppstod",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Är du säker på att du vill radera tavla {title}? Detta kommer radera all data som tillhör tavlan inklusive arkiverade kort.",
     "Delete the board?" : "Ta bort tavlan?",
+    "Leave" : "Lämna",
     "Exporting board..." : "Exporterar tavla...",
     "Board details" : "Taveldetaljer",
     "Edit board" : "Ändra tavla",
