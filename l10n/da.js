@@ -232,6 +232,7 @@ OC.L10N.register(
     "No reminder" : "Ingen påmindelse",
     "An error occurred" : "Der opstod en fejl",
     "Delete the board?" : "Slet tavlen?",
+    "Leave" : "Forlad",
     "Board details" : "Tavledetaljer",
     "Edit board" : "Redigér liste",
     "Clone board" : "Klon tavle",

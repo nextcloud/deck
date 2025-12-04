@@ -330,6 +330,7 @@
     "An error occurred" : "Hiba történt",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Biztos, hogy törli a(z) {title} táblát? Ez törölni fogja a tábla összes adatát, köztük az archivált kártyákat is.",
     "Delete the board?" : "Törli a táblát?",
+    "Leave" : "Elhagyás",
     "Exporting board..." : "Tábla exportálása…",
     "Board details" : "Tábla részletei",
     "Edit board" : "Tábla szerkesztése",

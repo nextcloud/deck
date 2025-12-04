@@ -333,6 +333,7 @@ OC.L10N.register(
     "An error occurred" : "Došlo k chybě",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Opravdu chcete tabuli {title} smazat? Toto smaže veškerá data této tabule, včetně archivovaných karet.",
     "Delete the board?" : "Smazat tabuli?",
+    "Leave" : "Opustit",
     "Exporting board..." : "Exportování tabule …",
     "Board details" : "Podrobnosti o tabuli",
     "Edit board" : "Upravit tabuli",

@@ -313,6 +313,7 @@
     "An error occurred" : "Errore bat gertatu da",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Ziur zaude {title} taula ezabatu nahi duzula? Honek taula honen datu guztiak ezabatuko ditu, artxibatutako txartelak barne.",
     "Delete the board?" : "Taula ezabatu?",
+    "Leave" : "Irten",
     "Board details" : "Taularen xehetasunak",
     "Edit board" : "Editatu taula",
     "Clone board" : "Klonatu taula",
