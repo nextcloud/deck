@@ -331,6 +331,7 @@
     "An error occurred" : "Tekkis viga",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Kas oled kindel, et soovid „{title}“ tahvli kustutada. Sellega saavad kustutatud kõik selle tahvli andmed, sealhulgas arhiveeritud kaardid.",
     "Delete the board?" : "Kas kustutame selle tahvli?",
+    "Leave" : "Lahku",
     "Exporting board..." : "Ekspordin tahvlit...",
     "Board details" : "Tahvli üksikasjad",
     "Edit board" : "Muuda tahvlit",

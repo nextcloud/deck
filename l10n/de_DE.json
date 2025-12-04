@@ -331,6 +331,7 @@
     "An error occurred" : "Es ist ein Fehler aufgetreten",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Möchten Sie das Board {title} wirklich löschen? Dadurch werden alle Daten dieses Boards einschließlich archivierter Karten gelöscht.",
     "Delete the board?" : "Das Board löschen?",
+    "Leave" : "Verlassen",
     "Exporting board..." : "Exportiere Board…",
     "Board details" : "Board-Details",
     "Edit board" : "Board bearbeiten",

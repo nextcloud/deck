@@ -287,6 +287,7 @@
     "An error occurred" : "A apărut o eraore",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Sunteți sigur că doriți să ștergeți panoul {title} ? Se vor șterge toate datele din panou, inclusiv cardurile arhivate.",
     "Delete the board?" : "Ștergeți panoul?",
+    "Leave" : "Părăsește",
     "Board details" : "Detalii panou",
     "Edit board" : "Editează panou",
     "Clone board" : "Clonează panou",

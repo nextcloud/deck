@@ -237,6 +237,7 @@ OC.L10N.register(
     "An error occurred" : "Tapahtui virhe",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Haluatko varmasti poistaa taulun {title}? Tämä poistaa kaikki taulun tiedot, mukaan lukien arkistoidut kortit.",
     "Delete the board?" : "Poistetaanko tämä taulu?",
+    "Leave" : "Poistu",
     "Board details" : "Taulun tiedot",
     "Edit board" : "Muokkaa taulua",
     "Clone board" : "Monista taulu",

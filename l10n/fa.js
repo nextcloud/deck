@@ -268,6 +268,7 @@ OC.L10N.register(
     "An error occurred" : "خطایی روی داد",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards.",
     "Delete the board?" : "Delete the board?",
+    "Leave" : "خروج",
     "Board details" : "Board details",
     "Edit board" : "ویرایش تخته",
     "Clone board" : "تخته شبیه‌سازی",

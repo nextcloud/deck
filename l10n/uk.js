@@ -332,6 +332,7 @@ OC.L10N.register(
     "An error occurred" : "Виникла помилка",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Ви впевнені, що хочете вилучити дошку {title}? Це призведе до видалення всіх даних цієї дошки, включно архівні картки.",
     "Delete the board?" : "Вилучити дошку?",
+    "Leave" : "Залишити",
     "Exporting board..." : "Експортна дошка...",
     "Board details" : "Деталі дошки",
     "Edit board" : "Редагувати дошку",

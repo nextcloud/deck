@@ -331,6 +331,7 @@
     "An error occurred" : "خاتالىق كۆرۈلدى",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "تاختا {title} نى ئۆچۈرمەكچىمۇ؟ بۇ ئارخىپ كارتىسىنى ئۆز ئىچىگە ئالغان بۇ تاختىنىڭ بارلىق سانلىق مەلۇماتلىرىنى ئۆچۈرۈۋېتىدۇ.",
     "Delete the board?" : "تاختىنى ئۆچۈرەمسىز؟",
+    "Leave" : "كەت",
     "Exporting board..." : "تاختىنى چىقىرۋاتىدۇ…",
     "Board details" : "مۇدىرىيەت تەپسىلاتلىرى",
     "Edit board" : "تاختاينى تەھرىرلەش",

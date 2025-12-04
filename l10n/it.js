@@ -331,6 +331,7 @@ OC.L10N.register(
     "An error occurred" : "Si è verificato un errore",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Sei sicuro di voler eliminare la lavagna {title}? Questo eliminerà tutti i dati di questa lavagna incluse le schede archiviate.",
     "Delete the board?" : "Vuoi eliminare la lavagna?",
+    "Leave" : "Lascia",
     "Exporting board..." : "Esportazione della lavagna...",
     "Board details" : "Dettagli lavagna",
     "Edit board" : "Modifica lavagna",

@@ -332,6 +332,7 @@ OC.L10N.register(
     "An error occurred" : "Hitilafu imetokea",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Una uhakika unataka kufuta bodi {title}? Hii itafuta data zote za bodi ikijumuisha kadi zilizohifadhiwa",
     "Delete the board?" : "Futa bodi?",
+    "Leave" : "Ondoka",
     "Exporting board..." : "Safirisha bodi...",
     "Board details" : "Maelezo ya bodi",
     "Edit board" : "Hariri bodi",

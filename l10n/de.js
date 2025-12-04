@@ -333,6 +333,7 @@ OC.L10N.register(
     "An error occurred" : "Es ist ein Fehler aufgetreten",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Möchtest du wirklich das Board {title} mit all seinen Daten einschließlich der archivierten Karten löschen?",
     "Delete the board?" : "Das Board löschen?",
+    "Leave" : "Verlassen",
     "Exporting board..." : "Exportiere Board...",
     "Board details" : "Boarddetails",
     "Edit board" : "Board bearbeiten",
