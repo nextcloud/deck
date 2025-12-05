@@ -95,6 +95,7 @@ OC.L10N.register(
     "All cards" : "Toles tarxetes",
     "No reminder" : "Nun hai nengún recordatoriu",
     "An error occurred" : "Prodúxose un error",
+    "Leave" : "Colar",
     "No notifications" : "Nun hai nengún avisu",
     "Clone cards" : "Clonar les tarxetes",
     "Advanced options" : "Opciones avanzaes",
