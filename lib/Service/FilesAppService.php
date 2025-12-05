@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -7,6 +9,7 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\CardMapper;
@@ -16,7 +19,9 @@ use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
 use OCP\Files\Folder;
+use OCP\Files\IFilenameValidator;
 use OCP\Files\IMimeTypeDetector;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IDBConnection;
@@ -29,6 +34,13 @@ use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class FilesAppService implements IAttachmentService, ICustomAttachmentService {
+	/**
+	 * In MacOs case since it allows using "/", there is the conversion of "/" to ":" in file name after upload, this handling is there
+	 *  since it can be confusing for users , it's mapped now for better UX.
+	 * Reason is not having access to the original filename because of early sanitization in the request lifecycle.
+	 */
+	private const SANITIZED_CHAR_MAPPING = [':' => '/'];
+
 	private IRequest $request;
 	private IRootFolder $rootFolder;
 	private DeckShareProvider $shareProvider;
@@ -42,6 +54,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	private CardMapper $cardMapper;
 	private LoggerInterface $logger;
 	private IDBConnection $connection;
+	private IFilenameValidator $filenameValidator;
 
 	public function __construct(
 		IRequest $request,
@@ -56,6 +69,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		CardMapper $cardMapper,
 		LoggerInterface $logger,
 		IDBConnection $connection,
+		IFilenameValidator $filenameValidator,
 		?string $userId,
 	) {
 		$this->request = $request;
@@ -71,6 +85,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$this->cardMapper = $cardMapper;
 		$this->logger = $logger;
 		$this->connection = $connection;
+		$this->filenameValidator = $filenameValidator;
 	}
 
 	public function listAttachments(int $cardId): array {
@@ -172,6 +187,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		}
 
 		$fileName = $file['name'];
+		$this->validateFilename($fileName);
 
 		// get shares for current card
 		// check if similar filename already exists
@@ -306,5 +322,17 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		}
 
 		return $share;
+	}
+
+	private function validateFilename(string $fileName): void {
+		try {
+			$this->filenameValidator->validateFilename($fileName);
+		} catch (InvalidPathException $e) {
+			$errorMessage = $e->getMessage();
+			foreach (self::SANITIZED_CHAR_MAPPING as $sanitized => $original) {
+				$errorMessage = str_replace($sanitized, $original, $errorMessage);
+			}
+			throw new BadRequestException($errorMessage);
+		}
 	}
 }

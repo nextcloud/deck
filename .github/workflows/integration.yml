@@ -107,7 +107,12 @@ jobs:
 
       - name: Print log
         if: always()
-        run: cat data/nextcloud.log
+        run: |
+          if [ -f data/nextcloud.log ]; then
+            cat data/nextcloud.log
+          else
+            echo "Log file not found"
+          fi
 
       - name: Query count
         if: ${{ matrix.databases == 'mysql' }}
