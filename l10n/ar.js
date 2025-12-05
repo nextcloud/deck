@@ -326,6 +326,7 @@ OC.L10N.register(
     "An error occurred" : "حدث خطأ",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "هل أنت متأكد من حذف اللوحة {title}؟ هذا سيؤدي إلى حذف كل بيانات هذه اللوحة بما في ذلك البطاقات المؤرشفة.",
     "Delete the board?" : "مسح اللوح؟",
+    "Leave" : "إجازة",
     "Board details" : "تفاصيل لوح",
     "Edit board" : "تعديل اللوح",
     "Clone board" : "استنسخ اللوح",
