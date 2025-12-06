@@ -325,6 +325,7 @@ OC.L10N.register(
     "An error occurred" : "S'ha produït un error",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Esteu segur que voleu suprimir el tauler {title}? Això suprimirà totes les dades d'aquest tauler, incloses les targetes arxivades.",
     "Delete the board?" : "Voleu suprimir el tauler?",
+    "Leave" : "Abandona",
     "Board details" : "Detalls del tauler",
     "Edit board" : "Edita el tauler",
     "Clone board" : "Clonar tauler",
