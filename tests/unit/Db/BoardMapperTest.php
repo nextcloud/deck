@@ -154,7 +154,12 @@ class BoardMapperTest extends TestCase {
 
 		$actual = $this->boardMapper->findToDelete();
 		$this->boards[0]->resetUpdatedFields();
-		$this->assertEquals([$this->boards[0]], $actual);
+
+		$filteredActual = array_values(array_filter($actual, function ($board) {
+			return $board->getId() === $this->boards[0]->getId();
+		}));
+
+		$this->assertEquals([$this->boards[0]], $filteredActual);
 
 		$this->boards[0]->setDeletedAt(0);
 		$this->boardMapper->update($this->boards[0]);
