@@ -132,7 +132,7 @@
 		<NcColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
 			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 		</NcColorPicker>
-		<form @submit.prevent.stop="applyEdit">
+		<form @submit.prevent="applyEdit">
 			<NcTextField ref="inputField"
 				:disable="loading"
 				:value.sync="editTitle"
@@ -141,9 +141,9 @@
 				required />
 			<NcButton type="tertiary"
 				:disabled="loading"
-				native-type="submit"
+				native-type="button"
 				:title="t('deck', 'Cancel edit')"
-				@click.stop.prevent="cancelEdit">
+				@click="cancelEdit">
 				<template #icon>
 					<CloseIcon :size="20" />
 				</template>
