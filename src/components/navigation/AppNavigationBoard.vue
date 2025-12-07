@@ -129,7 +129,7 @@
 		</template>
 	</NcAppNavigationItem>
 	<div v-else-if="editing" class="board-edit">
-		<NcColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
+		<NcColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.editColor}`" @update:value="updateColor">
 			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 		</NcColorPicker>
 		<form @submit.prevent="applyEdit">
