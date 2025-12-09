@@ -334,6 +334,7 @@ export default {
 							.then(() => {
 								this.loading = false
 								this.deleted = true
+								this.redirectToOverviewIfCurrentBoard()
 								this.undoTimeoutHandle = setTimeout(() => {
 									this.$store.dispatch('removeBoard', this.board)
 								}, 7000)
@@ -359,6 +360,7 @@ export default {
 						this.boardApi.leaveBoard(this.board)
 							.then(() => {
 								this.loading = false
+								this.redirectToOverviewIfCurrentBoard()
 								this.$store.dispatch('removeBoard', this.board)
 							})
 							.catch(() => {
@@ -434,6 +436,12 @@ export default {
 					OC.Notification.showTemporary(t('deck', 'An error occurred'))
 					console.error(e)
 				}
+			}
+		},
+		redirectToOverviewIfCurrentBoard() {
+			const currentBoardId = Number.parseInt(this.$route?.params?.id, 10)
+			if (!Number.isNaN(currentBoardId) && currentBoardId === this.board.id) {
+				this.$router.push({ name: 'main' })
 			}
 		},
 	},
