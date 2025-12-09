@@ -277,6 +277,9 @@ export default {
 			this.editTitle = this.board.title
 			this.editColor = '#' + this.board.color
 			this.editing = true
+			this.$nextTick(() => {
+				this.$refs?.inputField.focus()
+			})
 		},
 		async actionClone() {
 			this.loading = true
