@@ -43,6 +43,7 @@ use OCA\Deck\Reference\CommentReferenceProvider;
 use OCA\Deck\Reference\CreateCardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
+use OCA\Deck\Service\DiffService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
@@ -117,6 +118,11 @@ class Application extends App implements IBootstrap {
 		});
 		$context->registerService('database4ByteSupport', static function (ContainerInterface $c) {
 			return $c->get(IDBConnection::class)->supports4ByteText();
+		});
+
+		// Register DiffService for dependency injection
+		$context->registerService(DiffService::class, static function (ContainerInterface $c) {
+			return new DiffService();
 		});
 
 		$context->registerSearchProvider(DeckProvider::class);
