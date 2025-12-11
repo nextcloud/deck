@@ -119,7 +119,7 @@
 		</template>
 	</NcAppNavigationItem>
 	<div v-else-if="editing" class="board-edit">
-		<NcColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
+		<NcColorPicker v-model="editColor" class="app-navigation-entry-bullet-wrapper">
 			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 		</NcColorPicker>
 		<form @submit.prevent.stop="applyEdit">
@@ -269,9 +269,6 @@ export default {
 				.then(() => {
 					this.deleted = false
 				})
-		},
-		updateColor(newColor) {
-			this.editColor = newColor
 		},
 		actionEdit() {
 			this.editTitle = this.board.title
