@@ -10,7 +10,7 @@
 			@click.prevent.stop="startCreateBoard" />
 		<div v-else class="board-create">
 			<NcColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper" :disabled="loading">
-				<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+				<button :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 			</NcColorPicker>
 			<form @submit.prevent.stop="createBoard">
 				<NcTextField ref="inputField"
@@ -117,8 +117,9 @@ export default {
 		height: var(--default-clickable-area);
 		.color0 {
 			width: 24px !important;
-			margin: var(--default-grid-baseline);
 			height: 24px;
+			min-height: 0;
+			margin: var(--default-grid-baseline);
 			border-radius: 50%;
 			background-size: 14px;
 		}

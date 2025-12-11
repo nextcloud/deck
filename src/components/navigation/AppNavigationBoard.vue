@@ -131,7 +131,7 @@
 		</NcAppNavigationItem>
 		<div v-else-if="editing" class="board-edit">
 			<NcColorPicker v-model="editColor" class="app-navigation-entry-bullet-wrapper">
-				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+				<button :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 			</NcColorPicker>
 			<form @submit.prevent.stop="applyEdit">
 				<NcTextField ref="inputField"
@@ -472,8 +472,9 @@ export default {
 		height: var(--default-clickable-area);
 		.color0 {
 			width: 24px !important;
-			margin: var(--default-grid-baseline);
 			height: 24px;
+			min-height: 0;
+			margin: var(--default-grid-baseline);
 			border-radius: 50%;
 			background-size: 14px;
 		}
