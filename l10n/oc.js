@@ -20,6 +20,7 @@ OC.L10N.register(
     "Completed" : "Acabat",
     "Details" : "Detalhs",
     "General" : "Generals",
+    "Appearance" : "Aparéncia",
     "Search" : "Recercar",
     "Sharing" : "Partiment",
     "Tags" : "Etiquetas",
