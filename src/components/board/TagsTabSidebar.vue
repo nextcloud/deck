@@ -12,7 +12,7 @@
 						<NcColorPicker class="color-picker-wrapper"
 							:value="'#' + editingLabel.color"
 							:advanced-fields="true"
-							@input="updateColor">
+							@update:value="updateColor">
 							<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker" />
 						</NcColorPicker>
 						<input v-model="editingLabel.title" type="text">
