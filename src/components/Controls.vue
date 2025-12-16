@@ -427,7 +427,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '', completed: 'both' }
+			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},
