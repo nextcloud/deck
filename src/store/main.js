@@ -59,7 +59,7 @@ export default function storeFactory() {
 			searchQuery: '',
 			activity: [],
 			activityLoadMore: true,
-			filter: { tags: [], users: [], due: '', completed: 'both' },
+			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			shortcutLock: false,
 		},
 		getters: {
@@ -332,7 +332,7 @@ export default function storeFactory() {
 				commit('TOGGLE_FILTER', filter)
 			},
 			async loadBoardById({ commit, dispatch }, boardId) {
-				const filterReset = { tags: [], users: [], due: '' }
+				const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
 				dispatch('setFilter', filterReset)
 				commit('setCurrentBoard', null)
 				const board = await apiClient.loadById(boardId)
