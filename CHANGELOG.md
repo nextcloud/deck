@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.8
+### Added
+* [stable30] refactor: convert store to factory functions by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7402
+
 ## 1.14.7
 ### Fixed
 * [stable30] fix:  Use getId() method for card ID retrieval by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7145
