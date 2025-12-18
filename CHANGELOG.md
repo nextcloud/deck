@@ -5,6 +5,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.15.6
+### Added
+- [stable31] refactor: convert store to factory functions by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7401
+- [stable31] feat(sharing): ability to leave a shared board by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7474
+
+### Fixed
+- [stable31] fix: view mode menu when open archived card by url by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7424
+- [stable31] Fix 'Unassigned' board filter by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7470
+- [stable31] fix: board & label color picker by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7465
+- [stable31] Focus input field when executing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7473
+
 # 1.15.5
 ### Fixed
 * [stable31] fix: Check owner can create boards when importing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7343
