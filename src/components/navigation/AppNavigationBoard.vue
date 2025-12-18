@@ -112,6 +112,16 @@
 				@click="actionDelete">
 				{{ t('deck', 'Delete board') }}
 			</NcActionButton>
+
+			<NcActionButton v-if="canLeave && !isDueSubmenuActive"
+				icon="icon-delete"
+				:close-after-click="true"
+				@click="actionLeave">
+				<template #icon>
+					<LeaveIcon :size="20" decorative />
+				</template>
+				{{ t('deck', 'Leave board') }}
+			</NcActionButton>
 		</template>
 	</NcAppNavigationItem>
 	<div v-else-if="editing" class="board-edit">
@@ -152,12 +162,15 @@ import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
+import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
+import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
 
 import isTouchDevice from '../../mixins/isTouchDevice.js'
 import BoardCloneModal from './BoardCloneModal.vue'
@@ -178,6 +191,7 @@ export default {
 		CloneIcon,
 		CloseIcon,
 		CheckIcon,
+		LeaveIcon,
 		BoardCloneModal,
 	},
 	directives: {
@@ -207,6 +221,7 @@ export default {
 			updateDueSetting: null,
 			canCreate: canCreateState,
 			cloneModalOpen: false,
+			currentUser: getCurrentUser(),
 		}
 	},
 	computed: {
@@ -227,6 +242,9 @@ export default {
 		},
 		canManage() {
 			return this.board.permissions.PERMISSION_MANAGE
+		},
+		canLeave() {
+			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined
 		},
 		dueDateReminderIcon() {
 			if (this.board.settings['notify-due'] === 'all') {
@@ -309,6 +327,33 @@ export default {
 								this.undoTimeoutHandle = setTimeout(() => {
 									this.$store.dispatch('removeBoard', this.board)
 								}, 7000)
+							})
+					}
+				},
+				true,
+			)
+		},
+		actionLeave() {
+			OC.dialogs.confirmDestructive(
+				t('deck', 'Are you sure you want to leave the board {title}?', { title: this.board.title }),
+				t('deck', 'Leave the board?'),
+				{
+					type: OC.dialogs.YES_NO_BUTTONS,
+					confirm: t('deck', 'Leave'),
+					confirmClasses: 'error',
+					cancel: t('deck', 'Cancel'),
+				},
+				(result) => {
+					if (result) {
+						this.loading = true
+						this.boardApi.leaveBoard(this.board)
+							.then(() => {
+								this.loading = false
+								this.$store.dispatch('removeBoard', this.board)
+							})
+							.catch(() => {
+								showError(t('deck', 'Failed to leave the board'))
+								this.loading = false
 							})
 					}
 				},

@@ -85,6 +85,15 @@ class BoardController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity|null
+	 */
+	public function leave(int $boardId) {
+		return $this->boardService->leave($boardId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
 	 * @return array|bool
 	 * @internal param $userId
 	 */
