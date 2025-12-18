@@ -9,11 +9,11 @@
 				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
 					<form class="label-form" @submit.prevent="updateLabel(label)">
-						<NcColorPicker class="color-picker-wrapper"
-							:value="'#' + editingLabel.color"
+						<NcColorPicker v-model="editingLabelColor"
+							class="color-picker-wrapper"
 							:advanced-fields="true"
-							@input="updateColor">
-							<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker" />
+							@submit="updateColor">
+							<div :style="{ backgroundColor: editingLabelColor }" class="color0 icon-colorpicker" />
 						</NcColorPicker>
 						<input v-model="editingLabel.title" type="text">
 						<input :disabled="!editLabelObjValidated"
@@ -56,11 +56,11 @@
 			<li v-if="addLabel" class="editing">
 				<!-- New Tag -->
 				<form class="label-form" @submit.prevent="clickAddLabel">
-					<NcColorPicker class="color-picker-wrapper"
-						:value="'#' + addLabelObj.color"
+					<NcColorPicker v-model="addLabelColor"
+						class="color-picker-wrapper"
 						:advanced-fields="true"
 						@input="updateColor">
-						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
+						<div :style="{ backgroundColor: addLabelColor }" class="color0 icon-colorpicker" />
 					</NcColorPicker>
 					<input v-model="addLabelObj.title" type="text">
 					<input :disabled="!addLabelObjValidated"
@@ -102,8 +102,10 @@ export default {
 		return {
 			editingLabelId: null,
 			editingLabel: null,
+			editingLabelColor: null,
 			addLabelObj: null,
 			addLabel: false,
+			addLabelColor: null,
 			missingDataLabel: t('deck', 'title and color value must be provided'),
 			defaultColors: ['31CC7C', '17CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'],
 		}
@@ -152,6 +154,7 @@ export default {
 		clickEdit(label) {
 			this.editingLabelId = label.id
 			this.editingLabel = Object.assign({}, label)
+			this.editingLabelColor = '#' + label.color
 		},
 		deleteLabel(id) {
 			this.$store.dispatch('removeLabelFromCurrentBoard', id)
@@ -162,12 +165,14 @@ export default {
 		},
 		clickShowAddLabel() {
 			this.addLabelObj = { cardId: null, color: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)], title: '' }
+			this.addLabelColor = '#' + this.addLabelObj.color
 			this.addLabel = true
 		},
 		clickAddLabel() {
 			this.$store.dispatch('addLabelToCurrentBoard', this.addLabelObj)
 			this.addLabel = false
 			this.addLabelObj = null
+			this.addLabelColor = null
 		},
 	},
 }
