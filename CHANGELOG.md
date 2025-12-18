@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.8
+### Added
+* [stable29] refactor: convert store to factory functions by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7403
+
 ## 1.13.7
 ### Fixed
 * [stable29] chore: update workflows from templates by @backportbot[bot] in https://github.com/nextcloud/deck/pull/6920
