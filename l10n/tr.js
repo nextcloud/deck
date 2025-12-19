@@ -395,7 +395,7 @@ OC.L10N.register(
     "Link to a card" : "Bir kart bağlantısı",
     "Create a card" : "Bir kart ekle",
     "Message from {author} in {conversationName}" : "{conversationName} görüşmesinde {author} iletisi",
-    "Something went wrong" : "Bir şeyler ters gitti",
+    "Something went wrong" : "Bir sorun çıktı",
     "Failed to upload {name}" : "{name} yüklenemedi",
     "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı",
     "Assigned users" : "Atanmış kullanıcılar",
