@@ -391,9 +391,14 @@ export default function storeFactory() {
 			 * @param board The board to update.
 			 * @return {Promise<void>}
 			 */
-			async updateBoard({ commit }, board) {
+			async updateBoard({ commit, state }, board) {
 				const storedBoard = await apiClient.updateBoard(board)
 				commit('addBoard', storedBoard)
+
+				// keep the currently opened board title in sync after edits
+				if (state.currentBoard?.id === storedBoard.id) {
+					commit('setCurrentBoard', storedBoard)
+				}
 			},
 			async createBoard({ commit }, boardData) {
 				try {
