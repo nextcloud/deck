@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="avatars">
+	<div v-if="users.length > 0" class="avatars">
 		<div>
 			<NcPopover>
 				<template #trigger="{ attrs }">
