@@ -88,10 +88,12 @@ export default {
 			this.loading = false
 			this.editing = false
 			this.color = randomColor()
+			this.value = ''
 		},
 		cancelEdit(e) {
 			this.editing = false
 			this.color = randomColor()
+			this.value = ''
 		},
 	},
 }
