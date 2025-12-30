@@ -32,6 +32,7 @@ use OCP\IL10N;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
+use OCP\Share\IPartialShareProvider;
 use OCP\Share\IShare;
 
 /** Taken from the talk shareapicontroller helper */
@@ -42,7 +43,7 @@ interface IShareProviderBackend {
 	public function canAccessShare(IShare $share, string $user): bool;
 }
 
-class DeckShareProvider implements \OCP\Share\IShareProvider {
+class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvider {
 	public const DECK_FOLDER = '/Deck';
 	public const DECK_FOLDER_PLACEHOLDER = '/{DECK_PLACEHOLDER}';
 
@@ -768,6 +769,77 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 
 		$shares = $this->resolveSharesForRecipient($shares, $userId);
+
+		return $shares;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getSharedWithByPath(
+		string $userId,
+		int $shareType,
+		string $path,
+		bool $forChildren,
+		int $limit,
+		int $offset,
+	): iterable {
+		/** @var IShare[] $shares */
+		$shares = [];
+
+		$qb = $this->dbConnection->getQueryBuilder();
+		// s is the parent share, s2 the child
+		$qb->select('s.*', 's2.permissions AS s2_permissions', 's2.file_target AS s2_file_target',
+			'f.fileid', 'f.path', 'f.permissions AS f_permissions', 'f.storage', 'f.path_hash',
+			'f.parent AS f_parent', 'f.name', 'f.mimetype', 'f.mimepart', 'f.size', 'f.mtime', 'f.storage_mtime',
+			'f.encrypted', 'f.unencrypted_size', 'f.etag', 'f.checksum'
+		)
+			->selectAlias('st.id', 'storage_string_id')
+			->from('share', 's2')
+			->orderBy('s2.id')
+			->leftJoin('s2', 'share', 's', $qb->expr()->eq('s2.parent', 's.id'))
+			->leftJoin('s2', 'filecache', 'f', $qb->expr()->eq('s2.file_source', 'f.fileid'))
+			->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
+			->leftJoin('s2', 'deck_cards', 'dc', $qb->expr()->eq($qb->expr()
+				->castColumn('dc.id', IQueryBuilder::PARAM_STR), 's.share_with'));
+
+		if ($limit !== -1) {
+			$qb->setMaxResults($limit);
+		}
+
+		$qb->andWhere($qb->expr()->eq('s2.share_with', $qb->createNamedParameter($userId)))
+			->andWhere($qb->expr()->eq('s2.share_type',
+				$qb->createNamedParameter(IShare::TYPE_DECK_USER)))
+			->andWhere($qb->expr()->orX(
+				$qb->expr()->eq('s2.item_type', $qb->createNamedParameter('file')),
+				$qb->expr()->eq('s2.item_type', $qb->createNamedParameter('folder'))
+			));
+
+		if ($forChildren) {
+			$qb->andWhere($qb->expr()->like('s2.file_target', $qb->createNamedParameter($this->dbConnection->escapeLikeParameter($path) . '_%')));
+		} else {
+			$qb->andWhere($qb->expr()->eq('s2.file_target', $qb->createNamedParameter($path)));
+		}
+
+		$qb->andWhere($qb->expr()->eq('dc.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+
+		$cursor = $qb->executeQuery();
+		while ($data = $cursor->fetch()) {
+			if (!$this->isAccessibleResult($data)) {
+				continue;
+			}
+
+			if ($offset > 0) {
+				$offset--;
+				continue;
+			}
+			$share = $this->createShareObject($data);
+			// patch the share with the user-specific information
+			$this->applyBoardPermission($share, (int)$data['s2_permissions'], $userId);
+			$share->setTarget($data['s2_file_target']);
+			$shares[] = $share;
+		}
+		$cursor->closeCursor();
 
 		return $shares;
 	}
