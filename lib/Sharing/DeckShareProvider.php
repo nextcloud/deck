@@ -33,6 +33,7 @@ use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
+use OCP\Share\IShareProviderGetUsers;
 
 /** Taken from the talk shareapicontroller helper */
 interface IShareProviderBackend {
@@ -42,7 +43,7 @@ interface IShareProviderBackend {
 	public function canAccessShare(IShare $share, string $user): bool;
 }
 
-class DeckShareProvider implements \OCP\Share\IShareProvider {
+class DeckShareProvider implements \OCP\Share\IShareProvider, IShareProviderGetUsers {
 	public const DECK_FOLDER = '/Deck';
 	public const DECK_FOLDER_PLACEHOLDER = '/{DECK_PLACEHOLDER}';
 
@@ -1066,5 +1067,21 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 
 		return $shares;
+	}
+
+	public function getUsersForShare(IShare $share): iterable {
+		if ($share->getShareType() === IShare::TYPE_DECK) {
+			$cardId = (int)$share->getSharedWith();
+			$boardId = $this->cardMapper->findBoardId($cardId);
+			if ($boardId === null) {
+				return [];
+			}
+
+			foreach ($this->permissionService->findUsers($boardId) as $user) {
+				yield $user->getUserObject();
+			}
+		}
+
+		return [];
 	}
 }
