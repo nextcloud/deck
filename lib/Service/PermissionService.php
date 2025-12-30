@@ -207,7 +207,7 @@ class PermissionService {
 	 * Required to allow assigning them to cards
 	 *
 	 * @param $boardId
-	 * @return array
+	 * @return User[]
 	 */
 	public function findUsers($boardId, $refresh = false) {
 		// cache users of a board so we don't query them for every cards
