@@ -9,6 +9,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Card;
+use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Controller;
@@ -63,8 +64,11 @@ class CardController extends Controller {
 	 * @param $duedate
 	 */
 	#[NoAdminRequired]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt): Card {
-		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt);
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, $archived = null): Card {
+		$done = array_key_exists('done', $this->request->getParams())
+			? new OptionalNullableValue($this->request->getParam('done', null))
+			: null;
+		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, $archived, $done);
 	}
 
 	#[NoAdminRequired]
