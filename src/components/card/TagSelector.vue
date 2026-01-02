@@ -74,15 +74,31 @@ export default {
 		},
 	},
 	methods: {
-		onSelect(options) {
-			const addedLabel = options.filter(option => !this.card.labels.includes(option))
-			this.$emit('select', addedLabel[0])
+		onSelect(optionOrOptions) {
+			const option = Array.isArray(optionOrOptions)
+				? optionOrOptions[optionOrOptions.length - 1]
+				: optionOrOptions
+
+			if (!option || !option.id) {
+				return
+			}
+
+			this.$emit('select', option)
 		},
 		onRemove(removedLabel) {
+			if (!removedLabel || !removedLabel.id) {
+				return
+			}
+
 			this.$emit('remove', removedLabel)
 		},
 		async onNewTag(option) {
-			this.$emit('newtag', option.title)
+			const labelText = option?.title || option?.label
+			if (!labelText) {
+				return
+			}
+
+			this.$emit('newtag', labelText)
 		},
 	},
 }

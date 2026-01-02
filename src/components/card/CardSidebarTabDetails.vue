@@ -152,17 +152,23 @@ export default {
 		}, 500),
 
 		addLabelToCard(newLabel) {
-			this.copiedCard.labels.push(newLabel)
-			const data = {
-				card: this.copiedCard,
-				labelId: newLabel.id,
+			if (!newLabel?.id || !this.card?.id) {
+				return
 			}
-			this.$store.dispatch('addLabel', data)
+
+			this.$store.dispatch('addLabel', {
+				card: { id: this.card.id },
+				labelId: newLabel.id,
+			})
 		},
 
 		async addLabelToBoardAndCard(name) {
+			if (!name || !this.card?.id) {
+				return
+			}
+
 			await this.$store.dispatch('addLabelToCurrentBoardAndCard', {
-				card: this.copiedCard,
+				card: { id: this.card.id },
 				newLabel: {
 					title: name,
 					color: this.randomColor(),
@@ -171,18 +177,14 @@ export default {
 		},
 
 		removeLabelFromCard(removedLabel) {
-			const removeIndex = this.copiedCard.labels.findIndex((label) => {
-				return label.id === removedLabel.id
-			})
-			if (removeIndex !== -1) {
-				this.copiedCard.labels.splice(removeIndex, 1)
+			if (!removedLabel?.id || !this.card?.id) {
+				return
 			}
 
-			const data = {
-				card: this.copiedCard,
+			this.$store.dispatch('removeLabel', {
+				card: { id: this.card.id },
 				labelId: removedLabel.id,
-			}
-			this.$store.dispatch('removeLabel', data)
+			})
 		},
 		stringify(date) {
 			return moment(date).locale(this.locale).format('LLL')

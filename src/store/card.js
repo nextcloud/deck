@@ -243,6 +243,32 @@ export default function cardModuleFactory() {
 					Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
 				}
 			},
+			addLabelToCard(state, { cardId, label }) {
+				const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
+				if (existingIndex === -1 || !label?.id) {
+					return
+				}
+
+				const labels = state.cards[existingIndex].labels || []
+				if (labels.find((_label) => _label.id === label.id)) {
+					return
+				}
+
+				const updatedLabels = [...labels, label]
+				Vue.set(state.cards[existingIndex], 'labels', updatedLabels)
+				Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
+			},
+			removeLabelFromCard(state, { cardId, labelId }) {
+				const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
+				if (existingIndex === -1) {
+					return
+				}
+
+				const labels = state.cards[existingIndex].labels || []
+				const updatedLabels = labels.filter((_label) => _label.id !== labelId)
+				Vue.set(state.cards[existingIndex], 'labels', updatedLabels)
+				Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
+			},
 			cardSetAttachmentCount(state, { cardId, count }) {
 				const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
 				if (existingIndex !== -1) {
@@ -348,13 +374,22 @@ export default function cardModuleFactory() {
 				const user = await apiClient.removeUser(card.id, assignee.userId, assignee.type)
 				commit('removeUserFromCard', user)
 			},
-			async addLabel({ commit }, data) {
+			async addLabel({ commit, rootState }, data) {
+				if (!data?.card?.id || !data?.labelId) {
+					return
+				}
+
 				await apiClient.assignLabelToCard(data)
-				commit('updateCardProperty', { property: 'labels', card: data.card })
+				const label = rootState.currentBoard?.labels?.find((l) => l.id === data.labelId) || { id: data.labelId }
+				commit('addLabelToCard', { cardId: data.card.id, label })
 			},
 			async removeLabel({ commit }, data) {
+				if (!data?.card?.id || !data?.labelId) {
+					return
+				}
+
 				await apiClient.removeLabelFromCard(data)
-				commit('updateCardProperty', { property: 'labels', card: data.card })
+				commit('removeLabelFromCard', { cardId: data.card.id, labelId: data.labelId })
 			},
 			async updateCardDesc({ commit }, card) {
 				const updatedCard = await apiClient.updateCard(card)
