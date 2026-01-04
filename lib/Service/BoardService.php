@@ -246,7 +246,7 @@ class BoardService {
 	public function deleteUndo(int $id): Board {
 		$this->boardServiceValidator->check(compact('id'));
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE, allowDeletedBoard: true);
 		$board = $this->find($id, allowDeleted: true);
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
@@ -265,7 +265,7 @@ class BoardService {
 	public function deleteForce(int $id): Board {
 		$this->boardServiceValidator->check(compact('id'));
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE, allowDeletedBoard: true);
 		$board = $this->find($id, allowDeleted: true);
 		$delete = $this->boardMapper->delete($board);
 
