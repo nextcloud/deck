@@ -66,11 +66,13 @@ use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\OCM\Events\ResourceTypeRegisterEvent;
 use OCP\Server;
 use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
+use ResourceTypeRegisterListener;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'deck';
@@ -140,6 +142,7 @@ class Application extends App implements IBootstrap {
 		$context->registerReferenceProvider(CommentReferenceProvider::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+		$context->registerEventListener(ResourceTypeRegisterEvent::class, ResourceTypeRegisterListener::class);
 
 		// Event listening to emit UserShareAccessUpdatedEvent for files_sharing
 		$context->registerEventListener(AclCreatedEvent::class, AclCreatedRemovedListener::class);
