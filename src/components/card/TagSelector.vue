@@ -75,7 +75,10 @@ export default {
 	},
 	methods: {
 		onSelect(options) {
-			const addedLabel = options.filter(option => !this.card.labels.includes(option))
+			const addedLabel = options.filter(option => !this.card.labels.includes(option) && option.id && option.color)
+			if (addedLabel.length === 0) {
+				return
+			}
 			this.$emit('select', addedLabel[0])
 		},
 		onRemove(removedLabel) {
