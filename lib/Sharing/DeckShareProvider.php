@@ -693,16 +693,17 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	}
 
 	/**
-	 * Get shared with the given user
-	 *
-	 * @param string $userId get shares where this user is the recipient
-	 * @param int $shareType
-	 * @param Node|null $node
-	 * @param int $limit The max number of entries returned, -1 for all
-	 * @param int $offset
-	 * @return IShare[]
+	 * Get received shared for the given user.
+	 * You can optionally provide a node or a path to filter the shares.
 	 */
-	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
+	public function _getSharedWith(
+		string $userId,
+		int $limit,
+		int $offset,
+		?Node $node = null,
+		?string $path = null,
+		bool $forChildren = false,
+	): array {
 		$allBoards = $this->boardMapper->findBoardIds($userId);
 
 		/** @var IShare[] $shares */
@@ -741,6 +742,18 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 				$qb->andWhere($qb->expr()->eq('s.file_source', $qb->createNamedParameter($node->getId())));
 			}
 
+			if ($path !== null) {
+				$qb->leftJoin('s', 'share', 'sc', $qb->expr()->eq('s.parent', 'sc.id'))
+					->andWhere($qb->expr()->eq('sc.share_with', $qb->createNamedParameter($userId)))
+					->andWhere($qb->expr()->eq('sc.share_type', $qb->createNamedParameter(IShare::TYPE_DECK_USER)));
+
+				if ($forChildren) {
+					$qb->andWhere($qb->expr()->like('sc.file_target', $qb->createNamedParameter($this->dbConnection->escapeLikeParameter($path) . '_%')));
+				} else {
+					$qb->andWhere($qb->expr()->eq('sc.file_target', $qb->createNamedParameter($path)));
+				}
+			}
+
 			$qb->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
 				->andWhere($qb->expr()->in('db.id', $qb->createNamedParameter(
 					$boards,
@@ -774,6 +787,20 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	}
 
 	/**
+	 * Get shared with the given user
+	 *
+	 * @param string $userId get shares where this user is the recipient
+	 * @param int $shareType
+	 * @param Node|null $node
+	 * @param int $limit The max number of entries returned, -1 for all
+	 * @param int $offset
+	 * @return IShare[]
+	 */
+	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
+		return $this->_getSharedWith($userId, $limit, $offset, $node);
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function getSharedWithByPath(
@@ -784,64 +811,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		int $limit,
 		int $offset,
 	): iterable {
-		/** @var IShare[] $shares */
-		$shares = [];
-
-		$qb = $this->dbConnection->getQueryBuilder();
-		// s is the parent share, s2 the child
-		$qb->select('s.*', 's2.permissions AS s2_permissions', 's2.file_target AS s2_file_target',
-			'f.fileid', 'f.path', 'f.permissions AS f_permissions', 'f.storage', 'f.path_hash',
-			'f.parent AS f_parent', 'f.name', 'f.mimetype', 'f.mimepart', 'f.size', 'f.mtime', 'f.storage_mtime',
-			'f.encrypted', 'f.unencrypted_size', 'f.etag', 'f.checksum'
-		)
-			->selectAlias('st.id', 'storage_string_id')
-			->from('share', 's2')
-			->orderBy('s2.id')
-			->leftJoin('s2', 'share', 's', $qb->expr()->eq('s2.parent', 's.id'))
-			->leftJoin('s2', 'filecache', 'f', $qb->expr()->eq('s2.file_source', 'f.fileid'))
-			->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
-			->leftJoin('s2', 'deck_cards', 'dc', $qb->expr()->eq($qb->expr()
-				->castColumn('dc.id', IQueryBuilder::PARAM_STR), 's.share_with'));
-
-		if ($limit !== -1) {
-			$qb->setMaxResults($limit);
-		}
-
-		$qb->andWhere($qb->expr()->eq('s2.share_with', $qb->createNamedParameter($userId)))
-			->andWhere($qb->expr()->eq('s2.share_type',
-				$qb->createNamedParameter(IShare::TYPE_DECK_USER)))
-			->andWhere($qb->expr()->orX(
-				$qb->expr()->eq('s2.item_type', $qb->createNamedParameter('file')),
-				$qb->expr()->eq('s2.item_type', $qb->createNamedParameter('folder'))
-			));
-
-		if ($forChildren) {
-			$qb->andWhere($qb->expr()->like('s2.file_target', $qb->createNamedParameter($this->dbConnection->escapeLikeParameter($path) . '_%')));
-		} else {
-			$qb->andWhere($qb->expr()->eq('s2.file_target', $qb->createNamedParameter($path)));
-		}
-
-		$qb->andWhere($qb->expr()->eq('dc.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
-
-		$cursor = $qb->executeQuery();
-		while ($data = $cursor->fetch()) {
-			if (!$this->isAccessibleResult($data)) {
-				continue;
-			}
-
-			if ($offset > 0) {
-				$offset--;
-				continue;
-			}
-			$share = $this->createShareObject($data);
-			// patch the share with the user-specific information
-			$this->applyBoardPermission($share, (int)$data['s2_permissions'], $userId);
-			$share->setTarget($data['s2_file_target']);
-			$shares[] = $share;
-		}
-		$cursor->closeCursor();
-
-		return $shares;
+		return $this->_getSharedWith($userId, $limit, $offset, null, $path, $forChildren);
 	}
 
 	/**
