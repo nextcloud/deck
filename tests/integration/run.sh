@@ -7,8 +7,7 @@ HIDE_OC_LOGS=$2
 
 # Nextcloud integration tests composer
 (
-    cd ${OC_PATH}build/integration
-    composer install
+    composer --working-dir $OC_PATH install
 )
 INSTALLED=$($OCC status | grep installed: | cut -d " " -f 5)
 
