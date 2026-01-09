@@ -72,11 +72,11 @@ class CardApiController extends ApiController {
 		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description, $duedate);
 
 		foreach ($labels as $labelId) {
-			$this->cardService->assignLabel($card->id, $labelId);
+			$this->cardService->assignLabel($card->getId(), $labelId);
 		}
 
 		foreach ($users as $user) {
-			$this->assignmentService->assignUser($card->id, $user['id'], $user['type']);
+			$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
 		}
 
 		return new DataResponse($card, HTTP::STATUS_OK);

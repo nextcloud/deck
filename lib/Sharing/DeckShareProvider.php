@@ -419,7 +419,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$qb->executeStatement();
 
-		return $this->getShareById((int)$share->getId(), $recipient);
+		return $this->getShareById((string)$share->getId(), $recipient);
 	}
 
 	/**
