@@ -744,7 +744,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 			if ($path !== null) {
 				$qb->leftJoin('s', 'share', 'sc', $qb->expr()->eq('s.parent', 'sc.id'))
-					->andWhere($qb->expr()->eq('sc.share_with', $qb->createNamedParameter($userId)))
 					->andWhere($qb->expr()->eq('sc.share_type', $qb->createNamedParameter(IShare::TYPE_DECK_USER)));
 
 				if ($forChildren) {
@@ -800,9 +799,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		return $this->_getSharedWith($userId, $limit, $offset, $node);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getSharedWithByPath(
 		string $userId,
 		int $shareType,
