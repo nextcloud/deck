@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          ref: 'feature/54562/files-sharing-authoritative'
           submodules: true
 
       - name: Checkout app
