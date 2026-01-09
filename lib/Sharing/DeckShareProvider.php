@@ -693,6 +693,31 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	}
 
 	/**
+	 * Get shared with the given user
+	 *
+	 * @param string $userId get shares where this user is the recipient
+	 * @param int $shareType
+	 * @param Node|null $node
+	 * @param int $limit The max number of entries returned, -1 for all
+	 * @param int $offset
+	 * @return IShare[]
+	 */
+	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
+		return $this->_getSharedWith($userId, $limit, $offset, $node);
+	}
+
+	public function getSharedWithByPath(
+		string $userId,
+		int $shareType,
+		string $path,
+		bool $forChildren,
+		int $limit,
+		int $offset,
+	): iterable {
+		return $this->_getSharedWith($userId, $limit, $offset, null, $path, $forChildren);
+	}
+
+	/**
 	 * Get received shared for the given user.
 	 * You can optionally provide a node or a path to filter the shares.
 	 */
@@ -783,31 +808,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		$shares = $this->resolveSharesForRecipient($shares, $userId);
 
 		return $shares;
-	}
-
-	/**
-	 * Get shared with the given user
-	 *
-	 * @param string $userId get shares where this user is the recipient
-	 * @param int $shareType
-	 * @param Node|null $node
-	 * @param int $limit The max number of entries returned, -1 for all
-	 * @param int $offset
-	 * @return IShare[]
-	 */
-	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
-		return $this->_getSharedWith($userId, $limit, $offset, $node);
-	}
-
-	public function getSharedWithByPath(
-		string $userId,
-		int $shareType,
-		string $path,
-		bool $forChildren,
-		int $limit,
-		int $offset,
-	): iterable {
-		return $this->_getSharedWith($userId, $limit, $offset, null, $path, $forChildren);
 	}
 
 	/**
