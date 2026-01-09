@@ -702,7 +702,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		int $offset,
 		?Node $node = null,
 		?string $path = null,
-		bool $forChildren = false,
+		?bool $forChildren = false,
 	): array {
 		$allBoards = $this->boardMapper->findBoardIds($userId);
 
