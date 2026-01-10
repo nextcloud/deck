@@ -492,6 +492,7 @@ export default function storeFactory() {
 			async addLabelToCurrentBoardAndCard({ dispatch, commit }, { newLabel, card }) {
 				newLabel.boardId = this.state.currentBoard.id
 				const label = await apiClient.createLabel(newLabel)
+				card.labels.push(label)
 				commit('addLabelToCurrentBoard', label)
 				dispatch('addLabel', {
 					card,
