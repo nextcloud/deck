@@ -33,6 +33,7 @@ use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
+use Override;
 
 /** Taken from the talk shareapicontroller helper */
 interface IShareProviderBackend {
@@ -419,7 +420,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$qb->executeStatement();
 
-		return $this->getShareById((int)$share->getId(), $recipient);
+		return $this->getShareById($share->getId(), $recipient);
 	}
 
 	/**
@@ -567,11 +568,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		return $shares;
 	}
 
-	/**
-	 * @inheritDoc
-	 * @throws ShareNotFound
-	 */
-	public function getShareById($id, $recipientId = null) {
+	#[Override]
+	public function getShareById($id, $recipientId = null): IShare {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('s.*',
 			'f.fileid', 'f.path', 'f.permissions AS f_permissions', 'f.storage', 'f.path_hash',
