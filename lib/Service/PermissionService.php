@@ -52,7 +52,7 @@ class PermissionService {
 	 *
 	 * @return array<Acl::PERMISSION_*, bool>
 	 */
-	public function getPermissions(int $boardId, ?string $userId = null): array {
+	public function getPermissions(int $boardId, ?string $userId = null, bool $allowDeleted = false): array {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
@@ -64,8 +64,8 @@ class PermissionService {
 		}
 
 		try {
-			$board = $this->getBoard($boardId);
-			$owner = $this->userIsBoardOwner($boardId, $userId);
+			$board = $this->getBoard($boardId, $allowDeleted);
+			$owner = $this->userIsBoardOwner($boardId, $userId, $allowDeleted);
 			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
 			$owner = false;
@@ -107,7 +107,7 @@ class PermissionService {
 	 *
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false): bool {
+	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, bool $allowDeletedBoard = false): bool {
 		$boardId = (int)$id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -117,7 +117,7 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId, $userId);
+		$permissions = $this->getPermissions($boardId, $userId, $allowDeletedBoard);
 		if ($permissions[$permission] === true) {
 
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
@@ -142,12 +142,12 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool
 	 */
-	public function userIsBoardOwner($boardId, $userId = null) {
+	public function userIsBoardOwner($boardId, $userId = null, bool $allowDeleted = false) {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
 		try {
-			$board = $this->getBoard($boardId);
+			$board = $this->getBoard($boardId, $allowDeleted);
 			return $userId === $board->getOwner();
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 		}
@@ -158,9 +158,9 @@ class PermissionService {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	private function getBoard(int $boardId): Board {
+	private function getBoard(int $boardId, bool $allowDeleted = false): Board {
 		if (!isset($this->boardCache[(string)$boardId])) {
-			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true);
+			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true, $allowDeleted);
 		}
 		return $this->boardCache[(string)$boardId];
 	}

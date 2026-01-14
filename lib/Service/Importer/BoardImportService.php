@@ -106,11 +106,9 @@ class BoardImportService {
 			return;
 		}
 		$propertyEventHandlers = new \ReflectionProperty($this->commentsManager, 'eventHandlers');
-		$propertyEventHandlers->setAccessible(true);
 		$propertyEventHandlers->setValue($this->commentsManager, []);
 
 		$propertyEventHandlerClosures = new \ReflectionProperty($this->commentsManager, 'eventHandlerClosures');
-		$propertyEventHandlerClosures->setAccessible(true);
 		$propertyEventHandlerClosures->setValue($this->commentsManager, []);
 	}
 

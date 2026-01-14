@@ -9,7 +9,7 @@
 		}
 	],
 	"require": {
-		"justinrainbow/json-schema": "^6.0",
+		"justinrainbow/json-schema": "^6.5",
 		"bamarni/composer-bin-plugin": "^1.8"
 	},
 	"require-dev": {
