@@ -144,9 +144,9 @@ class ActivityManager {
 				break;
 			case self::SUBJECT_BOARD_UPDATE_ARCHIVED:
 				if (isset($subjectParams['after']) && $subjectParams['after']) {
-					$subject = $ownActivity ? $l->t('You have archived the board {board}') : $l->t('{user} has archived the board {before}');
+					$subject = $ownActivity ? $l->t('You have archived the board {board}') : $l->t('{user} has archived the board {board}');
 				} else {
-					$subject = $ownActivity ? $l->t('You have unarchived the board {board}') : $l->t('{user} has unarchived the board {before}');
+					$subject = $ownActivity ? $l->t('You have unarchived the board {board}') : $l->t('{user} has unarchived the board {board}');
 				}
 				break;
 			case self::SUBJECT_STACK_CREATE:
