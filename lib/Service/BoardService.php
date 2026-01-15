@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\User\LazyUser;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
@@ -34,6 +35,7 @@ use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
+use OCA\Files_Sharing\Event\UserShareAccessUpdatedEvent;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
@@ -42,6 +44,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -69,6 +72,7 @@ class BoardService {
 		private IDBConnection $connection,
 		private BoardServiceValidator $boardServiceValidator,
 		private SessionMapper $sessionMapper,
+		private IUserManager $userManager,
 		private ?string $userId,
 	) {
 	}
@@ -235,6 +239,13 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		$this->changeHelper->boardChanged($board->getId());
 
+		$acls = $this->aclMapper->findAll($id);
+		foreach ($acls as $acl) {
+			$user = new LazyUser($acl->getParticipant(), $this->userManager);
+			$event = new UserShareAccessUpdatedEvent($user);
+			$this->eventDispatcher->dispatchTyped($event);
+		}
+
 		return $board;
 	}
 
@@ -252,6 +263,13 @@ class BoardService {
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		$this->changeHelper->boardChanged($board->getId());
+
+		$acls = $this->aclMapper->findAll($id);
+		foreach ($acls as $acl) {
+			$user = new LazyUser($acl->getParticipant(), $this->userManager);
+			$event = new UserShareAccessUpdatedEvent($user);
+			$this->eventDispatcher->dispatchTyped($event);
+		}
 
 		return $board;
 	}
