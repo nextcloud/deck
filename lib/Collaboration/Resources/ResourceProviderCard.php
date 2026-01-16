@@ -14,48 +14,32 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\AppFramework\QueryException;
-use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProvider;
 use OCP\Collaboration\Resources\IResource;
 use OCP\Collaboration\Resources\ResourceException;
 use OCP\IURLGenerator;
 use OCP\IUser;
-use OCP\Server;
+use Override;
 
 class ResourceProviderCard implements IProvider {
 	public const RESOURCE_TYPE = 'deck-card';
 
-	private CardMapper $cardMapper;
-	private BoardMapper $boardMapper;
-	private PermissionService $permissionService;
-	private IURLGenerator $urlGenerator;
 	protected array $nodes = [];
 
-	public function __construct(CardMapper $cardMapper, BoardMapper $boardMapper, PermissionService $permissionService, IURLGenerator $urlGenerator) {
-		$this->cardMapper = $cardMapper;
-		$this->boardMapper = $boardMapper;
-		$this->permissionService = $permissionService;
-		$this->urlGenerator = $urlGenerator;
+	public function __construct(
+		private readonly CardMapper $cardMapper,
+		private readonly BoardMapper $boardMapper,
+		private readonly PermissionService $permissionService,
+		private readonly IURLGenerator $urlGenerator,
+	) {
 	}
 
-	/**
-	 * Get the type of a resource
-	 *
-	 * @return string
-	 * @since 15.0.0
-	 */
+	#[Override]
 	public function getType(): string {
 		return self::RESOURCE_TYPE;
 	}
 
-	/**
-	 * Get the rich object data of a resource
-	 *
-	 * @param IResource $resource
-	 * @return array
-	 * @since 16.0.0
-	 */
+	#[Override]
 	public function getResourceRichObject(IResource $resource): array {
 		try {
 			$card = $this->cardMapper->find($resource->getId());
@@ -80,14 +64,7 @@ class ResourceProviderCard implements IProvider {
 		];
 	}
 
-	/**
-	 * Can a user/guest access the collection
-	 *
-	 * @param IResource $resource
-	 * @param IUser|null $user
-	 * @return bool
-	 * @since 16.0.0
-	 */
+	#[Override]
 	public function canAccessResource(IResource $resource, ?IUser $user): bool {
 		if (!$user instanceof IUser || $resource->getType() !== self::RESOURCE_TYPE) {
 			return false;
@@ -113,27 +90,11 @@ class ResourceProviderCard implements IProvider {
 	}
 
 	/**
-	 * @param $cardId
-	 * @return Board
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 */
-	private function getBoard($cardId) {
+	private function getBoard(int $cardId): Board {
 		$boardId = $this->cardMapper->findBoardId($cardId);
 		return $this->boardMapper->find($boardId, false, true);
-	}
-
-	public function invalidateAccessCache($cardId = null) {
-		try {
-			/** @var IManager $resourceManager */
-			$resourceManager = Server::get(IManager::class);
-		} catch (QueryException $e) {
-		}
-		if ($cardId !== null) {
-			$resource = $resourceManager->getResourceForUser(self::RESOURCE_TYPE, (string)$cardId, null);
-			$resourceManager->invalidateAccessCacheForResource($resource);
-		} else {
-			$resourceManager->invalidateAccessCacheForProvider($this);
-		}
 	}
 }

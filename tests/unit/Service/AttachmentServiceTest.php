@@ -43,6 +43,7 @@ use OCP\AppFramework\IAppContainer;
 use OCP\IL10N;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Container\ContainerExceptionInterface;
 use Test\TestCase;
 
 /** @internal Just for testing the service registration */
@@ -99,7 +100,7 @@ class AttachmentServiceTest extends TestCase {
 	private $attachmentServiceValidator;
 
 	/**
-	 * @throws \OCP\AppFramework\QueryException
+	 * @throws ContainerExceptionInterface
 	 */
 	public function setUp(): void {
 		parent::setUp();
