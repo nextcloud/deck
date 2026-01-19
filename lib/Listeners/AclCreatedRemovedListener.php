@@ -6,8 +6,10 @@
  */
 namespace OCA\Deck\Listeners;
 
+use OCA\Circles\Model\Member;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
+use OCA\Deck\Service\CirclesService;
 use OCA\Files_Sharing\Event\UserShareAccessUpdatedEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -16,8 +18,10 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\Share\IShare;
 
+/** @template-implements IEventListener<Event|AclDeletedEvent|AclCreatedEvent> */
 class AclCreatedRemovedListener implements IEventListener {
 	public function __construct(
+		private CirclesService $circlesService,
 		private IGroupManager $groupManager,
 		private IEventDispatcher $eventDispatcher,
 		private IUserManager $userManager,
@@ -30,14 +34,27 @@ class AclCreatedRemovedListener implements IEventListener {
 		}
 
 		$acl = $event->getAcl();
-		if ($acl->getType() === IShare::TYPE_GROUP) {
-			$group = $this->groupManager->get($acl->getParticipant());
-			foreach ($group->getUsers() as $user) {
+		switch ($acl->getType()) {
+			case IShare::TYPE_GROUP:
+				$group = $this->groupManager->get($acl->getParticipant());
+				foreach ($group->getUsers() as $user) {
+					$this->eventDispatcher->dispatchTyped(new UserShareAccessUpdatedEvent($user));
+				}
+				break;
+			case IShare::TYPE_CIRCLE:
+				$circle = $this->circlesService->getCircle($acl->getParticipant());
+				$members = array_filter($circle->getInheritedMembers(), static function (Member $member) {
+					return $member->getUserType() === Member::TYPE_USER;
+				});
+				foreach ($members as $member) {
+					$user = $this->userManager->get($member->getUserId());
+					$this->eventDispatcher->dispatchTyped(new UserShareAccessUpdatedEvent($user));
+				}
+				break;
+			default:
+				$user = $this->userManager->get($acl->getParticipant());
 				$this->eventDispatcher->dispatchTyped(new UserShareAccessUpdatedEvent($user));
-			}
-		} else {
-			$user = $this->userManager->get($acl->getParticipant());
-			$this->eventDispatcher->dispatchTyped(new UserShareAccessUpdatedEvent($user));
+				break;
 		}
 	}
 }
