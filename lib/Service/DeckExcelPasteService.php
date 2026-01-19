@@ -22,6 +22,7 @@ class DeckExcelPasteService
     {
         return [
             'number_url'                  => 'Nummer URL',
+			'date_through' 				  => 'Datum doorgezet',
             'url'                         => 'URL',
             'warning'                     => 'Waarschuwing',
             'material'                    => 'Materiaal',
@@ -38,6 +39,7 @@ class DeckExcelPasteService
 
             // Filled later by assessor
             'file_number'                 => 'Dossiernummer',
+			'perci_number' 				  => 'Perci nummer',
             'online_offline'              => 'Online/Offline',
             'vb_sent_out'                 => 'VB verstuurd',
             'date'                        => 'Datum',
