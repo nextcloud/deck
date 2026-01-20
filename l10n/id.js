@@ -227,6 +227,7 @@ OC.L10N.register(
     "Failed to upload {name}" : "Gagal mengunggah {name}",
     "Maximum file size of {size} exceeded" : "Melampaui batas ukuran maksimal {size}",
     "Due date" : "Tenggat",
+    "Error creating the share" : "Kesalahan saat membuat berbagi",
     "Share" : "Bagikan",
     "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kartu \"%s\" pada \"%s\" telah melampaui tenggat.",
