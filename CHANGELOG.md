@@ -5,6 +5,37 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.17.0-beta.1
+
+### Added
+- chore/share provide get users — @juliusknorr — [#7499](https://github.com/nextcloud/deck/pull/7499)
+- feat: implement IPartialShareProvider support — @salmart-dev — [#7501](https://github.com/nextcloud/deck/pull/7501)
+- Feature/3331 dynamic column width — @ludij — [#6640](https://github.com/nextcloud/deck/pull/6640)
+
+### Fixed
+- fix: Correct typing — @artonge — [#7515](https://github.com/nextcloud/deck/pull/7515)
+- fix: add new tags to card and board — @grnd-alt — [#7508](https://github.com/nextcloud/deck/pull/7508)
+- Fix: Board cannot be undeleted — @theoholl — [#7505](https://github.com/nextcloud/deck/pull/7505)
+- Fix: Do not render empty avatar list — @theoholl — [#7494](https://github.com/nextcloud/deck/pull/7494)
+- Fix: Clear value in new board dialog when a new board was created or the edit canceled — @theoholl — [#7498](https://github.com/nextcloud/deck/pull/7498)
+- Fix: Update validator to allow 0 board name — @theoholl — [#7438](https://github.com/nextcloud/deck/pull/7438)
+- Fix: Make color picker keyboard-focusable — @theoholl — [#7446](https://github.com/nextcloud/deck/pull/7446)
+- Fix: Redirect user to overview page after deleting or leaving a board — @theoholl — [#7442](https://github.com/nextcloud/deck/pull/7442)
+- Fix: Keep input dialogs in position — @theoholl — [#7441](https://github.com/nextcloud/deck/pull/7441)
+- Fix/6185: Windows compatibiliy: unspecified error when uploading a forbidden file — @samin-z — [#7429](https://github.com/nextcloud/deck/pull/7429)
+- fix(comment): improve comment form behavior in firefox — @luka-nextcloud — [#7397](https://github.com/nextcloud/deck/pull/7397)
+- fix(l10n): Use numbered placeholders — @rakekniven — [#7259](https://github.com/nextcloud/deck/pull/7259)
+- fix: resolve MySQL Error 1093 when deleting users from boards — @ABartelt — [#7225](https://github.com/nextcloud/deck/pull/7225)
+
+### Other
+- Chore/bump min php version — @grnd-alt — [#7293](https://github.com/nextcloud/deck/pull/7293)
+- Add translators comments in reference providers — @julien-nc — [#7222](https://github.com/nextcloud/deck/pull/7222)
+- feat(deps): Add Nextcloud 33 support on main — @nickvergessen — [#7204](https://github.com/nextcloud/deck/pull/7204)
+- perf(cards): fetch all cards at once — @CarlSchwan — [#7165](https://github.com/nextcloud/deck/pull/7165)
+- Docs: Updating docs for API endpoints for uploading attachments — @Somebodyisnobody — [#7159](https://github.com/nextcloud/deck/pull/7159)
+- chore: remove deprecated setAccessible — @grnd-alt — [#7507](https://github.com/nextcloud/deck/pull/7507)
+- Upgrade PHP version to 8.4 in devcontainer configuration — @theoholl — [#7461](https://github.com/nextcloud/deck/pull/7461)
+
 ## 1.16.0-beta.1
 
 ### Added
