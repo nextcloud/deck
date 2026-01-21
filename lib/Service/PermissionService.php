@@ -26,7 +26,9 @@ use OCP\Share\IManager;
 use Psr\Log\LoggerInterface;
 
 class PermissionService {
-	private array $users = [];
+
+	/** @var array<string, array<string, User>> */
+	private $users = [];
 
 	private CappedMemoryCache $boardCache;
 	/** @var CappedMemoryCache<array<Acl::PERMISSION_*, bool>> */
@@ -207,8 +209,9 @@ class PermissionService {
 	 * Required to allow assigning them to cards
 	 *
 	 * @param $boardId
-	 * @return array
-	 */
+	 * @param $refresh
+	 * @return array<string, User>
+	 * */
 	public function findUsers($boardId, $refresh = false) {
 		// cache users of a board so we don't query them for every cards
 		if (array_key_exists((string)$boardId, $this->users) && !$refresh) {
@@ -222,12 +225,12 @@ class PermissionService {
 		} catch (MultipleObjectsReturnedException $e) {
 			return [];
 		}
-
+		/** @var array<string, User> */
 		$users = [];
 		if (!$this->userManager->userExists($board->getOwner())) {
 			$this->logger->info('No owner found for board ' . $board->getId());
 		} else {
-			$users[$board->getOwner()] = new User($board->getOwner(), $this->userManager);
+			$users[(string)$board->getOwner()] = new User($board->getOwner(), $this->userManager);
 		}
 		$acls = $this->aclMapper->findAll($boardId);
 		/** @var Acl $acl */
@@ -237,7 +240,7 @@ class PermissionService {
 					$this->logger->info('No user found for acl rule ' . $acl->getId());
 					continue;
 				}
-				$users[$acl->getParticipant()] = new User($acl->getParticipant(), $this->userManager);
+				$users[(string)$acl->getParticipant()] = new User($acl->getParticipant(), $this->userManager);
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $this->groupManager->get($acl->getParticipant());
@@ -246,7 +249,7 @@ class PermissionService {
 					continue;
 				}
 				foreach ($group->getUsers() as $user) {
-					$users[$user->getUID()] = new User($user->getUID(), $this->userManager);
+					$users[(string)$user->getUID()] = new User($user->getUID(), $this->userManager);
 				}
 			}
 
@@ -267,7 +270,7 @@ class PermissionService {
 						if ($user === null) {
 							$this->logger->info('No user found for circle member ' . $member->getUserId());
 						} else {
-							$users[$member->getUserId()] = new User($member->getUserId(), $this->userManager);
+							$users[(string)$member->getUserId()] = new User($member->getUserId(), $this->userManager);
 						}
 					}
 				} catch (\Exception $e) {

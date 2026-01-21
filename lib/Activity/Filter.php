@@ -61,7 +61,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @return string[] An array of allowed apps from which activities should be displayed
 	 * @since 11.0.0
 	 */
-	public function filterTypes(array $types): array {
+	public function filterTypes($types): array {
 		return array_merge($types, ['deck_comment']);
 	}
 
