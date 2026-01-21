@@ -239,11 +239,13 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		$this->changeHelper->boardChanged($board->getId());
 
-		$acls = $this->aclMapper->findAll($id);
-		foreach ($acls as $acl) {
-			$user = new LazyUser($acl->getParticipant(), $this->userManager);
-			$event = new UserShareAccessUpdatedEvent($user);
-			$this->eventDispatcher->dispatchTyped($event);
+		if (class_exists(UserShareAccessUpdatedEvent::class)) {
+			$acls = $this->aclMapper->findAll($id);
+			foreach ($acls as $acl) {
+				$user = new LazyUser($acl->getParticipant(), $this->userManager);
+				$event = new UserShareAccessUpdatedEvent($user);
+				$this->eventDispatcher->dispatchTyped($event);
+			}
 		}
 
 		return $board;
@@ -264,11 +266,13 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		$this->changeHelper->boardChanged($board->getId());
 
-		$acls = $this->aclMapper->findAll($id);
-		foreach ($acls as $acl) {
-			$user = new LazyUser($acl->getParticipant(), $this->userManager);
-			$event = new UserShareAccessUpdatedEvent($user);
-			$this->eventDispatcher->dispatchTyped($event);
+		if (class_exists(UserShareAccessUpdatedEvent::class)) {
+			$acls = $this->aclMapper->findAll($id);
+			foreach ($acls as $acl) {
+				$user = new LazyUser($acl->getParticipant(), $this->userManager);
+				$event = new UserShareAccessUpdatedEvent($user);
+				$this->eventDispatcher->dispatchTyped($event);
+			}
 		}
 
 		return $board;

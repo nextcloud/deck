@@ -107,7 +107,7 @@ class NotificationHelper {
 				$notification = $this->notificationManager->createNotification();
 				$notification
 					->setApp('deck')
-					->setUser((string)$user->getUID())
+					->setUser($user->getUID())
 					->setObject('card', (string)$card->getId())
 					->setSubject('card-overdue', [
 						$card->getTitle(), $board->getTitle()

@@ -44,6 +44,7 @@ namespace OCA\Circles\Model {
 		public const APP_DEFAULT = 11000;
 
 		public function getLevel(): int {}
+		public function getUserType(): int{}
 	}
 
 	class Circle {
@@ -83,6 +84,12 @@ namespace OCA\Circles {
 		public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
 		public function getFederatedUser(string $federatedId, int $type = Member::TYPE_SINGLE): FederatedUser {}
 	}
+}
+
+namespace OCA\Files_Sharing\Event{
+	class UserShareAccessUpdatedEvent extends \OCP\EventDispatcher\Event{
+			public function __construct($user){}
+		}
 }
 
 namespace {

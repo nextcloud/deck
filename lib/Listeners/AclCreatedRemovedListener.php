@@ -33,6 +33,10 @@ class AclCreatedRemovedListener implements IEventListener {
 			return;
 		}
 
+		if (!class_exists(UserShareAccessUpdatedEvent::class)) {
+			return;
+		}
+
 		$acl = $event->getAcl();
 		switch ($acl->getType()) {
 			case IShare::TYPE_GROUP:
@@ -42,6 +46,9 @@ class AclCreatedRemovedListener implements IEventListener {
 				}
 				break;
 			case IShare::TYPE_CIRCLE:
+				if (!$this->circlesService->isCirclesEnabled()) {
+					return;
+				}
 				$circle = $this->circlesService->getCircle($acl->getParticipant());
 				$members = array_filter($circle->getInheritedMembers(), static function (Member $member) {
 					return $member->getUserType() === Member::TYPE_USER;
