@@ -13,7 +13,8 @@ namespace OCA\Deck\Service;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\NoPermissionException;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
+use OCP\IAppConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUserSession;
@@ -24,16 +25,12 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
-	private IConfig $config;
-	private ?string $userId = null;
-	private IGroupManager $groupManager;
-
 	public function __construct(
-		IConfig $config,
-		IGroupManager $groupManager,
+		private IAppConfig $appConfig,
+		private IUserConfig $userConfig,
+		private IGroupManager $groupManager,
+		private ?string $userId = null
 	) {
-		$this->groupManager = $groupManager;
-		$this->config = $config;
 	}
 
 	public function getUserId(): ?string {
@@ -80,17 +77,17 @@ class ConfigService {
 				if ($this->getUserId() === null) {
 					return false;
 				}
-				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
+				return $this->userConfig->getValueBool($this->getUserId(), Application::APP_ID, 'calendar', true);
 			case 'cardDetailsInModal':
 				if ($this->getUserId() === null) {
 					return false;
 				}
-				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
+				return $this->userConfig->getValueBool($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
 			case 'cardIdBadge':
 				if ($this->getUserId() === null) {
 					return false;
 				}
-				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', false);
+				return $this->userConfig->getValueBool($this->getUserId(), Application::APP_ID, 'cardIdBadge', false);
 		}
 		return false;
 	}
@@ -101,13 +98,13 @@ class ConfigService {
 			return false;
 		}
 
-		$appConfigState = $this->config->getAppValue(Application::APP_ID, 'calendar', 'yes') === 'yes';
-		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'calendar', $appConfigState);
+		$appConfigState = $this->appConfig->getValueString(Application::APP_ID, 'calendar', 'yes') === 'yes';
+		$defaultState = $this->userConfig->getValueBool($userId, Application::APP_ID, 'calendar', $appConfigState);
 		if ($boardId === null) {
 			return $defaultState;
 		}
 
-		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
+		return $this->userConfig->getValueBool($userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
 	}
 
 	public function isCardDetailsInModal(?int $boardId = null): bool {
@@ -116,12 +113,12 @@ class ConfigService {
 			return false;
 		}
 
-		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardDetailsInModal', true);
+		$defaultState = $this->userConfig->getValueBool($userId, Application::APP_ID, 'cardDetailsInModal', true);
 		if ($boardId === null) {
 			return $defaultState;
 		}
 
-		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'board:' . $boardId . ':cardDetailsInModal', $defaultState);
+		return $this->userConfig->getValueBool($userId, Application::APP_ID, 'board:' . $boardId . ':cardDetailsInModal', $defaultState);
 	}
 
 	public function isCardIdBadgeEnabled(): bool {
@@ -129,13 +126,13 @@ class ConfigService {
 		if ($userId === null) {
 			return false;
 		}
-		$appConfigState = $this->config->getAppValue(Application::APP_ID, 'cardIdBadge', 'yes') === 'no';
-		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $appConfigState);
+		$appConfigState = $this->appConfig->getValueString(Application::APP_ID, 'cardIdBadge', 'yes') === 'no';
+		$defaultState = $this->userConfig->getValueBool($userId, Application::APP_ID, 'cardIdBadge', $appConfigState);
 
-		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
+		return $this->userConfig->getValueBool($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
 	}
 
-	public function set($key, $value) {
+	public function set(string $key, $value) {
 		$userId = $this->getUserId();
 		if ($userId === null) {
 			throw new NoPermissionException('Must be logged in to set user config');
@@ -151,15 +148,15 @@ class ConfigService {
 				$result = $this->setGroupLimit($value);
 				break;
 			case 'calendar':
-				$this->config->setUserValue($userId, Application::APP_ID, 'calendar', (string)$value);
+				$this->userConfig->setValueString($userId, Application::APP_ID, 'calendar', (string)$value);
 				$result = $value;
 				break;
 			case 'cardDetailsInModal':
-				$this->config->setUserValue($userId, Application::APP_ID, 'cardDetailsInModal', (string)$value);
+				$this->userConfig->setValueString($userId, Application::APP_ID, 'cardDetailsInModal', (string)$value);
 				$result = $value;
 				break;
 			case 'cardIdBadge':
-				$this->config->setUserValue($userId, Application::APP_ID, 'cardIdBadge', (string)$value);
+				$this->userConfig->setValueString($userId, Application::APP_ID, 'cardIdBadge', (string)$value);
 				$result = $value;
 				break;
 			case 'board':
@@ -167,7 +164,7 @@ class ConfigService {
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}
-				$this->config->setUserValue($userId, Application::APP_ID, $key, (string)$value);
+				$this->userConfig->setValueString($userId, Application::APP_ID, $key, (string)$value);
 				$result = $value;
 		}
 		return $result;
@@ -182,12 +179,12 @@ class ConfigService {
 			$groups[] = $group['id'];
 		}
 		$data = implode(',', $groups);
-		$this->config->setAppValue(Application::APP_ID, 'groupLimit', $data);
+		$this->appConfig->setValueString(Application::APP_ID, 'groupLimit', $data);
 		return $groups;
 	}
 
 	private function getGroupLimitList(): array {
-		$value = $this->config->getAppValue(Application::APP_ID, 'groupLimit', '');
+		$value = $this->appConfig->getValueString(Application::APP_ID, 'groupLimit', '');
 		$groups = explode(',', $value);
 		if ($value === '') {
 			return [];
@@ -217,7 +214,7 @@ class ConfigService {
 			throw new NoPermissionException('Must be logged in get the attachment folder');
 		}
 
-		return $this->config->getUserValue($userId ?? $this->getUserId(), 'deck', 'attachment_folder', '/Deck');
+		return $this->userConfig->getValueString($userId ?? $this->getUserId(), 'deck', 'attachment_folder', '/Deck');
 	}
 
 	public function setAttachmentFolder(?string $userId, string $path): void {
@@ -225,6 +222,6 @@ class ConfigService {
 			throw new NoPermissionException('Must be logged in get the attachment folder');
 		}
 
-		$this->config->setUserValue($userId ?? $this->getUserId(), 'deck', 'attachment_folder', $path);
+		$this->userConfig->setValueString($userId ?? $this->getUserId(), 'deck', 'attachment_folder', $path);
 	}
 }
