@@ -40,6 +40,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Db\User;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\NoPermissionException;
@@ -50,6 +51,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IURLGenerator;
 use OCP\IUser;
+use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -95,6 +97,9 @@ class BoardServiceTest extends TestCase {
 	/** @var SessionMapper */
 	private $sessionMapper;
 
+	/** @var IUserManager */
+	private $userManager;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
@@ -115,6 +120,7 @@ class BoardServiceTest extends TestCase {
 		$this->connection = $this->createMock(IDBConnection::class);
 		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 		$this->sessionMapper = $this->createMock(SessionMapper::class);
+		$this->userManager = $this->createMock(IUserManager::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -135,6 +141,7 @@ class BoardServiceTest extends TestCase {
 			$this->connection,
 			$this->boardServiceValidator,
 			$this->sessionMapper,
+			$this->userManager,
 			$this->userId
 		);
 
@@ -262,6 +269,9 @@ class BoardServiceTest extends TestCase {
 		$this->boardMapper->expects($this->once())
 			->method('update')
 			->willReturn($boardDeleted);
+		$this->aclMapper->expects($this->once())
+			->method('findAll')
+			->willReturn([]);
 		$this->assertEquals($boardDeleted, $this->service->delete(123));
 	}
 

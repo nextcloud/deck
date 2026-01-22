@@ -32,7 +32,9 @@ use OCP\IL10N;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
+use OCP\Share\IPartialShareProvider;
 use OCP\Share\IShare;
+use OCP\Share\IShareProviderGetUsers;
 
 /** Taken from the talk shareapicontroller helper */
 interface IShareProviderBackend {
@@ -42,7 +44,7 @@ interface IShareProviderBackend {
 	public function canAccessShare(IShare $share, string $user): bool;
 }
 
-class DeckShareProvider implements \OCP\Share\IShareProvider {
+class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvider, IShareProviderGetUsers {
 	public const DECK_FOLDER = '/Deck';
 	public const DECK_FOLDER_PLACEHOLDER = '/{DECK_PLACEHOLDER}';
 
@@ -419,7 +421,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$qb->executeStatement();
 
-		return $this->getShareById((int)$share->getId(), $recipient);
+		return $this->getShareById((string)$share->getId(), $recipient);
 	}
 
 	/**
@@ -702,6 +704,34 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @return IShare[]
 	 */
 	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
+		return $this->_getSharedWith($userId, $limit, $offset, $node);
+	}
+
+	public function getSharedWithByPath(
+		string $userId,
+		int $shareType,
+		string $path,
+		bool $forChildren,
+		int $limit,
+		int $offset,
+	): iterable {
+		return $this->_getSharedWith($userId, $limit, $offset, null, $path, $forChildren);
+	}
+
+	/**
+	 * Get received shared for the given user.
+	 * You can optionally provide a node or a path to filter the shares.
+	 *
+	 * @return IShare[]
+	 */
+	private function _getSharedWith(
+		string $userId,
+		int $limit,
+		int $offset,
+		?Node $node = null,
+		?string $path = null,
+		?bool $forChildren = false,
+	): array {
 		$allBoards = $this->boardMapper->findBoardIds($userId);
 
 		/** @var IShare[] $shares */
@@ -738,6 +768,18 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			// Filter by node if provided
 			if ($node !== null) {
 				$qb->andWhere($qb->expr()->eq('s.file_source', $qb->createNamedParameter($node->getId())));
+			}
+
+			if ($path !== null) {
+				$qb->leftJoin('s', 'share', 'sc', $qb->expr()->eq('s.parent', 'sc.id'))
+					->andWhere($qb->expr()->eq('sc.share_type', $qb->createNamedParameter(IShare::TYPE_DECK_USER)))
+					->andWhere($qb->expr()->eq('sc.share_with', $qb->createNamedParameter($userId)));
+
+				if ($forChildren) {
+					$qb->andWhere($qb->expr()->like('sc.file_target', $qb->createNamedParameter($this->dbConnection->escapeLikeParameter($path) . '_%')));
+				} else {
+					$qb->andWhere($qb->expr()->eq('sc.file_target', $qb->createNamedParameter($path)));
+				}
 			}
 
 			$qb->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
@@ -1066,5 +1108,21 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 
 		return $shares;
+	}
+
+	public function getUsersForShare(IShare $share): iterable {
+		if ($share->getShareType() === IShare::TYPE_DECK) {
+			$cardId = (int)$share->getSharedWith();
+			$boardId = $this->cardMapper->findBoardId($cardId);
+			if ($boardId === null) {
+				return [];
+			}
+
+			foreach ($this->permissionService->findUsers($boardId) as $user) {
+				yield $user->getUserObject();
+			}
+		}
+
+		return [];
 	}
 }

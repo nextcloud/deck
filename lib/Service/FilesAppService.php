@@ -312,7 +312,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	 */
 	private function getShareForAttachment(Attachment $attachment): IShare {
 		try {
-			$share = $this->shareProvider->getShareById($attachment->getId());
+			$share = $this->shareProvider->getShareById((string)$attachment->getId());
 		} catch (ShareNotFound $e) {
 			throw new NoPermissionException('No permission to access the attachment from the card');
 		}

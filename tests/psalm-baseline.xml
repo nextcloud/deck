@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="6.5.0@38fc8444edf0cebc9205296ee6e30e906ade783b">
-  <file src="lib/Activity/Filter.php">
-    <MethodSignatureMismatch>
-      <code><![CDATA[$types]]></code>
-    </MethodSignatureMismatch>
-  </file>
   <file src="lib/Controller/BoardApiController.php">
     <UndefinedFunction>
       <code><![CDATA[parseDate($modified)]]></code>

@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\IUser;
 use OCP\IUserManager;
 
 class User extends RelationalObject {
@@ -18,7 +19,7 @@ class User extends RelationalObject {
 		});
 	}
 
-	public function getObjectSerialization() {
+	public function getObjectSerialization(): array {
 		return [
 			'uid' => $this->getObject()->getUID(),
 			'displayname' => $this->getDisplayName(),
@@ -26,11 +27,15 @@ class User extends RelationalObject {
 		];
 	}
 
-	public function getUID() {
+	public function getUID(): string {
 		return $this->getPrimaryKey();
 	}
 
-	public function getDisplayName() {
+	public function getDisplayName(): ?string {
 		return $this->userManager->getDisplayName($this->getPrimaryKey());
+	}
+
+	public function getUserObject(): IUser {
+		return $this->getObject();
 	}
 }
