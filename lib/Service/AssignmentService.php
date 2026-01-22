@@ -121,7 +121,7 @@ class AssignmentService {
 		$groups = array_filter($this->aclMapper->findAll($boardId), function (Acl $acl) use ($userId) {
 			return $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $acl->getParticipant() === $userId;
 		});
-		if (!in_array($userId, $boardUsers) && count($groups) !== 1) {
+		if (!in_array($userId, $boardUsers, true) && count($groups) !== 1) {
 			throw new BadRequestException('The user is not part of the board');
 		}
 

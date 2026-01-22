@@ -71,7 +71,7 @@ class SessionService {
 		}
 		$this->eventDispatcher->dispatchTyped(new SessionClosedEvent($boardId, $this->userId));
 	}
-	
+
 	public function removeInactiveSessions(): int {
 		return $this->sessionMapper->deleteInactive();
 	}
@@ -90,7 +90,7 @@ class SessionService {
 			}
 
 			// don't notify the same user multiple times
-			if (!in_array($session->getUserId(), $userIds)) {
+			if (!in_array($session->getUserId(), $userIds, true)) {
 				$userIds[] = $session->getUserId();
 			}
 		}
