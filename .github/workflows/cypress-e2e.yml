@@ -7,6 +7,9 @@ on:
       - main
       - stable*
 
+permissions:
+    contents: read
+
 env:
   APP_NAME: deck
   CYPRESS_baseUrl: http://localhost:8081/index.php
@@ -30,7 +33,7 @@ jobs:
 
     services:
       postgres:
-        image: ghcr.io/nextcloud/continuous-integration-postgres-14:latest
+        image: ghcr.io/nextcloud/continuous-integration-postgres-17:latest # zizmor: ignore[unpinned-images]
         ports:
           - 4444:5432/tcp
         env:
@@ -51,8 +54,9 @@ jobs:
           echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
 
       - name: Checkout server
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
 
@@ -64,13 +68,15 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Checkout ${{ env.APP_NAME }}
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           path: apps/${{ env.APP_NAME }}
 
       - name: Checkout text
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           repository: nextcloud/text
           ref: ${{ env.text_app_ref }}
           path: apps/text
@@ -123,7 +129,7 @@ jobs:
           curl -v http://localhost:8081/index.php/login
 
       - name: Cypress run
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@2ad32e649e4db26c07674ebae31a297601dbcbaf # v6.10.8
         with:
           build: npm run dev
           record: false
