@@ -56,14 +56,8 @@ jobs:
         with:
           persist-credentials: false
           repository: nextcloud/server
+          submodules: true
           ref: ${{ matrix.server-versions }}
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Checkout ${{ env.APP_NAME }}
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
