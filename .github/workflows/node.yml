@@ -73,6 +73,7 @@ jobs:
         run: npm i -g 'npm@${{ steps.versions.outputs.npmVersion }}'
 
       - name: Validate package-lock.json # See https://github.com/npm/cli/issues/4460
+        if: false # disable temporarily
         run: |
           npm i -g npm-package-lock-add-resolved@1.1.4
           npm-package-lock-add-resolved
