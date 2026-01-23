@@ -112,7 +112,7 @@ OC.L10N.register(
     "Later" : "Più tardi",
     "copy" : "copia",
     "Read more inside" : "Leggi di più all'interno",
-    "Custom lists - click to rename!" : "Elenchi personalizzati: clicca per rinominarli!",
+    "Custom lists - click to rename!" : "Elenchi personalizzati: fai clic per rinominarli!",
     "To Do" : "Da fare",
     "In Progress" : "In corso",
     "Done" : "Fatto",
