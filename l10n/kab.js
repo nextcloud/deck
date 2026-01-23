@@ -33,6 +33,7 @@ OC.L10N.register(
     "Reply" : "Err",
     "Description" : "Aglam",
     "Open link" : "Nɣel aseɣwen",
+    "seconds ago" : "Tasinin aya",
     "Cancel edit" : "Sefsex aseẓreg",
     "No notifications" : "Ulac tisezmal",
     "Close" : "Mdel",
