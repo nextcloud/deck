@@ -343,7 +343,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	/**
 	 * @return Card[]
 	 */
-	public function findUnexposedDescriptionChances() {
+	public function findUnexposedDescriptionChances(): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'duedate', 'notified', 'description_prev', 'last_editor', 'description')
 			->from('deck_cards')
@@ -352,6 +352,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * @param int[] $boardIds
 	 * @return Card[]
 	 */
 	public function search(array $boardIds, SearchQuery $query, ?int $limit = null, ?int $offset = null): array {

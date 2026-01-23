@@ -40,7 +40,6 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Db\User;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\NoPermissionException;
@@ -49,7 +48,6 @@ use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -57,48 +55,26 @@ use Test\TestCase;
 
 class BoardServiceTest extends TestCase {
 
-	/** @var BoardService */
-	private $service;
-	/** @var IConfig */
-	private $config;
-	/** @var L10N */
-	private $l10n;
-	/** @var LabelMapper */
-	private $labelMapper;
-	/** @var AclMapper */
-	private $aclMapper;
-	/** @var BoardMapper */
-	private $boardMapper;
-	/** @var StackMapper */
-	private $stackMapper;
-	/** @var CardMapper */
-	private $cardMapper;
-	/** @var PermissionService */
-	private $permissionService;
-	/** @var AssignmentService */
-	private $assignmentService;
-	/** @var NotificationHelper */
-	private $notificationHelper;
-	/** @var AssignmentMapper */
-	private $assignedUsersMapper;
-	/** @var ActivityManager */
-	private $activityManager;
-	/** @var ChangeHelper */
-	private $changeHelper;
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-	private $userId = 'admin';
-	/** @var IURLGenerator */
-	private $urlGenerator;
-	/** @var IDBConnection|MockObject */
-	private $connection;
-	/** @var BoardServiceValidator */
-	private $boardServiceValidator;
-	/** @var SessionMapper */
-	private $sessionMapper;
-
-	/** @var IUserManager */
-	private $userManager;
+	private BoardService $service;
+	private IConfig&MockObject $config;
+	private L10N&MockObject $l10n;
+	private LabelMapper&MockObject $labelMapper;
+	private AclMapper&MockObject $aclMapper;
+	private BoardMapper&MockObject $boardMapper;
+	private StackMapper&MockObject $stackMapper;
+	private CardMapper&MockObject $cardMapper;
+	private PermissionService&MockObject $permissionService;
+	private AssignmentService&MockObject $assignmentService;
+	private NotificationHelper&MockObject $notificationHelper;
+	private AssignmentMapper&MockObject $assignedUsersMapper;
+	private ActivityManager&MockObject $activityManager;
+	private ChangeHelper&MockObject $changeHelper;
+	private IEventDispatcher&MockObject $eventDispatcher;
+	private IDBConnection&MockObject $connection;
+	private BoardServiceValidator&MockObject $boardServiceValidator;
+	private SessionMapper&MockObject $sessionMapper;
+	private IUserManager&MockObject $userManager;
+	private string $userId = 'admin';
 
 	public function setUp(): void {
 		parent::setUp();
@@ -116,7 +92,6 @@ class BoardServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
-		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->connection = $this->createMock(IDBConnection::class);
 		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 		$this->sessionMapper = $this->createMock(SessionMapper::class);
@@ -137,7 +112,6 @@ class BoardServiceTest extends TestCase {
 			$this->activityManager,
 			$this->eventDispatcher,
 			$this->changeHelper,
-			$this->urlGenerator,
 			$this->connection,
 			$this->boardServiceValidator,
 			$this->sessionMapper,
@@ -149,7 +123,7 @@ class BoardServiceTest extends TestCase {
 		$user->method('getUID')->willReturn('admin');
 	}
 
-	public function testFindAll() {
+	public function testFindAll(): void {
 		$b1 = new Board();
 		$b1->setId(1);
 		$b2 = new Board();
@@ -166,7 +140,7 @@ class BoardServiceTest extends TestCase {
 		$this->assertEquals([$b1, $b2, $b3], $result);
 	}
 
-	public function testFind() {
+	public function testFind(): void {
 		$b1 = new Board();
 		$b1->setId(1);
 		$this->boardMapper->expects($this->once())
@@ -186,7 +160,7 @@ class BoardServiceTest extends TestCase {
 		$this->assertEquals($b1, $this->service->find(1));
 	}
 
-	public function testCreate() {
+	public function testCreate(): void {
 		$board = new Board();
 		$board->setTitle('MyBoard');
 		$board->setOwner('admin');

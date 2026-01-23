@@ -43,7 +43,6 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
@@ -54,25 +53,24 @@ class BoardService {
 	private ?array $boardsCachePartial = null;
 
 	public function __construct(
-		private BoardMapper $boardMapper,
-		private StackMapper $stackMapper,
-		private CardMapper $cardMapper,
-		private IConfig $config,
-		private IL10N $l10n,
-		private LabelMapper $labelMapper,
-		private AclMapper $aclMapper,
-		private PermissionService $permissionService,
-		private AssignmentService $assignmentService,
-		private NotificationHelper $notificationHelper,
-		private AssignmentMapper $assignedUsersMapper,
-		private ActivityManager $activityManager,
-		private IEventDispatcher $eventDispatcher,
-		private ChangeHelper $changeHelper,
-		private IURLGenerator $urlGenerator,
-		private IDBConnection $connection,
-		private BoardServiceValidator $boardServiceValidator,
-		private SessionMapper $sessionMapper,
-		private IUserManager $userManager,
+		private readonly BoardMapper $boardMapper,
+		private readonly StackMapper $stackMapper,
+		private readonly CardMapper $cardMapper,
+		private readonly IConfig $config,
+		private readonly IL10N $l10n,
+		private readonly LabelMapper $labelMapper,
+		private readonly AclMapper $aclMapper,
+		private readonly PermissionService $permissionService,
+		private readonly AssignmentService $assignmentService,
+		private readonly NotificationHelper $notificationHelper,
+		private readonly AssignmentMapper $assignedUsersMapper,
+		private readonly ActivityManager $activityManager,
+		private readonly IEventDispatcher $eventDispatcher,
+		private readonly ChangeHelper $changeHelper,
+		private readonly IDBConnection $connection,
+		private readonly BoardServiceValidator $boardServiceValidator,
+		private readonly SessionMapper $sessionMapper,
+		private readonly IUserManager $userManager,
 		private ?string $userId,
 	) {
 	}
@@ -87,6 +85,7 @@ class BoardService {
 
 	/**
 	 * Get all boards that are shared with a user, their groups or circles
+	 * @return Board[]
 	 */
 	public function getUserBoards(?int $since = null, bool $includeArchived = true, ?int $before = null,
 		?string $term = null): array {
@@ -439,13 +438,10 @@ class BoardService {
 		$this->notificationHelper->sendBoardShared($acl->getBoardId(), $acl, true);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 
-		$version = \OCP\Util::getVersion()[0];
-		if ($version >= 16) {
-			try {
-				$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
-				$resourceProvider->invalidateAccessCache($acl->getBoardId());
-			} catch (\Exception $e) {
-			}
+		try {
+			$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+			$resourceProvider->invalidateAccessCache($acl->getBoardId());
+		} catch (\Exception $e) {
 		}
 
 		$deletedAcl = $this->aclMapper->delete($acl);
@@ -470,13 +466,10 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 
-		$version = \OCP\Util::getVersion()[0];
-		if ($version >= 16) {
-			try {
-				$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
-				$resourceProvider->invalidateAccessCache($acl->getBoardId());
-			} catch (\Exception $e) {
-			}
+		try {
+			$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+			$resourceProvider->invalidateAccessCache($acl->getBoardId());
+		} catch (\Exception $e) {
 		}
 
 		$deletedAcl = $this->aclMapper->delete($acl);

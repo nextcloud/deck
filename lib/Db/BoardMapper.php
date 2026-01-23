@@ -26,13 +26,13 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 	public function __construct(
 		IDBConnection $db,
-		private LabelMapper $labelMapper,
-		private AclMapper $aclMapper,
-		private StackMapper $stackMapper,
-		private IUserManager $userManager,
-		private IGroupManager $groupManager,
-		private CirclesService $circlesService,
-		private LoggerInterface $logger,
+		private readonly LabelMapper $labelMapper,
+		private readonly AclMapper $aclMapper,
+		private readonly StackMapper $stackMapper,
+		private readonly IUserManager $userManager,
+		private readonly IGroupManager $groupManager,
+		private readonly CirclesService $circlesService,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
 
@@ -42,10 +42,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 
 	/**
-	 * @param $id
-	 * @param bool $withLabels
-	 * @param bool $withAcl
-	 * @return Board
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
@@ -77,6 +73,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $this->boardCache[$cacheKey];
 	}
 
+	/**
+	 * @return int[]
+	 */
 	public function findBoardIds(string $userId): array {
 		// Owned by the user
 		$qb = $this->db->getQueryBuilder();
@@ -86,9 +85,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 				$qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
 			));
 		$result = $qb->executeQuery();
-		$ownerBoards = array_map(function (string $id) {
-			return (int)$id;
-		}, $result->fetchAll(\PDO::FETCH_COLUMN));
+		$ownerBoards = array_map(static fn (string $id): int => (int)$id, $result->fetchFirstColumn());
 		$result->closeCursor();
 
 		$qb = $this->db->getQueryBuilder();
@@ -121,13 +118,14 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		}
 
 		$result = $qb->executeQuery();
-		$sharedBoards = array_map(function (string $id) {
-			return (int)$id;
-		}, $result->fetchAll(\PDO::FETCH_COLUMN));
+		$sharedBoards = array_map(static fn (string $id): int => (int)$id, $result->fetchFirstColumn());
 		$result->closeCursor();
 		return array_unique(array_merge($ownerBoards, $sharedBoards));
 	}
 
+	/**
+	 * @return Board[]
+	 */
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
 		?string $term = null): array {
 		$useCache = ($since === -1 && $includeArchived === true && $before === null && $term === null);
@@ -138,24 +136,18 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived, $before, $term);
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
+			/** @var Board[] $allBoards */
 			$allBoards = array_values(array_unique(array_merge($userBoards, $groupBoards, $circleBoards)));
 
 			// Could be moved outside
-			$acls = $this->aclMapper->findIn(array_map(function ($board) {
-				return $board->getId();
-			}, $allBoards));
-
-			/* @var Board $entry */
-			foreach ($allBoards as $entry) {
-				$boardAcls = array_values(array_filter($acls, function ($acl) use ($entry) {
-					return $acl->getBoardId() === $entry->getId();
-				}));
-				$entry->setAcl($boardAcls);
-			}
+			$acls = $this->aclMapper->findIn(array_map(static fn (Board $board) => $board->getId(), $allBoards));
 
 			foreach ($allBoards as $board) {
-				$this->boardCache[$board->getId()] = $board;
+				$boardAcls = array_values(array_filter($acls, fn (Acl $acl) => $acl->getBoardId() === $board->getId()));
+				$board->setAcl($boardAcls);
+				$this->boardCache[(string)$board->getId()] = $board;
 			}
+
 			if ($useCache) {
 				$this->userBoardCache[$userId] = $allBoards;
 			}
@@ -251,9 +243,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		foreach ($sharedEntries as $entry) {
 			$entry->setShared(1);
 		}
-		$entries = array_merge($entries, $sharedEntries);
-
-		return $entries;
+		return array_merge($entries, $sharedEntries);
 	}
 
 	public function findAllByOwner(string $userId, ?int $limit = null, ?int $offset = null) {
@@ -407,9 +397,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)));
 
 		$result = $qb->executeQuery();
-		return array_map(function ($entry) {
-			return $entry['participant'];
-		}, $result->fetchAll());
+		return array_map(static fn (array $entry) => $entry['participant'], $result->fetchAllAssociative());
 	}
 
 	public function isSharedWithTeam(int $boardId, string $teamId): bool {

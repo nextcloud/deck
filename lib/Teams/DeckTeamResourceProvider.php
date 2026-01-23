@@ -18,11 +18,10 @@ use OCP\Teams\TeamResource;
 class DeckTeamResourceProvider implements \OCP\Teams\ITeamResourceProvider {
 
 	public function __construct(
-		private BoardMapper $boardMapper,
-		private IURLGenerator $urlGenerator,
+		private readonly BoardMapper $boardMapper,
+		private readonly IURLGenerator $urlGenerator,
 	) {
 	}
-
 
 	public function getId(): string {
 		return Application::APP_ID;
