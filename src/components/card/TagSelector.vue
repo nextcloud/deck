@@ -55,6 +55,10 @@ export default {
 			type: Object,
 			default: null,
 		},
+		value: {
+			type: Array,
+			default: null,
+		},
 		labels: {
 			type: Array,
 			default: () => [],
@@ -65,16 +69,25 @@ export default {
 		},
 	},
 	computed: {
+		assignedLabels() {
+			// Use value prop if provided (v-model), otherwise fall back to card.labels
+			const labels = this.value !== null ? this.value : (this.card?.labels || [])
+			return [...labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
-				.filter(label => this.card.labels.findIndex((l) => l.id === label.id) === -1)
-		},
-		assignedLabels() {
-			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+				.filter(label => this.assignedLabels.findIndex((l) => l.id === label.id) === -1)
 		},
 	},
 	methods: {
 		onSelect(options) {
+			// When using v-model (value prop), emit input with all selected labels
+			if (this.value !== null) {
+				this.$emit('input', options || [])
+				return
+			}
+			
+			// Legacy card-based behavior: emit select for single label
 			const addedLabel = options.filter(option => !this.card.labels.includes(option) && option.id && option.color)
 			if (addedLabel.length === 0) {
 				return
@@ -82,6 +95,14 @@ export default {
 			this.$emit('select', addedLabel[0])
 		},
 		onRemove(removedLabel) {
+			// When using v-model, emit input with updated array
+			if (this.value !== null) {
+				const updated = this.assignedLabels.filter(l => l.id !== removedLabel.id)
+				this.$emit('input', updated)
+				return
+			}
+			
+			// Legacy card-based behavior
 			this.$emit('remove', removedLabel)
 		},
 		async onNewTag(option) {

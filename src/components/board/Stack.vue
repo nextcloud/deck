@@ -40,19 +40,25 @@
 				</form>
 			</transition>
 			<NcActions v-if="canManage && !isArchived" :force-menu="true">
-				<NcActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+				<NcActionButton :close-after-click="true" @click="showAutomationSettings = true">
+					<template #icon>
+						<CogIcon decorative />
+					</template>
+					{{ t('deck', 'Automation rules') }}
+				</NcActionButton>
+				<NcActionButton v-if="!showArchived" :close-after-click="true" icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Archive all cards') }}
 				</NcActionButton>
-				<NcActionButton v-if="showArchived" @click="modalArchivAllCardsShow=true">
+				<NcActionButton v-if="showArchived" :close-after-click="true" @click="modalArchivAllCardsShow=true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Unarchive all cards') }}
 				</NcActionButton>
-				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
+				<NcActionButton :close-after-click="true" icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</NcActionButton>
 			</NcActions>
@@ -130,6 +136,10 @@
 				</form>
 			</div>
 		</transition>
+
+		<StackAutomationSettings :show="showAutomationSettings"
+			:stack-id="stack.id"
+			@close="showAutomationSettings = false" />
 	</div>
 </template>
 
@@ -139,10 +149,12 @@ import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
+import CogIcon from 'vue-material-design-icons/Cog.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 
 import CardItem from '../cards/CardItem.vue'
+import StackAutomationSettings from './StackAutomationSettings.vue'
 
 import '@nextcloud/dialogs/style.css'
 
@@ -157,6 +169,8 @@ export default {
 		NcModal,
 		ArchiveIcon,
 		CardPlusOutline,
+		CogIcon,
+		StackAutomationSettings,
 	},
 	directives: {
 		ClickOutside,
@@ -181,6 +195,7 @@ export default {
 			stateCardCreating: false,
 			animate: false,
 			modalArchivAllCardsShow: false,
+			showAutomationSettings: false,
 			stackTransfer: {
 				total: 0,
 				current: null,

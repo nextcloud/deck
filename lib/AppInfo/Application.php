@@ -29,6 +29,7 @@ use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Listeners\AclCreatedRemovedListener;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
+use OCA\Deck\Listeners\CardAutomationListener;
 use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Listeners\LiveUpdateListener;
@@ -143,6 +144,12 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(CardCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(CardUpdatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(CardDeletedEvent::class, FullTextSearchEventListener::class);
+
+		// Event listening for stack automations
+		$context->registerEventListener(CardCreatedEvent::class, CardAutomationListener::class);
+		$context->registerEventListener(CardUpdatedEvent::class, CardAutomationListener::class);
+		$context->registerEventListener(CardDeletedEvent::class, CardAutomationListener::class);
+
 		$context->registerEventListener(AclCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclUpdatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclDeletedEvent::class, FullTextSearchEventListener::class);
