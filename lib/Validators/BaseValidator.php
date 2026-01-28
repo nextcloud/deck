@@ -152,13 +152,12 @@ abstract class BaseValidator {
 	}
 
 	/**
-	 * @param $rule
 	 * @param $field
 	 * @param $parameter
 	 * @return string
 	 */
-	protected function getErrorMessage($rule, $field, $parameter = null): string {
-		if (in_array($rule, ['max', 'min'])) {
+	protected function getErrorMessage(string $rule, $field, $parameter = null): string {
+		if (in_array($rule, ['max', 'min'], true)) {
 			return $rule === 'max'
 			? $field . ' cannot be longer than ' . $parameter . ' characters '
 			: $field . ' must be at least ' . $parameter . ' characters long ';

@@ -165,7 +165,7 @@ class TrelloJsonService extends ABoardImportService {
 
 	private function sortComments(array $comments): array {
 		$comparison = function (\stdClass $a, \stdClass $b): int {
-			if ($a->date == $b->date) {
+			if ($a->date === $b->date) {
 				return 0;
 			}
 			return ($a->date < $b->date) ? -1 : 1;
@@ -352,7 +352,7 @@ class TrelloJsonService extends ABoardImportService {
 	}
 
 	private function checklistItem(\stdClass $item): string {
-		if (($item->state == 'incomplete')) {
+		if (($item->state === 'incomplete')) {
 			$string_start = '- [ ]';
 		} else {
 			$string_start = '- [x]';

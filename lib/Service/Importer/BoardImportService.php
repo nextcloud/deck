@@ -38,6 +38,7 @@ use Psr\Log\LoggerInterface;
 class BoardImportService {
 	private string $system = '';
 	private ?ABoardImportService $systemInstance = null;
+	/** @var list<array{name: string, class: class-string, internalName: string}> */
 	private array $allowedSystems = [];
 	/**
 	 * Data object created from config JSON
@@ -137,16 +138,12 @@ class BoardImportService {
 	public function validateSystem(): void {
 		$allowedSystems = $this->getAllowedImportSystems();
 		$allowedSystems = array_column($allowedSystems, 'internalName');
-		if (!in_array($this->getSystem(), $allowedSystems)) {
+		if (!in_array($this->getSystem(), $allowedSystems, true)) {
 			throw new NotFoundException('Invalid system: ' . $this->getSystem());
 		}
 	}
 
-	/**
-	 * @param ?string $system
-	 * @return self
-	 */
-	public function setSystem($system): self {
+	public function setSystem(?string $system): self {
 		if ($system) {
 			$this->system = $system;
 		}
@@ -157,11 +154,17 @@ class BoardImportService {
 		return $this->system;
 	}
 
-	public function addAllowedImportSystem($system): self {
+	/**
+	 * @param array{name: string, class: class-string, internalName: string} $system
+	 */
+	public function addAllowedImportSystem(array $system): self {
 		$this->allowedSystems[] = $system;
 		return $this;
 	}
 
+	/**
+	 * @return list<array{name: string, class: class-string, internalName: string}>
+	 */
 	public function getAllowedImportSystems(): array {
 		if (!$this->allowedSystems) {
 			$this->addAllowedImportSystem([
