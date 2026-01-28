@@ -541,7 +541,7 @@ class BoardService {
 		foreach ($stacks as $stack) {
 			$newStack = new Stack();
 			$newStack->setTitle($stack->getTitle());
-			if ($stack->getOrder() == null) {
+			if ($stack->getOrder() === null) {
 				$newStack->setOrder(999);
 			} else {
 				$newStack->setOrder($stack->getOrder());
