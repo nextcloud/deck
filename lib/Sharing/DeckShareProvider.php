@@ -24,6 +24,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\Node;
@@ -421,7 +422,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 		$qb->executeStatement();
 
-		return $this->getShareById((string)$share->getId(), $recipient);
+		return $this->getShareById($share->getId(), $recipient);
 	}
 
 	/**

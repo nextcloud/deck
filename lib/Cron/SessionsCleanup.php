@@ -32,7 +32,7 @@ class SessionsCleanup extends TimedJob {
 
 	protected function run($argument) {
 		$this->logger->debug('Run cleanup job for deck sessions');
-		
+
 		$removedSessions = $this->sessionService->removeInactiveSessions();
 		$this->logger->debug('Removed ' . $removedSessions . ' inactive sessions');
 	}

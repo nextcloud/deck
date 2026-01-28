@@ -278,8 +278,8 @@ class CardService {
 		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
 		$resetDuedateNotification = false;
 		if (
-			$card->getDuedate() === null ||
-			($card->getDuedate()) != ($changes->getBefore()->getDuedate())
+			$card->getDuedate() === null
+			|| ($card->getDuedate()) != ($changes->getBefore()->getDuedate())
 		) {
 			$card->setNotified(false);
 			$resetDuedateNotification = true;
