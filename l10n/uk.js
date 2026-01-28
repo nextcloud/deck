@@ -254,7 +254,7 @@ OC.L10N.register(
     "Invalid path selected" : "Вибрано неправильний шлях",
     "Upload new files" : "Додати файл",
     "Share from Files" : "Відкрити Файли",
-    "Pending share" : "Очікувана акція",
+    "Pending share" : "Очікуваний спільний ресурс",
     "Add this attachment" : "Долучити вкладення",
     "Show in Files" : "Показати в Файлах",
     "Download" : "Звантажити",
