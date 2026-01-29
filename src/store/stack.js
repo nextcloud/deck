@@ -102,7 +102,7 @@ export default function stackModuleFactory() {
 					})
 			},
 			deleteStack({ commit }, stack) {
-				apiClient.deleteStack(stack.id)
+				apiClient.deleteStack(stack.id, stack.boardId)
 					.then((stack) => {
 						commit('deleteStack', stack)
 						commit('moveStackToTrash', stack)
