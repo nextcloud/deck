@@ -292,6 +292,7 @@ OC.L10N.register(
     "Keyboard shortcut" : "Tipkovni prečac",
     "Action" : "Radnja",
     "Shift" : "Pomakni",
+    "Ctrl" : "Ctrl",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",
     "No due" : "Nema nezavršenih"
