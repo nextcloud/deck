@@ -36,6 +36,11 @@
 			<p>
 				{{ t('deck', 'Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them.') }}
 			</p>
+			<NcFormBox>
+				<NcFormBoxSwitch v-model="federationEnabled"
+					:label="t('deck', 'Enable federation')"
+					/>
+			</NcFormBox>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsShortcutsSection>
@@ -71,6 +76,8 @@ import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcHotkeyList from '@nextcloud/vue/components/NcHotkeyList'
 import NcHotkey from '@nextcloud/vue/components/NcHotkey'
 import { NcSelect } from '@nextcloud/vue'
+import { confirmPassword } from '@nextcloud/password-confirmation'
+import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 
@@ -119,6 +126,18 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
+			},
+		},
+		federationEnabled: {
+			get() {
+				const value = this.$store.getters.config('federationEnabled')
+				console.log(value)
+				return value
+			},
+			set(newValue) {
+				confirmPassword().then(() => {
+					this.$store.dispatch('setConfig', { federationEnabled: newValue })
+				})
 			},
 		},
 		configCalendar: {
