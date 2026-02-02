@@ -60,6 +60,7 @@ class ConfigService {
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
+			$data['federationEnabled'] = $this->get('federationEnabled');
 		}
 		return $data;
 	}
@@ -76,6 +77,8 @@ class ConfigService {
 					throw new NoPermissionException('You must be admin to get the group limit');
 				}
 				return $this->getGroupLimit();
+			case 'federationEnabled':
+				return (bool) $this->config->getAppValue(Application::APP_ID, 'federationEnabled', false);
 			case 'calendar':
 				if ($this->getUserId() === null) {
 					return false;
@@ -149,6 +152,13 @@ class ConfigService {
 					throw new NoPermissionException('You must be admin to set the group limit');
 				}
 				$result = $this->setGroupLimit($value);
+				break;
+			case 'federationEnabled':
+				if (!$this->groupManager->isAdmin($userId)) {
+					throw new NoPermissionException('You must be admin to set the federation enabled setting');
+				}
+				$this->config->setAppValue(Application::APP_ID, 'federationEnabled', (string)$value);
+				$result = $value;
 				break;
 			case 'calendar':
 				$this->config->setUserValue($userId, Application::APP_ID, 'calendar', (string)$value);
