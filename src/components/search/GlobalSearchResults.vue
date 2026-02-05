@@ -6,7 +6,8 @@
 <template>
 	<div v-if="searchQuery!==''" class="global-search">
 		<h2>
-			<NcRichText :text="t('deck', 'Search for {searchQuery} in all boards')" :arguments="queryStringArgs" />
+			<NcRichText :text="$route.params.id ? t('deck', 'Search for {searchQuery} in other boards') : t('deck', 'Search for {searchQuery} in all boards')"
+				:arguments="queryStringArgs" />
 			<div v-if="loading" class="icon-loading-small" />
 		</h2>
 		<NcActions>
