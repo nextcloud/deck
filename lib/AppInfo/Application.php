@@ -28,6 +28,7 @@ use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Listeners\AclCreatedRemovedListener;
+use OCA\Deck\Federation\DeckFederationProvider;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
@@ -37,6 +38,7 @@ use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
+use OCA\Deck\Middleware\FederationMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Reference\BoardReferenceProvider;
 use OCA\Deck\Reference\CardReferenceProvider;
@@ -60,13 +62,17 @@ use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\CommentsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\OCM\Events\ResourceTypeRegisterEvent;
+use OCP\Server;
 use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
+use ResourceTypeRegisterListener;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'deck';
@@ -102,6 +108,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
 			$listener->register($eventDispatcher);
 		});
+		$context->injectFn($this->registerCloudFederationProvider(...));
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -110,6 +117,7 @@ class Application extends App implements IBootstrap {
 		}
 
 		$context->registerCapability(Capabilities::class);
+		$context->registerMiddleWare(FederationMiddleware::class);
 		$context->registerMiddleWare(ExceptionMiddleware::class);
 		$context->registerMiddleWare(DefaultBoardMiddleware::class);
 
@@ -134,6 +142,7 @@ class Application extends App implements IBootstrap {
 		$context->registerReferenceProvider(CommentReferenceProvider::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+		$context->registerEventListener(ResourceTypeRegisterEvent::class, ResourceTypeRegisterListener::class);
 
 		// Event listening to emit UserShareAccessUpdatedEvent for files_sharing
 		$context->registerEventListener(AclCreatedEvent::class, AclCreatedRemovedListener::class);
@@ -193,5 +202,15 @@ class Application extends App implements IBootstrap {
 	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
+	}
+
+	public function registerCloudFederationProvider(
+		ICloudFederationProviderManager $manager,
+	): void {
+		$manager->addCloudFederationProvider(
+			DeckFederationProvider::PROVIDER_ID,
+			"Deck Federation",
+			static fn () => Server::get(DeckFederationProvider::class),
+		);
 	}
 }

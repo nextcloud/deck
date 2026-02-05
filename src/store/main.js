@@ -52,7 +52,7 @@ export default function storeFactory() {
 			currentBoard: null,
 			currentCard: null,
 			hasCardSaveError: false,
-			boards: loadState('deck', 'initialBoards', []),
+			boards: loadState('deck', 'initialBoards', {}),
 			sharees: [],
 			assignableUsers: [],
 			boardFilter: BOARD_FILTERS.ALL,
@@ -242,6 +242,7 @@ export default function storeFactory() {
 				state.sharees.push(...shareesUsersAndGroups.users)
 				state.sharees.push(...shareesUsersAndGroups.groups)
 				state.sharees.push(...shareesUsersAndGroups.circles)
+				state.sharees.push(...shareesUsersAndGroups.remotes)
 			},
 			setAssignableUsers(state, users) {
 				state.assignableUsers = users
@@ -414,31 +415,31 @@ export default function storeFactory() {
 			async cloneBoard({ commit }, { boardData, settings }) {
 				const { withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards } = settings
 
-				try {
-					const newBoard = await apiClient.cloneBoard(boardData, withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards)
-					commit('cloneBoard', newBoard)
-					return newBoard
-				} catch (err) {
-					return err
-				}
-			},
-			removeBoard({ commit }, board) {
-				commit('removeBoard', board)
-			},
-			async loadBoards({ commit }) {
-				const boards = await apiClient.loadBoards()
-				commit('setBoards', boards)
-			},
-			async loadSharees({ commit }, query) {
-				const params = new URLSearchParams()
-				if (typeof query === 'undefined') {
-					return
-				}
-				params.append('search', query)
-				params.append('format', 'json')
-				params.append('perPage', 20)
-				params.append('itemType', [0, 1, 4, 7])
-				params.append('lookup', false)
+			try {
+				const newBoard = await apiClient.cloneBoard(boardData, withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards)
+				commit('cloneBoard', newBoard)
+				return newBoard
+			} catch (err) {
+				return err
+			}
+		},
+		removeBoard({ commit }, board) {
+			commit('removeBoard', board)
+		},
+		async loadBoards({ commit }) {
+			const boards = await apiClient.loadBoards()
+			commit('setBoards', boards)
+		},
+		async loadSharees({ commit }, query) {
+			const params = new URLSearchParams()
+			if (typeof query === 'undefined') {
+				return
+			}
+			params.append('search', query)
+			params.append('format', 'json')
+			params.append('perPage', 20)
+			params.append('itemType', 'deck')
+			params.append('lookup', false)
 
 				const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), { params })
 				commit('setSharees', response.data.ocs.data)
