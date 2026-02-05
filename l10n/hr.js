@@ -219,6 +219,7 @@ OC.L10N.register(
     "Set a due date" : "Postavi datum dospijeća",
     "Remove due date" : "Ukloni datum dospijeća",
     "Mark as done" : "Označi kao završeno",
+    "Not done" : "Not done",
     "Unarchive card" : "Dearhiviraj karticu",
     "Archive card" : "Arhiviraj karticu",
     "Assign a tag to this card…" : "Dodijeli oznaku ovoj kartici...",
