@@ -14,7 +14,7 @@
     "You have archived the board {board}" : "Ви заархівували дошку {board}",
     "{user} has archived the board {before}" : "{user} заархівував дошку {before}",
     "You have unarchived the board {board}" : "Ви розархівували дошку {board}",
-    "{user} has unarchived the board {before}" : "{user} розархівував дошку {перед}",
+    "{user} has unarchived the board {before}" : "{user} розархівував дошку {before}",
     "You have created a new list {stack} on board {board}" : "Ви створили новий список {stack} на борту {board}",
     "{user} has created a new list {stack} on board {board}" : "{user} створив(-ла) новий список {stack} на дошці {board}",
     "You have renamed list {before} to {stack} on board {board}" : "Ви перейменували список {before} на {stack} на дошці {board}",
