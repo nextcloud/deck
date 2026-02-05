@@ -6,7 +6,7 @@
 # SPDX-FileCopyrightText: 2021-2024 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: MIT
 
-name: Lint eslint
+name: Node
 
 on: pull_request
 
@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: lint-eslint-${{ github.head_ref || github.run_id }}
+  group: node-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -40,20 +40,17 @@ jobs:
               - 'package.json'
               - 'package-lock.json'
               - 'tsconfig.json'
-              - '.eslintrc.*'
-              - '.eslintignore'
               - '**.js'
               - '**.ts'
               - '**.vue'
 
-  lint:
+  build:
     runs-on: ubuntu-latest
 
     needs: changes
     if: needs.changes.outputs.src != 'false'
 
-    name: NPM lint
-
+    name: NPM build
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -75,26 +72,43 @@ jobs:
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
         run: npm i -g 'npm@${{ steps.versions.outputs.npmVersion }}'
 
-      - name: Install dependencies
+      - name: Validate package-lock.json # See https://github.com/npm/cli/issues/4460
+        if: false # disable temporarily
+        run: |
+          npm i -g npm-package-lock-add-resolved@1.1.4
+          npm-package-lock-add-resolved
+          git --no-pager diff --exit-code
+
+      - name: Install dependencies & build
         env:
           CYPRESS_INSTALL_BINARY: 0
           PUPPETEER_SKIP_DOWNLOAD: true
-        run: npm ci
+        run: |
+          npm ci
+          npm run build --if-present
 
-      - name: Lint
-        run: npm run lint
+      - name: Check build changes
+        run: |
+          bash -c "[[ ! \"`git status --porcelain `\" ]] || (echo 'Please recompile and commit the assets, see the section \"Show changes on failure\" for details' && exit 1)"
+
+      - name: Show changes on failure
+        if: failure()
+        run: |
+          git status
+          git --no-pager diff
+          exit 1 # make it red to grab attention
 
   summary:
     permissions:
       contents: none
     runs-on: ubuntu-latest-low
-    needs: [changes, lint]
+    needs: [changes, build]
 
     if: always()
 
     # This is the summary, we just avoid to rename it so that branch protection rules still match
-    name: eslint
+    name: node
 
     steps:
       - name: Summary status
-        run: if ${{ needs.changes.outputs.src != 'false' && needs.lint.result != 'success' }}; then exit 1; fi
+        run: if ${{ needs.changes.outputs.src != 'false' && needs.build.result != 'success' }}; then exit 1; fi

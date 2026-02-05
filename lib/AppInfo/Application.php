@@ -27,6 +27,7 @@ use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
+use OCA\Deck\Listeners\AclCreatedRemovedListener;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
@@ -133,6 +134,10 @@ class Application extends App implements IBootstrap {
 		$context->registerReferenceProvider(CommentReferenceProvider::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+
+		// Event listening to emit UserShareAccessUpdatedEvent for files_sharing
+		$context->registerEventListener(AclCreatedEvent::class, AclCreatedRemovedListener::class);
+		$context->registerEventListener(AclDeletedEvent::class, AclCreatedRemovedListener::class);
 
 		// Event listening for full text search indexing
 		$context->registerEventListener(CardCreatedEvent::class, FullTextSearchEventListener::class);

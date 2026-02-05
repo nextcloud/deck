@@ -26,7 +26,9 @@ use OCP\Share\IManager;
 use Psr\Log\LoggerInterface;
 
 class PermissionService {
-	private array $users = [];
+
+	/** @var array<string, array<string, User>> */
+	private $users = [];
 
 	private CappedMemoryCache $boardCache;
 	/** @var CappedMemoryCache<array<Acl::PERMISSION_*, bool>> */
@@ -52,7 +54,7 @@ class PermissionService {
 	 *
 	 * @return array<Acl::PERMISSION_*, bool>
 	 */
-	public function getPermissions(int $boardId, ?string $userId = null): array {
+	public function getPermissions(int $boardId, ?string $userId = null, bool $allowDeleted = false): array {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
@@ -64,8 +66,8 @@ class PermissionService {
 		}
 
 		try {
-			$board = $this->getBoard($boardId);
-			$owner = $this->userIsBoardOwner($boardId, $userId);
+			$board = $this->getBoard($boardId, $allowDeleted);
+			$owner = $this->userIsBoardOwner($boardId, $userId, $allowDeleted);
 			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
 			$owner = false;
@@ -107,7 +109,7 @@ class PermissionService {
 	 *
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false): bool {
+	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, bool $allowDeletedBoard = false): bool {
 		$boardId = (int)$id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -117,7 +119,7 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId, $userId);
+		$permissions = $this->getPermissions($boardId, $userId, $allowDeletedBoard);
 		if ($permissions[$permission] === true) {
 
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
@@ -142,12 +144,12 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool
 	 */
-	public function userIsBoardOwner($boardId, $userId = null) {
+	public function userIsBoardOwner($boardId, $userId = null, bool $allowDeleted = false) {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
 		try {
-			$board = $this->getBoard($boardId);
+			$board = $this->getBoard($boardId, $allowDeleted);
 			return $userId === $board->getOwner();
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 		}
@@ -158,9 +160,9 @@ class PermissionService {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	private function getBoard(int $boardId): Board {
+	private function getBoard(int $boardId, bool $allowDeleted = false): Board {
 		if (!isset($this->boardCache[(string)$boardId])) {
-			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true);
+			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true, $allowDeleted);
 		}
 		return $this->boardCache[(string)$boardId];
 	}
@@ -207,8 +209,9 @@ class PermissionService {
 	 * Required to allow assigning them to cards
 	 *
 	 * @param $boardId
-	 * @return array
-	 */
+	 * @param $refresh
+	 * @return array<string, User>
+	 * */
 	public function findUsers($boardId, $refresh = false) {
 		// cache users of a board so we don't query them for every cards
 		if (array_key_exists((string)$boardId, $this->users) && !$refresh) {
@@ -222,12 +225,12 @@ class PermissionService {
 		} catch (MultipleObjectsReturnedException $e) {
 			return [];
 		}
-
+		/** @var array<string, User> */
 		$users = [];
 		if (!$this->userManager->userExists($board->getOwner())) {
 			$this->logger->info('No owner found for board ' . $board->getId());
 		} else {
-			$users[$board->getOwner()] = new User($board->getOwner(), $this->userManager);
+			$users[(string)$board->getOwner()] = new User($board->getOwner(), $this->userManager);
 		}
 		$acls = $this->aclMapper->findAll($boardId);
 		/** @var Acl $acl */
@@ -237,7 +240,7 @@ class PermissionService {
 					$this->logger->info('No user found for acl rule ' . $acl->getId());
 					continue;
 				}
-				$users[$acl->getParticipant()] = new User($acl->getParticipant(), $this->userManager);
+				$users[(string)$acl->getParticipant()] = new User($acl->getParticipant(), $this->userManager);
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $this->groupManager->get($acl->getParticipant());
@@ -246,7 +249,7 @@ class PermissionService {
 					continue;
 				}
 				foreach ($group->getUsers() as $user) {
-					$users[$user->getUID()] = new User($user->getUID(), $this->userManager);
+					$users[(string)$user->getUID()] = new User($user->getUID(), $this->userManager);
 				}
 			}
 
@@ -267,7 +270,7 @@ class PermissionService {
 						if ($user === null) {
 							$this->logger->info('No user found for circle member ' . $member->getUserId());
 						} else {
-							$users[$member->getUserId()] = new User($member->getUserId(), $this->userManager);
+							$users[(string)$member->getUserId()] = new User($member->getUserId(), $this->userManager);
 						}
 					}
 				} catch (\Exception $e) {

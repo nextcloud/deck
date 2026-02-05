@@ -72,9 +72,9 @@ class FilterStringParser {
 					$orEquals = $param[1] === '=';
 					$value = $orEquals ? substr($param, 2) : substr($param, 1);
 					$comparator = (
-						($param[0] === '<' ? SearchQuery::COMPARATOR_LESS : 0) |
-						($param[0] === '>' ? SearchQuery::COMPARATOR_MORE : 0) |
-						($orEquals ? SearchQuery::COMPARATOR_EQUAL : 0)
+						($param[0] === '<' ? SearchQuery::COMPARATOR_LESS : 0)
+						| ($param[0] === '>' ? SearchQuery::COMPARATOR_MORE : 0)
+						| ($orEquals ? SearchQuery::COMPARATOR_EQUAL : 0)
 					);
 				}
 				$query->addDuedate(new DateQueryParameter('date', $comparator, $this->removeQuotes($value)));

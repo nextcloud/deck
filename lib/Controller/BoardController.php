@@ -166,7 +166,7 @@ class BoardController extends ApiController {
 		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
 			$error = $phpFileUploadErrors[$file['error']];
 		}
-		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !in_array($file['type'], ['application/json', 'text/plain'])) {
+		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !in_array($file['type'], ['application/json', 'text/plain'], true)) {
 			$error = $this->l10n->t('Invalid file type. Only JSON files are allowed.');
 		}
 		if ($error !== null) {

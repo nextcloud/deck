@@ -90,7 +90,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function insert(Entity $entity): Entity {
-		if (!in_array('lastModified', $entity->getUpdatedFields())) {
+		if (!isset($entity->getUpdatedFields()['lastModified'])) {
 			$entity->setLastModified(time());
 		}
 		return parent::insert($entity);

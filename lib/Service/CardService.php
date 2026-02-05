@@ -278,8 +278,8 @@ class CardService {
 		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
 		$resetDuedateNotification = false;
 		if (
-			$card->getDuedate() === null ||
-			($card->getDuedate()) != ($changes->getBefore()->getDuedate())
+			$card->getDuedate() === null
+			|| ($card->getDuedate()) !== ($changes->getBefore()->getDuedate())
 		) {
 			$card->setNotified(false);
 			$resetDuedateNotification = true;
@@ -357,7 +357,7 @@ class CardService {
 		$newCard = $this->create($originCard->getTitle(), $targetStackId, $originCard->getType(), $originCard->getOrder(), $originCard->getOwner());
 		$boardId = $this->stackMapper->findBoardId($targetStackId);
 		foreach ($this->labelMapper->findAssignedLabelsForCard($id) as $label) {
-			if ($boardId != $this->stackMapper->findBoardId($originCard->getStackId())) {
+			if ($boardId !== $this->stackMapper->findBoardId($originCard->getStackId())) {
 				try {
 					$label = $this->labelService->cloneLabelIfNotExists($label->getId(), $boardId);
 				} catch (NoPermissionException $e) {

@@ -24,6 +24,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\Node;
@@ -32,7 +33,9 @@ use OCP\IL10N;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
+use OCP\Share\IPartialShareProvider;
 use OCP\Share\IShare;
+use OCP\Share\IShareProviderGetUsers;
 
 /** Taken from the talk shareapicontroller helper */
 interface IShareProviderBackend {
@@ -42,45 +45,24 @@ interface IShareProviderBackend {
 	public function canAccessShare(IShare $share, string $user): bool;
 }
 
-class DeckShareProvider implements \OCP\Share\IShareProvider {
+class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvider, IShareProviderGetUsers {
 	public const DECK_FOLDER = '/Deck';
 	public const DECK_FOLDER_PLACEHOLDER = '/{DECK_PLACEHOLDER}';
 
 	public const SHARE_TYPE_DECK_USER = IShare::TYPE_DECK_USER;
 
-	private IDBConnection $dbConnection;
-	private IManager $shareManager;
-	private AttachmentCacheHelper $attachmentCacheHelper;
-	private BoardMapper $boardMapper;
-	private CardMapper $cardMapper;
-	private PermissionService $permissionService;
-	private ITimeFactory $timeFactory;
-	private IL10N $l;
-	private IMimeTypeLoader $mimeTypeLoader;
-	private ?string $userId;
-
 	public function __construct(
-		IDBConnection $connection,
-		IManager $shareManager,
-		BoardMapper $boardMapper,
-		CardMapper $cardMapper,
-		PermissionService $permissionService,
-		AttachmentCacheHelper $attachmentCacheHelper,
-		IL10N $l,
-		ITimeFactory $timeFactory,
-		IMimeTypeLoader $mimeTypeLoader,
-		?string $userId,
+		private IDBConnection $dbConnection,
+		private IManager $shareManager,
+		private BoardMapper $boardMapper,
+		private CardMapper $cardMapper,
+		private PermissionService $permissionService,
+		private AttachmentCacheHelper $attachmentCacheHelper,
+		private IL10N $l,
+		private ITimeFactory $timeFactory,
+		private IMimeTypeLoader $mimeTypeLoader,
+		private ?string $userId = null,
 	) {
-		$this->dbConnection = $connection;
-		$this->shareManager = $shareManager;
-		$this->boardMapper = $boardMapper;
-		$this->cardMapper = $cardMapper;
-		$this->attachmentCacheHelper = $attachmentCacheHelper;
-		$this->permissionService = $permissionService;
-		$this->l = $l;
-		$this->timeFactory = $timeFactory;
-		$this->mimeTypeLoader = $mimeTypeLoader;
-		$this->userId = $userId;
 	}
 
 	public static function register(IEventDispatcher $dispatcher): void {
@@ -235,7 +217,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 */
 	private function createShareObject(array $data): IShare {
 		$share = $this->shareManager->newShare();
-		$share->setId($data['id'])
+		$share->setId((string)$data['id'])
 			->setShareType((int)$data['share_type'])
 			->setPermissions((int)$data['permissions'])
 			->setTarget($data['file_target'])
@@ -419,7 +401,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$qb->executeStatement();
 
-		return $this->getShareById((int)$share->getId(), $recipient);
+		return $this->getShareById($share->getId(), $recipient);
 	}
 
 	/**
@@ -702,6 +684,34 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @return IShare[]
 	 */
 	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
+		return $this->_getSharedWith($userId, $limit, $offset, $node);
+	}
+
+	public function getSharedWithByPath(
+		string $userId,
+		int $shareType,
+		string $path,
+		bool $forChildren,
+		int $limit,
+		int $offset,
+	): iterable {
+		return $this->_getSharedWith($userId, $limit, $offset, null, $path, $forChildren);
+	}
+
+	/**
+	 * Get received shared for the given user.
+	 * You can optionally provide a node or a path to filter the shares.
+	 *
+	 * @return IShare[]
+	 */
+	private function _getSharedWith(
+		string $userId,
+		int $limit,
+		int $offset,
+		?Node $node = null,
+		?string $path = null,
+		?bool $forChildren = false,
+	): array {
 		$allBoards = $this->boardMapper->findBoardIds($userId);
 
 		/** @var IShare[] $shares */
@@ -738,6 +748,18 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			// Filter by node if provided
 			if ($node !== null) {
 				$qb->andWhere($qb->expr()->eq('s.file_source', $qb->createNamedParameter($node->getId())));
+			}
+
+			if ($path !== null) {
+				$qb->leftJoin('s', 'share', 'sc', $qb->expr()->eq('s.parent', 'sc.id'))
+					->andWhere($qb->expr()->eq('sc.share_type', $qb->createNamedParameter(IShare::TYPE_DECK_USER)))
+					->andWhere($qb->expr()->eq('sc.share_with', $qb->createNamedParameter($userId)));
+
+				if ($forChildren) {
+					$qb->andWhere($qb->expr()->like('sc.file_target', $qb->createNamedParameter($this->dbConnection->escapeLikeParameter($path) . '_%')));
+				} else {
+					$qb->andWhere($qb->expr()->eq('sc.file_target', $qb->createNamedParameter($path)));
+				}
 			}
 
 			$qb->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
@@ -1053,11 +1075,18 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	public function getOrphanedAttachmentShares(): array {
 		$allCardIds = $this->cardMapper->getAllCardIds();
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share', 's')
-			->where($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
-			->andWhere($qb->expr()->notIn('s.share_with', $qb->createNamedParameter($allCardIds, IQueryBuilder::PARAM_STR_ARRAY)));
+			->where($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)));
+
+		$chunks = array_chunk($allCardIds, 1000);
+		foreach ($chunks as $chunk) {
+			$qb->andWhere(
+				$qb->expr()->notIn('s.share_with', $qb->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY))
+			);
+		}
 
 		$cursor = $qb->executeQuery();
 		$shares = [];
@@ -1066,5 +1095,21 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 
 		return $shares;
+	}
+
+	public function getUsersForShare(IShare $share): iterable {
+		if ($share->getShareType() === IShare::TYPE_DECK) {
+			$cardId = (int)$share->getSharedWith();
+			$boardId = $this->cardMapper->findBoardId($cardId);
+			if ($boardId === null) {
+				return [];
+			}
+
+			foreach ($this->permissionService->findUsers($boardId) as $user) {
+				yield $user->getUserObject();
+			}
+		}
+
+		return [];
 	}
 }

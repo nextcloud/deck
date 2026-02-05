@@ -18,6 +18,7 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IFilenameValidator;
 use OCP\Files\IMimeTypeDetector;
@@ -166,7 +167,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			throw new NotFoundException('File not found');
 		}
 		$file = $share->getNode();
-		if ($file === null || $share->getSharedWith() !== (string)$attachment->getCardId()) {
+		if (!($file instanceof File) || $share->getSharedWith() !== (string)$attachment->getCardId()) {
 			throw new NotFoundException('File not found');
 		}
 
@@ -262,6 +263,9 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	public function update(Attachment $attachment) {
 		$share = $this->getShareForAttachment($attachment);
 		$target = $share->getNode();
+		if (!($target instanceof File)) {
+			throw new StatusException('Target is not a file');
+		}
 		$file = $this->getUploadedFile();
 		$fileName = $file['name'];
 		$attachment->setData($fileName);
@@ -312,7 +316,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	 */
 	private function getShareForAttachment(Attachment $attachment): IShare {
 		try {
-			$share = $this->shareProvider->getShareById($attachment->getId());
+			$share = $this->shareProvider->getShareById((string)$attachment->getId());
 		} catch (ShareNotFound $e) {
 			throw new NoPermissionException('No permission to access the attachment from the card');
 		}

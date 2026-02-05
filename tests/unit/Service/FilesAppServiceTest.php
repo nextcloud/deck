@@ -60,7 +60,7 @@ class FilesAppServiceTest extends TestCase {
 
 	public function testCreateWithInvalidFilename() {
 		$this->expectException(BadRequestException::class);
-		
+
 		$attachment = new Attachment();
 		$attachment->setCardId(123);
 

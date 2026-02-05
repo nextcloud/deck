@@ -140,7 +140,7 @@ class ImportExportTest extends \Test\TestCase {
 		$arrayIsList = array_keys($array) === range(0, count($array) - 1);
 		foreach ($array as $key => $value) {
 			$tmpPrefix = $prefix;
-			if (in_array($key, $skipKeyList)) {
+			if (in_array($key, $skipKeyList, true)) {
 				continue;
 			}
 			if (is_array($value)) {
