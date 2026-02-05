@@ -140,11 +140,10 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	public function extendData(Attachment $attachment) {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		$share = $this->getShareForAttachment($attachment);
-		$files = $userFolder->getById($share->getNode()->getId());
-		if (count($files) === 0) {
+		$file = $userFolder->getFirstNodeById($share->getNode()->getId());
+		if ($file === null) {
 			return $attachment;
 		}
-		$file = array_shift($files);
 		$attachment->setExtendedData([
 			'path' => $userFolder->getRelativePath($file->getPath()),
 			'fileid' => $file->getId(),
