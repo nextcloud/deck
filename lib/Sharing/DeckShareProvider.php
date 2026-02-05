@@ -771,14 +771,39 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			}
 
 			if ($path !== null) {
-				$qb->leftJoin('s', 'share', 'sc', $qb->expr()->eq('s.parent', 'sc.id'))
-					->andWhere($qb->expr()->eq('sc.share_type', $qb->createNamedParameter(IShare::TYPE_DECK_USER)))
-					->andWhere($qb->expr()->eq('sc.share_with', $qb->createNamedParameter($userId)));
+				$path = str_replace('/' . $userId . '/files', '', $path);
+				$path = rtrim($path, '/');
+
+				$onClause = $qb->expr()->andX(
+					$qb->expr()->eq('sc.parent', 's.id'),
+					$qb->expr()->eq('sc.share_type', $qb->createNamedParameter(IShare::TYPE_DECK_USER)),
+					$qb->expr()->eq('sc.share_with', $qb->createNamedParameter($userId)),
+				);
+				$qb->leftJoin('s', 'share', 'sc', $onClause);
 
 				if ($forChildren) {
-					$qb->andWhere($qb->expr()->like('sc.file_target', $qb->createNamedParameter($this->dbConnection->escapeLikeParameter($path) . '_%')));
+					$childPathTemplate = $this->dbConnection->escapeLikeParameter($path) . '/_%';
+
+					$qb->andWhere(
+						$qb->expr()->orX(
+							$qb->expr()->like('sc.file_target', $qb->createNamedParameter($childPathTemplate, IQueryBuilder::PARAM_STR)),
+							$qb->expr()->andX(
+								$qb->expr()->isNull('sc.file_target'),
+								$qb->expr()->like('s.file_target', $qb->createNamedParameter($childPathTemplate, IQueryBuilder::PARAM_STR)),
+							),
+						),
+					);
 				} else {
-					$qb->andWhere($qb->expr()->eq('sc.file_target', $qb->createNamedParameter($path)));
+					$nonChildPath = $path === '' ? '/' : $path;
+					$qb->andWhere(
+						$qb->expr()->orX(
+							$qb->expr()->eq('sc.file_target', $qb->createNamedParameter($nonChildPath, IQueryBuilder::PARAM_STR)),
+							$qb->expr()->andX(
+								$qb->expr()->isNull('sc.file_target'),
+								$qb->expr()->eq('s.file_target', $qb->createNamedParameter($nonChildPath, IQueryBuilder::PARAM_STR)),
+							),
+						),
+					);
 				}
 			}
 
