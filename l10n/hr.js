@@ -225,6 +225,7 @@ OC.L10N.register(
     "Assign a tag to this card…" : "Dodijeli oznaku ovoj kartici...",
     "(group)" : "(grupa)",
     "{count} comments, {unread} unread" : "{count} komentara, {unread} nepročitanih",
+    "Open link" : "Otvori poveznicu",
     "Card deleted" : "Kartica je izbrisana",
     "Edit title" : "Uredi naslov",
     "Assign to me" : "Dodijeli meni",
@@ -294,6 +295,7 @@ OC.L10N.register(
     "Action" : "Radnja",
     "Shift" : "Pomakni",
     "Ctrl" : "Ctrl",
+    "Enter" : "Enter",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",
     "No due" : "Nema nezavršenih"
