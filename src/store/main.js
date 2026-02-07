@@ -13,6 +13,7 @@ import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
 import actions from './actions.js'
 import stackModuleFactory from './stack.js'
+import stackAutomationModuleFactory from './stackAutomation.js'
 import cardModuleFactory from './card.js'
 import comment from './comment.js'
 import trashbin from './trashbin.js'
@@ -34,6 +35,7 @@ export default function storeFactory() {
 		modules: {
 			actions,
 			stack: stackModuleFactory(),
+			stackAutomation: stackAutomationModuleFactory(),
 			card: cardModuleFactory(),
 			comment,
 			trashbin,
