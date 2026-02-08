@@ -250,12 +250,12 @@ export default {
 				if (addedIndex !== null && removedIndex === null) {
 					// move card to new stack
 					card.stackId = stackId
-					card.order = addedIndex
+					card.order = this.getUnfilteredOrder(addedIndex, card.id)
 					console.debug('move card to stack', card.stackId, card.order)
 					await this.$store.dispatch('reorderCard', card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
-					card.order = addedIndex
+					card.order = this.getUnfilteredOrder(addedIndex, card.id)
 					console.debug('move card in stack', card.stackId, card.order)
 					await this.$store.dispatch('reorderCard', card)
 				}
@@ -265,6 +265,35 @@ export default {
 			return index => {
 				return this.cardsByStack[index]
 			}
+		},
+		getUnfilteredOrder(filteredAddedIndex, cardId) {
+			// Convert a drop index from the filtered view to the correct
+			// order among all (unfiltered) cards in the stack so that
+			// reordering works correctly when filters are active.
+			const allCards = this.$store.getters.allCardsByStack(this.stack.id)
+				.filter(c => !c.archived && c.id !== cardId)
+			const filteredCards = this.cardsByStack.filter(c => c.id !== cardId)
+
+			if (filteredCards.length === 0 || allCards.length === 0) {
+				return filteredAddedIndex
+			}
+
+			if (filteredAddedIndex <= 0) {
+				// Dropped before the first visible card
+				const firstVisible = filteredCards[0]
+				return allCards.findIndex(c => c.id === firstVisible.id)
+			}
+
+			if (filteredAddedIndex >= filteredCards.length) {
+				// Dropped after the last visible card
+				const lastVisible = filteredCards[filteredCards.length - 1]
+				return allCards.findIndex(c => c.id === lastVisible.id) + 1
+			}
+
+			// Dropped between two visible cards — place after the
+			// preceding visible card in the unfiltered list
+			const prevVisible = filteredCards[filteredAddedIndex - 1]
+			return allCards.findIndex(c => c.id === prevVisible.id) + 1
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
