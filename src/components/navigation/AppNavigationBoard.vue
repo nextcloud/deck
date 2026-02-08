@@ -77,28 +77,28 @@
 				<!-- Due date reminder settings -->
 				<template v-if="isDueSubmenuActive">
 					<NcActionButton :icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
-						:disabled="updateDueSetting"
+						:disabled="updateDueSetting !== null"
 						@click="isDueSubmenuActive=false">
 						{{ t('deck', 'Due date reminders') }}
 					</NcActionButton>
 
 					<NcActionButton name="notification"
 						icon="icon-sound"
-						:disabled="updateDueSetting"
+						:disabled="updateDueSetting !== null"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 						@click="updateSetting('notify-due', 'all')">
 						{{ t('deck', 'All cards') }}
 					</NcActionButton>
 					<NcActionButton name="notification"
 						icon="icon-user"
-						:disabled="updateDueSetting"
+						:disabled="updateDueSetting !== null"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 						@click="updateSetting('notify-due', 'assigned')">
 						{{ t('deck', 'Assigned cards') }}
 					</NcActionButton>
 					<NcActionButton name="notification"
 						icon="icon-sound-off"
-						:disabled="updateDueSetting"
+						:disabled="updateDueSetting !== null"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 						@click="updateSetting('notify-due', 'off')">
 						{{ t('deck', 'No notifications') }}
