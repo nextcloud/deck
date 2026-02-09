@@ -64,8 +64,8 @@ class PermissionService {
 	 *
 	 * @return array<Acl::PERMISSION_*, bool>
 	 */
-	public function getPermissions(int $boardId, ?string $userId = null, bool $allowDeleted = false, ?string $accessToken = null): array {
-		if ($userId === null && $accessToken === null) {
+	public function getPermissions(int $boardId, ?string $userId = null, bool $allowDeleted = false): array {
+		if ($userId === null) {
 			$userId = $this->userId;
 		}
 
@@ -140,7 +140,7 @@ class PermissionService {
 	 *
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, bool $allowDeletedBoard = false, $accessToken = null): bool {
+	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, bool $allowDeletedBoard = false): bool {
 		$boardId = (int)$id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -150,7 +150,7 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId, $userId, $allowDeletedBoard, $accessToken);
+		$permissions = $this->getPermissions($boardId, $userId, $allowDeletedBoard);
 		if ($permissions[$permission] === true) {
 
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {

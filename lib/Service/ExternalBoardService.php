@@ -2,9 +2,9 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Exceptions\FederationDisabledException;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Deck\Db\Board;
-use OCA\Deck\Db\Card;
 use OCA\Deck\Federation\DeckFederationProxy;
 use OCP\Federation\ICloudIdManager;
 use OCP\IUserManager;
@@ -14,25 +14,36 @@ class ExternalBoardService {
 		private  IUserManager $userManager,
 		private ICloudIdManager $cloudIdManager,
 		private DeckFederationProxy $proxy,
+		private ConfigService $configService,
 		private ?string $userId,
 	) {
 	}
 
+	private function ensureFederationEnabled(): void {
+    	if (!$this->configService->get('federationEnabled')) {
+        	throw new FederationDisabledException();
+    	}
+	}
+
 	public function getExternalBoardFromRemote(Board $localBoard):DataResponse {
+		$this->ensureFederationEnabled();
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
 		$url = $ownerCloudId->getRemote() . "/ocs/v2.php/apps/deck/api/v1.0/board/".$localBoard->getExternalId();
 		$resp = $this->proxy->get($participantCloudId->getId(), $shareToken, $url);
-		return new DataResponse($this->LocalizeRemoteBoard($this->proxy->getOcsData($resp), $localBoard));
+		$ocs = $this->proxy->getOCSData($resp);
+		return new DataResponse($this->LocalizeRemoteBoard($ocs, $localBoard));
 	}
 	public function getExternalStacksFromRemote(Board $localBoard):DataResponse {
+		$this->ensureFederationEnabled();
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
 		$url = $ownerCloudId->getRemote() . "/ocs/v2.php/apps/deck/api/v1.0/stacks/".$localBoard->getExternalId();
 		$resp = $this->proxy->get($participantCloudId->getId(), $shareToken, $url);
-		return new DataResponse($this->LocalizeRemoteStacks($this->proxy->getOcsData($resp), $localBoard));
+		$ocs = $this->proxy->getOCSData($resp);
+		return new DataResponse($this->LocalizeRemoteStacks($ocs, $localBoard));
 	}
 
 	public function LocalizeRemoteStacks(array $stacks, Board $localBoard) {
@@ -59,6 +70,7 @@ class ExternalBoardService {
 		?array $users = [],
 		?int $boardId = null
 	): array {
+		$this->ensureFederationEnabled();
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
@@ -83,6 +95,7 @@ class ExternalBoardService {
 		string $title,
 		int $order = 0,
 	): array {
+		$this->ensureFederationEnabled();
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
@@ -98,11 +111,12 @@ class ExternalBoardService {
 	}
 
     public function deleteStackOnRemote(Board $localBoard, int $stackId): array {
-       $shareToken = $localBoard->getShareToken();
-       $participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
-       $ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
-       $url = $ownerCloudId->getRemote() . "/ocs/v2.php/apps/deck/api/v1.0/stacks/" . $stackId;
-       $resp = $this->proxy->delete($participantCloudId->getId(), $shareToken, $url, []);
-       return $this->proxy->getOcsData($resp);
+		$this->ensureFederationEnabled();
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . "/ocs/v2.php/apps/deck/api/v1.0/stacks/" . $stackId;
+		$resp = $this->proxy->delete($participantCloudId->getId(), $shareToken, $url, []);
+		return $this->proxy->getOcsData($resp);
     }
 }
