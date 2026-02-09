@@ -2,6 +2,7 @@
 
 namespace OCA\Deck\Middleware;
 
+use OCA\Deck\Service\ConfigService;
 use OCP\AppFramework\Middleware;
 use OCP\IRequest;
 use OCA\Deck\Service\PermissionService;
@@ -11,10 +12,15 @@ class FederationMiddleware extends Middleware {
     public function __construct(
 		private LoggerInterface $logger,
         private PermissionService $permissionService,
-        private IRequest $request
+        private IRequest $request,
+		private ConfigService $configService,
+
     ) {}
 
     public function beforeController($controller, $methodName) {
+		if(!$this->configService->get("federationEnabled")) {
+			return;
+		}
         $accessToken = $this->request->getHeader('deck-federation-accesstoken');
         if ($accessToken) {
             $this->permissionService->setAccessToken($accessToken);

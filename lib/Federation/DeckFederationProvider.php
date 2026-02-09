@@ -29,14 +29,6 @@ class DeckFederationProvider implements ICloudFederationProvider{
 	}
 
 	public function shareReceived(ICloudFederationShare $share): string {
-		$notification = $this->notificationManager->createNotification();
-		$notification->setApp('deck');
-		$notification->setUser($share->getShareWith());
-		$notification->setDateTime(new \DateTime());
-		$notification->setObject('remote-board-shared', (string) rand(0,9999999));
-		$notification->setSubject('remote-board-shared',[$share->getResourceName(), $share->getSharedBy()]);
-
-		$this->notificationManager->notify($notification);
 
 		$externalBoard = new Board();
 		$externalBoard->setTitle($share->getResourceName());
@@ -55,6 +47,15 @@ class DeckFederationProvider implements ICloudFederationProvider{
 		$this->aclMapper->insert($acl);
 
 		$this->changeHelper->boardChanged($insertedBoard->getId());
+
+		$notification = $this->notificationManager->createNotification();
+		$notification->setApp('deck');
+		$notification->setUser($share->getShareWith());
+		$notification->setDateTime(new \DateTime());
+		$notification->setObject('remote-board-shared', $insertedBoard->getId());
+		$notification->setSubject('remote-board-shared',[$share->getResourceName(), $share->getSharedBy()]);
+
+		$this->notificationManager->notify($notification);
 		return 'PLACE_HOLDER_ID';
 	}
 
