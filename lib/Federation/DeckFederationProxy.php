@@ -124,7 +124,7 @@ class DeckFederationProxy {
 			}
 		} catch (\Throwable $e) {
 			$this->logger->error('Error parsing JSON response: ' . ($content ?? 'no-data'), ['exception' => $e]);
-			throw new CannotReachRemoteException('Error parsing JSON response', $e->getCode(), $e);
+			throw new \Exception('Error parsing JSON response', $e->getCode(), $e);
 		}
 
 		return $responseData['ocs']['data'] ?? [];

@@ -27,7 +27,7 @@ namespace OCA\Deck\Db;
  * @method void setShareToken(string $shareToken)
  * @method string getShareToken()
  * @method void setExternalId(int $externalId)
- * @method int getExternalId()
+ * @method int | null getExternalId()
  */
 class Board extends RelationalEntity {
 	protected $title;
