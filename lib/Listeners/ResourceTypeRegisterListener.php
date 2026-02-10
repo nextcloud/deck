@@ -1,4 +1,5 @@
 <?php
+namespace OCA\Deck\Listeners;
 
 use OCP\EventDispatcher\IEventListener;
 use OCP\OCM\IOCMProvider;

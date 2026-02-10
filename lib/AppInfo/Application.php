@@ -36,6 +36,7 @@ use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
+use OCA\Deck\Listeners\ResourceTypeRegisterListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Middleware\FederationMiddleware;
@@ -62,6 +63,7 @@ use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\CommentsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
@@ -72,7 +74,7 @@ use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
-use ResourceTypeRegisterListener;
+
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'deck';
@@ -108,7 +110,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
 			$listener->register($eventDispatcher);
 		});
-		$context->injectFn($this->registerCloudFederationProvider(...));
+		$context->injectFn([$this, 'registerCloudFederationProviderManager']);
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -204,13 +206,14 @@ class Application extends App implements IBootstrap {
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
 	}
 
-	public function registerCloudFederationProvider(
+	public function registerCloudFederationProviderManager(
+		IConfig $config,
 		ICloudFederationProviderManager $manager,
 	): void {
 		$manager->addCloudFederationProvider(
 			DeckFederationProvider::PROVIDER_ID,
 			"Deck Federation",
-			static fn () => Server::get(DeckFederationProvider::class),
+			static fn (): ICloudFederationProvider => Server::get(DeckFederationProvider::class),
 		);
 	}
 }
