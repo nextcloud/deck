@@ -11,6 +11,6 @@ use OCA\Deck\BadRequestException;
 
 class FederationDisabledException extends BadRequestException {
 	public function __construct() {
-		parent::__construct("Federation is disabled");
+		parent::__construct('Federation is disabled');
 	}
 }

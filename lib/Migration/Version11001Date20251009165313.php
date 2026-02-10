@@ -9,20 +9,20 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 class Version11001Date20251009165313 extends SimpleMigrationStep {
-    public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
-        $schema = $schemaClosure();
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
+		$schema = $schemaClosure();
 
-        $tableName = 'deck_board_acl';
-        if ($schema->hasTable($tableName)) {
-            $table = $schema->getTable($tableName);
-            if (!$table->hasColumn('token')) {
-                $table->addColumn('token', 'string', [
-                    'notnull' => false,
-                    'length' => 32,
-                ]);
-            }
-        }
+		$tableName = 'deck_board_acl';
+		if ($schema->hasTable($tableName)) {
+			$table = $schema->getTable($tableName);
+			if (!$table->hasColumn('token')) {
+				$table->addColumn('token', 'string', [
+					'notnull' => false,
+					'length' => 32,
+				]);
+			}
+		}
 
-        return $schema;
-    }
+		return $schema;
+	}
 }

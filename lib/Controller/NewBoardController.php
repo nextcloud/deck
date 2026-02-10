@@ -3,17 +3,17 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\BoardService;
-use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\ExternalBoardService;
-use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\OCSController;
+use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Attribute\RequestHeader;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
-class NewBoardController extends OCSController{
+class NewBoardController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -39,7 +39,7 @@ class NewBoardController extends OCSController{
 	public function read(int $boardId): DataResponse {
 		// Board on this instance -> get it from database
 		$localBoard = $this->boardService->find($boardId, true, true);
-		if($localBoard->getExternalId() !== null) {
+		if ($localBoard->getExternalId() !== null) {
 			return $this->externalBoardService->getExternalBoardFromRemote($localBoard);
 		}
 		// Board on other instance -> get it from other instance
@@ -48,18 +48,18 @@ class NewBoardController extends OCSController{
 
 	#[NoAdminrequired]
 	#[NoCSRFRequired]
-	public function create(string $title, string $color,): DataResponse {
-		return new DataResponse( $this->boardService->create($title, $this->userId, $color));
+	public function create(string $title, string $color): DataResponse {
+		return new DataResponse($this->boardService->create($title, $this->userId, $color));
 	}
 
 	#[NoAdminRequired]
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function stacks(int $boardId): DataResponse{
+	public function stacks(int $boardId): DataResponse {
 		$localBoard = $this->boardService->find($boardId, true, true, $this->request->getParam('accessToken'));
 		// Board on other instance -> get it from other instance
-		if($localBoard->getExternalId() !== null) {
+		if ($localBoard->getExternalId() !== null) {
 			return $this->externalBoardService->getExternalStacksFromRemote($localBoard);
 		} else {
 			return new DataResponse($this->stackService->findAll($boardId));

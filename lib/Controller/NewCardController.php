@@ -2,18 +2,17 @@
 
 namespace OCA\Deck\Controller;
 
-use OCP\AppFramework\OCSController;
-use OCA\Deck\Service\StackService;
-use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ExternalBoardService;
-use OCP\AppFramework\Http\DataResponse;
+use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Attribute\RequestHeader;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
-
 
 class NewCardController extends OCSController {
 	public function __construct(
@@ -32,7 +31,7 @@ class NewCardController extends OCSController {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function create(string $title, int $stackId, ?int $boardId=null, ?string $type = 'plain',?string $owner = null,?int $order = 999, ?string $description = '', $duedate = null, ?array $labels = [], ?array $users = []) {
+	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = 999, ?string $description = '', $duedate = null, ?array $labels = [], ?array $users = []) {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
 			if ($board->getExternalId()) {

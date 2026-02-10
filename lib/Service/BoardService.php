@@ -32,7 +32,6 @@ use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
-use OCA\Deck\Federation\DeckFederationProvider;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
@@ -41,18 +40,17 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\Federation\ICloudFederationNotification;
-use OCP\Federation\ICloudFederationProvider;
-use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Federation\ICloudFederationFactory;
+use OCP\Federation\ICloudFederationNotification;
+use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
-use OCP\Server;
 use OCP\Security\ISecureRandom;
+use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -445,18 +443,18 @@ class BoardService {
 		$acl = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 
-		if($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
-			$notification  = $this->federationFactory->getCloudFederationNotification();
+		if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+			$notification = $this->federationFactory->getCloudFederationNotification();
 			if (!$notification instanceof ICloudFederationNotification) {
-    			throw new \InvalidArgumentException('Invalid notification type');
+				throw new \InvalidArgumentException('Invalid notification type');
 			}
 
 			$payload = [
 				$acl->jsonSerialize(),
-				"sharedSecret" => $acl->getToken(),
+				'sharedSecret' => $acl->getToken(),
 			];
 
-			$notification->setMessage("update-permissions", "deck", $acl->getBoardId(), $payload);
+			$notification->setMessage('update-permissions', 'deck', $acl->getBoardId(), $payload);
 
 			$url = $this->cloudIdManager->resolveCloudId($acl->getParticipant());
 			$resp = $this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
