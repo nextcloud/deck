@@ -41,9 +41,11 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationNotification;
 use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Federation\ICloudFederationFactory;
+use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
@@ -72,6 +74,7 @@ class BoardService {
 		private AssignmentMapper $assignedUsersMapper,
 		private ActivityManager $activityManager,
 		private readonly ICloudFederationProviderManager $cloudFederationProviderManager,
+		private readonly ICloudIdManager $cloudIdManager,
 		private readonly ICloudFederationFactory $federationFactory,
 		private IEventDispatcher $eventDispatcher,
 		private ChangeHelper $changeHelper,
@@ -441,6 +444,23 @@ class BoardService {
 		$this->boardMapper->mapAcl($acl);
 		$acl = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
+
+		if($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+			$notification  = $this->federationFactory->getCloudFederationNotification();
+			if (!$notification instanceof ICloudFederationNotification) {
+    			throw new \InvalidArgumentException('Invalid notification type');
+			}
+
+			$payload = [
+				$acl->jsonSerialize(),
+				"sharedSecret" => $acl->getToken(),
+			];
+
+			$notification->setMessage("update-permissions", "deck", $acl->getBoardId(), $payload);
+
+			$url = $this->cloudIdManager->resolveCloudId($acl->getParticipant());
+			$resp = $this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
+		}
 
 		$this->eventDispatcher->dispatchTyped(new AclUpdatedEvent($acl));
 
