@@ -139,9 +139,9 @@ return [
 		['name' => 'new_board#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
 		['name' => 'new_board#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 
-    ['name' => 'new_card#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
+		['name' => 'new_card#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
 
-    ['name' => 'new_stack#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
+		['name' => 'new_stack#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
 		['name' => 'new_stack#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],
 
 		['name' => 'Config#get', 'url' => '/api/v{apiVersion}/config', 'verb' => 'GET'],

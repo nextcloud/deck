@@ -2,15 +2,14 @@
 
 namespace OCA\Deck\Federation;
 
-use OCP\Http\Client\IClientService;
-use OC\Http\Client\Response;
-use OCP\Http\Client\IResponse;
-use OCP\AppFramework\Http;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ServerException;
-use OCP\IUserSession;
+use OC\Http\Client\Response;
+use OCP\AppFramework\Http;
+use OCP\Http\Client\IClientService;
+use OCP\Http\Client\IResponse;
 use OCP\IConfig;
+use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use Psr\Log\LoggerInterface;
 
@@ -21,27 +20,28 @@ class DeckFederationProxy {
 		private IConfig $config,
 		private IFactory $l10nFactory,
 		private LoggerInterface $logger,
-	){}
+	) {
+	}
 	protected function generateDefaultRequestOptions(
 		?string $cloudId,
 		#[SensitiveParameter]
 		?string $accessToken,
 	): array {
-		   $options = [
-				'verify' => !$this->config->getSystemValueBool('sharing.federation.allowSelfSignedCertificates'),
-				'nextcloud' => [
-					'allow_local_address' => $this->config->getSystemValueBool('allow_local_remote_servers'),
-				],
-				'headers' => [
-					'Cookie' => 'XDEBUG_SESSION=PHPSTORM',
-					'Accept' => 'application/json',
-					'x-nextcloud-federation' => 'true',
-					'OCS-APIRequest' => 'true',
-					'Accept-Language' => $this->l10nFactory->getUserLanguage($this->userSession->getUser()),
-					'deck-federation-accesstoken' => $accessToken,
-				],
-				'timeout' => 5,
-		   ];
+		$options = [
+			'verify' => !$this->config->getSystemValueBool('sharing.federation.allowSelfSignedCertificates'),
+			'nextcloud' => [
+				'allow_local_address' => $this->config->getSystemValueBool('allow_local_remote_servers'),
+			],
+			'headers' => [
+				'Cookie' => 'XDEBUG_SESSION=PHPSTORM',
+				'Accept' => 'application/json',
+				'x-nextcloud-federation' => 'true',
+				'OCS-APIRequest' => 'true',
+				'Accept-Language' => $this->l10nFactory->getUserLanguage($this->userSession->getUser()),
+				'deck-federation-accesstoken' => $accessToken,
+			],
+			'timeout' => 5,
+		];
 
 		if ($cloudId !== null && $accessToken !== null) {
 		}
@@ -81,35 +81,35 @@ class DeckFederationProxy {
 		} catch (ClientException $e) {
 			$status = $e->getResponse()->getStatusCode();
 
-			   try {
-				   $body = $e->getResponse()->getBody()->getContents();
-				   $data = json_decode($body, true, flags: JSON_THROW_ON_ERROR);
-				   $e->getResponse()->getBody()->rewind();
-				   if (!is_array($data)) {
-					   throw new \RuntimeException('JSON response is not an array');
-				   }
-			   } catch (\Throwable $e) {
-				   throw new \Exception('Error parsing JSON response', $e->getCode(), $e);
-			   }
+			try {
+				$body = $e->getResponse()->getBody()->getContents();
+				$data = json_decode($body, true, flags: JSON_THROW_ON_ERROR);
+				$e->getResponse()->getBody()->rewind();
+				if (!is_array($data)) {
+					throw new \RuntimeException('JSON response is not an array');
+				}
+			} catch (\Throwable $e) {
+				throw new \Exception('Error parsing JSON response', $e->getCode(), $e);
+			}
 
-			   $clientException = new \Exception($e->getMessage(), $status, $e);
-			   $this->logger->debug('Client error from remote', ['exception' => $clientException]);
-			   return new Response($e->getResponse(), false);
-		   } catch (ServerException|\Throwable $e) {
-			   $serverException = new \Exception($e->getMessage(), $e->getCode(), $e);
-			   $this->logger->error('Could not reach remote', ['exception' => $serverException]);
-			   throw $serverException;
+			$clientException = new \Exception($e->getMessage(), $status, $e);
+			$this->logger->debug('Client error from remote', ['exception' => $clientException]);
+			return new Response($e->getResponse(), false);
+		} catch (ServerException|\Throwable $e) {
+			$serverException = new \Exception($e->getMessage(), $e->getCode(), $e);
+			$this->logger->error('Could not reach remote', ['exception' => $serverException]);
+			throw $serverException;
 		}
 	}
 
 	public function get(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
-		return $this->request("get", $cloudId, $shareToken, $url, $params);
+		return $this->request('get', $cloudId, $shareToken, $url, $params);
 	}
 	public function post(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
-		return $this->request("post", $cloudId, $shareToken, $url, $params);
+		return $this->request('post', $cloudId, $shareToken, $url, $params);
 	}
 	public function delete(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
-		return $this->request("delete", $cloudId, $shareToken, $url, $params);
+		return $this->request('delete', $cloudId, $shareToken, $url, $params);
 	}
 	public function getOCSData(IResponse $response, array $allowedStatusCodes = [Http::STATUS_OK]): array {
 		if (!in_array($response->getStatusCode(), $allowedStatusCodes, true)) {
