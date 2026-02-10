@@ -6,6 +6,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCP\Common\Exception\NotFoundException;
 use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationShare;
 use OCP\Federation\ICloudIdManager;
@@ -16,7 +17,7 @@ class DeckFederationProvider implements ICloudFederationProvider{
 	public const PROVIDER_ID = 'deck';
 
 	public function __construct(
-		private readonly ICloudIdmanager $cloudIdManager,
+		private readonly ICloudIdManager $cloudIdManager,
 		private INotificationManager $notificationManager,
 		private BoardMapper $boardMapper,
 		private AclMapper $aclMapper,
@@ -60,6 +61,36 @@ class DeckFederationProvider implements ICloudFederationProvider{
 	}
 
 	public function notificationReceived($notificationType, $providerId, $notification): array {
+		switch ($notificationType) {
+			case "update-permissions":
+				$localBoards = $this->boardMapper->findByExternalId($providerId);
+				foreach ($localBoards as $board) {
+					if ($board->getShareToken() === $notification["sharedSecret"]) {
+						$localBoard = $board;
+					}
+				}
+				if (!isset($localBoard)) {
+					throw new NotFoundException("Board not found for provider ID: " . $providerId);
+				}
+				$localParticipant = $this->cloudIdManager->resolveCloudId($notification[0]["participant"])->getUser();
+				$acls = $this->aclMapper->findAll($localBoard->getId());
+				foreach ($acls as $acl) {
+					if ($acl->getParticipant() === $localParticipant) {
+						$localAcl = $acl;
+						break;
+					}
+				}
+				if (!isset($localAcl)) {
+					throw new NotFoundException("ACL entry not found for participant: " . $localParticipant);
+				}
+				$acl->setPermissionEdit($notification[0]["permissionEdit"]);
+				$acl->setPermissionManage($notification[0]["permissionManage"]);
+				$acl->setPermissionShare($notification[0]["permissionShare"]);
+				$this->aclMapper->update($acl);
+				break;
+			default:
+				throw new Exception("Unknown notification type: " . $notificationType);
+		}
 		return [];
 	}
 

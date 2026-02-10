@@ -71,4 +71,16 @@ class NewBoardController extends OCSController{
 	public function addAcl(int $boardId, int $type, $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): DataResponse {
 		return new DataResponse($this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage, $remote));
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $id
+	 * @param $permissionEdit
+	 * @param $permissionShare
+	 * @param $permissionManage
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function updateAcl($id, $permissionEdit, $permissionShare, $permissionManage) {
+		return $this->boardService->updateAcl($id, $permissionEdit, $permissionShare, $permissionManage);
+	}
 }

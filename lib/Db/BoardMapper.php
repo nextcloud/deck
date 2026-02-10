@@ -127,6 +127,18 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		$result->closeCursor();
 		return array_unique(array_merge($ownerBoards, $sharedBoards));
 	}
+	/**
+	 * @param int $externalId
+	 * @return Board[]
+	 */
+	public function findByExternalId(int $externalId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('external_id', $qb->createNamedParameter($externalId, IQueryBuilder::PARAM_INT)))
+			->orderBy('id');
+		return $this->findEntities($qb);
+	}
 
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
 		?string $term = null): array {
