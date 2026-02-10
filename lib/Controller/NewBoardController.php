@@ -46,7 +46,7 @@ class NewBoardController extends OCSController {
 		return new DataResponse($localBoard);
 	}
 
-	#[NoAdminrequired]
+	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function create(string $title, string $color): DataResponse {
 		return new DataResponse($this->boardService->create($title, $this->userId, $color));

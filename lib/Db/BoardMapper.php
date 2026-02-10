@@ -12,6 +12,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Federation\ICloudIdManager;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -32,6 +33,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		private IUserManager $userManager,
 		private IGroupManager $groupManager,
 		private CirclesService $circlesService,
+		private ICloudIdManager $cloudIdManager,
 		private LoggerInterface $logger,
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
@@ -534,8 +536,14 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 */
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
-		$board->resolveRelation('owner', function ($owner) use (&$userManager) {
-			if ($this->userManager->userExists($owner)) {
+		$cloudIdManager = $this->cloudIdManager;
+		$externalId = $board->getExternalId();
+		$board->resolveRelation('owner', function ($owner) use (&$userManager, &$cloudIdManager, $externalId) {
+			if ($externalId !== null) {
+				$cloudId = $cloudIdManager->resolveCloudId($owner);
+				return new FederatedUser($cloudId);
+			}
+			if ($userManager->userExists($owner)) {
 				return new User($owner, $userManager);
 			}
 			return null;
