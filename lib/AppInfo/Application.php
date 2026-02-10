@@ -27,8 +27,8 @@ use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
-use OCA\Deck\Listeners\AclCreatedRemovedListener;
 use OCA\Deck\Federation\DeckFederationProvider;
+use OCA\Deck\Listeners\AclCreatedRemovedListener;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
@@ -74,7 +74,6 @@ use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
-
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'deck';
@@ -212,7 +211,7 @@ class Application extends App implements IBootstrap {
 	): void {
 		$manager->addCloudFederationProvider(
 			DeckFederationProvider::PROVIDER_ID,
-			"Deck Federation",
+			'Deck Federation',
 			static fn (): ICloudFederationProvider => Server::get(DeckFederationProvider::class),
 		);
 	}

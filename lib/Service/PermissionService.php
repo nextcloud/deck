@@ -124,7 +124,7 @@ class PermissionService {
 				Acl::PERMISSION_EDIT => $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $this->accessToken),
 				Acl::PERMISSION_MANAGE => $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $this->accessToken),
 				Acl::PERMISSION_SHARE => $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $this->accessToken)
-		];
+			];
 		}
 		return [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
@@ -200,7 +200,7 @@ class PermissionService {
 
 
 	public function externalUserCan(array $acls, $permission, $shareToken = null) {
-		foreach($acls as $acl) {
+		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
 				$token = $acl->getToken();
 				if ($acl->getToken() === $shareToken) {

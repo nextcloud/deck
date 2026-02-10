@@ -78,7 +78,7 @@ class ConfigService {
 				}
 				return $this->getGroupLimit();
 			case 'federationEnabled':
-				return (bool) $this->config->getAppValue(Application::APP_ID, 'federationEnabled', false);
+				return (bool)$this->config->getAppValue(Application::APP_ID, 'federationEnabled', false);
 			case 'calendar':
 				if ($this->getUserId() === null) {
 					return false;

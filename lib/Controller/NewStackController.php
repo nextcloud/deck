@@ -1,16 +1,16 @@
 <?php
+
 namespace OCA\Deck\Controller;
 
-
-use OCP\AppFramework\OCSController;
-use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\StackService;
-use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Attribute\RequestHeader;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class NewStackController extends OCSController {
@@ -20,7 +20,7 @@ class NewStackController extends OCSController {
 		private ExternalBoardService $externalBoardService,
 		private BoardService $boardService,
 		private StackService $stackService,
-	){
+	) {
 		parent::__construct($appName, $request);
 	}
 

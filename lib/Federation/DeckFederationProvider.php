@@ -1,19 +1,20 @@
 <?php
 
 namespace OCA\Deck\Federation;
-use OCA\Deck\Db\Board;
+
+use Exception;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\Board;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCP\Common\Exception\NotFoundException;
 use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationShare;
 use OCP\Federation\ICloudIdManager;
 use OCP\Notification\IManager as INotificationManager;
-use Exception;
 
-class DeckFederationProvider implements ICloudFederationProvider{
+class DeckFederationProvider implements ICloudFederationProvider {
 	public const PROVIDER_ID = 'deck';
 
 	public function __construct(
@@ -22,7 +23,7 @@ class DeckFederationProvider implements ICloudFederationProvider{
 		private BoardMapper $boardMapper,
 		private AclMapper $aclMapper,
 		private ChangeHelper $changeHelper,
-	){
+	) {
 	}
 
 	public function getShareType(): string {
@@ -54,7 +55,7 @@ class DeckFederationProvider implements ICloudFederationProvider{
 		$notification->setUser($share->getShareWith());
 		$notification->setDateTime(new \DateTime());
 		$notification->setObject('remote-board-shared', $insertedBoard->getId());
-		$notification->setSubject('remote-board-shared',[$share->getResourceName(), $share->getSharedBy()]);
+		$notification->setSubject('remote-board-shared', [$share->getResourceName(), $share->getSharedBy()]);
 
 		$this->notificationManager->notify($notification);
 		return 'PLACE_HOLDER_ID';
@@ -62,17 +63,17 @@ class DeckFederationProvider implements ICloudFederationProvider{
 
 	public function notificationReceived($notificationType, $providerId, $notification): array {
 		switch ($notificationType) {
-			case "update-permissions":
+			case 'update-permissions':
 				$localBoards = $this->boardMapper->findByExternalId($providerId);
 				foreach ($localBoards as $board) {
-					if ($board->getShareToken() === $notification["sharedSecret"]) {
+					if ($board->getShareToken() === $notification['sharedSecret']) {
 						$localBoard = $board;
 					}
 				}
 				if (!isset($localBoard)) {
-					throw new NotFoundException("Board not found for provider ID: " . $providerId);
+					throw new NotFoundException('Board not found for provider ID: ' . $providerId);
 				}
-				$localParticipant = $this->cloudIdManager->resolveCloudId($notification[0]["participant"])->getUser();
+				$localParticipant = $this->cloudIdManager->resolveCloudId($notification[0]['participant'])->getUser();
 				$acls = $this->aclMapper->findAll($localBoard->getId());
 				foreach ($acls as $acl) {
 					if ($acl->getParticipant() === $localParticipant) {
@@ -81,15 +82,15 @@ class DeckFederationProvider implements ICloudFederationProvider{
 					}
 				}
 				if (!isset($localAcl)) {
-					throw new NotFoundException("ACL entry not found for participant: " . $localParticipant);
+					throw new NotFoundException('ACL entry not found for participant: ' . $localParticipant);
 				}
-				$acl->setPermissionEdit($notification[0]["permissionEdit"]);
-				$acl->setPermissionManage($notification[0]["permissionManage"]);
-				$acl->setPermissionShare($notification[0]["permissionShare"]);
+				$acl->setPermissionEdit($notification[0]['permissionEdit']);
+				$acl->setPermissionManage($notification[0]['permissionManage']);
+				$acl->setPermissionShare($notification[0]['permissionShare']);
 				$this->aclMapper->update($acl);
 				break;
 			default:
-				throw new Exception("Unknown notification type: " . $notificationType);
+				throw new Exception('Unknown notification type: ' . $notificationType);
 		}
 		return [];
 	}
