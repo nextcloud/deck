@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.17.0-beta.2
+### Fixed
+* Fix: Keep 'done' status when updating archived card by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7577
+* fix: stop ignoring certain share rows by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7605
+* fix(cron): Split Card IDs into chunks by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7620
+
 ## 1.17.0-beta.1
 
 ### Added
