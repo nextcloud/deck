@@ -59,6 +59,7 @@ OC.L10N.register(
     "seconds ago" : "seconds ago",
     "Archived boards" : "Arxivlangan taxtalar",
     "Shared with you" : "Shared with you",
+    "Cancel edit" : "Tahrirni bekor qilish",
     "No reminder" : "Eslatma yo'q",
     "Edit board" : "Tahrirlash paneli",
     "Clone board" : "Klon taxtasi",
