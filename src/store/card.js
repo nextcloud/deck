@@ -184,6 +184,11 @@ export default function cardModuleFactory() {
 					})
 					.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 			},
+			allCardsByStack: (state) => (id) => {
+				return state.cards
+					.filter((card) => card.stackId === id)
+					.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
+			},
 			cardById: state => (id) => {
 				return state.cards.find((card) => card.id === id)
 			},
@@ -299,7 +304,7 @@ export default function cardModuleFactory() {
 			async reorderCard({ commit, getters }, card) {
 				let i = 0
 				const newCards = []
-				for (const c of getters.cardsByStack(card.stackId)) {
+				for (const c of getters.allCardsByStack(card.stackId)) {
 					if (c.id === card.id) {
 						newCards.push(card)
 					}
