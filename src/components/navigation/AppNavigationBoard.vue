@@ -142,7 +142,7 @@
 					required />
 				<NcButton type="tertiary"
 					:disabled="loading"
-					native-type="submit"
+					native-type="button"
 					:title="t('deck', 'Cancel edit')"
 					@click.stop.prevent="cancelEdit">
 					<template #icon>
