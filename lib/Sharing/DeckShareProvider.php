@@ -751,8 +751,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			}
 
 			if ($path !== null) {
-				if (str_starts_with($path, '/' . $userId . '/files')) {
-					$path = substr($path, strlen('/' . $userId . '/files'));
+				$prefix = '/' . $userId . '/files';
+				if (str_starts_with($path, $prefix)) {
+					$path = substr($path, strlen($prefix));
 				}
 				$path = rtrim($path, '/');
 
