@@ -87,17 +87,17 @@ export default {
 			searchQuery: state => state.searchQuery,
 		}),
 		filteredResults() {
-			const sortFn = (a, b) => a.archived - b.archived || b.lastModified - a.lastModified
-			if (this.$route.params.id) {
-				return this.results.filter((result) => {
-				if (result.relatedBoard.id.toString() === this.$route.params.id.toString()) {
-					return result.archived;
-				}
-					return true;
-				}).sort(sortFn)
-			}
-			return [...this.results].sort(sortFn)
-		},
+            const sortFn = (a, b) => a.archived - b.archived || b.lastModified - a.lastModified
+            if (this.$route.params.id) {
+                return this.results.filter((result) => {
+                    if (result.relatedBoard.id.toString() === this.$route.params.id.toString()) {
+                        return result.archived
+                    }
+                    return true
+                }).sort(sortFn)
+            }
+            return [...this.results].sort(sortFn)
+        },
 		queryStringArgs() {
 			return {
 				searchQuery: this.searchQuery,
