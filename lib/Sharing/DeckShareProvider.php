@@ -36,6 +36,7 @@ use OCP\Share\IManager;
 use OCP\Share\IPartialShareProvider;
 use OCP\Share\IShare;
 use OCP\Share\IShareProviderGetUsers;
+use function strlen;
 
 /** Taken from the talk shareapicontroller helper */
 interface IShareProviderBackend {
@@ -751,7 +752,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			}
 
 			if ($path !== null) {
-				$path = str_replace('/' . $userId . '/files', '', $path);
+				if (str_starts_with($path, '/' . $userId . '/files')) {
+					$path = substr($path, strlen('/' . $userId . '/files'));
+				}
 				$path = rtrim($path, '/');
 
 				$onClause = $qb->expr()->andX(
