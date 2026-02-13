@@ -89,7 +89,13 @@ export default {
 		filteredResults() {
 			const sortFn = (a, b) => a.archived - b.archived || b.lastModified - a.lastModified
 			if (this.$route.params.id) {
-				return this.results.filter((result) => result.relatedBoard.id.toString() !== this.$route.params.id.toString()).sort(sortFn)
+				return this.results.filter((result) => {
+					// Only show cards from the current board if they are archived; show all cards from other boards
+					if (result.relatedBoard.id.toString() === this.$route.params.id.toString()) {
+						return result.archived
+					}
+					return true
+				}).sort(sortFn)
 			}
 			return [...this.results].sort(sortFn)
 		},
