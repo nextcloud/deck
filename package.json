@@ -48,7 +48,7 @@
     "chroma-js": "^3.2.0",
     "dompurify": "^3.2.5",
     "lodash": "^4.17.23",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.1.1",
     "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-task-checkbox": "^1.0.6",
     "moment": "^2.30.1",
