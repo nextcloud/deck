@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Db;
 
+use DateTime;
 use Sabre\VObject\Component\VCalendar;
 
 /**
@@ -56,6 +57,12 @@ class Stack extends RelationalEntity {
 		$event = $calendar->createComponent('VTODO');
 		$event->UID = 'deck-stack-' . $this->getId();
 		$event->SUMMARY = 'List : ' . $this->getTitle();
+		$lastModifiedTs = $this->getLastModified() > 0 ? $this->getLastModified() : time();
+		$lastModified = new DateTime();
+		$lastModified->setTimestamp($lastModifiedTs);
+		$event->DTSTAMP = $lastModified;
+		$event->{'LAST-MODIFIED'} = $lastModified;
+		$event->STATUS = 'NEEDS-ACTION';
 		$calendar->add($event);
 		return $calendar;
 	}

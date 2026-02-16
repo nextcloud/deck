@@ -60,6 +60,18 @@ class DeckCalendarBackendTest extends TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($existingCard);
+		$currentStack = new Stack();
+		$currentStack->setId(42);
+		$currentStack->setBoardId(12);
+		$targetStack = new Stack();
+		$targetStack->setId(88);
+		$targetStack->setBoardId(12);
+		$this->stackService->expects($this->exactly(2))
+			->method('find')
+			->willReturnMap([
+				[42, $currentStack],
+				[88, $targetStack],
+			]);
 
 		$this->cardService->expects($this->once())
 			->method('update')
@@ -182,6 +194,13 @@ ICS;
 			->method('find')
 			->with(123)
 			->willReturn($existingCard);
+		$currentStack = new Stack();
+		$currentStack->setId(42);
+		$currentStack->setBoardId(12);
+		$this->stackService->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($currentStack);
 
 		$this->cardService->expects($this->once())
 			->method('update')
@@ -219,5 +238,196 @@ END:VCALENDAR
 ICS;
 
 		$this->backend->updateCalendarObject($sourceCard, $calendarData);
+	}
+
+	public function testCreateCardFromCalendarUsesRelatedStack(): void {
+		$stack = new Stack();
+		$stack->setId(88);
+		$stack->setBoardId(12);
+
+		$card = new Card();
+		$this->stackService->expects($this->once())
+			->method('find')
+			->with(88)
+			->willReturn($stack);
+		$this->stackService->expects($this->never())
+			->method('findAll');
+		$this->cardService->expects($this->once())
+			->method('create')
+			->with(
+				'Created task',
+				88,
+				'plain',
+				999,
+				'admin',
+				'From mac',
+				$this->callback(fn ($value) => $value instanceof \DateTime && $value->format('c') === '2026-03-03T12:00:00+00:00')
+			)
+			->willReturn($card);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+SUMMARY:Created task
+DESCRIPTION:From mac
+RELATED-TO:deck-stack-88
+DUE:20260303T120000Z
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->createCalendarObject(12, 'admin', $calendarData);
+	}
+
+	public function testCreateCardFromCalendarFallsBackToDefaultStack(): void {
+		$stackA = new Stack();
+		$stackA->setId(5);
+		$stackA->setOrder(3);
+		$stackB = new Stack();
+		$stackB->setId(7);
+		$stackB->setOrder(0);
+
+		$card = new Card();
+		$this->stackService->expects($this->once())
+			->method('findAll')
+			->with(12)
+			->willReturn([$stackA, $stackB]);
+		$this->cardService->expects($this->once())
+			->method('create')
+			->with(
+				'Created without relation',
+				7,
+				'plain',
+				999,
+				'admin',
+				'',
+				null
+			)
+			->willReturn($card);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+SUMMARY:Created without relation
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->createCalendarObject(12, 'admin', $calendarData);
+	}
+
+	public function testCreateCardFromCalendarWithForeignRelatedStackFallsBackToDefaultStack(): void {
+		$foreignStack = new Stack();
+		$foreignStack->setId(99);
+		$foreignStack->setBoardId(999);
+
+		$stackA = new Stack();
+		$stackA->setId(5);
+		$stackA->setOrder(3);
+		$stackB = new Stack();
+		$stackB->setId(7);
+		$stackB->setOrder(0);
+
+		$card = new Card();
+		$this->stackService->expects($this->once())
+			->method('find')
+			->with(99)
+			->willReturn($foreignStack);
+		$this->stackService->expects($this->once())
+			->method('findAll')
+			->with(12)
+			->willReturn([$stackA, $stackB]);
+		$this->cardService->expects($this->once())
+			->method('create')
+			->with(
+				'Foreign related stack',
+				7,
+				'plain',
+				999,
+				'admin',
+				'',
+				null
+			)
+			->willReturn($card);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+SUMMARY:Foreign related stack
+RELATED-TO:deck-stack-99
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->createCalendarObject(12, 'admin', $calendarData);
+	}
+
+	public function testCreateCardFromCalendarWithExistingDeckUidUpdatesInsteadOfCreating(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(123);
+		$sourceCard->setTitle('Old title');
+		$sourceCard->setDescription('Old description');
+		$sourceCard->setStackId(42);
+		$sourceCard->setType('plain');
+		$sourceCard->setOrder(2);
+		$sourceCard->setOwner('admin');
+		$sourceCard->setDeletedAt(0);
+		$sourceCard->setArchived(false);
+		$sourceCard->setDone(null);
+
+		$sourceStack = new Stack();
+		$sourceStack->setId(42);
+		$sourceStack->setBoardId(12);
+		$targetStack = new Stack();
+		$targetStack->setId(88);
+		$targetStack->setBoardId(12);
+
+		$this->cardService->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($sourceCard);
+		$this->stackService->expects($this->exactly(2))
+			->method('find')
+			->willReturnMap([
+				[42, $sourceStack],
+				[88, $targetStack],
+			]);
+		$this->cardService->expects($this->never())
+			->method('create');
+		$this->stackService->expects($this->never())
+			->method('findAll');
+		$this->cardService->expects($this->once())
+			->method('update')
+			->with(
+				123,
+				'Updated by uid',
+				88,
+				'plain',
+				'admin',
+				'Moved back',
+				2,
+				null,
+				0,
+				false,
+				$this->isInstanceOf(OptionalNullableValue::class)
+			)
+			->willReturn($sourceCard);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-123
+SUMMARY:Updated by uid
+DESCRIPTION:Moved back
+RELATED-TO:deck-stack-88
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->createCalendarObject(12, 'admin', $calendarData);
 	}
 }
