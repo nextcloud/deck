@@ -55,7 +55,8 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function put($data) {
-		throw new Forbidden('This calendar-object is read-only');
+		$this->sourceItem = $this->backend->updateCalendarObject($this->sourceItem, $data);
+		$this->calendarObject = $this->sourceItem->getCalendarObject();
 	}
 
 	public function get() {
