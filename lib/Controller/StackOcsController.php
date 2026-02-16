@@ -28,7 +28,7 @@ class StackOcsController extends OCSController {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function create(string $title, int $boardId, int $order = 0) {
+	public function create(string $title, int $boardId, int $order = 0):DataResponse {
 		$board = $this->boardService->find($boardId, false);
 		if ($board->getExternalId()) {
 			$stack = $this->externalBoardService->createStackOnRemote($board, $title, $order);
@@ -43,7 +43,7 @@ class StackOcsController extends OCSController {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function delete(int $stackId, ?int $boardId = null) {
+	public function delete(int $stackId, ?int $boardId = null):DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
 			if ($board->getExternalId()) {

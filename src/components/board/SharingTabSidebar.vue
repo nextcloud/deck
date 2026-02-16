@@ -167,7 +167,6 @@ export default {
 			}).slice(0, 10)
 		},
 		unallocatedSharees() {
-			console.log(this.board.acl)
 			return this.sharees.filter((sharee) => {
 				const foundIndex = this.board.acl.findIndex((acl) => {
 					return acl.participant.uid === sharee.value.shareWith && acl.participant.type === sharee.value.shareType
@@ -194,7 +193,6 @@ export default {
 			loading(false)
 		},
 		async clickAddAcl() {
-			console.log(this.addAcl)
 			this.addAclForAPI = {
 				type: this.addAcl.value.shareType,
 				participant: this.addAcl.value.shareWith,

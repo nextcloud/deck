@@ -12,6 +12,7 @@ use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use Psr\Log\LoggerInterface;
+use SensitiveParameter;
 
 class DeckFederationProxy {
 	public function __construct(
@@ -33,7 +34,6 @@ class DeckFederationProxy {
 				'allow_local_address' => $this->config->getSystemValueBool('allow_local_remote_servers'),
 			],
 			'headers' => [
-				'Cookie' => 'XDEBUG_SESSION=PHPSTORM',
 				'Accept' => 'application/json',
 				'x-nextcloud-federation' => 'true',
 				'OCS-APIRequest' => 'true',
@@ -42,9 +42,6 @@ class DeckFederationProxy {
 			],
 			'timeout' => 5,
 		];
-
-		if ($cloudId !== null && $accessToken !== null) {
-		}
 
 		return $options;
 	}
@@ -102,13 +99,13 @@ class DeckFederationProxy {
 		}
 	}
 
-	public function get(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
+	public function get(string $cloudId, string $shareToken, string $url, array $params = []): IResponse {
 		return $this->request('get', $cloudId, $shareToken, $url, $params);
 	}
-	public function post(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
+	public function post(string $cloudId, string $shareToken, string $url, array $params = []): IResponse {
 		return $this->request('post', $cloudId, $shareToken, $url, $params);
 	}
-	public function delete(string $cloudId, string $shareToken, string $url, array $params = []):IResponse {
+	public function delete(string $cloudId, string $shareToken, string $url, array $params = []): IResponse {
 		return $this->request('delete', $cloudId, $shareToken, $url, $params);
 	}
 	public function getOCSData(IResponse $response, array $allowedStatusCodes = [Http::STATUS_OK]): array {

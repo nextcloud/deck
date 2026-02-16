@@ -9,6 +9,9 @@ import Vue from 'vue'
 
 const apiClient = new CardApi()
 
+/**
+ *
+ */
 export default function cardModuleFactory() {
 	return {
 		state: {

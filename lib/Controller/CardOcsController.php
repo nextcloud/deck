@@ -14,7 +14,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
-class CardocsController extends OCSController {
+class CardOcsController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,

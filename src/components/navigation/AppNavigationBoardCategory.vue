@@ -63,9 +63,6 @@ export default {
 	},
 	computed: {
 		boardsSorted() {
-			console.log("FROM NAVIGATION")
-			console.log(this.id)
-			console.log(this.boards)
 			return [...this.boards].sort((a, b) => a.title.localeCompare(b.title))
 		},
 		collapsible() {

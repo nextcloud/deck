@@ -13,6 +13,7 @@ export class StackApi {
 		url = `/apps/deck${url}`
 		return generateUrl(url)
 	}
+
 	ocsUrl(url) {
 		url = `/apps/deck/api/v1.0${url}`
 		return generateOcsUrl(url)

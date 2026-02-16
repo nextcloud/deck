@@ -22,9 +22,9 @@
 					@close="onCloseExportBoard" />
 			</template>
 
-		<template #counter>
-			<AccountIcon v-if="board.acl?.length > 0" />
-		</template>
+			<template #counter>
+				<AccountIcon v-if="board.acl?.length > 0" />
+			</template>
 
 			<template v-if="!deleted" slot="actions">
 				<template v-if="!isDueSubmenuActive">
@@ -251,9 +251,6 @@ export default {
 		},
 		canManage() {
 			return this.board.permissions.PERMISSION_MANAGE
-		},
-		canLeave() {
-			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined
 		},
 		canLeave() {
 			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined

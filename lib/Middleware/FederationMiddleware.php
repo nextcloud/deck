@@ -17,7 +17,7 @@ class FederationMiddleware extends Middleware {
 	) {
 	}
 
-	public function beforeController($controller, $methodName) {
+	public function beforeController($controller, $methodName): void {
 		if (!$this->configService->get('federationEnabled')) {
 			return;
 		}
