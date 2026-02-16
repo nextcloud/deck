@@ -13,7 +13,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
-class NewStackController extends OCSController {
+class StackOcsController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
