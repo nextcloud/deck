@@ -79,7 +79,7 @@ class DeckCalendarBackendTest extends TestCase {
 						return false;
 					}
 					$done = $value->getValue();
-					return $done instanceof \DateTimeInterface && $done->format('c') === '2026-03-01T10:00:00+00:00';
+					return $done instanceof \DateTime && $done->format('c') === '2026-03-01T10:00:00+00:00';
 				})
 			)
 			->willReturn($existingCard);
@@ -134,5 +134,90 @@ END:VCALENDAR
 ICS;
 
 		$this->backend->updateCalendarObject($sourceStack, $calendarData);
+	}
+
+	public function testDeleteCardFromCalendarObject(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(321);
+
+		$this->cardService->expects($this->once())
+			->method('delete')
+			->with(321);
+		$this->stackService->expects($this->never())
+			->method('delete');
+
+		$this->backend->deleteCalendarObject($sourceCard);
+	}
+
+	public function testDeleteStackFromCalendarObject(): void {
+		$sourceStack = new Stack();
+		$sourceStack->setId(654);
+
+		$this->stackService->expects($this->once())
+			->method('delete')
+			->with(654);
+		$this->cardService->expects($this->never())
+			->method('delete');
+
+		$this->backend->deleteCalendarObject($sourceStack);
+	}
+
+	public function testUpdateCardWithCompletedWithoutStatusMarksDone(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(123);
+
+		$existingCard = new Card();
+		$existingCard->setId(123);
+		$existingCard->setTitle('Card');
+		$existingCard->setDescription('Description');
+		$existingCard->setStackId(42);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(0);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(null);
+
+		$this->cardService->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($existingCard);
+
+		$this->cardService->expects($this->once())
+			->method('update')
+			->with(
+				123,
+				'Card',
+				42,
+				'plain',
+				'admin',
+				'Description',
+				0,
+				null,
+				0,
+				false,
+				$this->callback(function ($value) {
+					if (!($value instanceof OptionalNullableValue)) {
+						return false;
+					}
+					$done = $value->getValue();
+					return $done instanceof \DateTime && $done->format('c') === '2026-03-01T10:00:00+00:00';
+				})
+			)
+			->willReturn($existingCard);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-123
+SUMMARY:Card
+DESCRIPTION:Description
+COMPLETED:20260301T100000Z
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->updateCalendarObject($sourceCard, $calendarData);
 	}
 }

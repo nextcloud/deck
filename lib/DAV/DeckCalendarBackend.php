@@ -94,6 +94,23 @@ class DeckCalendarBackend {
 		throw new InvalidDataException('Unsupported calendar object source item');
 	}
 
+	/**
+	 * @param Card|Stack $sourceItem
+	 */
+	public function deleteCalendarObject($sourceItem): void {
+		if ($sourceItem instanceof Card) {
+			$this->cardService->delete($sourceItem->getId());
+			return;
+		}
+
+		if ($sourceItem instanceof Stack) {
+			$this->stackService->delete($sourceItem->getId());
+			return;
+		}
+
+		throw new InvalidDataException('Unsupported calendar object source item');
+	}
+
 	private function updateCardFromCalendar(Card $sourceItem, string $data): Card {
 		$todo = $this->extractTodo($data);
 		$card = $this->cardService->find($sourceItem->getId());
@@ -171,13 +188,18 @@ class DeckCalendarBackend {
 
 	private function mapDoneFromTodo(VTodo $todo, Card $card): OptionalNullableValue {
 		$done = $card->getDone();
-		if (!isset($todo->STATUS)) {
+		if (!isset($todo->STATUS) && !isset($todo->COMPLETED)) {
 			return new OptionalNullableValue($done);
 		}
 
-		$status = strtoupper((string)$todo->STATUS);
-		if ($status === 'COMPLETED') {
-			$done = isset($todo->COMPLETED) ? $todo->COMPLETED->getDateTime() : new \DateTimeImmutable();
+		$status = isset($todo->STATUS) ? strtoupper((string)$todo->STATUS) : null;
+		if ($status === 'COMPLETED' || isset($todo->COMPLETED)) {
+			if (isset($todo->COMPLETED)) {
+				$completed = $todo->COMPLETED->getDateTime();
+				$done = new \DateTime($completed->format('c'));
+			} else {
+				$done = new \DateTime();
+			}
 		} elseif ($status === 'NEEDS-ACTION' || $status === 'IN-PROCESS') {
 			$done = null;
 		}
