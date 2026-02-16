@@ -104,10 +104,25 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function createFile($name, $data = null) {
-		throw new Forbidden('Creating a new entry is not implemented');
+		$normalizedName = $this->normalizeCalendarObjectName($name);
+		if ($this->childExists($normalizedName)) {
+			$this->getChild($normalizedName)->put((string)$data);
+			$this->children = [];
+			return;
+		}
+
+		$owner = $this->extractUserIdFromPrincipalUri();
+		$this->backend->createCalendarObject(
+			$this->board->getId(),
+			$owner,
+			(string)$data,
+			$this->extractCardIdFromNormalizedName($normalizedName)
+		);
+		$this->children = [];
 	}
 
 	public function getChild($name) {
+		$name = $this->normalizeCalendarObjectName($name);
 		if ($this->childExists($name)) {
 			$card = array_values(array_filter(
 				$this->getBackendChildren(),
@@ -151,6 +166,7 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function childExists($name) {
+		$name = $this->normalizeCalendarObjectName($name);
 		return count(array_filter(
 			$this->getBackendChildren(),
 			function ($card) use (&$name) {
@@ -215,5 +231,29 @@ class Calendar extends ExternalCalendar {
 			'{http://apple.com/ns/ical/}calendar-color' => '#' . $this->board->getColor(),
 			'{' . Plugin::NS_CALDAV . '}supported-calendar-component-set' => new SupportedCalendarComponentSet(['VTODO']),
 		];
+	}
+
+	private function extractUserIdFromPrincipalUri(): string {
+		if (preg_match('#^/?principals/users/([^/]+)$#', $this->principalUri, $matches) !== 1) {
+			throw new InvalidDataException('Invalid principal URI');
+		}
+
+		return $matches[1];
+	}
+
+	private function normalizeCalendarObjectName(string $name): string {
+		if (preg_match('/^deck-(card-\d+\.ics)$/', $name, $matches) === 1) {
+			return $matches[1];
+		}
+
+		return $name;
+	}
+
+	private function extractCardIdFromNormalizedName(string $name): ?int {
+		if (preg_match('/^card-(\d+)\.ics$/', $name, $matches) === 1) {
+			return (int)$matches[1];
+		}
+
+		return null;
 	}
 }
