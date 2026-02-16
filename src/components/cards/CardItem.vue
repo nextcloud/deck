@@ -129,12 +129,12 @@ export default {
 			editingTitle: TITLE_EDITING_STATE.OFF,
 		}
 	},
-	computed: {
-		formattedCreatedAt() {
-               if (!this.card.createdAt) return ''
-               const date = new Date(this.card.createdAt * 1000)
-               return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
-           },
+		computed: {
+			formattedCreatedAt() {
+				if (!this.card.createdAt) return ''
+				const date = new Date(this.card.createdAt * 1000)
+				return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+			},
 		...mapState({
 			compactMode: state => state.compactMode,
 			showArchived: state => state.showArchived,
