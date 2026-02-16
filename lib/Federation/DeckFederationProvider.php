@@ -8,6 +8,7 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Service\ConfigService;
 use OCP\Common\Exception\NotFoundException;
 use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationShare;
@@ -23,6 +24,7 @@ class DeckFederationProvider implements ICloudFederationProvider {
 		private BoardMapper $boardMapper,
 		private AclMapper $aclMapper,
 		private ChangeHelper $changeHelper,
+		private ConfigService $configService,
 	) {
 	}
 
@@ -31,6 +33,7 @@ class DeckFederationProvider implements ICloudFederationProvider {
 	}
 
 	public function shareReceived(ICloudFederationShare $share): string {
+		$this->configService->ensureFederationEnabled();
 
 		$externalBoard = new Board();
 		$externalBoard->setTitle($share->getResourceName());

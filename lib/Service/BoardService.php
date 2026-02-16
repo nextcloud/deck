@@ -82,6 +82,7 @@ class BoardService {
 		private SessionMapper $sessionMapper,
 		private IUserManager $userManager,
 		private ISecureRandom $random,
+		private ConfigService $configService,
 		private ?string $userId,
 	) {
 	}
@@ -374,6 +375,7 @@ class BoardService {
 
 		$acl = new Acl();
 		if ($type === Acl::PERMISSION_TYPE_REMOTE) {
+			$this->configService->ensureFederationEnabled();
 			$sharedBy = $this->userManager->get($this->userId);
 			$board = $this->find($boardId);
 			$token = $this->random->generate(32);
@@ -444,6 +446,7 @@ class BoardService {
 		$this->changeHelper->boardChanged($acl->getBoardId());
 
 		if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+			$this->configService->ensureFederationEnabled();
 			$notification = $this->federationFactory->getCloudFederationNotification();
 			if (!$notification instanceof ICloudFederationNotification) {
 				throw new \InvalidArgumentException('Invalid notification type');

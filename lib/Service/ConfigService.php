@@ -12,6 +12,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Exceptions\FederationDisabledException;
 use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
@@ -136,6 +137,19 @@ class ConfigService {
 		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $appConfigState);
 
 		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
+	}
+
+	public function ensureFederationEnabled() {
+		if (!$this->get('federationEnabled')) {
+			throw new FederationDisabledException();
+		}
+		// @TODO fine tune these config values to respect incoming and outgoing federation separately
+		if ($this->config->getAppValue('files_sharing', 'outgoing_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
+		if ($this->config->getAppValue('files_sharing', 'incoming_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
 	}
 
 	public function set($key, $value) {
