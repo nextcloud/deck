@@ -9,14 +9,17 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\OCM\Events\ResourceTypeRegisterEvent;
 use OCP\OCM\IOCMProvider;
 
+/**
+ * @template-implements IEventListener<Event>
+ */
 class ResourceTypeRegisterListener implements IEventListener {
 	public function __construct(
 		protected IOCMProvider $provider,
-		protected ConfigService $configService
+		protected ConfigService $configService,
 	) {
 	}
 
-	public function handle(Event $event):void {
+	public function handle(Event $event): void {
 		if (!$event instanceof ResourceTypeRegisterEvent) {
 			return;
 		}

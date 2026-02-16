@@ -80,7 +80,7 @@ import { subscribe } from '@nextcloud/event-bus'
 import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
 import DeckAppSettings from '../DeckAppSettings.vue'
 import IconCog from 'vue-material-design-icons/CogOutline.vue'
-import { mapState } from 'vuex/dist/vuex.common.js'
+import { getCurrentUser } from '@nextcloud/auth'
 
 const canCreateState = loadState('deck', 'canCreate')
 

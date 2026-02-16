@@ -37,7 +37,7 @@ class DeckFederationProvider implements ICloudFederationProvider {
 
 		$externalBoard = new Board();
 		$externalBoard->setTitle($share->getResourceName());
-		$externalBoard->setExternalId($share->getProviderId());
+		$externalBoard->setExternalId((int)$share->getProviderId());
 		$externalBoard->setOwner($share->getSharedBy());
 		$externalBoard->setShareToken($share->getShareSecret());
 		$insertedBoard = $this->boardMapper->insert($externalBoard);
@@ -57,17 +57,17 @@ class DeckFederationProvider implements ICloudFederationProvider {
 		$notification->setApp('deck');
 		$notification->setUser($share->getShareWith());
 		$notification->setDateTime(new \DateTime());
-		$notification->setObject('remote-board-shared', $insertedBoard->getId());
+		$notification->setObject('remote-board-shared', (string)$insertedBoard->getId());
 		$notification->setSubject('remote-board-shared', [$share->getResourceName(), $share->getSharedBy()]);
 
 		$this->notificationManager->notify($notification);
-		return 'PLACE_HOLDER_ID';
+		return (string)$insertedBoard->getId();
 	}
 
 	public function notificationReceived($notificationType, $providerId, $notification): array {
 		switch ($notificationType) {
 			case 'update-permissions':
-				$localBoards = $this->boardMapper->findByExternalId($providerId);
+				$localBoards = $this->boardMapper->findByExternalId((int)$providerId);
 				foreach ($localBoards as $board) {
 					if ($board->getShareToken() === $notification['sharedSecret']) {
 						$localBoard = $board;

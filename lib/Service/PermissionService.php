@@ -146,7 +146,8 @@ class PermissionService {
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
 		}
-		if ($boardId === null) {
+		// (int)null === 0 so we have to check if any of these are null
+		if ($boardId === null || $id === null) {
 			// Throw NoPermission to not leak information about existing entries
 			throw new NoPermissionException('Permission denied');
 		}
@@ -200,16 +201,16 @@ class PermissionService {
 	}
 
 
-	public function externalUserCan(array $acls, $permission, $shareToken = null) {
+	public function externalUserCan(array $acls, int $permission, string $shareToken):bool {
 		$this->configService->ensureFederationEnabled();
 		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
-				$token = $acl->getToken();
 				if ($acl->getToken() === $shareToken) {
 					return $acl->getPermission($permission);
 				}
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -249,8 +250,11 @@ class PermissionService {
 		return $hasGroupPermission;
 	}
 
-	public function getUserId() {
-		return $this->userId || $this->aclMapper->findByAccessToken($this->accessToken)->getParticipant();
+	public function getUserId(): ?string {
+		if ($this->userId === null && $this->accessToken === null) {
+			return null;
+		}
+		return $this->userId ?? $this->aclMapper->findByAccessToken($this->accessToken)->getParticipant();
 	}
 
 	/**

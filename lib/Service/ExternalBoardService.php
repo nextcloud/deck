@@ -5,8 +5,6 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\FederatedUser;
-use OCA\Deck\Exceptions\FederationDisabledException;
 use OCA\Deck\Federation\DeckFederationProxy;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Federation\ICloudIdManager;
@@ -56,9 +54,7 @@ class ExternalBoardService {
 	public function LocalizeRemoteBoard(array $remoteBoard, Board $localBoard) {
 		$remoteBoard['id'] = $localBoard->getId();
 		$remoteBoard['stacks'] = $this->LocalizeRemoteStacks($remoteBoard['stacks'], $localBoard);
-
-		// setting this manually to a federatedUser as $localBoard->getOwner() does not return the resolved owner
-		$remoteBoard['owner'] = new FederatedUser($this->cloudIdManager->resolveCloudId($localBoard->getOwner()));
+		$remoteBoard['owner'] = $localBoard->resolveOwner();
 		$remoteBoard['acl'] = $localBoard->getAcl();
 		$remoteBoard['permissions'] = $localBoard->getPermissions();
 		return $remoteBoard;

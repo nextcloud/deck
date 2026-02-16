@@ -66,7 +66,7 @@ describe('Card', function () {
 	it('Create card from overview', function () {
 		cy.visit(`/apps/deck/#/`)
 		const newCardTitle = 'Test create from overview'
-		cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+		cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 		cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 
 		cy.get('.button-vue[aria-label*="Add card"]')
@@ -213,7 +213,7 @@ describe('Card', function () {
 
 		it('Smart picker', () => {
 			const newCardTitle = 'Test smart picker'
-			cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+			cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 			cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('.modal__card').should('be.visible')

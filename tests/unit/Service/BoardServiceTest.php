@@ -26,7 +26,11 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
+use OC\Federation\CloudFederationFactory;
+use OC\Federation\CloudFederationProviderManager;
+use OC\Federation\CloudIdManager;
 use OC\L10N\L10N;
+use OC\Security\SecureRandom;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -135,6 +139,9 @@ class BoardServiceTest extends TestCase {
 			$this->notificationHelper,
 			$this->assignedUsersMapper,
 			$this->activityManager,
+			$this->createMock(CloudFederationProviderManager::class),
+			$this->createMock(CloudIdManager::class),
+			$this->createMock(CloudFederationFactory::class),
 			$this->eventDispatcher,
 			$this->changeHelper,
 			$this->urlGenerator,
@@ -142,6 +149,8 @@ class BoardServiceTest extends TestCase {
 			$this->boardServiceValidator,
 			$this->sessionMapper,
 			$this->userManager,
+			$this->createMock(SecureRandom::class),
+			$this->createMock(ConfigService::class),
 			$this->userId
 		);
 

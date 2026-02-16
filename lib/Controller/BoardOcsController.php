@@ -6,6 +6,7 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Attribute\RequestHeader;
 use OCP\AppFramework\Http\DataResponse;
@@ -57,7 +58,7 @@ class BoardOcsController extends OCSController {
 	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function stacks(int $boardId): DataResponse {
-		$localBoard = $this->boardService->find($boardId, true, true, $this->request->getParam('accessToken'));
+		$localBoard = $this->boardService->find($boardId, true, true);
 		// Board on other instance -> get it from other instance
 		if ($localBoard->getExternalId() !== null) {
 			return $this->externalBoardService->getExternalStacksFromRemote($localBoard);
@@ -68,19 +69,13 @@ class BoardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function addAcl(int $boardId, int $type, $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): DataResponse {
-		return new DataResponse($this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage, $remote));
+	public function addAcl(int $boardId, int $type, string $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): DataResponse {
+		return new DataResponse($this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage));
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $id
-	 * @param $permissionEdit
-	 * @param $permissionShare
-	 * @param $permissionManage
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function updateAcl($id, $permissionEdit, $permissionShare, $permissionManage) {
-		return $this->boardService->updateAcl($id, $permissionEdit, $permissionShare, $permissionManage);
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function updateAcl(int $id, bool $permissionEdit, bool $permissionShare, bool $permissionManage): DataResponse {
+		return new DataResponse($this->boardService->updateAcl($id, $permissionEdit, $permissionShare, $permissionManage));
 	}
 }

@@ -380,19 +380,19 @@ class BoardService {
 			$board = $this->find($boardId);
 			$token = $this->random->generate(32);
 			$cloudShare = $this->federationFactory->getCloudFederationShare(
-				$participant, 							// shareWith
-				$board->getTitle(),						// name
-				'',										// description
-				$boardId,								// providerID
-				$sharedBy->getCloudId(),				// owner 				(this instance)
-				$sharedBy->getDisplayName(),			// ownerDisplayName 	(this instance)
-				$sharedBy->getCloudId(),				// sharedBy 			(this instance)
-				$sharedBy->getDisplayName(),			// sharedByDisplayName 	(this instance)
-				$token,									// sharedSecret
-				'user',									// shareType
-				'deck'									// resourceType
+				$participant,
+				$board->getTitle(),
+				'',
+				(string)$boardId,
+				$sharedBy->getCloudId(),
+				$sharedBy->getDisplayName(),
+				$sharedBy->getCloudId(),
+				$sharedBy->getDisplayName(),
+				$token,
+				'user',
+				'deck'
 			);
-			$resp = $this->cloudFederationProviderManager->sendCloudShare($cloudShare);
+			$this->cloudFederationProviderManager->sendCloudShare($cloudShare);
 			$acl->setToken($token);
 		}
 
@@ -457,10 +457,10 @@ class BoardService {
 				'sharedSecret' => $acl->getToken(),
 			];
 
-			$notification->setMessage('update-permissions', 'deck', $acl->getBoardId(), $payload);
+			$notification->setMessage('update-permissions', 'deck', (string)$acl->getBoardId(), $payload);
 
 			$url = $this->cloudIdManager->resolveCloudId($acl->getParticipant());
-			$resp = $this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
+			$this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
 		}
 
 		$this->eventDispatcher->dispatchTyped(new AclUpdatedEvent($acl));

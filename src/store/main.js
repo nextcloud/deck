@@ -29,6 +29,9 @@ export const BOARD_FILTERS = {
 	SHARED: 'shared',
 }
 
+/**
+ *
+ */
 export default function storeFactory() {
 	return new Vuex.Store({
 		modules: {
@@ -415,31 +418,31 @@ export default function storeFactory() {
 			async cloneBoard({ commit }, { boardData, settings }) {
 				const { withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards } = settings
 
-			try {
-				const newBoard = await apiClient.cloneBoard(boardData, withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards)
-				commit('cloneBoard', newBoard)
-				return newBoard
-			} catch (err) {
-				return err
-			}
-		},
-		removeBoard({ commit }, board) {
-			commit('removeBoard', board)
-		},
-		async loadBoards({ commit }) {
-			const boards = await apiClient.loadBoards()
-			commit('setBoards', boards)
-		},
-		async loadSharees({ commit }, query) {
-			const params = new URLSearchParams()
-			if (typeof query === 'undefined') {
-				return
-			}
-			params.append('search', query)
-			params.append('format', 'json')
-			params.append('perPage', 20)
-			params.append('itemType', 'deck')
-			params.append('lookup', false)
+				try {
+					const newBoard = await apiClient.cloneBoard(boardData, withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards)
+					commit('cloneBoard', newBoard)
+					return newBoard
+				} catch (err) {
+					return err
+				}
+			},
+			removeBoard({ commit }, board) {
+				commit('removeBoard', board)
+			},
+			async loadBoards({ commit }) {
+				const boards = await apiClient.loadBoards()
+				commit('setBoards', boards)
+			},
+			async loadSharees({ commit }, query) {
+				const params = new URLSearchParams()
+				if (typeof query === 'undefined') {
+					return
+				}
+				params.append('search', query)
+				params.append('format', 'json')
+				params.append('perPage', 20)
+				params.append('itemType', 'deck')
+				params.append('lookup', false)
 
 				const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), { params })
 				commit('setSharees', response.data.ocs.data)

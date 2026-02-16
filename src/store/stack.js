@@ -9,6 +9,9 @@ import applyOrderToArray from './../helpers/applyOrderToArray.js'
 
 const apiClient = new StackApi()
 
+/**
+ *
+ */
 export default function stackModuleFactory() {
 	return {
 		state: {
