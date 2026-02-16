@@ -20,8 +20,11 @@
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
 				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
-					<span class="dragDisabled" contenteditable="false">{{ displayTitle }}</span>
+                       <span class="dragDisabled" contenteditable="false">{{ displayTitle }}</span>
 				</h4>
+				<div v-if="editingTitle === 0 && card.owner && card.createdAt" class="card-meta">
+					Created by {{ card.owner.displayname }} on {{ formattedCreatedAt }}
+				</div>
 				<h4 v-if="editingTitle >= 1"
 					key="title-edit"
 					dir="auto"
@@ -127,6 +130,11 @@ export default {
 		}
 	},
 	computed: {
+		formattedCreatedAt() {
+               if (!this.card.createdAt) return ''
+               const date = new Date(this.card.createdAt * 1000)
+               return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+           },
 		...mapState({
 			compactMode: state => state.compactMode,
 			showArchived: state => state.showArchived,
