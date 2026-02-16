@@ -43,6 +43,7 @@ class PermissionService {
 		private AclMapper $aclMapper,
 		private BoardMapper $boardMapper,
 		private IUserManager $userManager,
+		private ConfigService $configService,
 		private IGroupManager $groupManager,
 		private IManager $shareManager,
 		private IConfig $config,
@@ -200,6 +201,7 @@ class PermissionService {
 
 
 	public function externalUserCan(array $acls, $permission, $shareToken = null) {
+		$this->configService->ensureFederationEnabled();
 		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
 				$token = $acl->getToken();

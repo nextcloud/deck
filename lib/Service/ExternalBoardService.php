@@ -25,14 +25,8 @@ class ExternalBoardService {
 	) {
 	}
 
-	private function ensureFederationEnabled(): void {
-		if (!$this->configService->get('federationEnabled')) {
-			throw new FederationDisabledException();
-		}
-	}
-
 	public function getExternalBoardFromRemote(Board $localBoard):DataResponse {
-		$this->ensureFederationEnabled();
+		$this->configService->ensureFederationEnabled();
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
@@ -42,7 +36,7 @@ class ExternalBoardService {
 		return new DataResponse($this->LocalizeRemoteBoard($ocs, $localBoard));
 	}
 	public function getExternalStacksFromRemote(Board $localBoard):DataResponse {
-		$this->ensureFederationEnabled();
+		$this->configService->ensureFederationEnabled();
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
@@ -81,7 +75,7 @@ class ExternalBoardService {
 		?array $users = [],
 		?int $boardId = null,
 	): array {
-		$this->ensureFederationEnabled();
+		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
@@ -107,7 +101,7 @@ class ExternalBoardService {
 		string $title,
 		int $order = 0,
 	): array {
-		$this->ensureFederationEnabled();
+		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
@@ -124,7 +118,7 @@ class ExternalBoardService {
 	}
 
 	public function deleteStackOnRemote(Board $localBoard, int $stackId): array {
-		$this->ensureFederationEnabled();
+		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
