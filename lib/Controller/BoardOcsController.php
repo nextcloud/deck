@@ -13,7 +13,7 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
-class NewBoardController extends OCSController {
+class BoardOcsController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
