@@ -35,11 +35,11 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function getOwner() {
-		return null;
+		return $this->calendar->getOwner();
 	}
 
 	public function getGroup() {
-		return null;
+		return $this->calendar->getGroup();
 	}
 
 	public function getACL() {
@@ -78,7 +78,7 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function delete() {
-		throw new Forbidden('This calendar-object is read-only');
+		$this->backend->deleteCalendarObject($this->sourceItem);
 	}
 
 	public function getName() {
