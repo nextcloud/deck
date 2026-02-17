@@ -116,7 +116,7 @@ class Calendar extends ExternalCalendar {
 
 	public function createFile($name, $data = null) {
 		try {
-			$this->getChild($name)->put((string)$data);
+			$this->getChildNode($name, false)->put((string)$data);
 			$this->children = null;
 			return;
 		} catch (NotFound $e) {
@@ -135,6 +135,10 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function getChild($name) {
+		return $this->getChildNode($name, true);
+	}
+
+	private function getChildNode(string $name, bool $allowPlaceholder) {
 		foreach ($this->getBackendChildren() as $item) {
 			$canonicalName = $item->getCalendarPrefix() . '-' . $item->getId() . '.ics';
 			if ($this->isMatchingCalendarObjectName($name, $canonicalName)) {
@@ -154,7 +158,7 @@ class Calendar extends ExternalCalendar {
 			return new CalendarObject($this, $canonicalName, $this->backend, $fallbackItem);
 		}
 
-		if ($this->shouldUsePlaceholderForMissingObject()) {
+		if ($allowPlaceholder && $this->shouldUsePlaceholderForMissingObject()) {
 			$placeholderItem = $this->buildPlaceholderCalendarObject($name);
 			if ($placeholderItem !== null) {
 				$canonicalName = $placeholderItem->getCalendarPrefix() . '-' . $placeholderItem->getId() . '.ics';
@@ -309,9 +313,11 @@ class Calendar extends ExternalCalendar {
 	private function buildPlaceholderCalendarObject(string $name) {
 		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
 			$cardId = (int)$matches[1];
-			// For stale hrefs after cross-board moves we intentionally allow
-			// placeholder resolution without board scoping.
-			$card = $this->backend->findCalendarObjectByName($name, null, null);
+			$card = $this->backend->findCalendarObjectByName($name, $this->board->getId(), $this->stack?->getId());
+			if (!($card instanceof Card)) {
+				// Fallback for stale hrefs after cross-board moves.
+				$card = $this->backend->findCalendarObjectByName($name, null, null);
+			}
 			if (!($card instanceof Card)) {
 				return null;
 			}
@@ -321,7 +327,8 @@ class Calendar extends ExternalCalendar {
 			$placeholder->setTitle('Deleted task');
 			$placeholder->setDescription('');
 			$placeholder->setStackId($this->stack?->getId() ?? $card->getStackId());
-			$placeholder->setType($card->getType() ?: 'plain');
+			$cardType = (string)$card->getType();
+			$placeholder->setType($cardType !== '' ? $cardType : 'plain');
 			$placeholder->setOrder(0);
 			$placeholder->setCreatedAt($card->getCreatedAt() > 0 ? $card->getCreatedAt() : time());
 			$placeholder->setLastModified(time());
