@@ -129,8 +129,9 @@ class Calendar extends ExternalCalendar {
 	public function getChild($name) {
 		$name = $this->normalizeCalendarObjectName($name);
 		foreach ($this->getBackendChildren() as $card) {
-			if ($card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name) {
-				return new CalendarObject($this, $name, $this->backend, $card);
+			$canonicalName = $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
+			if ($this->isMatchingCalendarObjectName($name, $canonicalName)) {
+				return new CalendarObject($this, $canonicalName, $this->backend, $card);
 			}
 		}
 
@@ -170,7 +171,8 @@ class Calendar extends ExternalCalendar {
 		return count(array_filter(
 			$this->getBackendChildren(),
 			function ($card) use (&$name) {
-				return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name;
+				$canonicalName = $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
+				return $this->isMatchingCalendarObjectName($name, $canonicalName);
 			}
 		)) > 0;
 	}
@@ -254,10 +256,6 @@ class Calendar extends ExternalCalendar {
 	}
 
 	private function normalizeCalendarObjectName(string $name): string {
-		if (preg_match('/^card-\d+\.ics$/', $name) === 1) {
-			return 'deck-' . $name;
-		}
-
 		return $name;
 	}
 
@@ -267,5 +265,17 @@ class Calendar extends ExternalCalendar {
 		}
 
 		return null;
+	}
+
+	private function isMatchingCalendarObjectName(string $requestedName, string $canonicalName): bool {
+		if ($requestedName === $canonicalName) {
+			return true;
+		}
+
+		if (str_starts_with($requestedName, 'deck-') && substr($requestedName, 5) === $canonicalName) {
+			return true;
+		}
+
+		return str_starts_with($canonicalName, 'deck-') && substr($canonicalName, 5) === $requestedName;
 	}
 }
