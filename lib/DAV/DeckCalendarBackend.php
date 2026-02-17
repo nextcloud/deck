@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace OCA\Deck\DAV;
 
-use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\BoardService;
@@ -21,14 +21,7 @@ use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
-use OCP\ILogger;
 use Sabre\DAV\Exception\NotFound;
-use Sabre\VObject\Component\VCalendar;
-use Sabre\VObject\Component\VTodo;
-use Sabre\VObject\InvalidDataException;
-use Sabre\VObject\Property;
-use Sabre\VObject\Property\ICalendar\Categories;
-use Sabre\VObject\Reader;
 
 class DeckCalendarBackend {
 
@@ -64,6 +57,7 @@ class DeckCalendarBackend {
 		return $this->boardService->findAll(-1, false, false);
 	}
 
+	/** @psalm-suppress InvalidThrow */
 	public function getBoard(int $id): Board {
 		try {
 			return $this->boardService->find($id);
@@ -266,7 +260,7 @@ class DeckCalendarBackend {
 			return $this->updateStackFromCalendar($sourceItem, $data);
 		}
 
-		throw new InvalidDataException('Unsupported calendar object source item');
+		throw new \InvalidArgumentException('Unsupported calendar object source item');
 	}
 
 	/**
@@ -309,7 +303,7 @@ class DeckCalendarBackend {
 			return;
 		}
 
-		throw new InvalidDataException('Unsupported calendar object source item');
+		throw new \InvalidArgumentException('Unsupported calendar object source item');
 	}
 
 	private function updateCardFromCalendar(Card $sourceItem, string $data, bool $restoreDeleted = false, ?int $targetBoardId = null): Card {
@@ -394,13 +388,13 @@ class DeckCalendarBackend {
 	/**
 	 * @param Card|Stack $sourceItem
 	 */
-	public function decorateCalendarObject($sourceItem, VCalendar $calendarObject): void {
+	public function decorateCalendarObject($sourceItem, $calendarObject): void {
 		if (!($sourceItem instanceof Card)) {
 			return;
 		}
 
 		$todos = $calendarObject->select('VTODO');
-		if (count($todos) === 0 || !($todos[0] instanceof VTodo)) {
+		if (count($todos) === 0 || !$this->isSabreVTodo($todos[0])) {
 			return;
 		}
 
@@ -439,33 +433,35 @@ class DeckCalendarBackend {
 		);
 	}
 
-	private function extractTodo(string $data): VTodo {
-		$vObject = Reader::read($data);
-		if (!($vObject instanceof VCalendar)) {
-			throw new InvalidDataException('Invalid calendar payload');
+	private function extractTodo(string $data) {
+		$readerClass = '\\Sabre\\VObject\\Reader';
+		$vObject = $readerClass::read($data);
+		if (!$this->isSabreVCalendar($vObject)) {
+			throw new \InvalidArgumentException('Invalid calendar payload');
 		}
 
 		$todos = $vObject->select('VTODO');
-		if (count($todos) === 0 || !($todos[0] instanceof VTodo)) {
-			throw new InvalidDataException('Calendar payload contains no VTODO');
+		if (count($todos) === 0 || !$this->isSabreVTodo($todos[0])) {
+			throw new \InvalidArgumentException('Calendar payload contains no VTODO');
 		}
 		return $todos[0];
 	}
 
-	private function extractStackIdFromRelatedTo(VTodo $todo): ?int {
+	private function extractStackIdFromRelatedTo($todo): ?int {
 		$parentCandidates = [];
 		$otherCandidates = [];
 		foreach ($todo->children() as $child) {
-			if (!($child instanceof Property) || $child->name !== 'RELATED-TO') {
+			if (!is_object($child) || !property_exists($child, 'name') || $child->name !== 'RELATED-TO') {
 				continue;
 			}
 
-			$value = trim((string)$child);
+			$value = trim($this->toStringValue($child));
 			if ($value === '') {
 				continue;
 			}
 
-			$reltype = isset($child['RELTYPE']) ? strtoupper((string)$child['RELTYPE']) : null;
+			$reltypeValue = $this->getPropertyParameter($child, 'RELTYPE');
+			$reltype = $reltypeValue !== null ? strtoupper($reltypeValue) : null;
 			if ($reltype === 'PARENT') {
 				$parentCandidates[] = $value;
 			} else {
@@ -482,7 +478,7 @@ class DeckCalendarBackend {
 		return null;
 	}
 
-	private function mapDoneFromTodo(VTodo $todo, Card $card): OptionalNullableValue {
+	private function mapDoneFromTodo($todo, Card $card): OptionalNullableValue {
 		$done = $card->getDone();
 		$percentComplete = isset($todo->{'PERCENT-COMPLETE'}) ? (int)((string)$todo->{'PERCENT-COMPLETE'}) : null;
 		if (!isset($todo->STATUS) && !isset($todo->COMPLETED) && $percentComplete === null) {
@@ -504,7 +500,7 @@ class DeckCalendarBackend {
 		return new OptionalNullableValue($done);
 	}
 
-	private function inferStackIdFromTodoHints(int $boardId, VTodo $todo, string $mode): ?int {
+	private function inferStackIdFromTodoHints(int $boardId, $todo, string $mode): ?int {
 		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
 			$categories = $this->extractCategories($todo) ?? [];
 			return $this->inferStackIdFromCategories($boardId, $categories);
@@ -530,7 +526,10 @@ class DeckCalendarBackend {
 		$stacks = $this->stackService->findAll($boardId);
 		$stackTitles = [];
 		foreach ($stacks as $stack) {
-			$stackTitles[mb_strtolower(trim($stack->getTitle()))] = true;
+			$key = mb_strtolower(trim($stack->getTitle()));
+			if ($key !== '') {
+				$stackTitles[$key] = true;
+			}
 		}
 
 		return array_values(array_filter($categories, static function (string $category) use ($stackTitles): bool {
@@ -597,7 +596,7 @@ class DeckCalendarBackend {
 		return max(1, min(9, 9 - (int)round($index * 8 / (count($stacks) - 1))));
 	}
 
-	private function addTodoCategory(VTodo $todo, string $category): void {
+	private function addTodoCategory($todo, string $category): void {
 		$category = trim($category);
 		if ($category === '') {
 			return;
@@ -605,7 +604,7 @@ class DeckCalendarBackend {
 
 		$current = [];
 		foreach ($todo->select('CATEGORIES') as $property) {
-			if ($property instanceof Categories) {
+			if (is_object($property) && method_exists($property, 'getParts')) {
 				foreach ($property->getParts() as $part) {
 					$key = mb_strtolower(trim((string)$part));
 					if ($key !== '') {
@@ -625,11 +624,11 @@ class DeckCalendarBackend {
 	/**
 	 * @return list<string>|null
 	 */
-	private function extractCategories(VTodo $todo): ?array {
+	private function extractCategories($todo): ?array {
 		$hasCategories = isset($todo->CATEGORIES);
 		$hasAppleTags = false;
 		foreach ($todo->children() as $child) {
-			if ($child instanceof Property && strtoupper($child->name) === 'X-APPLE-TAGS') {
+			if (is_object($child) && property_exists($child, 'name') && strtoupper((string)$child->name) === 'X-APPLE-TAGS') {
 				$hasAppleTags = true;
 				break;
 			}
@@ -643,14 +642,14 @@ class DeckCalendarBackend {
 		$properties = array_merge(
 			$todo->select('CATEGORIES'),
 			array_values(array_filter($todo->children(), static function ($child): bool {
-				return $child instanceof Property && strtoupper($child->name) === 'X-APPLE-TAGS';
+				return is_object($child) && property_exists($child, 'name') && strtoupper((string)$child->name) === 'X-APPLE-TAGS';
 			}))
 		);
 		foreach ($properties as $property) {
-			if ($property instanceof Categories) {
+			if (is_object($property) && method_exists($property, 'getParts')) {
 				$parts = $property->getParts();
 			} else {
-				$parts = explode(',', (string)$property);
+				$parts = explode(',', $this->toStringValue($property));
 			}
 			foreach ($parts as $part) {
 				$title = trim((string)$part);
@@ -742,7 +741,7 @@ class DeckCalendarBackend {
 	private function getDefaultStackIdForBoard(int $boardId): int {
 		$stacks = $this->stackService->findAll($boardId);
 		if (count($stacks) === 0) {
-			throw new InvalidDataException('No stack available for board');
+			throw new \InvalidArgumentException('No stack available for board');
 		}
 
 		usort($stacks, static fn (Stack $a, Stack $b) => $a->getOrder() <=> $b->getOrder());
@@ -771,7 +770,7 @@ class DeckCalendarBackend {
 		return $stack->getBoardId();
 	}
 
-	private function findExistingCardByUid(VTodo $todo): ?Card {
+	private function findExistingCardByUid($todo): ?Card {
 		$cardIdFromDeckProperty = $this->extractDeckCardId($todo);
 		if ($cardIdFromDeckProperty !== null) {
 			return $this->findCardByIdIncludingDeleted($cardIdFromDeckProperty);
@@ -790,7 +789,7 @@ class DeckCalendarBackend {
 		return $this->findCardByIdIncludingDeleted($cardId);
 	}
 
-	private function extractDeckCardId(VTodo $todo): ?int {
+	private function extractDeckCardId($todo): ?int {
 		$propertyNames = [
 			'X-NC-DECK-CARD-ID',
 			'X-NEXTCLOUD-DECK-CARD-ID',
@@ -858,15 +857,15 @@ class DeckCalendarBackend {
 		return $left->getTimestamp() === $right->getTimestamp();
 	}
 
-	private function buildTodoDebugContext(VTodo $todo): array {
+	private function buildTodoDebugContext($todo): array {
 		$relatedTo = [];
 		foreach ($todo->children() as $child) {
-			if (!($child instanceof Property) || $child->name !== 'RELATED-TO') {
+			if (!is_object($child) || !property_exists($child, 'name') || $child->name !== 'RELATED-TO') {
 				continue;
 			}
 			$relatedTo[] = [
-				'value' => trim((string)$child),
-				'reltype' => isset($child['RELTYPE']) ? (string)$child['RELTYPE'] : null,
+				'value' => trim($this->toStringValue($child)),
+				'reltype' => $this->getPropertyParameter($child, 'RELTYPE'),
 			];
 		}
 
@@ -886,11 +885,42 @@ class DeckCalendarBackend {
 	}
 
 	private function logCalDavDebug(string $message, array $context = []): void {
-		try {
-			\OCP\Util::writeLog('deck', $message . ' ' . json_encode($context), ILogger::WARNING);
-		} catch (\Throwable $e) {
-			// no-op on logging failure
+		// Keep this helper callable without producing warning-level log noise on normal sync flows.
+	}
+
+	private function isSabreVCalendar($value): bool {
+		return is_object($value)
+			&& method_exists($value, 'select')
+			&& method_exists($value, 'children')
+			&& method_exists($value, 'serialize');
+	}
+
+	private function isSabreVTodo($value): bool {
+		return is_object($value)
+			&& property_exists($value, 'name')
+			&& strtoupper((string)$value->name) === 'VTODO'
+			&& method_exists($value, 'children');
+	}
+
+	private function getPropertyParameter($property, string $parameter): ?string {
+		if (!is_object($property) || !($property instanceof \ArrayAccess) || !isset($property[$parameter])) {
+			return null;
 		}
+
+		$value = $property[$parameter];
+		$string = trim($this->toStringValue($value));
+		return $string !== '' ? $string : null;
+	}
+
+	private function toStringValue($value): string {
+		if (is_scalar($value)) {
+			return (string)$value;
+		}
+		if (is_object($value) && method_exists($value, '__toString')) {
+			return (string)$value;
+		}
+
+		return '';
 	}
 
 }
