@@ -102,6 +102,64 @@ class DeckCalendarBackend {
 		return $this->stackService->find($stackId)->getCards() ?? [];
 	}
 
+	public function getCalDavListMode(): string {
+		return $this->configService->getCalDavListMode();
+	}
+
+	public function getCalendarRevisionFingerprint(int $boardId, ?int $stackId = null): string {
+		$mode = $this->configService->getCalDavListMode();
+		$fingerprint = [$mode];
+		$stacks = $this->stackService->findAll($boardId);
+		usort($stacks, static fn (Stack $a, Stack $b) => $a->getOrder() <=> $b->getOrder());
+
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_PRIORITY) {
+			foreach ($stacks as $stack) {
+				$fingerprint[] = $stack->getId() . ':' . $stack->getOrder() . ':' . $stack->getDeletedAt();
+			}
+		}
+
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
+			foreach ($stacks as $stack) {
+				$fingerprint[] = $stack->getId() . ':' . $stack->getTitle() . ':' . $stack->getDeletedAt();
+			}
+		}
+
+		if ($stackId !== null) {
+			$fingerprint[] = 'stack:' . $stackId;
+		}
+
+		return implode('|', $fingerprint);
+	}
+
+	/**
+	 * @param Card|Stack $sourceItem
+	 */
+	public function getObjectRevisionFingerprint($sourceItem): string {
+		$mode = $this->configService->getCalDavListMode();
+		if (!($sourceItem instanceof Card)) {
+			return $mode;
+		}
+
+		try {
+			$stack = $this->stackService->find($sourceItem->getStackId());
+			$boardId = $stack->getBoardId();
+		} catch (\Throwable $e) {
+			return $mode;
+		}
+
+		$fingerprint = [$mode, 'stack:' . $stack->getId()];
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
+			$fingerprint[] = $stack->getTitle();
+			$fingerprint[] = (string)$stack->getDeletedAt();
+		}
+
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_PRIORITY) {
+			$fingerprint[] = $this->getCalendarRevisionFingerprint($boardId);
+		}
+
+		return implode('|', $fingerprint);
+	}
+
 	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null, ?int $preferredStackId = null): Card {
 		$todo = $this->extractTodo($data);
 		$existingCard = $this->findExistingCardByUid($todo);
@@ -435,7 +493,8 @@ class DeckCalendarBackend {
 		}
 		usort($stacks, static fn (Stack $a, Stack $b) => $a->getOrder() <=> $b->getOrder());
 
-		$targetIndex = (int)round(($priority - 1) * (count($stacks) - 1) / 8);
+		// Priority mapping for list mode: left-most list = high priority (9), right-most list = low priority (1)
+		$targetIndex = (int)round((9 - $priority) * (count($stacks) - 1) / 8);
 		return $stacks[max(0, min(count($stacks) - 1, $targetIndex))]->getId();
 	}
 
@@ -454,7 +513,8 @@ class DeckCalendarBackend {
 			}
 		}
 
-		return max(1, min(9, 1 + (int)round($index * 8 / (count($stacks) - 1))));
+		// Priority mapping for list mode: left-most list = high priority (9), right-most list = low priority (1)
+		return max(1, min(9, 9 - (int)round($index * 8 / (count($stacks) - 1))));
 	}
 
 	private function addTodoCategory(VTodo $todo, string $category): void {
