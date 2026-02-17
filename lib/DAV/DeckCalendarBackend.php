@@ -21,6 +21,7 @@ use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VTodo;
@@ -726,6 +727,14 @@ class DeckCalendarBackend {
 			return $this->labelService->create($title, '31CC7C', $boardId);
 		} catch (\Throwable $e) {
 			try {
+				\OCP\Server::get(LoggerInterface::class)->debug('[deck-caldav] label-create-failed', [
+					'boardId' => $boardId,
+					'title' => $title,
+					'error' => $e->getMessage(),
+				]);
+			} catch (\Throwable $ignored) {
+			}
+			try {
 				$board = $this->boardMapper->find($boardId, true, false);
 				foreach ($board->getLabels() ?? [] as $label) {
 					if (mb_strtolower(trim($label->getTitle())) === mb_strtolower($title)) {
@@ -820,7 +829,7 @@ class DeckCalendarBackend {
 
 	private function findCardByIdIncludingDeleted(int $cardId): ?Card {
 		try {
-			return $this->cardService->findIncludingDeleted($cardId);
+			return $this->cardService->findIncludingDeletedLite($cardId);
 		} catch (\Throwable $e) {
 			return null;
 		}
