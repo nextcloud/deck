@@ -10,6 +10,7 @@ use OCA\DAV\CalDAV\Integration\ExternalCalendar;
 use OCA\DAV\CalDAV\Plugin;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
 use Sabre\CalDAV\CalendarQueryValidator;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
@@ -132,6 +133,24 @@ class Calendar extends ExternalCalendar {
 			$canonicalName = $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
 			if ($this->isMatchingCalendarObjectName($name, $canonicalName)) {
 				return new CalendarObject($this, $canonicalName, $this->backend, $card);
+			}
+		}
+
+		$fallbackItem = $this->backend->findCalendarObjectByName(
+			$name,
+			$this->board->getId(),
+			$this->stack?->getId()
+		);
+		if ($fallbackItem !== null) {
+			$canonicalName = $fallbackItem->getCalendarPrefix() . '-' . $fallbackItem->getId() . '.ics';
+			return new CalendarObject($this, $canonicalName, $this->backend, $fallbackItem);
+		}
+
+		if ($this->shouldUsePlaceholderForMissingObject()) {
+			$placeholderItem = $this->buildPlaceholderCalendarObject($name);
+			if ($placeholderItem !== null) {
+				$canonicalName = $placeholderItem->getCalendarPrefix() . '-' . $placeholderItem->getId() . '.ics';
+				return new CalendarObject($this, $canonicalName, $this->backend, $placeholderItem);
 			}
 		}
 
@@ -277,5 +296,68 @@ class Calendar extends ExternalCalendar {
 		}
 
 		return str_starts_with($canonicalName, 'deck-') && substr($canonicalName, 5) === $requestedName;
+	}
+
+	/**
+	 * Prevent full REPORT failures on stale hrefs by returning a minimal placeholder
+	 * object when clients request no-longer-existing calendar object names.
+	 *
+	 * @return Card|Stack|null
+	 */
+	private function buildPlaceholderCalendarObject(string $name) {
+		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
+			$card = new Card();
+			$card->setId((int)$matches[1]);
+			$card->setTitle('Deleted task');
+			$card->setDescription('');
+			$card->setType('plain');
+			$card->setOrder(0);
+			$card->setOwner($this->extractUserIdFromPrincipalUri());
+			$card->setStackId($this->resolveFallbackStackId());
+			$card->setCreatedAt(time());
+			$card->setLastModified(time());
+			$card->setDeletedAt(time());
+			return $card;
+		}
+
+		if (preg_match('/^stack-(\d+)\.ics$/', $name, $matches) === 1) {
+			$stack = new Stack();
+			$stack->setId((int)$matches[1]);
+			$stack->setTitle('Deleted list');
+			$stack->setBoardId($this->board->getId());
+			$stack->setOrder(0);
+			$stack->setDeletedAt(time());
+			$stack->setLastModified(time());
+			return $stack;
+		}
+
+		return null;
+	}
+
+	private function resolveFallbackStackId(): int {
+		if ($this->stack !== null) {
+			return $this->stack->getId();
+		}
+
+		$stacks = $this->backend->getStacks($this->board->getId());
+		if (count($stacks) > 0) {
+			return $stacks[0]->getId();
+		}
+
+		return 0;
+	}
+
+	private function shouldUsePlaceholderForMissingObject(): bool {
+		if (!class_exists('\OC')) {
+			return false;
+		}
+
+		try {
+			$request = \OC::$server->getRequest();
+			$method = strtoupper((string)$request->getMethod());
+			return in_array($method, ['GET', 'HEAD', 'REPORT', 'PROPFIND'], true);
+		} catch (\Throwable $e) {
+			return false;
+		}
 	}
 }

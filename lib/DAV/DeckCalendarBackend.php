@@ -92,6 +92,50 @@ class DeckCalendarBackend {
 		return $this->stackService->find($stackId);
 	}
 
+	/**
+	 * Resolve a calendar object id from a CalDAV resource name, optionally
+	 * constrained to the current board/stack context.
+	 *
+	 * @param string $name resource name like card-123.ics, deck-card-123.ics or stack-12.ics
+	 * @return Card|Stack|null
+	 */
+	public function findCalendarObjectByName(string $name, ?int $boardId = null, ?int $stackId = null) {
+		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
+			$card = $this->findCardByIdIncludingDeleted((int)$matches[1]);
+			if ($card === null) {
+				return null;
+			}
+
+			try {
+				if ($stackId !== null && $card->getStackId() !== $stackId) {
+					return null;
+				}
+				if ($boardId !== null && $this->getBoardIdForCard($card) !== $boardId) {
+					return null;
+				}
+			} catch (\Throwable $e) {
+				return null;
+			}
+
+			return $card;
+		}
+
+		if (preg_match('/^stack-(\d+)\.ics$/', $name, $matches) === 1) {
+			try {
+				$stack = $this->stackService->find((int)$matches[1]);
+				if ($boardId !== null && $stack->getBoardId() !== $boardId) {
+					return null;
+				}
+
+				return $stack;
+			} catch (\Throwable $e) {
+				return null;
+			}
+		}
+
+		return null;
+	}
+
 	/** @return Card[] */
 	public function getChildrenForStack(int $stackId): array {
 		return $this->stackService->find($stackId)->getCards() ?? [];
