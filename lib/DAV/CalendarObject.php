@@ -25,6 +25,8 @@ class CalendarObject implements ICalendarObject, IACL {
 	private $backend;
 	/** @var VCalendar */
 	private $calendarObject;
+	/** @var string|null */
+	private $serializedData = null;
 
 	public function __construct(Calendar $calendar, string $name, DeckCalendarBackend $backend, $sourceItem) {
 		$this->calendar = $calendar;
@@ -57,12 +59,12 @@ class CalendarObject implements ICalendarObject, IACL {
 	public function put($data) {
 		$this->sourceItem = $this->backend->updateCalendarObject($this->sourceItem, $data);
 		$this->calendarObject = $this->sourceItem->getCalendarObject();
+		$this->serializedData = null;
 	}
 
 	public function get() {
 		if ($this->sourceItem) {
-			$this->backend->decorateCalendarObject($this->sourceItem, $this->calendarObject);
-			return $this->calendarObject->serialize();
+			return $this->getSerializedData();
 		}
 	}
 
@@ -75,7 +77,7 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function getSize() {
-		return mb_strlen($this->calendarObject->serialize());
+		return mb_strlen($this->getSerializedData());
 	}
 
 	public function delete() {
@@ -92,5 +94,14 @@ class CalendarObject implements ICalendarObject, IACL {
 
 	public function getLastModified() {
 		return $this->sourceItem->getLastModified();
+	}
+
+	private function getSerializedData(): string {
+		if ($this->serializedData === null) {
+			$this->backend->decorateCalendarObject($this->sourceItem, $this->calendarObject);
+			$this->serializedData = $this->calendarObject->serialize();
+		}
+
+		return $this->serializedData;
 	}
 }
