@@ -387,7 +387,7 @@ class DeckCalendarBackend {
 	 * @param Card|Stack $sourceItem
 	 */
 	public function decorateCalendarObject($sourceItem, $calendarObject): void {
-		if (!($sourceItem instanceof Card)) {
+		if (!($sourceItem instanceof Card) && !($sourceItem instanceof Stack)) {
 			return;
 		}
 
@@ -398,7 +398,11 @@ class DeckCalendarBackend {
 
 		$todo = $todos[0];
 		$mode = $this->configService->getCalDavListMode();
-		$stack = $this->stackService->find($sourceItem->getStackId());
+		if ($sourceItem instanceof Card) {
+			$stack = $this->stackService->find($sourceItem->getStackId());
+		} else {
+			$stack = $sourceItem;
+		}
 
 		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
 			$this->addTodoCategory($todo, $stack->getTitle());
