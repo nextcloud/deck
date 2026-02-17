@@ -8,7 +8,9 @@
 namespace OCA\Deck\DAV;
 
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
+use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\BoardService;
@@ -24,6 +26,8 @@ class DeckCalendarBackendTest extends TestCase {
 	private DeckCalendarBackend $backend;
 	private CardService $cardService;
 	private StackService $stackService;
+	private BoardMapper $boardMapper;
+	private LabelService $labelService;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -31,8 +35,8 @@ class DeckCalendarBackendTest extends TestCase {
 		$this->stackService = $this->createMock(StackService::class);
 		$this->cardService = $this->createMock(CardService::class);
 		$permissionService = $this->createMock(PermissionService::class);
-		$boardMapper = $this->createMock(BoardMapper::class);
-		$labelService = $this->createMock(LabelService::class);
+		$this->boardMapper = $this->createMock(BoardMapper::class);
+		$this->labelService = $this->createMock(LabelService::class);
 		$configService = $this->createMock(ConfigService::class);
 		$configService->method('getCalDavListMode')
 			->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS);
@@ -42,8 +46,8 @@ class DeckCalendarBackendTest extends TestCase {
 			$this->stackService,
 			$this->cardService,
 			$permissionService,
-			$boardMapper,
-			$labelService,
+			$this->boardMapper,
+			$this->labelService,
 			$configService
 		);
 	}
@@ -437,5 +441,143 @@ END:VCALENDAR
 ICS;
 
 		$this->backend->createCalendarObject(12, 'admin', $calendarData);
+	}
+
+	public function testUpdateCardWithInProgressStatusClearsDone(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(123);
+
+		$existingCard = new Card();
+		$existingCard->setId(123);
+		$existingCard->setTitle('Card');
+		$existingCard->setDescription('Description');
+		$existingCard->setStackId(42);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(0);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(new \DateTime('2026-03-01T10:00:00+00:00'));
+
+		$this->cardService->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($existingCard);
+		$currentStack = new Stack();
+		$currentStack->setId(42);
+		$currentStack->setBoardId(12);
+		$this->stackService->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($currentStack);
+
+		$this->cardService->expects($this->once())
+			->method('update')
+			->with(
+				123,
+				'Card',
+				42,
+				'plain',
+				'admin',
+				'Description',
+				0,
+				null,
+				0,
+				false,
+				$this->callback(function ($value) {
+					if (!($value instanceof OptionalNullableValue)) {
+						return false;
+					}
+					return $value->getValue() === null;
+				})
+			)
+			->willReturn($existingCard);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-123
+SUMMARY:Card
+DESCRIPTION:Description
+STATUS:IN-PROCESS
+PERCENT-COMPLETE:50
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->updateCalendarObject($sourceCard, $calendarData);
+	}
+
+	public function testUpdateCardSyncsAppleTagsToLabels(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(123);
+
+		$existingCard = new Card();
+		$existingCard->setId(123);
+		$existingCard->setTitle('Card');
+		$existingCard->setDescription('Old description');
+		$existingCard->setStackId(42);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(0);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(null);
+		$existingCard->setLabels([]);
+
+		$updatedCard = new Card();
+		$updatedCard->setId(123);
+
+		$this->cardService->expects($this->exactly(2))
+			->method('find')
+			->with(123)
+			->willReturnOnConsecutiveCalls($existingCard, $existingCard);
+
+		$currentStack = new Stack();
+		$currentStack->setId(42);
+		$currentStack->setBoardId(12);
+		$this->stackService->expects($this->exactly(2))
+			->method('find')
+			->with(42)
+			->willReturn($currentStack);
+
+		$this->cardService->expects($this->once())
+			->method('update')
+			->willReturn($updatedCard);
+
+		$label = new Label();
+		$label->setId(7);
+		$label->setTitle('Test');
+		$board = new Board();
+		$board->setId(12);
+		$board->setLabels([$label]);
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(12, true, false)
+			->willReturn($board);
+
+		$this->cardService->expects($this->once())
+			->method('assignLabel')
+			->with(123, 7);
+		$this->cardService->expects($this->never())
+			->method('removeLabel');
+		$this->labelService->expects($this->never())
+			->method('create');
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-123
+SUMMARY:Card
+DESCRIPTION:Updated description
+X-APPLE-TAGS:Test
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->updateCalendarObject($sourceCard, $calendarData);
 	}
 }
