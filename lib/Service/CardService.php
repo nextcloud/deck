@@ -157,6 +157,29 @@ class CardService {
 	}
 
 	/**
+	 * Find a card by id including soft-deleted entries.
+	 *
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function findIncludingDeleted(int $cardId): Card {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, allowDeletedCard: true, allowDeletedBoard: true);
+		$card = $this->cardMapper->find($cardId);
+		[$card] = $this->enrichCards([$card]);
+
+		$attachments = $this->attachmentService->findAll($cardId, true);
+		if ($this->request->getParam('apiVersion') === '1.0') {
+			$attachments = array_filter($attachments, function ($attachment) {
+				return $attachment->getType() === 'deck_file';
+			});
+		}
+		$card->setAttachments($attachments);
+
+		return $card;
+	}
+
+	/**
 	 * @return Card[]
 	 */
 	public function findCalendarEntries(int $boardId): array {
