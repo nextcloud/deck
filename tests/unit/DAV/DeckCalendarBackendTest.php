@@ -13,6 +13,8 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\ConfigService;
+use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
 use Test\TestCase;
@@ -30,13 +32,19 @@ class DeckCalendarBackendTest extends TestCase {
 		$this->cardService = $this->createMock(CardService::class);
 		$permissionService = $this->createMock(PermissionService::class);
 		$boardMapper = $this->createMock(BoardMapper::class);
+		$labelService = $this->createMock(LabelService::class);
+		$configService = $this->createMock(ConfigService::class);
+		$configService->method('getCalDavListMode')
+			->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS);
 
 		$this->backend = new DeckCalendarBackend(
 			$boardService,
 			$this->stackService,
 			$this->cardService,
 			$permissionService,
-			$boardMapper
+			$boardMapper,
+			$labelService,
+			$configService
 		);
 	}
 

@@ -288,8 +288,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		$orConditions = [];
 		for ($i = 0, $iMax = count($groups); $i < $iMax; $i++) {
-			$orConditions[] =
-				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($groups[$i], IQueryBuilder::PARAM_STR))
+			$orConditions[]
+				= $qb->expr()->eq('acl.participant', $qb->createNamedParameter($groups[$i], IQueryBuilder::PARAM_STR))
 			;
 		}
 		$qb->andWhere($qb->expr()->orX(...$orConditions));
@@ -344,8 +344,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		$orConditions = [];
 		for ($i = 0, $iMax = count($circles); $i < $iMax; $i++) {
-			$orConditions[] =
-				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($circles[$i], IQueryBuilder::PARAM_STR))
+			$orConditions[]
+				= $qb->expr()->eq('acl.participant', $qb->createNamedParameter($circles[$i], IQueryBuilder::PARAM_STR))
 			;
 		}
 		$qb->andWhere($qb->expr()->orX(...$orConditions));
