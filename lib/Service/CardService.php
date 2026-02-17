@@ -164,7 +164,8 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function findIncludingDeleted(int $cardId): Card {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, allowDeletedCard: true, allowDeletedBoard: true);
+		// Keep this call compatible with older PermissionService signatures.
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, true);
 		$card = $this->cardMapper->find($cardId);
 		[$card] = $this->enrichCards([$card]);
 

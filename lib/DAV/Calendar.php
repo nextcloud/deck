@@ -52,25 +52,31 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function getACL() {
-		// the calendar should always have read and write permissions
-		// write-properties is needed to allow the user to toggle the visibility of shared deck calendars
+		// Always allow read. Only expose write capabilities when the current
+		// principal can edit/manage the underlying board.
 		$acl = [
 			[
 				'privilege' => '{DAV:}read',
 				'principal' => $this->getOwner(),
 				'protected' => true,
 			],
-			[
+		];
+		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT)) {
+			$acl[] = [
 				'privilege' => '{DAV:}write',
 				'principal' => $this->getOwner(),
 				'protected' => true,
-			],
-			[
+			];
+		}
+		// write-properties is needed to allow users with manage permission to
+		// toggle calendar visibility and update board-level metadata.
+		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)) {
+			$acl[] = [
 				'privilege' => '{DAV:}write-properties',
 				'principal' => $this->getOwner(),
 				'protected' => true,
-			]
-		];
+			];
+		}
 
 		return $acl;
 	}
@@ -202,10 +208,9 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function getLastModified() {
-		$base = $this->board->getLastModified();
-		$fingerprint = $this->backend->getCalendarRevisionFingerprint($this->board->getId(), $this->stack?->getId());
-		$offset = hexdec(substr(md5($fingerprint), 0, 6)) % 997;
-		return $base + $offset;
+		// Keep collection last-modified monotonic and avoid hash offsets that
+		// can move backwards for different fingerprints.
+		return $this->board->getLastModified();
 	}
 
 	public function getGroup() {
@@ -229,7 +234,7 @@ class Calendar extends ExternalCalendar {
 							throw new Forbidden('no permission to change the displayname');
 						}
 						if (mb_strpos($value, 'Deck: ') === 0) {
-							$value = mb_substr($value, strlen('Deck: '));
+							$value = mb_substr($value, mb_strlen('Deck: '));
 						}
 						$this->board->setTitle($value);
 						break;
