@@ -157,21 +157,9 @@ class DeckCalendarBackend {
 
 	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null, ?int $preferredStackId = null): Card {
 		$todo = $this->extractTodo($data);
-		$this->logCalDavDebug('CalDAV create request', [
-			'boardId' => $boardId,
-			'owner' => $owner,
-			'preferredCardId' => $preferredCardId,
-			'preferredStackId' => $preferredStackId,
-			'todo' => $this->buildTodoDebugContext($todo),
-		]);
 		$existingCard = $this->findExistingCardByUid($todo);
 		if ($existingCard !== null) {
 			$restoreDeleted = $existingCard->getDeletedAt() > 0;
-			$this->logCalDavDebug('CalDAV create matched existing card', [
-				'cardId' => $existingCard->getId(),
-				'restoreDeleted' => $restoreDeleted,
-				'targetBoardId' => $boardId,
-			]);
 			return $this->updateCardFromCalendar($existingCard, $data, $restoreDeleted, $boardId);
 		}
 
@@ -179,11 +167,6 @@ class DeckCalendarBackend {
 			$cardById = $this->findCardByIdIncludingDeleted($preferredCardId);
 			if ($cardById !== null) {
 				$restoreDeleted = $cardById->getDeletedAt() > 0;
-				$this->logCalDavDebug('CalDAV create matched preferred card id', [
-					'cardId' => $cardById->getId(),
-					'restoreDeleted' => $restoreDeleted,
-					'targetBoardId' => $boardId,
-				]);
 				return $this->updateCardFromCalendar($cardById, $data, $restoreDeleted, $boardId);
 			}
 		}
@@ -214,12 +197,6 @@ class DeckCalendarBackend {
 			$description,
 			$dueDate
 		);
-		$this->logCalDavDebug('CalDAV create created new card', [
-			'cardId' => $card->getId(),
-			'boardId' => $boardId,
-			'stackId' => $stackId,
-			'title' => $title,
-		]);
 
 		$done = $this->mapDoneFromTodo($todo, $card)->getValue();
 		if ($done !== null) {
@@ -268,10 +245,6 @@ class DeckCalendarBackend {
 	 */
 	public function deleteCalendarObject($sourceItem, ?int $expectedBoardId = null): void {
 		if ($sourceItem instanceof Card) {
-			$this->logCalDavDebug('CalDAV delete request', [
-				'cardId' => $sourceItem->getId(),
-				'expectedBoardId' => $expectedBoardId,
-			]);
 			$currentCard = $sourceItem;
 			if ($expectedBoardId !== null) {
 				try {
@@ -279,11 +252,6 @@ class DeckCalendarBackend {
 					$currentBoardId = $this->getBoardIdForCard($currentCard);
 					if ($currentBoardId !== $expectedBoardId) {
 						// Ignore trailing delete from source calendar after a cross-board move.
-						$this->logCalDavDebug('CalDAV delete ignored after move', [
-							'cardId' => $sourceItem->getId(),
-							'expectedBoardId' => $expectedBoardId,
-							'currentBoardId' => $currentBoardId,
-						]);
 						return;
 					}
 				} catch (\Throwable $e) {
@@ -292,9 +260,6 @@ class DeckCalendarBackend {
 			}
 
 			$this->cardService->delete($sourceItem->getId());
-			$this->logCalDavDebug('CalDAV delete applied', [
-				'cardId' => $sourceItem->getId(),
-			]);
 			return;
 		}
 
@@ -311,14 +276,6 @@ class DeckCalendarBackend {
 		$card = $restoreDeleted ? $sourceItem : $this->cardService->find($sourceItem->getId());
 		$currentBoardId = $this->getBoardIdForCard($card);
 		$boardId = $targetBoardId ?? $currentBoardId;
-		$this->logCalDavDebug('CalDAV update request', [
-			'cardId' => $card->getId(),
-			'restoreDeleted' => $restoreDeleted,
-			'currentBoardId' => $currentBoardId,
-			'targetBoardId' => $targetBoardId,
-			'effectiveBoardId' => $boardId,
-			'todo' => $this->buildTodoDebugContext($todo),
-		]);
 
 		$title = trim((string)($todo->SUMMARY ?? ''));
 		if ($title === '') {
@@ -349,10 +306,6 @@ class DeckCalendarBackend {
 			&& (!$restoreDeleted || $card->getDeletedAt() === 0);
 
 		if ($isNoopUpdate) {
-			$this->logCalDavDebug('CalDAV update skipped (no-op)', [
-				'cardId' => $card->getId(),
-				'boardId' => $boardId,
-			]);
 			return $card;
 		}
 
@@ -369,13 +322,6 @@ class DeckCalendarBackend {
 			$card->getArchived(),
 			$done
 		);
-		$this->logCalDavDebug('CalDAV update applied', [
-			'cardId' => $updatedCard->getId(),
-			'stackId' => $updatedCard->getStackId(),
-			'boardId' => $this->getBoardIdForCard($updatedCard),
-			'title' => $updatedCard->getTitle(),
-		]);
-
 		$categories = $this->extractCategories($todo);
 		if ($categories !== null) {
 			$categories = $this->normalizeCategoriesForLabelSync($boardId, $categories, $mode);
@@ -418,7 +364,7 @@ class DeckCalendarBackend {
 
 		$title = trim((string)($todo->SUMMARY ?? ''));
 		if (mb_strpos($title, 'List : ') === 0) {
-			$title = mb_substr($title, strlen('List : '));
+			$title = mb_substr($title, mb_strlen('List : '));
 		}
 		if ($title === '') {
 			$title = $stack->getTitle();
@@ -811,24 +757,10 @@ class DeckCalendarBackend {
 
 	private function findCardByIdIncludingDeleted(int $cardId): ?Card {
 		try {
-			return $this->cardService->find($cardId);
+			return $this->cardService->findIncludingDeleted($cardId);
 		} catch (\Throwable $e) {
-			// continue with deleted cards
+			return null;
 		}
-
-		foreach ($this->boardService->findAll(-1, false, false) as $board) {
-			try {
-				foreach ($this->cardService->fetchDeleted($board->getId()) as $deletedCard) {
-					if ($deletedCard->getId() === $cardId) {
-						return $deletedCard;
-					}
-				}
-			} catch (\Throwable $e) {
-				// ignore inaccessible board and continue searching
-			}
-		}
-
-		return null;
 	}
 
 	private function normalizeDescriptionForCompare(string $value): string {
@@ -855,37 +787,6 @@ class DeckCalendarBackend {
 		}
 
 		return $left->getTimestamp() === $right->getTimestamp();
-	}
-
-	private function buildTodoDebugContext($todo): array {
-		$relatedTo = [];
-		foreach ($todo->children() as $child) {
-			if (!is_object($child) || !property_exists($child, 'name') || $child->name !== 'RELATED-TO') {
-				continue;
-			}
-			$relatedTo[] = [
-				'value' => trim($this->toStringValue($child)),
-				'reltype' => $this->getPropertyParameter($child, 'RELTYPE'),
-			];
-		}
-
-		return [
-			'uid' => isset($todo->UID) ? trim((string)$todo->UID) : null,
-			'deckCardId' => isset($todo->{'X-NC-DECK-CARD-ID'}) ? trim((string)$todo->{'X-NC-DECK-CARD-ID'}) : null,
-			'summary' => isset($todo->SUMMARY) ? trim((string)$todo->SUMMARY) : null,
-			'descriptionLen' => isset($todo->DESCRIPTION) ? mb_strlen((string)$todo->DESCRIPTION) : 0,
-			'due' => isset($todo->DUE) ? $todo->DUE->getDateTime()->format('c') : null,
-			'status' => isset($todo->STATUS) ? (string)$todo->STATUS : null,
-			'percentComplete' => isset($todo->{'PERCENT-COMPLETE'}) ? (string)$todo->{'PERCENT-COMPLETE'} : null,
-			'priority' => isset($todo->PRIORITY) ? (string)$todo->PRIORITY : null,
-			'categories' => $this->extractCategories($todo),
-			'xAppleTags' => isset($todo->{'X-APPLE-TAGS'}) ? (string)$todo->{'X-APPLE-TAGS'} : null,
-			'relatedTo' => $relatedTo,
-		];
-	}
-
-	private function logCalDavDebug(string $message, array $context = []): void {
-		// Keep this helper callable without producing warning-level log noise on normal sync flows.
 	}
 
 	private function isSabreVCalendar($value): bool {

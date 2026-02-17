@@ -394,7 +394,7 @@ ICS;
 		$targetStack->setBoardId(12);
 
 		$this->cardService->expects($this->once())
-			->method('find')
+			->method('findIncludingDeleted')
 			->with(123)
 			->willReturn($sourceCard);
 		$this->stackService->expects($this->exactly(2))
