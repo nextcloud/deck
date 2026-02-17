@@ -82,20 +82,21 @@ class CalendarPlugin implements ICalendarProvider {
 			return null;
 		}
 
-		if ($this->hasCalendarInCalendarHome($principalUri, $calendarUri)) {
-			try {
-				if (str_starts_with($calendarUri, 'stack-')) {
-					$stack = $this->backend->getStack((int)str_replace('stack-', '', $calendarUri));
-					$board = $this->backend->getBoard($stack->getBoardId());
-					return new Calendar($principalUri, $calendarUri, $board, $this->backend, $stack);
-				}
+		try {
+			if (str_starts_with($calendarUri, 'stack-')) {
+				$stack = $this->backend->getStack((int)str_replace('stack-', '', $calendarUri));
+				$board = $this->backend->getBoard($stack->getBoardId());
+				return new Calendar($principalUri, $calendarUri, $board, $this->backend, $stack);
+			}
 
+			if (str_starts_with($calendarUri, 'board-')) {
 				$board = $this->backend->getBoard((int)str_replace('board-', '', $calendarUri));
 				return new Calendar($principalUri, $calendarUri, $board, $this->backend);
-			} catch (NotFound $e) {
-				// We can just return null if we have no matching board
 			}
+		} catch (NotFound $e) {
+			// We can just return null if we have no matching board/stack
 		}
+
 		return null;
 	}
 }

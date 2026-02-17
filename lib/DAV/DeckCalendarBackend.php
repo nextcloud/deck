@@ -627,26 +627,19 @@ class DeckCalendarBackend {
 	 * @return list<string>|null
 	 */
 	private function extractCategories($todo): ?array {
-		$hasCategories = isset($todo->CATEGORIES);
-		$hasAppleTags = false;
+		$properties = $todo->select('CATEGORIES');
 		foreach ($todo->children() as $child) {
-			if (is_object($child) && property_exists($child, 'name') && strtoupper((string)$child->name) === 'X-APPLE-TAGS') {
-				$hasAppleTags = true;
-				break;
+			if (is_object($child)
+				&& property_exists($child, 'name')
+				&& strtoupper((string)$child->name) === 'X-APPLE-TAGS') {
+				$properties[] = $child;
 			}
 		}
-
-		if (!$hasCategories && !$hasAppleTags) {
+		if (count($properties) === 0) {
 			return null;
 		}
 
 		$values = [];
-		$properties = array_merge(
-			$todo->select('CATEGORIES'),
-			array_values(array_filter($todo->children(), static function ($child): bool {
-				return is_object($child) && property_exists($child, 'name') && strtoupper((string)$child->name) === 'X-APPLE-TAGS';
-			}))
-		);
 		foreach ($properties as $property) {
 			if (is_object($property) && method_exists($property, 'getParts')) {
 				$parts = $property->getParts();

@@ -115,10 +115,12 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function createFile($name, $data = null) {
-		if ($this->childExists($name)) {
+		try {
 			$this->getChild($name)->put((string)$data);
 			$this->children = null;
 			return;
+		} catch (NotFound $e) {
+			// New object path, continue with create.
 		}
 
 		$owner = $this->extractUserIdFromPrincipalUri();
@@ -306,8 +308,18 @@ class Calendar extends ExternalCalendar {
 	 */
 	private function buildPlaceholderCalendarObject(string $name) {
 		if (preg_match('/^stack-(\d+)\.ics$/', $name, $matches) === 1) {
+			$stackId = (int)$matches[1];
+			try {
+				$stack = $this->backend->getStack($stackId);
+				if ($stack->getBoardId() !== $this->board->getId()) {
+					return null;
+				}
+			} catch (\Throwable $e) {
+				return null;
+			}
+
 			$stack = new Stack();
-			$stack->setId((int)$matches[1]);
+			$stack->setId($stackId);
 			$stack->setTitle('Deleted list');
 			$stack->setBoardId($this->board->getId());
 			$stack->setOrder(0);
