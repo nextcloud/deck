@@ -89,6 +89,7 @@
 		</NcModal>
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
+			class="dnd-container"
 			group-name="stack"
 			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
@@ -366,6 +367,9 @@ export default {
 
 	.stack {
 		width: 100%;
+		.dnd-container {
+			flex-grow: 1;
+		}
 	}
 
 	.stack__header {
