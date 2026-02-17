@@ -61,6 +61,7 @@ class CalendarObject implements ICalendarObject, IACL {
 
 	public function get() {
 		if ($this->sourceItem) {
+			$this->backend->decorateCalendarObject($this->sourceItem, $this->calendarObject);
 			return $this->calendarObject->serialize();
 		}
 	}

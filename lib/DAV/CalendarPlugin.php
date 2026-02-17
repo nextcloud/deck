@@ -38,11 +38,23 @@ class CalendarPlugin implements ICalendarProvider {
 		}
 
 		$configService = $this->configService;
-		return array_map(function (Board $board) use ($principalUri) {
-			return new Calendar($principalUri, 'board-' . $board->getId(), $board, $this->backend);
-		}, array_filter($this->backend->getBoards(), function ($board) use ($configService) {
+		$boards = array_values(array_filter($this->backend->getBoards(), function ($board) use ($configService) {
 			return $configService->isCalendarEnabled($board->getId());
 		}));
+
+		if ($this->configService->getCalDavListMode() === ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR) {
+			$calendars = [];
+			foreach ($boards as $board) {
+				foreach ($this->backend->getStacks($board->getId()) as $stack) {
+					$calendars[] = new Calendar($principalUri, 'stack-' . $stack->getId(), $board, $this->backend, $stack);
+				}
+			}
+			return $calendars;
+		}
+
+		return array_map(function (Board $board) use ($principalUri) {
+			return new Calendar($principalUri, 'board-' . $board->getId(), $board, $this->backend);
+		}, $boards);
 	}
 
 	public function hasCalendarInCalendarHome(string $principalUri, string $calendarUri): bool {
@@ -50,9 +62,18 @@ class CalendarPlugin implements ICalendarProvider {
 			return false;
 		}
 
-		$boards = array_map(static function (Board $board) {
-			return 'board-' . $board->getId();
-		}, $this->backend->getBoards());
+		if ($this->configService->getCalDavListMode() === ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR) {
+			foreach ($this->backend->getBoards() as $board) {
+				foreach ($this->backend->getStacks($board->getId()) as $stack) {
+					if ($calendarUri === 'stack-' . $stack->getId()) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		$boards = array_map(static fn (Board $board): string => 'board-' . $board->getId(), $this->backend->getBoards());
 		return in_array($calendarUri, $boards, true);
 	}
 
@@ -63,6 +84,12 @@ class CalendarPlugin implements ICalendarProvider {
 
 		if ($this->hasCalendarInCalendarHome($principalUri, $calendarUri)) {
 			try {
+				if (str_starts_with($calendarUri, 'stack-')) {
+					$stack = $this->backend->getStack((int)str_replace('stack-', '', $calendarUri));
+					$board = $this->backend->getBoard($stack->getBoardId());
+					return new Calendar($principalUri, $calendarUri, $board, $this->backend, $stack);
+				}
+
 				$board = $this->backend->getBoard((int)str_replace('board-', '', $calendarUri));
 				return new Calendar($principalUri, $calendarUri, $board, $this->backend);
 			} catch (NotFound $e) {
