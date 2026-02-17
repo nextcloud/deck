@@ -181,6 +181,20 @@ class CardService {
 	}
 
 	/**
+	 * Lightweight variant for internal CalDAV lookups where enriched relations
+	 * and attachments are not required.
+	 *
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function findIncludingDeletedLite(int $cardId): Card {
+		// Keep this call compatible with older PermissionService signatures.
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, true);
+		return $this->cardMapper->find($cardId);
+	}
+
+	/**
 	 * @return Card[]
 	 */
 	public function findCalendarEntries(int $boardId): array {
