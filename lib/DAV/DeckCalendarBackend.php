@@ -17,6 +17,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
 use Sabre\DAV\Exception\NotFound;
@@ -39,16 +40,19 @@ class DeckCalendarBackend {
 	private $permissionService;
 	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var LabelService */
+	private $labelService;
 
 	public function __construct(
 		BoardService $boardService, StackService $stackService, CardService $cardService, PermissionService $permissionService,
-		BoardMapper $boardMapper,
+		BoardMapper $boardMapper, LabelService $labelService,
 	) {
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
 		$this->cardService = $cardService;
 		$this->permissionService = $permissionService;
 		$this->boardMapper = $boardMapper;
+		$this->labelService = $labelService;
 	}
 
 	public function getBoards(): array {
@@ -348,8 +352,15 @@ class DeckCalendarBackend {
 
 		$targetLabelIds = [];
 		foreach ($categories as $category) {
-			$key = mb_strtolower(trim($category));
+			$title = trim($category);
+			$key = mb_strtolower($title);
 			if ($key === '' || !isset($boardLabelsByTitle[$key])) {
+				$createdLabel = $this->createLabelForCategory($boardId, $title);
+				if ($createdLabel !== null) {
+					$boardLabelsByTitle[$key] = $createdLabel;
+				}
+			}
+			if (!isset($boardLabelsByTitle[$key])) {
 				continue;
 			}
 			$targetLabelIds[$boardLabelsByTitle[$key]->getId()] = true;
@@ -372,6 +383,29 @@ class DeckCalendarBackend {
 				$this->cardService->assignLabel($cardId, $labelId);
 			}
 		}
+	}
+
+	private function createLabelForCategory(int $boardId, string $title): ?\OCA\Deck\Db\Label {
+		$title = trim($title);
+		if ($title === '') {
+			return null;
+		}
+
+		try {
+			return $this->labelService->create($title, '31CC7C', $boardId);
+		} catch (\Throwable $e) {
+			try {
+				$board = $this->boardMapper->find($boardId, true, false);
+				foreach ($board->getLabels() ?? [] as $label) {
+					if (mb_strtolower(trim($label->getTitle())) === mb_strtolower($title)) {
+						return $label;
+					}
+				}
+			} catch (\Throwable $ignored) {
+			}
+		}
+
+		return null;
 	}
 
 	private function getDefaultStackIdForBoard(int $boardId): int {

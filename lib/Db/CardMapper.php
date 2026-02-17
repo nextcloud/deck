@@ -234,7 +234,12 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->orderBy('c.duedate')
 			->setMaxResults($limit)
 			->setFirstResult($offset);
-		return $this->findEntities($qb);
+		$cards = $this->findEntities($qb);
+		foreach ($cards as $card) {
+			$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
+			$card->setLabels($labels);
+		}
+		return $cards;
 	}
 
 	public function findAllArchived($stackId, $limit = null, $offset = null) {
