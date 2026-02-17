@@ -200,6 +200,10 @@ class Calendar extends ExternalCalendar {
 		return [];
 	}
 
+	public function getBoardId(): int {
+		return $this->board->getId();
+	}
+
 	public function propPatch(PropPatch $propPatch) {
 		$properties = [
 			'{DAV:}displayname',
