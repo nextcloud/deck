@@ -156,9 +156,14 @@ class Card extends RelationalEntity {
 		}
 
 		$labels = $this->getLabels() ?? [];
-		$event->CATEGORIES = array_map(function ($label): string {
+		$categoryTitles = array_map(function ($label): string {
 			return $label->getTitle();
 		}, $labels);
+		$event->CATEGORIES = $categoryTitles;
+		if (count($categoryTitles) > 0) {
+			// Apple Reminders uses this non-standard property for tags on CalDAV tasks.
+			$event->{'X-APPLE-TAGS'} = implode(',', $categoryTitles);
+		}
 
 		$event->SUMMARY = $this->getTitle();
 		$event->DESCRIPTION = $this->getDescription();
