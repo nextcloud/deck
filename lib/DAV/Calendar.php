@@ -263,15 +263,15 @@ class Calendar extends ExternalCalendar {
 	}
 
 	private function normalizeCalendarObjectName(string $name): string {
-		if (preg_match('/^deck-(card-\d+\.ics)$/', $name, $matches) === 1) {
-			return $matches[1];
+		if (preg_match('/^card-\d+\.ics$/', $name) === 1) {
+			return 'deck-' . $name;
 		}
 
 		return $name;
 	}
 
 	private function extractCardIdFromNormalizedName(string $name): ?int {
-		if (preg_match('/^card-(\d+)\.ics$/', $name, $matches) === 1) {
+		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
 			return (int)$matches[1];
 		}
 
