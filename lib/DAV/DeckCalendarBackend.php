@@ -24,6 +24,7 @@ use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VTodo;
 use Sabre\VObject\InvalidDataException;
 use Sabre\VObject\Property;
+use Sabre\VObject\Property\ICalendar\Categories;
 use Sabre\VObject\Reader;
 
 class DeckCalendarBackend {
@@ -115,23 +116,28 @@ class DeckCalendarBackend {
 		);
 
 		$done = $this->mapDoneFromTodo($todo, $card)->getValue();
-		if ($done === null) {
-			return $card;
+		if ($done !== null) {
+			$card = $this->cardService->update(
+				$card->getId(),
+				$card->getTitle(),
+				$card->getStackId(),
+				$card->getType(),
+				$card->getOwner() ?? $owner,
+				$card->getDescription(),
+				$card->getOrder(),
+				$card->getDuedate() ? $card->getDuedate()->format('c') : null,
+				$card->getDeletedAt(),
+				$card->getArchived(),
+				new OptionalNullableValue($done)
+			);
 		}
 
-		return $this->cardService->update(
-			$card->getId(),
-			$card->getTitle(),
-			$card->getStackId(),
-			$card->getType(),
-			$card->getOwner() ?? $owner,
-			$card->getDescription(),
-			$card->getOrder(),
-			$card->getDuedate() ? $card->getDuedate()->format('c') : null,
-			$card->getDeletedAt(),
-			$card->getArchived(),
-			new OptionalNullableValue($done)
-		);
+		$categories = $this->extractCategories($todo);
+		if ($categories !== null) {
+			$this->syncCardCategories($card->getId(), $categories);
+		}
+
+		return $card;
 	}
 
 	/**
@@ -189,7 +195,7 @@ class DeckCalendarBackend {
 		}
 		$done = $this->mapDoneFromTodo($todo, $card);
 
-		return $this->cardService->update(
+		$updatedCard = $this->cardService->update(
 			$card->getId(),
 			$title,
 			$stackId,
@@ -202,6 +208,13 @@ class DeckCalendarBackend {
 			$card->getArchived(),
 			$done
 		);
+
+		$categories = $this->extractCategories($todo);
+		if ($categories !== null) {
+			$this->syncCardCategories($updatedCard->getId(), $categories);
+		}
+
+		return $updatedCard;
 	}
 
 	private function updateStackFromCalendar(Stack $sourceItem, string $data): Stack {
@@ -288,6 +301,77 @@ class DeckCalendarBackend {
 		}
 
 		return new OptionalNullableValue($done);
+	}
+
+	/**
+	 * @return list<string>|null
+	 */
+	private function extractCategories(VTodo $todo): ?array {
+		if (!isset($todo->CATEGORIES)) {
+			return null;
+		}
+
+		$values = [];
+		foreach ($todo->select('CATEGORIES') as $property) {
+			if ($property instanceof Categories) {
+				$parts = $property->getParts();
+			} else {
+				$parts = explode(',', (string)$property);
+			}
+			foreach ($parts as $part) {
+				$title = trim((string)$part);
+				if ($title !== '') {
+					$values[$title] = true;
+				}
+			}
+		}
+
+		return array_keys($values);
+	}
+
+	/**
+	 * @param list<string> $categories
+	 */
+	private function syncCardCategories(int $cardId, array $categories): void {
+		$card = $this->cardService->find($cardId);
+		$boardId = $this->getBoardIdForCard($card);
+		$board = $this->boardMapper->find($boardId, true, false);
+		$boardLabels = $board->getLabels() ?? [];
+
+		$boardLabelsByTitle = [];
+		foreach ($boardLabels as $label) {
+			$key = mb_strtolower(trim($label->getTitle()));
+			if ($key !== '' && !isset($boardLabelsByTitle[$key])) {
+				$boardLabelsByTitle[$key] = $label;
+			}
+		}
+
+		$targetLabelIds = [];
+		foreach ($categories as $category) {
+			$key = mb_strtolower(trim($category));
+			if ($key === '' || !isset($boardLabelsByTitle[$key])) {
+				continue;
+			}
+			$targetLabelIds[$boardLabelsByTitle[$key]->getId()] = true;
+		}
+
+		$currentLabels = $card->getLabels() ?? [];
+		$currentLabelIds = [];
+		foreach ($currentLabels as $label) {
+			$currentLabelIds[$label->getId()] = true;
+		}
+
+		foreach (array_keys($currentLabelIds) as $labelId) {
+			if (!isset($targetLabelIds[$labelId])) {
+				$this->cardService->removeLabel($cardId, $labelId);
+			}
+		}
+
+		foreach (array_keys($targetLabelIds) as $labelId) {
+			if (!isset($currentLabelIds[$labelId])) {
+				$this->cardService->assignLabel($cardId, $labelId);
+			}
+		}
 	}
 
 	private function getDefaultStackIdForBoard(int $boardId): int {
