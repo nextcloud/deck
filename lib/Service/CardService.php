@@ -335,6 +335,9 @@ class CardService {
 		$oldBoardId = $this->stackMapper->findBoardId($changes->getBefore()->getStackId());
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		if ($boardId !== $oldBoardId) {
+			if ($oldBoardId !== null) {
+				$this->changeHelper->boardChanged($oldBoardId);
+			}
 			$stack = $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($this->cardMapper->findBoardId($card->getId()));
 			$boardLabels = $board->getLabels() ?? [];
