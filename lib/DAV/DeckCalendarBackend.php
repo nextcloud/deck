@@ -311,12 +311,27 @@ class DeckCalendarBackend {
 	 * @return list<string>|null
 	 */
 	private function extractCategories(VTodo $todo): ?array {
-		if (!isset($todo->CATEGORIES)) {
+		$hasCategories = isset($todo->CATEGORIES);
+		$hasAppleTags = false;
+		foreach ($todo->children() as $child) {
+			if ($child instanceof Property && strtoupper($child->name) === 'X-APPLE-TAGS') {
+				$hasAppleTags = true;
+				break;
+			}
+		}
+
+		if (!$hasCategories && !$hasAppleTags) {
 			return null;
 		}
 
 		$values = [];
-		foreach ($todo->select('CATEGORIES') as $property) {
+		$properties = array_merge(
+			$todo->select('CATEGORIES'),
+			array_values(array_filter($todo->children(), static function ($child): bool {
+				return $child instanceof Property && strtoupper($child->name) === 'X-APPLE-TAGS';
+			}))
+		);
+		foreach ($properties as $property) {
 			if ($property instanceof Categories) {
 				$parts = $property->getParts();
 			} else {
@@ -324,6 +339,7 @@ class DeckCalendarBackend {
 			}
 			foreach ($parts as $part) {
 				$title = trim((string)$part);
+				$title = ltrim($title, '#');
 				if ($title !== '') {
 					$values[$title] = true;
 				}
