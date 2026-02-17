@@ -24,7 +24,7 @@ OC.L10N.register(
     "Keep existing file" : "Пакінуць існуючы файл",
     "Add list" : "Дадаць спіс",
     "Active filters" : "Актыўныя фільтры",
-    "Apply filter" : "Ужыць фільтр",
+    "Apply filter" : "Прымяніць фільтр",
     "Open" : "Адкрыць",
     "Clear filter" : "Ачысціць фільтр",
     "Open details" : "Адкрыць падрабязнасці",
