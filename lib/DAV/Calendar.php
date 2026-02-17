@@ -307,6 +307,28 @@ class Calendar extends ExternalCalendar {
 	 * @return Card|Stack|null
 	 */
 	private function buildPlaceholderCalendarObject(string $name) {
+		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
+			$cardId = (int)$matches[1];
+			// For stale hrefs after cross-board moves we intentionally allow
+			// placeholder resolution without board scoping.
+			$card = $this->backend->findCalendarObjectByName($name, null, null);
+			if (!($card instanceof Card)) {
+				return null;
+			}
+
+			$placeholder = new Card();
+			$placeholder->setId($cardId);
+			$placeholder->setTitle('Deleted task');
+			$placeholder->setDescription('');
+			$placeholder->setStackId($this->stack?->getId() ?? $card->getStackId());
+			$placeholder->setType($card->getType() ?: 'plain');
+			$placeholder->setOrder(0);
+			$placeholder->setCreatedAt($card->getCreatedAt() > 0 ? $card->getCreatedAt() : time());
+			$placeholder->setLastModified(time());
+			$placeholder->setDeletedAt(time());
+			return $placeholder;
+		}
+
 		if (preg_match('/^stack-(\d+)\.ics$/', $name, $matches) === 1) {
 			$stackId = (int)$matches[1];
 			try {
