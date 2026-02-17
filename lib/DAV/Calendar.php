@@ -51,11 +51,16 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function getACL() {
-		// read is always granted for visible calendars.
-		// write-properties is needed to allow the user to toggle calendar visibility.
+		// the calendar should always have read and write permissions
+		// write-properties is needed to allow the user to toggle the visibility of shared deck calendars
 		$acl = [
 			[
 				'privilege' => '{DAV:}read',
+				'principal' => $this->getOwner(),
+				'protected' => true,
+			],
+			[
+				'privilege' => '{DAV:}write',
 				'principal' => $this->getOwner(),
 				'protected' => true,
 			],
@@ -65,14 +70,6 @@ class Calendar extends ExternalCalendar {
 				'protected' => true,
 			]
 		];
-
-		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT)) {
-			$acl[] = [
-				'privilege' => '{DAV:}write',
-				'principal' => $this->getOwner(),
-				'protected' => true,
-			];
-		}
 
 		return $acl;
 	}
