@@ -22,6 +22,8 @@ use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
 use Sabre\DAV\Exception\NotFound;
+use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Component\VTodo;
 
 class DeckCalendarBackend {
 
@@ -203,15 +205,21 @@ class DeckCalendarBackend {
 		$todo = $this->extractTodo($data);
 		$existingCard = $this->findExistingCardByUid($todo);
 		if ($existingCard !== null) {
-			$restoreDeleted = $existingCard->getDeletedAt() > 0;
-			return $this->updateCardFromCalendar($existingCard, $data, $restoreDeleted, $boardId);
+			$existingBoardId = $this->getBoardIdForCardOrNull($existingCard);
+			if ($existingBoardId === null || $existingBoardId === $boardId) {
+				$restoreDeleted = $existingCard->getDeletedAt() > 0;
+				return $this->updateCardFromCalendar($existingCard, $data, $restoreDeleted, $boardId);
+			}
 		}
 
 		if ($preferredCardId !== null) {
 			$cardById = $this->findCardByIdIncludingDeleted($preferredCardId);
 			if ($cardById !== null) {
-				$restoreDeleted = $cardById->getDeletedAt() > 0;
-				return $this->updateCardFromCalendar($cardById, $data, $restoreDeleted, $boardId);
+				$existingBoardId = $this->getBoardIdForCardOrNull($cardById);
+				if ($existingBoardId === null || $existingBoardId === $boardId) {
+					$restoreDeleted = $cardById->getDeletedAt() > 0;
+					return $this->updateCardFromCalendar($cardById, $data, $restoreDeleted, $boardId);
+				}
 			}
 		}
 
@@ -345,8 +353,8 @@ class DeckCalendarBackend {
 		$isNoopUpdate = $title === $card->getTitle()
 			&& $stackId === $card->getStackId()
 			&& $this->normalizeDescriptionForCompare($description) === $this->normalizeDescriptionForCompare((string)$card->getDescription())
-			&& $this->isDueDateEqual($card->getDuedate(), $incomingDue)
-			&& $this->isDoneDateEqual($card->getDone(), $done->getValue())
+			&& $this->isDateEqual($card->getDuedate(), $incomingDue)
+			&& $this->isDateEqual($card->getDone(), $done->getValue())
 			&& (!$restoreDeleted || $card->getDeletedAt() === 0);
 
 		if ($isNoopUpdate) {
@@ -424,8 +432,7 @@ class DeckCalendarBackend {
 	}
 
 	private function extractTodo(string $data) {
-		$readerClass = '\\Sabre\\VObject\\Reader';
-		$vObject = $readerClass::read($data);
+		$vObject = \Sabre\VObject\Reader::read($data);
 		if (!$this->isSabreVCalendar($vObject)) {
 			throw new \InvalidArgumentException('Invalid calendar payload');
 		}
@@ -760,6 +767,14 @@ class DeckCalendarBackend {
 		return $stack->getBoardId();
 	}
 
+	private function getBoardIdForCardOrNull(Card $card): ?int {
+		try {
+			return $this->getBoardIdForCard($card);
+		} catch (\Throwable $e) {
+			return null;
+		}
+	}
+
 	private function findExistingCardByUid($todo): ?Card {
 		$cardIdFromDeckProperty = $this->extractDeckCardId($todo);
 		if ($cardIdFromDeckProperty !== null) {
@@ -811,18 +826,7 @@ class DeckCalendarBackend {
 		return str_replace(["\r\n", "\r"], "\n", $value);
 	}
 
-	private function isDueDateEqual(?\DateTimeInterface $left, ?\DateTimeInterface $right): bool {
-		if ($left === null && $right === null) {
-			return true;
-		}
-		if ($left === null || $right === null) {
-			return false;
-		}
-
-		return $left->getTimestamp() === $right->getTimestamp();
-	}
-
-	private function isDoneDateEqual(?\DateTimeInterface $left, ?\DateTimeInterface $right): bool {
+	private function isDateEqual(?\DateTimeInterface $left, ?\DateTimeInterface $right): bool {
 		if ($left === null && $right === null) {
 			return true;
 		}
@@ -834,17 +838,11 @@ class DeckCalendarBackend {
 	}
 
 	private function isSabreVCalendar($value): bool {
-		return is_object($value)
-			&& method_exists($value, 'select')
-			&& method_exists($value, 'children')
-			&& method_exists($value, 'serialize');
+		return $value instanceof VCalendar;
 	}
 
 	private function isSabreVTodo($value): bool {
-		return is_object($value)
-			&& property_exists($value, 'name')
-			&& strtoupper((string)$value->name) === 'VTODO'
-			&& method_exists($value, 'children');
+		return $value instanceof VTodo;
 	}
 
 	private function getPropertyParameter($property, string $parameter): ?string {
