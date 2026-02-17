@@ -21,6 +21,12 @@
 					:label="t('deck', 'Show card ID badge')" />
 				<NcFormBoxSwitch v-model="configCalendar"
 					:label="t('deck', 'Show boards in calendar/tasks')" />
+				<NcSelect v-model="caldavListModeSelection"
+					:options="caldavListModeOptions"
+					:clearable="false"
+					label="label"
+					track-by="id"
+					:input-label="t('deck', 'CalDAV list mapping mode')" />
 			</NcFormBox>
 		</NcAppSettingsSection>
 
@@ -127,6 +133,26 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { calendar: newValue })
+			},
+		},
+		caldavListModeOptions() {
+			return [
+				{ id: 'root_tasks', label: this.t('deck', 'Default: lists as root tasks') },
+				{ id: 'per_list_calendar', label: this.t('deck', 'One calendar per list') },
+				{ id: 'list_as_category', label: this.t('deck', 'List name as category on each task') },
+				{ id: 'list_as_priority', label: this.t('deck', 'List position as task priority (1-9)') },
+			]
+		},
+		caldavListModeSelection: {
+			get() {
+				const current = this.$store.getters.config('caldavListMode') || 'root_tasks'
+				return this.caldavListModeOptions.find((option) => option.id === current) || this.caldavListModeOptions[0]
+			},
+			set(option) {
+				if (!option?.id) {
+					return
+				}
+				this.$store.dispatch('setConfig', { caldavListMode: option.id })
 			},
 		},
 	},

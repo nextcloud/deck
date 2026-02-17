@@ -17,6 +17,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
@@ -42,10 +43,12 @@ class DeckCalendarBackend {
 	private $boardMapper;
 	/** @var LabelService */
 	private $labelService;
+	/** @var ConfigService */
+	private $configService;
 
 	public function __construct(
 		BoardService $boardService, StackService $stackService, CardService $cardService, PermissionService $permissionService,
-		BoardMapper $boardMapper, LabelService $labelService,
+		BoardMapper $boardMapper, LabelService $labelService, ConfigService $configService,
 	) {
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
@@ -53,6 +56,7 @@ class DeckCalendarBackend {
 		$this->permissionService = $permissionService;
 		$this->boardMapper = $boardMapper;
 		$this->labelService = $labelService;
+		$this->configService = $configService;
 	}
 
 	public function getBoards(): array {
@@ -84,7 +88,21 @@ class DeckCalendarBackend {
 		);
 	}
 
-	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null): Card {
+	/** @return Stack[] */
+	public function getStacks(int $boardId): array {
+		return $this->stackService->findCalendarEntries($boardId);
+	}
+
+	public function getStack(int $stackId): Stack {
+		return $this->stackService->find($stackId);
+	}
+
+	/** @return Card[] */
+	public function getChildrenForStack(int $stackId): array {
+		return $this->stackService->find($stackId)->getCards() ?? [];
+	}
+
+	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null, ?int $preferredStackId = null): Card {
 		$todo = $this->extractTodo($data);
 		$existingCard = $this->findExistingCardByUid($todo);
 		if ($existingCard !== null) {
@@ -105,7 +123,15 @@ class DeckCalendarBackend {
 			$title = 'New task';
 		}
 
-		$stackId = $this->resolveStackIdForBoard($boardId, $this->extractStackIdFromRelatedTo($todo));
+		$mode = $this->configService->getCalDavListMode();
+		$relatedStackId = $this->extractStackIdFromRelatedTo($todo);
+		if ($relatedStackId === null && $preferredStackId !== null) {
+			$relatedStackId = $preferredStackId;
+		}
+		if ($relatedStackId === null) {
+			$relatedStackId = $this->inferStackIdFromTodoHints($boardId, $todo, $mode);
+		}
+		$stackId = $this->resolveStackIdForBoard($boardId, $relatedStackId);
 		$description = isset($todo->DESCRIPTION) ? (string)$todo->DESCRIPTION : '';
 		$dueDate = isset($todo->DUE) ? new \DateTime($todo->DUE->getDateTime()->format('c')) : null;
 
@@ -138,6 +164,7 @@ class DeckCalendarBackend {
 
 		$categories = $this->extractCategories($todo);
 		if ($categories !== null) {
+			$categories = $this->normalizeCategoriesForLabelSync($boardId, $categories, $mode);
 			$this->syncCardCategories($card->getId(), $categories);
 		}
 
@@ -189,7 +216,11 @@ class DeckCalendarBackend {
 		}
 
 		$description = isset($todo->DESCRIPTION) ? (string)$todo->DESCRIPTION : $card->getDescription();
+		$mode = $this->configService->getCalDavListMode();
 		$relatedStackId = $this->extractStackIdFromRelatedTo($todo);
+		if ($relatedStackId === null) {
+			$relatedStackId = $this->inferStackIdFromTodoHints($boardId, $todo, $mode);
+		}
 		if ($relatedStackId !== null) {
 			$stackId = $this->resolveStackIdForBoard($boardId, $relatedStackId);
 		} elseif ($targetBoardId !== null && $currentBoardId !== $targetBoardId) {
@@ -215,10 +246,38 @@ class DeckCalendarBackend {
 
 		$categories = $this->extractCategories($todo);
 		if ($categories !== null) {
+			$categories = $this->normalizeCategoriesForLabelSync($boardId, $categories, $mode);
 			$this->syncCardCategories($updatedCard->getId(), $categories);
 		}
 
 		return $updatedCard;
+	}
+
+	/**
+	 * @param Card|Stack $sourceItem
+	 */
+	public function decorateCalendarObject($sourceItem, VCalendar $calendarObject): void {
+		if (!($sourceItem instanceof Card)) {
+			return;
+		}
+
+		$todos = $calendarObject->select('VTODO');
+		if (count($todos) === 0 || !($todos[0] instanceof VTodo)) {
+			return;
+		}
+
+		$todo = $todos[0];
+		$mode = $this->configService->getCalDavListMode();
+		$stack = $this->stackService->find($sourceItem->getStackId());
+
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
+			$this->addTodoCategory($todo, $stack->getTitle());
+		}
+
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_PRIORITY) {
+			$priority = $this->calculateStackPriority($stack->getBoardId(), $stack->getId());
+			$todo->PRIORITY = $priority;
+		}
 	}
 
 	private function updateStackFromCalendar(Stack $sourceItem, string $data): Stack {
@@ -305,6 +364,122 @@ class DeckCalendarBackend {
 		}
 
 		return new OptionalNullableValue($done);
+	}
+
+	private function inferStackIdFromTodoHints(int $boardId, VTodo $todo, string $mode): ?int {
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
+			$categories = $this->extractCategories($todo) ?? [];
+			return $this->inferStackIdFromCategories($boardId, $categories);
+		}
+
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_PRIORITY) {
+			$priority = isset($todo->PRIORITY) ? (int)((string)$todo->PRIORITY) : null;
+			return $this->inferStackIdFromPriority($boardId, $priority);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param list<string> $categories
+	 * @return list<string>
+	 */
+	private function normalizeCategoriesForLabelSync(int $boardId, array $categories, string $mode): array {
+		if ($mode !== ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
+			return $categories;
+		}
+
+		$stacks = $this->stackService->findAll($boardId);
+		$stackTitles = [];
+		foreach ($stacks as $stack) {
+			$stackTitles[mb_strtolower(trim($stack->getTitle()))] = true;
+		}
+
+		return array_values(array_filter($categories, static function (string $category) use ($stackTitles): bool {
+			$key = mb_strtolower(trim($category));
+			return $key !== '' && !isset($stackTitles[$key]);
+		}));
+	}
+
+	private function inferStackIdFromCategories(int $boardId, array $categories): ?int {
+		if (count($categories) === 0) {
+			return null;
+		}
+
+		$categoriesByKey = [];
+		foreach ($categories as $category) {
+			$key = mb_strtolower(trim($category));
+			if ($key !== '') {
+				$categoriesByKey[$key] = true;
+			}
+		}
+
+		foreach ($this->stackService->findAll($boardId) as $stack) {
+			$key = mb_strtolower(trim($stack->getTitle()));
+			if ($key !== '' && isset($categoriesByKey[$key])) {
+				return $stack->getId();
+			}
+		}
+
+		return null;
+	}
+
+	private function inferStackIdFromPriority(int $boardId, ?int $priority): ?int {
+		if ($priority === null || $priority < 1 || $priority > 9) {
+			return null;
+		}
+
+		$stacks = $this->stackService->findAll($boardId);
+		if (count($stacks) === 0) {
+			return null;
+		}
+		usort($stacks, static fn (Stack $a, Stack $b) => $a->getOrder() <=> $b->getOrder());
+
+		$targetIndex = (int)round(($priority - 1) * (count($stacks) - 1) / 8);
+		return $stacks[max(0, min(count($stacks) - 1, $targetIndex))]->getId();
+	}
+
+	private function calculateStackPriority(int $boardId, int $stackId): int {
+		$stacks = $this->stackService->findAll($boardId);
+		if (count($stacks) <= 1) {
+			return 1;
+		}
+
+		usort($stacks, static fn (Stack $a, Stack $b) => $a->getOrder() <=> $b->getOrder());
+		$index = 0;
+		foreach ($stacks as $position => $stack) {
+			if ($stack->getId() === $stackId) {
+				$index = $position;
+				break;
+			}
+		}
+
+		return max(1, min(9, 1 + (int)round($index * 8 / (count($stacks) - 1))));
+	}
+
+	private function addTodoCategory(VTodo $todo, string $category): void {
+		$category = trim($category);
+		if ($category === '') {
+			return;
+		}
+
+		$current = [];
+		foreach ($todo->select('CATEGORIES') as $property) {
+			if ($property instanceof Categories) {
+				foreach ($property->getParts() as $part) {
+					$key = mb_strtolower(trim((string)$part));
+					if ($key !== '') {
+						$current[$key] = trim((string)$part);
+					}
+				}
+			}
+		}
+
+		$key = mb_strtolower($category);
+		if (!isset($current[$key])) {
+			$current[$key] = $category;
+			$todo->CATEGORIES = array_values($current);
+		}
 	}
 
 	/**
