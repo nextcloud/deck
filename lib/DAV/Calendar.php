@@ -190,7 +190,10 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function getLastModified() {
-		return $this->board->getLastModified();
+		$base = $this->board->getLastModified();
+		$fingerprint = $this->backend->getCalendarRevisionFingerprint($this->board->getId(), $this->stack?->getId());
+		$offset = hexdec(substr(md5($fingerprint), 0, 6)) % 997;
+		return $base + $offset;
 	}
 
 	public function getGroup() {

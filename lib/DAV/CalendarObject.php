@@ -71,7 +71,7 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function getETag() {
-		return '"' . md5($this->sourceItem->getLastModified()) . '"';
+		return '"' . md5($this->sourceItem->getLastModified() . '|' . $this->backend->getObjectRevisionFingerprint($this->sourceItem)) . '"';
 	}
 
 	public function getSize() {
