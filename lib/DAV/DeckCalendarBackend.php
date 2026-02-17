@@ -437,6 +437,7 @@ class DeckCalendarBackend {
 	}
 
 	private function extractTodo(string $data) {
+		/** @psalm-suppress UndefinedClass */
 		$vObject = \Sabre\VObject\Reader::read($data);
 		if (!$this->isSabreVCalendar($vObject)) {
 			throw new \InvalidArgumentException('Invalid calendar payload');
@@ -844,10 +845,12 @@ class DeckCalendarBackend {
 	}
 
 	private function isSabreVCalendar($value): bool {
+		/** @psalm-suppress UndefinedClass */
 		return $value instanceof VCalendar;
 	}
 
 	private function isSabreVTodo($value): bool {
+		/** @psalm-suppress UndefinedClass */
 		return $value instanceof VTodo;
 	}
 
