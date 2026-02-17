@@ -128,29 +128,20 @@ class Calendar extends ExternalCalendar {
 
 	public function getChild($name) {
 		$name = $this->normalizeCalendarObjectName($name);
-		if ($this->childExists($name)) {
-			$card = array_values(array_filter(
-				$this->getBackendChildren(),
-				function ($card) use (&$name) {
-					return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name;
-				}
-			));
-			if (count($card) > 0) {
-				return new CalendarObject($this, $name, $this->backend, $card[0]);
+		foreach ($this->getBackendChildren() as $card) {
+			if ($card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name) {
+				return new CalendarObject($this, $name, $this->backend, $card);
 			}
 		}
+
 		throw new NotFound('Node not found');
 	}
 
 	public function getChildren() {
-		$childNames = array_map(function ($card) {
-			return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
-		}, $this->getBackendChildren());
-
 		$children = [];
-
-		foreach ($childNames as $name) {
-			$children[] = $this->getChild($name);
+		foreach ($this->getBackendChildren() as $card) {
+			$name = $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
+			$children[] = new CalendarObject($this, $name, $this->backend, $card);
 		}
 
 		return $children;
