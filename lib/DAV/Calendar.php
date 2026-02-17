@@ -24,8 +24,8 @@ class Calendar extends ExternalCalendar {
 
 	/** @var string */
 	private $principalUri;
-	/** @var string[] */
-	private $children;
+	/** @var array<int, Card|Stack>|null */
+	private $children = null;
 	/** @var DeckCalendarBackend */
 	private $backend;
 	/** @var Board */
@@ -115,10 +115,9 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function createFile($name, $data = null) {
-		$normalizedName = $this->normalizeCalendarObjectName($name);
-		if ($this->childExists($normalizedName)) {
-			$this->getChild($normalizedName)->put((string)$data);
-			$this->children = [];
+		if ($this->childExists($name)) {
+			$this->getChild($name)->put((string)$data);
+			$this->children = null;
 			return;
 		}
 
@@ -127,21 +126,22 @@ class Calendar extends ExternalCalendar {
 			$this->board->getId(),
 			$owner,
 			(string)$data,
-			$this->extractCardIdFromNormalizedName($normalizedName),
+			$this->extractCardIdFromNormalizedName($name),
 			$this->stack?->getId()
 		);
-		$this->children = [];
+		$this->children = null;
 	}
 
 	public function getChild($name) {
-		$name = $this->normalizeCalendarObjectName($name);
-		foreach ($this->getBackendChildren() as $card) {
-			$canonicalName = $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
+		foreach ($this->getBackendChildren() as $item) {
+			$canonicalName = $item->getCalendarPrefix() . '-' . $item->getId() . '.ics';
 			if ($this->isMatchingCalendarObjectName($name, $canonicalName)) {
-				return new CalendarObject($this, $canonicalName, $this->backend, $card);
+				return new CalendarObject($this, $canonicalName, $this->backend, $item);
 			}
 		}
 
+		// Fallback for stale hrefs that are no longer part of the current
+		// children cache but still refer to a board-local object.
 		$fallbackItem = $this->backend->findCalendarObjectByName(
 			$name,
 			$this->board->getId(),
@@ -165,16 +165,16 @@ class Calendar extends ExternalCalendar {
 
 	public function getChildren() {
 		$children = [];
-		foreach ($this->getBackendChildren() as $card) {
-			$name = $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
-			$children[] = new CalendarObject($this, $name, $this->backend, $card);
+		foreach ($this->getBackendChildren() as $item) {
+			$name = $item->getCalendarPrefix() . '-' . $item->getId() . '.ics';
+			$children[] = new CalendarObject($this, $name, $this->backend, $item);
 		}
 
 		return $children;
 	}
 
 	private function getBackendChildren() {
-		if ($this->children) {
+		if ($this->children !== null) {
 			return $this->children;
 		}
 
@@ -192,11 +192,10 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function childExists($name) {
-		$name = $this->normalizeCalendarObjectName($name);
 		return count(array_filter(
 			$this->getBackendChildren(),
-			function ($card) use (&$name) {
-				$canonicalName = $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
+			function ($item) use (&$name) {
+				$canonicalName = $item->getCalendarPrefix() . '-' . $item->getId() . '.ics';
 				return $this->isMatchingCalendarObjectName($name, $canonicalName);
 			}
 		)) > 0;
@@ -279,10 +278,6 @@ class Calendar extends ExternalCalendar {
 		return $matches[1];
 	}
 
-	private function normalizeCalendarObjectName(string $name): string {
-		return $name;
-	}
-
 	private function extractCardIdFromNormalizedName(string $name): ?int {
 		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
 			return (int)$matches[1];
@@ -310,21 +305,6 @@ class Calendar extends ExternalCalendar {
 	 * @return Card|Stack|null
 	 */
 	private function buildPlaceholderCalendarObject(string $name) {
-		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
-			$card = new Card();
-			$card->setId((int)$matches[1]);
-			$card->setTitle('Deleted task');
-			$card->setDescription('');
-			$card->setType('plain');
-			$card->setOrder(0);
-			$card->setOwner($this->extractUserIdFromPrincipalUri());
-			$card->setStackId($this->resolveFallbackStackId());
-			$card->setCreatedAt(time());
-			$card->setLastModified(time());
-			$card->setDeletedAt(time());
-			return $card;
-		}
-
 		if (preg_match('/^stack-(\d+)\.ics$/', $name, $matches) === 1) {
 			$stack = new Stack();
 			$stack->setId((int)$matches[1]);
@@ -337,19 +317,6 @@ class Calendar extends ExternalCalendar {
 		}
 
 		return null;
-	}
-
-	private function resolveFallbackStackId(): int {
-		if ($this->stack !== null) {
-			return $this->stack->getId();
-		}
-
-		$stacks = $this->backend->getStacks($this->board->getId());
-		if (count($stacks) > 0) {
-			return $stacks[0]->getId();
-		}
-
-		return 0;
 	}
 
 	private function shouldUsePlaceholderForMissingObject(): bool {
