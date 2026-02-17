@@ -106,7 +106,7 @@ class DeckCalendarBackend {
 		}
 
 		$stackId = $this->resolveStackIdForBoard($boardId, $this->extractStackIdFromRelatedTo($todo));
-		$description = $this->extractDescription($todo);
+		$description = isset($todo->DESCRIPTION) ? (string)$todo->DESCRIPTION : '';
 		$dueDate = isset($todo->DUE) ? new \DateTime($todo->DUE->getDateTime()->format('c')) : null;
 
 		$card = $this->cardService->create(
@@ -188,7 +188,7 @@ class DeckCalendarBackend {
 			$title = $card->getTitle();
 		}
 
-		$description = isset($todo->DESCRIPTION) ? $this->extractDescription($todo) : $card->getDescription();
+		$description = isset($todo->DESCRIPTION) ? (string)$todo->DESCRIPTION : $card->getDescription();
 		$relatedStackId = $this->extractStackIdFromRelatedTo($todo);
 		if ($relatedStackId !== null) {
 			$stackId = $this->resolveStackIdForBoard($boardId, $relatedStackId);
@@ -346,53 +346,7 @@ class DeckCalendarBackend {
 			}
 		}
 
-		foreach ($this->extractInlineDeckLabels($todo) as $label) {
-			$values[$label] = true;
-		}
-
 		return array_keys($values);
-	}
-
-	private function extractDescription(VTodo $todo): string {
-		if (!isset($todo->DESCRIPTION)) {
-			return '';
-		}
-
-		$description = (string)$todo->DESCRIPTION;
-		$lines = preg_split('/\R/u', $description) ?: [];
-		$filtered = array_values(array_filter($lines, static function (string $line): bool {
-			return preg_match('/^\s*Deck-Labels:\s+/i', $line) !== 1;
-		}));
-		return trim(implode("\n", $filtered));
-	}
-
-	/**
-	 * @return list<string>
-	 */
-	private function extractInlineDeckLabels(VTodo $todo): array {
-		if (!isset($todo->DESCRIPTION)) {
-			return [];
-		}
-
-		$description = (string)$todo->DESCRIPTION;
-		$lines = preg_split('/\R/u', $description) ?: [];
-		$labels = [];
-		foreach ($lines as $line) {
-			if (preg_match('/^\s*Deck-Labels:\s*(.+)$/i', $line, $matches) !== 1) {
-				continue;
-			}
-
-			if (preg_match_all('/#([^\s#,]+)/u', $matches[1], $tagMatches) !== false) {
-				foreach ($tagMatches[1] as $tag) {
-					$title = trim(str_replace('-', ' ', $tag));
-					if ($title !== '') {
-						$labels[$title] = true;
-					}
-				}
-			}
-		}
-
-		return array_keys($labels);
 	}
 
 	/**
