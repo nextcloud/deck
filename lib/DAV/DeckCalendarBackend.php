@@ -21,6 +21,7 @@ use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
+use OCP\ILogger;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VTodo;
@@ -162,9 +163,21 @@ class DeckCalendarBackend {
 
 	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null, ?int $preferredStackId = null): Card {
 		$todo = $this->extractTodo($data);
+		$this->logCalDavDebug('CalDAV create request', [
+			'boardId' => $boardId,
+			'owner' => $owner,
+			'preferredCardId' => $preferredCardId,
+			'preferredStackId' => $preferredStackId,
+			'todo' => $this->buildTodoDebugContext($todo),
+		]);
 		$existingCard = $this->findExistingCardByUid($todo);
 		if ($existingCard !== null) {
 			$restoreDeleted = $existingCard->getDeletedAt() > 0;
+			$this->logCalDavDebug('CalDAV create matched existing card', [
+				'cardId' => $existingCard->getId(),
+				'restoreDeleted' => $restoreDeleted,
+				'targetBoardId' => $boardId,
+			]);
 			return $this->updateCardFromCalendar($existingCard, $data, $restoreDeleted, $boardId);
 		}
 
@@ -172,6 +185,11 @@ class DeckCalendarBackend {
 			$cardById = $this->findCardByIdIncludingDeleted($preferredCardId);
 			if ($cardById !== null) {
 				$restoreDeleted = $cardById->getDeletedAt() > 0;
+				$this->logCalDavDebug('CalDAV create matched preferred card id', [
+					'cardId' => $cardById->getId(),
+					'restoreDeleted' => $restoreDeleted,
+					'targetBoardId' => $boardId,
+				]);
 				return $this->updateCardFromCalendar($cardById, $data, $restoreDeleted, $boardId);
 			}
 		}
@@ -202,6 +220,12 @@ class DeckCalendarBackend {
 			$description,
 			$dueDate
 		);
+		$this->logCalDavDebug('CalDAV create created new card', [
+			'cardId' => $card->getId(),
+			'boardId' => $boardId,
+			'stackId' => $stackId,
+			'title' => $title,
+		]);
 
 		$done = $this->mapDoneFromTodo($todo, $card)->getValue();
 		if ($done !== null) {
@@ -248,9 +272,35 @@ class DeckCalendarBackend {
 	/**
 	 * @param Card|Stack $sourceItem
 	 */
-	public function deleteCalendarObject($sourceItem): void {
+	public function deleteCalendarObject($sourceItem, ?int $expectedBoardId = null): void {
 		if ($sourceItem instanceof Card) {
+			$this->logCalDavDebug('CalDAV delete request', [
+				'cardId' => $sourceItem->getId(),
+				'expectedBoardId' => $expectedBoardId,
+			]);
+			$currentCard = $sourceItem;
+			if ($expectedBoardId !== null) {
+				try {
+					$currentCard = $this->cardService->find($sourceItem->getId());
+					$currentBoardId = $this->getBoardIdForCard($currentCard);
+					if ($currentBoardId !== $expectedBoardId) {
+						// Ignore trailing delete from source calendar after a cross-board move.
+						$this->logCalDavDebug('CalDAV delete ignored after move', [
+							'cardId' => $sourceItem->getId(),
+							'expectedBoardId' => $expectedBoardId,
+							'currentBoardId' => $currentBoardId,
+						]);
+						return;
+					}
+				} catch (\Throwable $e) {
+					// If we cannot resolve the current card, continue with normal delete behavior.
+				}
+			}
+
 			$this->cardService->delete($sourceItem->getId());
+			$this->logCalDavDebug('CalDAV delete applied', [
+				'cardId' => $sourceItem->getId(),
+			]);
 			return;
 		}
 
@@ -267,6 +317,14 @@ class DeckCalendarBackend {
 		$card = $restoreDeleted ? $sourceItem : $this->cardService->find($sourceItem->getId());
 		$currentBoardId = $this->getBoardIdForCard($card);
 		$boardId = $targetBoardId ?? $currentBoardId;
+		$this->logCalDavDebug('CalDAV update request', [
+			'cardId' => $card->getId(),
+			'restoreDeleted' => $restoreDeleted,
+			'currentBoardId' => $currentBoardId,
+			'targetBoardId' => $targetBoardId,
+			'effectiveBoardId' => $boardId,
+			'todo' => $this->buildTodoDebugContext($todo),
+		]);
 
 		$title = trim((string)($todo->SUMMARY ?? ''));
 		if ($title === '') {
@@ -287,6 +345,22 @@ class DeckCalendarBackend {
 			$stackId = $card->getStackId();
 		}
 		$done = $this->mapDoneFromTodo($todo, $card);
+		$incomingDue = isset($todo->DUE) ? $todo->DUE->getDateTime() : null;
+
+		$isNoopUpdate = $title === $card->getTitle()
+			&& $stackId === $card->getStackId()
+			&& $this->normalizeDescriptionForCompare($description) === $this->normalizeDescriptionForCompare((string)$card->getDescription())
+			&& $this->isDueDateEqual($card->getDuedate(), $incomingDue)
+			&& $this->isDoneDateEqual($card->getDone(), $done->getValue())
+			&& (!$restoreDeleted || $card->getDeletedAt() === 0);
+
+		if ($isNoopUpdate) {
+			$this->logCalDavDebug('CalDAV update skipped (no-op)', [
+				'cardId' => $card->getId(),
+				'boardId' => $boardId,
+			]);
+			return $card;
+		}
 
 		$updatedCard = $this->cardService->update(
 			$card->getId(),
@@ -296,11 +370,17 @@ class DeckCalendarBackend {
 			$card->getOwner() ?? '',
 			$description,
 			$card->getOrder(),
-			isset($todo->DUE) ? $todo->DUE->getDateTime()->format('c') : null,
+			$incomingDue ? $incomingDue->format('c') : null,
 			$restoreDeleted ? 0 : $card->getDeletedAt(),
 			$card->getArchived(),
 			$done
 		);
+		$this->logCalDavDebug('CalDAV update applied', [
+			'cardId' => $updatedCard->getId(),
+			'stackId' => $updatedCard->getStackId(),
+			'boardId' => $this->getBoardIdForCard($updatedCard),
+			'title' => $updatedCard->getTitle(),
+		]);
 
 		$categories = $this->extractCategories($todo);
 		if ($categories !== null) {
@@ -692,6 +772,11 @@ class DeckCalendarBackend {
 	}
 
 	private function findExistingCardByUid(VTodo $todo): ?Card {
+		$cardIdFromDeckProperty = $this->extractDeckCardId($todo);
+		if ($cardIdFromDeckProperty !== null) {
+			return $this->findCardByIdIncludingDeleted($cardIdFromDeckProperty);
+		}
+
 		if (!isset($todo->UID)) {
 			return null;
 		}
@@ -703,6 +788,26 @@ class DeckCalendarBackend {
 
 		$cardId = (int)$matches[1];
 		return $this->findCardByIdIncludingDeleted($cardId);
+	}
+
+	private function extractDeckCardId(VTodo $todo): ?int {
+		$propertyNames = [
+			'X-NC-DECK-CARD-ID',
+			'X-NEXTCLOUD-DECK-CARD-ID',
+		];
+
+		foreach ($propertyNames as $propertyName) {
+			if (!isset($todo->{$propertyName})) {
+				continue;
+			}
+
+			$value = trim((string)$todo->{$propertyName});
+			if (preg_match('/^\d+$/', $value) === 1) {
+				return (int)$value;
+			}
+		}
+
+		return null;
 	}
 
 	private function findCardByIdIncludingDeleted(int $cardId): ?Card {
@@ -726,4 +831,66 @@ class DeckCalendarBackend {
 
 		return null;
 	}
+
+	private function normalizeDescriptionForCompare(string $value): string {
+		return str_replace(["\r\n", "\r"], "\n", $value);
+	}
+
+	private function isDueDateEqual(?\DateTimeInterface $left, ?\DateTimeInterface $right): bool {
+		if ($left === null && $right === null) {
+			return true;
+		}
+		if ($left === null || $right === null) {
+			return false;
+		}
+
+		return $left->getTimestamp() === $right->getTimestamp();
+	}
+
+	private function isDoneDateEqual(?\DateTimeInterface $left, ?\DateTimeInterface $right): bool {
+		if ($left === null && $right === null) {
+			return true;
+		}
+		if ($left === null || $right === null) {
+			return false;
+		}
+
+		return $left->getTimestamp() === $right->getTimestamp();
+	}
+
+	private function buildTodoDebugContext(VTodo $todo): array {
+		$relatedTo = [];
+		foreach ($todo->children() as $child) {
+			if (!($child instanceof Property) || $child->name !== 'RELATED-TO') {
+				continue;
+			}
+			$relatedTo[] = [
+				'value' => trim((string)$child),
+				'reltype' => isset($child['RELTYPE']) ? (string)$child['RELTYPE'] : null,
+			];
+		}
+
+		return [
+			'uid' => isset($todo->UID) ? trim((string)$todo->UID) : null,
+			'deckCardId' => isset($todo->{'X-NC-DECK-CARD-ID'}) ? trim((string)$todo->{'X-NC-DECK-CARD-ID'}) : null,
+			'summary' => isset($todo->SUMMARY) ? trim((string)$todo->SUMMARY) : null,
+			'descriptionLen' => isset($todo->DESCRIPTION) ? mb_strlen((string)$todo->DESCRIPTION) : 0,
+			'due' => isset($todo->DUE) ? $todo->DUE->getDateTime()->format('c') : null,
+			'status' => isset($todo->STATUS) ? (string)$todo->STATUS : null,
+			'percentComplete' => isset($todo->{'PERCENT-COMPLETE'}) ? (string)$todo->{'PERCENT-COMPLETE'} : null,
+			'priority' => isset($todo->PRIORITY) ? (string)$todo->PRIORITY : null,
+			'categories' => $this->extractCategories($todo),
+			'xAppleTags' => isset($todo->{'X-APPLE-TAGS'}) ? (string)$todo->{'X-APPLE-TAGS'} : null,
+			'relatedTo' => $relatedTo,
+		];
+	}
+
+	private function logCalDavDebug(string $message, array $context = []): void {
+		try {
+			\OCP\Util::writeLog('deck', $message . ' ' . json_encode($context), ILogger::WARNING);
+		} catch (\Throwable $e) {
+			// no-op on logging failure
+		}
+	}
+
 }
