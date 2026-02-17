@@ -166,9 +166,32 @@ class Card extends RelationalEntity {
 		}
 
 		$event->SUMMARY = $this->getTitle();
-		$event->DESCRIPTION = $this->getDescription();
+		$event->DESCRIPTION = $this->buildCalDavDescription($this->getDescription(), $categoryTitles);
 		$calendar->add($event);
 		return $calendar;
+	}
+
+	/**
+	 * @param list<string> $categoryTitles
+	 */
+	private function buildCalDavDescription(string $description, array $categoryTitles): string {
+		$description = rtrim($description);
+		if (count($categoryTitles) === 0) {
+			return $description;
+		}
+
+		$hashTags = array_map(static function (string $title): string {
+			$tag = preg_replace('/\s+/u', '-', trim($title));
+			$tag = trim((string)$tag, '#');
+			return '#' . $tag;
+		}, $categoryTitles);
+
+		$tagLine = 'Deck-Labels: ' . implode(' ', $hashTags);
+		if ($description === '') {
+			return $tagLine;
+		}
+
+		return $description . "\n\n" . $tagLine;
 	}
 
 	public function getDaysUntilDue(): ?int {
