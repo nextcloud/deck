@@ -127,6 +127,7 @@ class Card extends RelationalEntity {
 		$calendar = new VCalendar();
 		$event = $calendar->createComponent('VTODO');
 		$event->UID = 'deck-card-' . $this->getId();
+		$event->{'X-NC-DECK-CARD-ID'} = (string)$this->getId();
 		$createdAtTs = $this->getCreatedAt() > 0 ? $this->getCreatedAt() : time();
 		$lastModifiedTs = $this->getLastModified() > 0 ? $this->getLastModified() : $createdAtTs;
 		$createdAt = new DateTime();
