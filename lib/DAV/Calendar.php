@@ -10,6 +10,7 @@ use OCA\DAV\CalDAV\Integration\ExternalCalendar;
 use OCA\DAV\CalDAV\Plugin;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use OCA\Deck\Db\Stack;
 use Sabre\CalDAV\CalendarQueryValidator;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
 use Sabre\DAV\Exception\Forbidden;
@@ -28,12 +29,15 @@ class Calendar extends ExternalCalendar {
 	private $backend;
 	/** @var Board */
 	private $board;
+	/** @var Stack|null */
+	private $stack;
 
-	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend) {
+	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend, ?Stack $stack = null) {
 		parent::__construct('deck', $calendarUri);
 
 		$this->backend = $backend;
 		$this->board = $board;
+		$this->stack = $stack;
 
 		$this->principalUri = $principalUri;
 	}
@@ -116,7 +120,8 @@ class Calendar extends ExternalCalendar {
 			$this->board->getId(),
 			$owner,
 			(string)$data,
-			$this->extractCardIdFromNormalizedName($normalizedName)
+			$this->extractCardIdFromNormalizedName($normalizedName),
+			$this->stack?->getId()
 		);
 		$this->children = [];
 	}
@@ -157,7 +162,11 @@ class Calendar extends ExternalCalendar {
 		}
 
 		if ($this->board) {
-			$this->children = $this->backend->getChildren($this->board->getId());
+			if ($this->stack !== null) {
+				$this->children = $this->backend->getChildrenForStack($this->stack->getId());
+			} else {
+				$this->children = $this->backend->getChildren($this->board->getId());
+			}
 		} else {
 			$this->children = [];
 		}
@@ -226,8 +235,13 @@ class Calendar extends ExternalCalendar {
 	 * @inheritDoc
 	 */
 	public function getProperties($properties) {
+		$displayName = 'Deck: ' . ($this->board ? $this->board->getTitle() : 'no board object provided');
+		if ($this->stack !== null) {
+			$displayName .= ' / ' . $this->stack->getTitle();
+		}
+
 		return [
-			'{DAV:}displayname' => 'Deck: ' . ($this->board ? $this->board->getTitle() : 'no board object provided'),
+			'{DAV:}displayname' => $displayName,
 			'{http://apple.com/ns/ical/}calendar-color' => '#' . $this->board->getColor(),
 			'{' . Plugin::NS_CALDAV . '}supported-calendar-component-set' => new SupportedCalendarComponentSet(['VTODO']),
 		];
