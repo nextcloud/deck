@@ -61,11 +61,12 @@ class CalendarPlugin implements ICalendarProvider {
 		if (!$this->calendarIntegrationEnabled) {
 			return false;
 		}
+		$normalizedCalendarUri = $this->normalizeCalendarUri($calendarUri);
 
 		if ($this->configService->getCalDavListMode() === ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR) {
 			foreach ($this->backend->getBoards() as $board) {
 				foreach ($this->backend->getStacks($board->getId()) as $stack) {
-					if ($calendarUri === 'stack-' . $stack->getId()) {
+					if ($normalizedCalendarUri === 'stack-' . $stack->getId()) {
 						return true;
 					}
 				}
@@ -74,29 +75,39 @@ class CalendarPlugin implements ICalendarProvider {
 		}
 
 		$boards = array_map(static fn (Board $board): string => 'board-' . $board->getId(), $this->backend->getBoards());
-		return in_array($calendarUri, $boards, true);
+		return in_array($normalizedCalendarUri, $boards, true);
 	}
 
 	public function getCalendarInCalendarHome(string $principalUri, string $calendarUri): ?ExternalCalendar {
 		if (!$this->calendarIntegrationEnabled) {
 			return null;
 		}
+		$normalizedCalendarUri = $this->normalizeCalendarUri($calendarUri);
 
 		try {
-			if (str_starts_with($calendarUri, 'stack-')) {
-				$stack = $this->backend->getStack((int)str_replace('stack-', '', $calendarUri));
+			if (str_starts_with($normalizedCalendarUri, 'stack-')) {
+				$stack = $this->backend->getStack((int)str_replace('stack-', '', $normalizedCalendarUri));
 				$board = $this->backend->getBoard($stack->getBoardId());
-				return new Calendar($principalUri, $calendarUri, $board, $this->backend, $stack);
+				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend, $stack);
 			}
 
-			if (str_starts_with($calendarUri, 'board-')) {
-				$board = $this->backend->getBoard((int)str_replace('board-', '', $calendarUri));
-				return new Calendar($principalUri, $calendarUri, $board, $this->backend);
+			if (str_starts_with($normalizedCalendarUri, 'board-')) {
+				$board = $this->backend->getBoard((int)str_replace('board-', '', $normalizedCalendarUri));
+				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend);
 			}
 		} catch (NotFound $e) {
 			// We can just return null if we have no matching board/stack
 		}
 
 		return null;
+	}
+
+	private function normalizeCalendarUri(string $calendarUri): string {
+		$prefix = 'app-generated--deck--';
+		if (str_starts_with($calendarUri, $prefix)) {
+			return substr($calendarUri, strlen($prefix));
+		}
+
+		return $calendarUri;
 	}
 }
