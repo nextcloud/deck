@@ -270,7 +270,7 @@ class ActivityManager {
 				];
 				if ($changes['before'] !== $changes['after']) {
 					try {
-						$event = $this->createEvent($objectType, $entity, $subjectComplete, $changes);
+						$event = $this->createEvent($objectType, $entity, $subjectComplete, $changes, $this->userId);
 						if ($event !== null) {
 							$events[] = $event;
 						}
@@ -300,6 +300,11 @@ class ActivityManager {
 	 * @throws \Exception
 	 */
 	private function createEvent($objectType, $entity, $subject, $additionalParams = [], $author = null) {
+		// @TODO implement actual activities for federated users
+		// this case only happens for federated activities if the author is not provided
+		if ($author === null && $this->userId === null) {
+			return;
+		}
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {

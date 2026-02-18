@@ -11,6 +11,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Federation\DeckFederationProxy;
+use OCA\Deck\Model\OptionalNullableValue;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Federation\ICloudIdManager;
 use OCP\IUserManager;
@@ -74,7 +75,6 @@ class ExternalBoardService {
 		?string $description = '',
 		$duedate = null,
 		?array $users = [],
-		?int $boardId = null,
 	): array {
 		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
@@ -94,6 +94,44 @@ class ExternalBoardService {
 			'boardId' => $localBoard->getExternalId(),
 		];
 		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function updateCardOnRemote(
+		Board $localBoard,
+		int $cardId,
+		string $title,
+		int $stackId,
+		string $type,
+		string $owner,
+		string $description = '',
+		int $order = 0,
+		?string $duedate = null,
+		?int $deletedAt = null,
+		?bool $archived = null,
+		?OptionalNullableValue $done = null,
+	): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId;
+		$params = [
+			'id' => $cardId,
+			'title' => $title,
+			'stackId' => $stackId,
+			'type' => $type,
+			'owner' => $owner,
+			'description' => $description,
+			'order' => $order,
+			'duedate' => $duedate,
+			'deletedAt' => $deletedAt,
+			'archived' => $archived,
+			'done' => $done->getValue() ?? null,
+			'boardId' => $localBoard->getExternalId(),
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
 		return $this->proxy->getOcsData($resp);
 	}
 

@@ -41,7 +41,7 @@ describe('Deck dashboard', function() {
 		}).then((board) => {
 			cy.visit(`/apps/deck/#/board/${board.id}`)
 
-			cy.intercept({ method: 'PUT', url: '**/apps/deck/cards/**' }).as('updateCard')
+			cy.intercept({ method: 'PUT', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards/**' }).as('updateCard')
 
 			const newCardTitle = 'Hello world'
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()

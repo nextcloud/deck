@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ExternalBoardService;
@@ -61,4 +62,51 @@ class CardOcsController extends OCSController {
 		return new DataResponse($card);
 	}
 
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null): DataResponse {
+		$done = array_key_exists('done', $this->request->getParams())
+			? new OptionalNullableValue($this->request->getParam('done', null))
+			: null;
+		if (!$owner) {
+			$owner = $this->userId;
+		} else {
+			if (!is_string($owner)) {
+				$owner = $owner['uid'];
+			}
+		}
+
+		$localBoard = $this->boardService->find($boardId, false);
+		if ($localBoard->getExternalId()) {
+			return new DataResponse($this->externalBoardService->updateCardOnRemote(
+				$localBoard,
+				$id,
+				$title,
+				$stackId,
+				$type,
+				$owner,
+				$description,
+				$order,
+				$duedate,
+				$deletedAt,
+				$archived,
+				$done
+			));
+		}
+
+		return new DataResponse($this->cardService->update($id,
+			$title,
+			$stackId,
+			$type,
+			$owner,
+			$description,
+			$order,
+			$duedate,
+			$deletedAt,
+			$archived,
+			$done
+		));
+	}
 }

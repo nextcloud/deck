@@ -140,6 +140,7 @@ return [
 		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 
 		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
+		['name' => 'card_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}', 'verb' => 'PUT'],
 
 		['name' => 'stack_ocs#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
 		['name' => 'stack_ocs#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],
