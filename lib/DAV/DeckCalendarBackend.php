@@ -102,9 +102,17 @@ class DeckCalendarBackend {
 	 * @param string $name resource name like card-123.ics, deck-card-123.ics or stack-12.ics
 	 * @return Card|Stack|null
 	 */
-	public function findCalendarObjectByName(string $name, ?int $boardId = null, ?int $stackId = null) {
+	public function findCalendarObjectByName(string $name, ?int $boardId = null, ?int $stackId = null, bool $includeDeleted = true) {
 		if (preg_match('/^(?:deck-)?card-(\d+)\.ics$/', $name, $matches) === 1) {
-			$card = $this->findCardByIdIncludingDeleted((int)$matches[1]);
+			$cardId = (int)$matches[1];
+			$card = null;
+			try {
+				$card = $includeDeleted
+					? $this->findCardByIdIncludingDeleted($cardId)
+					: $this->cardService->find($cardId);
+			} catch (\Throwable $e) {
+				$card = null;
+			}
 			if ($card === null) {
 				return null;
 			}
@@ -296,7 +304,7 @@ class DeckCalendarBackend {
 	/**
 	 * @param Card|Stack $sourceItem
 	 */
-	public function deleteCalendarObject($sourceItem, ?int $expectedBoardId = null): void {
+	public function deleteCalendarObject($sourceItem, ?int $expectedBoardId = null, ?int $expectedStackId = null): void {
 		if ($sourceItem instanceof Card) {
 			$currentCard = $sourceItem;
 			if ($expectedBoardId !== null) {
@@ -305,6 +313,10 @@ class DeckCalendarBackend {
 					$currentBoardId = $this->getBoardIdForCard($currentCard);
 					if ($currentBoardId !== $expectedBoardId) {
 						// Ignore trailing delete from source calendar after a cross-board move.
+						return;
+					}
+					if ($expectedStackId !== null && $currentCard->getStackId() !== $expectedStackId) {
+						// Ignore trailing delete from source list calendar after an in-board move.
 						return;
 					}
 				} catch (\Throwable $e) {
