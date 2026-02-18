@@ -142,7 +142,7 @@ jobs:
           retention-days: 5
 
   summary:
-      runs-on: ubuntu-latest-low
+      runs-on: ubuntu-latest
       needs: [ cypress ]
 
       if: always()
