@@ -238,14 +238,7 @@ export default function storeFactory() {
 				state.boards = boards
 			},
 			setSharees(state, shareesUsersAndGroups) {
-				Vue.set(state, 'sharees', shareesUsersAndGroups.exact.users)
-				state.sharees.push(...shareesUsersAndGroups.exact.groups)
-				state.sharees.push(...shareesUsersAndGroups.exact.circles)
-
-				state.sharees.push(...shareesUsersAndGroups.users)
-				state.sharees.push(...shareesUsersAndGroups.groups)
-				state.sharees.push(...shareesUsersAndGroups.circles)
-				state.sharees.push(...shareesUsersAndGroups.remotes)
+				Vue.set(state, 'sharees', shareesUsersAndGroups)
 			},
 			setAssignableUsers(state, users) {
 				state.assignableUsers = users
@@ -434,17 +427,17 @@ export default function storeFactory() {
 				commit('setBoards', boards)
 			},
 			async loadSharees({ commit }, query) {
-				const params = new URLSearchParams()
 				if (typeof query === 'undefined') {
 					return
 				}
-				params.append('search', query)
-				params.append('format', 'json')
-				params.append('perPage', 20)
-				params.append('itemType', 'deck')
-				params.append('lookup', false)
+				const params = {
+					search: query,
+					itemType: 'deck',
+					shareTypes: [0, 1, 4, 6, 7],
+					limit: 20,
+				}
 
-				const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), { params })
+				const response = await axios.get(generateOcsUrl('/core/autocomplete/get'), { params })
 				commit('setSharees', response.data.ocs.data)
 			},
 

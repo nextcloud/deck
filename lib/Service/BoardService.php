@@ -41,7 +41,6 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Federation\ICloudFederationFactory;
-use OCP\Federation\ICloudFederationNotification;
 use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
@@ -448,9 +447,6 @@ class BoardService {
 		if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
 			$this->configService->ensureFederationEnabled();
 			$notification = $this->federationFactory->getCloudFederationNotification();
-			if (!$notification instanceof ICloudFederationNotification) {
-				throw new \InvalidArgumentException('Invalid notification type');
-			}
 
 			$payload = [
 				$acl->jsonSerialize(),
