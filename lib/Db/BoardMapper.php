@@ -524,7 +524,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 				return null;
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
-				return null;
+				return new FederatedUser($this->cloudIdManager->resolveCloudId($acl->getParticipant()));
 			}
 			$this->logger->warning('Unknown permission type for mapping acl ' . $acl->getId());
 			return null;

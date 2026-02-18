@@ -81,7 +81,7 @@ class DeckFederationProvider implements ICloudFederationProvider {
 				if (!isset($localBoard)) {
 					throw new NotFoundException('Board not found for provider ID: ' . $providerId);
 				}
-				$localParticipant = $this->cloudIdManager->resolveCloudId($notification[0]['participant'])->getUser();
+				$localParticipant = $this->cloudIdManager->resolveCloudId($notification[0]['participant']['uid'])->getUser();
 				$acls = $this->aclMapper->findAll($localBoard->getId());
 				foreach ($acls as $acl) {
 					if ($acl->getParticipant() === $localParticipant) {

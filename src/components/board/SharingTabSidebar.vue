@@ -4,25 +4,10 @@
 -->
 <template>
 	<div>
-		<NcSelect v-if="canShare"
-			v-model="addAcl"
-			:input-label="t('deck', 'Share board with a user, group or team …')"
+		<NcSelectUsers v-model="addAcl"
 			:options="formatedSharees"
-			:user-select="true"
-			label="displayName"
-			:loading="isLoading || !!isSearching"
-			:disabled="isLoading"
-			track-by="multiselectKey"
-			:internal-search="false"
-			@input="clickAddAcl"
-			@search="(search, loading) => asyncFind(search, loading)">
-			<template #noOptions>
-				{{ isSearching ? t('deck', 'Searching for users, groups and teams …') : t('deck', 'No participants found') }}
-			</template>
-			<template #noResult>
-				{{ isSearching ? t('deck', 'Searching for users, groups and teams …') : t('deck', 'No participants found') }}
-			</template>
-		</NcSelect>
+			:loading="isLoading"
+			@search="(search) => asyncFind(search)" />
 
 		<ul id="shareWithList"
 			class="shareWithList">
@@ -94,12 +79,19 @@
 </template>
 
 <script>
-import { NcCollectionList, NcAvatar, NcSelect, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
+import { NcCollectionList, NcAvatar, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel, NcSelectUsers } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import debounce from 'lodash/debounce.js'
+const SOURCE_TO_SHARE_TYPE = {
+	users: 0,
+	groups: 1,
+	emails: 4,
+	remotes: 6,
+	teams: 7,
+}
 
 export default {
 	name: 'SharingTabSidebar',
@@ -108,7 +100,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcActionCheckbox,
-		NcSelect,
+		NcSelectUsers,
 		NcCollectionList,
 		NcRelatedResourcesPanel,
 	},
@@ -141,41 +133,43 @@ export default {
 			return (uid) => uid === getCurrentUser().uid
 		},
 		formatedSharees() {
-			return this.unallocatedSharees.map(item => {
-				const subname = item.label === item.shareWithDisplayNameUnique
-					? ''
-					: item.shareWithDisplayNameUnique
-				const sharee = {
-					user: item.value.shareWith,
-					displayName: item.label,
-					subname,
-					icon: 'icon-user',
-					multiselectKey: item.shareType + ':' + item.primaryKey,
+			const result = this.unallocatedSharees.map(item => {
+				const res = {
+					...item,
+					displayName: item.displayname || item.name || item.label || item.id,
+					user: item.id,
+					subname: item.shareWithDisplayNameUnique || item.subline, // NcSelectUser does its own pattern matching to filter things out
 				}
-
-				if (item.value.shareType === 1) {
-					sharee.icon = 'icon-group'
-					sharee.isNoUser = true
-				}
-				if (item.value.shareType === 7) {
-					sharee.icon = 'icon-circles'
-					sharee.isNoUser = true
-				}
-
-				sharee.value = item.value
-				return sharee
+				return res
 			}).slice(0, 10)
+			return result
 		},
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
 				const foundIndex = this.board.acl.findIndex((acl) => {
-					return acl.participant.uid === sharee.value.shareWith && acl.participant.type === sharee.value.shareType
+					console.debug()
+					if (acl.participant.uid === sharee.id && acl.type === SOURCE_TO_SHARE_TYPE[sharee.source]) {
+						return true
+					}
+					if (acl.participant.id === sharee.id && acl.type === SOURCE_TO_SHARE_TYPE[sharee.source]) {
+						return true
+					}
+					return false
 				})
 				if (foundIndex === -1) {
 					return true
 				}
 				return false
 			})
+		},
+	},
+	watch: {
+		addAcl: {
+			handler() {
+				if (this.addAcl) {
+					this.clickAddAcl()
+				}
+			},
 		},
 	},
 	mounted() {
@@ -187,15 +181,15 @@ export default {
 			await this.$store.dispatch('loadSharees', query)
 			this.isSearching = false
 		}, 300),
-		async asyncFind(query, loading) {
-			loading(true)
+		async asyncFind(query) {
+			this.isLoading = true
 			await this.debouncedFind(query)
-			loading(false)
+			this.isLoading = false
 		},
 		async clickAddAcl() {
 			this.addAclForAPI = {
-				type: this.addAcl.value.shareType,
-				participant: this.addAcl.value.shareWith,
+				type: SOURCE_TO_SHARE_TYPE[this.addAcl.source],
+				participant: this.addAcl.id,
 				permissionEdit: false,
 				permissionShare: false,
 				permissionManage: false,
