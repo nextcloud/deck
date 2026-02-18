@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   matrix:
-    runs-on: ubuntu-latest-low
+    runs-on: ubuntu-latest
     outputs:
       php-version: ${{ steps.versions.outputs.php-available-list }}
       server-max: ${{ steps.versions.outputs.branches-max-list }}
@@ -34,7 +34,7 @@ jobs:
         uses: icewind1991/nextcloud-version-matrix@58becf3b4bb6dc6cef677b15e2fd8e7d48c0908f # v1.3.1
 
   changes:
-    runs-on: ubuntu-latest-low
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
@@ -175,7 +175,7 @@ jobs:
   summary:
     permissions:
       contents: none
-    runs-on: ubuntu-latest-low
+    runs-on: ubuntu-latest
     needs: [changes, phpunit-sqlite]
 
     if: always()
