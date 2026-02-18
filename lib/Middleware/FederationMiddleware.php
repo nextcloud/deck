@@ -23,7 +23,9 @@ class FederationMiddleware extends Middleware {
 	}
 
 	public function beforeController($controller, $methodName): void {
-		if (!$this->configService->get('federationEnabled')) {
+		try {
+			$this->configService->ensureFederationEnabled();
+		} catch (\Exception $e) {
 			return;
 		}
 		$accessToken = $this->request->getHeader('deck-federation-accesstoken');

@@ -80,11 +80,11 @@ export class CardApi {
 			})
 	}
 
-	updateCard(card) {
-		return axios.put(this.url(`/cards/${card.id}`), card)
+	updateCard(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}`), { ...card, boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

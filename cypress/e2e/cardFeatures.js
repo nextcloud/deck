@@ -194,7 +194,7 @@ describe('Card', function () {
 
 		it('Shows the modal with the editor', () => {
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
-			cy.intercept({ method: 'PUT', url: '**/apps/deck/cards/*' }).as('save')
+			cy.intercept({ method: 'PUT', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards/*' }).as('save')
 			cy.get('.modal__card').should('be.visible')
 			cy.get('.app-sidebar-header__mainname').contains('Hello world')
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world').should('be.visible')

@@ -110,6 +110,9 @@ class DeckFederationProxy {
 	public function post(string $cloudId, string $shareToken, string $url, array $params = []): IResponse {
 		return $this->request('post', $cloudId, $shareToken, $url, $params);
 	}
+	public function put(string $cloudId, string $shareToken, string $url, array $params = []): IResponse {
+		return $this->request('put', $cloudId, $shareToken, $url, $params);
+	}
 	public function delete(string $cloudId, string $shareToken, string $url, array $params = []): IResponse {
 		return $this->request('delete', $cloudId, $shareToken, $url, $params);
 	}
