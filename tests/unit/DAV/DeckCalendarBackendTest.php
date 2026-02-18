@@ -186,6 +186,46 @@ ICS;
 		$this->backend->deleteCalendarObject($sourceStack);
 	}
 
+	public function testDeleteCardFromCalendarObjectSkipsTrailingDeleteAfterSameBoardStackMove(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(321);
+		$sourceCard->setStackId(10);
+
+		$currentCard = new Card();
+		$currentCard->setId(321);
+		$currentCard->setStackId(11);
+
+		$currentStack = new Stack();
+		$currentStack->setId(11);
+		$currentStack->setBoardId(12);
+
+		$this->cardService->expects($this->once())
+			->method('find')
+			->with(321)
+			->willReturn($currentCard);
+		$this->stackService->expects($this->once())
+			->method('find')
+			->with(11)
+			->willReturn($currentStack);
+		$this->cardService->expects($this->never())
+			->method('delete');
+
+		$this->backend->deleteCalendarObject($sourceCard, 12, 10);
+	}
+
+	public function testFindCalendarObjectByNameWithoutDeletedFallbackSkipsSoftDeletedCard(): void {
+		$this->cardService->expects($this->once())
+			->method('find')
+			->with(321)
+			->willThrowException(new \Exception('Card not found'));
+		$this->cardService->expects($this->never())
+			->method('findIncludingDeletedLite');
+
+		$object = $this->backend->findCalendarObjectByName('card-321.ics', 12, null, false);
+
+		$this->assertNull($object);
+	}
+
 	public function testUpdateCardWithCompletedWithoutStatusMarksDone(): void {
 		$sourceCard = new Card();
 		$sourceCard->setId(123);

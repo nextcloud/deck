@@ -81,7 +81,7 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function delete() {
-		$this->backend->deleteCalendarObject($this->sourceItem, $this->calendar->getBoardId());
+		$this->backend->deleteCalendarObject($this->sourceItem, $this->calendar->getBoardId(), $this->calendar->getStackId());
 	}
 
 	public function getName() {
