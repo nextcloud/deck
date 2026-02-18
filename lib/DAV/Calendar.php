@@ -116,7 +116,7 @@ class Calendar extends ExternalCalendar {
 
 	public function createFile($name, $data = null) {
 		try {
-			$this->getChildNode($name, false)->put((string)$data);
+			$this->getChildNode($name, false, false)->put((string)$data);
 			$this->children = null;
 			return;
 		} catch (NotFound $e) {
@@ -135,10 +135,10 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function getChild($name) {
-		return $this->getChildNode($name, true);
+		return $this->getChildNode($name, true, true);
 	}
 
-	private function getChildNode(string $name, bool $allowPlaceholder) {
+	private function getChildNode(string $name, bool $allowPlaceholder, bool $includeDeletedFallback) {
 		foreach ($this->getBackendChildren() as $item) {
 			$canonicalName = $item->getCalendarPrefix() . '-' . $item->getId() . '.ics';
 			if ($this->isMatchingCalendarObjectName($name, $canonicalName)) {
@@ -151,7 +151,8 @@ class Calendar extends ExternalCalendar {
 		$fallbackItem = $this->backend->findCalendarObjectByName(
 			$name,
 			$this->board->getId(),
-			$this->stack?->getId()
+			$this->stack?->getId(),
+			$includeDeletedFallback
 		);
 		if ($fallbackItem !== null) {
 			$canonicalName = $fallbackItem->getCalendarPrefix() . '-' . $fallbackItem->getId() . '.ics';
@@ -224,6 +225,10 @@ class Calendar extends ExternalCalendar {
 
 	public function getBoardId(): int {
 		return $this->board->getId();
+	}
+
+	public function getStackId(): ?int {
+		return $this->stack?->getId();
 	}
 
 	public function propPatch(PropPatch $propPatch) {
