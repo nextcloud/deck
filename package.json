@@ -60,7 +60,7 @@
     "vue-click-outside": "^1.1.0",
     "vue-easymde": "^2.0.0",
     "vue-infinite-loading": "^2.4.5",
-    "vue-loader": "^15.11.1",
+    "vue-loader": "^17.4.2",
     "vue-material-design-icons": "^5.3.1",
     "vue-router": "^3.6.5",
     "vue-smooth-dnd": "^0.8.1",
