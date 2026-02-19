@@ -57,7 +57,7 @@ class FullTextSearchEventListener implements IEventListener {
 		try {
 			if ($event instanceof CardCreatedEvent) {
 				$this->manager->createIndex(
-					DeckProvider::DECK_PROVIDER_ID, (string)$event->getCard()->getId(), $this->userId
+					DeckProvider::DECK_PROVIDER_ID, (string)$event->getCard()->getId(), $event->getCard()->getOwner()
 				);
 			}
 			if ($event instanceof CardUpdatedEvent) {

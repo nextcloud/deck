@@ -29,6 +29,7 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
 use OCP\IGroupManager;
@@ -83,6 +84,7 @@ class BoardControllerTest extends \Test\TestCase {
 			'deck',
 			$this->request,
 			$this->boardService,
+			$this->createMock(ExternalBoardService::class),
 			$this->permissionService,
 			$this->boardImportService,
 			$this->l10n,

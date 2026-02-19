@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Db;
 
+use OC\Federation\CloudIdManager;
 use OCA\Deck\Service\CirclesService;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
@@ -61,6 +62,7 @@ class AclMapperTest extends TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->createMock(CirclesService::class),
+			$this->createMock(CloudIdManager::class),
 			$this->createMock(LoggerInterface::class)
 		);
 

@@ -24,7 +24,7 @@ describe('Board', function() {
 
 		cy.intercept({
 			method: 'POST',
-			url: '/index.php/apps/deck/boards',
+			url: '/ocs/v2.php/apps/deck/api/v1.0/boards',
 		}).as('createBoardRequest')
 
 		// Click "Add board"

@@ -13,11 +13,16 @@ export class CardApi {
 		return generateUrl(url)
 	}
 
+	ocsUrl(url) {
+		url = `/apps/deck/api/v1.0${url}`
+		return generateOcsUrl(url)
+	}
+
 	addCard(card) {
-		return axios.post(this.url('/cards'), card)
+		return axios.post(this.ocsUrl('/cards'), card)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -75,11 +80,11 @@ export class CardApi {
 			})
 	}
 
-	updateCard(card) {
-		return axios.put(this.url(`/cards/${card.id}`), card)
+	updateCard(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}`), { ...card, boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

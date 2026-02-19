@@ -80,6 +80,7 @@ import { subscribe } from '@nextcloud/event-bus'
 import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
 import DeckAppSettings from '../DeckAppSettings.vue'
 import IconCog from 'vue-material-design-icons/CogOutline.vue'
+import { getCurrentUser } from '@nextcloud/auth'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -126,6 +127,33 @@ export default {
 			'archivedBoards',
 			'sharedBoards',
 		]),
+		isAdmin() {
+			return !!getCurrentUser()?.isAdmin
+		},
+		cardDetailsInModal: {
+			get() {
+				return this.$store.getters.config('cardDetailsInModal')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
+		},
+		cardIdBadge: {
+			get() {
+				return this.$store.getters.config('cardIdBadge')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
+			},
+		},
+		configCalendar: {
+			get() {
+				return this.$store.getters.config('calendar')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { calendar: newValue })
+			},
+		},
 	},
 	mounted() {
 		subscribe('deck:global:toggle-help-dialog', () => {

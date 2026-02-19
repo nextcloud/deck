@@ -21,6 +21,34 @@ declare(strict_types=1);
  *
  */
 
+
+namespace GuzzleHttp\Exception {
+	class ClientException extends \RuntimeException {
+		public function getResponse() {
+		}
+	}
+}
+
+
+namespace OC\Http\Client {
+	class Response implements \OCP\Http\Client\IResponse {
+		public function __construct(Psr\Http\Message\ResponseInterface $response, $stream = false) {
+		}
+
+		public function getBody() {
+		}
+
+		public function getStatusCode(): int {
+		}
+
+		public function getHeader(string $key): string {
+		}
+
+		public function getHeaders(): array {
+		}
+	}
+}
+
 namespace OCA\Circles\Model {
 	class Member {
 		public const LEVEL_NONE = 0;
