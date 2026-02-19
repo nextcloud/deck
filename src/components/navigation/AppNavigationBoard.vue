@@ -133,7 +133,7 @@
 			<NcColorPicker v-model="editColor" class="app-navigation-entry-bullet-wrapper">
 				<button :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 			</NcColorPicker>
-			<form @submit.prevent.stop="applyEdit">
+			<form @submit.prevent.stop="applyEdit" @keyup.esc="cancelEdit">
 				<NcTextField ref="inputField"
 					:disable="loading"
 					:value.sync="editTitle"
@@ -142,7 +142,7 @@
 					required />
 				<NcButton type="tertiary"
 					:disabled="loading"
-					native-type="submit"
+					native-type="button"
 					:title="t('deck', 'Cancel edit')"
 					@click.stop.prevent="cancelEdit">
 					<template #icon>
