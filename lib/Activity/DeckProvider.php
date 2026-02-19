@@ -73,7 +73,6 @@ class DeckProvider implements IProvider {
 
 		$subjectIdentifier = $event->getSubject();
 		$subjectParams = $event->getSubjectParameters();
-		$ownActivity = ($event->getAuthor() === $this->userId);
 
 		/**
 		 * Map stored parameter objects to rich string types
@@ -85,6 +84,7 @@ class DeckProvider implements IProvider {
 			$author = $subjectParams['author'];
 			unset($subjectParams['author']);
 		}
+		$ownActivity = ($author === $this->userId);
 		$user = $this->userManager->get($author);
 		$params = [];
 		if ($user !== null) {
