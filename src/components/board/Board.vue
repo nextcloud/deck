@@ -163,14 +163,14 @@ export default {
 		},
 	},
 	created() {
-		this.session = createSession(this.id)
+		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
 		this.$root.$on('open-card', (cardId) => {
 			this.localModal = cardId
 		})
 	},
 	beforeDestroy() {
-		this.session.close()
+		this.session?.close()
 	},
 	methods: {
 		async fetchData() {
