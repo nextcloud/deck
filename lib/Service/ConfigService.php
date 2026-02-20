@@ -12,6 +12,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Exceptions\FederationDisabledException;
 use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
@@ -60,6 +61,7 @@ class ConfigService {
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
+			$data['federationEnabled'] = $this->get('federationEnabled');
 		}
 		return $data;
 	}
@@ -76,6 +78,8 @@ class ConfigService {
 					throw new NoPermissionException('You must be admin to get the group limit');
 				}
 				return $this->getGroupLimit();
+			case 'federationEnabled':
+				return $this->config->getAppValue(Application::APP_ID, 'federationEnabled', 'no') === 'yes';
 			case 'calendar':
 				if ($this->getUserId() === null) {
 					return false;
@@ -135,6 +139,19 @@ class ConfigService {
 		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
 	}
 
+	public function ensureFederationEnabled() {
+		if (!$this->get('federationEnabled')) {
+			throw new FederationDisabledException();
+		}
+		// @TODO fine tune these config values to respect incoming and outgoing federation separately
+		if ($this->config->getAppValue('files_sharing', 'outgoing_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
+		if ($this->config->getAppValue('files_sharing', 'incoming_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
+	}
+
 	public function set($key, $value) {
 		$userId = $this->getUserId();
 		if ($userId === null) {
@@ -149,6 +166,13 @@ class ConfigService {
 					throw new NoPermissionException('You must be admin to set the group limit');
 				}
 				$result = $this->setGroupLimit($value);
+				break;
+			case 'federationEnabled':
+				if (!$this->groupManager->isAdmin($userId)) {
+					throw new NoPermissionException('You must be admin to set the federation enabled setting');
+				}
+				$this->config->setAppValue(Application::APP_ID, 'federationEnabled', (string)$value);
+				$result = $value;
 				break;
 			case 'calendar':
 				$this->config->setUserValue($userId, Application::APP_ID, 'calendar', (string)$value);

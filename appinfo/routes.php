@@ -133,6 +133,18 @@ return [
 		['name' => 'board_api#preflighted_cors', 'url' => '/api/v{apiVersion}/{path}','verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	],
 	'ocs' => [
+		['name' => 'board_ocs#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
+		['name' => 'board_ocs#read', 'url' => '/api/v{apiVersion}/board/{boardId}', 'verb' => 'GET'],
+		['name' => 'board_ocs#stacks', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
+		['name' => 'board_ocs#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
+		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
+
+		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
+		['name' => 'card_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}', 'verb' => 'PUT'],
+
+		['name' => 'stack_ocs#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
+		['name' => 'stack_ocs#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],
+
 		['name' => 'Config#get', 'url' => '/api/v{apiVersion}/config', 'verb' => 'GET'],
 		['name' => 'Config#setValue', 'url' => '/api/v{apiVersion}/config/{key}', 'verb' => 'POST'],
 

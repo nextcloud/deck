@@ -72,6 +72,7 @@ class PermissionServiceTest extends \Test\TestCase {
 			$this->aclMapper,
 			$this->boardMapper,
 			$this->userManager,
+			$this->createMock(ConfigService::class),
 			$this->groupManager,
 			$this->shareManager,
 			$this->config,

@@ -366,7 +366,9 @@
             "deletedAt": 0,
             "lastModified": 1689667796,
             "settings": [],
-            "ETag": "b97a2b19e1cafc8f95e3f4db71097214"
+            "ETag": "b97a2b19e1cafc8f95e3f4db71097214",
+            "shareToken": null,
+            "externalId": null
         },
         "189": {
             "id": 189,
@@ -431,7 +433,8 @@
                     "permissionEdit": true,
                     "permissionShare": false,
                     "permissionManage": false,
-                    "owner": false
+                    "owner": false,
+                    "token": null
                 },
                 {
                     "id": 5,
@@ -446,7 +449,8 @@
                     "permissionEdit": false,
                     "permissionShare": true,
                     "permissionManage": false,
-                    "owner": false
+                    "owner": false,
+                    "token": null
                 },
                 {
                     "id": 6,
@@ -461,7 +465,8 @@
                     "permissionEdit": false,
                     "permissionShare": false,
                     "permissionManage": true,
-                    "owner": false
+                    "owner": false,
+                    "token": null
                 }
             ],
             "permissions": {
@@ -742,7 +747,9 @@
             "deletedAt": 0,
             "lastModified": 1689667537,
             "settings": [],
-            "ETag": "6c315c83f146485e6b2b6fdc24ffa617"
+            "ETag": "6c315c83f146485e6b2b6fdc24ffa617",
+            "shareToken": null,
+            "externalId": null
         }
     }
 }

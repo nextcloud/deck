@@ -30,6 +30,9 @@ class PermissionService {
 	/** @var array<string, array<string, User>> */
 	private $users = [];
 
+	// accessToken to check permission for federated shares
+	private ?string $accessToken = null;
+
 	private CappedMemoryCache $boardCache;
 	/** @var CappedMemoryCache<array<Acl::PERMISSION_*, bool>> */
 	private CappedMemoryCache $permissionCache;
@@ -40,6 +43,7 @@ class PermissionService {
 		private AclMapper $aclMapper,
 		private BoardMapper $boardMapper,
 		private IUserManager $userManager,
+		private ConfigService $configService,
 		private IGroupManager $groupManager,
 		private IManager $shareManager,
 		private IConfig $config,
@@ -47,6 +51,13 @@ class PermissionService {
 	) {
 		$this->boardCache = new CappedMemoryCache();
 		$this->permissionCache = new CappedMemoryCache();
+	}
+
+	/**
+	 * Set AccessToken for requests from federation shares
+	 */
+	public function setAccessToken(string $token) {
+		$this->accessToken = $token;
 	}
 
 	/**
@@ -59,21 +70,34 @@ class PermissionService {
 			$userId = $this->userId;
 		}
 
-		$cacheKey = $boardId . '-' . $userId;
-		if ($cached = $this->permissionCache->get($cacheKey)) {
-			/** @var array<Acl::PERMISSION_*, bool> $cached */
-			return $cached;
+		// check chache if not a federated request
+		if ($this->accessToken === null) {
+			$cacheKey = $boardId . '-' . $userId;
+			if ($cached = $this->permissionCache->get($cacheKey)) {
+				/** @var array<Acl::PERMISSION_*, bool> $cached */
+				return $cached;
+			}
+		}
+		$board = $this->getBoard($boardId, $allowDeleted);
+		if ($this->accessToken !== null) {
+			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
+			$permissions = [
+				Acl::PERMISSION_READ => $this->externalUserCan($acls, Acl::PERMISSION_READ, $this->accessToken),
+				Acl::PERMISSION_EDIT => $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $this->accessToken),
+				Acl::PERMISSION_MANAGE => $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $this->accessToken),
+				Acl::PERMISSION_SHARE => $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $this->accessToken)
+			];
+			return $permissions;
 		}
 
+
 		try {
-			$board = $this->getBoard($boardId, $allowDeleted);
 			$owner = $this->userIsBoardOwner($boardId, $userId, $allowDeleted);
 			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
 			$owner = false;
 			$acls = [];
 		}
-
 		$permissions = [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
@@ -95,6 +119,14 @@ class PermissionService {
 	public function matchPermissions(Board $board) {
 		$owner = $this->userIsBoardOwner($board->getId());
 		$acls = $board->getAcl() ?? [];
+		if ($this->accessToken !== null) {
+			return [
+				Acl::PERMISSION_READ => $this->externalUserCan($acls, Acl::PERMISSION_READ, $this->accessToken),
+				Acl::PERMISSION_EDIT => $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $this->accessToken),
+				Acl::PERMISSION_MANAGE => $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $this->accessToken),
+				Acl::PERMISSION_SHARE => $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $this->accessToken)
+			];
+		}
 		return [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
@@ -114,7 +146,8 @@ class PermissionService {
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
 		}
-		if ($boardId === null) {
+		// (int)null === 0 so we have to check if any of these are null
+		if ($boardId === null || $id === null) {
 			// Throw NoPermission to not leak information about existing entries
 			throw new NoPermissionException('Permission denied');
 		}
@@ -167,6 +200,19 @@ class PermissionService {
 		return $this->boardCache[(string)$boardId];
 	}
 
+
+	public function externalUserCan(array $acls, int $permission, string $shareToken):bool {
+		$this->configService->ensureFederationEnabled();
+		foreach ($acls as $acl) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				if ($acl->getToken() === $shareToken) {
+					return $acl->getPermission($permission);
+				}
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Check if permission matches the acl rules for current user and groups
 	 *
@@ -202,6 +248,13 @@ class PermissionService {
 			}
 		}
 		return $hasGroupPermission;
+	}
+
+	public function getUserId(): ?string {
+		if ($this->userId === null && $this->accessToken === null) {
+			return null;
+		}
+		return $this->userId ?? $this->aclMapper->findByAccessToken($this->accessToken)->getParticipant();
 	}
 
 	/**
