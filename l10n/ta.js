@@ -27,9 +27,7 @@ OC.L10N.register(
     "Export" : "ஏற்றுமதி",
     "Close" : "மூடுக",
     "Share" : "பகிர்வு",
-    "Personal" : "தனிப்பட்ட",
     "Save" : "சேமிக்க ",
-    "Keyboard shortcuts" : "விசைப்பலகை குறுக்குவழிகள்",
     "Today" : "இன்று"
 },
 "nplurals=2; plural=(n != 1);");

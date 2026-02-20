@@ -26,9 +26,7 @@ OC.L10N.register(
     "Close" : "Zatvori",
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
     "Share" : "Podjeli",
-    "Personal" : "Osobno",
     "Save" : "Spremi",
-    "Keyboard shortcuts" : "Tipkovni prečaci",
     "Today" : "Danas",
     "Tomorrow" : "Sutra"
 },

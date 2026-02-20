@@ -23,7 +23,6 @@ OC.L10N.register(
     "Export" : "Eksport",
     "Close" : "Tutup",
     "Share" : "Kongsi",
-    "Personal" : "Peribadi",
     "Save" : "Simpan",
     "Today" : "Hari ini"
 },

@@ -63,13 +63,7 @@ OC.L10N.register(
     "Close" : "Mbylleni",
     "Due date" : "Data e vendosur",
     "Share" : "Shpërndaje",
-    "Personal" : "Personale",
-    "To do" : "Për t'u bërë",
-    "Doing" : "Duke e bërë",
     "Save" : "Ruaj",
-    "Keyboard shortcuts" : "Shkurtoret e tastierës",
-    "Keyboard shortcut" : "Shkurtore tastiere",
-    "Action" : "Veprim",
     "Today" : "Sot",
     "Tomorrow" : "Nesër"
 },

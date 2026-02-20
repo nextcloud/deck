@@ -36,9 +36,7 @@ OC.L10N.register(
     "Export" : "Eksporter",
     "Close" : "Lat att",
     "Share" : "Del",
-    "Personal" : "Personleg",
     "Save" : "Lagre",
-    "Keyboard shortcuts" : "Tastatursnarvegar",
     "Today" : "I dag"
 },
 "nplurals=2; plural=(n != 1);");

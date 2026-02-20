@@ -21,6 +21,7 @@ OC.L10N.register(
     "Activity" : "Gnìomhachd",
     "Undo" : "Neo-dhèan",
     "Transfer" : "Tar-chuir",
+    "(remote)" : "(cèin)",
     "Delete" : "Sguab às",
     "Edit" : "Deasaich",
     "Download" : "Luchdaich a-nuas",
