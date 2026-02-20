@@ -62,10 +62,7 @@ OC.L10N.register(
     "Close" : "Plegar",
     "Create a card" : "Crear una carta",
     "Share" : "Partejar",
-    "Personal" : "Personal",
     "Save" : "Salvar",
-    "Keyboard shortcuts" : "Acorchis de clavièr",
-    "Keyboard shortcut" : "Acorchis de clavièr",
     "Today" : "Uèi",
     "Tomorrow" : "Deman"
 },

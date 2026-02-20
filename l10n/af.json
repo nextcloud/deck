@@ -19,7 +19,6 @@
     "Details" : "Besonderhede",
     "Search" : "Soek",
     "Tags" : "Etikette",
-    "No participants found" : "Geen deelnemers gevind",
     "Can edit" : "Kan redigeer",
     "Can share" : "Kan deel",
     "Owner" : "Eienaar",
@@ -42,10 +41,8 @@
     "Export" : "Voer uit",
     "Due date" : "Sperdatum",
     "Share" : "Deel",
-    "Personal" : "Persoonlik",
+    "No participants found" : "Geen deelnemers gevind",
     "Save" : "Stoor",
-    "Keyboard shortcuts" : "Sneltoetse",
-    "Keyboard shortcut" : "Snelsleutel",
     "Today" : "Vandag",
     "Tomorrow" : "Môre"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

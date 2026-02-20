@@ -58,10 +58,7 @@ OC.L10N.register(
     "Close" : "ปิด",
     "Due date" : "วันที่ครบกำหนด",
     "Share" : "แชร์",
-    "Personal" : "ส่วนตัว",
     "Save" : "บันทึก",
-    "Keyboard shortcuts" : "แป้นพิมพ์ลัด",
-    "Keyboard shortcut" : "แป้นพิมพ์ลัด",
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้"
 },

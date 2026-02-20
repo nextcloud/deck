@@ -67,12 +67,8 @@ OC.L10N.register(
     "Close" : "Cerrar",
     "Due date" : "Fecha de vencimiento",
     "Share" : "Compartir",
-    "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "Save" : "Guardar",
-    "Keyboard shortcuts" : "Atajos del teclado",
-    "Keyboard shortcut" : "Atajo del teclado",
-    "Action" : "Acción",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana"
 },

@@ -38,10 +38,7 @@ OC.L10N.register(
     "No notifications" : "Ulac tisezmal",
     "Close" : "Mdel",
     "Share" : "Bḍu",
-    "Personal" : "Udmawan",
     "Save" : "Sekles",
-    "Keyboard shortcuts" : "Inegzumen n unasiw",
-    "Ctrl" : "Ctrl",
     "Today" : "Ass-a"
 },
 "nplurals=2; plural=(n != 1);");
