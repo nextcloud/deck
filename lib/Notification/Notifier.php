@@ -125,7 +125,7 @@ class Notifier implements INotifier {
 						]
 					]
 				);
-				$notification->setLink($this->getCardUrl($boardId, $cardId));
+				$notification->setLink($this->getCardRedirectUrl($cardId));
 				break;
 			case 'card-overdue':
 				$cardId = (int)$notification->getObjectId();
@@ -157,7 +157,7 @@ class Notifier implements INotifier {
 						],
 					]
 				);
-				$notification->setLink($this->getCardUrl($boardId, $cardId));
+				$notification->setLink($this->getCardRedirectUrl($cardId));
 				break;
 			case 'card-comment-mentioned':
 				$cardId = (int)$notification->getObjectId();
@@ -197,7 +197,7 @@ class Notifier implements INotifier {
 				if ($notification->getMessage() === '{message}') {
 					$notification->setParsedMessage($notification->getMessageParameters()['message']);
 				}
-				$notification->setLink($this->getCardUrl($boardId, $cardId));
+				$notification->setLink($this->getCardRedirectUrl($cardId));
 				break;
 			case 'board-shared':
 				$boardId = (int)$notification->getObjectId();
@@ -252,5 +252,9 @@ class Notifier implements INotifier {
 
 	private function getCardUrl(int $boardId, int $cardId): string {
 		return $this->url->linkToRouteAbsolute('deck.page.indexCard', ['boardId' => $boardId, 'cardId' => $cardId]);
+	}
+
+	private function getCardRedirectUrl(int $cardId): string {
+		return $this->url->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $cardId]);
 	}
 }
