@@ -157,6 +157,44 @@ class CardService {
 	}
 
 	/**
+	 * Find a card by id including soft-deleted entries.
+	 *
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function findIncludingDeleted(int $cardId): Card {
+		// Keep this call compatible with older PermissionService signatures.
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, true);
+		$card = $this->cardMapper->find($cardId);
+		[$card] = $this->enrichCards([$card]);
+
+		$attachments = $this->attachmentService->findAll($cardId, true);
+		if ($this->request->getParam('apiVersion') === '1.0') {
+			$attachments = array_filter($attachments, function ($attachment) {
+				return $attachment->getType() === 'deck_file';
+			});
+		}
+		$card->setAttachments($attachments);
+
+		return $card;
+	}
+
+	/**
+	 * Lightweight variant for internal CalDAV lookups where enriched relations
+	 * and attachments are not required.
+	 *
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function findIncludingDeletedLite(int $cardId): Card {
+		// Keep this call compatible with older PermissionService signatures.
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, true);
+		return $this->cardMapper->find($cardId);
+	}
+
+	/**
 	 * @return Card[]
 	 */
 	public function findCalendarEntries(int $boardId): array {
@@ -312,6 +350,9 @@ class CardService {
 		$oldBoardId = $this->stackMapper->findBoardId($changes->getBefore()->getStackId());
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		if ($boardId !== $oldBoardId) {
+			if ($oldBoardId !== null) {
+				$this->changeHelper->boardChanged($oldBoardId);
+			}
 			$stack = $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($this->cardMapper->findBoardId($card->getId()));
 			$boardLabels = $board->getLabels() ?? [];

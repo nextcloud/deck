@@ -24,6 +24,11 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED = 'assigned';
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
+	public const SETTING_CALDAV_LIST_MODE_ROOT_TASKS = 'root_tasks';
+	public const SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR = 'per_list_calendar';
+	public const SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY = 'list_as_category';
+	public const SETTING_CALDAV_LIST_MODE_LIST_AS_PRIORITY = 'list_as_priority';
+	public const SETTING_CALDAV_LIST_MODE_DEFAULT = self::SETTING_CALDAV_LIST_MODE_ROOT_TASKS;
 
 	private IConfig $config;
 	private ?string $userId = null;
@@ -57,7 +62,8 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
-			'cardIdBadge' => $this->isCardIdBadgeEnabled()
+			'cardIdBadge' => $this->isCardIdBadgeEnabled(),
+			'caldavListMode' => $this->getCalDavListMode(),
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -67,7 +73,7 @@ class ConfigService {
 	}
 
 	/**
-	 * @return bool|array{id: string, displayname: string}[]
+	 * @return bool|string|array{id: string, displayname: string}[]
 	 * @throws NoPermissionException
 	 */
 	public function get(string $key) {
@@ -95,8 +101,27 @@ class ConfigService {
 					return false;
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', false);
+			case 'caldavListMode':
+				return $this->getCalDavListMode();
 		}
 		return false;
+	}
+
+	public function getCalDavListMode(): string {
+		$userId = $this->getUserId();
+		if ($userId === null) {
+			return self::SETTING_CALDAV_LIST_MODE_DEFAULT;
+		}
+
+		$value = (string)$this->config->getUserValue($userId, Application::APP_ID, 'caldavListMode', self::SETTING_CALDAV_LIST_MODE_DEFAULT);
+		$allowed = [
+			self::SETTING_CALDAV_LIST_MODE_ROOT_TASKS,
+			self::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR,
+			self::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY,
+			self::SETTING_CALDAV_LIST_MODE_LIST_AS_PRIORITY,
+		];
+
+		return in_array($value, $allowed, true) ? $value : self::SETTING_CALDAV_LIST_MODE_DEFAULT;
 	}
 
 	public function isCalendarEnabled(?int $boardId = null): bool {
@@ -185,6 +210,19 @@ class ConfigService {
 			case 'cardIdBadge':
 				$this->config->setUserValue($userId, Application::APP_ID, 'cardIdBadge', (string)$value);
 				$result = $value;
+				break;
+			case 'caldavListMode':
+				$allowed = [
+					self::SETTING_CALDAV_LIST_MODE_ROOT_TASKS,
+					self::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR,
+					self::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY,
+					self::SETTING_CALDAV_LIST_MODE_LIST_AS_PRIORITY,
+				];
+				if (!in_array((string)$value, $allowed, true)) {
+					throw new BadRequestException('Unsupported CalDAV list mode');
+				}
+				$this->config->setUserValue($userId, Application::APP_ID, 'caldavListMode', (string)$value);
+				$result = (string)$value;
 				break;
 			case 'board':
 				[$boardId, $boardConfigKey] = explode(':', $key);

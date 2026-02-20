@@ -127,30 +127,44 @@ class Card extends RelationalEntity {
 		$calendar = new VCalendar();
 		$event = $calendar->createComponent('VTODO');
 		$event->UID = 'deck-card-' . $this->getId();
+		$event->{'X-NC-DECK-CARD-ID'} = (string)$this->getId();
+		$createdAtTs = $this->getCreatedAt() > 0 ? $this->getCreatedAt() : time();
+		$lastModifiedTs = $this->getLastModified() > 0 ? $this->getLastModified() : $createdAtTs;
+		$createdAt = new DateTime();
+		$createdAt->setTimestamp($createdAtTs);
+		$lastModified = new DateTime();
+		$lastModified->setTimestamp($lastModifiedTs);
+		$event->DTSTAMP = $lastModified;
+		$event->CREATED = $createdAt;
+		$event->{'LAST-MODIFIED'} = $lastModified;
 		if ($this->getDuedate()) {
-			$creationDate = new DateTime();
-			$creationDate->setTimestamp($this->createdAt);
-			$event->DTSTAMP = $creationDate;
 			$event->DUE = new DateTime($this->getDuedate()->format('c'), new DateTimeZone('UTC'));
 		}
-		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
+		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId(), ['RELTYPE' => 'PARENT']);
 
 		// FIXME: For write support: CANCELLED / IN-PROCESS handling
 		if ($this->getDone() || $this->getArchived()) {
-			$date = new DateTime();
-			$date->setTimestamp($this->getLastModified());
 			$event->STATUS = 'COMPLETED';
-			$event->COMPLETED = $this->getDone() ? $this->getDone() : $this->getArchived();
+			$event->{'PERCENT-COMPLETE'} = 100;
+			if ($this->getDone()) {
+				$event->COMPLETED = $this->getDone();
+			} else {
+				$event->COMPLETED = $lastModified;
+			}
 		} else {
 			$event->STATUS = 'NEEDS-ACTION';
+			$event->{'PERCENT-COMPLETE'} = 0;
 		}
 
-		// $event->add('PERCENT-COMPLETE', 100);
-
 		$labels = $this->getLabels() ?? [];
-		$event->CATEGORIES = array_map(function ($label): string {
+		$categoryTitles = array_map(function ($label): string {
 			return $label->getTitle();
 		}, $labels);
+		$event->CATEGORIES = $categoryTitles;
+		if (count($categoryTitles) > 0) {
+			// Apple Reminders uses this non-standard property for tags on CalDAV tasks.
+			$event->{'X-APPLE-TAGS'} = implode(',', $categoryTitles);
+		}
 
 		$event->SUMMARY = $this->getTitle();
 		$event->DESCRIPTION = $this->getDescription();

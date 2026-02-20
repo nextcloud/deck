@@ -134,7 +134,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	 * @return Card[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAll($stackId, ?int $limit = null, int $offset = 0, int $since = -1) {
+	public function findAll($stackId, ?int $limit = null, ?int $offset = 0, int $since = -1) {
+		$offset ??= 0;
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -154,7 +155,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	 * @return array<int, null|Card[]>
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAllForStacks(array $stackIds, ?int $limit = null, int $offset = 0, int $since = -1): array {
+	public function findAllForStacks(array $stackIds, ?int $limit = null, ?int $offset = 0, int $since = -1): array {
+		$offset ??= 0;
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -234,7 +236,12 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->orderBy('c.duedate')
 			->setMaxResults($limit)
 			->setFirstResult($offset);
-		return $this->findEntities($qb);
+		$cards = $this->findEntities($qb);
+		foreach ($cards as $card) {
+			$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
+			$card->setLabels($labels);
+		}
+		return $cards;
 	}
 
 	public function findAllArchived($stackId, $limit = null, $offset = null) {
