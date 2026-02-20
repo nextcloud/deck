@@ -61,12 +61,8 @@ OC.L10N.register(
     "Close" : "დახურვა",
     "Due date" : "განპირობებულია თარიღისთვის",
     "Share" : "გაზიარება",
-    "Personal" : "პირადი",
     "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "Save" : "შენახვა",
-    "Keyboard shortcuts" : "კლავიატურის კომბინაციები",
-    "Keyboard shortcut" : "კლავიატურის კომბინაცია",
-    "Action" : "ქმედება",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ"
 },

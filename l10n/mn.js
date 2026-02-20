@@ -42,9 +42,7 @@ OC.L10N.register(
     "Advanced options" : "Бусад сонголтууд",
     "Export" : "Экспорт",
     "Share" : "Түгээх",
-    "Personal" : "Хувийн",
     "Save" : "Хадгалах",
-    "Keyboard shortcut" : "Keyboard товчлуур",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш"
 },

@@ -32,7 +32,6 @@ OC.L10N.register(
     "Export" : "Exportéieren",
     "Close" : "Zoumaachen",
     "Share" : "Deelen",
-    "Personal" : "Perséinlech",
     "Save" : "Späicheren",
     "Today" : "Haut",
     "Tomorrow" : "Muer"

@@ -44,7 +44,6 @@
     "Tags" : "Birkas",
     "Activity" : "Darbības",
     "Undo" : "Atsaukt",
-    "Searching for users, groups and teams …" : "Meklē lietotājus, kopas un komandas …",
     "(Group)" : "(Grupa)",
     "Can edit" : "Var labot",
     "Can share" : "Var koplietot",
@@ -80,11 +79,8 @@
     "Close" : "Aizvērt",
     "Due date" : "Izpildes datums",
     "Share" : "Koplietot",
-    "Personal" : "Personīgs",
+    "Searching for users, groups and teams …" : "Meklē lietotājus, kopas un komandas …",
     "Save" : "Saglabāt",
-    "Keyboard shortcuts" : "Tastatūras saīsnes",
-    "Keyboard shortcut" : "Tastatūras saīsne",
-    "Action" : "Darbība",
     "Today" : "Šodien",
     "Tomorrow" : "Rīt"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"

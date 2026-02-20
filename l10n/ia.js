@@ -40,10 +40,7 @@ OC.L10N.register(
     "Export" : "Exportar",
     "Close" : "Clauder",
     "Share" : "Compartir",
-    "Personal" : "Personal",
     "Save" : "Salveguardar",
-    "Keyboard shortcuts" : "Combinationes de claves",
-    "Keyboard shortcut" : "Combination de claves",
     "Today" : "Hodie",
     "Tomorrow" : "Deman"
 },

@@ -43,7 +43,6 @@ OC.L10N.register(
     "No notifications" : "Kemennadenn ebet",
     "Close" : "Serriñ",
     "Share" : "Rannan",
-    "Personal" : "Personel",
     "Save" : "Enrollañ",
     "Today" : "Hiziv",
     "Tomorrow" : "Warc'hoaz"

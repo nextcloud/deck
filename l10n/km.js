@@ -27,7 +27,6 @@ OC.L10N.register(
     "Export" : "នាំចេញ",
     "Close" : "បិទ",
     "Share" : "ចែក​រំលែក",
-    "Personal" : "ផ្ទាល់​ខ្លួន",
     "Save" : "រក្សាទុក",
     "Today" : "ថ្ងៃ​នេះ"
 },

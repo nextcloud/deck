@@ -32,7 +32,6 @@ OC.L10N.register(
     "Export" : "Արտահանում",
     "Close" : "Փակել",
     "Share" : "Կիսվել",
-    "Personal" : "Անձնական",
     "Save" : "Պահպանել",
     "Today" : "այսօր"
 },

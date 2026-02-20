@@ -73,9 +73,7 @@ OC.L10N.register(
     "Close" : "Yopish",
     "Due date" : "Muddati",
     "Share" : "Ulashish",
-    "Personal" : "Personal",
     "Save" : "Saqlash",
-    "Keyboard shortcuts" : "Klaviatura yorliqlari",
     "Today" : "Today",
     "Tomorrow" : "Ertaga"
 },

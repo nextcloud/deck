@@ -30,9 +30,7 @@ OC.L10N.register(
     "Export" : "রপ্তানি",
     "Close" : "বন্ধ",
     "Share" : "ভাগাভাগি কর",
-    "Personal" : "ব্যক্তিগত",
     "Save" : "সংরক্ষণ",
-    "Keyboard shortcuts" : "কী-বোর্ড শর্টকাট",
     "Today" : "আজ",
     "Tomorrow" : "আগামীকাল"
 },
