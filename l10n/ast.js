@@ -47,6 +47,7 @@ OC.L10N.register(
     "Transfer" : "Tresferir",
     "(Group)" : "(Grupu)",
     "(Team)" : "(Equipu)",
+    "(remote)" : "(remotu)",
     "Can edit" : "Pue editar",
     "Owner" : "Propietariu",
     "Delete" : "Desaniciar",
