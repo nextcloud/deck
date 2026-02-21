@@ -83,6 +83,7 @@ class NotifierTest extends \Test\TestCase {
 				return match ($route) {
 					'deck.page.indexBoard' => '/board/123',
 					'deck.page.indexCard' => '/board/123/card/234',
+					'deck.page.redirectToCard' => '/card/234',
 				};
 			});
 	}
@@ -135,6 +136,9 @@ class NotifierTest extends \Test\TestCase {
 		$notification->expects($this->once())
 			->method('setIcon')
 			->with('/absolute/deck-dark.svg');
+		$notification->expects($this->once())
+			->method('setLink')
+			->with('/card/123');
 
 		$actualNotification = $this->notifier->prepare($notification, 'en_US');
 
@@ -345,6 +349,47 @@ class NotifierTest extends \Test\TestCase {
 		$notification->expects($this->once())
 			->method('setIcon')
 			->with('/absolute/deck-dark.svg');
+
+		$actualNotification = $this->notifier->prepare($notification, 'en_US');
+
+		$this->assertEquals($notification, $actualNotification);
+	}
+
+	public function testPrepareCardAssigned() {
+		/** @var INotification|MockObject $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())
+			->method('getApp')
+			->willReturn('deck');
+
+		$notification->expects($this->once())
+			->method('getSubjectParameters')
+			->willReturn(['Card title','Board title', 'admin']);
+
+		$notification->expects($this->once())
+			->method('getSubject')
+			->willReturn('card-assigned');
+		$notification->expects($this->once())
+			->method('getObjectId')
+			->willReturn('123');
+		$this->stackMapper->expects($this->once())
+			->method('findStackFromCardId')
+			->willReturn($this->buildMockStack());
+
+		$this->url->expects($this->once())
+			->method('imagePath')
+			->with('deck', 'deck-dark.svg')
+			->willReturn('deck-dark.svg');
+		$this->url->expects($this->once())
+			->method('getAbsoluteURL')
+			->with('deck-dark.svg')
+			->willReturn('/absolute/deck-dark.svg');
+		$notification->expects($this->once())
+			->method('setIcon')
+			->with('/absolute/deck-dark.svg');
+		$notification->expects($this->once())
+			->method('setLink')
+			->with('/card/123');
 
 		$actualNotification = $this->notifier->prepare($notification, 'en_US');
 
