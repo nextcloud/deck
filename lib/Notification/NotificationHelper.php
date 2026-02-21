@@ -174,7 +174,7 @@ class NotificationHelper {
 			$notification = $this->generateBoardShared($board, $acl->getParticipant());
 			if ($markAsRead) {
 				$this->notificationManager->markProcessed($notification);
-			} else {
+			} elseif ($acl->getParticipant() !== $this->currentUser) {
 				$notification->setDateTime(new DateTime());
 				$this->notificationManager->notify($notification);
 			}
@@ -201,6 +201,9 @@ class NotificationHelper {
 
 	public function sendMention(IComment $comment): void {
 		foreach ($comment->getMentions() as $mention) {
+			if ((string)$mention['id'] === $this->currentUser) {
+				continue;
+			}
 			$card = $this->cardMapper->find($comment->getObjectId());
 			$boardId = $this->cardMapper->findBoardId($card->getId());
 			$notification = $this->notificationManager->createNotification();
