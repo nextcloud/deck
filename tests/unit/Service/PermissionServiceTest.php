@@ -376,4 +376,30 @@ class PermissionServiceTest extends \Test\TestCase {
 			'user3' => new User($user3->getUID(), $this->userManager),
 		], $users);
 	}
+
+	public function testGetUsersForAclUser() {
+		$acl = new Acl();
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
+		$acl->setParticipant('user1');
+
+		$this->userManager->expects($this->once())->method('userExists')->with('user1')->willReturn(true);
+		$this->assertEquals(['user1'], $this->service->getUsersForAcl($acl));
+	}
+
+	public function testGetUsersForAclGroup() {
+		$acl = new Acl();
+		$acl->setType(Acl::PERMISSION_TYPE_GROUP);
+		$acl->setParticipant('group1');
+
+		$user1 = $this->createMock(IUser::class);
+		$user1->method('getUID')->willReturn('user1');
+		$user2 = $this->createMock(IUser::class);
+		$user2->method('getUID')->willReturn('user2');
+
+		$group = $this->createMock(IGroup::class);
+		$group->method('getUsers')->willReturn([$user1, $user2]);
+		$this->groupManager->expects($this->once())->method('get')->with('group1')->willReturn($group);
+
+		$this->assertEquals(['user1', 'user2'], $this->service->getUsersForAcl($acl));
+	}
 }

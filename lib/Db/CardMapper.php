@@ -279,6 +279,22 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * @return Card[]
+	 */
+	public function findAllByBoardIdNonDeleted(int $boardId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('c.*')
+			->from('deck_cards', 'c')
+			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->orderBy('c.created_at')
+			->addOrderBy('c.id');
+		return $this->findEntities($qb);
+	}
+
+	/**
 	 * @param int[] $boardIds
 	 * @return Card[]
 	 */

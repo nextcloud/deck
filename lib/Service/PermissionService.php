@@ -335,6 +335,43 @@ class PermissionService {
 		return $this->users[(string)$boardId];
 	}
 
+	/**
+	 * Resolve a single ACL entry to the UIDs it grants access to.
+	 *
+	 * @return string[]
+	 */
+	public function getUsersForAcl(Acl $acl): array {
+		$users = [];
+		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+			if ($this->userManager->userExists($acl->getParticipant())) {
+				$users[] = $acl->getParticipant();
+			}
+		} elseif ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+			$group = $this->groupManager->get($acl->getParticipant());
+			if ($group !== null) {
+				foreach ($group->getUsers() as $user) {
+					$users[] = $user->getUID();
+				}
+			}
+		} elseif ($this->circlesService->isCirclesEnabled() && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+			try {
+				$circle = $this->circlesService->getCircle($acl->getParticipant());
+				if ($circle !== null) {
+					foreach ($circle->getInheritedMembers() as $member) {
+						if ($member->getUserType() !== 1 || $member->getLevel() < Member::LEVEL_MEMBER) {
+							continue;
+						}
+						if ($this->userManager->get($member->getUserId()) !== null) {
+							$users[] = $member->getUserId();
+						}
+					}
+				}
+			} catch (\Exception $e) {
+			}
+		}
+		return $users;
+	}
+
 	public function canCreate() {
 		if ($this->userId === null) {
 			return false;
