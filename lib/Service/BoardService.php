@@ -40,11 +40,15 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationFactory;
+use OCP\Federation\ICloudFederationProviderManager;
+use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
+use OCP\Security\ISecureRandom;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -66,6 +70,9 @@ class BoardService {
 		private NotificationHelper $notificationHelper,
 		private AssignmentMapper $assignedUsersMapper,
 		private ActivityManager $activityManager,
+		private readonly ICloudFederationProviderManager $cloudFederationProviderManager,
+		private readonly ICloudIdManager $cloudIdManager,
+		private readonly ICloudFederationFactory $federationFactory,
 		private IEventDispatcher $eventDispatcher,
 		private ChangeHelper $changeHelper,
 		private IURLGenerator $urlGenerator,
@@ -73,6 +80,8 @@ class BoardService {
 		private BoardServiceValidator $boardServiceValidator,
 		private SessionMapper $sessionMapper,
 		private IUserManager $userManager,
+		private ISecureRandom $random,
+		private ConfigService $configService,
 		private ?string $userId,
 	) {
 	}
@@ -118,7 +127,7 @@ class BoardService {
 			return $this->boardsCachePartial[$boardId];
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ, null, false);
 		$board = $this->boardMapper->find($boardId, true, true, $allowDeleted);
 		[$board] = $this->enrichBoards([$board], $fullDetails);
 		return $board;
@@ -364,6 +373,28 @@ class BoardService {
 		[$edit, $share, $manage] = $this->applyPermissions($boardId, $edit, $share, $manage);
 
 		$acl = new Acl();
+		if ($type === Acl::PERMISSION_TYPE_REMOTE) {
+			$this->configService->ensureFederationEnabled();
+			$sharedBy = $this->userManager->get($this->userId);
+			$board = $this->find($boardId);
+			$token = $this->random->generate(32);
+			$cloudShare = $this->federationFactory->getCloudFederationShare(
+				$participant,
+				$board->getTitle(),
+				'',
+				(string)$boardId,
+				$sharedBy->getCloudId(),
+				$sharedBy->getDisplayName(),
+				$sharedBy->getCloudId(),
+				$sharedBy->getDisplayName(),
+				$token,
+				'user',
+				'deck'
+			);
+			$this->cloudFederationProviderManager->sendCloudShare($cloudShare);
+			$acl->setToken($token);
+		}
+
 		$acl->setBoardId($boardId);
 		$acl->setType($type);
 		$acl->setParticipant($participant);
@@ -412,6 +443,21 @@ class BoardService {
 		$this->boardMapper->mapAcl($acl);
 		$acl = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
+
+		if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+			$this->configService->ensureFederationEnabled();
+			$notification = $this->federationFactory->getCloudFederationNotification();
+
+			$payload = [
+				$acl->jsonSerialize(),
+				'sharedSecret' => $acl->getToken(),
+			];
+
+			$notification->setMessage('update-permissions', 'deck', (string)$acl->getBoardId(), $payload);
+
+			$url = $this->cloudIdManager->resolveCloudId($acl->getParticipant());
+			$this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
+		}
 
 		$this->eventDispatcher->dispatchTyped(new AclUpdatedEvent($acl));
 

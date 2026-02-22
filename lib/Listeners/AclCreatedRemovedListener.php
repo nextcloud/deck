@@ -60,6 +60,13 @@ class AclCreatedRemovedListener implements IEventListener {
 				break;
 			default:
 				$user = $this->userManager->get($acl->getParticipant());
+
+				// for federated participants userManager might return null
+				// disabling this for now as attachments for federated shares are not supported yet
+				// @TODO: add event dispatching for federated shares
+				if (is_null($user)) {
+					break;
+				}
 				$this->eventDispatcher->dispatchTyped(new UserShareAccessUpdatedEvent($user));
 				break;
 		}

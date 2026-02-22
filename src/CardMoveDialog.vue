@@ -34,7 +34,7 @@
 
 <script>
 import { NcDialog, NcSelect, NcButton } from '@nextcloud/vue'
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapGetters } from 'vuex'
@@ -85,9 +85,9 @@ export default {
 		},
 		async loadStacksFromBoard(board) {
 			try {
-				const url = generateUrl('/apps/deck/stacks/' + board.id)
+				const url = generateOcsUrl(`/apps/deck/api/v1.0/stacks/${board.id}`)
 				const response = await axios.get(url)
-				this.stacksFromBoard = response.data
+				this.stacksFromBoard = response.data.ocs.data
 			} catch (err) {
 				return err
 			}
@@ -95,7 +95,7 @@ export default {
 		async moveCard() {
 			this.copiedCard = Object.assign({}, this.card)
 			this.copiedCard.stackId = this.selectedStack.id
-			this.$store.dispatch('moveCard', this.copiedCard)
+			this.$store.dispatch('moveCard', { card: this.copiedCard, oldBoardId: this.selectedBoard.id })
 			if (parseInt(this.selectedBoard.id) === parseInt(this.selectedStack.boardId)) {
 				await this.$store.commit('addNewCard', { ...this.copiedCard })
 			}
