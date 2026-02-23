@@ -178,9 +178,16 @@ export default {
 		},
 	},
 	watch: {
-		currentCard(newCard, oldCard) {
-			if (newCard.id === oldCard.id) return
-			this.focusHeader()
+		currentCard: {
+			handler(newCard, oldCard) {
+				if (!newCard) {
+					return
+				}
+				// Only refocus when actually switching cards, not during autosave updates
+				if (!oldCard?.id || newCard.id !== oldCard.id) {
+					this.focusHeader()
+				}
+			},
 		},
 		'currentCard.title': {
 			immediate: true,
