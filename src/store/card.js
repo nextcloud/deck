@@ -29,7 +29,6 @@ export default function cardModuleFactory() {
 						return false
 					}
 					let allTagsMatch = true
-					let allUsersMatch = true
 
 					if (tags.length > 0) {
 						tags.forEach((tag) => {
@@ -43,12 +42,10 @@ export default function cardModuleFactory() {
 					}
 
 					if (users.length > 0) {
-						users.forEach((user) => {
-							if (!card?.assignedUsers || card.assignedUsers.findIndex((u) => u.participant.uid === user) === -1) {
-								allUsersMatch = false
-							}
-						})
-						if (!allUsersMatch) {
+						const anyUserMatch = !card?.assignedUsers
+							? false
+							: users.some((user) => card.assignedUsers.findIndex((u) => u.participant.uid === user) !== -1)
+						if (!anyUserMatch) {
 							return false
 						}
 					}
