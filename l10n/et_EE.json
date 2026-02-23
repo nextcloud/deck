@@ -188,6 +188,7 @@
     "Admin settings" : "Peakasutaja seadistused",
     "Limit board creation to some groups" : "Piira tahvlite loomise õigus mõnede gruppidega",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Kasutajad, kes pole nende gruppide liikmed, ei saa oma tahvleid luua, kuid saavad töötada tahvlitega, mida neile on jagatud.",
+    "Enable federation" : "Lülita födereerimine (liitpilve kasutamine) sisse",
     "Board actions" : "Tegevused tahvliga",
     "Scroll sideways" : "Külitsi kerimine",
     "Navigate between cards" : "Liigu kaartide vahel",
