@@ -27,6 +27,8 @@ use OCP\Activity\IManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Comments\IComment;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\L10N\IFactory;
 use OCP\Server;
@@ -46,6 +48,7 @@ class ActivityManager {
 	private AclMapper $aclMapper;
 	private StackMapper $stackMapper;
 	private IFactory $l10nFactory;
+	private IDBConnection $db;
 
 	public const DECK_OBJECT_BOARD = 'deck_board';
 	public const DECK_OBJECT_CARD = 'deck_card';
@@ -101,6 +104,7 @@ class ActivityManager {
 		StackMapper $stackMapper,
 		AclMapper $aclMapper,
 		IFactory $l10nFactory,
+		IDBConnection $db,
 		?string $userId,
 	) {
 		$this->manager = $manager;
@@ -110,6 +114,7 @@ class ActivityManager {
 		$this->stackMapper = $stackMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10nFactory = $l10nFactory;
+		$this->db = $db;
 		$this->userId = $userId;
 	}
 
@@ -581,36 +586,65 @@ class ActivityManager {
 	}
 
 	/**
-	 * Publish card_create activity entries for all existing cards to a newly added board member,
+	 * Retroactively publish all existing board activity events to a newly added member,
 	 * so they can see the full history after the board is shared with them.
 	 */
-	public function retroactivelyPublishCardCreationActivities(int $boardId, string $userId): void {
+	public function retroactivelyPublishBoardActivities(int $boardId, string $userId): void {
 		try {
-			$cards = $this->cardMapper->findAllByBoardIdNonDeleted($boardId);
+			$board = $this->boardMapper->find($boardId);
 		} catch (\Exception $e) {
 			return;
 		}
-		foreach ($cards as $card) {
+		$referenceUser = $board->getOwner();
+		if ($referenceUser === $userId) {
+			return;
+		}
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('a.*')
+			->from('activity', 'a')
+			->leftJoin('a', 'deck_cards', 'c',
+				$qb->expr()->andX(
+					$qb->expr()->eq('a.object_type', $qb->createNamedParameter(self::DECK_OBJECT_CARD)),
+					$qb->expr()->eq('a.object_id', 'c.id')
+				)
+			)
+			->leftJoin('c', 'deck_stacks', 's', $qb->expr()->eq('c.stack_id', 's.id'))
+			->where($qb->expr()->eq('a.app', $qb->createNamedParameter('deck')))
+			->andWhere($qb->expr()->eq('a.affecteduser', $qb->createNamedParameter($referenceUser)))
+			->andWhere(
+				$qb->expr()->orX(
+					$qb->expr()->andX(
+						$qb->expr()->eq('a.object_type', $qb->createNamedParameter(self::DECK_OBJECT_BOARD)),
+						$qb->expr()->eq('a.object_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT))
+					),
+					$qb->expr()->andX(
+						$qb->expr()->eq('a.object_type', $qb->createNamedParameter(self::DECK_OBJECT_CARD)),
+						$qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT))
+					)
+				)
+			)
+			->orderBy('a.timestamp')
+			->addOrderBy('a.activity_id');
+
+		$result = $qb->executeQuery();
+		while ($row = $result->fetch()) {
 			try {
-				$author = $card->getOwner();
-				$createdAt = $card->getCreatedAt();
-				if ($author === null || $createdAt === null) {
-					continue;
-				}
-				$subjectParams = $this->findDetailsForCard($card->getId());
-				$subjectParams['author'] = $author;
+				$subjectParams = json_decode($row['subjectparams'], true) ?? [];
+				$author = $subjectParams['author'] ?? '';
 				$event = $this->manager->generateEvent();
-				$event->setApp('deck')
-					->setType('deck')
+				$event->setApp($row['app'])
+					->setType($row['type'])
 					->setAuthor($author)
-					->setObject(self::DECK_OBJECT_CARD, (int)$card->getId(), $card->getTitle())
-					->setSubject(self::SUBJECT_CARD_CREATE, $subjectParams)
-					->setTimestamp($createdAt)
+					->setObject($row['object_type'], (int)$row['object_id'], '')
+					->setSubject($row['subject'], $subjectParams)
+					->setTimestamp((int)$row['timestamp'])
 					->setAffectedUser($userId);
 				$this->manager->publish($event);
 			} catch (\Exception $e) {
-				// skip cards whose related stack/board can no longer be resolved
+				// skip events that cannot be re-published
 			}
 		}
+		$result->closeCursor();
 	}
 }

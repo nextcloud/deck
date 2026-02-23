@@ -38,6 +38,10 @@ use OCA\Deck\Service\PermissionService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\IResult;
+use OCP\DB\QueryBuilder\IExpressionBuilder;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\L10N\IFactory;
@@ -64,6 +68,8 @@ class ActivityManagerTest extends TestCase {
 	private $l10nFactory;
 	/** @var IL10N|MockObject */
 	private $l10n;
+	/** @var IDBConnection|MockObject */
+	private $db;
 	/** @var string */
 	private $userId = 'admin';
 
@@ -76,6 +82,7 @@ class ActivityManagerTest extends TestCase {
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->l10n = $this->createMock(IL10N::class);
+		$this->db = $this->createMock(IDBConnection::class);
 		$this->activityManager = new ActivityManager(
 			$this->manager,
 			$this->permissionService,
@@ -84,6 +91,7 @@ class ActivityManagerTest extends TestCase {
 			$this->stackMapper,
 			$this->aclMapper,
 			$this->l10nFactory,
+			$this->db,
 			$this->userId
 		);
 	}
@@ -501,28 +509,47 @@ class ActivityManagerTest extends TestCase {
 		], $this->invokePrivate($this->activityManager, 'findDetailsForAttachment', [$attachment]));
 	}
 
-	public function testRetroactivelyPublishCardCreationActivities() {
-		$card = new Card();
-		$card->setId(101);
-		$card->setTitle('Card 1');
-		$card->setStackId(42);
-		$card->setOwner('user1');
-		$card->setCreatedAt(1000);
-
-		$stack = new Stack();
-		$stack->setId(42);
-		$stack->setBoardId(999);
-
-		$boardData = ['id' => 999, 'title' => 'Test Board'];
-		$board = Board::fromRow($boardData);
-
-		$this->cardMapper->expects(self::once())
-			->method('findAllByBoardIdNonDeleted')
+	public function testRetroactivelyPublishBoardActivities(): void {
+		$board = Board::fromRow(['id' => 999, 'title' => 'Test Board', 'owner' => 'boardowner']);
+		$this->boardMapper->expects(self::once())
+			->method('find')
 			->with(999)
-			->willReturn([$card]);
-		$this->cardMapper->expects(self::once())->method('find')->willReturn($card);
-		$this->stackMapper->expects(self::once())->method('find')->willReturn($stack);
-		$this->boardMapper->expects(self::once())->method('find')->willReturn($board);
+			->willReturn($board);
+
+		$qb = $this->createMock(IQueryBuilder::class);
+		$expr = $this->createMock(IExpressionBuilder::class);
+		$cursor = $this->createMock(IResult::class);
+
+		$this->db->expects(self::once())->method('getQueryBuilder')->willReturn($qb);
+		$qb->method('select')->willReturnSelf();
+		$qb->method('from')->willReturnSelf();
+		$qb->method('leftJoin')->willReturnSelf();
+		$qb->method('where')->willReturnSelf();
+		$qb->method('andWhere')->willReturnSelf();
+		$qb->method('orderBy')->willReturnSelf();
+		$qb->method('addOrderBy')->willReturnSelf();
+		$qb->method('expr')->willReturn($expr);
+		$qb->method('createNamedParameter')->willReturnArgument(0);
+		$expr->method('eq')->willReturn('1=1');
+		$expr->method('andX')->willReturn('1=1');
+		$expr->method('orX')->willReturn('1=1');
+
+		$row = [
+			'app' => 'deck',
+			'type' => 'deck',
+			'subject' => ActivityManager::SUBJECT_CARD_CREATE,
+			'subjectparams' => json_encode([
+				'author' => 'user1',
+				'card' => ['id' => 101, 'title' => 'My Card'],
+				'board' => ['id' => 999, 'title' => 'Test Board'],
+			]),
+			'object_type' => ActivityManager::DECK_OBJECT_CARD,
+			'object_id' => 101,
+			'timestamp' => 1000,
+		];
+		$cursor->method('fetch')->willReturnOnConsecutiveCalls($row, false);
+		$cursor->expects(self::once())->method('closeCursor');
+		$qb->expects(self::once())->method('executeQuery')->willReturn($cursor);
 
 		$event = $this->createMock(IEvent::class);
 		$this->manager->expects(self::once())->method('generateEvent')->willReturn($event);
@@ -535,32 +562,33 @@ class ActivityManagerTest extends TestCase {
 		$event->expects(self::once())->method('setAffectedUser')->with('newuser')->willReturn($event);
 		$this->manager->expects(self::once())->method('publish')->with($event);
 
-		$this->activityManager->retroactivelyPublishCardCreationActivities(999, 'newuser');
+		$this->activityManager->retroactivelyPublishBoardActivities(999, 'newuser');
 	}
 
-	public function testRetroactivelyPublishCardCreationActivitiesSkipsCardWithMissingStack() {
-		$card = new Card();
-		$card->setId(101);
-		$card->setTitle('Card 1');
-		$card->setStackId(42);
-		$card->setOwner('user1');
-		$card->setCreatedAt(1000);
-
-		$this->cardMapper->expects(self::once())
-			->method('findAllByBoardIdNonDeleted')
-			->willReturn([$card]);
-		$this->cardMapper->expects(self::once())
+	public function testRetroactivelyPublishBoardActivitiesSkipsIfNewUserIsOwner(): void {
+		$board = Board::fromRow(['id' => 999, 'title' => 'Test Board', 'owner' => 'newuser']);
+		$this->boardMapper->expects(self::once())
 			->method('find')
-			->willReturn($card);
-		$this->stackMapper->expects(self::once())
-			->method('find')
-			->willThrowException(new DoesNotExistException('stack gone'));
+			->with(999)
+			->willReturn($board);
 
-		// no event must be published; the exception must not propagate
+		$this->db->expects(self::never())->method('getQueryBuilder');
 		$this->manager->expects(self::never())->method('generateEvent');
-		$this->manager->expects(self::never())->method('publish');
 
-		$this->activityManager->retroactivelyPublishCardCreationActivities(999, 'newuser');
+		$this->activityManager->retroactivelyPublishBoardActivities(999, 'newuser');
+	}
+
+	public function testRetroactivelyPublishBoardActivitiesHandlesBoardNotFoundException(): void {
+		$this->boardMapper->expects(self::once())
+			->method('find')
+			->with(999)
+			->willThrowException(new DoesNotExistException('board gone'));
+
+		$this->db->expects(self::never())->method('getQueryBuilder');
+		$this->manager->expects(self::never())->method('generateEvent');
+
+		// must not throw
+		$this->activityManager->retroactivelyPublishBoardActivities(999, 'newuser');
 	}
 
 	public function invokePrivate(&$object, $methodName, array $parameters = []) {

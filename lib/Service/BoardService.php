@@ -421,7 +421,7 @@ class BoardService {
 		$this->eventDispatcher->dispatchTyped(new AclCreatedEvent($acl));
 
 		foreach ($this->permissionService->getUsersForAcl($newAcl) as $userId) {
-			$this->activityManager->retroactivelyPublishCardCreationActivities($boardId, $userId);
+			$this->activityManager->retroactivelyPublishBoardActivities($boardId, $userId);
 		}
 		return $newAcl;
 	}
