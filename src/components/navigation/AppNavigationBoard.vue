@@ -72,6 +72,13 @@
 					<NcActionButton v-if="!board.archived && board.acl?.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
 						{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
 					</NcActionButton>
+					<NcActionButton :close-after-click="true" @click="toggleDefaultBoard">
+						<template #icon>
+							<PinOffIcon v-if="isDefaultBoard" :size="20" decorative />
+							<PinIcon v-else :size="20" decorative />
+						</template>
+						{{ isDefaultBoard ? t('deck', 'Remove as default board') : t('deck', 'Set as default board') }}
+					</NcActionButton>
 				</template>
 
 				<!-- Due date reminder settings -->
@@ -172,6 +179,8 @@ import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
 import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import PinIcon from 'vue-material-design-icons/Pin.vue'
+import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
 
 import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
@@ -198,6 +207,8 @@ export default {
 		CloneIcon,
 		CloseIcon,
 		CheckIcon,
+		PinIcon,
+		PinOffIcon,
 		LeaveIcon,
 		BoardCloneModal,
 		BoardExportModal,
@@ -231,6 +242,7 @@ export default {
 			cloneModalOpen: false,
 			exportModalOpen: false,
 			currentUser: getCurrentUser(),
+			defaultBoardId: localStorage.getItem('deck.defaultBoardId'),
 		}
 	},
 	computed: {
@@ -275,6 +287,9 @@ export default {
 			}
 			return ''
 		},
+		isDefaultBoard() {
+			return this.defaultBoardId === String(this.board.id)
+		},
 	},
 	watch: {},
 	mounted() {
@@ -282,6 +297,15 @@ export default {
 		this.popupItem = this.$el
 	},
 	methods: {
+		toggleDefaultBoard() {
+			if (this.isDefaultBoard) {
+				localStorage.removeItem('deck.defaultBoardId')
+				this.defaultBoardId = null
+			} else {
+				localStorage.setItem('deck.defaultBoardId', String(this.board.id))
+				this.defaultBoardId = String(this.board.id)
+			}
+		},
 		unDelete() {
 			clearTimeout(this.undoTimeoutHandle)
 			this.boardApi.unDeleteBoard(this.board)
