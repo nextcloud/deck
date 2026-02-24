@@ -21,7 +21,6 @@ use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
 
@@ -92,15 +91,12 @@ class AssignmentService {
 	}
 
 	/**
-	 * @param $cardId
-	 * @param $userId
-	 * @return bool|null|Entity
 	 * @throws BadRequestException
 	 * @throws NoPermissionException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	public function assignUser($cardId, $userId, int $type = Assignment::TYPE_USER) {
+	public function assignUser(int $cardId, string $userId, int $type = Assignment::TYPE_USER): Assignment {
 		$this->assignmentServiceValidator->check(compact('cardId', 'userId'));
 
 		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP) {
@@ -121,7 +117,7 @@ class AssignmentService {
 		$groups = array_filter($this->aclMapper->findAll($boardId), function (Acl $acl) use ($userId) {
 			return $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $acl->getParticipant() === $userId;
 		});
-		if (!in_array($userId, $boardUsers) && count($groups) !== 1) {
+		if (!in_array($userId, $boardUsers, true) && count($groups) !== 1) {
 			throw new BadRequestException('The user is not part of the board');
 		}
 
@@ -144,16 +140,13 @@ class AssignmentService {
 	}
 
 	/**
-	 * @param $cardId
-	 * @param $userId
-	 * @return Entity
 	 * @throws BadRequestException
 	 * @throws NotFoundException
 	 * @throws NoPermissionException
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 */
-	public function unassignUser($cardId, $userId, $type = 0) {
+	public function unassignUser(int $cardId, string $userId, int $type = 0): Assignment {
 		$this->assignmentServiceValidator->check(compact('cardId', 'userId'));
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 

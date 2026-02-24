@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="avatars">
+	<div v-if="users.length > 0" class="avatars">
 		<div>
 			<NcPopover>
 				<template #trigger="{ attrs }">
@@ -17,7 +17,7 @@
 								:user="user.participant.uid"
 								:display-name="user.participant.displayname"
 								:disable-menu="true"
-								:show-user-status="false"
+								:hide-status="true"
 								:size="32" />
 							<NcAvatar v-if="user.type === 1"
 								:user="user.participant.uid"
@@ -42,6 +42,7 @@
 						class="avatar-list-entry">
 						<NcAvatar :user="user.participant.uid"
 							:display-name="user.participant.displayname"
+							:hide-status="true"
 							:disable-menu="true"
 							:is-no-user="user.type !== 0"
 							:size="32" />
@@ -59,6 +60,7 @@
 					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
 					:disable-menu="true"
+					:hide-status="true"
 					:is-no-user="user.type !== 0"
 					:size="24" />
 				{{ user.participant.displayname }}

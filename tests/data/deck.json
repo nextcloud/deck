@@ -90,8 +90,8 @@
                                 }
                             ],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -123,8 +123,8 @@
                             "createdAt": 1689667572,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -168,8 +168,8 @@
                                     "type": 0
                                 }
                             ],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -240,8 +240,8 @@
                                 }
                             ],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -283,8 +283,8 @@
                                 }
                             ],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -328,8 +328,8 @@
                                     "type": 0
                                 }
                             ],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -366,7 +366,9 @@
             "deletedAt": 0,
             "lastModified": 1689667796,
             "settings": [],
-            "ETag": "b97a2b19e1cafc8f95e3f4db71097214"
+            "ETag": "b97a2b19e1cafc8f95e3f4db71097214",
+            "shareToken": null,
+            "externalId": null
         },
         "189": {
             "id": 189,
@@ -431,7 +433,8 @@
                     "permissionEdit": true,
                     "permissionShare": false,
                     "permissionManage": false,
-                    "owner": false
+                    "owner": false,
+                    "token": null
                 },
                 {
                     "id": 5,
@@ -446,7 +449,8 @@
                     "permissionEdit": false,
                     "permissionShare": true,
                     "permissionManage": false,
-                    "owner": false
+                    "owner": false,
+                    "token": null
                 },
                 {
                     "id": 6,
@@ -461,7 +465,8 @@
                     "permissionEdit": false,
                     "permissionShare": false,
                     "permissionManage": true,
-                    "owner": false
+                    "owner": false,
+                    "token": null
                 }
             ],
             "permissions": {
@@ -493,8 +498,8 @@
                             "createdAt": 1689667483,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -526,8 +531,8 @@
                             "createdAt": 1689667518,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -559,8 +564,8 @@
                             "createdAt": 1689667527,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -592,8 +597,8 @@
                             "createdAt": 1689667537,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -636,8 +641,8 @@
                             "createdAt": 1689667488,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -680,8 +685,8 @@
                             "createdAt": 1689667493,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -713,8 +718,8 @@
                             "createdAt": 1689667502,
                             "labels": [],
                             "assignedUsers": [],
-                            "attachments": null,
-                            "attachmentCount": null,
+                            "attachments": [],
+                            "attachmentCount": 0,
                             "owner": {
                                 "primaryKey": "admin",
                                 "uid": "admin",
@@ -742,7 +747,9 @@
             "deletedAt": 0,
             "lastModified": 1689667537,
             "settings": [],
-            "ETag": "6c315c83f146485e6b2b6fdc24ffa617"
+            "ETag": "6c315c83f146485e6b2b6fdc24ffa617",
+            "shareToken": null,
+            "externalId": null
         }
     }
 }

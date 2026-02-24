@@ -11,6 +11,7 @@ use OCA\Deck\Db\Board;
 class BoardSummary extends Board {
 	private Board $board;
 
+	/** @psalm-suppress ConstructorSignatureMismatch */
 	public function __construct(Board $board) {
 		parent::__construct();
 		$this->board = $board;
@@ -27,7 +28,7 @@ class BoardSummary extends Board {
 		return $this->board->getter($name);
 	}
 
-	public function __call($name, $arguments) {
-		return $this->board->__call($name, $arguments);
+	public function __call($methodName, $args) {
+		return $this->board->__call($methodName, $args);
 	}
 }

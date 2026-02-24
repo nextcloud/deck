@@ -7,9 +7,13 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\Card;
+use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\IRequest;
 
 class CardController extends Controller {
@@ -23,45 +27,26 @@ class CardController extends Controller {
 		parent::__construct($appName, $request);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function read($cardId) {
+	#[NoAdminRequired]
+	public function read(int $cardId): Card {
 		return $this->cardService->find($cardId);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @param $stackId
-	 * @param $order
-	 * @return array
+	 * @return Card[]
 	 */
-	public function reorder($cardId, $stackId, $order) {
-		return $this->cardService->reorder((int)$cardId, (int)$stackId, (int)$order);
+	#[NoAdminRequired]
+	public function reorder(int $cardId, int $stackId, int $order): array {
+		return $this->cardService->reorder($cardId, $stackId, $order);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @param $title
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function rename($cardId, $title) {
+	#[NoAdminRequired]
+	public function rename(int $cardId, string $title): Card {
 		return $this->cardService->rename($cardId, $title);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $title
-	 * @param $stackId
-	 * @param $type
-	 * @param int $order
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function create($title, $stackId, $type = 'plain', $order = 999, string $description = '', $duedate = null, $labels = [], $users = []) {
+	#[NoAdminRequired]
+	public function create(string $title, int $stackId, string $type = 'plain', int $order = 999, string $description = '', $duedate = null, array $labels = [], array $users = []): Card {
 		$card = $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, $duedate);
 
 		foreach ($labels as $label) {
@@ -76,113 +61,71 @@ class CardController extends Controller {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $id
-	 * @param $title
-	 * @param $stackId
-	 * @param $type
-	 * @param $order
-	 * @param $description
 	 * @param $duedate
-	 * @param $deletedAt
-	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt) {
-		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt);
+	#[NoAdminRequired]
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, $archived = null): Card {
+		$done = array_key_exists('done', $this->request->getParams())
+			? new OptionalNullableValue($this->request->getParam('done', null))
+			: null;
+		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, $archived, $done);
 	}
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @param $targetStackId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function clone(int $cardId, ?int $targetStackId = null) {
+
+	#[NoAdminRequired]
+	public function clone(int $cardId, ?int $targetStackId = null): Card {
 		return $this->cardService->cloneCard($cardId, $targetStackId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function delete($cardId) {
+	#[NoAdminRequired]
+	public function delete(int $cardId): Card {
 		return $this->cardService->delete($cardId);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
+	 * @return Card[]
 	 */
-	public function deleted($boardId) {
+	#[NoAdminRequired]
+	public function deleted(int $boardId): array {
 		return $this->cardService->fetchDeleted($boardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
+	#[NoAdminRequired]
 	public function archive($cardId) {
 		return $this->cardService->archive($cardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function unarchive($cardId) {
+	#[NoAdminRequired]
+	public function unarchive(int $cardId): Card {
 		return $this->cardService->unarchive($cardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function done(int $cardId) {
+	#[NoAdminRequired]
+	public function done(int $cardId): Card {
 		return $this->cardService->done($cardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function undone(int $cardId) {
+	#[NoAdminRequired]
+	public function undone(int $cardId): Card {
 		return $this->cardService->undone($cardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @param $labelId
-	 */
-	public function assignLabel($cardId, $labelId) {
+	#[NoAdminRequired]
+	public function assignLabel(int $cardId, int $labelId): void {
 		$this->cardService->assignLabel($cardId, $labelId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $cardId
-	 * @param $labelId
-	 */
-	public function removeLabel($cardId, $labelId) {
+	#[NoAdminRequired]
+	public function removeLabel(int $cardId, int $labelId): void {
 		$this->cardService->removeLabel($cardId, $labelId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
-	public function assignUser($cardId, $userId, $type = 0) {
+	#[NoAdminRequired]
+	public function assignUser(int $cardId, string $userId, int $type = 0): Assignment {
 		return $this->assignmentService->assignUser($cardId, $userId, $type);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
-	public function unassignUser($cardId, $userId, $type = 0) {
+	#[NoAdminRequired]
+	public function unassignUser(int $cardId, string $userId, int $type = 0): Assignment {
 		return $this->assignmentService->unassignUser($cardId, $userId, $type);
 	}
 }

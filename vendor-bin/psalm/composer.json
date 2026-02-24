@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "vimeo/psalm": "^6.4"
+    },
+	"config": {
+		"platform": {
+			"php": "8.1.17"
+		}
+	}
+}

@@ -10,7 +10,6 @@ namespace OCA\Deck\Db;
 use JsonSerializable;
 
 class Assignment extends RelationalEntity implements JsonSerializable {
-	public $id;
 	protected $participant;
 	protected $cardId;
 	protected $type;

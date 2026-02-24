@@ -19,29 +19,25 @@ use OCP\Comments\IComment;
 abstract class ABoardImportService {
 	/** @var string */
 	public static $name = '';
-	/** @var BoardImportService */
-	private $boardImportService;
-	/** @var bool */
-	protected $needValidateData = true;
+	private BoardImportService $boardImportService;
+	protected bool $needValidateData = true;
 	/** @var Stack[] */
-	protected $stacks = [];
+	protected array $stacks = [];
 	/** @var Label[] */
-	protected $labels = [];
+	protected array $labels = [];
 	/** @var Card[] */
-	protected $cards = [];
+	protected array $cards = [];
 	/** @var Acl[] */
-	protected $acls = [];
+	protected array $acls = [];
 	/** @var IComment[][] */
-	protected $comments = [];
+	protected array $comments = [];
 	/** @var Assignment[] */
-	protected $assignments = [];
-	/** @var string[][] */
-	protected $labelCardAssignments = [];
+	protected array $assignments = [];
+	/** @var int[][] */
+	protected array $labelCardAssignments = [];
 
 	/**
 	 * Configure import service
-	 *
-	 * @return void
 	 */
 	abstract public function bootstrap(): void;
 
@@ -68,10 +64,13 @@ abstract class ABoardImportService {
 
 	abstract public function getCardAssignments(): array;
 
+	/**
+	 * @return array<int, array<int, int>>
+	 */
 	abstract public function getCardLabelAssignment(): array;
 
 	/**
-	 * @return IComment[][]|array
+	 * @return array<int, array<string, IComment>>
 	 */
 	abstract public function getComments(): array;
 
@@ -98,16 +97,16 @@ abstract class ABoardImportService {
 		$this->acls[$code] = $acl;
 	}
 
-	public function updateComment(string $cardId, string $commentId, IComment $comment): void {
+	public function updateComment(int $cardId, string $commentId, IComment $comment): void {
 		$this->comments[$cardId][$commentId] = $comment;
 	}
 
-	public function updateCardAssignment(string $cardId, string $assignmentId, Entity $assignment): void {
+	public function updateCardAssignment(int $cardId, int $assignmentId, Entity $assignment): void {
 		$this->assignments[$cardId][$assignmentId] = $assignment;
 	}
 
-	public function updateCardLabelsAssignment(string $cardId, string $assignmentId, string $assignment): void {
-		$this->labelCardAssignments[$cardId][$assignmentId] = $assignment;
+	public function updateCardLabelsAssignment(int $cardId, int $assignmentId, int $labelId): void {
+		$this->labelCardAssignments[$cardId][$assignmentId] = $labelId;
 	}
 
 	public function setImportService(BoardImportService $service): void {

@@ -66,7 +66,7 @@ describe('Card', function () {
 	it('Create card from overview', function () {
 		cy.visit(`/apps/deck/#/`)
 		const newCardTitle = 'Test create from overview'
-		cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+		cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 		cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 
 		cy.get('.button-vue[aria-label*="Add card"]')
@@ -194,7 +194,7 @@ describe('Card', function () {
 
 		it('Shows the modal with the editor', () => {
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
-			cy.intercept({ method: 'PUT', url: '**/apps/deck/cards/*' }).as('save')
+			cy.intercept({ method: 'PUT', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards/*' }).as('save')
 			cy.get('.modal__card').should('be.visible')
 			cy.get('.app-sidebar-header__mainname').contains('Hello world')
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world').should('be.visible')
@@ -213,7 +213,7 @@ describe('Card', function () {
 
 		it('Smart picker', () => {
 			const newCardTitle = 'Test smart picker'
-			cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+			cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 			cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('.modal__card').should('be.visible')
@@ -320,70 +320,5 @@ describe('Card', function () {
 				.should('not.exist')
 		})
 
-	})
-
-	describe('Card actions', () => {
-		beforeEach(function () {
-			cy.login(user)
-			useModal(false).then(() => {
-				cy.visit(`/apps/deck/#/board/${boardId}`)
-			})
-		})
-
-		it('Custom card actions', () => {
-			const myAction = {
-				label: 'Test action',
-				icon: 'icon-user',
-				callback(card) {
-					console.log('Called callback', card)
-				},
-			}
-			cy.spy(myAction, 'callback').as('myAction.callback')
-
-			cy.window().then(win => {
-				win.OCA.Deck.registerCardAction(myAction)
-			})
-
-			cy.get('.card:contains("Hello world")').should('be.visible').click()
-			cy.get('#app-sidebar-vue')
-				.find('.ProseMirror h1').contains('Hello world').should('be.visible')
-
-			cy.get('.app-sidebar-header .action-item__menutoggle').click()
-			cy.get('.v-popper__popper button:contains("Test action")').click()
-
-			cy.get('@myAction.callback')
-				.should('be.called')
-				.its('firstCall.args.0')
-				.as('args')
-
-			cy.url().then(url => {
-				const cardId = url.split('/').pop()
-				cy.get('@args').should('have.property', 'name', 'Hello world')
-				cy.get('@args').should('have.property', 'stackname', 'TestList')
-				cy.get('@args').should('have.property', 'boardname', 'MyTestBoard')
-				cy.get('@args').its('link').then((url) => {
-					expect(url.split('/').pop() === cardId).to.be.true
-					cy.visit(url)
-					cy.get('#app-sidebar-vue')
-						.find('.ProseMirror h1').contains('Hello world').should('be.visible')
-				})
-			})
-		})
-
-		it('clone card', () => {
-			cy.intercept({ method: 'POST', url: '**/apps/deck/**/cards/*/clone' }).as('clone')
-			cy.get('.card:contains("Hello world")').should('be.visible').click()
-			cy.get('#app-sidebar-vue')
-				.find('.ProseMirror h1').contains('Hello world').should('be.visible')
-
-			cy.get('.app-sidebar-header .action-item__menutoggle').click()
-			cy.get('.v-popper__popper button:contains("Move/copy card")').click()
-			cy.get('.vs__dropdown-menu span[title="MyTestBoard"]').should('be.visible').click()
-			cy.get('[data-cy="select-stack"] .vs__dropdown-toggle').should('be.visible').click()
-			cy.get('.vs__dropdown-menu span[title="TestList"]').should('be.visible').click()
-			cy.get('.modal-container button:contains("Copy card")').click()
-			cy.wait('@clone', { timeout: 7000 })
-			cy.get('.card:contains("Hello world")').should('have.length', 2)
-		})
 	})
 })

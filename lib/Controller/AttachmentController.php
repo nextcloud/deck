@@ -7,8 +7,13 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\BadRequestException;
+use OCA\Deck\Db\Attachment;
 use OCA\Deck\Service\AttachmentService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Response;
 use OCP\IRequest;
 
 class AttachmentController extends Controller {
@@ -20,74 +25,66 @@ class AttachmentController extends Controller {
 		parent::__construct($appName, $request);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
-	public function getAll($cardId) {
+	#[NoAdminRequired]
+	public function getAll(int $cardId): array {
 		return $this->attachmentService->findAll($cardId, true);
 	}
 
 	/**
-	 * @param $cardId
-	 * @param $attachmentId
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 * @return \OCP\AppFramework\Http\Response
 	 * @throws \OCA\Deck\NotFoundException
 	 */
-	public function display($cardId, $attachmentId) {
-		if (!str_contains($attachmentId, ':')) {
-			$type = 'deck_file';
-		} else {
-			[$type, $attachmentId] = explode(':', $attachmentId);
-		}
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function display(int $cardId, string $attachmentId): Response {
+		['type' => $type, 'attachmentId' => $attachmentId] = $this->extractTypeAndAttachmentId($attachmentId);
 		return $this->attachmentService->display($cardId, $attachmentId, $type);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
-	public function create($cardId) {
+	#[NoAdminRequired]
+	public function create(int $cardId): Attachment {
 		return $this->attachmentService->create(
 			$cardId,
 			$this->request->getParam('type'),
-			$this->request->getParam('data')
+			$this->request->getParam('data') ?? '',
 		);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
-	public function update($cardId, $attachmentId) {
-		if (!str_contains($attachmentId, ':')) {
-			$type = 'deck_file';
-		} else {
-			[$type, $attachmentId] = explode(':', $attachmentId);
-		}
-		return $this->attachmentService->update($cardId, $attachmentId, $this->request->getParam('data'), $type);
+	#[NoAdminRequired]
+	public function update(int $cardId, string $attachmentId): Attachment {
+		['type' => $type, 'attachmentId' => $attachmentId] = $this->extractTypeAndAttachmentId($attachmentId);
+		return $this->attachmentService->update($cardId, $attachmentId, $this->request->getParam('data') ?? '', $type);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
-	public function delete($cardId, $attachmentId) {
-		if (!str_contains($attachmentId, ':')) {
-			$type = 'deck_file';
-		} else {
-			[$type, $attachmentId] = explode(':', $attachmentId);
-		}
+	#[NoAdminRequired]
+	public function delete(int $cardId, string $attachmentId): Attachment {
+		['type' => $type, 'attachmentId' => $attachmentId] = $this->extractTypeAndAttachmentId($attachmentId);
 		return $this->attachmentService->delete($cardId, $attachmentId, $type);
 	}
 
+	#[NoAdminRequired]
+	public function restore(int $cardId, string $attachmentId): Attachment {
+		['type' => $type, 'attachmentId' => $attachmentId] = $this->extractTypeAndAttachmentId($attachmentId);
+		return $this->attachmentService->restore($cardId, $attachmentId, $type);
+	}
+
 	/**
-	 * @NoAdminRequired
+	 * @return array{type: string, attachmentId: int}
+	 * @throws BadRequestException
 	 */
-	public function restore($cardId, $attachmentId) {
+	private function extractTypeAndAttachmentId(string $attachmentId): array {
 		if (!str_contains($attachmentId, ':')) {
 			$type = 'deck_file';
 		} else {
-			[$type, $attachmentId] = explode(':', $attachmentId);
+			[$type, $attachmentId] = [...explode(':', $attachmentId), '', ''];
 		}
-		return $this->attachmentService->restore($cardId, $attachmentId, $type);
+
+		if ($type === '' || !is_numeric($attachmentId)) {
+			throw new BadRequestException('Invalid attachment id');
+		}
+
+		return [
+			'type' => $type,
+			'attachmentId' => (int)$attachmentId,
+		];
 	}
 }

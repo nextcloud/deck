@@ -12,6 +12,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Federation\ICloudIdManager;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -32,6 +33,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		private IUserManager $userManager,
 		private IGroupManager $groupManager,
 		private CirclesService $circlesService,
+		private ICloudIdManager $cloudIdManager,
 		private LoggerInterface $logger,
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
@@ -126,6 +128,18 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		}, $result->fetchAll(\PDO::FETCH_COLUMN));
 		$result->closeCursor();
 		return array_unique(array_merge($ownerBoards, $sharedBoards));
+	}
+	/**
+	 * @param int $externalId
+	 * @return Board[]
+	 */
+	public function findByExternalId(int $externalId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('external_id', $qb->createNamedParameter($externalId, IQueryBuilder::PARAM_INT)))
+			->orderBy('id');
+		return $this->findEntities($qb);
 	}
 
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
@@ -469,16 +483,16 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return parent::delete($entity);
 	}
 
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		$board = $this->find($id);
 		return ($board->getOwner() === $userId);
 	}
 
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		return $id;
 	}
 
-	public function mapAcl(Acl &$acl) {
+	public function mapAcl(Acl &$acl): void {
 		$acl->resolveRelation('participant', function ($participant) use (&$acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 				if ($this->userManager->userExists($acl->getParticipant())) {
@@ -509,6 +523,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 				}
 				return null;
 			}
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				return new FederatedUser($this->cloudIdManager->resolveCloudId($acl->getParticipant()));
+			}
 			$this->logger->warning('Unknown permission type for mapping acl ' . $acl->getId());
 			return null;
 		});
@@ -519,8 +536,14 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 */
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
-		$board->resolveRelation('owner', function ($owner) use (&$userManager) {
-			if ($this->userManager->userExists($owner)) {
+		$cloudIdManager = $this->cloudIdManager;
+		$externalId = $board->getExternalId();
+		$board->resolveRelation('owner', function ($owner) use (&$userManager, &$cloudIdManager, $externalId) {
+			if ($externalId !== null) {
+				$cloudId = $cloudIdManager->resolveCloudId($owner);
+				return new FederatedUser($cloudId);
+			}
+			if ($userManager->userExists($owner)) {
 				return new User($owner, $userManager);
 			}
 			return null;

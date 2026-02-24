@@ -12,6 +12,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Exceptions\FederationDisabledException;
 use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
@@ -48,7 +49,8 @@ class ConfigService {
 	}
 
 	public function getAll(): array {
-		if ($this->getUserId() === null) {
+		$userId = $this->getUserId();
+		if ($userId === null) {
 			return [];
 		}
 
@@ -57,8 +59,9 @@ class ConfigService {
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
 			'cardIdBadge' => $this->isCardIdBadgeEnabled()
 		];
-		if ($this->groupManager->isAdmin($this->getUserId())) {
+		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
+			$data['federationEnabled'] = $this->get('federationEnabled');
 		}
 		return $data;
 	}
@@ -75,6 +78,8 @@ class ConfigService {
 					throw new NoPermissionException('You must be admin to get the group limit');
 				}
 				return $this->getGroupLimit();
+			case 'federationEnabled':
+				return $this->config->getAppValue(Application::APP_ID, 'federationEnabled', 'no') === 'yes';
 			case 'calendar':
 				if ($this->getUserId() === null) {
 					return false;
@@ -95,44 +100,61 @@ class ConfigService {
 	}
 
 	public function isCalendarEnabled(?int $boardId = null): bool {
-		if ($this->getUserId() === null) {
+		$userId = $this->getUserId();
+		if ($userId === null) {
 			return false;
 		}
 
 		$appConfigState = $this->config->getAppValue(Application::APP_ID, 'calendar', 'yes') === 'yes';
-		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', $appConfigState);
+		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'calendar', $appConfigState);
 		if ($boardId === null) {
 			return $defaultState;
 		}
 
-		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
+		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
 	}
 
 	public function isCardDetailsInModal(?int $boardId = null): bool {
-		if ($this->getUserId() === null) {
+		$userId = $this->getUserId();
+		if ($userId === null) {
 			return false;
 		}
 
-		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
+		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardDetailsInModal', true);
 		if ($boardId === null) {
 			return $defaultState;
 		}
 
-		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'board:' . $boardId . ':cardDetailsInModal', $defaultState);
+		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'board:' . $boardId . ':cardDetailsInModal', $defaultState);
 	}
 
 	public function isCardIdBadgeEnabled(): bool {
-		if ($this->getUserId() === null) {
+		$userId = $this->getUserId();
+		if ($userId === null) {
 			return false;
 		}
 		$appConfigState = $this->config->getAppValue(Application::APP_ID, 'cardIdBadge', 'yes') === 'no';
-		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', $appConfigState);
+		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $appConfigState);
 
-		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', $defaultState);
+		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
+	}
+
+	public function ensureFederationEnabled() {
+		if (!$this->get('federationEnabled')) {
+			throw new FederationDisabledException();
+		}
+		// @TODO fine tune these config values to respect incoming and outgoing federation separately
+		if ($this->config->getAppValue('files_sharing', 'outgoing_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
+		if ($this->config->getAppValue('files_sharing', 'incoming_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
 	}
 
 	public function set($key, $value) {
-		if ($this->getUserId() === null) {
+		$userId = $this->getUserId();
+		if ($userId === null) {
 			throw new NoPermissionException('Must be logged in to set user config');
 		}
 
@@ -140,21 +162,28 @@ class ConfigService {
 		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
 			case 'groupLimit':
-				if (!$this->groupManager->isAdmin($this->getUserId())) {
+				if (!$this->groupManager->isAdmin($userId)) {
 					throw new NoPermissionException('You must be admin to set the group limit');
 				}
 				$result = $this->setGroupLimit($value);
 				break;
+			case 'federationEnabled':
+				if (!$this->groupManager->isAdmin($userId)) {
+					throw new NoPermissionException('You must be admin to set the federation enabled setting');
+				}
+				$this->config->setAppValue(Application::APP_ID, 'federationEnabled', (string)$value);
+				$result = $value;
+				break;
 			case 'calendar':
-				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'calendar', (string)$value);
+				$this->config->setUserValue($userId, Application::APP_ID, 'calendar', (string)$value);
 				$result = $value;
 				break;
 			case 'cardDetailsInModal':
-				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', (string)$value);
+				$this->config->setUserValue($userId, Application::APP_ID, 'cardDetailsInModal', (string)$value);
 				$result = $value;
 				break;
 			case 'cardIdBadge':
-				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', (string)$value);
+				$this->config->setUserValue($userId, Application::APP_ID, 'cardIdBadge', (string)$value);
 				$result = $value;
 				break;
 			case 'board':
@@ -162,7 +191,7 @@ class ConfigService {
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}
-				$this->config->setUserValue($this->getUserId(), Application::APP_ID, $key, (string)$value);
+				$this->config->setUserValue($userId, Application::APP_ID, $key, (string)$value);
 				$result = $value;
 		}
 		return $result;

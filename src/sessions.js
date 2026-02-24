@@ -5,7 +5,6 @@
 
 import { listen } from '@nextcloud/notify_push'
 import { sessionApi } from './services/SessionApi.js'
-import store from './store/main.js'
 import axios from '@nextcloud/axios'
 
 const SESSION_INTERVAL = 90 // in seconds
@@ -13,6 +12,8 @@ const SESSION_INTERVAL = 90 // in seconds
 let hasPush = false
 
 let syncRunning = false
+
+let store = null
 
 /**
  * used to verify, whether an event is originated by ourselves
@@ -28,28 +29,35 @@ function isOurSessionToken(token) {
 	}
 }
 
-hasPush = listen('deck_board_update', (name, body) => {
-	// ignore update events which we have triggered ourselves
-	if (isOurSessionToken(body._causingSessionToken)) return
+/**
+ *
+ * @param storeInstance
+ */
+export function initSessions(storeInstance) {
+	store = storeInstance
+	hasPush = listen('deck_board_update', (name, body) => {
+		// ignore update events which we have triggered ourselves
+		if (isOurSessionToken(body._causingSessionToken)) return
 
-	// only handle update events for the currently open board
-	const currentBoardId = store.state.currentBoard?.id
-	if (body.id !== currentBoardId) return
+		// only handle update events for the currently open board
+		const currentBoardId = store.state.currentBoard?.id
+		if (body.id !== currentBoardId) return
 
-	store.dispatch('refreshBoard', currentBoardId)
-})
+		store.dispatch('refreshBoard', currentBoardId)
+	})
 
-listen('deck_card_update', (name, body) => {
+	listen('deck_card_update', (name, body) => {
 
-	// ignore update events which we have triggered ourselves
-	if (isOurSessionToken(body._causingSessionToken)) return
+		// ignore update events which we have triggered ourselves
+		if (isOurSessionToken(body._causingSessionToken)) return
 
-	// only handle update events for the currently open board
-	const currentBoardId = store.state.currentBoard?.id
-	if (body.boardId !== currentBoardId) return
+		// only handle update events for the currently open board
+		const currentBoardId = store.state.currentBoard?.id
+		if (body.boardId !== currentBoardId) return
 
-	store.dispatch('loadStacks', currentBoardId)
-})
+		store.dispatch('loadStacks', currentBoardId)
+	})
+}
 
 /**
  * is the notify_push app active and can

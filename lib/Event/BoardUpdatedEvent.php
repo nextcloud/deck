@@ -14,7 +14,7 @@ use OCP\EventDispatcher\Event;
 
 class BoardUpdatedEvent extends Event {
 	private $boardId;
-	
+
 	public function __construct(int $boardId) {
 		parent::__construct();
 

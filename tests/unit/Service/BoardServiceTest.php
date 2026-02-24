@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -24,7 +26,11 @@
 
 namespace OCA\Deck\Service;
 
+use OC\Federation\CloudFederationFactory;
+use OC\Federation\CloudFederationProviderManager;
+use OC\Federation\CloudIdManager;
 use OC\L10N\L10N;
+use OC\Security\SecureRandom;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -38,6 +44,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Db\User;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\NoPermissionException;
@@ -48,6 +55,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IURLGenerator;
 use OCP\IUser;
+use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -93,6 +101,9 @@ class BoardServiceTest extends TestCase {
 	/** @var SessionMapper */
 	private $sessionMapper;
 
+	/** @var IUserManager */
+	private $userManager;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
@@ -113,6 +124,7 @@ class BoardServiceTest extends TestCase {
 		$this->connection = $this->createMock(IDBConnection::class);
 		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 		$this->sessionMapper = $this->createMock(SessionMapper::class);
+		$this->userManager = $this->createMock(IUserManager::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -127,12 +139,18 @@ class BoardServiceTest extends TestCase {
 			$this->notificationHelper,
 			$this->assignedUsersMapper,
 			$this->activityManager,
+			$this->createMock(CloudFederationProviderManager::class),
+			$this->createMock(CloudIdManager::class),
+			$this->createMock(CloudFederationFactory::class),
 			$this->eventDispatcher,
 			$this->changeHelper,
 			$this->urlGenerator,
 			$this->connection,
 			$this->boardServiceValidator,
 			$this->sessionMapper,
+			$this->userManager,
+			$this->createMock(SecureRandom::class),
+			$this->createMock(ConfigService::class),
 			$this->userId
 		);
 
@@ -240,6 +258,7 @@ class BoardServiceTest extends TestCase {
 
 	public function testDelete() {
 		$board = new Board();
+		$board->setId(42);
 		$board->setOwner('admin');
 		$board->setDeletedAt(0);
 		$this->boardMapper->expects($this->once())
@@ -252,13 +271,16 @@ class BoardServiceTest extends TestCase {
 			]);
 		$this->sessionMapper->expects($this->once())
 			->method('findAllActive')
-			->with(null)
+			->with(42)
 			->willReturn([]);
 		$boardDeleted = clone $board;
 		$boardDeleted->setDeletedAt(1);
 		$this->boardMapper->expects($this->once())
 			->method('update')
 			->willReturn($boardDeleted);
+		$this->aclMapper->expects($this->once())
+			->method('findAll')
+			->willReturn([]);
 		$this->assertEquals($boardDeleted, $this->service->delete(123));
 	}
 
@@ -267,7 +289,7 @@ class BoardServiceTest extends TestCase {
 		$user->method('getUID')->willReturn('admin');
 		$acl = new Acl();
 		$acl->setBoardId(123);
-		$acl->setType('user');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
 		$acl->setParticipant('admin');
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
@@ -287,7 +309,7 @@ class BoardServiceTest extends TestCase {
 				'admin' => 'admin',
 			]);
 		$this->assertEquals($acl, $this->service->addAcl(
-			123, 'user', 'admin', true, true, true
+			123, Acl::PERMISSION_TYPE_USER, 'admin', true, true, true
 		));
 	}
 
@@ -323,7 +345,7 @@ class BoardServiceTest extends TestCase {
 	public function testAddAclExtendPermission($currentUserAcl, $providedAcl, $resultingAcl) {
 		$existingAcl = new Acl();
 		$existingAcl->setBoardId(123);
-		$existingAcl->setType('user');
+		$existingAcl->setType(Acl::PERMISSION_TYPE_USER);
 		$existingAcl->setParticipant('admin');
 		$existingAcl->setPermissionEdit($currentUserAcl[0]);
 		$existingAcl->setPermissionShare($currentUserAcl[1]);
@@ -391,14 +413,14 @@ class BoardServiceTest extends TestCase {
 			->method('dispatchTyped')
 			->with(new AclCreatedEvent($acl));
 		$this->assertEquals($expected, $this->service->addAcl(
-			123, 'user', 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
+			123, Acl::PERMISSION_TYPE_USER, 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
 		));
 	}
 
 	public function testUpdateAcl() {
 		$acl = new Acl();
 		$acl->setBoardId(123);
-		$acl->setType('user');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
 		$acl->setParticipant('admin');
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);

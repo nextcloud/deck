@@ -9,11 +9,14 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -23,6 +26,7 @@ class BoardController extends ApiController {
 		$appName,
 		IRequest $request,
 		private BoardService $boardService,
+		private ExternalBoardService $externalBoardService,
 		private PermissionService $permissionService,
 		private BoardImportService $boardImportService,
 		private IL10N $l10n,
@@ -31,68 +35,43 @@ class BoardController extends ApiController {
 		parent::__construct($appName, $request);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function index() {
 		return $this->boardService->findAll();
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function read(int $boardId) {
+	#[NoAdminRequired]
+	public function read(int $boardId): Board {
 		return $this->boardService->find($boardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $title
-	 * @param $color
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function create($title, $color) {
+	#[NoAdminRequired]
+	public function create(string $title, string $color): Board {
 		return $this->boardService->create($title, $this->userId, $color);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $id
-	 * @param $title
-	 * @param $color
-	 * @param $archived
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function update($id, $title, $color, $archived) {
+	#[NoAdminRequired]
+	public function update(int $id, string $title, string $color, bool $archived): Board {
 		return $this->boardService->update($id, $title, $color, $archived);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function delete($boardId) {
+	#[NoAdminRequired]
+	public function delete(int $boardId): Board {
 		return $this->boardService->delete($boardId);
 	}
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
-	 */
-	public function deleteUndo($boardId) {
+
+	#[NoAdminRequired]
+	public function deleteUndo(int $boardId): Board {
 		return $this->boardService->deleteUndo($boardId);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return array|bool
-	 * @internal param $userId
-	 */
-	public function getUserPermissions($boardId) {
+	#[NoAdminRequired]
+	public function leave(int $boardId) {
+		return $this->boardService->leave($boardId);
+	}
+
+	#[NoAdminRequired]
+	public function getUserPermissions(int $boardId): array {
 		$permissions = $this->permissionService->getPermissions($boardId);
 		return [
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
@@ -103,16 +82,10 @@ class BoardController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @param $type
 	 * @param $participant
-	 * @param $permissionEdit
-	 * @param $permissionShare
-	 * @param $permissionManage
-	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage) {
+	#[NoAdminRequired]
+	public function addAcl(int $boardId, int $type, $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): Acl {
 		return $this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage);
 	}
 
@@ -172,6 +145,10 @@ class BoardController extends ApiController {
 	 * @NoAdminRequired
 	 */
 	public function import(): DataResponse {
+		if (!$this->permissionService->canCreate()) {
+			throw new NoPermissionException('Creating boards has been disabled for your account.');
+		}
+
 		$file = $this->request->getUploadedFile('file');
 		$error = null;
 		$phpFileUploadErrors = [
@@ -191,7 +168,7 @@ class BoardController extends ApiController {
 		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
 			$error = $phpFileUploadErrors[$file['error']];
 		}
-		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !in_array($file['type'], ['application/json', 'text/plain'])) {
+		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !in_array($file['type'], ['application/json', 'text/plain'], true)) {
 			$error = $this->l10n->t('Invalid file type. Only JSON files are allowed.');
 		}
 		if ($error !== null) {

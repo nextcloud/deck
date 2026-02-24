@@ -77,7 +77,7 @@ class Notifier implements INotifier {
 	 */
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		$l = $this->l10nFactory->get('deck', $languageCode);
-		if ($notification->getApp() !== 'deck') {
+		if ($notification->getApp() !== 'deck' || $notification->getObjectType() === 'activity_notification') {
 			throw new UnknownNotificationException();
 		}
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('deck', 'deck-dark.svg')));
@@ -136,7 +136,7 @@ class Notifier implements INotifier {
 				}
 
 				$notification->setParsedSubject(
-					$l->t('The card "%s" on "%s" has reached its due date.', $params)
+					$l->t('The card "%1$s" on "%2$s" has reached its due date.', $params)
 				);
 				$notification->setRichSubject(
 					$l->t('The card {deck-card} on {deck-board} has reached its due date.'),
@@ -228,6 +228,17 @@ class Notifier implements INotifier {
 							'name' => $dn ?? '',
 						]
 					]
+				);
+				$notification->setLink($this->getBoardUrl($boardId));
+				break;
+			case 'remote-board-shared':
+				$boardId = (int)$notification->getObjectId();
+				if (!$boardId) {
+					throw new AlreadyProcessedException();
+				}
+				$federationOwnerDisplayName = $params[1];
+				$notification->setParsedSubject(
+					$l->t('The remote board %s has been shared with you by %s', [$params[0], $federationOwnerDisplayName])
 				);
 				$notification->setLink($this->getBoardUrl($boardId));
 				break;

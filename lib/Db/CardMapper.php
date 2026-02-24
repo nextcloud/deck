@@ -86,16 +86,15 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$updatedFields = $entity->getUpdatedFields();
 		if (isset($updatedFields['duedate']) && $updatedFields['duedate']) {
 			try {
-				/** @var Card $existing */
 				$existing = $this->find($entity->getId());
-				if ($existing && $entity->getDuedate() !== $existing->getDuedate()) {
+				if ($entity->getDueDate() !== $existing->getDueDate()) {
 					$entity->setNotified(false);
 				}
 				// remove pending notifications
 				$notification = $this->notificationManager->createNotification();
 				$notification
 					->setApp('deck')
-					->setObject('card', $entity->getId());
+					->setObject('card', (string)$entity->getId());
 				$this->notificationManager->markProcessed($notification);
 			} catch (Exception $e) {
 			}
@@ -131,7 +130,11 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $card;
 	}
 
-	public function findAll($stackId, $limit = null, $offset = null, $since = -1) {
+	/**
+	 * @return Card[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAll($stackId, ?int $limit = null, int $offset = 0, int $since = -1) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -144,6 +147,32 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->orderBy('order')
 			->addOrderBy('id');
 		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @param int[] $stackIds
+	 * @return array<int, null|Card[]>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAllForStacks(array $stackIds, ?int $limit = null, int $offset = 0, int $since = -1): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards')
+			->where($qb->expr()->in('stack_id', $qb->createNamedParameter($stackIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)))
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->orderBy('order')
+			->addOrderBy('id');
+
+		$rawCards = $this->findEntities($qb);
+		$cards = array_fill_keys($stackIds, null);
+		foreach ($rawCards as $card) {
+			$cards[$card->getStackId()][] = $card;
+		}
+		return $cards;
 	}
 
 	public function queryCardsByBoard(int $boardId): IQueryBuilder {
@@ -164,7 +193,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $qb;
 	}
 
-	public function findToDelete($timeLimit, $limit = null) {
+	/**
+	 * @return Card[]
+	 */
+	public function findToDelete(int $timeLimit, ?int $limit = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'owner', 'archived', 'deleted_at', 'last_modified')
 			->from('deck_cards')
@@ -175,7 +207,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findDeleted($boardId, $limit = null, $offset = null) {
+	/**
+	 * @return Card[]
+	 */
+	public function findDeleted(int $boardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->queryCardsByBoard($boardId);
 		$qb->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
@@ -185,7 +220,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findCalendarEntries($boardId, $limit = null, $offset = null) {
+	/**
+	 * @return Card[]
+	 */
+	public function findCalendarEntries(int $boardId, ?int $limit = null, $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
@@ -240,7 +278,11 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAllWithDue(array $boardIds) {
+	/**
+	 * @param int[] $boardIds
+	 * @return Card[]
+	 */
+	public function findAllWithDue(array $boardIds): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
@@ -257,7 +299,11 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findToMeOrNotAssignedCards(array $boardIds, string $username) {
+	/**
+	 * @param int[] $boardIds
+	 * @return Card[]
+	 */
+	public function findToMeOrNotAssignedCards(array $boardIds, string $username): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
@@ -279,7 +325,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findOverdue() {
+	/**
+	 * @return Card[]
+	 */
+	public function findOverdue(): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'duedate', 'notified')
 			->from('deck_cards')
@@ -291,6 +340,9 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * @return Card[]
+	 */
 	public function findUnexposedDescriptionChances() {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'duedate', 'notified', 'description_prev', 'last_editor', 'description')
@@ -299,6 +351,9 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * @return Card[]
+	 */
 	public function search(array $boardIds, SearchQuery $query, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->queryCardsByBoards($boardIds);
 		$this->extendQueryByFilter($qb, $query);
@@ -333,7 +388,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			$qb->andWhere($qb->expr()->lt('c.last_modified', $qb->createNamedParameter($offset, IQueryBuilder::PARAM_INT)));
 		}
 
-		$result = $qb->execute();
+		$result = $qb->executeQuery();
 		$entities = [];
 		while ($row = $result->fetch()) {
 			$entities[] = Card::fromRow($row);
@@ -376,7 +431,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			$qb->andWhere($qb->expr()->lt('comments.id', $qb->createNamedParameter($offset, IQueryBuilder::PARAM_INT)));
 		}
 
-		$result = $qb->execute();
+		$result = $qb->executeQuery();
 		$entities = $result->fetchAll();
 		$result->closeCursor();
 		return $entities;
@@ -472,7 +527,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 				});
 				$groups = $this->groupManager->search($assignment->getValue());
 				foreach ($searchUsers as $user) {
-					$groups = array_merge($groups, $this->groupManager->getUserIdGroups($user->getUID()));
+					$groups = array_merge($groups, $this->groupManager->getUserGroups($user));
 				}
 
 				$assignmentSearches = [];
@@ -525,7 +580,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		if ($offset !== null) {
 			$qb->setFirstResult($offset);
 		}
-		$result = $qb->execute();
+		$result = $qb->executeQuery();
 		$all = $result->fetchAll();
 		$result->closeCursor();
 		return $all;
@@ -537,32 +592,32 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return parent::delete($entity);
 	}
 
-	public function deleteByStack($stackId) {
+	public function deleteByStack($stackId): void {
 		$cards = $this->findAllByStack($stackId);
 		foreach ($cards as $card) {
 			$this->delete($card);
 		}
 	}
 
-	public function assignLabel($card, $label) {
+	public function assignLabel(int $card, int $label): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->insert('deck_assigned_labels')
 			->values([
 				'label_id' => $qb->createNamedParameter($label, IQueryBuilder::PARAM_INT),
 				'card_id' => $qb->createNamedParameter($card, IQueryBuilder::PARAM_INT),
 			]);
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
-	public function removeLabel($card, $label) {
+	public function removeLabel(int $card, int $label): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete('deck_assigned_labels')
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($card, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('label_id', $qb->createNamedParameter($label, IQueryBuilder::PARAM_INT)));
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.id')
 			->from($this->getTableName(), 'c')
@@ -574,7 +629,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		$result = $this->cache->get('findBoardId:' . $id);
 		if ($result === null) {
 			try {
@@ -604,13 +659,11 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function transferOwnership(string $ownerId, string $newOwnerId, ?int $boardId = null): void {
-		$params = [
-			'owner' => $ownerId,
-			'newOwner' => $newOwnerId
-		];
-		$sql = "UPDATE `*PREFIX*{$this->tableName}`  SET `owner` = :newOwner WHERE `owner` = :owner";
-		$stmt = $this->db->executeQuery($sql, $params);
-		$stmt->closeCursor();
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->getTableName())
+			->set('owner', $qb->createNamedParameter($newOwnerId, IQueryBuilder::PARAM_STR))
+			->where('owner', $qb->createNamedParameter($ownerId, IQueryBuilder::PARAM_STR))
+			->executeStatement();
 	}
 
 	public function remapCardOwner(int $boardId, string $userId, string $newUserId): void {
