@@ -182,7 +182,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		string $target,
 		int $permissions,
 		string $token,
-		?\DateTime $expirationDate
+		?\DateTime $expirationDate,
+		?string $attributes = null
 	): int {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->insert('share')
@@ -1075,22 +1076,22 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	}
 
 	protected function updateShareAttributes(IShare $share, ?string $data): IShare {
-		if ($data !== null && $data !== '') {
-			$attributes = $share->getAttributes() ?? $share->newAttributes();
-			$compressedAttributes = \json_decode($data, true);
-			if ($compressedAttributes === false || $compressedAttributes === null) {
-				return $share;
-			}
-			foreach ($compressedAttributes as $compressedAttribute) {
-				$attributes->setAttribute(
-					$compressedAttribute[0],
-					$compressedAttribute[1],
-					$compressedAttribute[2]
-				);
-			}
-			$share->setAttributes($attributes);
+		if ($data === null || $data === '') {
+			return $share;
 		}
-
+		$attributes = $share->getAttributes() ?? $share->newAttributes();
+		$compressedAttributes = \json_decode($data, true);
+		if ($compressedAttributes === false || $compressedAttributes === null) {
+			return $share;
+		}
+		foreach ($compressedAttributes as $compressedAttribute) {
+			$attributes->setAttribute(
+				$compressedAttribute[0],
+				$compressedAttribute[1],
+				$compressedAttribute[2]
+			);
+		}
+		$share->setAttributes($attributes);
 		return $share;
 	}
 
