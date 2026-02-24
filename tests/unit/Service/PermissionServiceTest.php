@@ -348,9 +348,8 @@ class PermissionServiceTest extends \Test\TestCase {
 			->method('__call')
 			->with('getOwner', [])
 			->willReturn('user1');
-		$this->aclMapper->expects($this->once())
-			->method('findAll')
-			->with(123)
+		$board->expects($this->any())
+			->method('getAcl')
 			->willReturn([$aclUser, $aclGroup]);
 		$this->boardMapper->expects($this->once())
 			->method('find')

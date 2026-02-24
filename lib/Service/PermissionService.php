@@ -272,7 +272,7 @@ class PermissionService {
 		}
 
 		try {
-			$board = $this->boardMapper->find($boardId);
+			$board = $this->getBoard($boardId);
 		} catch (DoesNotExistException $e) {
 			return [];
 		} catch (MultipleObjectsReturnedException $e) {
@@ -285,7 +285,7 @@ class PermissionService {
 		} else {
 			$users[(string)$board->getOwner()] = new User($board->getOwner(), $this->userManager);
 		}
-		$acls = $this->aclMapper->findAll($boardId);
+		$acls = $board->getAcl();
 		/** @var Acl $acl */
 		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
