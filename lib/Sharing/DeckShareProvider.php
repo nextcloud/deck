@@ -289,55 +289,62 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @inheritDoc
 	 */
 	public function update(IShare $share) {
-		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->update('share')
-			->where($qb->expr()->eq('id', $qb->createNamedParameter($share->getId())))
-			->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
-			->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
-			->set('permissions', $qb->createNamedParameter($share->getPermissions()))
-			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
+		$this->dbConnection->beginTransaction();
+		try {
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share')
+				->where($qb->expr()->eq('id', $qb->createNamedParameter($share->getId())))
+				->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
+				->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
+				->set('permissions', $qb->createNamedParameter($share->getPermissions()))
+				->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
 
-		$shareAttributes = $this->formatShareAttributes($share->getAttributes());
-		if ($shareAttributes !== null) {
-			$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+			$shareAttributes = $this->formatShareAttributes($share->getAttributes());
+			if ($shareAttributes !== null) {
+				$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+			}
+
+			$qb->executeStatement();
+
+			/*
+			* Update all user defined group shares
+			*/
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share')
+				->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
+				->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
+				->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
+				->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
+
+			if ($shareAttributes !== null) {
+				$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+			}
+
+			$qb->executeStatement();
+
+			/*
+			* Now update the permissions for all children that have not set it to 0
+			*/
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share')
+				->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
+				->andWhere($qb->expr()->neq('permissions', $qb->createNamedParameter(0)))
+				->set('permissions', $qb->createNamedParameter($share->getPermissions()));
+
+			if ($shareAttributes !== null) {
+				$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+			}
+
+			$qb->executeStatement();
+		} catch (\Exception $e) {
+			$this->dbConnection->rollBack();
+			throw $e;
 		}
-
-		$qb->executeStatement();
-
-		/*
-		 * Update all user defined group shares
-		 */
-		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->update('share')
-			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
-			->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
-			->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
-			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
-
-		if ($shareAttributes !== null) {
-			$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
-		}
-
-		$qb->executeStatement();
-
-		/*
-		 * Now update the permissions for all children that have not set it to 0
-		 */
-		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->update('share')
-			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
-			->andWhere($qb->expr()->neq('permissions', $qb->createNamedParameter(0)))
-			->set('permissions', $qb->createNamedParameter($share->getPermissions()));
-
-		if ($shareAttributes !== null) {
-			$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
-		}
-
-		$qb->executeStatement();
+		$this->dbConnection->commit();
 
 		return $share;
 	}
@@ -1131,22 +1138,22 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	}
 
 	protected function updateShareAttributes(IShare $share, ?string $data): IShare {
-		if ($data !== null && $data !== '') {
-			$attributes = $share->getAttributes() ?? $share->newAttributes();
-			$compressedAttributes = \json_decode($data, true);
-			if ($compressedAttributes === false || $compressedAttributes === null) {
-				return $share;
-			}
-			foreach ($compressedAttributes as $compressedAttribute) {
-				$attributes->setAttribute(
-					$compressedAttribute[0],
-					$compressedAttribute[1],
-					$compressedAttribute[2]
-				);
-			}
-			$share->setAttributes($attributes);
+		if ($data === null || $data === '') {
+			return $share;
 		}
-
+		$attributes = $share->getAttributes() ?? $share->newAttributes();
+		$compressedAttributes = \json_decode($data, true);
+		if ($compressedAttributes === false || $compressedAttributes === null) {
+			return $share;
+		}
+		foreach ($compressedAttributes as $compressedAttribute) {
+			$attributes->setAttribute(
+				$compressedAttribute[0],
+				$compressedAttribute[1],
+				$compressedAttribute[2]
+			);
+		}
+		$share->setAttributes($attributes);
 		return $share;
 	}
 
