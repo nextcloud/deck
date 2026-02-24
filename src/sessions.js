@@ -73,7 +73,7 @@ export function isNotifyPushEnabled() {
  */
 export function createSession(boardId) {
 
-	if (!isNotifyPushEnabled()) {
+	if (!boardId || !isNotifyPushEnabled()) {
 		// return a dummy object
 		return {
 			async close() {},
@@ -107,7 +107,7 @@ export function createSession(boardId) {
 			syncRunning = true
 			await sessionApi.syncSession(boardId, await tokenPromise)
 		} catch (err) {
-			if (err.response.status === 404) {
+			if (err.response?.status === 404) {
 				// session probably expired, let's
 				// create a fresh session
 				create()
