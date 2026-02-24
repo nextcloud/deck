@@ -180,6 +180,7 @@ OC.L10N.register(
     "Failed to transfer the board to {user}" : "Неуспешно прехвърляне на таблото на {user}",
     "Board owner" : "Собственик на табло",
     "(Group)" : "(Група)",
+    "(remote)" : "(отдалечен)",
     "Can edit" : "Може да редактира",
     "Can share" : "Може да споделя",
     "Can manage" : "Може да управлява",
