@@ -411,8 +411,6 @@ OC.L10N.register(
     "Save" : "Speichern",
     "Today" : "Heute",
     "Tomorrow" : "Morgen",
-    "No due" : "Kein Fälligkeitsdatum",
-    "Set as default board" : "Als Standard-Board festlegen",
-    "Remove as default board" : "Als Standard-Board entfernen"
+    "No due" : "Kein Fälligkeitsdatum"
 },
 "nplurals=2; plural=(n != 1);");

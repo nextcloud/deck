@@ -326,6 +326,7 @@ OC.L10N.register(
     "Assigned cards" : "Tildelte kort",
     "No notifications" : "Ingen varsler",
     "Delete board" : "Slett tavle",
+    "Import board" : "Importer tavle",
     "Clone cards" : "Klone kort",
     "Advanced options" : "Avanserte innstillinger",
     "Clone" : "Klone",
