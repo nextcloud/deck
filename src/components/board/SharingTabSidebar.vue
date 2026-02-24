@@ -138,7 +138,7 @@ export default {
 					...item,
 					displayName: item.displayname || item.name || item.label || item.id,
 					user: item.id,
-					subname: item.shareWithDisplayNameUnique || item.subline, // NcSelectUser does its own pattern matching to filter things out
+					subname: item.shareWithDisplayNameUnique || item.subline || item.id, // NcSelectUser does its own pattern matching to filter things out
 				}
 				return res
 			}).slice(0, 10)
@@ -147,7 +147,6 @@ export default {
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
 				const foundIndex = this.board.acl.findIndex((acl) => {
-					console.debug()
 					if (acl.participant.uid === sharee.id && acl.type === SOURCE_TO_SHARE_TYPE[sharee.source]) {
 						return true
 					}

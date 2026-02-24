@@ -433,7 +433,7 @@ export default function storeFactory() {
 				const params = {
 					search: query,
 					itemType: 'deck',
-					shareTypes: [0, 1, 4, 6, 7],
+					shareTypes: [0, 1, 6, 7],
 					limit: 20,
 				}
 
