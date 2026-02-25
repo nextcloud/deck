@@ -346,6 +346,8 @@ OC.L10N.register(
     "Export board" : "Board exportieren",
     "Turn on due date reminders" : "Fälligkeitserinnerungen einschalten",
     "Turn off due date reminders" : "Fälligkeitserinnerungen ausschalten",
+    "Remove as default board" : "Nicht mehr als Standardboard verwenden",
+    "Set as default board" : "Als Standardboard verwenden",
     "Due date reminders" : "Fälligkeitserinnerungen",
     "Assigned cards" : "Zugewiesene Karten",
     "No notifications" : "Keine Benachrichtigungen",
