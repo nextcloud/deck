@@ -433,8 +433,7 @@
                     "permissionEdit": true,
                     "permissionShare": false,
                     "permissionManage": false,
-                    "owner": false,
-                    "token": null
+                    "owner": false
                 },
                 {
                     "id": 5,
@@ -449,8 +448,7 @@
                     "permissionEdit": false,
                     "permissionShare": true,
                     "permissionManage": false,
-                    "owner": false,
-                    "token": null
+                    "owner": false
                 },
                 {
                     "id": 6,
@@ -465,8 +463,7 @@
                     "permissionEdit": false,
                     "permissionShare": false,
                     "permissionManage": true,
-                    "owner": false,
-                    "token": null
+                    "owner": false
                 }
             ],
             "permissions": {
