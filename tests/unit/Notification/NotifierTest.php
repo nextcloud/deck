@@ -355,7 +355,7 @@ class NotifierTest extends \Test\TestCase {
 		$this->assertEquals($notification, $actualNotification);
 	}
 
-	public function testPrepareCardAssigned() {
+	public function testPrepareCardAssignedUsesRedirectUrl() {
 		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
