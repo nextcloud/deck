@@ -178,6 +178,10 @@ export default defineComponent({
 				: null
 			// Next Monday 08:00 AM
 			const nextWeekTime = moment().add(1, 'weeks').day(1).hour(8)
+			// Next Month 1st 08:00 AM
+			const nextMonthTime = moment().add(1, 'months').day(1).hour(8)
+			// Next Quarter 1set 08:00 AM
+			const nextQuarterTime = moment().add(3, 'months').day(1).hour(8)
 			return [
 				{
 					key: 'laterToday',
@@ -202,6 +206,18 @@ export default defineComponent({
 					timestamp: this.getTimestamp(nextWeekTime),
 					label: t('deck', 'Next week – {timeLocale}', { timeLocale: nextWeekTime?.format('ddd LT') }),
 					ariaLabel: t('deck', 'Set due date for next week'),
+				},
+				{
+					key: 'nextMonth',
+					timestamp: this.getTimestamp(nextMonthTime),
+					label: t('deck', 'Next month – {timeLocale}', { timeLocale: nextMonthTime?.format('ddd LT') }),
+					ariaLabel: t('deck', 'Set due date for next month'),
+				},
+				{
+					key: 'nextQuarter',
+					timestamp: this.getTimestamp(nextQuarterTime),
+					label: t('deck', 'Next quarter – {timeLocale}', { timeLocale: nextQuarterTime?.format('ddd LT') }),
+					ariaLabel: t('deck', 'Set due date for next quarter'),
 				},
 			].filter(option => option.timestamp !== null)
 		},
