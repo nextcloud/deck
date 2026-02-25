@@ -201,7 +201,7 @@ export class CardApi {
 	}
 
 	assignLabelToCard(data) {
-		return axios.post(this.url(`/cards/${data.card.id}/label/${data.labelId}`))
+		return axios.post(this.ocsUrl(`/cards/${data.card.id}/label/${data.labelId}`), { boardId: data.boardId ? data.boardId : null })
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)

@@ -135,6 +135,18 @@ class ExternalBoardService {
 		return $this->proxy->getOcsData($resp);
 	}
 
+	public function assignLabelOnRemote(Board $localBoard, int $cardId, int $labelId): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/label/' . $labelId;
+		$resp = $this->proxy->post($ownerCloudId->getId(), $shareToken, $url, [
+			'boardId' => $localBoard->getExternalId(),
+		]);
+		return $this->proxy->getOcsData($resp);
+	}
+
 	public function createStackOnRemote(
 		Board $localBoard,
 		string $title,
