@@ -355,6 +355,7 @@ export default function cardModuleFactory() {
 				commit('updateCardProperty', { property: 'labels', card: data.card })
 			},
 			async removeLabel({ commit }, data) {
+				data.boardId = this.state.currentBoard.id
 				await apiClient.removeLabelFromCard(data)
 				commit('updateCardProperty', { property: 'labels', card: data.card })
 			},

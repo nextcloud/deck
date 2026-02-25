@@ -142,6 +142,7 @@ return [
 		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
 		['name' => 'card_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}', 'verb' => 'PUT'],
 		['name' => 'card_ocs#assignLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
+		['name' => 'card_ocs#removeLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 
 		['name' => 'stack_ocs#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
 		['name' => 'stack_ocs#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],

@@ -204,7 +204,7 @@ export class CardApi {
 		return axios.post(this.ocsUrl(`/cards/${data.card.id}/label/${data.labelId}`), { boardId: data.boardId ? data.boardId : null })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -216,10 +216,14 @@ export class CardApi {
 	}
 
 	removeLabelFromCard(data) {
-		return axios.delete(this.url(`/cards/${data.card.id}/label/${data.labelId}`))
+		return axios.delete(this.ocsUrl(`/cards/${data.card.id}/label/${data.labelId}`), {
+			data: {
+				boardId: data.boardId ? data.boardId : null,
+			},
+		})
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

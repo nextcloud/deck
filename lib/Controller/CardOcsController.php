@@ -80,6 +80,20 @@ class CardOcsController extends OCSController {
 	#[NoAdminRequired]
 	#[PublicPage]
 	#[NoCSRFRequired]
+	public function removeLabel(?int $boardId, int $cardId, int $labelId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->removeLabelOnRemote($board, $cardId, $labelId));
+			}
+		}
+
+		return new DataResponse($this->cardService->removeLabel($cardId, $labelId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams())
