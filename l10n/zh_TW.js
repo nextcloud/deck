@@ -346,6 +346,8 @@ OC.L10N.register(
     "Export board" : "匯出看板",
     "Turn on due date reminders" : "開啟到期日提醒",
     "Turn off due date reminders" : "關閉到期日提醒",
+    "Remove as default board" : "移除預設看板",
+    "Set as default board" : "設定為預設看板",
     "Due date reminders" : "到期日提醒",
     "Assigned cards" : "已分配的卡片",
     "No notifications" : "無通知",
