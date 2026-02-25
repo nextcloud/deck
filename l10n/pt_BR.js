@@ -346,6 +346,8 @@ OC.L10N.register(
     "Export board" : "Exportar painel",
     "Turn on due date reminders" : "Ativar lembretes de vencimento",
     "Turn off due date reminders" : "Desativar lembretes de vencimento",
+    "Remove as default board" : "Remover como painel padrão",
+    "Set as default board" : "Definir como painel padrão",
     "Due date reminders" : "Lembretes de vencimento",
     "Assigned cards" : "Cartões atribuídos",
     "No notifications" : "Sem notificações",

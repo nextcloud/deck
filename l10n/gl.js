@@ -346,6 +346,8 @@ OC.L10N.register(
     "Export board" : "Exportar taboleiro",
     "Turn on due date reminders" : "Activar os lembretes de data de caducidade",
     "Turn off due date reminders" : "Desctivar os lembretes de data de caducidade",
+    "Remove as default board" : "Retirar como taboleiro predeterminado",
+    "Set as default board" : "Definir como taboleiro predeterminado",
     "Due date reminders" : "Lembretes de data de caducidade",
     "Assigned cards" : "Tarxetas asignadas",
     "No notifications" : "Non hai notificacións",
