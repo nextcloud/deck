@@ -91,6 +91,7 @@ const SOURCE_TO_SHARE_TYPE = {
 	emails: 4,
 	remotes: 6,
 	teams: 7,
+	circles: 7,
 }
 
 export default {
