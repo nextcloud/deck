@@ -97,7 +97,6 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} 在 {deckcard} 的意見中提到了您。",
     "The board \"%s\" has been shared with you by %s." : "面板 \"%s\" 已由 %s 分享給您。",
     "{user} has shared {deck-board} with you." : "{user} 分享了面板 {deck-board} 給您。",
-    "The remote board %s has been shared with you by %s" : "遠端面板「%s」已由 %s 分享給您。",
     "Deck board" : "Deck 面板",
     "Owned by %1$s" : "由 %1$s 擁有",
     "Deck boards, cards and comments" : "Deck 面板、卡片和評論",

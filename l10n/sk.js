@@ -97,7 +97,6 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} vás spomenul v komentári v {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Používateľ %s vám sprístupnil nástenku \"%s\".",
     "{user} has shared {deck-board} with you." : "{user} zdieľa {deck-board} s vami.",
-    "The remote board %s has been shared with you by %s" : "Vzdialená nástenka %s bola zdieľaná s vami od %s",
     "Deck board" : "Palubná doska",
     "Owned by %1$s" : "Vlastní %1$s",
     "Deck boards, cards and comments" : "Nástenky Deck, karty a komentáre",

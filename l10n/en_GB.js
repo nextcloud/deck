@@ -97,7 +97,6 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} has mentioned you in a comment on {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "The board \"%s\" has been shared with you by %s.",
     "{user} has shared {deck-board} with you." : "{user} has shared {deck-board} with you.",
-    "The remote board %s has been shared with you by %s" : "The remote board %s has been shared with you by %s",
     "Deck board" : "Deck board",
     "Owned by %1$s" : "Owned by %1$s",
     "Deck boards, cards and comments" : "Deck boards, cards and comments",

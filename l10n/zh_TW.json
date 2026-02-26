@@ -95,7 +95,6 @@
     "{user} has mentioned you in a comment on {deck-card}." : "{user} 在 {deck-card} 的留言中提及您。",
     "The board \"%s\" has been shared with you by %s." : "佈告欄「%s」已由 %s 分享給您。",
     "{user} has shared {deck-board} with you." : "{user} 已與您分享 {deck-board}。",
-    "The remote board %s has been shared with you by %s" : "遠端看板 %s 已由 %s 分享給您",
     "Deck board" : "Deck 佈告欄",
     "Owned by %1$s" : "由 %1$s 擁有",
     "Deck boards, cards and comments" : "Deck 看板、卡片與評論",
