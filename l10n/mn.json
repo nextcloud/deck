@@ -95,7 +95,6 @@
     "{user} has mentioned you in a comment on {deck-card}." : "{user} таныг {deck-card} дээрх сэтгэгдэлд дурдлаа.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" самбарыг %s тантай хуваалцлаа.",
     "{user} has shared {deck-board} with you." : "{user} {deck-board}-г тантай хуваалцлаа.",
-    "The remote board %s has been shared with you by %s" : "Алсын %s самбарыг %s танд хуваалцсан",
     "Deck board" : "Deck самбар",
     "Owned by %1$s" : "%1$s эзэмшилтэй",
     "Deck boards, cards and comments" : "Deck самбар, карт болон сэтгэгдлүүд",
