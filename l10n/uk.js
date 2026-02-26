@@ -97,7 +97,6 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} згадав вас у коментарі до {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Дошку \"%s\" з вами поділився %s.",
     "{user} has shared {deck-board} with you." : "{user} поділився з вами {deck-board}.",
-    "The remote board %s has been shared with you by %s" : "%s надав(-ла) вам доступ до віддаленої дошки %s",
     "Deck board" : "Дошка колоди",
     "Owned by %1$s" : "Належить %1$s",
     "Deck boards, cards and comments" : "Дошки колод, карти та коментарі",
