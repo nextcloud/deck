@@ -97,6 +97,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} hat dich in einem Kommentar zu {deck-card} erwähnt.",
     "The board \"%s\" has been shared with you by %s." : "Das Board \"%s\" wurde von %s mit dir geteilt.",
     "{user} has shared {deck-board} with you." : "{user} hat das Board {deck-board} mit dir geteilt.",
+    "The remote board %1$s has been shared with you by %2$s" : "Das Remote-Board %1$s wurde von %2$s mit dir geteilt",
     "Deck board" : "Deck-Board",
     "Owned by %1$s" : "Im Besitz von %1$s",
     "Deck boards, cards and comments" : "Deck-Boards, Karten und Kommentare",

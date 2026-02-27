@@ -97,6 +97,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user}, {deck-card} kartına yaptığı yorumda sizi andı.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" panosu %s tarafından sizinle paylaşıldı.",
     "{user} has shared {deck-board} with you." : "{user}, {deck-card} kartını sizinle paylaştı.",
+    "The remote board %1$s has been shared with you by %2$s" : "%1$s uzak panosu %2$s tarafından sizinle paylaşıldı",
     "Deck board" : "Tahta panosu",
     "Owned by %1$s" : "Sahibi: %1$s",
     "Deck boards, cards and comments" : "Tahta panoları, kartlar ve yorumlar",
