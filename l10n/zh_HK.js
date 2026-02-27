@@ -190,6 +190,7 @@ OC.L10N.register(
     "Admin settings" : "管理員設定",
     "Limit board creation to some groups" : "限制面板只能由某些群組創建",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "這些群組之外的用戶將無法創建自己的面板，但仍然可以在與他們共享的面板上工作。",
+    "Enable federation" : "啟用聯邦",
     "Board actions" : "面板操作",
     "Scroll sideways" : "橫向滾動",
     "Navigate between cards" : "在卡片間移動",

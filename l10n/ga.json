@@ -188,6 +188,7 @@
     "Admin settings" : "Socruithe admin",
     "Limit board creation to some groups" : "Teorainn a chur le cruthú cláir do roinnt grúpaí",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Ní bheidh úsáideoirí taobh amuigh de na grúpaí sin in ann a gcuid boird féin a chruthú, ach beidh siad fós in ann oibriú ar bhoird atá roinnte leo.",
+    "Enable federation" : "Cumasaigh cónaidhm",
     "Board actions" : "Gníomhartha an Bhoird",
     "Scroll sideways" : "Scrollaigh taobh",
     "Navigate between cards" : "Déan nascleanúint idir cártaí",

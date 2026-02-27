@@ -219,6 +219,7 @@ OC.L10N.register(
     "Board owner" : "Propietari del tauler",
     "(Group)" : "(Grup)",
     "(Team)" : "(Equip)",
+    "(remote)" : "(remot)",
     "Can edit" : "Pot editar",
     "Can share" : "Pot compartir",
     "Can manage" : "Pot gestionar",

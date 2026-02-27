@@ -32,10 +32,12 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
+use OCP\Share\IAttributes;
 use OCP\Share\IManager;
 use OCP\Share\IPartialShareProvider;
 use OCP\Share\IShare;
 use OCP\Share\IShareProviderGetUsers;
+use function strlen;
 
 /** Taken from the talk shareapicontroller helper */
 interface IShareProviderBackend {
@@ -119,6 +121,11 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			)
 		);*/
 
+		// set share attributes
+		$shareAttributes = $this->formatShareAttributes(
+			$share->getAttributes()
+		);
+
 		$shareId = $this->addShareToDB(
 			$share->getSharedWith(),
 			$share->getSharedBy(),
@@ -128,7 +135,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			$share->getTarget(),
 			$share->getPermissions(),
 			$share->getToken() ?? '',
-			$share->getExpirationDate()
+			$share->getExpirationDate(),
+			$shareAttributes
 		);
 		$data = $this->getRawShare($shareId);
 
@@ -149,6 +157,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @param int $permissions
 	 * @param string $token
 	 * @param \DateTime|null $expirationDate
+	 * @param string|null $attributes
 	 * @return int
 	 */
 	private function addShareToDB(
@@ -161,6 +170,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		int $permissions,
 		string $token,
 		?\DateTime $expirationDate,
+		?string $attributes = null,
 	): int {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->insert('share')
@@ -178,6 +188,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 		if ($expirationDate !== null) {
 			$qb->setValue('expiration', $qb->createNamedParameter($expirationDate, 'datetime'));
+		}
+
+		if ($attributes !== null) {
+			$qb->setValue('attributes', $qb->createNamedParameter($attributes));
 		}
 
 		$qb->executeStatement();
@@ -250,6 +264,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			$entryData['parent'] = $entryData['f_parent'];
 			$share->setNodeCacheEntry(Cache::cacheEntryFromData($entryData, $this->mimeTypeLoader));
 		}
+
+		$share = $this->updateShareAttributes($share, $data['attributes'] ?? null);
+
 		return $share;
 	}
 
@@ -273,39 +290,62 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @inheritDoc
 	 */
 	public function update(IShare $share) {
-		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->update('share')
-			->where($qb->expr()->eq('id', $qb->createNamedParameter($share->getId())))
-			->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
-			->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
-			->set('permissions', $qb->createNamedParameter($share->getPermissions()))
-			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE))
-			->executeStatement();
+		$this->dbConnection->beginTransaction();
+		try {
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share')
+				->where($qb->expr()->eq('id', $qb->createNamedParameter($share->getId())))
+				->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
+				->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
+				->set('permissions', $qb->createNamedParameter($share->getPermissions()))
+				->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
 
-		/*
-		 * Update all user defined group shares
-		 */
-		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->update('share')
-			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
-			->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
-			->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
-			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE))
-			->executeStatement();
+			$shareAttributes = $this->formatShareAttributes($share->getAttributes());
+			if ($shareAttributes !== null) {
+				$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+			}
 
-		/*
-		 * Now update the permissions for all children that have not set it to 0
-		 */
-		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->update('share')
-			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
-			->andWhere($qb->expr()->neq('permissions', $qb->createNamedParameter(0)))
-			->set('permissions', $qb->createNamedParameter($share->getPermissions()))
-			->executeStatement();
+			$qb->executeStatement();
+
+			/*
+			* Update all user defined group shares
+			*/
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share')
+				->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
+				->set('uid_owner', $qb->createNamedParameter($share->getShareOwner()))
+				->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
+				->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
+				->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
+
+			if ($shareAttributes !== null) {
+				$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+			}
+
+			$qb->executeStatement();
+
+			/*
+			* Now update the permissions for all children that have not set it to 0
+			*/
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share')
+				->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
+				->andWhere($qb->expr()->neq('permissions', $qb->createNamedParameter(0)))
+				->set('permissions', $qb->createNamedParameter($share->getPermissions()));
+
+			if ($shareAttributes !== null) {
+				$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+			}
+
+			$qb->executeStatement();
+		} catch (\Exception $e) {
+			$this->dbConnection->rollBack();
+			throw $e;
+		}
+		$this->dbConnection->commit();
 
 		return $share;
 	}
@@ -751,7 +791,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			}
 
 			if ($path !== null) {
-				$path = str_replace('/' . $userId . '/files', '', $path);
+				$prefix = '/' . $userId . '/files';
+				if (str_starts_with($path, $prefix)) {
+					$path = substr($path, strlen($prefix));
+				}
 				$path = rtrim($path, '/');
 
 				$onClause = $qb->expr()->andX(
@@ -1096,6 +1139,42 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			yield $share;
 		}
 		$cursor->closeCursor();
+	}
+
+	protected function updateShareAttributes(IShare $share, ?string $data): IShare {
+		if ($data === null || $data === '') {
+			return $share;
+		}
+		$attributes = $share->getAttributes() ?? $share->newAttributes();
+		$compressedAttributes = \json_decode($data, true);
+		if ($compressedAttributes === false || $compressedAttributes === null) {
+			return $share;
+		}
+		foreach ($compressedAttributes as $compressedAttribute) {
+			$attributes->setAttribute(
+				$compressedAttribute[0],
+				$compressedAttribute[1],
+				$compressedAttribute[2]
+			);
+		}
+		$share->setAttributes($attributes);
+		return $share;
+	}
+
+	protected function formatShareAttributes(?IAttributes $attributes): ?string {
+		if ($attributes === null || empty($attributes->toArray())) {
+			return null;
+		}
+
+		$compressedAttributes = [];
+		foreach ($attributes->toArray() as $attribute) {
+			$compressedAttributes[] = [
+				0 => $attribute['scope'],
+				1 => $attribute['key'],
+				2 => $attribute['value']
+			];
+		}
+		return \json_encode($compressedAttributes) ?: null;
 	}
 
 	public function getOrphanedAttachmentShares(): array {

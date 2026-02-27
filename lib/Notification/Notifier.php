@@ -238,7 +238,7 @@ class Notifier implements INotifier {
 				}
 				$federationOwnerDisplayName = $params[1];
 				$notification->setParsedSubject(
-					$l->t('The remote board %s has been shared with you by %s', [$params[0], $federationOwnerDisplayName])
+					$l->t('The remote board %1$s has been shared with you by %2$s', [$params[0], $federationOwnerDisplayName])
 				);
 				$notification->setLink($this->getBoardUrl($boardId));
 				break;

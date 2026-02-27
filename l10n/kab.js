@@ -36,6 +36,7 @@ OC.L10N.register(
     "seconds ago" : "Tasinin aya",
     "Cancel edit" : "Sefsex aseẓreg",
     "No notifications" : "Ulac tisezmal",
+    "Export" : "Sifeḍ",
     "Close" : "Mdel",
     "Share" : "Bḍu",
     "Save" : "Sekles",

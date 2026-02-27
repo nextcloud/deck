@@ -220,6 +220,7 @@ OC.L10N.register(
     "Board owner" : "منشئ اللوح",
     "(Group)" : "(مجموعة)",
     "(Team)" : "(الفريق)",
+    "(remote)" : "(عن بعد)",
     "Can edit" : "يمكن تعديله",
     "Can share" : "يمكن مشاركته",
     "Can manage" : "يمكن إدارته",

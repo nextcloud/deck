@@ -190,6 +190,7 @@ OC.L10N.register(
     "Admin settings" : "Nastavení pro správu",
     "Limit board creation to some groups" : "Umožnit vytváření tabulí pouze vybraným skupinám",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Uživatelé, kteří nejsou členy těchto skupin nebudou moci vytvářet své vlastní tabule, ale pořád budou moci pracovat na tabulích, které jim byly nasdíleny.",
+    "Enable federation" : "Zapnout federování",
     "Board actions" : "Akce ohledně tabule",
     "Scroll sideways" : "Posunout na strany",
     "Navigate between cards" : "Pohyb mezi kartami",

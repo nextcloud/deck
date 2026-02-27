@@ -190,6 +190,7 @@ OC.L10N.register(
     "Admin settings" : "Admin settings",
     "Limit board creation to some groups" : "Limit board creation to some groups",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them.",
+    "Enable federation" : "Enable federation",
     "Board actions" : "Board actions",
     "Scroll sideways" : "Scroll sideways",
     "Navigate between cards" : "Navigate between cards",
