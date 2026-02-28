@@ -85,7 +85,7 @@
     "@vue/test-utils": "^2.4.6",
     "@vue/vue2-jest": "^29.2.6",
     "cypress": "^13.17.0",
-    "cypress-split": "^1.24.22",
+    "cypress-split": "^1.24.28",
     "eslint-plugin-cypress": "^3.6.0",
     "eslint-webpack-plugin": "^5.0.2",
     "jest": "^29.7.0",
