@@ -7,6 +7,9 @@ on:
       - main
       - stable*
 
+permissions:
+    contents: read
+
 env:
   APP_NAME: deck
   CYPRESS_baseUrl: http://localhost:8081/index.php
@@ -26,13 +29,9 @@ jobs:
 
     name: runner ${{ matrix.containers }}
 
-    env:
-      extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu
-      key: cache-v1
-
     services:
       postgres:
-        image: ghcr.io/nextcloud/continuous-integration-postgres-14:latest
+        image: ghcr.io/nextcloud/continuous-integration-postgres-17:latest # zizmor: ignore[unpinned-images]
         ports:
           - 4444:5432/tcp
         env:
@@ -43,7 +42,7 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -53,53 +52,39 @@ jobs:
           echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
 
       - name: Checkout server
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           repository: nextcloud/server
+          submodules: true
           ref: ${{ matrix.server-versions }}
 
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-
       - name: Checkout ${{ env.APP_NAME }}
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           path: apps/${{ env.APP_NAME }}
 
       - name: Checkout text
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           repository: nextcloud/text
           ref: ${{ env.text_app_ref }}
           path: apps/text
 
-      - name: Setup cache environment
-        id: extcache
-        uses: shivammathur/cache-extensions@v1
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: ${{ env.extensions }}
-          key: ${{ env.key }}
-
-      - name: Cache extensions
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.extcache.outputs.dir }}
-          key: ${{ steps.extcache.outputs.key }}
-          restore-keys: ${{ steps.extcache.outputs.key }}
-
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.34.1
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: ${{ env.extensions }}
-          ini-values:
-            apc.enable_cli=on
-          coverage: none
+            php-version: ${{ matrix.php-versions }}
+            # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
+            extensions: apcu, bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
+            coverage: none
+            ini-file: development
+            # Temporary workaround for missing pcntl_* in PHP
+            ini-values: apc.enable_cli=on, disable_functions=
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install composer dependencies
         working-directory: apps/${{ env.APP_NAME }}
@@ -125,7 +110,7 @@ jobs:
           curl -v http://localhost:8081/index.php/login
 
       - name: Cypress run
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@2ad32e649e4db26c07674ebae31a297601dbcbaf # v6.10.8
         with:
           build: npm run dev
           record: false
@@ -141,7 +126,7 @@ jobs:
           SPLIT_INDEX: ${{ strategy.job-index }}
 
       - name: Upload test failure screenshots
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: failure()
         with:
           name: Upload screenshots
@@ -149,7 +134,7 @@ jobs:
           retention-days: 5
 
       - name: Upload nextcloud logs
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: failure()
         with:
           name: Upload nextcloud log
