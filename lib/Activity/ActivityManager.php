@@ -431,12 +431,6 @@ class ActivityManager {
 			->setSubject($subject, $subjectParams)
 			->setTimestamp(time());
 
-		// FIXME: We currently require activities for comments even if they are disabled though settings
-		// Get rid of this once the frontend fetches comments/activity individually
-		if ($eventType === 'deck_comment') {
-			$event->setAuthor(self::DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED);
-		}
-
 		return $event;
 	}
 

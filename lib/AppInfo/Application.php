@@ -62,6 +62,7 @@ use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\CommentsEvent;
+use OCP\Comments\Events\CommentAddedEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationProviderManager;
@@ -157,6 +158,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AclUpdatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclDeletedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(CommentsEvent::class, CommentEventListener::class);
+		$context->registerEventListener(CommentAddedEvent::class, CommentEventListener::class);
 
 		// Handling cache invalidation for collections
 		$context->registerEventListener(AclCreatedEvent::class, ResourceListener::class);
