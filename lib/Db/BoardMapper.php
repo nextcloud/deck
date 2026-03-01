@@ -300,13 +300,13 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
 			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
-		$or = $qb->expr()->orx();
+		$orConditions = [];
 		for ($i = 0, $iMax = count($groups); $i < $iMax; $i++) {
-			$or->add(
-				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($groups[$i], IQueryBuilder::PARAM_STR))
-			);
+			$orConditions[]
+				= $qb->expr()->eq('acl.participant', $qb->createNamedParameter($groups[$i], IQueryBuilder::PARAM_STR))
+			;
 		}
-		$qb->andWhere($or);
+		$qb->andWhere($qb->expr()->orX(...$orConditions));
 		if (!$includeArchived) {
 			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
@@ -356,13 +356,13 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
 			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
-		$or = $qb->expr()->orx();
+		$orConditions = [];
 		for ($i = 0, $iMax = count($circles); $i < $iMax; $i++) {
-			$or->add(
-				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($circles[$i], IQueryBuilder::PARAM_STR))
-			);
+			$orConditions[]
+				= $qb->expr()->eq('acl.participant', $qb->createNamedParameter($circles[$i], IQueryBuilder::PARAM_STR))
+			;
 		}
-		$qb->andWhere($or);
+		$qb->andWhere($qb->expr()->orX(...$orConditions));
 		if (!$includeArchived) {
 			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
