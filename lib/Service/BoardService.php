@@ -680,11 +680,11 @@ class BoardService {
 				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 			]);
 
+			$this->enrichWithBoardSettings($board);
 			if ($fullDetails) {
 				$this->enrichWithStacks($board);
 				$this->enrichWithLabels($board);
 				$this->enrichWithUsers($board);
-				$this->enrichWithBoardSettings($board);
 				$this->enrichWithActiveSessions($board);
 			}
 
