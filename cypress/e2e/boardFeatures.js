@@ -180,6 +180,82 @@ describe('Board export', function() {
 	})
 })
 
+describe('Board title editing', function() {
+	before(function() {
+		cy.createUser(user)
+	})
+
+	it('Shows updated board title immediately on the opened board', function() {
+		const originalTitle = `Live rename ${Date.now()}`
+		const updatedTitle = `${originalTitle} updated`
+
+		cy.createExampleBoard({ user, board: sampleBoard(originalTitle) }).then((board) => {
+			cy.login(user)
+			cy.visit(`/apps/deck/board/${board.id}`)
+
+			cy.intercept({ method: 'PUT', url: `**/apps/deck/boards/${board.id}` }).as('updateBoard')
+
+			cy.get(`.app-navigation__list .app-navigation-entry:contains("${originalTitle}")`)
+				.parent()
+				.find('button[aria-label="Actions"]')
+				.click()
+
+			cy.get('button:contains("Edit board")').click()
+
+			cy.get('.board-edit form input[type=text]')
+				.clear()
+				.type(updatedTitle)
+
+			cy.get('.board-edit form button[title="Save board"]').click()
+
+			cy.get('.board-title h2').contains(updatedTitle)
+
+			cy.wait('@updateBoard').its('response.statusCode').should('equal', 200)
+
+			cy.get('.app-navigation__list .app-navigation-entry')
+				.contains(updatedTitle)
+				.should('be.visible')
+		})
+	})
+
+	it('Does not change the opened board title when editing another board', function() {
+		const boardATitle = `Active board ${Date.now()}`
+		const boardBTitle = `Background board ${Date.now()}`
+		const boardBUpdatedTitle = `${boardBTitle} updated`
+
+		cy.createExampleBoard({ user, board: sampleBoard(boardATitle) }).then((boardA) => {
+			cy.createExampleBoard({ user, board: sampleBoard(boardBTitle) }).then((boardB) => {
+				cy.login(user)
+				cy.visit(`/apps/deck/board/${boardA.id}`)
+
+				cy.intercept({ method: 'PUT', url: `**/apps/deck/boards/${boardB.id}` }).as('updateBoardOther')
+
+				cy.get('.board-title h2').should('contain', boardATitle)
+
+				cy.get(`.app-navigation__list .app-navigation-entry:contains("${boardBTitle}")`)
+					.parent()
+					.find('button[aria-label="Actions"]')
+					.click()
+
+				cy.get('button:contains("Edit board")').click()
+
+				cy.get('.board-edit form input[type=text]')
+					.clear()
+					.type(boardBUpdatedTitle)
+
+				cy.get('.board-edit form button[title="Save board"]').click()
+
+				cy.wait('@updateBoardOther').its('response.statusCode').should('equal', 200)
+
+				cy.get('.board-title h2').should('contain', boardATitle)
+				cy.get('.app-navigation__list .app-navigation-entry')
+					.contains(boardBUpdatedTitle)
+					.should('be.visible')
+			})
+		})
+	})
+})
+
 describe('Board import', function() {
 	before(function () {
 		cy.createUser(user)
