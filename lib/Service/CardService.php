@@ -215,6 +215,7 @@ class CardService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
+		$oldStackId = $card->getStackId();
 		$card->setDeletedAt(time());
 		$this->cardMapper->update($card);
 
@@ -430,10 +431,16 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$changes = new ChangeSet($card);
+		$oldStackId = $card->getStackId();
 		$card->setStackId($stackId);
 		$this->cardMapper->update($card);
 		$changes->setAfter($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
+
+		// Re-fetch the card after update to include any automation changes
+		if ($oldStackId !== $stackId) {
+			$card = $this->cardMapper->find($id);
+		}
 
 		$cardsToReorder = $this->cardMapper->findAll($stackId);
 		$result = [];
@@ -460,7 +467,10 @@ class CardService {
 		$this->changeHelper->cardChanged($id, false);
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
-		return array_values($result);
+		// Enrich cards with labels and other data before returning
+		$enrichedResult = $this->enrichCards(array_values($result));
+
+		return $enrichedResult;
 	}
 
 	/**
