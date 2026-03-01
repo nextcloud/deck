@@ -81,4 +81,8 @@ class CardDetails extends Card {
 	public function __call(string $methodName, array $args) {
 		return $this->card->__call($methodName, $args);
 	}
+
+	public function getUpdatedFields(): array {
+		return $this->card->getUpdatedFields();
+	}
 }
