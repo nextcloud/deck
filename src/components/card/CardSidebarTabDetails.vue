@@ -156,6 +156,7 @@ export default {
 			const data = {
 				card: this.copiedCard,
 				labelId: newLabel.id,
+				boardId: this.copiedCard.boardId,
 			}
 			this.$store.dispatch('addLabel', data)
 		},
