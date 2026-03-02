@@ -17,6 +17,7 @@ class BoardContext implements Context {
 	/** @var array last card response */
 	private $card = null;
 	private array $storedCards = [];
+	private array $storedStacks = [];
 	private ?array $activities = null;
 
 	private ServerContext $serverContext;
@@ -321,5 +322,152 @@ class BoardContext implements Context {
 		Assert::assertEquals($count, count($this->activities ?? []));
 	}
 
+	/**
+	 * @When remember the last stack as :name
+	 */
+	public function rememberTheLastStackAs($name) {
+		$this->storedStacks[$name] = $this->stack;
+	}
+
+	/**
+	 * @When /^sets the current stack as done column$/
+	 */
+	public function setsTheCurrentStackAsDoneColumn() {
+		$this->requestContext->sendOCSRequest(
+			'PUT',
+			'apps/deck/api/v1.0/stacks/' . $this->stack['id'] . '/done',
+			['boardId' => $this->board['id'], 'isDone' => true]
+		);
+	}
+
+	/**
+	 * @When /^unsets the current stack as done column$/
+	 */
+	public function unsetsTheCurrentStackAsDoneColumn() {
+		$this->requestContext->sendOCSRequest(
+			'PUT',
+			'apps/deck/api/v1.0/stacks/' . $this->stack['id'] . '/done',
+			['boardId' => $this->board['id'], 'isDone' => false]
+		);
+	}
+
+	/**
+	 * @When /^move the card to the stack "([^"]*)"$/
+	 */
+	public function moveTheCardToTheStack($stackName) {
+		$stack = $this->storedStacks[$stackName] ?? null;
+		Assert::assertNotNull($stack, 'Stack "' . $stackName . '" not found in stored stacks');
+		$this->requestContext->sendJSONrequest(
+			'PUT',
+			'/index.php/apps/deck/cards/' . $this->card['id'] . '/reorder',
+			['stackId' => $stack['id'], 'order' => 0]
+		);
+		// Reload the card so subsequent assertions see the updated done status
+		if ($this->requestContext->getResponse()->getStatusCode() === 200) {
+			$this->getCard();
+		}
+	}
+
+	/**
+	 * @When /^mark the card as done$/
+	 */
+	public function markTheCardAsDone() {
+		$this->requestContext->sendJSONrequest(
+			'PUT',
+			'/index.php/apps/deck/cards/' . $this->card['id'] . '/done'
+		);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		if ($this->requestContext->getResponse()->getStatusCode() === 200) {
+			$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		}
+	}
+
+	/**
+	 * @Given /^the board is archived$/
+	 */
+	public function theBoardIsArchived() {
+		$this->requestContext->sendJSONrequest(
+			'PUT',
+			'/index.php/apps/deck/boards/' . $this->board['id'],
+			array_merge($this->board, ['archived' => true])
+		);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		if ($this->requestContext->getResponse()->getStatusCode() === 200) {
+			$this->board = json_decode((string)$this->getResponse()->getBody(), true);
+		}
+	}
+
+	/**
+	 * @Then /^the card should be marked as done$/
+	 */
+	public function theCardShouldBeMarkedAsDone() {
+		Assert::assertNotEmpty($this->card['done'], 'Expected card to be marked as done, but done is empty');
+	}
+
+	/**
+	 * @Then /^the card should not be marked as done$/
+	 */
+	public function theCardShouldNotBeMarkedAsDone() {
+		Assert::assertEmpty($this->card['done'], 'Expected card not to be marked as done, but done is: ' . print_r($this->card['done'], true));
+	}
+
+	/**
+	 * @Then /^the current stack should be marked as done column$/
+	 */
+	public function theCurrentStackShouldBeMarkedAsDoneColumn() {
+		$found = $this->getStack();
+		Assert::assertTrue($found['isDoneColumn'], 'Expected current stack to be marked as done column');
+	}
+
+	/**
+	 * @Then /^the current stack should not be marked as done column$/
+	 */
+	public function theCurrentStackShouldNotBeMarkedAsDoneColumn() {
+		$found = $this->getStack();
+		Assert::assertFalse($found['isDoneColumn'], 'Expected current stack not to be marked as done column');
+	}
+
+	/**
+	 * @Then /^the remembered card "([^"]*)" should be marked as done$/
+	 */
+	public function theRememberedCardShouldBeMarkedAsDone($name) {
+		$card = $this->storedCards[$name] ?? null;
+		Assert::assertNotNull($card, 'Card "' . $name . '" not found in stored cards');
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/cards/' . $card['id']);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$freshCard = json_decode((string)$this->getResponse()->getBody(), true);
+		Assert::assertNotEmpty($freshCard['done'], 'Expected remembered card "' . $name . '" to be marked as done, but done is empty');
+	}
+
+	/**
+	 * @Then /^the card should be in the stack "([^"]*)"$/
+	 */
+	public function theCardShouldBeInTheStack($stackName) {
+		$stack = $this->storedStacks[$stackName] ?? null;
+		Assert::assertNotNull($stack, 'Stack "' . $stackName . '" not found in stored stacks');
+		Assert::assertEquals(
+			$stack['id'],
+			$this->card['stackId'],
+			'Expected card to be in stack "' . $stackName . '" (id: ' . $stack['id'] . '), but it is in stack id: ' . $this->card['stackId']
+		);
+	}
+
+	/**
+	 * @return mixed|null
+	 */
+	private function getStack(): mixed {
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/stacks/' . $this->board['id']);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$stacks = json_decode((string)$this->getResponse()->getBody(), true);
+		$found = null;
+		foreach ($stacks as $stack) {
+			if ($stack['id'] === $this->stack['id']) {
+				$found = $stack;
+				break;
+			}
+		}
+		Assert::assertNotNull($found, 'Current stack not found in board stacks');
+		return $found;
+	}
 
 }

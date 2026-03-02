@@ -183,9 +183,11 @@ class StackServiceTest extends TestCase {
 		$s1 = new Stack();
 		$s1->setId(222);
 		$s1->setBoardId(1);
+		$s1->setIsDoneColumn(false);
 		$s2 = new Stack();
 		$s2->setId(223);
-		$s1->setBoardId(1);
+		$s2->setBoardId(1);
+		$s2->setIsDoneColumn(false);
 		return [$s1, $s2];
 	}
 	private function getCards($stackId = 0) {
@@ -269,5 +271,51 @@ class StackServiceTest extends TestCase {
 		$stack->setBoardId(1);
 		$stack->setOrder($order);
 		return $stack;
+	}
+
+	public function testSetDoneStackSetsDoneColumn(): void {
+		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
+		$this->stackMapper->expects($this->once())
+			->method('clearDoneColumnForBoard')
+			->with(1);
+		$undoneCard = new Card();
+		$undoneCard->setId(10);
+		$undoneCard->setStackId(5);
+		$alreadyDoneCard = new Card();
+		$alreadyDoneCard->setId(11);
+		$alreadyDoneCard->setStackId(5);
+		$alreadyDoneCard->setDone(new \DateTime());
+		$this->cardMapper->expects($this->once())
+			->method('findAll')
+			->with(5)
+			->willReturn([$undoneCard, $alreadyDoneCard]);
+		$this->cardMapper->expects($this->once())
+			->method('update')
+			->with($this->callback(fn (Card $c) => $c->getId() === 10 && $c->getDone() !== null));
+		$this->stackMapper->expects($this->once())
+			->method('setIsDoneColumn')
+			->with(5, true);
+		$this->stackService->setDoneStack(5, 1, true);
+	}
+
+	public function testSetDoneStackDoesNotMarkCardsWhenUnsetting(): void {
+		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
+		$this->stackMapper->expects($this->never())->method('clearDoneColumnForBoard');
+		$this->cardMapper->expects($this->never())->method('findAll');
+		$this->cardMapper->expects($this->never())->method('update');
+		$this->stackMapper->expects($this->once())
+			->method('setIsDoneColumn')
+			->with(5, false);
+		$this->stackService->setDoneStack(5, 1, false);
+	}
+
+	public function testSetDoneStackThrowsOnArchivedBoard(): void {
+		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(true);
+		$this->stackMapper->expects($this->never())->method('setIsDoneColumn');
+		$this->expectException(\OCA\Deck\NoPermissionException::class);
+		$this->stackService->setDoneStack(5, 1, true);
 	}
 }

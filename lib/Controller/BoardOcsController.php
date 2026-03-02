@@ -9,7 +9,6 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
-use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
@@ -26,7 +25,6 @@ class BoardOcsController extends OCSController {
 		private BoardService $boardService,
 		private ExternalBoardService $externalBoardService,
 		private LoggerInterface $logger,
-		private StackService $stackService,
 		private $userId,
 	) {
 		parent::__construct($appName, $request);
@@ -56,20 +54,6 @@ class BoardOcsController extends OCSController {
 	#[NoCSRFRequired]
 	public function create(string $title, string $color): DataResponse {
 		return new DataResponse($this->boardService->create($title, $this->userId, $color));
-	}
-
-	#[NoAdminRequired]
-	#[PublicPage]
-	#[NoCSRFRequired]
-	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function stacks(int $boardId): DataResponse {
-		$localBoard = $this->boardService->find($boardId, true, true);
-		// Board on other instance -> get it from other instance
-		if ($localBoard->getExternalId() !== null) {
-			return $this->externalBoardService->getExternalStacksFromRemote($localBoard);
-		} else {
-			return new DataResponse($this->stackService->findAll($boardId));
-		}
 	}
 
 	#[NoAdminRequired]

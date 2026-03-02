@@ -22,6 +22,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method \int getOrder()
  * @method void setOrder(int $order)
  * @method Card[] getCards()
+ * @method bool getIsDoneColumn()
+ * @method void setIsDoneColumn(bool $isDoneColumn)
  */
 class Stack extends RelationalEntity {
 	protected $title;
@@ -30,6 +32,7 @@ class Stack extends RelationalEntity {
 	protected $lastModified = 0;
 	protected $cards = [];
 	protected $order;
+	protected $isDoneColumn = false;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
@@ -37,6 +40,7 @@ class Stack extends RelationalEntity {
 		$this->addType('deletedAt', 'integer');
 		$this->addType('lastModified', 'integer');
 		$this->addType('order', 'integer');
+		$this->addType('isDoneColumn', 'boolean');
 	}
 
 	public function setCards($cards) {

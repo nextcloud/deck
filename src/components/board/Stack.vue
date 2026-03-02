@@ -4,24 +4,29 @@
 -->
 
 <template>
-	<div class="stack" :data-cy-stack="stack.title">
+	<div class="stack" :class="{'stack--done-column': isDoneColumn}" :data-cy-stack="stack.title">
 		<div v-click-outside="stopCardCreation"
 			class="stack__header"
-			:class="{'stack__header--add': showAddCard}"
+			:class="{'stack__header--add': showAddCard, 'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived" tabindex="0">
 					{{ stack.title }}
+					<CheckCircleOutline v-if="isDoneColumn"
+						class="stack__done-icon"
+						decorative />
 				</h3>
 				<h3 v-else-if="!editing"
-					dir="auto"
 					tabindex="0"
 					:aria-label="stack.title"
 					:title="stack.title"
 					class="stack__title"
 					@click="startEditing(stack)"
 					@keydown.enter="startEditing(stack)">
-					{{ stack.title }}
+					<span dir="auto">{{ stack.title }}</span>
+					<CheckCircleOutline v-if="isDoneColumn"
+						class="stack__done-icon"
+						decorative />
 				</h3>
 				<form v-else-if="editing"
 					v-click-outside="cancelEdit"
@@ -51,6 +56,12 @@
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Unarchive all cards') }}
+				</NcActionButton>
+				<NcActionButton close-after-click @click="toggleDoneColumn">
+					<template #icon>
+						<CheckCircleOutline decorative />
+					</template>
+					{{ isDoneColumn ? t('deck', 'Do not set cards as "done"') : t('deck', 'Set cards as "done"') }}
 				</NcActionButton>
 				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
@@ -140,6 +151,7 @@ import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
+import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 
@@ -158,6 +170,7 @@ export default {
 		NcModal,
 		ArchiveIcon,
 		CardPlusOutline,
+		CheckCircleOutline,
 	},
 	directives: {
 		ClickOutside,
@@ -204,6 +217,9 @@ export default {
 				}
 				return !card.archived
 			})
+		},
+		isDoneColumn() {
+			return !!this.stack.isDoneColumn
 		},
 		dragHandleSelector() {
 			return this.canEdit && !this.showArchived ? null : '.no-drag'
@@ -266,6 +282,13 @@ export default {
 			return index => {
 				return this.cardsByStack[index]
 			}
+		},
+		toggleDoneColumn() {
+			this.$store.dispatch('setDoneStack', {
+				stackId: this.stack.id,
+				boardId: this.stack.boardId,
+				isDone: !this.isDoneColumn,
+			})
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
@@ -370,6 +393,12 @@ export default {
 		.dnd-container {
 			flex-grow: 1;
 		}
+
+		&.stack--done-column {
+			.stack__header--done-column {
+				border-bottom: 2px solid var(--color-success);
+			}
+		}
 	}
 
 	.stack__header {
@@ -422,9 +451,27 @@ export default {
 			padding: $card-padding;
 			font-size: var(--default-font-size);
 
+			span {
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
 			&:focus-visible {
 				outline: 2px solid var(--color-border-dark);
 				border-radius: 3px;
+			}
+		}
+
+		.stack__done-icon {
+			flex-shrink: 0;
+			color: var(--color-main-text);
+			margin-inline-start: 2px;
+			width: 1em;
+			height: 1em;
+
+			:deep(svg) {
+				width: 1em;
+				height: 1em;
 			}
 		}
 

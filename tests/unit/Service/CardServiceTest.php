@@ -494,4 +494,90 @@ class CardServiceTest extends TestCase {
 		$this->expectException(StatusException::class);
 		$this->cardService->removeLabel(123, 999);
 	}
+
+	public function testDoneMarksCardAsDone(): void {
+		$card = new Card();
+		$card->setId(42);
+		$card->setStackId(10);
+		$stack = new Stack();
+		$stack->setId(10);
+		$stack->setBoardId(1);
+		$stack->setIsDoneColumn(false);
+		$this->cardMapper->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($card);
+		$this->cardMapper->expects($this->once())
+			->method('update')
+			->willReturnCallback(fn (Card $c) => $c);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(10)
+			->willReturn($stack);
+		$this->stackMapper->expects($this->once())
+			->method('findDoneColumnForBoard')
+			->with(1)
+			->willReturn(null);
+		$result = $this->cardService->done(42);
+		$this->assertNotNull($result->getDone());
+		$this->assertEquals(10, $result->getStackId());
+	}
+
+	public function testDoneAutoMovesToDoneColumn(): void {
+		$card = new Card();
+		$card->setId(42);
+		$card->setStackId(10);
+		$currentStack = new Stack();
+		$currentStack->setId(10);
+		$currentStack->setBoardId(1);
+		$currentStack->setIsDoneColumn(false);
+		$doneStack = new Stack();
+		$doneStack->setId(20);
+		$doneStack->setBoardId(1);
+		$doneStack->setIsDoneColumn(true);
+		$this->cardMapper->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($card);
+		$this->cardMapper->expects($this->exactly(2))
+			->method('update')
+			->willReturnCallback(fn (Card $c) => $c);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(10)
+			->willReturn($currentStack);
+		$this->stackMapper->expects($this->once())
+			->method('findDoneColumnForBoard')
+			->with(1)
+			->willReturn($doneStack);
+		$result = $this->cardService->done(42);
+		$this->assertNotNull($result->getDone());
+		$this->assertEquals(20, $result->getStackId());
+	}
+
+	public function testDoneDoesNotMoveCardAlreadyInDoneColumn(): void {
+		$card = new Card();
+		$card->setId(42);
+		$card->setStackId(20);
+		$doneStack = new Stack();
+		$doneStack->setId(20);
+		$doneStack->setBoardId(1);
+		$doneStack->setIsDoneColumn(true);
+		$this->cardMapper->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($card);
+		$this->cardMapper->expects($this->once())
+			->method('update')
+			->willReturnCallback(fn (Card $c) => $c);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(20)
+			->willReturn($doneStack);
+		$this->stackMapper->expects($this->never())
+			->method('findDoneColumnForBoard');
+		$result = $this->cardService->done(42);
+		$this->assertNotNull($result->getDone());
+		$this->assertEquals(20, $result->getStackId());
+	}
 }
