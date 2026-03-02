@@ -62,6 +62,35 @@ class CardOcsController extends OCSController {
 		return new DataResponse($card);
 	}
 
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
+	public function assignLabel(?int $boardId, int $cardId, int $labelId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->assignLabelOnRemote($board, $cardId, $labelId));
+			}
+		}
+
+		return new DataResponse($this->cardService->assignLabel($cardId, $labelId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
+	public function removeLabel(?int $boardId, int $cardId, int $labelId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->removeLabelOnRemote($board, $cardId, $labelId));
+			}
+		}
+
+		return new DataResponse($this->cardService->removeLabel($cardId, $labelId));
+	}
+
 	#[NoAdminRequired]
 	#[PublicPage]
 	#[NoCSRFRequired]
