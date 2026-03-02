@@ -135,7 +135,7 @@ return [
 	'ocs' => [
 		['name' => 'board_ocs#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
 		['name' => 'board_ocs#read', 'url' => '/api/v{apiVersion}/board/{boardId}', 'verb' => 'GET'],
-		['name' => 'board_ocs#stacks', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
+		['name' => 'stack_ocs#index', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_ocs#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
 		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 
@@ -146,6 +146,7 @@ return [
 		['name' => 'card_ocs#reorder', 'url' => '/api/v{apiVersion}/cards/{cardId}/reorder', 'verb' => 'PUT'],
 
 		['name' => 'stack_ocs#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
+		['name' => 'stack_ocs#setDoneStack', 'url' => '/api/v{apiVersion}/stacks/{stackId}/done', 'verb' => 'PUT'],
 		['name' => 'stack_ocs#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],
 		['name' => 'stack_ocs#reorder', 'url' => '/api/v{apiVersion}/stacks/{stackId}/reorder', 'verb' => 'PUT'],
 

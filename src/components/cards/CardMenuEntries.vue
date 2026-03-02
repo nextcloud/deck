@@ -30,6 +30,7 @@
 		<NcActionButton v-if="canEdit"
 			icon="icon-checkmark"
 			:close-after-click="true"
+			:disabled="isInDoneColumn && !!card.done"
 			@click="changeCardDoneStatus()">
 			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
 		</NcActionButton>
@@ -109,6 +110,9 @@ export default {
 		}),
 		canEdit() {
 			return !this.card.archived
+		},
+		isInDoneColumn() {
+			return this.stackById(this.card.stackId)?.isDoneColumn === true
 		},
 		canEditBoard() {
 			if (this.currentBoard) {
