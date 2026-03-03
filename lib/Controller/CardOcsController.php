@@ -8,6 +8,7 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Model\OptionalNullableValue;
+use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ExternalBoardService;
@@ -25,6 +26,7 @@ class CardOcsController extends OCSController {
 		string $appName,
 		IRequest $request,
 		private CardService $cardService,
+		private AssignmentService $assignmentService,
 		private StackService $stackService,
 		private BoardService $boardService,
 		private ExternalBoardService $externalBoardService,
@@ -75,6 +77,19 @@ class CardOcsController extends OCSController {
 		}
 
 		return new DataResponse($this->cardService->assignLabel($cardId, $labelId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
+	public function assignUser(?int $boardId, int $cardId, string $userId, int $type = 0): DataResponse {
+		if ($boardId) {
+			$localBoard = $this->boardService->find($boardId, false);
+			if ($localBoard->getExternalId()) {
+				return new DataResponse($this->externalBoardService->assignUserOnRemote($localBoard, $cardId, $userId, $type));
+			}
+		}
+		return new DataResponse($this->assignmentService->assignUser($cardId, $userId, $type));
 	}
 
 	#[NoAdminRequired]

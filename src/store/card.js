@@ -354,7 +354,8 @@ export default function cardModuleFactory() {
 				}
 			},
 			async assignCardToUser({ commit }, { card, assignee }) {
-				const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)
+				const boardId = this.state.currentBoard.id
+				const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type, boardId)
 				commit('assignCardToUser', user)
 			},
 			async removeUserFromCard({ commit }, { card, assignee }) {

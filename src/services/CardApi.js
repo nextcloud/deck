@@ -110,11 +110,11 @@ export class CardApi {
 			})
 	}
 
-	assignUser(cardId, id, type) {
-		return axios.post(this.url(`/cards/${cardId}/assign`), { userId: id, type })
+	assignUser(cardId, id, type, boardId) {
+		return axios.post(this.ocsUrl(`/cards/${cardId}/assign`), { userId: id, type, boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
