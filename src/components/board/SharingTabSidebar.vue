@@ -90,7 +90,7 @@ const SOURCE_TO_SHARE_TYPE = {
 	groups: 1,
 	emails: 4,
 	remotes: 6,
-	teams: 7,
+	circles: 7,
 }
 
 export default {
@@ -139,6 +139,7 @@ export default {
 					displayName: item.displayname || item.name || item.label || item.id,
 					user: item.id,
 					subname: item.shareWithDisplayNameUnique || item.subline || item.id, // NcSelectUser does its own pattern matching to filter things out
+					type: SOURCE_TO_SHARE_TYPE[item.source]
 				}
 				return res
 			}).slice(0, 10)

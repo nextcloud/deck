@@ -7,7 +7,6 @@
 
 namespace OCA\Deck\Service;
 
-use OC\Federation\CloudIdManager;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Board;
@@ -56,10 +55,10 @@ class ExternalBoardService {
 		return new DataResponse($this->LocalizeRemoteStacks($ocs, $localBoard));
 	}
 
-	public function localizeRemoteUser(Board $localBoard, array $user): array | User | FederatedUser | null {
+	public function localizeRemoteUser(Board $localBoard, array $user): array|User|FederatedUser|null {
 		// skip invalid users
 		if (!$user['uid']) {
-			return null;;
+			return null;
 		}
 		// if it's already a valid cloud id the user originates from a third instance and we pass it as is
 		if ($this->cloudIdManager->isValidCloudId($user['uid'])) {
@@ -81,7 +80,7 @@ class ExternalBoardService {
 	public function LocalizeRemoteStacks(array $stacks, Board $localBoard) {
 		foreach ($stacks as $i => $stack) {
 			$stack['boardId'] = $localBoard->getId();
-			foreach($stack['cards'] as $j => $card) {
+			foreach ($stack['cards'] as $j => $card) {
 				$stack['cards'][$j]['assignedUsers'] = array_map(function ($assignment) use ($localBoard) {
 					$assignment['participant'] = $this->localizeRemoteUser($localBoard, $assignment['participant']);
 					return $assignment;
@@ -234,6 +233,32 @@ class ExternalBoardService {
 		return $result;
 	}
 
+	public function unAssignUserOnRemote(Board $localBoard, int $cardId, string $userId, int $type = 0): array {
+		$this->configService->ensureFederationEnabled();
+
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+
+		if ($this->cloudIdManager->isValidCloudId($userId)) {
+			$cloudId = $this->cloudIdManager->resolveCloudId($userId);
+			// assignee's origin is the same as the board owner's origin: send as local user
+			if ($cloudId->getRemote() === $ownerCloudId->getRemote()) {
+				$userId = $cloudId->getUser();
+				$type = Assignment::TYPE_USER;
+			}
+		} else {
+			// local user for us = remote user for remote
+			$userId = $this->cloudIdManager->getCloudId($userId, null)->getId();
+			$type = Assignment::TYPE_REMOTE;
+		}
+		$shareToken = $localBoard->getShareToken();
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/unassign';
+		$resp = $this->proxy->put($ownerCloudId->getId(), $shareToken, $url, [
+			'userId' => $userId,
+			'type' => $type,
+			'boardId' => $localBoard->getExternalId(),
+		]);
+		return $this->proxy->getOcsData($resp);
+	}
 
 	public function createStackOnRemote(
 		Board $localBoard,

@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
 
 class PermissionService {
 
-	/** @var array<string, array<string, User>> */
+	/** @var array<string, array<string, User|FederatedUser>> */
 	private $users = [];
 
 	// accessToken to check permission for federated shares
@@ -266,7 +266,7 @@ class PermissionService {
 	 *
 	 * @param $boardId
 	 * @param $refresh
-	 * @return array<string, User>
+	 * @return array<string, User | FederatedUser>
 	 * */
 	public function findUsers($boardId, $refresh = false) {
 		// cache users of a board so we don't query them for every cards

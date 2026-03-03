@@ -125,11 +125,11 @@ export class CardApi {
 			})
 	}
 
-	removeUser(cardId, id, type) {
-		return axios.put(this.url(`/cards/${cardId}/unassign`), { userId: id, type })
+	removeUser(cardId, id, type, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${cardId}/unassign`), { userId: id, type, boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
