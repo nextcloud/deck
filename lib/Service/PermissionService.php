@@ -13,12 +13,14 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Cache\CappedMemoryCache;
+use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -47,6 +49,7 @@ class PermissionService {
 		private IGroupManager $groupManager,
 		private IManager $shareManager,
 		private IConfig $config,
+		private ICloudIdManager $cloudIdManager,
 		private ?string $userId,
 	) {
 		$this->boardCache = new CappedMemoryCache();
@@ -304,6 +307,10 @@ class PermissionService {
 				foreach ($group->getUsers() as $user) {
 					$users[(string)$user->getUID()] = new User($user->getUID(), $this->userManager);
 				}
+			}
+
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				$users[(string)$acl->getParticipant()] = new FederatedUser($this->cloudIdManager->resolveCloudId($acl->getParticipant()));
 			}
 
 			if ($this->circlesService->isCirclesEnabled() && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
