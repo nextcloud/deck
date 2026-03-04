@@ -184,9 +184,9 @@ export default function cardModuleFactory() {
 					})
 					.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 			},
-			allCardsByStack: (state) => (id) => {
+			activeCardsByStack: (state) => (id) => {
 				return state.cards
-					.filter((card) => card.stackId === id)
+					.filter((card) => card.stackId === id && !card.archived)
 					.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 			},
 			cardById: state => (id) => {
@@ -304,10 +304,12 @@ export default function cardModuleFactory() {
 			},
 			async reorderCard({ commit, getters }, card) {
 				let i = 0
+				let found = false
 				const newCards = []
-				for (const c of getters.allCardsByStack(card.stackId)) {
+				for (const c of getters.activeCardsByStack(card.stackId)) {
 					if (c.id === card.id) {
 						newCards.push(card)
+						found = true
 					}
 					if (i === card.order) {
 						i++
@@ -316,7 +318,9 @@ export default function cardModuleFactory() {
 						newCards.push({ ...c, order: i++ })
 					}
 				}
-				newCards.push(card)
+				if (!found) {
+					newCards.push(card)
+				}
 				await commit('updateCardsReorder', newCards)
 
 				apiClient.reorderCard(card).then((cards) => {

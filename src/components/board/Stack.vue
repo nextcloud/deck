@@ -269,10 +269,11 @@ export default {
 		},
 		getUnfilteredOrder(filteredAddedIndex, cardId) {
 			// Convert a drop index from the filtered view to the correct
-			// order among all (unfiltered) cards in the stack so that
-			// reordering works correctly when filters are active.
-			const allCards = this.$store.getters.allCardsByStack(this.stack.id)
-				.filter(c => !c.archived && c.id !== cardId)
+			// order among all active (non-archived, unfiltered) cards in
+			// the stack so that reordering works correctly when filters
+			// are active.
+			const allCards = this.$store.getters.activeCardsByStack(this.stack.id)
+				.filter(c => c.id !== cardId)
 			const filteredCards = this.cardsByStack.filter(c => c.id !== cardId)
 
 			if (filteredCards.length === 0 || allCards.length === 0) {
@@ -282,19 +283,22 @@ export default {
 			if (filteredAddedIndex <= 0) {
 				// Dropped before the first visible card
 				const firstVisible = filteredCards[0]
-				return allCards.findIndex(c => c.id === firstVisible.id)
+				const idx = allCards.findIndex(c => c.id === firstVisible.id)
+				return idx !== -1 ? idx : filteredAddedIndex
 			}
 
 			if (filteredAddedIndex >= filteredCards.length) {
 				// Dropped after the last visible card
 				const lastVisible = filteredCards[filteredCards.length - 1]
-				return allCards.findIndex(c => c.id === lastVisible.id) + 1
+				const idx = allCards.findIndex(c => c.id === lastVisible.id)
+				return idx !== -1 ? idx + 1 : filteredAddedIndex
 			}
 
 			// Dropped between two visible cards — place after the
 			// preceding visible card in the unfiltered list
 			const prevVisible = filteredCards[filteredAddedIndex - 1]
-			return allCards.findIndex(c => c.id === prevVisible.id) + 1
+			const idx = allCards.findIndex(c => c.id === prevVisible.id)
+			return idx !== -1 ? idx + 1 : filteredAddedIndex
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
