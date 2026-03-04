@@ -103,8 +103,12 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		));
 
 		// Shared to user groups of the user
-		$groupIds = $this->groupManager->getUserGroupIds($this->userManager->get($userId));
-		if (count($groupIds) !== 0) {
+		$user = $this->userManager->get($userId);
+		$groupIds = null;
+		if ($user !== null) {
+			$groupIds = $this->groupManager->getUserGroupIds($user);
+		}
+		if ($groupIds !== null && count($groupIds) !== 0) {
 			$qb->orWhere($qb->expr()->andX(
 				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
 				$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)),
