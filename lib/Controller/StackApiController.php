@@ -7,14 +7,16 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-use Sabre\HTTP\Util;
+use function Sabre\HTTP\parseDate;
 
 /**
  * Class StackApiController
@@ -29,23 +31,21 @@ class StackApiController extends ApiController {
 		$appName,
 		IRequest $request,
 		private StackService $stackService,
-		private BoardService $boardService,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * Return all of the stacks in the specified board.
+	 * Return all the stacks in the specified board.
 	 */
-	public function index() {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function index(): DataResponse {
 		$since = 0;
 		$modified = $this->request->getHeader('If-Modified-Since');
-		if ($modified !== null && $modified !== '') {
-			$date = Util::parseHTTPDate($modified);
+		if ($modified !== '') {
+			$date = parseDate($modified);
 			if (!$date) {
 				throw new StatusException('Invalid If-Modified-Since header provided.');
 			}
@@ -56,13 +56,12 @@ class StackApiController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * Return all of the stacks in the specified board.
+	 * Return all the stacks in the specified board.
 	 */
-	public function get() {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function get(): DataResponse {
 		$stack = $this->stackService->find($this->request->getParam('stackId'));
 		$response = new DataResponse($stack, HTTP::STATUS_OK);
 		$response->setETag($stack->getETag());
@@ -70,55 +69,45 @@ class StackApiController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * @params $title
-	 * @params $order
-	 *
 	 * Create a stack with the specified title and order.
 	 */
-	public function create($title, $order) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function create(string $title, int $order): DataResponse {
 		$stack = $this->stackService->create($title, $this->request->getParam('boardId'), $order);
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * @params $title
-	 * @params $order
-	 *
 	 * Update a stack by the specified stackId and boardId with the values that were put.
 	 */
-	public function update($title, $order) {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function update(string $title, int $order) {
 		$stack = $this->stackService->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order, 0);
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
 	 * Delete the stack specified by $this->request->getParam('stackId').
 	 */
-	public function delete() {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function delete(): DataResponse {
 		$stack = $this->stackService->delete($this->request->getParam('stackId'));
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 *
-	 * get the stacks that have been archived.
+	 * Get the stacks that have been archived.
 	 */
-	public function getArchived() {
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function getArchived(): DataResponse {
 		$stacks = $this->stackService->findAllArchived($this->request->getParam('boardId'));
 		return new DataResponse($stacks, HTTP::STATUS_OK);
 	}

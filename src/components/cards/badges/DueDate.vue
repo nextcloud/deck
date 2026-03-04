@@ -95,16 +95,16 @@ export default {
 		z-index: 2;
 
 		[data-due-state='Overdue'] & {
-			color: var(--color-error-text);
-			background-color: rgba(var(--color-error-rgb), .1);
+			color: var(--color-element-error, var(--color-error-text));
+			background-color: rgba(var(--color-error-rgb), .5);
 		}
 		[data-due-state='Now'] & {
-			color: var(--color-warning-text);
-			background-color: rgba(var(--color-warning-rgb), .1);
+			color: var(--color-element-warning, var(--color-warning-text));
+			background-color: rgba(var(--color-warning-rgb), .5);
 		}
 		[data-due-state='Done'] & {
-			color: var(--color-success-text);
-			background-color: rgba(var(--color-success-rgb), .1);
+			color: var(--color-element-success, var(--color-success-text));
+			background-color: rgba(var(--color-success-rgb), .5);
 		}
 
 		.due--label {

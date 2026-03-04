@@ -15,7 +15,7 @@ use OCP\EventDispatcher\Event;
 
 abstract class ACardEvent extends Event {
 	private $card;
-	
+
 	public function __construct(Card $card) {
 		parent::__construct();
 

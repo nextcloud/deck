@@ -22,8 +22,6 @@ use OCP\IUserManager;
 use OutOfBoundsException;
 use Psr\Log\LoggerInterface;
 
-use function is_numeric;
-
 class CommentService {
 
 	public function __construct(
@@ -36,12 +34,9 @@ class CommentService {
 	) {
 	}
 
-	public function list(string $cardId, int $limit = 20, int $offset = 0): DataResponse {
-		if (!is_numeric($cardId)) {
-			throw new BadRequestException('A valid card id must be provided');
-		}
+	public function list(int $cardId, int $limit = 20, int $offset = 0): DataResponse {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
-		$comments = $this->commentsManager->getForObject(Application::COMMENT_ENTITY_TYPE, $cardId, $limit, $offset);
+		$comments = $this->commentsManager->getForObject(Application::COMMENT_ENTITY_TYPE, (string)$cardId, $limit, $offset);
 		$result = [];
 		foreach ($comments as $comment) {
 			$formattedComment = $this->formatComment($comment);
@@ -96,13 +91,13 @@ class CommentService {
 	 * @throws BadRequestException
 	 * @throws NotFoundException|NoPermissionException
 	 */
-	public function create(int $cardId, string $message, string $replyTo = '0'): DataResponse {
+	public function create(int $cardId, string $message, int $replyTo = 0): DataResponse {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 
 		// Check if parent is a comment on the same card
-		if ($replyTo !== '0') {
+		if ($replyTo !== 0) {
 			try {
-				$comment = $this->commentsManager->get($replyTo);
+				$comment = $this->commentsManager->get((string)$replyTo);
 				if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int)$comment->getObjectId() !== $cardId) {
 					throw new CommentNotFoundException();
 				}
@@ -115,7 +110,7 @@ class CommentService {
 			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, (string)$cardId);
 			$comment->setMessage($message);
 			$comment->setVerb('comment');
-			$comment->setParentId($replyTo);
+			$comment->setParentId((string)$replyTo);
 			$this->commentsManager->save($comment);
 			return new DataResponse($this->formatComment($comment, true));
 		} catch (\InvalidArgumentException $e) {
@@ -128,14 +123,8 @@ class CommentService {
 		}
 	}
 
-	public function update(string $cardId, string $commentId, string $message): DataResponse {
-		if (!is_numeric($cardId)) {
-			throw new BadRequestException('A valid card id must be provided');
-		}
-		if (!is_numeric($commentId)) {
-			throw new BadRequestException('A valid comment id must be provided');
-		}
-		$comment = $this->get((int)$cardId, (int)$commentId);
+	public function update(int $cardId, int $commentId, string $message): DataResponse {
+		$comment = $this->get($cardId, $commentId);
 		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
@@ -145,18 +134,12 @@ class CommentService {
 		return new DataResponse($this->formatComment($comment));
 	}
 
-	public function delete(string $cardId, string $commentId): DataResponse {
-		if (!is_numeric($cardId)) {
-			throw new BadRequestException('A valid card id must be provided');
-		}
-		if (!is_numeric($commentId)) {
-			throw new BadRequestException('A valid comment id must be provided');
-		}
+	public function delete(int $cardId, int $commentId): DataResponse {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 
 		try {
-			$comment = $this->commentsManager->get($commentId);
-			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $comment->getObjectId() !== $cardId) {
+			$comment = $this->commentsManager->get((string)$commentId);
+			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int)$comment->getObjectId() !== $cardId) {
 				throw new CommentNotFoundException();
 			}
 		} catch (CommentNotFoundException $e) {
@@ -165,11 +148,11 @@ class CommentService {
 		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
-		$this->commentsManager->delete($commentId);
+		$this->commentsManager->delete((string)$commentId);
 		return new DataResponse([]);
 	}
 
-	private function formatComment(IComment $comment, $addReplyTo = false): array {
+	private function formatComment(IComment $comment, bool $addReplyTo = false): array {
 		$actorDisplayName = $this->userManager->getDisplayName($comment->getActorId()) ?? $comment->getActorId();
 
 		$formattedComment = [

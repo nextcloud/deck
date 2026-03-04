@@ -122,7 +122,10 @@
 									class="checkbox"
 									:value="user.uid"
 									@change="setFilter">
-								<label :for="user.uid"><NcAvatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
+								<label :for="user.uid"><NcAvatar :user="user.uid"
+									:size="24"
+									:disable-menu="true"
+									:hide-status="true" /> {{ user.displayname }}</label>
 							</div>
 
 							<h3>{{ t('deck', 'Filter by status') }}</h3>
@@ -312,7 +315,6 @@ export default {
 			newStackTitle: '',
 			stack: '',
 			filterVisible: false,
-			showArchived: false,
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
@@ -331,6 +333,7 @@ export default {
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 			searchQuery: state => state.searchQuery,
+			showArchived: state => state.showArchived,
 		}),
 		detailsRoute() {
 			return {
@@ -405,7 +408,6 @@ export default {
 		},
 		toggleShowArchived() {
 			this.$store.dispatch('toggleShowArchived')
-			this.showArchived = !this.showArchived
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }
@@ -428,7 +430,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '', completed: 'both' }
+			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},

@@ -217,8 +217,8 @@ class DeckProvider implements IFullTextSearchProvider {
 	public function improveSearchResult(ISearchResult $searchResult) {
 		foreach ($searchResult->getDocuments() as $document) {
 			try {
-				$board =
-					$this->fullTextSearchService->getBoardFromCardId((int)$document->getId());
+				$board
+					= $this->fullTextSearchService->getBoardFromCardId((int)$document->getId());
 				$path = '/board/' . $board->getId() . '/card/' . $document->getId();
 				$document->setLink($this->urlGenerator->linkToRoute('deck.page.index') . $path);
 			} catch (DoesNotExistException $e) {

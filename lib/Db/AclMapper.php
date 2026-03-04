@@ -18,16 +18,23 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		parent::__construct($db, 'deck_board_acl', Acl::class);
 	}
 
+	public function findByAccessToken(string $accessToken) {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage', 'token')
+			->from('deck_board_acl')
+			->where($qb->expr()->eq('token', $qb->createNamedParameter($accessToken, IQueryBuilder::PARAM_STR)))
+			->setMaxResults(1);
+
+		return $this->findEntity($qb);
+	}
+
 	/**
-	 * @param numeric $boardId
-	 * @param int|null $limit
-	 * @param int|null $offset
 	 * @return Acl[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAll($boardId, $limit = null, $offset = null) {
+	public function findAll(int $boardId, ?int $limit = null, ?int $offset = null) {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage')
+		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage', 'token')
 			->from('deck_board_acl')
 			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
@@ -51,12 +58,9 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $userId
-	 * @param numeric $id
-	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
-	public function isOwner($userId, $id): bool {
+	public function isOwner(string $userId, int $id): bool {
 		$aclId = $id;
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('acl.id')
@@ -68,11 +72,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
-	/**
-	 * @param numeric $id
-	 * @return int|null
-	 */
-	public function findBoardId($id): ?int {
+	public function findBoardId(int $id): ?int {
 		try {
 			$entity = $this->find($id);
 			return $entity->getBoardId();
@@ -87,7 +87,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 * @return Acl[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findByParticipant($type, $participant): array {
+	public function findByParticipant(int $type, string $participant): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -96,6 +96,16 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->eq('participant', $qb->createNamedParameter($participant, IQueryBuilder::PARAM_STR)));
 
 		return $this->findEntities($qb);
+	}
+
+	public function findParticipantFromBoard(int $boardId, int $type, string $participant): ?Acl {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_board_acl')
+			->where($qb->expr()->eq('type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)))
+			->where($qb->expr()->eq('participant', $qb->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
+		return $this->findEntity($qb);
 	}
 
 	/**

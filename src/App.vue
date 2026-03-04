@@ -107,6 +107,10 @@ export default {
 		this.$store.dispatch('loadSharees')
 	},
 	mounted() {
+		// Redirect to cleaner URL (without /index.php) if RewriteBase is enabled
+		if (this.$route.path.startsWith('/index.php')) {
+			window.location.href = this.$route.fullPath.replace('/index.php', '')
+		}
 		// Set navigation to initial state and update in case it gets toggled
 		emit('toggle-navigation', { open: !this.isMobile && this.navShown, _initial: true })
 		this.$nextTick(() => {

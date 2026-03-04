@@ -49,7 +49,7 @@ class CommentEventListener implements IEventListener {
 		$applicableEvents = [
 			CommentsEvent::EVENT_UPDATE
 		];
-		if (in_array($eventType, $applicableEvents)) {
+		if (in_array($eventType, $applicableEvents, true)) {
 			$this->notificationHandler($event);
 			return;
 		}

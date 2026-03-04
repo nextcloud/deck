@@ -5,7 +5,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router.js'
-import store from './store/main.js'
+import storeFactory from './store/main.js'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
@@ -13,12 +13,14 @@ import { subscribe } from '@nextcloud/event-bus'
 import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
-import './sessions.js'
+import { initSessions } from './sessions.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
 
+const store = storeFactory()
 sync(store, router)
+initSessions(store)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
@@ -38,17 +40,6 @@ Vue.config.errorHandler = (err, vm, info) => {
 	}
 	console.error(err)
 }
-
-// TODO: remove when we have a proper fileinfo standalone library
-// original scripts are loaded from
-// https://github.com/nextcloud/server/blob/5bf3d1bb384da56adbf205752be8f840aac3b0c5/lib/private/legacy/template.php#L120-L122
-window.addEventListener('DOMContentLoaded', () => {
-	if (!window.OCA.Files) {
-		window.OCA.Files = {}
-	}
-	// register unused client for the sidebar to have access to its parser methods
-	Object.assign(window.OCA.Files, { App: { fileList: { filesClient: OC.Files.getClient() } } }, window.OCA.Files)
-})
 
 /* eslint-disable-next-line no-new */
 new Vue({

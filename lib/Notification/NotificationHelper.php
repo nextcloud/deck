@@ -95,7 +95,7 @@ class NotificationHelper {
 
 			$shouldNotify = $notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL;
 
-			if ($user->getUID() === $board->getOwner() && count($board->getAcl()) === 0) {
+			if ($user->getUID() === $board->getOwner() && count($board->getAcl() ?? []) === 0) {
 				// Notify if all or assigned is configured for unshared boards
 				$shouldNotify = true;
 			} elseif ($notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED && $this->assignmentMapper->isUserAssigned($card->getId(), $user->getUID())) {
@@ -107,7 +107,7 @@ class NotificationHelper {
 				$notification = $this->notificationManager->createNotification();
 				$notification
 					->setApp('deck')
-					->setUser((string)$user->getUID())
+					->setUser($user->getUID())
 					->setObject('card', (string)$card->getId())
 					->setSubject('card-overdue', [
 						$card->getTitle(), $board->getTitle()
@@ -174,7 +174,7 @@ class NotificationHelper {
 			$notification = $this->generateBoardShared($board, $acl->getParticipant());
 			if ($markAsRead) {
 				$this->notificationManager->markProcessed($notification);
-			} else {
+			} elseif ($acl->getParticipant() !== $this->currentUser) {
 				$notification->setDateTime(new DateTime());
 				$this->notificationManager->notify($notification);
 			}
@@ -201,6 +201,9 @@ class NotificationHelper {
 
 	public function sendMention(IComment $comment): void {
 		foreach ($comment->getMentions() as $mention) {
+			if ((string)$mention['id'] === $this->currentUser) {
+				continue;
+			}
 			$card = $this->cardMapper->find($comment->getObjectId());
 			$boardId = $this->cardMapper->findBoardId($card->getId());
 			$notification = $this->notificationManager->createNotification();

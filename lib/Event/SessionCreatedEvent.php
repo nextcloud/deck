@@ -17,7 +17,7 @@ use OCP\EventDispatcher\Event;
 class SessionCreatedEvent extends Event {
 	private $boardId;
 	private $userId;
-	
+
 	public function __construct(int $boardId, string $userId) {
 		parent::__construct();
 

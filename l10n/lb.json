@@ -7,6 +7,8 @@
     "Cancel" : "Ofbriechen",
     "Completed" : "Erfëllt",
     "Details" : "Detailer",
+    "General" : "Allgemeng",
+    "Search" : "Search",
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",
     "Activity" : "Aktivitéit",
@@ -18,20 +20,18 @@
     "Download" : "Eroflueden",
     "Modified" : "Geännert",
     "Comments" : "Kommentarer",
-    "Save" : "Späicheren",
     "Created:" : "Erstallt:",
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "Description" : "Beschreiwung",
     "seconds ago" : "Sekonnen hier",
-    "Search" : "Search",
     "Shared with you" : "Mat dir gedeelt",
     "Advanced options" : "Erweidert Astellungen",
     "Export" : "Exportéieren",
-    "Today" : "Haut",
-    "Tomorrow" : "Muer",
     "Close" : "Zoumaachen",
     "Share" : "Deelen",
-    "Personal" : "Perséinlech"
+    "Save" : "Späicheren",
+    "Today" : "Haut",
+    "Tomorrow" : "Muer"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -143,7 +143,7 @@ class UserExportTest extends \Test\TestCase {
 		$this->commentService->expects($this->exactly(count($cards) * count($stacks) * count($boards)))
 			->method('list')
 			->willReturn(new DataResponse($comments));
-		
+
 		$this->cardMapper->expects($this->exactly(count($boards) * count($stacks)))
 			->method('findAllByStack')
 			->willReturn($cards);
@@ -197,7 +197,7 @@ class UserExportTest extends \Test\TestCase {
 		$this->commentService->expects($this->exactly(count($stacks) * count($boards)))
 			->method('list')
 			->willReturn(new DataResponse($comments));
-		
+
 		$this->cardMapper->expects($this->once())
 			->method('findAllByStack')
 			->willReturn($cards);

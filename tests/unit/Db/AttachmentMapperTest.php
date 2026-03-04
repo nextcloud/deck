@@ -119,7 +119,7 @@ class AttachmentMapperTest extends TestCase {
 			->method('isOwner')
 			->with('admin', 1)
 			->willReturn(true);
-		$this->assertTrue($this->attachmentMapper->isOwner('admin', (string)$this->attachments[0]->getId()));
+		$this->assertTrue($this->attachmentMapper->isOwner('admin', $this->attachments[0]->getId()));
 	}
 
 	public function testIsOwnerInvalid() {
@@ -127,7 +127,7 @@ class AttachmentMapperTest extends TestCase {
 			->method('isOwner')
 			->with('admin', 1)
 			->will($this->throwException(new DoesNotExistException('does not exist')));
-		$this->assertFalse($this->attachmentMapper->isOwner('admin', (string)$this->attachments[0]->getId()));
+		$this->assertFalse($this->attachmentMapper->isOwner('admin', $this->attachments[0]->getId()));
 	}
 
 	public function testFindBoardId() {

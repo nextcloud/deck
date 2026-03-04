@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\OverviewService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -24,9 +25,7 @@ class OverviewApiController extends OCSController {
 		parent::__construct($appName, $request);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function upcomingCards(): DataResponse {
 		return new DataResponse($this->dashboardService->findUpcomingCards($this->userId));
 	}

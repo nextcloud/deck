@@ -7,6 +7,22 @@
 
 namespace OCA\Deck\Db;
 
+/**
+ * @method int getBoardId()
+ * @method bool isPermissionEdit()
+ * @method void setPermissionEdit(bool $permissionEdit)
+ * @method bool isPermissionShare()
+ * @method void setPermissionShare(bool $permissionShare)
+ * @method bool isPermissionManage()
+ * @method void setPermissionManage(bool $permissionManage)
+ * @method int getType()
+ * @method void setType(int $type)
+ * @method bool isOwner()
+ * @method void setOwner(int $owner)
+ * @method void setToken(string $token)
+ * @method string getToken()
+ *
+ */
 class Acl extends RelationalEntity {
 	public const PERMISSION_READ = 0;
 	public const PERMISSION_EDIT = 1;
@@ -15,6 +31,7 @@ class Acl extends RelationalEntity {
 
 	public const PERMISSION_TYPE_USER = 0;
 	public const PERMISSION_TYPE_GROUP = 1;
+	public const PERMISSION_TYPE_REMOTE = 6;
 	public const PERMISSION_TYPE_CIRCLE = 7;
 
 	protected $participant;
@@ -24,6 +41,7 @@ class Acl extends RelationalEntity {
 	protected $permissionShare = false;
 	protected $permissionManage = false;
 	protected $owner = false;
+	protected $token = null;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
@@ -33,21 +51,18 @@ class Acl extends RelationalEntity {
 		$this->addType('permissionManage', 'boolean');
 		$this->addType('type', 'integer');
 		$this->addType('owner', 'boolean');
+		$this->addType('token', 'string');
 		$this->addRelation('owner');
 		$this->addResolvable('participant');
 	}
 
-	public function getPermission($permission) {
-		switch ($permission) {
-			case self::PERMISSION_READ:
-				return true;
-			case self::PERMISSION_EDIT:
-				return $this->getPermissionEdit();
-			case self::PERMISSION_SHARE:
-				return $this->getPermissionShare();
-			case self::PERMISSION_MANAGE:
-				return $this->getPermissionManage();
-		}
-		return false;
+	public function getPermission(int $permission): bool {
+		return match ($permission) {
+			self::PERMISSION_READ => true,
+			self::PERMISSION_EDIT => $this->getPermissionEdit(),
+			self::PERMISSION_SHARE => $this->getPermissionShare(),
+			self::PERMISSION_MANAGE => $this->getPermissionManage(),
+			default => false,
+		};
 	}
 }

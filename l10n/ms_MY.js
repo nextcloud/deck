@@ -6,6 +6,8 @@ OC.L10N.register(
     "Missing a temporary folder" : "Direktori sementara hilang",
     "Done" : "Done",
     "Cancel" : "Batal",
+    "General" : "Umum",
+    "Search" : "Search",
     "Activity" : "Aktiviti",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -14,16 +16,14 @@ OC.L10N.register(
     "Edit" : "Sunting",
     "Download" : "Muat turun",
     "Modified" : "Dimodifikasi",
-    "Save" : "Simpan",
     "Created:" : "Telah dibina:",
     "Update" : "Kemaskini",
     "Description" : "Keterangan",
-    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Export" : "Eksport",
-    "Today" : "Hari ini",
     "Close" : "Tutup",
     "Share" : "Kongsi",
-    "Personal" : "Peribadi"
+    "Save" : "Simpan",
+    "Today" : "Hari ini"
 },
 "nplurals=1; plural=0;");

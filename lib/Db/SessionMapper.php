@@ -34,7 +34,7 @@ class SessionMapper extends QBMapper {
 			throw new DoesNotExistException('Session is invalid');
 		}
 		$session = Session::fromRow($data);
-		if ($session->getUserId() != $userId || $session->getBoardId() != $boardId) {
+		if ($session->getUserId() !== $userId || $session->getBoardId() !== $boardId) {
 			throw new DoesNotExistException('Session is invalid');
 		}
 		return $session;

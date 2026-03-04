@@ -178,7 +178,8 @@ export default {
 		},
 	},
 	watch: {
-		currentCard() {
+		currentCard(newCard, oldCard) {
+			if (newCard.id === oldCard.id) return
 			this.focusHeader()
 		},
 		'currentCard.title': {

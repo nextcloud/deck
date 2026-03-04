@@ -1,0 +1,26 @@
+OC.L10N.register(
+    "deck",
+    {
+    "Finished" : "Tamamlandy",
+    "File" : "Faýl",
+    "Cancel" : "ýatyrmak",
+    "Completed" : "Tamamlanan",
+    "Details" : "Jikme-jiklikler",
+    "General" : "Esasy",
+    "Search" : "Gözlemek",
+    "Sharing" : "Paýlaşmak",
+    "Tags" : "Bellikler",
+    "Activity" : "işjeňlik we hereket",
+    "(remote)" : "(uzakdan)",
+    "Delete" : "Pozmak",
+    "Edit" : "Redaktirläň",
+    "Download" : "Göçürip almak",
+    "Update" : "Täzelemek",
+    "seconds ago" : "Sekunt öň",
+    "No notifications" : "Duýduryş ýok",
+    "Close" : "Ýap",
+    "Share" : "Paýlaş",
+    "Save" : "Saklamak",
+    "Today" : "Şu gün"
+},
+"nplurals=2; plural=(n != 1);");

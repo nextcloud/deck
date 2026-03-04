@@ -10,10 +10,24 @@ namespace OCA\Deck\Db;
 /**
  * @method int getId()
  * @method string getTitle()
+ * @method void setTitle(string $title)
  * @method int getShared()
+ * @method void setShared(int $shared)
+ * @method bool isArchived()
  * @method bool getArchived()
+ * @method void setArchived(bool $archived)
  * @method int getDeletedAt()
+ * @method void setDeletedAt(int $deletedAt)
  * @method int getLastModified()
+ * @method void setLastModified(int $lastModified)
+ * @method string getOwner()
+ * @method void setOwner(string $owner)
+ * @method string getColor()
+ * @method void setColor(string $color)
+ * @method void setShareToken(string $shareToken)
+ * @method string getShareToken()
+ * @method void setExternalId(int $externalId)
+ * @method int | null getExternalId()
  */
 class Board extends RelationalEntity {
 	protected $title;
@@ -31,6 +45,8 @@ class Board extends RelationalEntity {
 	protected $activeSessions = [];
 	protected $deletedAt = 0;
 	protected $lastModified = 0;
+	protected $shareToken = null;
+	protected $externalId = null;
 
 	protected $settings = [];
 
@@ -40,6 +56,8 @@ class Board extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addType('lastModified', 'integer');
+		$this->addType('shareToken', 'string');
+		$this->addType('externalId', 'integer');
 		$this->addRelation('labels');
 		$this->addRelation('acl');
 		$this->addRelation('shared');

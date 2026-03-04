@@ -16,10 +16,14 @@
 			{{ board.title }}
 		</div>
 		<div class="board-list-avatars-cell" title="">
-			<NcAvatar :user="board.owner.uid" :display-name="board.owner.displayname" class="board-list-avatar" />
+			<NcAvatar :user="board.owner.uid"
+				:display-name="board.owner.displayname"
+				class="board-list-avatar"
+				:hide-status="true" />
 			<NcAvatar v-for="user in limitedAcl"
 				:key="user.id"
 				:user="user.participant.uid"
+				:hide-status="true"
 				:display-name="user.participant.displayname"
 				class="board-list-avatar" />
 			<div v-if="board.acl.length > 5" :title="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />

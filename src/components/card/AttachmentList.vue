@@ -6,7 +6,7 @@
 <template>
 	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
 		<div v-if="!isReadOnly" class="button-group">
-			<NcButton class="icon-upload" @click="uploadNewFile()">
+			<NcButton v-if="canUploadLocalFiles" class="icon-upload" @click="uploadNewFile()">
 				{{ t('deck', 'Upload new files') }}
 			</NcButton>
 			<NcButton class="icon-folder" @click="shareFromFiles()">
@@ -141,6 +141,10 @@ export default {
 		}
 	},
 	computed: {
+		canUploadLocalFiles() {
+			const storageStats = loadState('files', 'storageStats', { quota: -1 })
+			return storageStats.quota !== 0
+		},
 		attachments() {
 			// FIXME sort propertly by last modified / deleted at
 			return [...this.$store.getters.attachmentsByCard(this.cardId)].filter(attachment => attachment.deletedAt >= 0).sort((a, b) => b.id - a.id)

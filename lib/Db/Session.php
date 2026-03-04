@@ -12,7 +12,6 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\Entity;
 
 class Session extends Entity implements \JsonSerializable {
-	public $id;
 	protected $userId;
 	protected $token;
 	protected $lastContact;

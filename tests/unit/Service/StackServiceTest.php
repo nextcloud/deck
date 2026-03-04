@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -48,8 +50,7 @@ use Test\TestCase;
  */
 class StackServiceTest extends TestCase {
 
-	/** @var StackService */
-	private $stackService;
+	private StackService $stackService;
 	/** @var \PHPUnit\Framework\MockObject\MockObject|StackMapper */
 	private $stackMapper;
 	/** @var \PHPUnit\Framework\MockObject\MockObject|CardMapper */
@@ -129,12 +130,17 @@ class StackServiceTest extends TestCase {
 				}
 			)
 		);
-		$this->cardMapper->expects($this->any())->method('findAll')->willReturn($this->getCards(222));
-
+		$this->cardMapper->expects($this->any())->method('findAllForStacks')->willReturnCallback(function (array $stackIds) {
+			$r = [];
+			foreach ($stackIds as $stackId) {
+				$r[$stackId] = $this->getCards(222);
+			}
+			return $r;
+		});
 
 		$actual = $this->stackService->findAll(123);
 		for ($stackId = 0; $stackId < 3; $stackId++) {
-			for ($cardId = 0;$cardId < 10;$cardId++) {
+			for ($cardId = 0; $cardId < 10; $cardId++) {
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getId(), $cardId);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getStackId(), 222);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getLabels(), $this->getLabels()[$cardId]);
@@ -211,7 +217,7 @@ class StackServiceTest extends TestCase {
 		$stackToBeDeleted->setBoardId(1);
 		$this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
 		$this->stackMapper->expects($this->once())->method('update')->willReturn($stackToBeDeleted);
-		$this->cardMapper->expects($this->once())->method('findAll')->willReturn([]);
+		$this->cardMapper->expects($this->once())->method('findAllForStacks')->willReturn([]);
 		$this->stackService->delete(123);
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), 'deletedAt is in the past');
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() > 0, 'deletedAt is set');
@@ -246,6 +252,9 @@ class StackServiceTest extends TestCase {
 		$this->stackMapper->expects($this->once())
 			->method('findAll')
 			->willReturn($stacks);
+		$this->stackMapper->expects($this->any())
+			->method('update')
+			->willReturnCallback(fn (Stack $stack): Stack => $stack);
 		$actual = $this->stackService->reorder(1, 2);
 		$a = $this->createStack(1, 2);
 		$b = $this->createStack(2, 0);
@@ -254,7 +263,7 @@ class StackServiceTest extends TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
-	private function createStack($id, $order) {
+	private function createStack(int $id, int $order) {
 		$stack = new Stack();
 		$stack->setId($id);
 		$stack->setBoardId(1);

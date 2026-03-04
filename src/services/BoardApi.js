@@ -4,7 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import '../models/index.js'
 
 /**
@@ -15,6 +15,11 @@ export class BoardApi {
 	url(url) {
 		url = `/apps/deck${url}`
 		return generateUrl(url)
+	}
+
+	ocsUrl(url) {
+		url = `/apps/deck/api/v1.0${url}`
+		return generateOcsUrl(url)
 	}
 
 	/**
@@ -49,10 +54,10 @@ export class BoardApi {
 	 * @return {Promise}
 	 */
 	createBoard(boardData) {
-		return axios.post(this.url('/boards'), boardData)
+		return axios.post(this.ocsUrl('/boards'), boardData)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -93,6 +98,21 @@ export class BoardApi {
 			})
 	}
 
+	leaveBoard(board) {
+		return axios.post(this.url(`/boards/${board.id}/leave`))
+			.then(
+				() => {
+					return Promise.resolve()
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	loadBoards() {
 		return axios.get(this.url('/boards'))
 			.then(
@@ -109,10 +129,10 @@ export class BoardApi {
 	}
 
 	loadById(id) {
-		return axios.get(this.url(`/boards/${id}`))
+		return axios.get(this.ocsUrl(`/board/${id}`))
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -304,10 +324,10 @@ export class BoardApi {
 	// Acl API Calls
 
 	addAcl(acl) {
-		return axios.post(this.url(`/boards/${acl.boardId}/acl`), acl)
+		return axios.post(this.ocsUrl(`/boards/${acl.boardId}/acl`), acl)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

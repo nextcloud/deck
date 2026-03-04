@@ -51,7 +51,7 @@ class FileServiceTest extends TestCase {
 	private AttachmentMapper&MockObject $attachmentMapper;
 	private IMimeTypeDetector&MockObject $mimeTypeDetector;
 	private FileService $fileService;
-	
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);

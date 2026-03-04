@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
@@ -116,7 +118,7 @@ class AttachmentServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 
 		$this->appContainer->expects($this->exactly(2))
-			->method('query')
+			->method('get')
 			->withConsecutive(
 				[FileService::class],
 				[FilesAppService::class]
@@ -156,7 +158,7 @@ class AttachmentServiceTest extends TestCase {
 		$fileAppServiceMock = $this->createMock(FilesAppService::class);
 
 		$appContainer->expects($this->exactly(3))
-			->method('query')
+			->method('get')
 			->withConsecutive(
 				[FileService::class],
 				[FilesAppService::class],
@@ -185,7 +187,7 @@ class AttachmentServiceTest extends TestCase {
 		$fileAppServiceMock = $this->createMock(FilesAppService::class);
 
 		$appContainer->expects($this->exactly(3))
-			->method('query')
+			->method('get')
 			->withConsecutive(
 				[FileService::class],
 				[FilesAppService::class],

@@ -16,6 +16,7 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\Importer\ABoardImportService;
+use OCP\Comments\IComment;
 use OCP\IUser;
 use OCP\IUserManager;
 
@@ -118,6 +119,7 @@ class DeckJsonService extends ABoardImportService {
 				$comments[$this->cards[$sourceCard->id]->getId()][$commentOriginal->id] = $comment;
 			}
 		}
+		/** @var array<int, array<string, IComment>> */
 		return $comments;
 	}
 

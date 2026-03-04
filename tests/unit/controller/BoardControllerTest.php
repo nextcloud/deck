@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -26,46 +28,48 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
+use OCA\Deck\Service\Importer\BoardImportService;
+use OCA\Deck\Service\PermissionService;
+use OCP\IGroupManager;
+use OCP\IL10N;
+use OCP\IRequest;
 use OCP\IUser;
+use OCP\IUserManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class BoardControllerTest extends \Test\TestCase {
-	private $l10n;
-	private $controller;
-	private $request;
-	private $userManager;
-	private $groupManager;
-	private $boardService;
-	private $permissionService;
-	private $boardImportService;
+	private IL10N&MockObject $l10n;
+	private BoardController $controller;
+	private IRequest&MockObject $request;
+	private IUserManager&MockObject $userManager;
+	private IGroupManager&MockObject $groupManager;
+	private BoardService&MockObject $boardService;
+	private PermissionService&MockObject $permissionService;
+	private BoardImportService&MockObject $boardImportService;
 	private $userId = 'user';
 
 	public function setUp(): void {
-		$this->l10n = $this->request = $this->getMockBuilder(
-			'\OCP\IL10n')
+		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->request = $this->getMockBuilder(
-			'\OCP\IRequest')
+		$this->request = $this->getMockBuilder(IRequest::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->userManager = $this->getMockBuilder(
-			'\OCP\IUserManager')
+		$this->userManager = $this->getMockBuilder(IUserManager::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->groupManager = $this->getMockBuilder(
-			'\OCP\IGroupManager')
+		$this->groupManager = $this->getMockBuilder(IGroupManager::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->boardService = $this->getMockBuilder(
-			'\OCA\Deck\Service\BoardService')
+		$this->boardService = $this->getMockBuilder(BoardService::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->permissionService = $this->getMockBuilder(
-			'\OCA\Deck\Service\PermissionService')
+		$this->permissionService = $this->getMockBuilder(PermissionService::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->boardImportService = $this->getMockBuilder(
-			'\OCA\Deck\Service\Importer\BoardImportService')
+		$this->boardImportService = $this->getMockBuilder(BoardImportService::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -80,6 +84,7 @@ class BoardControllerTest extends \Test\TestCase {
 			'deck',
 			$this->request,
 			$this->boardService,
+			$this->createMock(ExternalBoardService::class),
 			$this->permissionService,
 			$this->boardImportService,
 			$this->l10n,
@@ -107,35 +112,39 @@ class BoardControllerTest extends \Test\TestCase {
 	}
 
 	public function testCreate() {
+		$board = $this->createMock(Board::class);
 		$this->boardService->expects($this->once())
 			->method('create')
-			->with(1, 'user', 3)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->create(1, 3));
+			->with('abc', 'user', 'green')
+			->willReturn($board);
+		$this->assertEquals($board, $this->controller->create('abc', 'green'));
 	}
 
-	public function testUpdate() {
+	public function testUpdate(): void {
+		$board = $this->createMock(Board::class);
 		$this->boardService->expects($this->once())
 			->method('update')
-			->with(1, 2, 3, false)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2, 3, false));
+			->with(1, 'abc', 'green', false)
+			->willReturn($board);
+		$this->assertEquals($board, $this->controller->update(1, 'abc', 'green', false));
 	}
 
-	public function testDelete() {
+	public function testDelete(): void {
+		$board = $this->createMock(Board::class);
 		$this->boardService->expects($this->once())
 			->method('delete')
 			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->delete(123));
+			->willReturn($board);
+		$this->assertEquals($board, $this->controller->delete(123));
 	}
 
 	public function testDeleteUndo() {
+		$board = $this->createMock(Board::class);
 		$this->boardService->expects($this->once())
 			->method('deleteUndo')
 			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->deleteUndo(123));
+			->willReturn($board);
+		$this->assertEquals($board, $this->controller->deleteUndo(123));
 	}
 
 	public function testGetUserPermissions() {
@@ -158,20 +167,22 @@ class BoardControllerTest extends \Test\TestCase {
 		$this->assertEquals($expected, $this->controller->getUserPermissions(123));
 	}
 
-	public function testAddAcl() {
+	public function testAddAcl(): void {
+		$acl = $this->createMock(Acl::class);
 		$this->boardService->expects($this->once())
 			->method('addAcl')
-			->with(1, 2, 3, 4, 5, 6)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->addAcl(1, 2, 3, 4, 5, 6));
+			->with(1, 2, 'user1', true, true, true)
+			->willReturn($acl);
+		$this->assertEquals($acl, $this->controller->addAcl(1, 2, 'user1', true, true, true));
 	}
 
-	public function testUpdateAcl() {
+	public function testUpdateAcl(): void {
+		$acl = $this->createMock(Acl::class);
 		$this->boardService->expects($this->once())
 			->method('updateAcl')
-			->with(1, 2, 3, 4)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->updateAcl(1, 2, 3, 4));
+			->with(1, true, true, true)
+			->willReturn($acl);
+		$this->assertEquals($acl, $this->controller->updateAcl(1, true, true, true));
 	}
 
 	public function testDeleteAcl() {

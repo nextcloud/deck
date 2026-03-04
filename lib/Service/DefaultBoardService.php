@@ -136,7 +136,7 @@ class DefaultBoardService {
 				);
 
 				foreach ($defaultLabels as $defaultLabel) {
-					if ($defaultLabel && in_array($defaultLabel->getTitle(), $cardData['labels'])) {
+					if ($defaultLabel && in_array($defaultLabel->getTitle(), $cardData['labels'], true)) {
 						$this->cardService->assignLabel($card->getId(), $defaultLabel->getId());
 					}
 				}

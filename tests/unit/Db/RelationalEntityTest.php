@@ -36,7 +36,7 @@ class RelationalEntityTest extends \Test\TestCase {
 		$entity->setFoo('test');
 		$this->assertEquals([], $entity->getUpdatedFields());
 	}
-	
+
 	public function testWithoutRelation() {
 		$entity = new MyRelationalEntity();
 		$entity->setFoo(null);

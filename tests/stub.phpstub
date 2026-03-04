@@ -21,6 +21,34 @@ declare(strict_types=1);
  *
  */
 
+
+namespace GuzzleHttp\Exception {
+	class ClientException extends \RuntimeException {
+		public function getResponse() {
+		}
+	}
+}
+
+
+namespace OC\Http\Client {
+	class Response implements \OCP\Http\Client\IResponse {
+		public function __construct(Psr\Http\Message\ResponseInterface $response, $stream = false) {
+		}
+
+		public function getBody() {
+		}
+
+		public function getStatusCode(): int {
+		}
+
+		public function getHeader(string $key): string {
+		}
+
+		public function getHeaders(): array {
+		}
+	}
+}
+
 namespace OCA\Circles\Model {
 	class Member {
 		public const LEVEL_NONE = 0;
@@ -44,6 +72,7 @@ namespace OCA\Circles\Model {
 		public const APP_DEFAULT = 11000;
 
 		public function getLevel(): int {}
+		public function getUserType(): int{}
 	}
 
 	class Circle {
@@ -83,6 +112,12 @@ namespace OCA\Circles {
 		public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
 		public function getFederatedUser(string $federatedId, int $type = Member::TYPE_SINGLE): FederatedUser {}
 	}
+}
+
+namespace OCA\Files_Sharing\Event{
+	class UserShareAccessUpdatedEvent extends \OCP\EventDispatcher\Event{
+			public function __construct($user){}
+		}
 }
 
 namespace {

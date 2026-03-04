@@ -12,6 +12,8 @@
     "Cancel" : "Dayandır",
     "Completed" : "Bitmişdir",
     "Details" : "Detallar",
+    "General" : "Ümumi",
+    "Search" : "Axtarış",
     "Sharing" : "Paylaşılır",
     "Tags" : "Işarələr",
     "Activity" : "Fəallıq",
@@ -23,20 +25,18 @@
     "Download" : "Yüklə",
     "Modified" : "Dəyişdirildi",
     "Comments" : "Şərhlər",
-    "Save" : "Saxla",
     "Created:" : "Yaradıldı:",
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
     "Description" : "Açıqlanma",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
-    "Search" : "Axtarış",
     "Shared with you" : "Shared with you",
     "Export" : "Çıxarış",
-    "Today" : "Bu gün",
-    "Tomorrow" : "Sabah",
     "Close" : "Bağla",
     "Share" : "Paylaş",
-    "Personal" : "Şəxsi"
+    "Save" : "Saxla",
+    "Today" : "Bu gün",
+    "Tomorrow" : "Sabah"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

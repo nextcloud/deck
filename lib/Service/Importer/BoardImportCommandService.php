@@ -82,8 +82,8 @@ class BoardImportCommandService extends BoardImportService {
 			$this->getOutput()->writeln('<error>' . $e->getMessage() . '</error>');
 			$helper = $this->getCommand()->getHelper('question');
 			$question = new Question(
-				"<info>You can get more info on https://deck.readthedocs.io/en/latest/User_documentation_en/#6-import-boards</info>\n" .
-				'Please provide a valid config json file: ',
+				"<info>You can get more info on https://deck.readthedocs.io/en/latest/User_documentation_en/#6-import-boards</info>\n"
+				. 'Please provide a valid config json file: ',
 				'config.json'
 			);
 			$question->setValidator(function (string $answer) {

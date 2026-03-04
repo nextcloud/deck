@@ -13,6 +13,8 @@ OC.L10N.register(
     "Cancel" : "ընդհատել",
     "Completed" : "Ավարտվեց",
     "Details" : "Մանրամասներ",
+    "General" : "Ընդհանուր",
+    "Search" : "Search",
     "Activity" : "Գործունեություն",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -22,17 +24,15 @@ OC.L10N.register(
     "Download" : "Ներբեռնել",
     "Modified" : "Փոփոխված",
     "Comments" : "Կարծիքներ",
-    "Save" : "Պահպանել",
     "Created:" : "Ստեղծված.",
     "Update" : "Թարմացնել",
     "Description" : "Նկարագրություն",
     "seconds ago" : "վրկ. առաջ",
-    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Export" : "Արտահանում",
-    "Today" : "այսօր",
     "Close" : "Փակել",
     "Share" : "Կիսվել",
-    "Personal" : "Անձնական"
+    "Save" : "Պահպանել",
+    "Today" : "այսօր"
 },
 "nplurals=2; plural=(n != 1);");

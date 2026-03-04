@@ -14,45 +14,25 @@
 		</div>
 
 		<div v-else-if="isValidFilter" class="overview">
-			<div class="dashboard-column">
-				<h3>{{ t('deck', 'Overdue') }}</h3>
-				<div v-for="card in sortCards('overdue')" :key="card.id">
-					<CardItem :id="card.id" />
+			<div v-for="columnProps in columnPropsList" :key="columnProps.title" class="dashboard-column">
+				<div class="dashboard-column__header">
+					<h3 class="dashboard-column__header-title"
+						:title="columnProps.title"
+						:aria-label="columnProps.title">
+						{{ t('deck', columnProps.title) }}
+					</h3>
 				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h3>{{ t('deck', 'Today') }}</h3>
-				<div v-for="card in sortCards('today')" :key="card.id">
-					<CardItem :id="card.id" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h3>{{ t('deck', 'Tomorrow') }}</h3>
-				<div v-for="card in sortCards('tomorrow')" :key="card.id">
-					<CardItem :id="card.id" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h3>{{ t('deck', 'Next 7 days') }}</h3>
-				<div v-for="card in sortCards('nextSevenDays')" :key="card.id">
-					<CardItem :id="card.id" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h3>{{ t('deck', 'Later') }}</h3>
-				<div v-for="card in sortCards('later')" :key="card.id">
-					<CardItem :id="card.id" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h3>{{ t('deck', 'No due') }}</h3>
-				<div v-for="card in assignedCardsDashboard.nodue" :key="card.id">
-					<CardItem :id="card.id" />
+				<div class="dashboard-column__list">
+					<template v-if="columnProps.sort === false">
+						<CardItem v-for="card in filterCards(columnProps.filter)"
+							:id="card.id"
+							:key="card.id" />
+					</template>
+					<template v-else>
+						<CardItem v-for="card in sortCards(filterCards(columnProps.filter))"
+							:id="card.id"
+							:key="card.id" />
+					</template>
 				</div>
 			</div>
 		</div>
@@ -73,6 +53,34 @@ const SUPPORTED_FILTERS = [
 	FILTER_UPCOMING,
 ]
 
+const COLUMN_PROPS_LIST = [
+	{
+		title: 'Overdue',
+		filter: 'overdue',
+	},
+	{
+		title: 'Today',
+		filter: 'today',
+	},
+	{
+		title: 'Tomorrow',
+		filter: 'tomorrow',
+	},
+	{
+		title: 'Next 7 days',
+		filter: 'nextSevenDays',
+	},
+	{
+		title: 'Later',
+		filter: 'later',
+	},
+	{
+		title: 'No due',
+		filter: 'nodue',
+		sort: false,
+	},
+]
+
 export default {
 	name: 'Overview',
 	components: {
@@ -89,6 +97,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+			columnPropsList: COLUMN_PROPS_LIST,
 		}
 	},
 	computed: {
@@ -125,16 +134,16 @@ export default {
 			}
 			this.loading = false
 		},
-		sortCards(when) {
-			const cards = this.assignedCardsDashboard[when]
-
+		filterCards(when) {
+			return this.assignedCardsDashboard[when]
+		},
+		sortCards(cards) {
 			if (!cards) {
 				return null
 			} else {
 				return cards.toSorted((current, next) => {
 					const currentDueDate = new Date(current.duedate)
 					const nextDueDate = new Date(next.duedate)
-
 					return currentDueDate - nextDueDate
 				})
 			}
@@ -151,38 +160,75 @@ export default {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	max-height: calc(100vh - 50px);
 	display: flex;
 	flex-direction: column;
 }
 
 .overview {
 	position: relative;
-	height: calc(100% - var(--default-clickable-area));
-	overflow-x: scroll;
+	overflow-x: auto;
+	flex-grow: 1;
+	scrollbar-gutter: stable;
 	display: flex;
 	align-items: stretch;
-	padding-left: $board-spacing;
-	padding-right: $board-spacing;
+	gap: $board-gap;
+	padding: 0 $board-gap;
 
 	.dashboard-column {
 		display: flex;
 		flex-direction: column;
-		min-width: $stack-width;
-		width: $stack-width;
-		margin-left: $stack-spacing;
-		margin-right: $stack-spacing;
+		flex: 0 1 $card-max-width;
+		min-width: $card-min-width;
 
-		h3 {
-			font-size: var(--default-font-size);
-			margin: -6px;
-			margin-bottom: 12px;
-			padding: 6px 13px;
+		.dashboard-column__header {
+			display: flex;
 			position: sticky;
 			top: 0;
+			height: var(--default-clickable-area);
 			z-index: 100;
+			margin-top: 0;
 			background-color: var(--color-main-background);
-			border: 1px solid var(--color-main-background);
+
+			// Smooth fade out of the cards at the top
+			&:before {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 100%;
+				height: 20px;
+				top: 30px;
+				left: 0px;
+				z-index: 99;
+				transition: top var(--animation-slow);
+				background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(255, 255, 255, 0) 100%);
+
+				body.theme--dark & {
+					background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(0, 0, 0, 0) 100%);
+				}
+			}
+		}
+
+		.dashboard-column__header-title {
+			display: flex;
+			align-items: center;
+			height: var(--default-clickable-area);
+			margin: 0;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			padding: $card-padding;
+			font-size: var(--default-font-size);
+		}
+
+		.dashboard-column__list {
+			$margin-x: calc($stack-gap * -1);
+			display: flex;
+			flex-direction: column;
+			gap: $stack-gap;
+			padding: $stack-gap;
+			margin: 0 $margin-x;
+			overflow-y: auto;
+			scrollbar-gutter: stable;
 		}
 	}
 }
