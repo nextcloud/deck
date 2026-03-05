@@ -190,4 +190,20 @@ class ExternalBoardService {
 		$resp = $this->proxy->delete($participantCloudId->getId(), $shareToken, $url, []);
 		return $this->proxy->getOcsData($resp);
 	}
+
+	public function reorderCardOnRemote(Board $localBoard, int $cardId, int $stackId, int $order): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/reorder';
+		$params = [
+			'stackId' => $stackId,
+			'order' => $order,
+			'boardId' => $localBoard->getExternalId(),
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
 }

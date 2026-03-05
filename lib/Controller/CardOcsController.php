@@ -138,4 +138,17 @@ class CardOcsController extends OCSController {
 			$done
 		));
 	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
+	public function reorder(int $cardId, int $stackId, int $order, ?int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->reorderCardOnRemote($board, $cardId, $stackId, $order));
+			}
+		}
+		return new DataResponse($this->cardService->reorder($cardId, $stackId, $order));
+	}
 }
