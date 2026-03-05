@@ -253,15 +253,17 @@ class CardServiceTest extends TestCase {
 		$clonedCard = clone $card;
 		$clonedCard->setId(2);
 		$clonedCard->setStackId(1234);
+
 		$this->cardMapper->expects($this->exactly(2))
 			->method('insert')
 			->willReturn($card, $clonedCard);
 
 		$this->cardMapper->expects($this->once())
 			->method('update')->willReturn($clonedCard);
-		$this->cardMapper->expects($this->exactly(2))
+
+		$this->cardMapper->expects($this->exactly(3))
 			->method('find')
-			->willReturn($card, $clonedCard);
+			->willReturn($card, $clonedCard, $clonedCard);
 
 		$this->cardMapper->expects($this->any())
 			->method('findBoardId')
@@ -302,6 +304,7 @@ class CardServiceTest extends TestCase {
 		$this->stackMapper->expects($this->any())
 			->method('find')
 			->willReturn($stackMock);
+
 		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
 		$c = $this->cardService->cloneCard($b->getId(), 1234);
 		$this->assertEquals($b->getTitle(), $c->getTitle());
