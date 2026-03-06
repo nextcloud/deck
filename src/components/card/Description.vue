@@ -118,6 +118,7 @@ export default {
 			textAppAvailable: !!window.OCA?.Text?.createEditor,
 			editor: null,
 			keyExitState: 0,
+			descriptionOld: '',
 			description: '',
 			markdownIt: null,
 			descriptionEditing: false,
@@ -172,6 +173,21 @@ export default {
 			return this.card?.description?.trim?.() !== ''
 		},
 	},
+	watch: {
+		card(newCard) {
+			if (newCard.description !== this.descriptionOld) {
+				clearTimeout(this.descriptionSaveTimeout)
+				this.descriptionLastEdit = 0
+
+				this.descriptionOld = newCard.description
+				this.description = newCard.description
+				if (this.editor) {
+					this.editor.setContent(this.description)
+				}
+				showWarning(t('deck', 'The description has been changed by another user.'), { timeout: 3000 })
+			}
+		},
+	},
 	mounted() {
 		this.setupEditor()
 	},
@@ -182,6 +198,7 @@ export default {
 		async setupEditor() {
 			await this.destroyEditor()
 			this.descriptionLastEdit = 0
+			this.descriptionOld = this.card.description
 			this.description = this.card.description
 			this.editor = await window.OCA.Text.createEditor({
 				el: this.$refs.editor,
@@ -296,6 +313,7 @@ export default {
 				}
 				this.$emit('change', this.description)
 				this.descriptionLastEdit = 0
+				this.descriptionOld = this.description
 				this.$store.commit('setHasCardSaveError', false)
 			} catch (e) {
 				this.$store.commit('setHasCardSaveError', true)
