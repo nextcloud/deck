@@ -420,6 +420,18 @@ class BoardService {
 
 		$this->eventDispatcher->dispatchTyped(new AclCreatedEvent($acl));
 
+		// Sync permissions to remote server since shareReceived() creates ACL with no permissions
+		if ($type === Acl::PERMISSION_TYPE_REMOTE && ($edit || $share || $manage)) {
+			$notification = $this->federationFactory->getCloudFederationNotification();
+			$payload = [
+				$newAcl->jsonSerialize(),
+				'sharedSecret' => $newAcl->getToken(),
+			];
+			$notification->setMessage('update-permissions', 'deck', (string)$boardId, $payload);
+			$url = $this->cloudIdManager->resolveCloudId($participant);
+			$this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
+		}
+
 		return $newAcl;
 	}
 
