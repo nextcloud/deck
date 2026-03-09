@@ -26,6 +26,7 @@ use OCA\Deck\StatusException;
 use OCA\Deck\Validators\StackServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class StackService {
 	private StackMapper $stackMapper;
@@ -303,5 +304,30 @@ class StackService {
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stackToSort->getBoardId()));
 
 		return $result;
+	}
+
+	/**
+	 * @param int $boardId
+	 * @param array $stack
+	 *
+	 * @return Stack
+	 *
+	 * @throws InternalErrorException
+	 */
+	public function importStack(int $boardId, array $stack): Stack {
+		$item = new Stack();
+		$item->setBoardId($boardId);
+		$item->setTitle($stack['title']);
+		$item->setDeletedAt($stack['deletedAt']);
+		$item->setLastModified($stack['lastModified']);
+		$item->setOrder($stack['order']);
+		try {
+			$newStack = $this->stackMapper->insert($item);
+		} catch (\Exception $e) {
+			$this->logger->error('importStack insert error: ' . $e->getMessage());
+			throw new InternalErrorException('importStack insert error: ' . $e->getMessage());
+		}
+
+		return $newStack;
 	}
 }
