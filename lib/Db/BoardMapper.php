@@ -583,4 +583,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$this->userBoardCache = new CappedMemoryCache();
 		}
 	}
+
+	public function getDbConnection() {
+
+		return $this->db;
+	}
 }

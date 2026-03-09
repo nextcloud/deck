@@ -36,6 +36,7 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class CardService {
 	public function __construct(
@@ -639,5 +640,58 @@ class CardService {
 
 	public function getRedirectUrlForCard(int $cardId): string {
 		return $this->urlGenerator->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $cardId]);
+	}
+
+	/**
+	 * @param int $stackId
+	 * @param array $card
+	 *
+	 * @return Card
+	 *
+	 * @throws InternalErrorException
+	 */
+	public function importCard (int $stackId, array $card): Card {
+		$item = new Card();
+		$item->setStackId($stackId);
+		$item->setTitle($card['title']);
+		$item->setType($card['type']);
+		$item->setOrder($card['order']);
+		$item->setOwner($card['owner']);
+		$item->setDescription($card['description']);
+		$item->setDuedate($card['duedate']);
+		$item->setLastModified($card['lastModified']);
+		$item->setLastEditor($card['lastEditor']);
+		$item->setCreatedAt($card['createdAt']);
+		$item->isArchived($card['archived']);
+		$item->setDeletedAt($card['deletedAt']);
+		$item->setDone($card['done']);
+		$item->setNotified($card['notified']);
+
+		try {
+			$newCard = $this->cardMapper->insert($item);
+		} catch (\Exception $e) {
+			$this->logger->error('importCard insert error: ' . $e->getMessage());
+			throw new InternalErrorException('importCard insert error: ' . $e->getMessage());
+		}
+
+		return $newCard;
+	}
+
+	/**
+	 * @param int $cardId
+	 * @param int $boardId
+	 * @param array $importedLabel
+	 *
+	 * @return void
+	 */
+	public function importLabels(int $cardId, int $boardId, array $importedLabel): void {
+		$labels = $this->labelMapper->findAll($boardId);
+
+		foreach ($labels as $label) {
+			if ($label->getTitle() === $importedLabel['title'] && $label->getColor() === $importedLabel['color']) {
+				$this->cardMapper->assignLabel($cardId, $label->getId());
+			}
+		}
+		$this->changeHelper->cardChanged($cardId);
 	}
 }

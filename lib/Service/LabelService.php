@@ -9,11 +9,14 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\LabelServiceValidator;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class LabelService {
 
@@ -23,6 +26,7 @@ class LabelService {
 		private BoardService $boardService,
 		private ChangeHelper $changeHelper,
 		private LabelServiceValidator $labelServiceValidator,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -135,5 +139,25 @@ class LabelService {
 		$this->changeHelper->boardChanged($label->getBoardId());
 
 		return $this->labelMapper->update($label);
+	}
+
+	/**
+	 * @param Board $board
+	 * @param array $$label
+	 *
+	 * @return void
+	 */
+	public function importBoardLabel(Board $board, array $label): void {
+		$labelEntity = new Label();
+		$labelEntity->setBoardId($board->getId());
+		$labelEntity->setTitle($label['title']);
+		$labelEntity->setColor($label['color']);
+		$labelEntity->setLastModified($label['lastModified']);
+		try {
+			$this->labelMapper->insert($labelEntity);
+		} catch (\Throwable $e) {
+			$this->logger->error('importBoardLabel insert error: ' . $e->getMessage());
+			throw new InternalErrorException('importBoardLabel insert error: ' . $e->getMessage());
+		}
 	}
 }
