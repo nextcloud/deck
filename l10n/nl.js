@@ -146,6 +146,7 @@ OC.L10N.register(
     "Filter by tag" : "Filteren op label",
     "Filter by assigned user" : "Filter op toegewezen gebruiker",
     "Unassigned" : "Niet-toegewezen",
+    "Open and completed" : "Open en gereed",
     "Open" : "Openen",
     "Completed" : "Voltooid",
     "Filter by due date" : "Filter op vervaldatum",
