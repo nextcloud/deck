@@ -12,11 +12,8 @@ use OCP\App\IAppManager;
 use OCP\Capabilities\ICapability;
 
 class Capabilities implements ICapability {
-
-	/** @var IAppManager */
-	private $appManager;
-	/** @var PermissionService */
-	private $permissionService;
+	private IAppManager $appManager;
+	private PermissionService $permissionService;
 
 
 	public function __construct(IAppManager $appManager, PermissionService $permissionService) {
@@ -27,7 +24,7 @@ class Capabilities implements ICapability {
 	/**
 	 * Function an app uses to return the capabilities
 	 *
-	 * @return array{deck: array{version: string, canCreateBoards: bool, apiVersions: array<string>}}
+	 * @return array{deck: array{version: string, canCreateBoards: bool, supportsDoneColumn:true, apiVersions: array<string>}}
 	 * @since 8.2.0
 	 */
 	public function getCapabilities() {

@@ -108,6 +108,36 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $result;
 	}
 
+	public function clearDoneColumnForBoard(int $boardId): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->getTableName())
+			->set('is_done_column', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL))
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
+	public function setIsDoneColumn(int $stackId, bool $isDone): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->getTableName())
+			->set('is_done_column', $qb->createNamedParameter($isDone, IQueryBuilder::PARAM_BOOL))
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+	}
+
+	public function findDoneColumnForBoard(int $boardId): ?Stack {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('is_done_column', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			return null;
+		}
+	}
+
 	public function delete(Entity $entity): Entity {
 		// delete cards on stack
 		$this->cardMapper->deleteByStack($entity->getId());
