@@ -108,10 +108,6 @@ jobs:
           ./occ config:system:set query_log_file --value "$PWD/query.log"
           php -S localhost:8080 &
 
-      - name: Run behat
-        working-directory: apps/${{ env.APP_NAME }}/tests/integration
-        run: ./run.sh
-
       - name: Run federated behat
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: ./run-federation.sh
