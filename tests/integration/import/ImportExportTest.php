@@ -328,6 +328,7 @@ class ImportExportTest extends \Test\TestCase {
 			'lastModified' => 1689667779,
 			'createdAt' => 1689667569,
 			'owner' => $owner,
+			'done' => new \DateTime('2023-07-18T10:00:00+00:00'),
 			'duedate' => new \DateTime('2050-07-24T22:00:00.000000+0000'),
 			'order' => 999,
 			'stackId' => $stacks[0]->getId(),
