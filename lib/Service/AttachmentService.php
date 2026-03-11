@@ -289,6 +289,7 @@ class AttachmentService {
 		}
 
 		if ($service instanceof ICustomAttachmentService) {
+			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 			try {
 				$attachment = new Attachment();
 				$attachment->setId($attachmentId);
