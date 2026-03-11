@@ -112,6 +112,10 @@ jobs:
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: ./run.sh
 
+      - name: Run federated behat
+        working-directory: apps/${{ env.APP_NAME }}/tests/integration
+        run: ./run-federation.sh
+
       - name: Print log
         if: always()
         run: |
