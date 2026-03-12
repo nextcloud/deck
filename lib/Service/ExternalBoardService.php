@@ -165,7 +165,7 @@ class ExternalBoardService {
 		int $order = 0,
 	): array {
 		$this->configService->ensureFederationEnabled();
-		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_MANAGE, $this->userId, false, false);
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());

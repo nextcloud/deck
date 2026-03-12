@@ -22,6 +22,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method \int getOrder()
  * @method void setOrder(int $order)
  * @method Card[] getCards()
+ * @method bool getIsDoneColumn()
+ * @method void setIsDoneColumn(bool $isDoneColumn)
  */
 class Stack extends RelationalEntity {
 	protected $title;
