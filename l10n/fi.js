@@ -137,6 +137,7 @@ OC.L10N.register(
     "Appearance" : "Ulkoasu",
     "Show boards in calendar/tasks" : "Näytä taulut kalenterissa ja tehtävissä",
     "Search" : "Etsi",
+    "Show those shortcuts" : "Näytä pikanäppäimet",
     "Mark card as completed/not completed" : "Merkitse kortti valmiiksi/avoimeksi",
     "Loading board" : "Ladataan taulua",
     "Board not found" : "Taulua ei löydy",
