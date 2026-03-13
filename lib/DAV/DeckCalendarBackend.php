@@ -60,7 +60,6 @@ class DeckCalendarBackend {
 		return $this->boardService->findAll(-1, false, false);
 	}
 
-	/** @psalm-suppress InvalidThrow */
 	public function getBoard(int $id): Board {
 		try {
 			return $this->boardService->find($id);
@@ -145,15 +144,6 @@ class DeckCalendarBackend {
 		}
 
 		return null;
-	}
-
-	/** @return Card[] */
-	public function getChildrenForStack(int $stackId): array {
-		return $this->stackService->find($stackId)->getCards() ?? [];
-	}
-
-	public function getCalDavListMode(): string {
-		return $this->configService->getCalDavListMode();
 	}
 
 	public function getCalendarRevisionFingerprint(int $boardId, ?int $stackId = null): string {

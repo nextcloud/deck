@@ -187,7 +187,7 @@ class Calendar extends ExternalCalendar {
 
 		if ($this->board) {
 			if ($this->stack !== null) {
-				$this->children = $this->backend->getChildrenForStack($this->stack->getId());
+				$this->children = $this->stack->getCards() ?? [];
 			} else {
 				$this->children = $this->backend->getChildren($this->board->getId());
 			}
