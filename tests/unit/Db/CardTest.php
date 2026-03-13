@@ -65,6 +65,14 @@ class CardTest extends TestCase {
 		$this->assertEquals($state, (new CardDetails($card))->jsonSerialize()['overdue']);
 	}
 
+	public function testStartdate() {
+		$card = $this->createCard();
+		$startdate = new DateTime('2026-03-01 09:00:00');
+		$card->setStartdate($startdate->format('Y-m-d H:i:s'));
+		$json = (new CardDetails($card))->jsonSerialize();
+		$this->assertNotNull($json['startdate']);
+	}
+
 	public function testJsonSerialize() {
 		$card = $this->createCard();
 		$this->assertEquals([
@@ -79,6 +87,7 @@ class CardTest extends TestCase {
 			'stackId' => 1,
 			'labels' => null,
 			'duedate' => null,
+			'startdate' => null,
 			'overdue' => 0,
 			'archived' => false,
 			'attachments' => [],
@@ -108,6 +117,7 @@ class CardTest extends TestCase {
 			'stackId' => 1,
 			'labels' => [],
 			'duedate' => null,
+			'startdate' => null,
 			'overdue' => 0,
 			'archived' => false,
 			'attachments' => [],
@@ -139,6 +149,7 @@ class CardTest extends TestCase {
 			'stackId' => 1,
 			'labels' => [],
 			'duedate' => null,
+			'startdate' => null,
 			'overdue' => 0,
 			'archived' => false,
 			'attachments' => [],

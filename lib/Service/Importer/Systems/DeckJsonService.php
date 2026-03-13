@@ -211,6 +211,7 @@ class DeckJsonService extends ABoardImportService {
 			$boardOwner = $this->getBoard()->getOwner();
 			$card->setOwner($this->mapOwner(is_string($boardOwner) ? $boardOwner : $boardOwner->getUID()));
 			$card->setDuedate($cardSource->duedate ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->duedate) : null);
+			$card->setStartdate(isset($cardSource->startdate) && $cardSource->startdate !== null ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->startdate) : null);
 			$card->setDone(isset($cardSource->done) && $cardSource->done !== null ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->done) : null);
 			$cards[$cardSource->id] = $card;
 		}

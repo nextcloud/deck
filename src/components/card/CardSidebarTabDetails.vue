@@ -18,6 +18,11 @@
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
+		<StartDateSelector :card="card"
+			:can-edit="canEdit"
+			@change="updateCardStartDate"
+			@input="debouncedUpdateCardStartDate" />
+
 		<DueDateSelector :card="card"
 			:can-edit="canEdit"
 			@change="updateCardDue"
@@ -52,12 +57,14 @@ import Description from './Description.vue'
 import TagSelector from './TagSelector.vue'
 import AssignmentSelector from './AssignmentSelector.vue'
 import DueDateSelector from './DueDateSelector.vue'
+import StartDateSelector from './StartDateSelector.vue'
 import { debounce } from 'lodash'
 
 export default {
 	name: 'CardSidebarTabDetails',
 	components: {
 		DueDateSelector,
+		StartDateSelector,
 		AssignmentSelector,
 		TagSelector,
 		Description,
@@ -149,6 +156,17 @@ export default {
 
 		debouncedUpdateCardDue: debounce(function(val) {
 			this.updateCardDue(val)
+		}, 500),
+
+		updateCardStartDate(val) {
+			this.$store.dispatch('updateCardStartDate', {
+				...this.copiedCard,
+				startdate: val ? (new Date(val)).toISOString() : null,
+			})
+		},
+
+		debouncedUpdateCardStartDate: debounce(function(val) {
+			this.updateCardStartDate(val)
 		}, 500),
 
 		addLabelToCard(newLabel) {
