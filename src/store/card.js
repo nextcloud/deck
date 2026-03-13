@@ -369,6 +369,11 @@ export default function cardModuleFactory() {
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'duedate', card: updatedCard })
 			},
+			async updateCardStartDate({ commit, getters }, card) {
+				const stack = getters.stackById(card.stackId)
+				const updatedCard = await apiClient.updateCard(card, stack.boardId)
+				commit('updateCardProperty', { property: 'startdate', card: updatedCard })
+			},
 
 			addCardData({ commit }, cardData) {
 				const card = { ...cardData }
