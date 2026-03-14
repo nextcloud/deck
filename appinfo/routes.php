@@ -41,6 +41,12 @@ return [
 		['name' => 'stack#deleted', 'url' => '/{boardId}/stacks/deleted', 'verb' => 'GET'],
 		['name' => 'stack#archived', 'url' => '/stacks/{boardId}/archived', 'verb' => 'GET'],
 
+		// stack automations
+		['name' => 'stack_automation#index', 'url' => '/stacks/{stackId}/automations', 'verb' => 'GET'],
+		['name' => 'stack_automation#create', 'url' => '/stacks/{stackId}/automations', 'verb' => 'POST'],
+		['name' => 'stack_automation#update', 'url' => '/automations/{id}', 'verb' => 'PUT'],
+		['name' => 'stack_automation#delete', 'url' => '/automations/{id}', 'verb' => 'DELETE'],
+
 		// cards
 		['name' => 'card#read', 'url' => '/cards/{cardId}', 'verb' => 'GET'],
 		['name' => 'card#create', 'url' => '/cards', 'verb' => 'POST'],
