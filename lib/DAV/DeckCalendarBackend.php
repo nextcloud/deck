@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace OCA\Deck\DAV;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
@@ -27,6 +28,8 @@ use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VTodo;
 
 class DeckCalendarBackend {
+
+	private const MAX_AUTO_CREATED_LABELS_PER_SYNC = 5;
 
 	/** @var BoardService */
 	private $boardService;
@@ -701,6 +704,7 @@ class DeckCalendarBackend {
 		$card = $this->cardService->find($cardId);
 		$boardId = $this->getBoardIdForCard($card);
 		$board = $this->boardMapper->find($boardId, true, false);
+		$canCreateLabels = $this->checkBoardPermission($boardId, Acl::PERMISSION_MANAGE);
 		$boardLabels = $board->getLabels() ?? [];
 
 		$boardLabelsByTitle = [];
@@ -712,13 +716,17 @@ class DeckCalendarBackend {
 		}
 
 		$targetLabelIds = [];
+		$createdLabels = 0;
 		foreach ($categories as $category) {
 			$title = trim($category);
 			$key = mb_strtolower($title);
 			if ($key === '' || !isset($boardLabelsByTitle[$key])) {
-				$createdLabel = $this->createLabelForCategory($boardId, $title);
-				if ($createdLabel !== null) {
-					$boardLabelsByTitle[$key] = $createdLabel;
+				if ($canCreateLabels && $createdLabels < self::MAX_AUTO_CREATED_LABELS_PER_SYNC) {
+					$createdLabel = $this->createLabelForCategory($boardId, $title);
+					if ($createdLabel !== null) {
+						$boardLabelsByTitle[$key] = $createdLabel;
+						$createdLabels++;
+					}
 				}
 			}
 			if (!isset($boardLabelsByTitle[$key])) {
