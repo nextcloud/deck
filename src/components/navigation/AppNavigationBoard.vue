@@ -112,10 +112,9 @@
 					</NcActionButton>
 				</template>
 				<NcActionButton v-else-if="!board.archived && board.acl?.length > 0"
-					:name="t('deck', 'Due date reminders')"
-					:icon="dueDateReminderIcon"
-					@click="isDueSubmenuActive=true">
-					{{ dueDateReminderText }}
+					icon="icon-sound"
+					@click="openDueReminderMenu">
+					{{ t('deck', 'Due date reminders') }}
 				</NcActionButton>
 
 				<NcActionButton v-if="canManage && !isDueSubmenuActive"
@@ -238,6 +237,7 @@ export default {
 			editColor: '',
 			isDueSubmenuActive: false,
 			updateDueSetting: null,
+			loadingDueReminderSettings: false,
 			canCreate: canCreateState,
 			cloneModalOpen: false,
 			exportModalOpen: false,
@@ -267,25 +267,8 @@ export default {
 		canLeave() {
 			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined
 		},
-		dueDateReminderIcon() {
-			if (this.board.settings['notify-due'] === 'all') {
-				return 'icon-sound'
-			} else if (this.board.settings['notify-due'] === 'assigned') {
-				return 'icon-user'
-			} else if (this.board.settings['notify-due'] === 'off') {
-				return 'icon-sound-off'
-			}
-			return ''
-		},
-		dueDateReminderText() {
-			if (this.board.settings['notify-due'] === 'all') {
-				return t('deck', 'All cards')
-			} else if (this.board.settings['notify-due'] === 'assigned') {
-				return t('deck', 'Only assigned cards')
-			} else if (this.board.settings['notify-due'] === 'off') {
-				return t('deck', 'No reminder')
-			}
-			return ''
+		hasDueDateReminderSetting() {
+			return ['all', 'assigned', 'off'].includes(this.board.settings?.['notify-due'])
 		},
 		isDefaultBoard() {
 			return this.defaultBoardId === String(this.board.id)
@@ -416,6 +399,24 @@ export default {
 		},
 		cancelEdit(e) {
 			this.editing = false
+		},
+		async openDueReminderMenu() {
+			this.isDueSubmenuActive = true
+
+			if (this.hasDueDateReminderSetting || this.loadingDueReminderSettings) {
+				return
+			}
+
+			this.loadingDueReminderSettings = true
+
+			try {
+				await this.$store.dispatch('hydrateBoardSettings', this.board.id)
+			} catch (error) {
+				OC.Notification.showTemporary(t('deck', 'Failed to load due date reminder settings'))
+				console.error(error)
+			} finally {
+				this.loadingDueReminderSettings = false
+			}
 		},
 		async updateSetting(key, value) {
 			this.updateDueSetting = value
