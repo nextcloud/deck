@@ -61,7 +61,10 @@ class Calendar extends ExternalCalendar {
 				'protected' => true,
 			],
 		];
-		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT)) {
+		$canWrite = $this->stack !== null
+			? $this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)
+			: $this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT);
+		if ($canWrite) {
 			$acl[] = [
 				'privilege' => '{DAV:}write',
 				'principal' => $this->getOwner(),
@@ -242,8 +245,10 @@ class Calendar extends ExternalCalendar {
 						if (!$this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)) {
 							throw new Forbidden('no permission to change the displayname');
 						}
-						if (mb_strpos($value, 'Deck: ') === 0) {
-							$value = mb_substr($value, mb_strlen('Deck: '));
+						$value = $this->normalizeRequestedDisplayName((string)$value);
+						if ($this->stack !== null) {
+							$this->stack->setTitle($value);
+							break;
 						}
 						$this->board->setTitle($value);
 						break;
@@ -257,12 +262,15 @@ class Calendar extends ExternalCalendar {
 						}
 						$this->board->setColor($color);
 						break;
+					}
 				}
-			}
-			return $this->backend->updateBoard($this->board);
-		});
-		// We can just return here and let oc_properties handle everything
-	}
+				if ($this->stack !== null) {
+					return $this->backend->updateStack($this->stack);
+				}
+				return $this->backend->updateBoard($this->board);
+			});
+			// We can just return here and let oc_properties handle everything
+		}
 
 	/**
 	 * @inheritDoc
@@ -286,6 +294,20 @@ class Calendar extends ExternalCalendar {
 		}
 
 		return $matches[1];
+	}
+
+	private function normalizeRequestedDisplayName(string $value): string {
+		if (mb_strpos($value, 'Deck: ') === 0) {
+			$value = mb_substr($value, mb_strlen('Deck: '));
+		}
+		if ($this->stack !== null) {
+			$stackPrefix = $this->board->getTitle() . ' / ';
+			if (mb_strpos($value, $stackPrefix) === 0) {
+				$value = mb_substr($value, mb_strlen($stackPrefix));
+			}
+		}
+
+		return $value;
 	}
 
 	private function extractCardIdFromNormalizedName(string $name): ?int {
