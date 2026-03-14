@@ -739,6 +739,7 @@ class DeckCalendarBackend {
 
 		$targetLabelIds = [];
 		$createdLabels = 0;
+		$hasUnresolvedCategories = false;
 		foreach ($categories as $category) {
 			$title = trim($category);
 			$key = mb_strtolower($title);
@@ -752,6 +753,7 @@ class DeckCalendarBackend {
 				}
 			}
 			if (!isset($boardLabelsByTitle[$key])) {
+				$hasUnresolvedCategories = true;
 				continue;
 			}
 			$targetLabelIds[$boardLabelsByTitle[$key]->getId()] = true;
@@ -763,9 +765,11 @@ class DeckCalendarBackend {
 			$currentLabelIds[$label->getId()] = true;
 		}
 
-		foreach (array_keys($currentLabelIds) as $labelId) {
-			if (!isset($targetLabelIds[$labelId])) {
-				$this->cardService->removeLabel($cardId, $labelId);
+		if (!$hasUnresolvedCategories) {
+			foreach (array_keys($currentLabelIds) as $labelId) {
+				if (!isset($targetLabelIds[$labelId])) {
+					$this->cardService->removeLabel($cardId, $labelId);
+				}
 			}
 		}
 
