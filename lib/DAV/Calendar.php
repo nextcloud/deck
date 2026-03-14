@@ -12,6 +12,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
+use OCP\IRequest;
 use Sabre\CalDAV\CalendarQueryValidator;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
 use Sabre\DAV\Exception\Forbidden;
@@ -32,13 +33,16 @@ class Calendar extends ExternalCalendar {
 	private $board;
 	/** @var Stack|null */
 	private $stack;
+	/** @var IRequest|null */
+	private $request;
 
-	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend, ?Stack $stack = null) {
+	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend, ?Stack $stack = null, ?IRequest $request = null) {
 		parent::__construct('deck', $calendarUri);
 
 		$this->backend = $backend;
 		$this->board = $board;
 		$this->stack = $stack;
+		$this->request = $request;
 
 		$this->principalUri = $principalUri;
 	}
@@ -432,13 +436,12 @@ class Calendar extends ExternalCalendar {
 	}
 
 	private function shouldUsePlaceholderForMissingObject(): bool {
-		if (!class_exists('\OC')) {
+		if ($this->request === null) {
 			return false;
 		}
 
 		try {
-			$request = \OC::$server->getRequest();
-			$method = strtoupper((string)$request->getMethod());
+			$method = strtoupper((string)$this->request->getMethod());
 			return in_array($method, ['GET', 'HEAD', 'REPORT', 'PROPFIND'], true);
 		} catch (\Throwable $e) {
 			return false;
@@ -446,13 +449,12 @@ class Calendar extends ExternalCalendar {
 	}
 
 	private function isDirectObjectReadRequest(): bool {
-		if (!class_exists('\OC')) {
+		if ($this->request === null) {
 			return false;
 		}
 
 		try {
-			$request = \OC::$server->getRequest();
-			$method = strtoupper((string)$request->getMethod());
+			$method = strtoupper((string)$this->request->getMethod());
 			return in_array($method, ['GET', 'HEAD'], true);
 		} catch (\Throwable $e) {
 			return false;
