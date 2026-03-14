@@ -58,7 +58,7 @@ export default function stackModuleFactory() {
 		actions: {
 			orderStack({ commit }, { stack, removedIndex, addedIndex }) {
 				commit('orderStack', { stack, removedIndex, addedIndex })
-				apiClient.reorderStack(stack.id, addedIndex)
+				apiClient.reorderStack(stack.id, addedIndex, stack.boardId)
 					.catch((err) => {
 						OC.Notification.showTemporary('Failed to change order')
 						console.error(err.response.data.message)

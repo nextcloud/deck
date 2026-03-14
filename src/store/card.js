@@ -314,7 +314,8 @@ export default function cardModuleFactory() {
 				newCards.push(card)
 				await commit('updateCardsReorder', newCards)
 
-				apiClient.reorderCard(card).then((cards) => {
+				const stack = getters.stackById(card.stackId)
+				apiClient.reorderCard(card, stack.boardId).then((cards) => {
 					commit('updateCardsReorder', Object.values(cards))
 				})
 			},
