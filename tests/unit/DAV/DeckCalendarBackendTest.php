@@ -1091,4 +1091,17 @@ ICS;
 
 		$this->backend->updateCalendarObject($sourceCard, $calendarData);
 	}
+
+	public function testGetObjectRevisionFingerprintUsesKnownBoardContextWithoutStackLookup(): void {
+		$card = new Card();
+		$card->setId(123);
+		$card->setStackId(42);
+
+		$this->stackService->expects($this->never())
+			->method('find');
+
+		$fingerprint = $this->backend->getObjectRevisionFingerprint($card, 12, 42);
+
+		$this->assertSame(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS . '|stack:42', $fingerprint);
+	}
 }

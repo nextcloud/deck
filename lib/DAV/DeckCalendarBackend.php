@@ -192,21 +192,32 @@ class DeckCalendarBackend {
 	/**
 	 * @param Card|Stack $sourceItem
 	 */
-	public function getObjectRevisionFingerprint($sourceItem): string {
+	public function getObjectRevisionFingerprint($sourceItem, ?int $boardId = null, ?int $calendarStackId = null): string {
 		$mode = $this->configService->getCalDavListMode();
 		if (!($sourceItem instanceof Card)) {
 			return $mode;
 		}
 
-		try {
-			$stack = $this->stackService->find($sourceItem->getStackId());
-			$boardId = $stack->getBoardId();
-		} catch (\Throwable $e) {
-			return $mode;
+		$stackId = $calendarStackId ?? $sourceItem->getStackId();
+		$stack = null;
+
+		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY || $boardId === null) {
+			try {
+				$stack = $this->stackService->find($sourceItem->getStackId());
+				$boardId ??= $stack->getBoardId();
+				$stackId = $stack->getId();
+			} catch (\Throwable $e) {
+				return $mode;
+			}
 		}
 
-		$fingerprint = [$mode, 'stack:' . $stack->getId()];
+		$fingerprint = [$mode, 'stack:' . $stackId];
 		if ($mode === ConfigService::SETTING_CALDAV_LIST_MODE_LIST_AS_CATEGORY) {
+			try {
+				$stack ??= $this->stackService->find($sourceItem->getStackId());
+			} catch (\Throwable $e) {
+				return $mode;
+			}
 			$fingerprint[] = $stack->getTitle();
 			$fingerprint[] = (string)$stack->getDeletedAt();
 		}
