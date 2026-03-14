@@ -6,6 +6,7 @@
  */
 namespace OCA\Deck\DAV;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
 use Sabre\CalDAV\ICalendarObject;
@@ -25,6 +26,8 @@ class CalendarObject implements ICalendarObject, IACL {
 	private $backend;
 	/** @var VCalendar */
 	private $calendarObject;
+	/** @var string|null */
+	private $serializedData = null;
 
 	public function __construct(Calendar $calendar, string $name, DeckCalendarBackend $backend, $sourceItem) {
 		$this->calendar = $calendar;
@@ -35,15 +38,22 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function getOwner() {
-		return null;
+		return $this->calendar->getOwner();
 	}
 
 	public function getGroup() {
-		return null;
+		return $this->calendar->getGroup();
 	}
 
 	public function getACL() {
-		return $this->calendar->getACL();
+		$acl = $this->calendar->getACL();
+		if ($this->sourceItem instanceof Stack
+			&& !$this->backend->checkBoardPermission($this->calendar->getBoardId(), Acl::PERMISSION_MANAGE)) {
+			return array_values(array_filter($acl, static function (array $entry): bool {
+				return $entry['privilege'] !== '{DAV:}write';
+			}));
+		}
+		return $acl;
 	}
 
 	public function setACL(array $acl) {
@@ -55,12 +65,14 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function put($data) {
-		throw new Forbidden('This calendar-object is read-only');
+		$this->sourceItem = $this->backend->updateCalendarObject($this->sourceItem, $data);
+		$this->calendarObject = $this->sourceItem->getCalendarObject();
+		$this->serializedData = null;
 	}
 
 	public function get() {
 		if ($this->sourceItem) {
-			return $this->calendarObject->serialize();
+			return $this->getSerializedData();
 		}
 	}
 
@@ -69,15 +81,19 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function getETag() {
-		return '"' . md5($this->sourceItem->getLastModified()) . '"';
+		return '"' . md5($this->sourceItem->getLastModified() . '|' . $this->backend->getObjectRevisionFingerprint(
+			$this->sourceItem,
+			$this->calendar->getBoardId(),
+			$this->calendar->getStackId()
+		)) . '"';
 	}
 
 	public function getSize() {
-		return mb_strlen($this->calendarObject->serialize());
+		return mb_strlen($this->getSerializedData());
 	}
 
 	public function delete() {
-		throw new Forbidden('This calendar-object is read-only');
+		$this->backend->deleteCalendarObject($this->sourceItem, $this->calendar->getBoardId(), $this->calendar->getStackId());
 	}
 
 	public function getName() {
@@ -90,5 +106,14 @@ class CalendarObject implements ICalendarObject, IACL {
 
 	public function getLastModified() {
 		return $this->sourceItem->getLastModified();
+	}
+
+	private function getSerializedData(): string {
+		if ($this->serializedData === null) {
+			$this->backend->decorateCalendarObject($this->sourceItem, $this->calendarObject);
+			$this->serializedData = $this->calendarObject->serialize();
+		}
+
+		return $this->serializedData;
 	}
 }

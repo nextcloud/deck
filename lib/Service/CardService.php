@@ -139,9 +139,15 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find(int $cardId): Card {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+	public function find(int $cardId, bool $includeDeleted = false, bool $enhance = true): Card {
+		// Keep this call compatible with older PermissionService signatures.
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, $includeDeleted);
 		$card = $this->cardMapper->find($cardId);
+
+		if (!$enhance) {
+			return $card;
+		}
+
 		[$card] = $this->enrichCards([$card]);
 
 		// Attachments are only enriched on individual card fetching
@@ -153,6 +159,18 @@ class CardService {
 		}
 		$card->setAttachments($attachments);
 
+		return $card;
+	}
+
+	public function findByDavUriLite(string $davUri, ?int $boardId = null, ?int $stackId = null, bool $includeDeleted = true): Card {
+		if ($boardId !== null) {
+			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		}
+
+		$card = $this->cardMapper->findByDavUri($davUri, $boardId, $stackId, $includeDeleted);
+		if ($boardId === null) {
+			$this->permissionService->checkPermission($this->cardMapper, $card->getId(), Acl::PERMISSION_READ, null, $includeDeleted);
+		}
 		return $card;
 	}
 
@@ -176,13 +194,16 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null): Card {
+	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, ?string $davUri = null): Card {
 		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->stackMapper, $stackId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
+		$stack = $this->stackMapper->find($stackId);
+		$boardId = $stack->getBoardId();
+		$board = $this->boardMapper->find($boardId);
 		$card = new Card();
 		$card->setTitle($title);
 		$card->setStackId($stackId);
@@ -191,10 +212,17 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
+		$card->setDavUri($davUri);
 		$card = $this->cardMapper->insert($card);
 
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE, [], $card->getOwner());
-		$this->changeHelper->cardChanged($card->getId(), false);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE, [
+			'stack' => $stack,
+			'board' => [
+				'id' => $board->getId(),
+				'title' => $board->getTitle(),
+			],
+		], $card->getOwner());
+		$this->changeHelper->cardChanged($card->getId(), false, $boardId, $stackId);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
 		[$card] = $this->enrichCards([$card]);
@@ -233,13 +261,17 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null): Card {
+	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null, ?int $knownBoardId = null): Card {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
-		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
+		if ($knownBoardId !== null) {
+			$this->permissionService->checkPermission($this->boardMapper, $knownBoardId, Acl::PERMISSION_EDIT);
+		} else {
+			$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
+		}
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 
-		if ($this->boardService->isArchived($this->cardMapper, $id)) {
+		if ($knownBoardId !== null ? $this->boardService->isArchived(null, $knownBoardId) : $this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
@@ -312,6 +344,9 @@ class CardService {
 		$oldBoardId = $this->stackMapper->findBoardId($changes->getBefore()->getStackId());
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		if ($boardId !== $oldBoardId) {
+			if ($oldBoardId !== null) {
+				$this->changeHelper->boardChanged($oldBoardId);
+			}
 			$stack = $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($this->cardMapper->findBoardId($card->getId()));
 			$boardLabels = $board->getLabels() ?? [];
@@ -338,7 +373,7 @@ class CardService {
 		if ($resetDuedateNotification) {
 			$this->notificationHelper->markDuedateAsRead($card);
 		}
-		$this->changeHelper->cardChanged($card->getId());
+		$this->changeHelper->cardChanged($card->getId(), true, $boardId, $card->getStackId());
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
