@@ -23,6 +23,8 @@ use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class AssignmentService {
 
@@ -64,6 +66,10 @@ class AssignmentService {
 	 * @var AssignmentServiceValidator
 	 */
 	private $assignmentServiceValidator;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 
 	public function __construct(
@@ -77,6 +83,7 @@ class AssignmentService {
 		IEventDispatcher $eventDispatcher,
 		AssignmentServiceValidator $assignmentServiceValidator,
 		$userId,
+		LoggerInterface $logger,
 	) {
 		$this->assignmentServiceValidator = $assignmentServiceValidator;
 		$this->permissionService = $permissionService;
@@ -88,6 +95,7 @@ class AssignmentService {
 		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->currentUser = $userId;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -168,5 +176,25 @@ class AssignmentService {
 			}
 		}
 		throw new NotFoundException('No assignment for ' . $userId . 'found.');
+	}
+
+	/**
+	 * @param int $cardId
+	 * @param array $assignedUser
+	 *
+	 * @return void
+	 */
+	public function importAssignedUser(int $cardId, array $assignedUser): void {
+		$newAssignedUser = new Assignment();
+		$newAssignedUser->setCardId($cardId);
+		$newAssignedUser->setParticipant($assignedUser['participant']['uid']);
+		$newAssignedUser->setType($assignedUser['type']);
+
+		try {
+			$this->assignedUsersMapper->insert($newAssignedUser);
+		} catch (\Exception $e) {
+			$this->logger->error('importAssignedUser insert error: ' . $e->getMessage());
+			throw new InternalErrorException('importAssignedUser insert error: ' . $e->getMessage());
+		}
 	}
 }
