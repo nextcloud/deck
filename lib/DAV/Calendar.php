@@ -61,9 +61,7 @@ class Calendar extends ExternalCalendar {
 				'protected' => true,
 			],
 		];
-		$canWrite = $this->stack !== null
-			? $this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)
-			: $this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT);
+		$canWrite = $this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT);
 		if ($canWrite) {
 			$acl[] = [
 				'privilege' => '{DAV:}write',
