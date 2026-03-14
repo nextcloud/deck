@@ -998,6 +998,85 @@ ICS;
 		$this->backend->updateCalendarObject($sourceCard, $calendarData);
 	}
 
+	public function testUpdateCardKeepsExistingLabelsWhenCategoriesCannotBeCreated(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(123);
+
+		$currentLabel = new Label();
+		$currentLabel->setId(99);
+		$currentLabel->setTitle('Existing');
+
+		$existingCard = new Card();
+		$existingCard->setId(123);
+		$existingCard->setTitle('Card');
+		$existingCard->setDescription('Old description');
+		$existingCard->setStackId(42);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(0);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(null);
+		$existingCard->setLabels([$currentLabel]);
+
+		$updatedCard = new Card();
+		$updatedCard->setId(123);
+
+		$this->cardService->expects($this->exactly(2))
+			->method('find')
+			->with(123)
+			->willReturnOnConsecutiveCalls($existingCard, $existingCard);
+
+		$currentStack = new Stack();
+		$currentStack->setId(42);
+		$currentStack->setBoardId(12);
+		$this->stackService->expects($this->exactly(2))
+			->method('find')
+			->with(42)
+			->willReturn($currentStack);
+
+		$this->cardService->expects($this->once())
+			->method('update')
+			->willReturn($updatedCard);
+
+		$board = new Board();
+		$board->setId(12);
+		$board->setLabels([]);
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(12, true, false)
+			->willReturn($board);
+
+		$this->permissionService->expects($this->once())
+			->method('getPermissions')
+			->with(12)
+			->willReturn([
+				\OCA\Deck\Db\Acl::PERMISSION_MANAGE => false,
+			]);
+
+		$this->labelService->expects($this->never())
+			->method('create');
+		$this->cardService->expects($this->never())
+			->method('assignLabel');
+		$this->cardService->expects($this->never())
+			->method('removeLabel');
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-123
+SUMMARY:Card
+DESCRIPTION:Updated description
+CATEGORIES:Alpha
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->updateCalendarObject($sourceCard, $calendarData);
+	}
+
 	public function testUpdateCardLimitsAutoCreatedLabelsPerSync(): void {
 		$sourceCard = new Card();
 		$sourceCard->setId(123);
@@ -1014,6 +1093,109 @@ ICS;
 		$existingCard->setArchived(false);
 		$existingCard->setDone(null);
 		$existingCard->setLabels([]);
+
+		$updatedCard = new Card();
+		$updatedCard->setId(123);
+
+		$this->cardService->expects($this->exactly(2))
+			->method('find')
+			->with(123)
+			->willReturnOnConsecutiveCalls($existingCard, $existingCard);
+
+		$currentStack = new Stack();
+		$currentStack->setId(42);
+		$currentStack->setBoardId(12);
+		$this->stackService->expects($this->exactly(2))
+			->method('find')
+			->with(42)
+			->willReturn($currentStack);
+
+		$this->cardService->expects($this->once())
+			->method('update')
+			->willReturn($updatedCard);
+
+		$board = new Board();
+		$board->setId(12);
+		$board->setLabels([]);
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(12, true, false)
+			->willReturn($board);
+
+		$this->permissionService->expects($this->once())
+			->method('getPermissions')
+			->with(12)
+			->willReturn([
+				\OCA\Deck\Db\Acl::PERMISSION_MANAGE => true,
+			]);
+
+		$labels = [];
+		for ($i = 1; $i <= 5; $i++) {
+			$label = new Label();
+			$label->setId($i);
+			$label->setTitle('Tag ' . $i);
+			$labels[] = $label;
+		}
+
+		$this->labelService->expects($this->exactly(5))
+			->method('create')
+			->withConsecutive(
+				['Tag 1', '31CC7C', 12],
+				['Tag 2', '31CC7C', 12],
+				['Tag 3', '31CC7C', 12],
+				['Tag 4', '31CC7C', 12],
+				['Tag 5', '31CC7C', 12],
+			)
+			->willReturnOnConsecutiveCalls(...$labels);
+
+		$this->cardService->expects($this->exactly(5))
+			->method('assignLabel')
+			->withConsecutive(
+				[123, 1],
+				[123, 2],
+				[123, 3],
+				[123, 4],
+				[123, 5],
+			);
+		$this->cardService->expects($this->never())
+			->method('removeLabel');
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-123
+SUMMARY:Card
+DESCRIPTION:Updated description
+CATEGORIES:Tag 1,Tag 2,Tag 3,Tag 4,Tag 5,Tag 6
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->updateCalendarObject($sourceCard, $calendarData);
+	}
+
+	public function testUpdateCardKeepsExistingLabelsWhenAutoCreateLimitIsExceeded(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(123);
+
+		$currentLabel = new Label();
+		$currentLabel->setId(99);
+		$currentLabel->setTitle('Existing');
+
+		$existingCard = new Card();
+		$existingCard->setId(123);
+		$existingCard->setTitle('Card');
+		$existingCard->setDescription('Old description');
+		$existingCard->setStackId(42);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(0);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(null);
+		$existingCard->setLabels([$currentLabel]);
 
 		$updatedCard = new Card();
 		$updatedCard->setId(123);
