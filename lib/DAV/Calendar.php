@@ -187,14 +187,10 @@ class Calendar extends ExternalCalendar {
 			return $this->children;
 		}
 
-		if ($this->board) {
-			if ($this->stack !== null) {
-				$this->children = $this->stack->getCards() ?? [];
-			} else {
-				$this->children = $this->backend->getChildren($this->board->getId());
-			}
+		if ($this->stack !== null) {
+			$this->children = $this->stack->getCards() ?? [];
 		} else {
-			$this->children = [];
+			$this->children = $this->backend->getChildren($this->board->getId());
 		}
 
 		return $this->children;
@@ -275,7 +271,7 @@ class Calendar extends ExternalCalendar {
 	 * @inheritDoc
 	 */
 	public function getProperties($properties) {
-		$displayName = 'Deck: ' . ($this->board ? $this->board->getTitle() : 'no board object provided');
+		$displayName = 'Deck: ' . $this->board->getTitle();
 		if ($this->stack !== null) {
 			$displayName .= ' / ' . $this->stack->getTitle();
 		}
@@ -289,7 +285,7 @@ class Calendar extends ExternalCalendar {
 
 	private function extractUserIdFromPrincipalUri(): string {
 		if (preg_match('#^/?principals/users/([^/]+)$#', $this->principalUri, $matches) !== 1) {
-			throw new InvalidDataException('Invalid principal URI');
+			throw new Forbidden('Invalid principal URI');
 		}
 
 		return $matches[1];
@@ -398,7 +394,7 @@ class Calendar extends ExternalCalendar {
 
 			$placeholder = new Card();
 			$placeholder->setId($cardId);
-			$placeholder->setTitle('Deleted task');
+			$placeholder->setTitle($this->translatePlaceholderTitle('Deleted task'));
 			$placeholder->setDescription('');
 			$placeholder->setDavUri($card->getDavUri());
 			$placeholder->setStackId($this->stack?->getId() ?? $card->getStackId());
@@ -424,7 +420,7 @@ class Calendar extends ExternalCalendar {
 
 			$stack = new Stack();
 			$stack->setId($stackId);
-			$stack->setTitle('Deleted list');
+			$stack->setTitle($this->translatePlaceholderTitle('Deleted list'));
 			$stack->setBoardId($this->board->getId());
 			$stack->setOrder(0);
 			$stack->setDeletedAt(time());
@@ -460,6 +456,18 @@ class Calendar extends ExternalCalendar {
 			return in_array($method, ['GET', 'HEAD'], true);
 		} catch (\Throwable $e) {
 			return false;
+		}
+	}
+
+	private function translatePlaceholderTitle(string $text): string {
+		if (!class_exists('\OC')) {
+			return $text;
+		}
+
+		try {
+			return \OC::$server->getL10N('deck')->t($text);
+		} catch (\Throwable $e) {
+			return $text;
 		}
 	}
 }
