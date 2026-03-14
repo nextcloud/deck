@@ -104,7 +104,8 @@ class DeckCalendarBackendTest extends TestCase {
 					}
 					$done = $value->getValue();
 					return $done instanceof \DateTime && $done->format('c') === '2026-03-01T10:00:00+00:00';
-				})
+				}),
+				12
 			)
 			->willReturn($existingCard);
 
@@ -218,8 +219,6 @@ ICS;
 			->method('find')
 			->with(321)
 			->willThrowException(new \Exception('Card not found'));
-		$this->cardService->expects($this->never())
-			->method('findIncludingDeletedLite');
 
 		$object = $this->backend->findCalendarObjectByName('card-321.ics', 12, null, false);
 
@@ -239,6 +238,77 @@ ICS;
 		$object = $this->backend->findCalendarObjectByName('client-task.ics', 12, null, true);
 
 		$this->assertSame($card, $object);
+	}
+
+	public function testCreateCalendarObjectUpdatesExistingCardByDavUriWithinBoard(): void {
+		$existingCard = new Card();
+		$existingCard->setId(222);
+		$existingCard->setTitle('Existing');
+		$existingCard->setDescription('');
+		$existingCard->setStackId(5);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(999);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(null);
+		$existingCard->setDavUri('client-task.ics');
+
+		$currentStack = new Stack();
+		$currentStack->setId(5);
+		$currentStack->setBoardId(12);
+		$targetStack = new Stack();
+		$targetStack->setId(6);
+		$targetStack->setBoardId(12);
+
+		$this->cardService->expects($this->once())
+			->method('findByDavUriLite')
+			->with('client-task.ics', 12, null, true)
+			->willReturn($existingCard);
+		$this->cardService->expects($this->once())
+			->method('find')
+			->with(222)
+			->willReturn($existingCard);
+		$this->cardService->expects($this->never())
+			->method('create');
+		$this->stackService->expects($this->exactly(2))
+			->method('find')
+			->willReturnMap([
+				[5, $currentStack],
+				[6, $targetStack],
+			]);
+		$this->cardService->expects($this->once())
+			->method('update')
+			->with(
+				222,
+				'Updated via href',
+				6,
+				'plain',
+				'admin',
+				'',
+				999,
+				null,
+				0,
+				false,
+				$this->callback(static function ($value) {
+					return $value instanceof OptionalNullableValue && $value->getValue() === null;
+				}),
+				12
+			)
+			->willReturn($existingCard);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:different-uid
+SUMMARY:Updated via href
+STATUS:NEEDS-ACTION
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->createCalendarObject(12, 'admin', $calendarData, null, 6, 'client-task.ics');
 	}
 
 	public function testCreateCalendarObjectMovesExistingCardToPreferredStackInSameBoard(): void {
@@ -276,14 +346,13 @@ ICS;
 		$targetStack->setId(6);
 		$targetStack->setBoardId(12);
 
-		$this->cardService->expects($this->once())
-			->method('findIncludingDeletedLite')
-			->with(91)
-			->willReturn($existingCard);
-		$this->cardService->expects($this->once())
+		$this->cardService->expects($this->exactly(2))
 			->method('find')
-			->with(91)
-			->willReturn($existingCard);
+			->withConsecutive(
+				[91, true, false],
+				[91]
+			)
+			->willReturnOnConsecutiveCalls($existingCard, $existingCard);
 		$this->stackService->expects($this->exactly(2))
 			->method('find')
 			->willReturnMap([
@@ -305,7 +374,8 @@ ICS;
 				false,
 				$this->callback(static function ($value) {
 					return $value instanceof OptionalNullableValue && $value->getValue() === null;
-				})
+				}),
+				12
 			)
 			->willReturn($existingCard);
 
@@ -371,7 +441,8 @@ ICS;
 					}
 					$done = $value->getValue();
 					return $done instanceof \DateTime && $done->format('c') === '2026-03-01T10:00:00+00:00';
-				})
+				}),
+				12
 			)
 			->willReturn($existingCard);
 
@@ -577,10 +648,13 @@ ICS;
 		$targetStack->setId(88);
 		$targetStack->setBoardId(12);
 
-		$this->cardService->expects($this->once())
-			->method('findIncludingDeleted')
-			->with(123)
-			->willReturn($sourceCard);
+		$this->cardService->expects($this->exactly(2))
+			->method('find')
+			->withConsecutive(
+				[123, true, false],
+				[123]
+			)
+			->willReturnOnConsecutiveCalls($sourceCard, $sourceCard);
 		$this->stackService->expects($this->exactly(2))
 			->method('find')
 			->willReturnMap([
@@ -604,7 +678,8 @@ ICS;
 				null,
 				0,
 				false,
-				$this->isInstanceOf(OptionalNullableValue::class)
+				$this->isInstanceOf(OptionalNullableValue::class),
+				12
 			)
 			->willReturn($sourceCard);
 
@@ -669,7 +744,8 @@ ICS;
 						return false;
 					}
 					return $value->getValue() === null;
-				})
+				}),
+				12
 			)
 			->willReturn($existingCard);
 
