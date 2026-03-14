@@ -457,7 +457,7 @@ class ActivityManager {
 		} elseif (isset($subjectParams['board']['id'])) {
 			$boardId = (int)$subjectParams['board']['id'];
 		} elseif ($event->getObjectType() === self::DECK_OBJECT_CARD) {
-			$boardId = $this->cardMapper->findBoardId($event->getObjectId());
+			$boardId = $this->cardMapper->findBoardId((int)$event->getObjectId());
 		} else {
 			return;
 		}
