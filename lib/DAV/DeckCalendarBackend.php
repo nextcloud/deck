@@ -159,8 +159,6 @@ class DeckCalendarBackend {
 		} catch (\Throwable $e) {
 			return null;
 		}
-
-		return null;
 	}
 
 	public function getCalendarRevisionFingerprint(int $boardId, ?int $stackId = null): string {
@@ -456,6 +454,7 @@ class DeckCalendarBackend {
 		$stack = $this->stackService->find($sourceItem->getId());
 
 		$title = trim((string)($todo->SUMMARY ?? ''));
+		// Some clients serialize the synthetic stack VTODO summary as "List : <title>".
 		if (mb_strpos($title, 'List : ') === 0) {
 			$title = mb_substr($title, mb_strlen('List : '));
 		}
