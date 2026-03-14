@@ -139,9 +139,15 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find(int $cardId): Card {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+	public function find(int $cardId, bool $includeDeleted = false, bool $enhance = true): Card {
+		// Keep this call compatible with older PermissionService signatures.
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, $includeDeleted);
 		$card = $this->cardMapper->find($cardId);
+
+		if (!$enhance) {
+			return $card;
+		}
+
 		[$card] = $this->enrichCards([$card]);
 
 		// Attachments are only enriched on individual card fetching
@@ -154,44 +160,6 @@ class CardService {
 		$card->setAttachments($attachments);
 
 		return $card;
-	}
-
-	/**
-	 * Find a card by id including soft-deleted entries.
-	 *
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 */
-	public function findIncludingDeleted(int $cardId): Card {
-		// Keep this call compatible with older PermissionService signatures.
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, true);
-		$card = $this->cardMapper->find($cardId);
-		[$card] = $this->enrichCards([$card]);
-
-		$attachments = $this->attachmentService->findAll($cardId, true);
-		if ($this->request->getParam('apiVersion') === '1.0') {
-			$attachments = array_filter($attachments, function ($attachment) {
-				return $attachment->getType() === 'deck_file';
-			});
-		}
-		$card->setAttachments($attachments);
-
-		return $card;
-	}
-
-	/**
-	 * Lightweight variant for internal CalDAV lookups where enriched relations
-	 * and attachments are not required.
-	 *
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 */
-	public function findIncludingDeletedLite(int $cardId): Card {
-		// Keep this call compatible with older PermissionService signatures.
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, null, true);
-		return $this->cardMapper->find($cardId);
 	}
 
 	public function findByDavUriLite(string $davUri, ?int $boardId = null, ?int $stackId = null, bool $includeDeleted = true): Card {

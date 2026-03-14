@@ -838,7 +838,7 @@ class DeckCalendarBackend {
 
 	private function findCardByIdIncludingDeleted(int $cardId): ?Card {
 		try {
-			return $this->cardService->findIncludingDeletedLite($cardId);
+			return $this->cardService->find($cardId, true, false);
 		} catch (\Throwable $e) {
 			return null;
 		}
