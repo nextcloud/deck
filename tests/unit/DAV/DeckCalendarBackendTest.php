@@ -226,6 +226,21 @@ ICS;
 		$this->assertNull($object);
 	}
 
+	public function testFindCalendarObjectByNameResolvesStoredDavUri(): void {
+		$card = new Card();
+		$card->setId(321);
+		$card->setDavUri('client-task.ics');
+
+		$this->cardService->expects($this->once())
+			->method('findByDavUriLite')
+			->with('client-task.ics', 12, null, true)
+			->willReturn($card);
+
+		$object = $this->backend->findCalendarObjectByName('client-task.ics', 12, null, true);
+
+		$this->assertSame($card, $object);
+	}
+
 	public function testUpdateCardWithCompletedWithoutStatusMarksDone(): void {
 		$sourceCard = new Card();
 		$sourceCard->setId(123);
@@ -313,7 +328,8 @@ ICS;
 				999,
 				'admin',
 				'From mac',
-				$this->callback(fn ($value) => $value instanceof \DateTime && $value->format('c') === '2026-03-03T12:00:00+00:00')
+				$this->callback(fn ($value) => $value instanceof \DateTime && $value->format('c') === '2026-03-03T12:00:00+00:00'),
+				null
 			)
 			->willReturn($card);
 
@@ -330,6 +346,45 @@ END:VCALENDAR
 ICS;
 
 		$this->backend->createCalendarObject(12, 'admin', $calendarData);
+	}
+
+	public function testCreateCardFromCalendarStoresCustomDavUri(): void {
+		$stack = new Stack();
+		$stack->setId(88);
+		$stack->setBoardId(12);
+
+		$card = new Card();
+		$this->stackService->expects($this->once())
+			->method('find')
+			->with(88)
+			->willReturn($stack);
+		$this->stackService->expects($this->never())
+			->method('findAll');
+		$this->cardService->expects($this->once())
+			->method('create')
+			->with(
+				'Created task',
+				88,
+				'plain',
+				999,
+				'admin',
+				'',
+				null,
+				'client-task.ics'
+			)
+			->willReturn($card);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+SUMMARY:Created task
+RELATED-TO:deck-stack-88
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->createCalendarObject(12, 'admin', $calendarData, null, null, 'client-task.ics');
 	}
 
 	public function testCreateCardFromCalendarFallsBackToDefaultStack(): void {
@@ -354,6 +409,7 @@ ICS;
 				999,
 				'admin',
 				'',
+				null,
 				null
 			)
 			->willReturn($card);
@@ -400,6 +456,7 @@ ICS;
 				999,
 				'admin',
 				'',
+				null,
 				null
 			)
 			->willReturn($card);

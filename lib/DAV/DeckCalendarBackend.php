@@ -143,6 +143,12 @@ class DeckCalendarBackend {
 			}
 		}
 
+		try {
+			return $this->cardService->findByDavUriLite($name, $boardId, $stackId, $includeDeleted);
+		} catch (\Throwable $e) {
+			return null;
+		}
+
 		return null;
 	}
 
@@ -200,7 +206,7 @@ class DeckCalendarBackend {
 		return implode('|', $fingerprint);
 	}
 
-	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null, ?int $preferredStackId = null): Card {
+	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null, ?int $preferredStackId = null, ?string $preferredDavUri = null): Card {
 		$todo = $this->extractTodo($data);
 		$existingCard = $this->findExistingCardByUid($todo);
 		if ($existingCard !== null) {
@@ -246,7 +252,8 @@ class DeckCalendarBackend {
 			999,
 			$owner,
 			$description,
-			$dueDate
+			$dueDate,
+			$this->normalizeDavUriForStorage($preferredDavUri)
 		);
 
 		$done = $this->mapDoneFromTodo($todo, $card)->getValue();
@@ -829,6 +836,18 @@ class DeckCalendarBackend {
 		} catch (\Throwable $e) {
 			return null;
 		}
+	}
+
+	private function normalizeDavUriForStorage(?string $name): ?string {
+		if ($name === null || $name === '') {
+			return null;
+		}
+
+		if (preg_match('/^(?:deck-)?card-\d+\.ics$/', $name) === 1 || preg_match('/^stack-\d+\.ics$/', $name) === 1) {
+			return null;
+		}
+
+		return $name;
 	}
 
 	private function normalizeDescriptionForCompare(string $value): string {

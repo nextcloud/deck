@@ -194,6 +194,12 @@ class CardService {
 		return $this->cardMapper->find($cardId);
 	}
 
+	public function findByDavUriLite(string $davUri, ?int $boardId = null, ?int $stackId = null, bool $includeDeleted = true): Card {
+		$card = $this->cardMapper->findByDavUri($davUri, $boardId, $stackId, $includeDeleted);
+		$this->permissionService->checkPermission($this->cardMapper, $card->getId(), Acl::PERMISSION_READ, null, $includeDeleted);
+		return $card;
+	}
+
 	/**
 	 * @return Card[]
 	 */
@@ -214,7 +220,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null): Card {
+	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, ?string $davUri = null): Card {
 		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
@@ -229,6 +235,7 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
+		$card->setDavUri($davUri);
 		$card = $this->cardMapper->insert($card);
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE, [], $card->getOwner());
