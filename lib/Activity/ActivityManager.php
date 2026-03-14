@@ -363,7 +363,12 @@ class ActivityManager {
 			case self::SUBJECT_LABEL_UNASSING:
 			case self::SUBJECT_CARD_USER_ASSIGN:
 			case self::SUBJECT_CARD_USER_UNASSIGN:
-				$subjectParams = $this->findDetailsForCard($entity->getId(), $subject);
+				$subjectParams = $this->findDetailsForCard(
+					$entity instanceof Card ? $entity : $entity->getId(),
+					$subject,
+					($additionalParams['stack'] ?? null) instanceof Stack ? $additionalParams['stack'] : null,
+					isset($additionalParams['board']['id'], $additionalParams['board']['title']) && is_array($additionalParams['board']) ? $additionalParams['board'] : null,
+				);
 
 				if (isset($additionalParams['after']) && $additionalParams['after'] instanceof \DateTimeInterface) {
 					$additionalParams['after'] = $additionalParams['after']->format('c');
@@ -446,15 +451,16 @@ class ActivityManager {
 	 * @param IEvent $event
 	 */
 	private function sendToUsers(IEvent $event) {
-		switch ($event->getObjectType()) {
-			case self::DECK_OBJECT_BOARD:
-				$mapper = $this->boardMapper;
-				break;
-			case self::DECK_OBJECT_CARD:
-				$mapper = $this->cardMapper;
-				break;
+		$subjectParams = $event->getSubjectParameters();
+		if ($event->getObjectType() === self::DECK_OBJECT_BOARD) {
+			$boardId = (int)$event->getObjectId();
+		} elseif (isset($subjectParams['board']['id'])) {
+			$boardId = (int)$subjectParams['board']['id'];
+		} elseif ($event->getObjectType() === self::DECK_OBJECT_CARD) {
+			$boardId = $this->cardMapper->findBoardId($event->getObjectId());
+		} else {
+			return;
 		}
-		$boardId = $mapper->findBoardId($event->getObjectId());
 		/** @var IUser $user */
 		foreach ($this->permissionService->findUsers($boardId) as $user) {
 			$event->setAffectedUser($user->getUID());
@@ -479,8 +485,7 @@ class ActivityManager {
 		if ($objectType === self::DECK_OBJECT_CARD) {
 			switch ($className) {
 				case Card::class:
-					$objectId = $entity->getId();
-					break;
+					return $entity;
 				case Attachment::class:
 				case Label::class:
 				case Assignment::class:
@@ -497,8 +502,7 @@ class ActivityManager {
 		if ($objectType === self::DECK_OBJECT_BOARD) {
 			switch ($className) {
 				case Board::class:
-					$objectId = $entity->getId();
-					break;
+					return $entity;
 				case Label::class:
 				case Stack::class:
 				case Acl::class:
@@ -521,16 +525,23 @@ class ActivityManager {
 		];
 	}
 
-	private function findDetailsForCard(int $cardId, ?string $subject = null): array {
-		$card = $this->cardMapper->find($cardId);
-		$stack = $this->stackMapper->find($card->getStackId());
-		$board = $this->boardMapper->find($stack->getBoardId());
+	private function findDetailsForCard($cardOrId, ?string $subject = null, ?Stack $knownStack = null, ?array $knownBoard = null): array {
+		$card = $cardOrId instanceof Card ? $cardOrId : $this->cardMapper->find((int)$cardOrId);
+		$stack = $knownStack ?? $this->stackMapper->find($card->getStackId());
 
 		// Reduce the data size in activity table
-		$boardArray = [
-			'id' => $board->getId(),
-			'title' => $board->getTitle(),
-		];
+		if ($knownBoard !== null) {
+			$boardArray = [
+				'id' => (int)$knownBoard['id'],
+				'title' => (string)$knownBoard['title'],
+			];
+		} else {
+			$board = $this->boardMapper->find($stack->getBoardId());
+			$boardArray = [
+				'id' => $board->getId(),
+				'title' => $board->getTitle(),
+			];
+		}
 
 		if ($subject !== self::SUBJECT_CARD_UPDATE_DESCRIPTION) {
 			$card = [

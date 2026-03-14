@@ -208,6 +208,15 @@ class DeckCalendarBackend {
 
 	public function createCalendarObject(int $boardId, string $owner, string $data, ?int $preferredCardId = null, ?int $preferredStackId = null, ?string $preferredDavUri = null): Card {
 		$todo = $this->extractTodo($data);
+		$normalizedPreferredDavUri = $this->normalizeDavUriForStorage($preferredDavUri);
+		if ($normalizedPreferredDavUri !== null) {
+			$cardByDavUri = $this->findCardByDavUriInBoard($normalizedPreferredDavUri, $boardId);
+			if ($cardByDavUri !== null) {
+				$restoreDeleted = $cardByDavUri->getDeletedAt() > 0;
+				return $this->updateCardFromCalendar($cardByDavUri, $data, $restoreDeleted, $boardId, $preferredStackId);
+			}
+		}
+
 		$existingCard = $this->findExistingCardByUid($todo);
 		if ($existingCard !== null) {
 			$existingBoardId = $this->getBoardIdForCardOrNull($existingCard);
@@ -253,7 +262,7 @@ class DeckCalendarBackend {
 			$owner,
 			$description,
 			$dueDate,
-			$this->normalizeDavUriForStorage($preferredDavUri)
+			$normalizedPreferredDavUri
 		);
 
 		$done = $this->mapDoneFromTodo($todo, $card)->getValue();
@@ -388,7 +397,8 @@ class DeckCalendarBackend {
 			$incomingDue ? $incomingDue->format('c') : null,
 			$restoreDeleted ? 0 : $card->getDeletedAt(),
 			$card->getArchived(),
-			$done
+			$done,
+			$boardId
 		);
 		$categories = $this->extractCategories($todo);
 		if ($categories !== null) {
@@ -854,6 +864,14 @@ class DeckCalendarBackend {
 		}
 
 		return $name;
+	}
+
+	private function findCardByDavUriInBoard(string $davUri, int $boardId): ?Card {
+		try {
+			return $this->cardService->findByDavUriLite($davUri, $boardId, null, true);
+		} catch (\Throwable $e) {
+			return null;
+		}
 	}
 
 	private function normalizeDescriptionForCompare(string $value): string {

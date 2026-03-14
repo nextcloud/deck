@@ -115,16 +115,18 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function createFile($name, $data = null) {
-		try {
-			$this->getChildNode($name, false, false)->put((string)$data);
-			$this->children = null;
-			return;
-		} catch (NotFound $e) {
-			// New object path, continue with create.
+		if ($this->shouldLookupExistingChildForCreate($name)) {
+			try {
+				$this->getChildNode($name, false, false)->put((string)$data);
+				$this->children = null;
+				return;
+			} catch (NotFound $e) {
+				// New object path, continue with create.
+			}
 		}
 
 		$owner = $this->extractUserIdFromPrincipalUri();
-		$this->backend->createCalendarObject(
+		$calendarObject = $this->backend->createCalendarObject(
 			$this->board->getId(),
 			$owner,
 			(string)$data,
@@ -132,7 +134,7 @@ class Calendar extends ExternalCalendar {
 			$this->stack?->getId(),
 			$name
 		);
-		$this->children = null;
+		$this->rememberCreatedChild($calendarObject);
 	}
 
 	public function getChild($name) {
@@ -292,6 +294,37 @@ class Calendar extends ExternalCalendar {
 		}
 
 		return null;
+	}
+
+	private function shouldLookupExistingChildForCreate(string $name): bool {
+		if ($this->extractCardIdFromNormalizedName($name) !== null) {
+			return true;
+		}
+
+		return preg_match('/^stack-(\d+)\.ics$/', $name) === 1;
+	}
+
+	private function rememberCreatedChild(Card $card): void {
+		if ($this->stack === null || $card->getStackId() !== $this->stack->getId()) {
+			$this->children = null;
+			return;
+		}
+
+		$cards = $this->stack->getCards() ?? [];
+		$replaced = false;
+		foreach ($cards as $index => $existingCard) {
+			if ($existingCard->getId() === $card->getId()) {
+				$cards[$index] = $card;
+				$replaced = true;
+				break;
+			}
+		}
+		if (!$replaced) {
+			$cards[] = $card;
+		}
+
+		$this->stack->setCards($cards);
+		$this->children = $cards;
 	}
 
 	private function getCalendarObjectName($item): string {
