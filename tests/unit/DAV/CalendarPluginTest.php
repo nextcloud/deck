@@ -20,6 +20,7 @@ class CalendarPluginTest extends TestCase {
 
 		$configService->method('get')->with('calendar')->willReturn(true);
 		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS);
+		$configService->method('isCalendarEnabled')->with(2)->willReturn(true);
 
 		$board = new Board();
 		$board->setId(2);
@@ -40,6 +41,8 @@ class CalendarPluginTest extends TestCase {
 		$configService = $this->createMock(ConfigService::class);
 
 		$configService->method('get')->with('calendar')->willReturn(true);
+		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR);
+		$configService->method('isCalendarEnabled')->with(2)->willReturn(true);
 
 		$stack = new Stack();
 		$stack->setId(5);
@@ -55,14 +58,65 @@ class CalendarPluginTest extends TestCase {
 			->with(5)
 			->willReturn($stack);
 		$backend->expects($this->once())
-			->method('getBoard')
-			->with(2)
-			->willReturn($board);
+			->method('getBoards')
+			->willReturn([$board]);
 
 		$plugin = new CalendarPlugin($backend, $configService);
 
 		$calendar = $plugin->getCalendarInCalendarHome('principals/users/admin', 'app-generated--deck--stack-5');
 
 		$this->assertInstanceOf(Calendar::class, $calendar);
+	}
+
+	public function testHasCalendarInCalendarHomeReturnsFalseForDisabledBoardUri(): void {
+		$backend = $this->createMock(DeckCalendarBackend::class);
+		$configService = $this->createMock(ConfigService::class);
+
+		$configService->method('get')->with('calendar')->willReturn(true);
+		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS);
+		$configService->method('isCalendarEnabled')->with(2)->willReturn(false);
+
+		$board = new Board();
+		$board->setId(2);
+
+		$backend->expects($this->once())
+			->method('getBoards')
+			->willReturn([$board]);
+
+		$plugin = new CalendarPlugin($backend, $configService);
+
+		$this->assertFalse(
+			$plugin->hasCalendarInCalendarHome('principals/users/admin', 'app-generated--deck--board-2')
+		);
+	}
+
+	public function testGetCalendarInCalendarHomeReturnsNullForDisabledStackBoard(): void {
+		$backend = $this->createMock(DeckCalendarBackend::class);
+		$configService = $this->createMock(ConfigService::class);
+
+		$configService->method('get')->with('calendar')->willReturn(true);
+		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR);
+		$configService->method('isCalendarEnabled')->with(2)->willReturn(false);
+
+		$stack = new Stack();
+		$stack->setId(5);
+		$stack->setBoardId(2);
+
+		$board = new Board();
+		$board->setId(2);
+
+		$backend->expects($this->once())
+			->method('getBoards')
+			->willReturn([$board]);
+		$backend->expects($this->once())
+			->method('getStack')
+			->with(5)
+			->willReturn($stack);
+
+		$plugin = new CalendarPlugin($backend, $configService);
+
+		$this->assertNull(
+			$plugin->getCalendarInCalendarHome('principals/users/admin', 'app-generated--deck--stack-5')
+		);
 	}
 }

@@ -37,10 +37,7 @@ class CalendarPlugin implements ICalendarProvider {
 			return [];
 		}
 
-		$configService = $this->configService;
-		$boards = array_values(array_filter($this->backend->getBoards(), function ($board) use ($configService) {
-			return $configService->isCalendarEnabled($board->getId());
-		}));
+		$boards = array_values($this->getEnabledBoardsById());
 
 		if ($this->configService->getCalDavListMode() === ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR) {
 			$calendars = [];
@@ -61,38 +58,53 @@ class CalendarPlugin implements ICalendarProvider {
 		if (!$this->calendarIntegrationEnabled) {
 			return false;
 		}
-		$normalizedCalendarUri = $this->normalizeCalendarUri($calendarUri);
 
-		if ($this->configService->getCalDavListMode() === ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR) {
-			foreach ($this->backend->getBoards() as $board) {
-				foreach ($this->backend->getStacks($board->getId()) as $stack) {
-					if ($normalizedCalendarUri === 'stack-' . $stack->getId()) {
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
-		$boards = array_map(static fn (Board $board): string => 'board-' . $board->getId(), $this->backend->getBoards());
-		return in_array($normalizedCalendarUri, $boards, true);
+		return $this->resolveCalendar($principalUri, $calendarUri) !== null;
 	}
 
 	public function getCalendarInCalendarHome(string $principalUri, string $calendarUri): ?ExternalCalendar {
 		if (!$this->calendarIntegrationEnabled) {
 			return null;
 		}
+
+		return $this->resolveCalendar($principalUri, $calendarUri);
+	}
+
+	/**
+	 * @return array<int, Board>
+	 */
+	private function getEnabledBoardsById(): array {
+		$boards = [];
+		foreach ($this->backend->getBoards() as $board) {
+			if ($this->configService->isCalendarEnabled($board->getId())) {
+				$boards[$board->getId()] = $board;
+			}
+		}
+
+		return $boards;
+	}
+
+	private function resolveCalendar(string $principalUri, string $calendarUri): ?ExternalCalendar {
 		$normalizedCalendarUri = $this->normalizeCalendarUri($calendarUri);
+		$enabledBoardsById = $this->getEnabledBoardsById();
+		$perListMode = $this->configService->getCalDavListMode() === ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR;
 
 		try {
-			if (str_starts_with($normalizedCalendarUri, 'stack-')) {
+			if ($perListMode && str_starts_with($normalizedCalendarUri, 'stack-')) {
 				$stack = $this->backend->getStack((int)str_replace('stack-', '', $normalizedCalendarUri));
-				$board = $this->backend->getBoard($stack->getBoardId());
+				$board = $enabledBoardsById[$stack->getBoardId()] ?? null;
+				if ($board === null) {
+					return null;
+				}
 				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend, $stack);
 			}
 
-			if (str_starts_with($normalizedCalendarUri, 'board-')) {
-				$board = $this->backend->getBoard((int)str_replace('board-', '', $normalizedCalendarUri));
+			if (!$perListMode && str_starts_with($normalizedCalendarUri, 'board-')) {
+				$boardId = (int)str_replace('board-', '', $normalizedCalendarUri);
+				$board = $enabledBoardsById[$boardId] ?? null;
+				if ($board === null) {
+					return null;
+				}
 				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend);
 			}
 		} catch (NotFound $e) {
