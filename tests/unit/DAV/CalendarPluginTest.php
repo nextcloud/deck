@@ -10,6 +10,7 @@ namespace OCA\Deck\DAV;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\ConfigService;
+use OCP\IL10N;
 use OCP\IRequest;
 use Test\TestCase;
 
@@ -19,6 +20,7 @@ class CalendarPluginTest extends TestCase {
 		$backend = $this->createMock(DeckCalendarBackend::class);
 		$configService = $this->createMock(ConfigService::class);
 		$request = $this->createMock(IRequest::class);
+		$l10n = $this->createMock(IL10N::class);
 
 		$configService->method('get')->with('calendar')->willReturn(true);
 		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS);
@@ -31,7 +33,7 @@ class CalendarPluginTest extends TestCase {
 			->method('getBoards')
 			->willReturn([$board]);
 
-		$plugin = new CalendarPlugin($backend, $configService, $request);
+		$plugin = new CalendarPlugin($backend, $configService, $request, $l10n);
 
 		$this->assertTrue(
 			$plugin->hasCalendarInCalendarHome('principals/users/admin', 'app-generated--deck--board-2')
@@ -42,6 +44,7 @@ class CalendarPluginTest extends TestCase {
 		$backend = $this->createMock(DeckCalendarBackend::class);
 		$configService = $this->createMock(ConfigService::class);
 		$request = $this->createMock(IRequest::class);
+		$l10n = $this->createMock(IL10N::class);
 
 		$configService->method('get')->with('calendar')->willReturn(true);
 		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR);
@@ -64,7 +67,7 @@ class CalendarPluginTest extends TestCase {
 			->method('getBoards')
 			->willReturn([$board]);
 
-		$plugin = new CalendarPlugin($backend, $configService, $request);
+		$plugin = new CalendarPlugin($backend, $configService, $request, $l10n);
 
 		$calendar = $plugin->getCalendarInCalendarHome('principals/users/admin', 'app-generated--deck--stack-5');
 
@@ -75,6 +78,7 @@ class CalendarPluginTest extends TestCase {
 		$backend = $this->createMock(DeckCalendarBackend::class);
 		$configService = $this->createMock(ConfigService::class);
 		$request = $this->createMock(IRequest::class);
+		$l10n = $this->createMock(IL10N::class);
 
 		$configService->method('get')->with('calendar')->willReturn(true);
 		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS);
@@ -87,7 +91,7 @@ class CalendarPluginTest extends TestCase {
 			->method('getBoards')
 			->willReturn([$board]);
 
-		$plugin = new CalendarPlugin($backend, $configService, $request);
+		$plugin = new CalendarPlugin($backend, $configService, $request, $l10n);
 
 		$this->assertFalse(
 			$plugin->hasCalendarInCalendarHome('principals/users/admin', 'app-generated--deck--board-2')
@@ -98,6 +102,7 @@ class CalendarPluginTest extends TestCase {
 		$backend = $this->createMock(DeckCalendarBackend::class);
 		$configService = $this->createMock(ConfigService::class);
 		$request = $this->createMock(IRequest::class);
+		$l10n = $this->createMock(IL10N::class);
 
 		$configService->method('get')->with('calendar')->willReturn(true);
 		$configService->method('getCalDavListMode')->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR);
@@ -118,7 +123,7 @@ class CalendarPluginTest extends TestCase {
 			->with(5)
 			->willReturn($stack);
 
-		$plugin = new CalendarPlugin($backend, $configService, $request);
+		$plugin = new CalendarPlugin($backend, $configService, $request, $l10n);
 
 		$this->assertNull(
 			$plugin->getCalendarInCalendarHome('principals/users/admin', 'app-generated--deck--stack-5')
