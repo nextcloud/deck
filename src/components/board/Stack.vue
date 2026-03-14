@@ -251,12 +251,12 @@ export default {
 				if (addedIndex !== null && removedIndex === null) {
 					// move card to new stack
 					card.stackId = stackId
-					card.order = addedIndex
+					card.order = this.getUnfilteredOrder(addedIndex, card.id)
 					console.debug('move card to stack', card.stackId, card.order)
 					await this.$store.dispatch('reorderCard', card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
-					card.order = addedIndex
+					card.order = this.getUnfilteredOrder(addedIndex, card.id)
 					console.debug('move card in stack', card.stackId, card.order)
 					await this.$store.dispatch('reorderCard', card)
 				}
@@ -266,6 +266,39 @@ export default {
 			return index => {
 				return this.cardsByStack[index]
 			}
+		},
+		getUnfilteredOrder(filteredAddedIndex, cardId) {
+			// Convert a drop index from the filtered view to the correct
+			// order among all active (non-archived, unfiltered) cards in
+			// the stack so that reordering works correctly when filters
+			// are active.
+			const allCards = this.$store.getters.activeCardsByStack(this.stack.id)
+				.filter(c => c.id !== cardId)
+			const filteredCards = this.cardsByStack.filter(c => c.id !== cardId)
+
+			if (filteredCards.length === 0 || allCards.length === 0) {
+				return filteredAddedIndex
+			}
+
+			if (filteredAddedIndex <= 0) {
+				// Dropped before the first visible card
+				const firstVisible = filteredCards[0]
+				const idx = allCards.findIndex(c => c.id === firstVisible.id)
+				return idx !== -1 ? idx : filteredAddedIndex
+			}
+
+			if (filteredAddedIndex >= filteredCards.length) {
+				// Dropped after the last visible card
+				const lastVisible = filteredCards[filteredCards.length - 1]
+				const idx = allCards.findIndex(c => c.id === lastVisible.id)
+				return idx !== -1 ? idx + 1 : filteredAddedIndex
+			}
+
+			// Dropped between two visible cards — place after the
+			// preceding visible card in the unfiltered list
+			const prevVisible = filteredCards[filteredAddedIndex - 1]
+			const idx = allCards.findIndex(c => c.id === prevVisible.id)
+			return idx !== -1 ? idx + 1 : filteredAddedIndex
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
