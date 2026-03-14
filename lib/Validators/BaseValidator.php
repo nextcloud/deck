@@ -113,6 +113,16 @@ abstract class BaseValidator {
 	}
 
 	/**
+	 * @param $value
+	 * @return bool
+	 */
+	private function date(string $value): bool {
+		$date = \DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $value)
+			?: \DateTime::createFromFormat(\DateTime::ATOM, $value);
+		return $date !== false;
+	}
+
+	/**
 	 * @throws Exception
 	 */
 	private function max($value, $limit): bool {
