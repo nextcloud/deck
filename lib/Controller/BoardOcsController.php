@@ -43,12 +43,10 @@ class BoardOcsController extends OCSController {
 	#[NoCSRFRequired]
 	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function read(int $boardId): DataResponse {
-		// Board on this instance -> get it from database
 		$localBoard = $this->boardService->find($boardId, true, true);
 		if ($localBoard->getExternalId() !== null) {
 			return $this->externalBoardService->getExternalBoardFromRemote($localBoard);
 		}
-		// Board on other instance -> get it from other instance
 		return new DataResponse($localBoard);
 	}
 
