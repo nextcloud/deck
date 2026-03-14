@@ -65,4 +65,11 @@ class Acl extends RelationalEntity {
 			default => false,
 		};
 	}
+
+	public function jsonSerialize(): array {
+		$json = parent::jsonSerialize();
+		unset($json['token']);
+
+		return $json;
+	}
 }
