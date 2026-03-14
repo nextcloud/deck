@@ -6,6 +6,7 @@
  */
 namespace OCA\Deck\DAV;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
 use Sabre\CalDAV\ICalendarObject;
@@ -45,7 +46,14 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function getACL() {
-		return $this->calendar->getACL();
+		$acl = $this->calendar->getACL();
+		if ($this->sourceItem instanceof Stack
+			&& !$this->backend->checkBoardPermission($this->calendar->getBoardId(), Acl::PERMISSION_MANAGE)) {
+			return array_values(array_filter($acl, static function (array $entry): bool {
+				return $entry['privilege'] !== '{DAV:}write';
+			}));
+		}
+		return $acl;
 	}
 
 	public function setACL(array $acl) {
