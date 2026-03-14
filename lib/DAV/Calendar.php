@@ -12,6 +12,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
+use OCP\IL10N;
 use OCP\IRequest;
 use Sabre\CalDAV\CalendarQueryValidator;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
@@ -35,14 +36,17 @@ class Calendar extends ExternalCalendar {
 	private $stack;
 	/** @var IRequest|null */
 	private $request;
+	/** @var IL10N|null */
+	private $l10n;
 
-	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend, ?Stack $stack = null, ?IRequest $request = null) {
+	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend, ?Stack $stack = null, ?IRequest $request = null, ?IL10N $l10n = null) {
 		parent::__construct('deck', $calendarUri);
 
 		$this->backend = $backend;
 		$this->board = $board;
 		$this->stack = $stack;
 		$this->request = $request;
+		$this->l10n = $l10n;
 
 		$this->principalUri = $principalUri;
 	}
@@ -462,12 +466,12 @@ class Calendar extends ExternalCalendar {
 	}
 
 	private function translatePlaceholderTitle(string $text): string {
-		if (!class_exists('\OC')) {
+		if ($this->l10n === null) {
 			return $text;
 		}
 
 		try {
-			return \OC::$server->getL10N('deck')->t($text);
+			return $this->l10n->t($text);
 		} catch (\Throwable $e) {
 			return $text;
 		}

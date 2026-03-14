@@ -11,6 +11,7 @@ use OCA\DAV\CalDAV\Integration\ExternalCalendar;
 use OCA\DAV\CalDAV\Integration\ICalendarProvider;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Service\ConfigService;
+use OCP\IL10N;
 use OCP\IRequest;
 use Sabre\DAV\Exception\NotFound;
 
@@ -24,11 +25,14 @@ class CalendarPlugin implements ICalendarProvider {
 	private $calendarIntegrationEnabled;
 	/** @var IRequest */
 	private $request;
+	/** @var IL10N */
+	private $l10n;
 
-	public function __construct(DeckCalendarBackend $backend, ConfigService $configService, IRequest $request) {
+	public function __construct(DeckCalendarBackend $backend, ConfigService $configService, IRequest $request, IL10N $l10n) {
 		$this->backend = $backend;
 		$this->configService = $configService;
 		$this->request = $request;
+		$this->l10n = $l10n;
 		$this->calendarIntegrationEnabled = $configService->get('calendar');
 	}
 
@@ -47,14 +51,14 @@ class CalendarPlugin implements ICalendarProvider {
 			$calendars = [];
 			foreach ($boards as $board) {
 				foreach ($this->backend->getStacks($board->getId()) as $stack) {
-					$calendars[] = new Calendar($principalUri, 'stack-' . $stack->getId(), $board, $this->backend, $stack, $this->request);
+					$calendars[] = new Calendar($principalUri, 'stack-' . $stack->getId(), $board, $this->backend, $stack, $this->request, $this->l10n);
 				}
 			}
 			return $calendars;
 		}
 
 		return array_map(function (Board $board) use ($principalUri) {
-			return new Calendar($principalUri, 'board-' . $board->getId(), $board, $this->backend, null, $this->request);
+			return new Calendar($principalUri, 'board-' . $board->getId(), $board, $this->backend, null, $this->request, $this->l10n);
 		}, $boards);
 	}
 
@@ -100,7 +104,7 @@ class CalendarPlugin implements ICalendarProvider {
 				if ($board === null) {
 					return null;
 				}
-				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend, $stack, $this->request);
+				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend, $stack, $this->request, $this->l10n);
 			}
 
 			if (!$perListMode && str_starts_with($normalizedCalendarUri, 'board-')) {
@@ -109,7 +113,7 @@ class CalendarPlugin implements ICalendarProvider {
 				if ($board === null) {
 					return null;
 				}
-				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend, null, $this->request);
+				return new Calendar($principalUri, $normalizedCalendarUri, $board, $this->backend, null, $this->request, $this->l10n);
 			}
 		} catch (NotFound $e) {
 			// We can just return null if we have no matching board/stack
