@@ -386,6 +386,12 @@ class DeckCalendarBackend {
 		}
 		$done = $this->mapDoneFromTodo($todo, $card);
 		$incomingDue = isset($todo->DUE) ? $todo->DUE->getDateTime() : null;
+		$categories = $this->extractCategories($todo);
+		if ($categories !== null) {
+			$categories = $this->normalizeCategoriesForLabelSync($boardId, $categories, $mode);
+		}
+		$categoriesChanged = $categories !== null
+			&& !$this->hasSameCategoryLabels($categories, $card);
 
 		$isNoopUpdate = $title === $card->getTitle()
 			&& $stackId === $card->getStackId()
@@ -394,7 +400,11 @@ class DeckCalendarBackend {
 			&& $this->isDateEqual($card->getDone(), $done->getValue())
 			&& (!$restoreDeleted || $card->getDeletedAt() === 0);
 
-		if ($isNoopUpdate) {
+		if ($isNoopUpdate && !$categoriesChanged) {
+			return $card;
+		}
+		if ($isNoopUpdate && $categories !== null) {
+			$this->syncCardCategories($card->getId(), $categories);
 			return $card;
 		}
 
@@ -412,9 +422,7 @@ class DeckCalendarBackend {
 			$done,
 			$boardId
 		);
-		$categories = $this->extractCategories($todo);
 		if ($categories !== null) {
-			$categories = $this->normalizeCategoriesForLabelSync($boardId, $categories, $mode);
 			$this->syncCardCategories($updatedCard->getId(), $categories);
 		}
 
@@ -894,6 +902,29 @@ class DeckCalendarBackend {
 
 	private function normalizeDescriptionForCompare(string $value): string {
 		return str_replace(["\r\n", "\r"], "\n", $value);
+	}
+
+	/**
+	 * @param list<string> $categories
+	 */
+	private function hasSameCategoryLabels(array $categories, Card $card): bool {
+		$incoming = [];
+		foreach ($categories as $category) {
+			$key = mb_strtolower(trim($category));
+			if ($key !== '') {
+				$incoming[$key] = true;
+			}
+		}
+
+		$current = [];
+		foreach ($card->getLabels() ?? [] as $label) {
+			$key = mb_strtolower(trim($label->getTitle()));
+			if ($key !== '') {
+				$current[$key] = true;
+			}
+		}
+
+		return array_keys($incoming) === array_keys($current);
 	}
 
 	private function isDateEqual(?\DateTimeInterface $left, ?\DateTimeInterface $right): bool {

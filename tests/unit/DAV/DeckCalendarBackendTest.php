@@ -844,6 +844,80 @@ ICS;
 		$this->backend->updateCalendarObject($sourceCard, $calendarData);
 	}
 
+	public function testUpdateCardSyncsCategoriesEvenWhenOtherFieldsAreUnchanged(): void {
+		$sourceCard = new Card();
+		$sourceCard->setId(123);
+
+		$existingCard = new Card();
+		$existingCard->setId(123);
+		$existingCard->setTitle('Card');
+		$existingCard->setDescription('Description');
+		$existingCard->setStackId(42);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(0);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(null);
+		$existingCard->setLabels([]);
+
+		$this->cardService->expects($this->exactly(2))
+			->method('find')
+			->with(123)
+			->willReturnOnConsecutiveCalls($existingCard, $existingCard);
+
+		$currentStack = new Stack();
+		$currentStack->setId(42);
+		$currentStack->setBoardId(12);
+		$this->stackService->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($currentStack);
+
+		$label = new Label();
+		$label->setId(7);
+		$label->setTitle('Test');
+		$board = new Board();
+		$board->setId(12);
+		$board->setLabels([$label]);
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(12, true, false)
+			->willReturn($board);
+
+		$this->permissionService->expects($this->once())
+			->method('getPermissions')
+			->with(12)
+			->willReturn([
+				\OCA\Deck\Db\Acl::PERMISSION_MANAGE => true,
+			]);
+
+		$this->cardService->expects($this->never())
+			->method('update');
+		$this->labelService->expects($this->never())
+			->method('create');
+		$this->cardService->expects($this->once())
+			->method('assignLabel')
+			->with(123, 7);
+		$this->cardService->expects($this->never())
+			->method('removeLabel');
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-123
+SUMMARY:Card
+DESCRIPTION:Description
+X-APPLE-TAGS:Test
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$this->backend->updateCalendarObject($sourceCard, $calendarData);
+	}
+
 	public function testUpdateCardDoesNotAutoCreateLabelsWithoutManagePermission(): void {
 		$sourceCard = new Card();
 		$sourceCard->setId(123);
