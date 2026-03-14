@@ -18,6 +18,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method void setTitle(string $title)
  * @method string getDescription()
  * @method string getDescriptionPrev()
+ * @method ?string getDavUri()
+ * @method void setDavUri(?string $davUri)
  * @method int getStackId()
  * @method void setStackId(int $stackId)
  * @method int getOrder()
@@ -66,6 +68,7 @@ class Card extends RelationalEntity {
 	protected string $title = '';
 	protected $description;
 	protected $descriptionPrev;
+	protected $davUri = null;
 	protected $stackId;
 	protected $type;
 	protected $lastModified;
@@ -106,6 +109,7 @@ class Card extends RelationalEntity {
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addType('duedate', 'datetime');
+		$this->addType('davUri', 'string');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
@@ -121,6 +125,12 @@ class Card extends RelationalEntity {
 
 	public function setDatabaseType($type) {
 		$this->databaseType = $type;
+	}
+
+	public function jsonSerialize(): array {
+		$json = parent::jsonSerialize();
+		unset($json['davUri']);
+		return $json;
 	}
 
 	public function getCalendarObject(): VCalendar {
