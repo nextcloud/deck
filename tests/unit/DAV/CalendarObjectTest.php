@@ -59,4 +59,25 @@ class CalendarObjectTest extends TestCase {
 
 		$this->assertSame($expectedAcl, $calendarObject->getACL());
 	}
+
+	public function testGetETagPassesCalendarContextToBackendFingerprint(): void {
+		$calendar = $this->createMock(Calendar::class);
+		$calendar->method('getBoardId')->willReturn(12);
+		$calendar->method('getStackId')->willReturn(9);
+
+		$backend = $this->createMock(DeckCalendarBackend::class);
+
+		$card = $this->createMock(Card::class);
+		$card->method('getCalendarObject')->willReturn(new VCalendar());
+		$card->method('getLastModified')->willReturn(1234567890);
+
+		$backend->expects($this->once())
+			->method('getObjectRevisionFingerprint')
+			->with($card, 12, 9)
+			->willReturn('fingerprint');
+
+		$calendarObject = new CalendarObject($calendar, 'card-7.ics', $backend, $card);
+
+		$this->assertSame('"' . md5('1234567890|fingerprint') . '"', $calendarObject->getETag());
+	}
 }
