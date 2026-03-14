@@ -261,15 +261,15 @@ class Calendar extends ExternalCalendar {
 						}
 						$this->board->setColor($color);
 						break;
-					}
 				}
-				if ($this->stack !== null) {
-					return $this->backend->updateStack($this->stack);
-				}
-				return $this->backend->updateBoard($this->board);
-			});
-			// We can just return here and let oc_properties handle everything
-		}
+			}
+			if ($this->stack !== null) {
+				return $this->backend->updateStack($this->stack);
+			}
+			return $this->backend->updateBoard($this->board);
+		});
+		// We can just return here and let oc_properties handle everything
+	}
 
 	/**
 	 * @inheritDoc
