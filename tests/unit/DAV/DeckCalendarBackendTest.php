@@ -19,6 +19,7 @@ use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class DeckCalendarBackendTest extends TestCase {
@@ -29,6 +30,7 @@ class DeckCalendarBackendTest extends TestCase {
 	private BoardMapper $boardMapper;
 	private LabelService $labelService;
 	private PermissionService $permissionService;
+	private LoggerInterface $logger;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -38,6 +40,7 @@ class DeckCalendarBackendTest extends TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->labelService = $this->createMock(LabelService::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$configService = $this->createMock(ConfigService::class);
 		$configService->method('getCalDavListMode')
 			->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_ROOT_TASKS);
@@ -49,7 +52,8 @@ class DeckCalendarBackendTest extends TestCase {
 			$this->permissionService,
 			$this->boardMapper,
 			$this->labelService,
-			$configService
+			$configService,
+			$this->logger
 		);
 	}
 
@@ -325,7 +329,8 @@ ICS;
 			$permissionService,
 			$this->boardMapper,
 			$this->labelService,
-			$configService
+			$configService,
+			$this->logger
 		);
 
 		$existingCard = new Card();

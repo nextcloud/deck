@@ -45,10 +45,12 @@ class DeckCalendarBackend {
 	private $labelService;
 	/** @var ConfigService */
 	private $configService;
+	/** @var LoggerInterface */
+	private $logger;
 
 	public function __construct(
 		BoardService $boardService, StackService $stackService, CardService $cardService, PermissionService $permissionService,
-		BoardMapper $boardMapper, LabelService $labelService, ConfigService $configService,
+		BoardMapper $boardMapper, LabelService $labelService, ConfigService $configService, LoggerInterface $logger,
 	) {
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
@@ -57,6 +59,7 @@ class DeckCalendarBackend {
 		$this->boardMapper = $boardMapper;
 		$this->labelService = $labelService;
 		$this->configService = $configService;
+		$this->logger = $logger;
 	}
 
 	public function getBoards(): array {
@@ -783,7 +786,7 @@ class DeckCalendarBackend {
 			return $this->labelService->create($title, '31CC7C', $boardId);
 		} catch (\Throwable $e) {
 			try {
-				\OCP\Server::get(LoggerInterface::class)->debug('[deck-caldav] label-create-failed', [
+				$this->logger->debug('[deck-caldav] label-create-failed', [
 					'boardId' => $boardId,
 					'title' => $title,
 					'error' => $e->getMessage(),
