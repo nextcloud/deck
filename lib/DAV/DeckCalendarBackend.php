@@ -213,7 +213,7 @@ class DeckCalendarBackend {
 			$existingBoardId = $this->getBoardIdForCardOrNull($existingCard);
 			if ($existingBoardId === null || $existingBoardId === $boardId) {
 				$restoreDeleted = $existingCard->getDeletedAt() > 0;
-				return $this->updateCardFromCalendar($existingCard, $data, $restoreDeleted, $boardId);
+				return $this->updateCardFromCalendar($existingCard, $data, $restoreDeleted, $boardId, $preferredStackId);
 			}
 		}
 
@@ -223,7 +223,7 @@ class DeckCalendarBackend {
 				$existingBoardId = $this->getBoardIdForCardOrNull($cardById);
 				if ($existingBoardId === null || $existingBoardId === $boardId) {
 					$restoreDeleted = $cardById->getDeletedAt() > 0;
-					return $this->updateCardFromCalendar($cardById, $data, $restoreDeleted, $boardId);
+					return $this->updateCardFromCalendar($cardById, $data, $restoreDeleted, $boardId, $preferredStackId);
 				}
 			}
 		}
@@ -333,7 +333,7 @@ class DeckCalendarBackend {
 		throw new \InvalidArgumentException('Unsupported calendar object source item');
 	}
 
-	private function updateCardFromCalendar(Card $sourceItem, string $data, bool $restoreDeleted = false, ?int $targetBoardId = null): Card {
+	private function updateCardFromCalendar(Card $sourceItem, string $data, bool $restoreDeleted = false, ?int $targetBoardId = null, ?int $targetStackId = null): Card {
 		$todo = $this->extractTodo($data);
 		$card = $restoreDeleted ? $sourceItem : $this->cardService->find($sourceItem->getId());
 		$currentBoardId = $this->getBoardIdForCard($card);
@@ -347,6 +347,12 @@ class DeckCalendarBackend {
 		$description = isset($todo->DESCRIPTION) ? (string)$todo->DESCRIPTION : $card->getDescription();
 		$mode = $this->configService->getCalDavListMode();
 		$relatedStackId = $this->extractStackIdFromRelatedTo($todo);
+		if ($targetStackId !== null && $mode === ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR) {
+			$relatedStackId = $targetStackId;
+		}
+		if ($relatedStackId === null) {
+			$relatedStackId = $targetStackId;
+		}
 		if ($relatedStackId === null) {
 			$relatedStackId = $this->inferStackIdFromTodoHints($boardId, $todo, $mode);
 		}

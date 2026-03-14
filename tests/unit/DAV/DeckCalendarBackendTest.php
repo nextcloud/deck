@@ -241,6 +241,89 @@ ICS;
 		$this->assertSame($card, $object);
 	}
 
+	public function testCreateCalendarObjectMovesExistingCardToPreferredStackInSameBoard(): void {
+		$configService = $this->createMock(ConfigService::class);
+		$configService->method('getCalDavListMode')
+			->willReturn(ConfigService::SETTING_CALDAV_LIST_MODE_PER_LIST_CALENDAR);
+		$boardService = $this->createMock(BoardService::class);
+		$permissionService = $this->createMock(PermissionService::class);
+		$backend = new DeckCalendarBackend(
+			$boardService,
+			$this->stackService,
+			$this->cardService,
+			$permissionService,
+			$this->boardMapper,
+			$this->labelService,
+			$configService
+		);
+
+		$existingCard = new Card();
+		$existingCard->setId(91);
+		$existingCard->setTitle('Test neue URI');
+		$existingCard->setDescription('');
+		$existingCard->setStackId(5);
+		$existingCard->setType('plain');
+		$existingCard->setOrder(999);
+		$existingCard->setOwner('admin');
+		$existingCard->setDeletedAt(0);
+		$existingCard->setArchived(false);
+		$existingCard->setDone(null);
+
+		$currentStack = new Stack();
+		$currentStack->setId(5);
+		$currentStack->setBoardId(12);
+		$targetStack = new Stack();
+		$targetStack->setId(6);
+		$targetStack->setBoardId(12);
+
+		$this->cardService->expects($this->once())
+			->method('findIncludingDeletedLite')
+			->with(91)
+			->willReturn($existingCard);
+		$this->cardService->expects($this->once())
+			->method('find')
+			->with(91)
+			->willReturn($existingCard);
+		$this->stackService->expects($this->exactly(2))
+			->method('find')
+			->willReturnMap([
+				[5, $currentStack],
+				[6, $targetStack],
+			]);
+		$this->cardService->expects($this->once())
+			->method('update')
+			->with(
+				91,
+				'Test neue URI',
+				6,
+				'plain',
+				'admin',
+				'',
+				999,
+				null,
+				0,
+				false,
+				$this->callback(static function ($value) {
+					return $value instanceof OptionalNullableValue && $value->getValue() === null;
+				})
+			)
+			->willReturn($existingCard);
+
+		$calendarData = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTODO
+UID:deck-card-91
+SUMMARY:Test neue URI
+RELATED-TO:deck-stack-5
+STATUS:NEEDS-ACTION
+END:VTODO
+END:VCALENDAR
+ICS;
+
+		$backend->createCalendarObject(12, 'admin', $calendarData, 91, 6, 'deck-card-91.ics');
+	}
+
 	public function testUpdateCardWithCompletedWithoutStatusMarksDone(): void {
 		$sourceCard = new Card();
 		$sourceCard->setId(123);
