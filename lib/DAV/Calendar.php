@@ -71,9 +71,10 @@ class Calendar extends ExternalCalendar {
 				'protected' => true,
 			];
 		}
-		// write-properties is needed to allow users with manage permission to
-		// toggle calendar visibility and update board-level metadata.
-		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)) {
+		// Keep write-properties available for shared calendars so clients can
+		// still persist user-local calendar settings. Sensitive board/stack
+		// metadata updates are guarded explicitly in propPatch().
+		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_READ)) {
 			$acl[] = [
 				'privilege' => '{DAV:}write-properties',
 				'principal' => $this->getOwner(),
