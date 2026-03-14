@@ -325,6 +325,16 @@ class Calendar extends ExternalCalendar {
 			$cardId = (int)$matches[1];
 			$card = $this->backend->findCalendarObjectByName($name, $this->board->getId(), $this->stack?->getId());
 			if (!($card instanceof Card)) {
+				$boardLocalCard = $this->backend->findCalendarObjectByName($name, $this->board->getId(), null);
+				if ($boardLocalCard instanceof Card
+					&& $this->stack !== null
+					&& $boardLocalCard->getDeletedAt() === 0
+					&& $boardLocalCard->getStackId() !== $this->stack->getId()
+					&& $this->isDirectObjectReadRequest()
+				) {
+					return null;
+				}
+
 				// Fallback for stale hrefs after cross-board moves.
 				$card = $this->backend->findCalendarObjectByName($name, null, null);
 			}
@@ -380,6 +390,20 @@ class Calendar extends ExternalCalendar {
 			$request = \OC::$server->getRequest();
 			$method = strtoupper((string)$request->getMethod());
 			return in_array($method, ['GET', 'HEAD', 'REPORT', 'PROPFIND'], true);
+		} catch (\Throwable $e) {
+			return false;
+		}
+	}
+
+	private function isDirectObjectReadRequest(): bool {
+		if (!class_exists('\OC')) {
+			return false;
+		}
+
+		try {
+			$request = \OC::$server->getRequest();
+			$method = strtoupper((string)$request->getMethod());
+			return in_array($method, ['GET', 'HEAD'], true);
 		} catch (\Throwable $e) {
 			return false;
 		}
