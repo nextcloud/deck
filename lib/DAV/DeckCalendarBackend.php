@@ -78,6 +78,17 @@ class DeckCalendarBackend {
 		return true;
 	}
 
+	public function updateStack(Stack $stack): bool {
+		$this->stackService->update(
+			$stack->getId(),
+			$stack->getTitle(),
+			$stack->getBoardId(),
+			$stack->getOrder(),
+			$stack->getDeletedAt()
+		);
+		return true;
+	}
+
 	public function getChildren(int $id): array {
 		return array_merge(
 			$this->cardService->findCalendarEntries($id),
