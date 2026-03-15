@@ -12,6 +12,7 @@
 			:menu-placement="'auto'"
 			:force-display-actions="isTouchDevice"
 			@click="onNavigate"
+			@update:menuOpen="onUpdateMenuOpen"
 			@undo="unDelete">
 			<template #icon>
 				<NcAppNavigationIconBullet :color="board.color" />
@@ -89,32 +90,33 @@
 						{{ t('deck', 'Due date reminders') }}
 					</NcActionButton>
 
-					<NcActionButton name="notification"
+					<NcActionButton 
+					    :name="t('deck', 'All cards')"
 						icon="icon-sound"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
-						@click="updateSetting('notify-due', 'all')">
-						{{ t('deck', 'All cards') }}
+						@click="updateSetting('notify-due', 'all')">						
 					</NcActionButton>
-					<NcActionButton name="notification"
+					<NcActionButton
+						:name="t('deck', 'Assigned cards')"
 						icon="icon-user"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 						@click="updateSetting('notify-due', 'assigned')">
-						{{ t('deck', 'Assigned cards') }}
 					</NcActionButton>
-					<NcActionButton name="notification"
+					<NcActionButton
+						:name="t('deck', 'No notifications')"
 						icon="icon-sound-off"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 						@click="updateSetting('notify-due', 'off')">
-						{{ t('deck', 'No notifications') }}
 					</NcActionButton>
 				</template>
 				<NcActionButton v-else-if="!board.archived && board.acl?.length > 0"
-					icon="icon-sound"
-					@click="openDueReminderMenu">
-					{{ t('deck', 'Due date reminders') }}
+					:name="t('deck', 'Due date reminders')"
+					:icon="dueDateReminderIcon"
+					@click="isDueSubmenuActive=true">
+					{{ dueDateReminderText }}
 				</NcActionButton>
 
 				<NcActionButton v-if="canManage && !isDueSubmenuActive"
@@ -267,6 +269,28 @@ export default {
 		canLeave() {
 			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined
 		},
+		dueDateReminderIcon() {
+			if (this.board.settings['notify-due'] === 'all') {
+				return 'icon-sound'
+			} else if (this.board.settings['notify-due'] === 'assigned') {
+				return 'icon-user'
+			} else if (this.board.settings['notify-due'] === 'off') {
+				return 'icon-sound-off'
+			}
+
+			return ''
+		},
+		dueDateReminderText() {
+			if (this.board.settings['notify-due'] === 'all') {
+				return t('deck', 'All cards')
+			} else if (this.board.settings['notify-due'] === 'assigned') {
+				return t('deck', 'Assigned cards')
+			} else if (this.board.settings['notify-due'] === 'off') {
+				return t('deck', 'No notifications')
+			}
+
+			return ''
+		},
 		hasDueDateReminderSetting() {
 			return ['all', 'assigned', 'off'].includes(this.board.settings?.['notify-due'])
 		},
@@ -400,10 +424,15 @@ export default {
 		cancelEdit(e) {
 			this.editing = false
 		},
-		async openDueReminderMenu() {
-			this.isDueSubmenuActive = true
+		async onUpdateMenuOpen(menuOpen) {
+			this.menuOpen = menuOpen
 
-			if (this.hasDueDateReminderSetting || this.loadingDueReminderSettings) {
+			if (!menuOpen) {
+				this.isDueSubmenuActive = false
+				return
+			}
+
+			if (this.board.archived || this.board.acl?.length === 0 || this.hasDueDateReminderSetting || this.loadingDueReminderSettings) {
 				return
 			}
 
