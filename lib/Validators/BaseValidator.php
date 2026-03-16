@@ -109,10 +109,10 @@ abstract class BaseValidator {
 			return true;
 		}
 
-        if (is_string($value)) {
-            return strlen(trim($value)) > 0;
-        }
-        return !empty($value);
+		if (is_string($value)) {
+			return strlen(trim($value)) > 0;
+		}
+		return !empty($value);
 	}
 
 	/**
