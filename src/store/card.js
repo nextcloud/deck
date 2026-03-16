@@ -216,8 +216,8 @@ export default function cardModuleFactory() {
 				for (const newCard of cards) {
 					const existingIndex = state.cards.findIndex(_card => _card.id === newCard.id)
 					if (existingIndex !== -1) {
-						Vue.set(state.cards[existingIndex], 'order', newCard.order)
-						Vue.set(state.cards[existingIndex], 'stackId', newCard.stackId)
+						// Merge all properties from server response (includes labels from automations)
+						Vue.set(state.cards, existingIndex, Object.assign({}, state.cards[existingIndex], newCard))
 					}
 				}
 			},
