@@ -46,6 +46,10 @@
 					</form>
 				</template>
 			</NcEmptyContent>
+			<GanttView v-else-if="!isEmpty && !loading && viewMode === 'gantt'"
+				key="gantt"
+				:board="board"
+				:stacks="stacksByBoard" />
 			<div v-else-if="!isEmpty && !loading"
 				key="board"
 				ref="board"
@@ -88,6 +92,7 @@ import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import Stack from './Stack.vue'
+import GanttView from './GanttView.vue'
 import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
@@ -102,6 +107,7 @@ export default {
 		DeckIcon,
 		Draggable,
 		Stack,
+		GanttView,
 		NcEmptyContent,
 		NcModal,
 		NcTextField,
@@ -134,6 +140,7 @@ export default {
 			isFullApp: state => state.isFullApp,
 			board: state => state.currentBoard,
 			showArchived: state => state.showArchived,
+			viewMode: state => state.viewMode,
 		}),
 		...mapGetters([
 			'canEdit',

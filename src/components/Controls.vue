@@ -226,6 +226,21 @@
 
 				<NcActions :aria-label="t('deck', 'View Modes')"
 					:name="t('deck', 'Toggle View Modes')">
+					<NcActionButton :class="{ 'action--active': viewMode === 'kanban' }"
+						@click="setViewMode('kanban')">
+						<template #icon>
+							<ViewColumnIcon :size="20" decorative />
+						</template>
+						{{ t('deck', 'Kanban view') }}
+					</NcActionButton>
+					<NcActionButton :class="{ 'action--active': viewMode === 'gantt' }"
+						@click="setViewMode('gantt')">
+						<template #icon>
+							<ChartGanttIcon :size="20" decorative />
+						</template>
+						{{ t('deck', 'Gantt view') }}
+					</NcActionButton>
+					<NcActionSeparator />
 					<NcActionButton @click="toggleShowArchived">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
@@ -264,7 +279,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -273,6 +288,8 @@ import FilterOffIcon from 'vue-material-design-icons/FilterOffOutline.vue'
 import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
+import ViewColumnIcon from 'vue-material-design-icons/ViewColumn.vue'
+import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
 import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
@@ -294,6 +311,9 @@ export default {
 		FilterOffIcon,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
+		ViewColumnIcon,
+		ChartGanttIcon,
+		NcActionSeparator,
 		TableColumnPlusAfter,
 		SessionList,
 	},
@@ -334,6 +354,7 @@ export default {
 			showCardCover: state => state.showCardCover,
 			searchQuery: state => state.searchQuery,
 			showArchived: state => state.showArchived,
+			viewMode: state => state.viewMode,
 		}),
 		detailsRoute() {
 			return {
@@ -405,6 +426,9 @@ export default {
 		},
 		toggleShowCardCover() {
 			this.$store.dispatch('toggleShowCardCover')
+		},
+		setViewMode(mode) {
+			this.$store.dispatch('setViewMode', mode)
 		},
 		toggleShowArchived() {
 			this.$store.dispatch('toggleShowArchived')
