@@ -104,6 +104,14 @@ abstract class BaseValidator {
 	 * @return bool
 	 */
 	private function not_empty($value): bool {
+		// Treat string zero as a valid non-empty value while still rejecting other empty values
+		if ($value === '0') {
+			return true;
+		}
+
+		if (is_string($value)) {
+			return strlen(trim($value)) > 0;
+		}
 		return !empty($value);
 	}
 
