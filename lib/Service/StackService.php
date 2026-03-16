@@ -19,6 +19,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
@@ -26,7 +27,6 @@ use OCA\Deck\StatusException;
 use OCA\Deck\Validators\StackServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class StackService {
 	private StackMapper $stackMapper;
@@ -310,11 +310,11 @@ class StackService {
 	 * @param int $boardId
 	 * @param array $stack
 	 *
-	 * @return Stack
+	 * @return int
 	 *
-	 * @throws InternalErrorException
+	 * @throws InternalError
 	 */
-	public function importStack(int $boardId, array $stack): Stack {
+	public function importStack(int $boardId, array $stack): int {
 		$item = new Stack();
 		$item->setBoardId($boardId);
 		$item->setTitle($stack['title']);
@@ -325,9 +325,9 @@ class StackService {
 			$newStack = $this->stackMapper->insert($item);
 		} catch (\Exception $e) {
 			$this->logger->error('importStack insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importStack insert error: ' . $e->getMessage());
+			throw new InternalError('importStack insert error: ' . $e->getMessage());
 		}
 
-		return $newStack;
+		return $newStack->getId();
 	}
 }

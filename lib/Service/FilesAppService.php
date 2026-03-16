@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
+use Doctrine\DBAL\Connection;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
@@ -33,7 +35,6 @@ use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	/**
@@ -363,7 +364,10 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	 * @param int $cardId
 	 * @param array $shareData
 	 * @param string $userId
+	 *
 	 * @return bool
+	 *
+	 * @throws InternalError
 	 */
 	public function importDeckSharesForCard(int $cardId, array $shareData, int $fileId, string $userId): void {
 		try {
@@ -402,7 +406,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			$qb->executeStatement();
 		} catch (\Throwable $e) {
 			$this->logger->error('importDeckSharesForCard insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importDeckSharesForCard insert error: ' . $e->getMessage());
+			throw new InternalError('importDeckSharesForCard insert error: ' . $e->getMessage());
 		}
 	}
 }

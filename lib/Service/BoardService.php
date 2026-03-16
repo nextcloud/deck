@@ -27,6 +27,7 @@ use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
@@ -882,6 +883,8 @@ class BoardService {
 	 * @param array $acl
 	 *
 	 * @return void
+	 *
+	 * @throws InternalError
 	 */
 	public function importAcl(Board $board, array $acl): void {
 		$aclEntity = new Acl();
@@ -895,7 +898,7 @@ class BoardService {
 			$this->aclMapper->insert($aclEntity);
 		} catch (\Exception $e) {
 			$this->logger->error('importAcl insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importAcl insert error: ' . $e->getMessage());
+			throw new InternalError('importAcl insert error: ' . $e->getMessage());
 		}
 	}
 }

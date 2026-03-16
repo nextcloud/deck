@@ -13,10 +13,10 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\LabelServiceValidator;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class LabelService {
 
@@ -143,9 +143,11 @@ class LabelService {
 
 	/**
 	 * @param Board $board
-	 * @param array $$label
+	 * @param array $label
 	 *
 	 * @return void
+	 *
+	 * @throws InternalError
 	 */
 	public function importBoardLabel(Board $board, array $label): void {
 		$labelEntity = new Label();
@@ -157,7 +159,7 @@ class LabelService {
 			$this->labelMapper->insert($labelEntity);
 		} catch (\Throwable $e) {
 			$this->logger->error('importBoardLabel insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importBoardLabel insert error: ' . $e->getMessage());
+			throw new InternalError('importBoardLabel insert error: ' . $e->getMessage());
 		}
 	}
 }

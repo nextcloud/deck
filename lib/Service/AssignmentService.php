@@ -20,11 +20,11 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\AssignmentServiceValidator;
+use OCA\Deck\Errors\InternalError;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class AssignmentService {
 
@@ -183,6 +183,8 @@ class AssignmentService {
 	 * @param array $assignedUser
 	 *
 	 * @return void
+	 *
+	 * @throws InternalError
 	 */
 	public function importAssignedUser(int $cardId, array $assignedUser): void {
 		$newAssignedUser = new Assignment();
@@ -194,7 +196,7 @@ class AssignmentService {
 			$this->assignedUsersMapper->insert($newAssignedUser);
 		} catch (\Exception $e) {
 			$this->logger->error('importAssignedUser insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importAssignedUser insert error: ' . $e->getMessage());
+			throw new InternalError('importAssignedUser insert error: ' . $e->getMessage());
 		}
 	}
 }

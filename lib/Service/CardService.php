@@ -20,6 +20,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
@@ -36,7 +37,6 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class CardService {
 	public function __construct(
@@ -646,11 +646,11 @@ class CardService {
 	 * @param int $stackId
 	 * @param array $card
 	 *
-	 * @return Card
+	 * @return int
 	 *
-	 * @throws InternalErrorException
+	 * @throws InternalError
 	 */
-	public function importCard (int $stackId, array $card): Card {
+	public function importCard (int $stackId, array $card): int {
 		$item = new Card();
 		$item->setStackId($stackId);
 		$item->setTitle($card['title']);
@@ -662,7 +662,7 @@ class CardService {
 		$item->setLastModified($card['lastModified']);
 		$item->setLastEditor($card['lastEditor']);
 		$item->setCreatedAt($card['createdAt']);
-		$item->isArchived($card['archived']);
+		$item->setArchived($card['archived']);
 		$item->setDeletedAt($card['deletedAt']);
 		$item->setDone($card['done']);
 		$item->setNotified($card['notified']);
@@ -671,10 +671,10 @@ class CardService {
 			$newCard = $this->cardMapper->insert($item);
 		} catch (\Exception $e) {
 			$this->logger->error('importCard insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importCard insert error: ' . $e->getMessage());
+			throw new InternalError('importCard insert error: ' . $e->getMessage());
 		}
 
-		return $newCard;
+		return $newCard->getId();
 	}
 
 	/**

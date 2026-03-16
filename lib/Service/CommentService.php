@@ -12,6 +12,7 @@ use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Http\DataResponse;
@@ -231,7 +232,7 @@ class CommentService {
 			$this->commentsManager->save($newComment);
 		} catch (\Exception $e) {
 			$this->logger->error('importComment insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importComment insert error: ' . $e->getMessage());
+			throw new InternalError('importComment insert error: ' . $e->getMessage());
 		}
 		return (int)$newComment->getId();
 	}
