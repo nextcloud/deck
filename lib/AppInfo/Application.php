@@ -52,6 +52,7 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
 use OCA\Text\Event\LoadEditor;
+use OCA\Deck\UserMigration\DeckMigrator;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -181,6 +182,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, ResourceAdditionalScriptsListener::class);
 
 		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
+		$context->registerUserMigrator(DeckMigrator::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
