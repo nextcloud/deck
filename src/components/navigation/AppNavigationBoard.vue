@@ -90,22 +90,19 @@
 						{{ t('deck', 'Due date reminders') }}
 					</NcActionButton>
 
-					<NcActionButton 
-						icon="icon-sound"
+					<NcActionButton icon="icon-sound"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 						@click="updateSetting('notify-due', 'all')">
 						{{ t('deck', 'All cards') }}
 					</NcActionButton>
-					<NcActionButton
-						icon="icon-user"
+					<NcActionButton icon="icon-user"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 						@click="updateSetting('notify-due', 'assigned')">
 						{{ t('deck', 'Assigned cards') }}
 					</NcActionButton>
-					<NcActionButton
-						icon="icon-sound-off"
+					<NcActionButton icon="icon-sound-off"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 						@click="updateSetting('notify-due', 'off')">
