@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Errors;
 
-class InternalError extends \Exception
-{
+class InternalError extends \Exception {
 
 }
-

@@ -650,7 +650,7 @@ class CardService {
 	 *
 	 * @throws InternalError
 	 */
-	public function importCard (int $stackId, array $card): int {
+	public function importCard(int $stackId, array $card): int {
 		$item = new Card();
 		$item->setStackId($stackId);
 		$item->setTitle($card['title']);

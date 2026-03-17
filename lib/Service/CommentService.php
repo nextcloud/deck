@@ -23,7 +23,6 @@ use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\IUserManager;
 use OutOfBoundsException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class CommentService {
 
