@@ -91,25 +91,25 @@
 					</NcActionButton>
 
 					<NcActionButton 
-					    :name="t('deck', 'All cards')"
 						icon="icon-sound"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
-						@click="updateSetting('notify-due', 'all')">						
+						@click="updateSetting('notify-due', 'all')">
+						{{ t('deck', 'All cards') }}
 					</NcActionButton>
 					<NcActionButton
-						:name="t('deck', 'Assigned cards')"
 						icon="icon-user"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 						@click="updateSetting('notify-due', 'assigned')">
+						{{ t('deck', 'Assigned cards') }}
 					</NcActionButton>
 					<NcActionButton
-						:name="t('deck', 'No notifications')"
 						icon="icon-sound-off"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 						@click="updateSetting('notify-due', 'off')">
+						{{ t('deck', 'No notifications') }}
 					</NcActionButton>
 				</template>
 				<NcActionButton v-else-if="!board.archived && board.acl?.length > 0"
