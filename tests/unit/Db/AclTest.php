@@ -59,8 +59,7 @@ class AclTest extends \Test\TestCase {
 			'permissionEdit' => true,
 			'permissionShare' => true,
 			'permissionManage' => true,
-			'owner' => false,
-			'token' => null
+			'owner' => false
 		], $acl->jsonSerialize());
 		$acl = $this->createAclGroup();
 		$this->assertEquals([
@@ -71,8 +70,7 @@ class AclTest extends \Test\TestCase {
 			'permissionEdit' => true,
 			'permissionShare' => true,
 			'permissionManage' => true,
-			'owner' => false,
-			'token' => null
+			'owner' => false
 		], $acl->jsonSerialize());
 	}
 
@@ -87,8 +85,7 @@ class AclTest extends \Test\TestCase {
 			'permissionEdit' => true,
 			'permissionShare' => true,
 			'permissionManage' => true,
-			'owner' => true,
-			'token' => null
+			'owner' => true
 		], $acl->jsonSerialize());
 	}
 
