@@ -221,7 +221,12 @@ class CommentService {
 	 */
 	public function importComment(int $cardId, array $comment, string $parentId = '0'): int {
 		try {
-			$newComment = new Comment();
+			$newComment = $this->commentsManager->create(
+				$comment['actorType'],
+				$comment['actorId'],
+				Application::COMMENT_ENTITY_TYPE,
+				(string)$cardId
+			);
 			$newComment->setMessage($comment['message']);
 			$newComment->setObject(Application::COMMENT_ENTITY_TYPE, (string)$cardId);
 			$newComment->setVerb('comment');

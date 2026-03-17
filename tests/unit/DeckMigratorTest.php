@@ -32,7 +32,6 @@ use OCP\UserMigration\IExportDestination;
 use OCP\UserMigration\IImportSource;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class DeckMigratorTest extends TestCase {

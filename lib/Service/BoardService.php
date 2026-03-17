@@ -54,7 +54,6 @@ use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class BoardService {
 	private ?array $boardsCacheFull = null;
@@ -859,7 +858,7 @@ class BoardService {
 	 *
 	 * @return Board
 	 *
-	 * @throws InternalErrorException
+	 * @throws InternalError
 	 */
 	public function importBoard(array $board, string $userId): Board {
 		$item = new Board();
@@ -873,7 +872,7 @@ class BoardService {
 			$newBoard = $this->boardMapper->insert($item);
 		} catch (\Exception $e) {
 			$this->logger->error('importBoard insert error: ' . $e->getMessage());
-			throw new InternalErrorException('importBoard insert error: ' . $e->getMessage());
+			throw new InternalError('importBoard insert error: ' . $e->getMessage());
 		}
 		return $newBoard;
 	}

@@ -25,9 +25,10 @@ use OCA\Deck\Service\FilesAppService;
 use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\StackService;
 use OCP\Files\Folder;
-use OCP\Files\NotFoundException;
-use OCP\IL10N;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
+use OCP\IConfig;
+use OCP\IL10N;
 use OCP\IUser;
 use OCP\UserMigration\IExportDestination;
 use OCP\UserMigration\IImportSource;
@@ -35,9 +36,8 @@ use OCP\UserMigration\IMigrator;
 use OCP\UserMigration\ISizeEstimationMigrator;
 use OCP\UserMigration\TMigratorBasicVersionHandling;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-use OCP\IConfig;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 
@@ -112,7 +112,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 				$labels = $this->labelMapper->findAll($board->getId());
 				$boardLabels = array_merge($boardLabels, $labels);
 
-				list($newStacks, $newCards, $newComments) = $this->exportStacksCardsCommentsSimple($board->getId());
+					[$newStacks, $newCards, $newComments] = $this->exportStacksCardsCommentsSimple($board->getId());
 				$boardStacks = array_merge($boardStacks, $newStacks);
 				$stackCards = array_merge($stackCards, $newCards);
 				$cardComments = array_merge($cardComments, $newComments);
@@ -122,9 +122,9 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 			$exportDestination->addFileContents(self::BOARD_LABELS, json_encode($boardLabels));
 			$exportDestination->addFileContents(self::BOARD_STACKS, json_encode($boardStacks));
 			$exportDestination->addFileContents(self::STACK_CARDS, json_encode($stackCards));
-				usort($cardComments, function ($firstComment, $secondComment) {
-					return ($firstComment['id'] ?? 0) <=> ($secondComment['id'] ?? 0);
-				});
+			usort($cardComments, function ($firstComment, $secondComment) {
+				return ($firstComment['id'] ?? 0) <=> ($secondComment['id'] ?? 0);
+			});
 			$exportDestination->addFileContents(self::CARD_COMMENTS, json_encode($cardComments));
 
 			$cardIds = array_map(fn ($c) => $c->getId(), $stackCards);
@@ -179,20 +179,20 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	 * @return array[] [$stacks, $cards, $comments]
 	 */
 	private function exportStacksCardsCommentsSimple(int $boardId): array {
-		   $stacks = $this->stackMapper->findAll($boardId);
-		   $allBoardCards = [];
-		   $allComments = [];
-		   foreach ($stacks as $stack) {
-			   $stackUnarchivedCards = $this->cardMapper->findAll($stack->getId());
-			   $stackArchivedCards = $this->cardMapper->findAllArchived($stack->getId());
-			   $allBoardCards = array_merge($allBoardCards, $stackUnarchivedCards, $stackArchivedCards);
-			   $stackAllCards = array_merge($stackUnarchivedCards, $stackArchivedCards);
-			   foreach ($stackAllCards as $card) {
-				   $comments = $this->commentService->exportAllForCard($card->getId());
-				   $allComments = array_merge($allComments, $comments);
-			   }
-		   }
-		   return [$stacks, $allBoardCards, $allComments];
+			$stacks = $this->stackMapper->findAll($boardId);
+			$allBoardCards = [];
+			$allComments = [];
+			foreach ($stacks as $stack) {
+				$stackUnarchivedCards = $this->cardMapper->findAll($stack->getId());
+				$stackArchivedCards = $this->cardMapper->findAllArchived($stack->getId());
+				$allBoardCards = array_merge($allBoardCards, $stackUnarchivedCards, $stackArchivedCards);
+				$stackAllCards = array_merge($stackUnarchivedCards, $stackArchivedCards);
+				foreach ($stackAllCards as $card) {
+					$comments = $this->commentService->exportAllForCard($card->getId());
+					$allComments = array_merge($allComments, $comments);
+				}
+			}
+			return [$stacks, $allBoardCards, $allComments];
 	}
 
 	/**
@@ -251,7 +251,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	 *
 	 * @return void
 	 */
-	private function importCardAttachment(IImportSource $importSource, string $userId, array $cardIdMap ): void {
+	private function importCardAttachment(IImportSource $importSource, string $userId, array $cardIdMap): void {
 		$cardAttachments = json_decode($importSource->getFileContents(self::CARD_ATTACHMENTS), true);
 		$userFolder = $this->rootFolder->getUserFolder($userId);
 		try {
@@ -277,7 +277,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 		Folder $deckFolder,
 		IImportSource $importSource,
 		array $cardIdMap,
-		string $userId
+		string $userId,
 	): void {
 		$fileTarget = $share['file_target'];
 		$fileTargetClean = str_replace('{DECK_PLACEHOLDER}/', '', ltrim($fileTarget, '/'));

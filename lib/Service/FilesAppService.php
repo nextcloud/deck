@@ -352,6 +352,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			->from('share')
 			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(12)))
 			->andWhere($qb->expr()->in('share_with', $qb->createParameter('cardIds')));
+		/** @psalm-suppress UndefinedClass */
 		$qb->setParameter('cardIds', $cardIds, Connection::PARAM_STR_ARRAY);
 
 		$sql = $qb->getSQL();
@@ -365,7 +366,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	 * @param array $shareData
 	 * @param string $userId
 	 *
-	 * @return bool
+	 * @return void
 	 *
 	 * @throws InternalError
 	 */
