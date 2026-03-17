@@ -374,8 +374,10 @@ class CardService {
 			}
 			$this->assignmentService->assignUser($newCard->getId(), $assignement->getParticipant());
 		}
-		$newCard->setDescription($originCard->getDescription());
-		$card = $this->enrichCards([$this->cardMapper->update($newCard)]);
+		$freshCard = $this->cardMapper->find($newCard->getId());
+		$freshCard->setDescription($originCard->getDescription());
+		$card = $this->enrichCards([$this->cardMapper->update($freshCard)]);
+
 		return $card[0];
 	}
 

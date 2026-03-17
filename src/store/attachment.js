@@ -64,37 +64,43 @@ export default {
 
 	},
 	actions: {
-		async fetchAttachments({ commit }, cardId) {
-			const attachments = await apiClient.fetchAttachments(cardId)
+		async fetchAttachments({ commit, rootState }, cardId) {
+			const boardId = rootState.currentBoard.id
+			const attachments = await apiClient.fetchAttachments(cardId, boardId)
 			commit('createAttachments', { cardId, attachments })
 			commit('cardSetAttachmentCount', { cardId, count: attachments.length })
 		},
 
-		async createAttachment({ commit }, { cardId, formData, onUploadProgress }) {
-			const attachment = await apiClient.createAttachment({ cardId, formData, onUploadProgress })
+		async createAttachment({ commit, rootState }, { cardId, formData, onUploadProgress }) {
+			const boardId = rootState.currentBoard.id
+			const attachment = await apiClient.createAttachment({ cardId, formData, onUploadProgress, boardId })
 			commit('createAttachment', { cardId, attachment })
 			commit('cardIncreaseAttachmentCount', cardId)
 		},
 
-		async updateAttachment({ commit }, { cardId, attachment, formData }) {
-			const result = await apiClient.updateAttachment({ cardId, attachment, formData })
+		async updateAttachment({ commit, rootState }, { cardId, attachment, formData }) {
+			const boardId = rootState.currentBoard.id
+			const result = await apiClient.updateAttachment({ cardId, attachment, formData, boardId })
 			commit('updateAttachment', { cardId, attachment: result })
 		},
 
-		async deleteAttachment({ commit }, attachment) {
-			await apiClient.deleteAttachment(attachment)
+		async deleteAttachment({ commit, rootState }, attachment) {
+			const boardId = rootState.currentBoard.id
+			await apiClient.deleteAttachment(attachment, boardId)
 			commit('deleteAttachment', attachment)
 			commit('cardDecreaseAttachmentCount', attachment.cardId)
 		},
 
-		async unshareAttachment({ commit }, attachment) {
-			await apiClient.deleteAttachment(attachment)
+		async unshareAttachment({ commit, rootState }, attachment) {
+			const boardId = rootState.currentBoard.id
+			await apiClient.deleteAttachment(attachment, boardId)
 			commit('unshareAttachment', attachment)
 			commit('cardDecreaseAttachmentCount', attachment.cardId)
 		},
 
-		async restoreAttachment({ commit }, attachment) {
-			const restoredAttachment = await apiClient.restoreAttachment(attachment)
+		async restoreAttachment({ commit, rootState }, attachment) {
+			const boardId = rootState.currentBoard.id
+			const restoredAttachment = await apiClient.restoreAttachment(attachment, boardId)
 			commit('restoreAttachment', restoredAttachment)
 			commit('cardIncreaseAttachmentCount', attachment.cardId)
 		},

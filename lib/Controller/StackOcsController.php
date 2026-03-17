@@ -60,4 +60,21 @@ class StackOcsController extends OCSController {
 		return new DataResponse($result);
 	}
 
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
+	public function reorder(int $stackId, int $order, ?int $boardId):DataResponse {
+		if ($boardId !== null) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				$stacks = $this->externalBoardService->reorderStackOnRemote($board, $stackId, $order);
+				return new DataResponse($stacks);
+			}
+		}
+		$stacks = $this->stackService->reorder($stackId, $order);
+		return new DataResponse($stacks);
+	}
+
 }

@@ -143,9 +143,17 @@ return [
 		['name' => 'card_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}', 'verb' => 'PUT'],
 		['name' => 'card_ocs#assignLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
 		['name' => 'card_ocs#removeLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
+		['name' => 'card_ocs#reorder', 'url' => '/api/v{apiVersion}/cards/{cardId}/reorder', 'verb' => 'PUT'],
 
 		['name' => 'stack_ocs#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
 		['name' => 'stack_ocs#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],
+		['name' => 'stack_ocs#reorder', 'url' => '/api/v{apiVersion}/stacks/{stackId}/reorder', 'verb' => 'PUT'],
+
+		['name' => 'attachment_ocs#getAll', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments', 'verb' => 'GET'],
+		['name' => 'attachment_ocs#create', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachment', 'verb' => 'POST'],
+		['name' => 'attachment_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'PUT'],
+		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
+		['name' => 'attachment_ocs#restore', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
 
 		['name' => 'Config#get', 'url' => '/api/v{apiVersion}/config', 'verb' => 'GET'],
 		['name' => 'Config#setValue', 'url' => '/api/v{apiVersion}/config/{key}', 'verb' => 'POST'],
