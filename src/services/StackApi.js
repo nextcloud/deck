@@ -83,11 +83,11 @@ export class StackApi {
 			})
 	}
 
-	reorderStack(stackId, order) {
-		return axios.put(this.url(`/stacks/${stackId}/reorder`), { order })
+	reorderStack(stackId, order, boardId) {
+		return axios.put(this.ocsUrl(`/stacks/${stackId}/reorder`), { order, boardId: boardId ?? null })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

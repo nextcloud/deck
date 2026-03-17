@@ -95,11 +95,11 @@ export class CardApi {
 			})
 	}
 
-	reorderCard(card) {
-		return axios.put(this.url(`/cards/${card.id}/reorder`), card)
+	reorderCard(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}/reorder`), { ...card, boardId: boardId ?? null })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
