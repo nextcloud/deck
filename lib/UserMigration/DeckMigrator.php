@@ -112,7 +112,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 				$labels = $this->labelMapper->findAll($board->getId());
 				$boardLabels = array_merge($boardLabels, $labels);
 
-					[$newStacks, $newCards, $newComments] = $this->exportStacksCardsCommentsSimple($board->getId());
+			[$newStacks, $newCards, $newComments] = $this->exportStacksCardsCommentsSimple($board->getId());
 				$boardStacks = array_merge($boardStacks, $newStacks);
 				$stackCards = array_merge($stackCards, $newCards);
 				$cardComments = array_merge($cardComments, $newComments);

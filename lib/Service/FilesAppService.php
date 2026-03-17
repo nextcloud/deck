@@ -355,10 +355,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		/** @psalm-suppress UndefinedClass */
 		$qb->setParameter('cardIds', $cardIds, Connection::PARAM_STR_ARRAY);
 
-		$sql = $qb->getSQL();
-		$params = $qb->getParameters();
-		$shares = $qb->executeQuery()->fetchAllAssociative();
-		return $shares;
+		return $qb->executeQuery()->fetchAllAssociative();
 	}
 
 	/**
