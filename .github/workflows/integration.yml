@@ -32,7 +32,7 @@ jobs:
       matrix:
         php-versions: ['8.2']
         databases: ['sqlite', 'mysql', 'pgsql']
-        server-versions: ['master']
+        server-versions: ['perf/base/basic-auth-fs-setup']
 
     name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
 
@@ -74,7 +74,7 @@ jobs:
           with:
               persist-credentials: false
               repository: nextcloud/activity
-              ref: ${{ matrix.server-versions }}
+              ref: master
               path: apps/activity
 
       - name: Set up php ${{ matrix.php-versions }}
