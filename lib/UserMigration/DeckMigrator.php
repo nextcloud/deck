@@ -112,7 +112,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 				$labels = $this->labelMapper->findAll($board->getId());
 				$boardLabels = array_merge($boardLabels, $labels);
 
-			[$newStacks, $newCards, $newComments] = $this->exportStacksCardsCommentsSimple($board->getId());
+				[$newStacks, $newCards, $newComments] = $this->exportStacksCardsCommentsSimple($board->getId());
 				$boardStacks = array_merge($boardStacks, $newStacks);
 				$stackCards = array_merge($stackCards, $newCards);
 				$cardComments = array_merge($cardComments, $newComments);
@@ -179,20 +179,20 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	 * @return array[] [$stacks, $cards, $comments]
 	 */
 	private function exportStacksCardsCommentsSimple(int $boardId): array {
-			$stacks = $this->stackMapper->findAll($boardId);
-			$allBoardCards = [];
-			$allComments = [];
-			foreach ($stacks as $stack) {
-				$stackUnarchivedCards = $this->cardMapper->findAll($stack->getId());
-				$stackArchivedCards = $this->cardMapper->findAllArchived($stack->getId());
-				$allBoardCards = array_merge($allBoardCards, $stackUnarchivedCards, $stackArchivedCards);
-				$stackAllCards = array_merge($stackUnarchivedCards, $stackArchivedCards);
-				foreach ($stackAllCards as $card) {
-					$comments = $this->commentService->exportAllForCard($card->getId());
-					$allComments = array_merge($allComments, $comments);
-				}
+		$stacks = $this->stackMapper->findAll($boardId);
+		$allBoardCards = [];
+		$allComments = [];
+		foreach ($stacks as $stack) {
+			$stackUnarchivedCards = $this->cardMapper->findAll($stack->getId());
+			$stackArchivedCards = $this->cardMapper->findAllArchived($stack->getId());
+			$allBoardCards = array_merge($allBoardCards, $stackUnarchivedCards, $stackArchivedCards);
+			$stackAllCards = array_merge($stackUnarchivedCards, $stackArchivedCards);
+			foreach ($stackAllCards as $card) {
+				$comments = $this->commentService->exportAllForCard($card->getId());
+				$allComments = array_merge($allComments, $comments);
 			}
-			return [$stacks, $allBoardCards, $allComments];
+		}
+		return [$stacks, $allBoardCards, $allComments];
 	}
 
 	/**

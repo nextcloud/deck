@@ -32,6 +32,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Validators\LabelServiceValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class LabelServiceTest extends TestCase {
@@ -47,6 +48,8 @@ class LabelServiceTest extends TestCase {
 	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
 	private ChangeHelper&MockObject $changeHelper;
 	private LabelServiceValidator&MockObject $labelServiceValidator;
+	/** @var LoggerInterface */
+	private $logger;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -57,6 +60,7 @@ class LabelServiceTest extends TestCase {
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->labelServiceValidator = $this->createMock(LabelServiceValidator::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->labelService = new LabelService(
 			$this->labelMapper,
@@ -64,6 +68,7 @@ class LabelServiceTest extends TestCase {
 			$this->boardService,
 			$this->changeHelper,
 			$this->labelServiceValidator,
+			$this->logger,
 		);
 	}
 
