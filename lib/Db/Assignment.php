@@ -17,6 +17,7 @@ class Assignment extends RelationalEntity implements JsonSerializable {
 	public const TYPE_USER = Acl::PERMISSION_TYPE_USER;
 	public const TYPE_GROUP = Acl::PERMISSION_TYPE_GROUP;
 	public const TYPE_CIRCLE = Acl::PERMISSION_TYPE_CIRCLE;
+	public const TYPE_REMOTE = Acl::PERMISSION_TYPE_REMOTE;
 
 	public function __construct() {
 		$this->addType('id', 'integer');

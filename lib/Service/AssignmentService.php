@@ -99,7 +99,7 @@ class AssignmentService {
 	public function assignUser(int $cardId, string $userId, int $type = Assignment::TYPE_USER): Assignment {
 		$this->assignmentServiceValidator->check(compact('cardId', 'userId'));
 
-		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP) {
+		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP && $type !== Assignment::TYPE_REMOTE) {
 			throw new BadRequestException('Invalid type provided for assignemnt');
 		}
 

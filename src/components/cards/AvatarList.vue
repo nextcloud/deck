@@ -19,6 +19,12 @@
 								:disable-menu="true"
 								:hide-status="true"
 								:size="32" />
+							<NcAvatar v-if="user.type === 6"
+								:user="user.participant.uid"
+								:display-name="user.participant.displayname"
+								:disable-menu="true"
+								:hide-status="true"
+								:size="32" />
 							<NcAvatar v-if="user.type === 1"
 								:user="user.participant.uid"
 								:display-name="user.participant.displayname"

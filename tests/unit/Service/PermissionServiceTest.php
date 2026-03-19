@@ -32,6 +32,7 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
@@ -53,6 +54,7 @@ class PermissionServiceTest extends \Test\TestCase {
 	private IGroupManager|MockObject $groupManager;
 	private MockObject|IManager $shareManager;
 	private IConfig|MockObject $config;
+	private ICloudIdManager|MockObject $cloudIdManager;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -65,6 +67,7 @@ class PermissionServiceTest extends \Test\TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->shareManager = $this->createMock(IManager::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->cloudIdManager = $this->createMock(ICloudIdManager::class);
 
 		$this->service = new PermissionService(
 			$this->logger,
@@ -76,6 +79,7 @@ class PermissionServiceTest extends \Test\TestCase {
 			$this->groupManager,
 			$this->shareManager,
 			$this->config,
+			$this->cloudIdManager,
 			'admin'
 		);
 	}

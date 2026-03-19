@@ -122,7 +122,7 @@ export default {
 			return !!board?.permissions?.PERMISSION_EDIT
 		},
 		isCurrentUserAssigned() {
-			return this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
+			return this.card.assignedUsers.find((item) => (item.type === 0 || item.type === 6) && item.participant.uid === getCurrentUser()?.uid)
 		},
 		boardId() {
 			return this.card?.boardId ? this.card.boardId : Number(this.$route.params.id)
