@@ -57,6 +57,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class BoardServiceTest extends TestCase {
@@ -104,6 +105,9 @@ class BoardServiceTest extends TestCase {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var LoggerInterface */
+	private $logger;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
@@ -125,6 +129,7 @@ class BoardServiceTest extends TestCase {
 		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 		$this->sessionMapper = $this->createMock(SessionMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -151,7 +156,8 @@ class BoardServiceTest extends TestCase {
 			$this->userManager,
 			$this->createMock(SecureRandom::class),
 			$this->createMock(ConfigService::class),
-			$this->userId
+			$this->userId,
+			$this->logger,
 		);
 
 		$user = $this->createMock(IUser::class);

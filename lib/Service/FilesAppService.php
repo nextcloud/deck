@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
+use Doctrine\DBAL\Connection;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
@@ -337,6 +339,72 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 				$errorMessage = str_replace($sanitized, $original, $errorMessage);
 			}
 			throw new BadRequestException($errorMessage);
+		}
+	}
+
+	/**
+	 * @param int[] $cardIds
+	 * @return array
+	 */
+	public function getAllDeckSharesForCards(array $cardIds): array {
+		$qb = $this->connection->getQueryBuilder();
+		$qb->select('*')
+			->from('share')
+			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(12)))
+			->andWhere($qb->expr()->in('share_with', $qb->createParameter('cardIds')));
+		/** @psalm-suppress UndefinedClass */
+		$qb->setParameter('cardIds', $cardIds, Connection::PARAM_STR_ARRAY);
+
+		return $qb->executeQuery()->fetchAllAssociative();
+	}
+
+	/**
+	 * @param int $cardId
+	 * @param array $shareData
+	 * @param string $userId
+	 *
+	 * @return void
+	 *
+	 * @throws InternalError
+	 */
+	public function importDeckSharesForCard(int $cardId, array $shareData, int $fileId, string $userId): void {
+		try {
+			$insert = [
+				'share_type' => $shareData['share_type'] ?? 12,
+				'share_with' => (string)$cardId,
+				'uid_owner' => $userId,
+				'uid_initiator' => $userId,
+				'file_source' => $fileId,
+				'file_target' => $shareData['file_target'],
+				'permissions' => $shareData['permissions'] ?? 1,
+				'stime' => $shareData['stime'] ?? time(),
+				'parent' => $shareData['parent'],
+				'item_type' => $shareData['item_type'] ?? 'file',
+				'item_source' => $fileId,
+				'item_target' => $shareData['item_target'],
+				'token' => $shareData['token'],
+				'mail_send' => $shareData['mail_send'],
+				'share_name' => $shareData['share_name'],
+				'note' => $shareData['note'],
+				'label' => $shareData['label'],
+				'hide_download' => $shareData['hide_download'],
+				'expiration' => $shareData['expiration'],
+				'accepted' => $shareData['accepted'],
+				'password' => $shareData['password'],
+				'password_by_talk' => $shareData['password_by_talk'],
+				'attributes' => $shareData['attributes'],
+				'password_expiration_time' => $shareData['password_expiration_time'],
+				'reminder_sent' => $shareData['reminder_sent'],
+			];
+			$qb = $this->connection->getQueryBuilder();
+			$qb->insert('share');
+			foreach ($insert as $key => $value) {
+				$qb->setValue($key, $qb->createNamedParameter($value));
+			}
+			$qb->executeStatement();
+		} catch (\Throwable $e) {
+			$this->logger->error('importDeckSharesForCard insert error: ' . $e->getMessage());
+			throw new InternalError('importDeckSharesForCard insert error: ' . $e->getMessage());
 		}
 	}
 }

@@ -27,6 +27,7 @@ use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
@@ -52,6 +53,7 @@ use OCP\Security\ISecureRandom;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 class BoardService {
 	private ?array $boardsCacheFull = null;
@@ -83,6 +85,7 @@ class BoardService {
 		private ISecureRandom $random,
 		private ConfigService $configService,
 		private ?string $userId,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -847,5 +850,54 @@ class BoardService {
 		}
 
 		$board->setStacks($stacks);
+	}
+
+	/**
+	 * @param array $board
+	 * @param string $userId
+	 *
+	 * @return Board
+	 *
+	 * @throws InternalError
+	 */
+	public function importBoard(array $board, string $userId): Board {
+		$item = new Board();
+		$item->setTitle($board['title']);
+		$item->setOwner($userId);
+		$item->setColor($board['color']);
+		$item->setArchived((bool)$board['archived']);
+		$item->setDeletedAt($board['deletedAt']);
+		$item->setLastModified($board['lastModified']);
+		try {
+			$newBoard = $this->boardMapper->insert($item);
+		} catch (\Exception $e) {
+			$this->logger->error('importBoard insert error: ' . $e->getMessage());
+			throw new InternalError('importBoard insert error: ' . $e->getMessage());
+		}
+		return $newBoard;
+	}
+
+	/**
+	 * @param Board $board
+	 * @param array $acl
+	 *
+	 * @return void
+	 *
+	 * @throws InternalError
+	 */
+	public function importAcl(Board $board, array $acl): void {
+		$aclEntity = new Acl();
+		$aclEntity->setBoardId($board->getId());
+		$aclEntity->setType((int)$acl['type']);
+		$aclEntity->setParticipant($acl['participant']);
+		$aclEntity->setPermissionEdit((bool)$acl['permissionEdit']);
+		$aclEntity->setPermissionShare((bool)$acl['permissionShare']);
+		$aclEntity->setPermissionManage((bool)$acl['permissionManage']);
+		try {
+			$this->aclMapper->insert($aclEntity);
+		} catch (\Exception $e) {
+			$this->logger->error('importAcl insert error: ' . $e->getMessage());
+			throw new InternalError('importAcl insert error: ' . $e->getMessage());
+		}
 	}
 }

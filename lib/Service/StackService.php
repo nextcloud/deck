@@ -19,6 +19,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
@@ -303,5 +304,30 @@ class StackService {
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stackToSort->getBoardId()));
 
 		return $result;
+	}
+
+	/**
+	 * @param int $boardId
+	 * @param array $stack
+	 *
+	 * @return int
+	 *
+	 * @throws InternalError
+	 */
+	public function importStack(int $boardId, array $stack): int {
+		$item = new Stack();
+		$item->setBoardId($boardId);
+		$item->setTitle($stack['title']);
+		$item->setDeletedAt($stack['deletedAt']);
+		$item->setLastModified($stack['lastModified']);
+		$item->setOrder($stack['order']);
+		try {
+			$newStack = $this->stackMapper->insert($item);
+		} catch (\Exception $e) {
+			$this->logger->error('importStack insert error: ' . $e->getMessage());
+			throw new InternalError('importStack insert error: ' . $e->getMessage());
+		}
+
+		return $newStack->getId();
 	}
 }

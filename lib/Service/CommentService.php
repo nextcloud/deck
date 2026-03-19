@@ -7,10 +7,12 @@
 
 namespace OCA\Deck\Service;
 
+use OC\Comments\Comment;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Http\DataResponse;
@@ -187,5 +189,55 @@ class CommentService {
 		} catch (CommentNotFoundException $e) {
 		}
 		return $formattedComment;
+	}
+
+	public function exportAllForCard(int $cardId, int $limit = 1000, int $offset = 0): array {
+		$comments = $this->commentsManager->getForObject(
+			Application::COMMENT_ENTITY_TYPE,
+			(string)$cardId,
+			$limit,
+			$offset
+		);
+		$allComments = [];
+		foreach ($comments as $comment) {
+			$formattedComment = $this->formatComment($comment);
+			try {
+				if ($comment->getParentId() !== '0' && $replyTo = $this->commentsManager->get($comment->getParentId())) {
+					$formattedComment['replyTo'] = $this->formatComment($replyTo);
+				}
+			} catch (CommentNotFoundException $e) {
+			}
+			$allComments[] = $formattedComment;
+		}
+		return $allComments;
+	}
+
+	/**
+	 * @param int $cardId
+	 * @param array $comment
+	 * @param string $parentId
+	 *
+	 * @return int
+	 */
+	public function importComment(int $cardId, array $comment, string $parentId = '0'): int {
+		try {
+			$newComment = $this->commentsManager->create(
+				$comment['actorType'],
+				$comment['actorId'],
+				Application::COMMENT_ENTITY_TYPE,
+				(string)$cardId
+			);
+			$newComment->setMessage($comment['message']);
+			$newComment->setObject(Application::COMMENT_ENTITY_TYPE, (string)$cardId);
+			$newComment->setVerb('comment');
+			$newComment->setParentId($parentId);
+			$newComment->setActor($comment['actorType'], $comment['actorId']);
+			$newComment->setCreationDateTime(new \DateTime($comment['creationDateTime']));
+			$this->commentsManager->save($newComment);
+		} catch (\Exception $e) {
+			$this->logger->error('importComment insert error: ' . $e->getMessage());
+			throw new InternalError('importComment insert error: ' . $e->getMessage());
+		}
+		return (int)$newComment->getId();
 	}
 }

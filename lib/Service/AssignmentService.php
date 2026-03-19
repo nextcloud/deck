@@ -15,6 +15,7 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
@@ -23,6 +24,7 @@ use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
+use Psr\Log\LoggerInterface;
 
 class AssignmentService {
 
@@ -64,6 +66,10 @@ class AssignmentService {
 	 * @var AssignmentServiceValidator
 	 */
 	private $assignmentServiceValidator;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 
 	public function __construct(
@@ -77,6 +83,7 @@ class AssignmentService {
 		IEventDispatcher $eventDispatcher,
 		AssignmentServiceValidator $assignmentServiceValidator,
 		$userId,
+		LoggerInterface $logger,
 	) {
 		$this->assignmentServiceValidator = $assignmentServiceValidator;
 		$this->permissionService = $permissionService;
@@ -88,6 +95,7 @@ class AssignmentService {
 		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->currentUser = $userId;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -168,5 +176,27 @@ class AssignmentService {
 			}
 		}
 		throw new NotFoundException('No assignment for ' . $userId . 'found.');
+	}
+
+	/**
+	 * @param int $cardId
+	 * @param array $assignedUser
+	 *
+	 * @return void
+	 *
+	 * @throws InternalError
+	 */
+	public function importAssignedUser(int $cardId, array $assignedUser): void {
+		$newAssignedUser = new Assignment();
+		$newAssignedUser->setCardId($cardId);
+		$newAssignedUser->setParticipant($assignedUser['participant']['uid']);
+		$newAssignedUser->setType($assignedUser['type']);
+
+		try {
+			$this->assignedUsersMapper->insert($newAssignedUser);
+		} catch (\Exception $e) {
+			$this->logger->error('importAssignedUser insert error: ' . $e->getMessage());
+			throw new InternalError('importAssignedUser insert error: ' . $e->getMessage());
+		}
 	}
 }

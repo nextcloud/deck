@@ -37,6 +37,7 @@ use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\Activity\IEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class AssignmentServiceTest extends TestCase {
@@ -82,6 +83,10 @@ class AssignmentServiceTest extends TestCase {
 	 * @var AssignmentServiceValidator
 	 */
 	private $assignmentServiceValidator;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 
 	public function setUp(): void {
@@ -95,6 +100,7 @@ class AssignmentServiceTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->assignmentServiceValidator = $this->createMock(AssignmentServiceValidator::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->assignmentService = new AssignmentService(
 			$this->permissionService,
 			$this->cardMapper,
@@ -105,7 +111,8 @@ class AssignmentServiceTest extends TestCase {
 			$this->changeHelper,
 			$this->eventDispatcher,
 			$this->assignmentServiceValidator,
-			'admin'
+			'admin',
+			$this->logger,
 		);
 	}
 

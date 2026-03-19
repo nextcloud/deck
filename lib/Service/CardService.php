@@ -20,6 +20,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Errors\InternalError;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
@@ -639,5 +640,58 @@ class CardService {
 
 	public function getRedirectUrlForCard(int $cardId): string {
 		return $this->urlGenerator->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $cardId]);
+	}
+
+	/**
+	 * @param int $stackId
+	 * @param array $card
+	 *
+	 * @return int
+	 *
+	 * @throws InternalError
+	 */
+	public function importCard(int $stackId, array $card): int {
+		$item = new Card();
+		$item->setStackId($stackId);
+		$item->setTitle($card['title']);
+		$item->setType($card['type']);
+		$item->setOrder($card['order']);
+		$item->setOwner($card['owner']);
+		$item->setDescription($card['description']);
+		$item->setDuedate($card['duedate']);
+		$item->setLastModified($card['lastModified']);
+		$item->setLastEditor($card['lastEditor']);
+		$item->setCreatedAt($card['createdAt']);
+		$item->setArchived($card['archived']);
+		$item->setDeletedAt($card['deletedAt']);
+		$item->setDone($card['done']);
+		$item->setNotified($card['notified']);
+
+		try {
+			$newCard = $this->cardMapper->insert($item);
+		} catch (\Exception $e) {
+			$this->logger->error('importCard insert error: ' . $e->getMessage());
+			throw new InternalError('importCard insert error: ' . $e->getMessage());
+		}
+
+		return $newCard->getId();
+	}
+
+	/**
+	 * @param int $cardId
+	 * @param int $boardId
+	 * @param array $importedLabel
+	 *
+	 * @return void
+	 */
+	public function importLabels(int $cardId, int $boardId, array $importedLabel): void {
+		$labels = $this->labelMapper->findAll($boardId);
+
+		foreach ($labels as $label) {
+			if ($label->getTitle() === $importedLabel['title'] && $label->getColor() === $importedLabel['color']) {
+				$this->cardMapper->assignLabel($cardId, $label->getId());
+			}
+		}
+		$this->changeHelper->cardChanged($cardId);
 	}
 }
