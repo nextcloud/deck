@@ -180,6 +180,39 @@ class ExternalBoardService {
 		return $this->localizeRemoteStacks([$stack], $localBoard)[0];
 	}
 
+	public function getRemoteCapabilities(Board $localBoard): array {
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/cloud/capabilities';
+		$resp = $this->proxy->get('', '', $url);
+		$data = $this->proxy->getOCSData($resp);
+		return $data['capabilities']['deck'] ?? [];
+	}
+
+	public function remoteSupportsCapability(Board $localBoard, string $capability): bool {
+		$capabilities = $this->getRemoteCapabilities($localBoard);
+		return !empty($capabilities[$capability]);
+	}
+
+	public function setDoneStackOnRemote(Board $localBoard, int $stackId, bool $isDone): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_MANAGE, $this->userId, false, false);
+
+		if (!$this->remoteSupportsCapability($localBoard, 'supportsDoneColumn')) {
+			throw new \Exception('Remote server does not support the done column feature');
+		}
+
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/stacks/' . $stackId . '/done';
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+			'isDone' => $isDone,
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
 	public function deleteStackOnRemote(Board $localBoard, int $stackId): array {
 		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);

@@ -432,7 +432,21 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$changes = new ChangeSet($card);
+		$oldStackId = $card->getStackId();
 		$card->setStackId($stackId);
+
+		if ($stackId !== $oldStackId) {
+			$newStack = $this->stackMapper->find($stackId);
+			if ($newStack->getIsDoneColumn()) {
+				$card->setDone(new \DateTime());
+			} else {
+				$oldStack = $this->stackMapper->find($oldStackId);
+				if ($oldStack->getIsDoneColumn()) {
+					$card->setDone(null);
+				}
+			}
+		}
+
 		$this->cardMapper->update($card);
 		$changes->setAfter($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
@@ -535,6 +549,15 @@ class CardService {
 		$changes = new ChangeSet($card);
 		$card->setDone(new \DateTime());
 		$newCard = $this->cardMapper->update($card);
+		// Auto-move to done column if one is configured and card is not already there
+		$currentStack = $this->stackMapper->find($newCard->getStackId());
+		if (!$currentStack->getIsDoneColumn()) {
+			$doneStack = $this->stackMapper->findDoneColumnForBoard($currentStack->getBoardId());
+			if ($doneStack !== null) {
+				$newCard->setStackId($doneStack->getId());
+				$newCard = $this->cardMapper->update($newCard);
+			}
+		}
 		$this->notificationHelper->markDuedateAsRead($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_DONE);
 		$this->changeHelper->cardChanged($id, false);
