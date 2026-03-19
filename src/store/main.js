@@ -252,6 +252,23 @@ export default function storeFactory() {
 			setCurrentCard(state, card) {
 				state.currentCard = card
 			},
+			setBoardSettings(state, { boardId, settings }) {
+				const indexExisting = state.boards.findIndex((board) => board.id === boardId)
+
+				if (indexExisting > -1) {
+					Vue.set(state.boards[indexExisting], 'settings', {
+						...(state.boards[indexExisting].settings || {}),
+						...settings,
+					})
+				}
+
+				if (state.currentBoard?.id === boardId) {
+					Vue.set(state.currentBoard, 'settings', {
+						...(state.currentBoard.settings || {}),
+						...settings,
+					})
+				}
+			},
 
 			// label mutators
 			removeLabelFromCurrentBoard(state, labelId) {
@@ -308,6 +325,11 @@ export default function storeFactory() {
 		actions: {
 			setFullApp({ commit }, isFullApp) {
 				commit('setFullApp', isFullApp)
+			},
+			async hydrateBoardSettings({ commit }, boardId) {
+				const board = await apiClient.loadById(boardId)
+				commit('setBoardSettings', { boardId, settings: board.settings || {} })
+				return board.settings || {}
 			},
 			async setConfig({ commit }, config) {
 				for (const key in config) {
