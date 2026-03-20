@@ -22,6 +22,12 @@
 				<NcFormBoxSwitch v-model="configCalendar"
 					:label="t('deck', 'Show boards in calendar/tasks')" />
 			</NcFormBox>
+			<NcSelect v-model="caldavListModeSelection"
+				:options="caldavListModeOptions"
+				:clearable="false"
+				label="label"
+				track-by="id"
+				:input-label="t('deck', 'CalDAV list mapping mode')" />
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection v-if="isAdmin" id="admin-settings" :name="t('deck', 'Admin settings')">
@@ -67,6 +73,7 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { useHotKey } from '@nextcloud/vue/composables/useHotKey'
+import { translate as t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import NcAppSettingsShortcutsSection from '@nextcloud/vue/components/NcAppSettingsShortcutsSection'
@@ -144,6 +151,26 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { calendar: newValue })
+			},
+		},
+		caldavListModeOptions() {
+			return [
+				{ id: 'root_tasks', label: t('deck', 'Default: lists as root tasks') },
+				{ id: 'per_list_calendar', label: t('deck', 'One calendar per list') },
+				{ id: 'list_as_category', label: t('deck', 'List name as category on each task') },
+				{ id: 'list_as_priority', label: t('deck', 'List position as task priority (1-9)') },
+			]
+		},
+		caldavListModeSelection: {
+			get() {
+				const current = this.$store.getters.config('caldavListMode') || 'root_tasks'
+				return this.caldavListModeOptions.find((option) => option.id === current) || this.caldavListModeOptions[0]
+			},
+			set(option) {
+				if (!option?.id) {
+					return
+				}
+				this.$store.dispatch('setConfig', { caldavListMode: option.id })
 			},
 		},
 	},

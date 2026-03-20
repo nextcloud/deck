@@ -41,7 +41,7 @@ class ChangeHelper {
 		$this->db->executeUpdate($sql, [$time, $boardId]);
 	}
 
-	public function cardChanged($cardId, $updateCard = true) {
+	public function cardChanged($cardId, $updateCard = true, ?int $boardId = null, ?int $stackId = null) {
 		$time = time();
 		$etag = md5($time . microtime());
 		$this->cache->set(self::TYPE_CARD . '-' . $cardId, $etag);
@@ -50,11 +50,17 @@ class ChangeHelper {
 			$this->db->executeUpdate($sql, [time(), $this->userId, $cardId]);
 		}
 
+		if ($boardId !== null && $stackId !== null) {
+			$this->boardChanged($boardId);
+			$this->stackChanged($stackId);
+			return;
+		}
+
 		$sql = 'SELECT s.board_id as id, c.stack_id as stack_id FROM `*PREFIX*deck_stacks` as s inner join `*PREFIX*deck_cards` as c ON c.stack_id = s.id WHERE c.id = ?';
 		$result = $this->db->executeQuery($sql, [$cardId]);
 		if ($row = $result->fetch()) {
-			$this->boardChanged($row['id']);
-			$this->stackChanged($row['stack_id']);
+			$this->boardChanged($boardId ?? (int)$row['id']);
+			$this->stackChanged($stackId ?? (int)$row['stack_id']);
 		}
 	}
 
