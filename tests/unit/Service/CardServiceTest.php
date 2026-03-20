@@ -250,18 +250,22 @@ class CardServiceTest extends TestCase {
 		$card->setOrder(0);
 		$card->setOwner('admin');
 		$card->setStackId(12345);
+		$card->setDescription('A test description');
+
 		$clonedCard = clone $card;
 		$clonedCard->setId(2);
 		$clonedCard->setStackId(1234);
+
 		$this->cardMapper->expects($this->exactly(2))
 			->method('insert')
 			->willReturn($card, $clonedCard);
 
 		$this->cardMapper->expects($this->once())
 			->method('update')->willReturn($clonedCard);
-		$this->cardMapper->expects($this->exactly(2))
+
+		$this->cardMapper->expects($this->exactly(3))
 			->method('find')
-			->willReturn($card, $clonedCard);
+			->willReturn($card, $clonedCard, $clonedCard);
 
 		$this->cardMapper->expects($this->any())
 			->method('findBoardId')
@@ -287,6 +291,10 @@ class CardServiceTest extends TestCase {
 			->with(1)
 			->willReturn([$a1]);
 
+		$this->assignedUsersMapper->expects($this->any())
+			->method('findIn')
+			->willReturn([]);
+
 		// check if labels get cloned
 		$label = new Label();
 		$label->setId(1);
@@ -297,16 +305,31 @@ class CardServiceTest extends TestCase {
 			->method('assignLabel')
 			->with($clonedCard->getId(), $label->getId());
 
+		$labelForClone = Label::fromRow([
+			'id' => 1,
+			'boardId' => 1234,
+			'cardId' => 2,
+		]);
+		$this->labelMapper->expects($this->any())
+			->method('findAssignedLabelsForCards')
+			->willReturn([$labelForClone]);
+
 		$stackMock = new Stack();
 		$stackMock->setBoardId(1234);
 		$this->stackMapper->expects($this->any())
 			->method('find')
 			->willReturn($stackMock);
+
 		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
 		$c = $this->cardService->cloneCard($b->getId(), 1234);
 		$this->assertEquals($b->getTitle(), $c->getTitle());
 		$this->assertEquals($b->getOwner(), $c->getOwner());
 		$this->assertNotEquals($b->getStackId(), $c->getStackId());
+
+		$this->assertEquals('A test description', $c->getDescription());
+
+		$this->assertCount(1, $c->getLabels());
+		$this->assertEquals($label->getId(), $c->getLabels()[0]->getId());
 	}
 
 	public function testDelete() {
