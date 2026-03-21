@@ -57,7 +57,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Remove `vuex-router-sync` source usage. No local sync helper is needed because Deck does not read synced route state from the store.
 - [x] Funnel direct `@nextcloud/dialogs` calls through local helper modules.
 - [x] Replace deep `@nextcloud/vue/dist/...` imports with local adapters.
-- [ ] Introduce a local infinite-loader component before the Vue 3 runtime switch.
+- [x] Introduce a local infinite-loader component before the Vue 3 runtime switch.
 
 ### 1.2 Manual widget lifecycle management
 

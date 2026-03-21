@@ -22,13 +22,13 @@
 					:key="card.id"
 					:standalone="true" />
 				<Placeholder v-if="loading" />
-				<InfiniteLoading :identifier="searchQuery" @infinite="infiniteHandler">
+				<InfiniteLoader :identifier="searchQuery" @infinite="infiniteHandler">
 					<div slot="spinner" />
 					<div slot="no-more" />
 					<div slot="no-results">
 						{{ t('deck', 'No results found') }}
 					</div>
-				</InfiniteLoading>
+				</InfiniteLoader>
 			</template>
 			<template v-else>
 				<p>{{ t('deck', 'No results found') }}</p>
@@ -42,7 +42,7 @@ import CardItem from '../cards/CardItem.vue'
 import { mapState } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoader from '../InfiniteLoader.vue'
 import Placeholder from './Placeholder.vue'
 import { NcActions, NcActionButton, NcRichText } from '@nextcloud/vue'
 
@@ -73,7 +73,7 @@ function search({ query, cursor }) {
 
 export default {
 	name: 'GlobalSearchResults',
-	components: { CardItem, InfiniteLoading, NcRichText, Placeholder, NcActions, NcActionButton },
+	components: { CardItem, InfiniteLoader, NcRichText, Placeholder, NcActions, NcActionButton },
 	data() {
 		return {
 			results: [],
