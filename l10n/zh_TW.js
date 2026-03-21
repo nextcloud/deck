@@ -237,6 +237,8 @@ OC.L10N.register(
     "Edit list title" : "編輯清單標題",
     "Archive all cards" : "封存所有卡片",
     "Unarchive all cards" : "解除封存所有卡片",
+    "Do not set cards as \"done\"" : "請勿將卡片標記為「已完成」",
+    "Set cards as \"done\"" : "設定卡片為「已完成」",
     "Delete list" : "刪除列表",
     "Archive all cards in this list" : "封存此列表中的所有卡片",
     "Unarchive all cards in this list" : "解除封存所有此列表中的卡片",
