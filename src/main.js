@@ -6,7 +6,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import storeFactory from './store/main.js'
-import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import { subscribe } from '@nextcloud/event-bus'
@@ -19,7 +18,6 @@ import { initSessions } from './sessions.js'
 document.body.setAttribute('data-snap-ignore', 'true')
 
 const store = storeFactory()
-sync(store, router)
 initSessions(store)
 
 Vue.prototype.t = translate

@@ -54,7 +54,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 ### 1.1a Build isolation seams first
 
 - [x] Introduce a local `clickOutside` directive and replace direct `vue-click-outside` imports.
-- [ ] Replace `vuex-router-sync` with a local route-store sync helper.
+- [x] Remove `vuex-router-sync` source usage. No local sync helper is needed because Deck does not read synced route state from the store.
 - [ ] Funnel direct `@nextcloud/dialogs` calls through local helper modules.
 - [ ] Replace deep `@nextcloud/vue/dist/...` imports with local adapters.
 - [ ] Introduce a local infinite-loader component before the Vue 3 runtime switch.
@@ -82,7 +82,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [ ] Upgrade routing from Vue Router 3 to Vue Router 4.
 - [ ] Port [../src/router.js](../src/router.js) to Vue Router 4 APIs.
 - [ ] Re-verify navigation guards, redirects, and history base handling.
-- [ ] Re-evaluate `vuex-router-sync` usage and replace it if necessary.
+- [x] Re-evaluate `vuex-router-sync` usage. No replacement is required because Deck uses `$route` directly instead of synced store route state.
 
 ### 2.2 Store
 

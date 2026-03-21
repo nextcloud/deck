@@ -172,7 +172,7 @@ npm info <package-name> repository homepage
 ## Implemented isolation seams
 
 - [x] `vue-click-outside` has been replaced in source with a local directive at [../src/directives/clickOutside.js](../src/directives/clickOutside.js).
-- [ ] `vuex-router-sync` is still pending replacement.
+- [x] `vuex-router-sync` source usage has been removed from [../src/main.js](../src/main.js). No local replacement is needed because Deck uses `$route` directly.
 - [ ] `@nextcloud/dialogs` is still pending consolidation behind local helpers.
 
 ## Blocking conditions
