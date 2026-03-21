@@ -65,7 +65,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ClickOutside from 'vue-click-outside'
 import { NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'
@@ -100,9 +99,6 @@ export default {
 		ShareVariantIcon,
 		DeckAppSettings,
 		IconCog,
-	},
-	directives: {
-		ClickOutside,
 	},
 	props: {
 		loading: {

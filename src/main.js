@@ -10,7 +10,7 @@ import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import { subscribe } from '@nextcloud/event-bus'
-import ClickOutside from 'vue-click-outside'
+import clickOutside from './directives/clickOutside.js'
 import './shared-init.js'
 import './models/index.js'
 import { initSessions } from './sessions.js'
@@ -25,7 +25,7 @@ initSessions(store)
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 
-Vue.directive('click-outside', ClickOutside)
+Vue.directive('click-outside', clickOutside)
 
 Vue.directive('focus', {
 	inserted(el) {

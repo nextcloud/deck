@@ -146,7 +146,6 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
@@ -171,9 +170,6 @@ export default {
 		ArchiveIcon,
 		CardPlusOutline,
 		CheckCircleOutline,
-	},
-	directives: {
-		ClickOutside,
 	},
 	props: {
 		dragging: {

@@ -6,18 +6,18 @@
 import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from '@nextcloud/vue/dist/Functions/registerReference.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import storeFactory from './store/main.js'
+import clickOutside from './directives/clickOutside.js'
 
 import './shared-init.js'
 
 const prepareVue = async (Component = null) => {
 	const { default: Vue } = await import('vue')
-	const { default: ClickOutside } = await import('vue-click-outside')
 
 	Vue.prototype.t = translate
 	Vue.prototype.n = translatePlural
 	Vue.prototype.OC = window.OC
 	Vue.prototype.OCA = window.OCA
-	Vue.directive('click-outside', ClickOutside)
+	Vue.directive('click-outside', clickOutside)
 	Vue.directive('focus', {
 		inserted(el) {
 			el.focus()

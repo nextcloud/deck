@@ -53,7 +53,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 1.1a Build isolation seams first
 
-- [ ] Introduce a local `clickOutside` directive and replace direct `vue-click-outside` imports.
+- [x] Introduce a local `clickOutside` directive and replace direct `vue-click-outside` imports.
 - [ ] Replace `vuex-router-sync` with a local route-store sync helper.
 - [ ] Funnel direct `@nextcloud/dialogs` calls through local helper modules.
 - [ ] Replace deep `@nextcloud/vue/dist/...` imports with local adapters.

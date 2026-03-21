@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
 import { mapState, mapGetters } from 'vuex'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
@@ -98,9 +97,6 @@ const TITLE_EDITING_STATE = {
 export default {
 	name: 'CardItem',
 	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
-	directives: {
-		ClickOutside,
-	},
 	mixins: [Color, labelStyle],
 	props: {
 		id: {

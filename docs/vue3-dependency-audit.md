@@ -169,6 +169,12 @@ npm info <package-name> repository homepage
 | `vue-click-outside` | isolate first | 2026-03-21 | It has a small API surface and many call sites, so replacing it early cuts migration noise across the app. |
 | `@nextcloud/dialogs` | isolate first | 2026-03-21 | Direct calls are spread across the app, but they already behave like helper functions and can be centralized behind local wrappers. |
 
+## Implemented isolation seams
+
+- [x] `vue-click-outside` has been replaced in source with a local directive at [../src/directives/clickOutside.js](../src/directives/clickOutside.js).
+- [ ] `vuex-router-sync` is still pending replacement.
+- [ ] `@nextcloud/dialogs` is still pending consolidation behind local helpers.
+
 ## Blocking conditions
 
 - [ ] No package remains in `blocked` state without an explicit mitigation plan.
