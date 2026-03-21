@@ -174,6 +174,7 @@ npm info <package-name> repository homepage
 - [x] `vue-click-outside` has been replaced in source with a local directive at [../src/directives/clickOutside.js](../src/directives/clickOutside.js).
 - [x] `vuex-router-sync` source usage has been removed from [../src/main.js](../src/main.js). No local replacement is needed because Deck uses `$route` directly.
 - [x] `@nextcloud/dialogs` source usage has been consolidated behind [../src/helpers/dialogs.js](../src/helpers/dialogs.js) and [../src/helpers/errors.js](../src/helpers/errors.js).
+- [x] Deep `@nextcloud/vue/dist/...` imports have been isolated behind [../src/lib/nextcloudVue/components.js](../src/lib/nextcloudVue/components.js) and [../src/lib/nextcloudVue/reference.js](../src/lib/nextcloudVue/reference.js).
 
 ## Blocking conditions
 

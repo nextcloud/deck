@@ -1,0 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+export { NcUserBubble } from '@nextcloud/vue'
+export { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'

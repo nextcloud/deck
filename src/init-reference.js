@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from '@nextcloud/vue/dist/Functions/registerReference.js'
+import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from './lib/nextcloudVue/reference.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import storeFactory from './store/main.js'
 import clickOutside from './directives/clickOutside.js'
