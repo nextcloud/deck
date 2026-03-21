@@ -57,6 +57,8 @@ window.addEventListener('DOMContentLoaded', () => {
 							})
 							+ '](' + window.location.protocol + '//' + window.location.host + generateUrl('/call/' + conversationToken) + ')',
 					},
+					resolveEvent: 'submit',
+					rejectEvents: ['cancel', 'close'],
 				})
 			} catch (e) {
 				console.debug('Card creation dialog was canceled')

@@ -86,7 +86,7 @@ export default {
 			default: false,
 		},
 	},
-	emits: ['edit-title'],
+	emits: ['edit-title', 'open-card'],
 	data() {
 		return {
 			modalShow: false,
@@ -145,7 +145,7 @@ export default {
 				return
 			}
 
-			this.$root.$emit('open-card', this.card.id)
+			this.$emit('open-card', this.card.id)
 		},
 		editTitle() {
 			this.$emit('edit-title', this.card.id)

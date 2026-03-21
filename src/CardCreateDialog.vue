@@ -8,8 +8,9 @@
 		<CreateNewCardCustomPicker :title="title"
 			:description="description"
 			show-created-notice
-			@cancel="close"
-			@close="close" />
+			@cancel="cancel"
+			@close="close"
+			@submit="submit" />
 	</NcModal>
 </template>
 
@@ -31,6 +32,17 @@ export default {
 		description: {
 			type: String,
 			default: '',
+		},
+	},
+	methods: {
+		cancel() {
+			this.$emit('cancel')
+		},
+		close() {
+			this.$emit('close')
+		},
+		submit(value) {
+			this.$emit('submit', value)
 		},
 	},
 }

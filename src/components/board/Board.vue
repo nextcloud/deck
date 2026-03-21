@@ -63,7 +63,10 @@
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
-						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
+						<Stack :stack="stack"
+							:dragging="draggingStack"
+							data-click-closes-sidebar="true"
+							@open-card="openCard" />
 					</DeckDraggable>
 				</DeckDragContainer>
 			</div>
@@ -165,9 +168,6 @@ export default {
 	created() {
 		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
-		this.$root.$on('open-card', (cardId) => {
-			this.localModal = cardId
-		})
 	},
 	beforeDestroy() {
 		this.session?.close()
@@ -211,6 +211,10 @@ export default {
 			}
 			this.$store.dispatch('createStack', newStack)
 			this.newStackTitle = ''
+		},
+
+		openCard(cardId) {
+			this.localModal = cardId
 		},
 
 		onMouseDown(event) {

@@ -14,7 +14,9 @@
 			</template>
 		</NcButton>
 		<NcActions>
-			<CardMenuEntries :card="card" @edit-title="editTitle" />
+			<CardMenuEntries :card="card"
+				@edit-title="editTitle"
+				@open-card="openCard" />
 		</NcActions>
 	</div>
 </template>
@@ -32,11 +34,14 @@ export default {
 			default: null,
 		},
 	},
-	emits: ['edit-title'],
+	emits: ['edit-title', 'open-card'],
 	methods: {
 		openLink() {
 			window.open(this.card?.referenceData?.openGraphObject?.link)
 			return false
+		},
+		openCard(cardId) {
+			this.$emit('open-card', cardId)
 		},
 		editTitle(id) {
 			this.$emit('edit-title', id)

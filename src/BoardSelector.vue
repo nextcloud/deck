@@ -63,10 +63,10 @@ export default {
 			})
 		},
 		close() {
-			this.$root.$emit('close')
+			this.$emit('close')
 		},
 		select() {
-			this.$root.$emit('select', this.selectedBoard)
+			this.$emit('select', this.selectedBoard)
 		},
 	},
 

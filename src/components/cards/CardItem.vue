@@ -43,7 +43,8 @@
 				<CardMenu v-if="showMenuAtTitle"
 					:card="card"
 					class="right card-menu"
-					@edit-title="triggerEditTitle" />
+					@edit-title="triggerEditTitle"
+					@open-card="openCardFromMenu" />
 			</div>
 
 			<div v-if="hasLabels" class="card-labels">
@@ -59,7 +60,8 @@
 				<CardMenu v-if="showMenuAtLabels"
 					:card="card"
 					class="right"
-					@edit-title="triggerEditTitle" />
+					@edit-title="triggerEditTitle"
+					@open-card="openCardFromMenu" />
 			</div>
 
 			<div v-if="hasBadges"
@@ -70,7 +72,8 @@
 					<CardMenu v-if="showMenuAtBadges"
 						:card="card"
 						class="right"
-						@edit-title="triggerEditTitle" />
+						@edit-title="triggerEditTitle"
+						@open-card="openCardFromMenu" />
 				</CardBadges>
 			</div>
 		</div>
@@ -96,6 +99,7 @@ const TITLE_EDITING_STATE = {
 
 export default {
 	name: 'CardItem',
+	emits: ['open-card'],
 	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
 	mixins: [Color, labelStyle],
 	props: {
@@ -210,20 +214,29 @@ export default {
 			card.focus()
 		},
 		openCard(event) {
-			if (event.target.tagName.toLowerCase() === 'a') {
+			if (event?.target?.tagName?.toLowerCase() === 'a') {
 				return
 			}
 			if (this.dragging || this.hasSelection()) {
-			  return
+				return Promise.resolve()
 			}
 			const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
 
 			if (this.$router) {
-				this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
+				return this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
+			}
+
+			this.$emit('open-card', this.card.id)
+			return Promise.resolve()
+		},
+		openCardFromMenu(cardId) {
+			if (this.$router) {
+				const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
+				this.$router.push({ name: 'card', params: { id: boardId, cardId } }).catch(() => {})
 				return
 			}
 
-			this.$root.$emit('open-card', this.card.id)
+			this.$emit('open-card', cardId)
 		},
 		triggerEditTitle() {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING

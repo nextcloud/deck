@@ -63,15 +63,15 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 1.2 Manual widget lifecycle management
 
-- [ ] Replace `Vue.extend(...)` usage in [../src/init-dashboard.js](../src/init-dashboard.js) and [../src/init-reference.js](../src/init-reference.js).
-- [ ] Replace `$destroy()`-based teardown in [../src/helpers/selector.js](../src/helpers/selector.js), [../src/views/FileSharingPicker.js](../src/views/FileSharingPicker.js), and [../src/init-reference.js](../src/init-reference.js).
-- [ ] Standardize mount and unmount behavior for widgets, selectors, and custom picker elements.
+- [x] Replace `Vue.extend(...)` usage in [../src/init-dashboard.js](../src/init-dashboard.js) and [../src/init-reference.js](../src/init-reference.js).
+- [x] Replace `$destroy()`-based teardown in [../src/helpers/selector.js](../src/helpers/selector.js), [../src/views/FileSharingPicker.js](../src/views/FileSharingPicker.js), and [../src/init-reference.js](../src/init-reference.js).
+- [x] Standardize mount and unmount behavior for widgets, selectors, and custom picker elements via [../src/lib/mountComponent.js](../src/lib/mountComponent.js).
 
 ### 1.3 Event flow cleanup
 
-- [ ] Remove `$root.$on(...)` and `$root.$emit(...)` patterns in [../src/helpers/selector.js](../src/helpers/selector.js), [../src/BoardSelector.vue](../src/BoardSelector.vue), [../src/CardSelector.vue](../src/CardSelector.vue), [../src/components/board/Board.vue](../src/components/board/Board.vue), [../src/components/cards/CardItem.vue](../src/components/cards/CardItem.vue), and [../src/components/cards/CardMenuEntries.vue](../src/components/cards/CardMenuEntries.vue).
-- [ ] Replace root-instance messaging with explicit emits, callback props, or a dedicated external emitter.
-- [ ] Document the chosen event pattern and use it consistently across entrypoints.
+- [x] Remove `$root.$on(...)` and `$root.$emit(...)` patterns in [../src/helpers/selector.js](../src/helpers/selector.js), [../src/BoardSelector.vue](../src/BoardSelector.vue), [../src/CardSelector.vue](../src/CardSelector.vue), [../src/components/board/Board.vue](../src/components/board/Board.vue), [../src/components/cards/CardItem.vue](../src/components/cards/CardItem.vue), and [../src/components/cards/CardMenuEntries.vue](../src/components/cards/CardMenuEntries.vue).
+- [x] Replace root-instance messaging with explicit emits, callback props, or a dedicated external emitter.
+- [x] Document the chosen event pattern and use it consistently across entrypoints.
 
 ### Exit criteria
 

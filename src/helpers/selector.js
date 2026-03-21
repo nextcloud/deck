@@ -3,23 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
+import { appendMountTarget, mountComponent } from '../lib/mountComponent.js'
 
-const buildSelector = (selector, propsData = {}) => {
+const buildSelector = (selector, options = {}) => {
+	const {
+		props = {},
+		resolveEvent = 'select',
+		rejectEvents = ['close'],
+		rejectMessage = 'Selection canceled',
+	} = options
+
 	return new Promise((resolve, reject) => {
-		const container = document.createElement('div')
-		document.getElementById('body-user').append(container)
-		const ComponentVM = new Vue({
-			render: (h) => h(selector, propsData),
-		}).$mount(container)
-		ComponentVM.$root.$on('close', () => {
-			ComponentVM.$el.remove()
-			ComponentVM.$destroy()
-			reject(new Error('Selection canceled'))
+		const container = appendMountTarget()
+		let mountedComponent = null
+		const cleanup = () => {
+			mountedComponent?.destroy({ removeElement: true })
+		}
+
+		const on = {
+			[resolveEvent]: (value) => {
+				cleanup()
+				resolve(value)
+			},
+		}
+
+		rejectEvents.forEach((eventName) => {
+			on[eventName] = () => {
+				cleanup()
+				reject(new Error(rejectMessage))
+			}
 		})
-		ComponentVM.$root.$on('select', (id) => {
-			ComponentVM.$el.remove()
-			ComponentVM.$destroy()
-			resolve(id)
+
+		mountedComponent = mountComponent(Vue, selector, {
+			target: container,
+			props,
+			on,
 		})
 	})
 }

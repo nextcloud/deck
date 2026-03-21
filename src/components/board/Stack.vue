@@ -114,7 +114,10 @@
 				<transition :appear="animate && !card.animated && (card.animated=true)"
 					:appear-class="'zoom-appear-class'"
 					:appear-active-class="'zoom-appear-active-class'">
-					<CardItem :id="card.id" ref="card" :dragging="draggingCard" />
+					<CardItem :id="card.id"
+						ref="card"
+						:dragging="draggingCard"
+						@open-card="openCard" />
 				</transition>
 			</DeckDraggable>
 		</DeckDragContainer>
@@ -158,6 +161,7 @@ import CardItem from '../cards/CardItem.vue'
 
 export default {
 	name: 'Stack',
+	emits: ['open-card'],
 	components: {
 		NcActions,
 		NcActionButton,
@@ -276,6 +280,9 @@ export default {
 			return index => {
 				return this.cardsByStack[index]
 			}
+		},
+		openCard(cardId) {
+			this.$emit('open-card', cardId)
 		},
 		toggleDoneColumn() {
 			this.$store.dispatch('setDoneStack', {

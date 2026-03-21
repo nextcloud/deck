@@ -6,6 +6,7 @@
 import './css/dashboard.scss'
 
 import './shared-init.js'
+import { mountComponent } from './lib/mountComponent.js'
 
 const debug = process.env.NODE_ENV !== 'production'
 
@@ -44,33 +45,27 @@ document.addEventListener('DOMContentLoaded', () => {
 		const { Vue, store } = await getAsyncImports()
 		const { default: DashboardUpcoming } = await import('./views/DashboardUpcoming.vue')
 
-		const View = Vue.extend(DashboardUpcoming)
-		const vm = new View({
-			propsData: {},
+		return mountComponent(Vue, DashboardUpcoming, {
+			target: el,
 			store,
-		}).$mount(el)
-		return vm
+		}).root
 	})
 
 	OCA.Dashboard.register('deckToday', async (el) => {
 		const { Vue, store } = await getAsyncImports()
 		const { default: DashboardToday } = await import('./views/DashboardToday.vue')
-		const View = Vue.extend(DashboardToday)
-		const vm = new View({
-			propsData: {},
+		return mountComponent(Vue, DashboardToday, {
+			target: el,
 			store,
-		}).$mount(el)
-		return vm
+		}).root
 	})
 
 	OCA.Dashboard.register('deckTomorrow', async (el) => {
 		const { Vue, store } = await getAsyncImports()
 		const { default: DashboardTomorrow } = await import('./views/DashboardTomorrow.vue')
-		const View = Vue.extend(DashboardTomorrow)
-		const vm = new View({
-			propsData: {},
+		return mountComponent(Vue, DashboardTomorrow, {
+			target: el,
 			store,
-		}).$mount(el)
-		return vm
+		}).root
 	})
 })

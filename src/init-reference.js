@@ -7,6 +7,7 @@ import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult
 import { translate, translatePlural } from '@nextcloud/l10n'
 import storeFactory from './store/main.js'
 import clickOutside from './directives/clickOutside.js'
+import { mountComponent } from './lib/mountComponent.js'
 
 import './shared-init.js'
 
@@ -23,75 +24,75 @@ const prepareVue = async (Component = null) => {
 			el.focus()
 		},
 	})
-	if (!Component) {
-		return Vue
-	}
-
-	return Vue.extend(Component)
+	return Vue
 }
 
 registerWidget('deck-card', async (el, { richObjectType, richObject, accessible }) => {
 	const { default: CardReferenceWidget } = await import('./views/CardReferenceWidget.vue')
-	const Widget = await prepareVue(CardReferenceWidget)
+	const Vue = await prepareVue(CardReferenceWidget)
 	// trick to change the wrapper element size, otherwise it always is 100%
 	// which is not very nice with a simple card
 	el.parentNode.style['max-width'] = '400px'
 	el.parentNode.style['margin-left'] = '0'
 	el.parentNode.style['margin-right'] = '0'
-	new Widget({
-		propsData: {
+	mountComponent(Vue, CardReferenceWidget, {
+		target: el,
+		props: {
 			richObjectType,
 			richObject,
 			accessible,
 		},
-	}).$mount(el)
+	})
 })
 
-const boardWidgets = {}
+const boardWidgets = new Map()
 registerWidget('deck-board', async (el, { richObjectType, richObject, accessible, interactive }) => {
 	const { default: BoardReferenceWidget } = await import('./views/BoardReferenceWidget.vue')
-	const Widget = await prepareVue(BoardReferenceWidget)
-	boardWidgets[el] = new Widget({
+	const Vue = await prepareVue(BoardReferenceWidget)
+	boardWidgets.set(el, mountComponent(Vue, BoardReferenceWidget, {
+		target: el,
 		store: storeFactory(),
-		propsData: {
+		props: {
 			richObjectType,
 			richObject,
 			accessible,
 			interactive,
 		},
-	}).$mount(el)
+	}))
 }, (el) => {
-	boardWidgets[el].$destroy()
-	delete boardWidgets[el]
+	boardWidgets.get(el)?.destroy()
+	boardWidgets.delete(el)
 })
 
 registerWidget('deck-comment', async (el, { richObjectType, richObject, accessible }) => {
 	const { default: CommentReferenceWidget } = await import('./views/CommentReferenceWidget.vue')
-	const Widget = await prepareVue(CommentReferenceWidget)
+	const Vue = await prepareVue(CommentReferenceWidget)
 
 	el.parentNode.style['max-width'] = '400px'
 	el.parentNode.style['margin-left'] = '0'
 	el.parentNode.style['margin-right'] = '0'
 
-	new Widget({
-		propsData: {
+	mountComponent(Vue, CommentReferenceWidget, {
+		target: el,
+		props: {
 			richObjectType,
 			richObject,
 			accessible,
 		},
-	}).$mount(el)
+	})
 })
 
 registerCustomPickerElement('create-new-deck-card', async (el, { providerId, accessible }) => {
 	const { default: CreateNewCardCustomPicker } = await import('./views/CreateNewCardCustomPicker.vue')
-	const Element = await prepareVue(CreateNewCardCustomPicker)
-	const vueElement = new Element({
-		propsData: {
+	const Vue = await prepareVue(CreateNewCardCustomPicker)
+	const vueElement = mountComponent(Vue, CreateNewCardCustomPicker, {
+		target: el,
+		props: {
 			providerId,
 			accessible,
 		},
-	}).$mount(el)
-	return new NcCustomPickerRenderResult(vueElement.$el, vueElement)
+	})
+	return new NcCustomPickerRenderResult(vueElement.element, vueElement)
 }, (el, renderResult) => {
-	renderResult.object.$destroy()
+	renderResult.object.destroy()
 }, 'normal')
