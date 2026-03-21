@@ -51,21 +51,21 @@
 				ref="board"
 				class="board"
 				@mousedown="onMouseDown">
-				<Container lock-axix="y"
+				<DeckDragContainer lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
 					data-click-closes-sidebar="true"
 					@drag-start="draggingStack = true"
 					@drag-end="draggingStack = false"
 					@drop="onDropStack">
-					<Draggable v-for="stack in stacksByBoard"
+					<DeckDraggable v-for="stack in stacksByBoard"
 						:key="stack.id"
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
 						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
-					</Draggable>
-				</Container>
+					</DeckDraggable>
+				</DeckDragContainer>
 			</div>
 		</transition>
 		<GlobalSearchResults v-if="isFullApp" />
@@ -82,7 +82,6 @@
 </template>
 
 <script>
-import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
@@ -93,14 +92,15 @@ import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
 import CardSidebar from '../card/CardSidebar.vue'
+import { DeckDragContainer, DeckDraggable, resetDeckDndDocumentState } from '../../lib/dnd.js'
 export default {
 	name: 'Board',
 	components: {
 		GlobalSearchResults,
 		Controls,
-		Container,
+		DeckDragContainer,
 		DeckIcon,
-		Draggable,
+		DeckDraggable,
 		Stack,
 		NcEmptyContent,
 		NcModal,
@@ -243,10 +243,7 @@ export default {
 		},
 
 		fixActionRestriction() {
-			document.body.classList.remove(
-				'smooth-dnd-no-user-select',
-				'smooth-dnd-disable-touch-action',
-			)
+			resetDeckDndDocumentState()
 		},
 	},
 }

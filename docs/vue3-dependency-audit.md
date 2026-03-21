@@ -106,7 +106,7 @@ These are the packages that should be hidden behind local abstractions before th
 | Package | Why isolate later | Current footprint | Suggested local seam |
 | --- | --- | --- | --- |
 | `vue-easymde` | Single main usage, but deep custom behavior and editor-internal access | Concentrated in [../src/components/card/Description.vue](../src/components/card/Description.vue) | local `DeckMarkdownEditor` component |
-| `vue-smooth-dnd` | Only two files import it, but the interaction model and CSS coupling are deep | Used in [../src/components/board/Board.vue](../src/components/board/Board.vue) and [../src/components/board/Stack.vue](../src/components/board/Stack.vue) | local `BoardDnDContainer` and `CardDnDContainer` wrappers or a thin `src/lib/dnd/` adapter |
+| `vue-smooth-dnd` | Only two files import it, but the interaction model and CSS coupling are deep | Used in [../src/components/board/Board.vue](../src/components/board/Board.vue) and [../src/components/board/Stack.vue](../src/components/board/Stack.vue) | thin `src/lib/dnd.js` adapter with local component exports |
 
 ### Isolation order recommendation
 
@@ -177,6 +177,7 @@ npm info <package-name> repository homepage
 - [x] Deep `@nextcloud/vue/dist/...` imports have been isolated behind [../src/lib/nextcloudVue/components.js](../src/lib/nextcloudVue/components.js) and [../src/lib/nextcloudVue/reference.js](../src/lib/nextcloudVue/reference.js).
 - [x] `vue-infinite-loading` source usage has been replaced by [../src/components/InfiniteLoader.vue](../src/components/InfiniteLoader.vue).
 - [x] `vue-easymde` source usage has been isolated behind [../src/components/card/DeckMarkdownEditor.vue](../src/components/card/DeckMarkdownEditor.vue).
+- [x] `vue-smooth-dnd` source usage has been isolated behind [../src/lib/dnd.js](../src/lib/dnd.js), with [../src/components/board/Board.vue](../src/components/board/Board.vue) and [../src/components/board/Stack.vue](../src/components/board/Stack.vue) using local DnD exports instead of the third-party package directly.
 
 ## Blocking conditions
 

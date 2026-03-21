@@ -99,7 +99,7 @@
 			</div>
 		</NcModal>
 
-		<Container :get-child-payload="payloadForCard(stack.id)"
+		<DeckDragContainer :get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container"
 			group-name="stack"
 			data-click-closes-sidebar="true"
@@ -110,14 +110,14 @@
 			@drag-start="draggingCard = true"
 			@drag-end="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
-			<Draggable v-for="card in cardsByStack" :key="card.id">
+			<DeckDraggable v-for="card in cardsByStack" :key="card.id">
 				<transition :appear="animate && !card.animated && (card.animated=true)"
 					:appear-class="'zoom-appear-class'"
 					:appear-active-class="'zoom-appear-active-class'">
 					<CardItem :id="card.id" ref="card" :dragging="draggingCard" />
 				</transition>
-			</Draggable>
-		</Container>
+			</DeckDraggable>
+		</DeckDragContainer>
 
 		<transition name="slide-bottom" appear>
 			<div v-if="showAddCard" class="stack__card-add">
@@ -147,12 +147,12 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '../../helpers/dialogs.js'
+import { DeckDragContainer, DeckDraggable } from '../../lib/dnd.js'
 
 import CardItem from '../cards/CardItem.vue'
 
@@ -162,8 +162,8 @@ export default {
 		NcActions,
 		NcActionButton,
 		CardItem,
-		Container,
-		Draggable,
+		DeckDragContainer,
+		DeckDraggable,
 		NcModal,
 		ArchiveIcon,
 		CardPlusOutline,

@@ -59,6 +59,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Replace deep `@nextcloud/vue/dist/...` imports with local adapters.
 - [x] Introduce a local infinite-loader component before the Vue 3 runtime switch.
 - [x] Wrap the legacy Markdown editor behind a local `DeckMarkdownEditor` component.
+- [x] Route board and stack drag-and-drop through a local DnD adapter.
 
 ### 1.2 Manual widget lifecycle management
 
