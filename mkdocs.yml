@@ -13,6 +13,9 @@ pages:
         - Nextcloud API: API-Nextcloud.md
     - Developer documentation:
         - Data structure: structure.md
+        - Vue 3 migration:
+            - Implementation plan: vue3-migration-plan.md
+            - Dependency audit: vue3-dependency-audit.md
         - Import documentation:
             - Implement import: implement-import.md
             - Class diagram: import-class-diagram.md
