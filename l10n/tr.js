@@ -237,6 +237,8 @@ OC.L10N.register(
     "Edit list title" : "Liste başlığını düzenle",
     "Archive all cards" : "Tüm kartları arşivle",
     "Unarchive all cards" : "Tüm kartları arşivden çıkar",
+    "Do not set cards as \"done\"" : "Kartları \"Tamamlanmış\" olarak işaretleme",
+    "Set cards as \"done\"" : "Kartları \"Tamamlanmış\" olarak işaretle",
     "Delete list" : "Listeyi sil",
     "Archive all cards in this list" : "Bu listedeki tüm kartları arşivle",
     "Unarchive all cards in this list" : "Bu listedeki tüm kartları arşivden çıkar",
