@@ -235,6 +235,8 @@
     "Edit list title" : "Редагувати заголовок списку",
     "Archive all cards" : "Архівувати всі картки",
     "Unarchive all cards" : "Розархівувати всі картки",
+    "Do not set cards as \"done\"" : "Не встановлювати статус \"зроблено\" на картках",
+    "Set cards as \"done\"" : "Встановити статус картки \"зроблено\"",
     "Delete list" : "Вилучити список",
     "Archive all cards in this list" : "Архівуйте всі картки в цьому списку",
     "Unarchive all cards in this list" : "Розархівувати всі картки в цьому списку",

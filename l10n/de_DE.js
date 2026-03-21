@@ -237,6 +237,8 @@ OC.L10N.register(
     "Edit list title" : "Listentitel bearbeiten",
     "Archive all cards" : "Alle Karten archivieren",
     "Unarchive all cards" : "Alle Karten dearchivieren",
+    "Do not set cards as \"done\"" : "Karten nicht als \"erledigt\" markieren",
+    "Set cards as \"done\"" : "Karten als \"erledigt\" markieren",
     "Delete list" : "Liste löschen",
     "Archive all cards in this list" : "Alle Karten in dieser Liste archivieren",
     "Unarchive all cards in this list" : "Alle Karten in dieser Liste dearchivieren",
