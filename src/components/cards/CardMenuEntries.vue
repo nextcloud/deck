@@ -69,9 +69,8 @@ import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
-import { showUndo } from '@nextcloud/dialogs'
+import { showUndo } from '../../helpers/dialogs.js'
 
-import '@nextcloud/dialogs/style.css'
 import { emit } from '@nextcloud/event-bus'
 
 export default {

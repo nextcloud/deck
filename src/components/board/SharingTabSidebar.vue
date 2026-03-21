@@ -82,7 +82,7 @@
 import { NcCollectionList, NcAvatar, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel, NcSelectUsers } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '../../helpers/dialogs.js'
 import { loadState } from '@nextcloud/initial-state'
 import debounce from 'lodash/debounce.js'
 const SOURCE_TO_SHARE_TYPE = {

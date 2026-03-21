@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '../helpers/dialogs.js'
 import { formatFileSize } from '@nextcloud/files'
 // eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue'

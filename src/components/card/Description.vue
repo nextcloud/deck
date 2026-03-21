@@ -73,7 +73,7 @@ import AttachmentList from './AttachmentList.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
-import { showWarning } from '@nextcloud/dialogs'
+import { showWarning } from '../../helpers/dialogs.js'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import { mapState } from 'vuex'
 

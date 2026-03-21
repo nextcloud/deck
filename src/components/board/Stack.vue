@@ -152,11 +152,9 @@ import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
-import { showError, showUndo } from '@nextcloud/dialogs'
+import { showError, showUndo } from '../../helpers/dialogs.js'
 
 import CardItem from '../cards/CardItem.vue'
-
-import '@nextcloud/dialogs/style.css'
 
 export default {
 	name: 'Stack',

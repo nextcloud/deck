@@ -92,7 +92,7 @@ import CommentIcon from 'vue-material-design-icons/Comment.vue'
 import CommentOutlineIcon from 'vue-material-design-icons/CommentOutline.vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
-import { showError, showWarning } from '@nextcloud/dialogs'
+import { showError, showWarning } from '../../helpers/dialogs.js'
 import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/CardMenuEntries.vue'
 

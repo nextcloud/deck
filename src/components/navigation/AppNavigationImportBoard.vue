@@ -15,8 +15,8 @@
 
 <script>
 import { NcAppNavigationItem } from '@nextcloud/vue'
+import { showLoading, showSuccess } from '../../helpers/dialogs.js'
 import { showError } from '../../helpers/errors.js'
-import { showSuccess, showLoading } from '@nextcloud/dialogs'
 
 export default {
 	name: 'AppNavigationImportBoard',

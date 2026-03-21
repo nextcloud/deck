@@ -187,7 +187,7 @@ import { emit } from '@nextcloud/event-bus'
 import isTouchDevice from '../../mixins/isTouchDevice.js'
 import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
-import { showLoading, showError } from '@nextcloud/dialogs'
+import { showLoading, showError } from '../../helpers/dialogs.js'
 import { getCurrentUser } from '@nextcloud/auth'
 
 const canCreateState = loadState('deck', 'canCreate')
