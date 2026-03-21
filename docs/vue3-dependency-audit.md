@@ -176,6 +176,7 @@ npm info <package-name> repository homepage
 - [x] `@nextcloud/dialogs` source usage has been consolidated behind [../src/helpers/dialogs.js](../src/helpers/dialogs.js) and [../src/helpers/errors.js](../src/helpers/errors.js).
 - [x] Deep `@nextcloud/vue/dist/...` imports have been isolated behind [../src/lib/nextcloudVue/components.js](../src/lib/nextcloudVue/components.js) and [../src/lib/nextcloudVue/reference.js](../src/lib/nextcloudVue/reference.js).
 - [x] `vue-infinite-loading` source usage has been replaced by [../src/components/InfiniteLoader.vue](../src/components/InfiniteLoader.vue).
+- [x] `vue-easymde` source usage has been isolated behind [../src/components/card/DeckMarkdownEditor.vue](../src/components/card/DeckMarkdownEditor.vue).
 
 ## Blocking conditions
 

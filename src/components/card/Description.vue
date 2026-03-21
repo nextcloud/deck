@@ -44,7 +44,7 @@
 			<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
 				{{ t('deck', 'Write a description …') }}
 			</p>
-			<VueEasymde v-else
+			<DeckMarkdownEditor v-else
 				:key="card.id"
 				ref="markdownEditor"
 				v-model="description"
@@ -70,6 +70,7 @@ import MarkdownIt from 'markdown-it'
 import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import AttachmentList from './AttachmentList.vue'
+import DeckMarkdownEditor from './DeckMarkdownEditor.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
@@ -92,7 +93,7 @@ markdownIt.use(MarkdownItLinkAttributes, {
 export default {
 	name: 'Description',
 	components: {
-		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common.js'),
+		DeckMarkdownEditor,
 		NcActions,
 		NcActionButton,
 		NcModal,
@@ -179,6 +180,9 @@ export default {
 		await this.destroyEditor()
 	},
 	methods: {
+		getMarkdownEditor() {
+			return this.$refs.markdownEditor?.getEasyMde()
+		},
 		async setupEditor() {
 			await this.destroyEditor()
 			this.descriptionLastEdit = 0
@@ -208,18 +212,23 @@ export default {
 			this?.editor?.destroy()
 		},
 		addKeyListeners() {
-			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
+			const easyMde = this.getMarkdownEditor()
+			if (!easyMde?.codemirror) {
+				return
+			}
+
+			easyMde.codemirror.on('keydown', (a, b) => {
 				if (this.keyExitState === 0 && (b.key === 'Meta' || b.key === 'Alt')) {
 					this.keyExitState = 1
 				}
 				if (this.keyExitState === 1 && b.key === 'Enter') {
 					this.keyExitState = 0
-					this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
-					this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
+					easyMde.codemirror.off('keydown', undefined)
+					easyMde.codemirror.off('keyup', undefined)
 					this.hideEditor()
 				}
 			})
-			this.$refs.markdownEditor.easymde.codemirror.on('keyup', (a, b) => {
+			easyMde.codemirror.on('keyup', (a, b) => {
 				if (b.key === 'Meta' || b.key === 'Control') {
 					this.keyExitState = 0
 				}
@@ -235,8 +244,9 @@ export default {
 
 		},
 		hideEditor() {
-			this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
-			this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
+			const easyMde = this.getMarkdownEditor()
+			easyMde?.codemirror?.off('keydown', undefined)
+			easyMde?.codemirror?.off('keyup', undefined)
 			this.descriptionEditing = false
 		},
 		showAttachmentModal() {
@@ -256,9 +266,9 @@ export default {
 				return
 			} else {
 				const attachmentString = (asImage ? '!' : '') + '[📎 ' + fileName + '](' + this.attachmentPreview(attachment) + ')'
-				const descString = this.$refs.markdownEditor.easymde.value()
+				const descString = this.$refs.markdownEditor.getValue()
 				const newContent = descString + '\n' + attachmentString
-				this.$refs.markdownEditor.easymde.value(newContent)
+				this.$refs.markdownEditor.setValue(newContent)
 				this.description = newContent
 			}
 			this.updateDescription()
