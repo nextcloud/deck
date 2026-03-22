@@ -90,6 +90,7 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { pushRoute } from '../../router/navigation.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -223,7 +224,7 @@ export default {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
 
 			if (this.$router) {
-				return this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
+				return pushRoute(this.$router, { name: 'card', params: { id: boardId, cardId: this.card.id } })
 			}
 
 			this.$emit('open-card', this.card.id)
@@ -232,7 +233,7 @@ export default {
 		openCardFromMenu(cardId) {
 			if (this.$router) {
 				const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
-				this.$router.push({ name: 'card', params: { id: boardId, cardId } }).catch(() => {})
+				pushRoute(this.$router, { name: 'card', params: { id: boardId, cardId } })
 				return
 			}
 

@@ -82,6 +82,11 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 ### 2.1 Router
 
 - [ ] Upgrade routing from Vue Router 3 to Vue Router 4.
+- [x] Isolate router base URL logic, route records, and global guards behind reusable helpers in [../src/router/config.js](../src/router/config.js).
+- [x] Centralize router creation options behind [../src/router/config.js](../src/router/config.js) so only the concrete router constructor API remains in [../src/router.js](../src/router.js).
+- [x] Normalize redirect decisions behind a reusable guard helper in [../src/router/config.js](../src/router/config.js) so Router 4 can consume return-based guard results.
+- [x] Isolate duplicate-navigation suppression behind [../src/router/navigation.js](../src/router/navigation.js) instead of inline `router.push(...).catch(...)` calls.
+- [x] Convert [../src/router.js](../src/router.js) to a `createDeckRouter()` factory so the final Router 4 runtime swap is localized.
 - [ ] Port [../src/router.js](../src/router.js) to Vue Router 4 APIs.
 - [ ] Re-verify navigation guards, redirects, and history base handling.
 - [x] Re-evaluate `vuex-router-sync` usage. No replacement is required because Deck uses `$route` directly instead of synced store route state.
@@ -168,6 +173,7 @@ Use this phase only if the dependency audit shows that temporary compat mode wil
 - [ ] Update build tooling, compiler packages, and test transformers for Vue 3.
 - [ ] Ensure `npm run build` succeeds.
 - [ ] Ensure `npm run lint` succeeds.
+- [ ] Re-run lint after the `package.json` script update in [../package.json](../package.json); command execution is currently blocked by the editor terminal/task integration in this session.
 - [ ] Ensure `npm test` succeeds.
 - [ ] Run the key user flows manually in a Nextcloud instance.
 - [ ] Validate dashboard, sharing picker, collaboration picker, and reference widgets.

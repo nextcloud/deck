@@ -154,7 +154,7 @@ export default {
 			this.$store.dispatch('deleteCard', this.card)
 			const undoCard = { ...this.card, deletedAt: 0 }
 			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
-			if (this.$router.currentRoute.name === 'card') {
+			if (this.$route?.name === 'card') {
 				this.$router.push({ name: 'board' })
 			}
 		},
