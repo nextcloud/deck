@@ -20,7 +20,7 @@ Status values:
 | --- | --- | --- | --- | --- |
 | `vue` | runtime | blocked | target `3.5.x` and remove compat-only APIs | Current lockfile is `2.7.16`; move to the stable Vue 3.5 line once the Nextcloud UI layer is ready. |
 | `vue-loader` | SFC build | blocked | keep `15.11.1` while Vue 2.7 is still the active runtime, then switch to `17.4.2+` together with the Vue 3 compiler stack | The current workspace resolved `vue-loader 17.4.2` against Vue 2.7 and `@vue/compiler-sfc 2.7`, which breaks SFC compilation because `vue-loader@17` expects the Vue 3 parser return shape. |
-| `vue-router` | main app router | blocked | target `4.3.x` or newer stable `4.4.x` | Current `3.6.5` is the Vue 2 router line. |
+| `vue-router` | main app router | blocked | target `5.0.x` to match the published Nextcloud Vue 3 stack | Current `3.6.5` is the Vue 2 router line. The local lockfile already contains a published `vue-router 5.0.4` tarball pulled by `@nextcloud/vue 9.6.0`. |
 | `vuex` | main, overview, dashboard stores | blocked | target `4.1.x` | Current `3.6.2` has a Vue 2 peer dependency. Keep the store migration scoped and avoid combining it with Pinia. |
 | `vuex-router-sync` | router-state sync | replace | remove dependency and sync route state manually where needed | Current `5.0.0` peers on Router 3 and Vuex 3 only, and the repo uses it only in [../src/main.js](../src/main.js). |
 | `@vue/test-utils` | component tests | upgrade | keep `2.4.6+` and verify final test setup after runtime switch | Current `2.4.6` is already the Vue 3 test-utils generation. No frontend tests currently reference it. |
@@ -31,8 +31,8 @@ Status values:
 
 | Package | Current usage | Status | Action | Notes |
 | --- | --- | --- | --- | --- |
-| `@nextcloud/vue` | shared UI components, composables, reference helpers, deep imports | blocked | upgrade to the first Vue 3-compatible major published by Nextcloud, likely `9.x` or `10.x` | Current `8.35.0` depends on `vue ^2.7.16`, `vue-router ^3.6.5`, `@nextcloud/vue-select` with `vue 2.x`, `vue2-datepicker`, and other Vue 2 packages. This is the main ecosystem blocker and the exact target major is still unconfirmed. |
-| `@nextcloud/dialogs` | toasts, undo, loading, file picker helpers | blocked | upgrade in lockstep with the first Vue 3-compatible `@nextcloud/vue` major, likely `7.x` or `8.x` | Current `6.4.2` peers on `@nextcloud/vue ^8.24.0` and `vue ^2.7.16`. The exact target major is still unconfirmed. |
+| `@nextcloud/vue` | shared UI components, composables, reference helpers, deep imports | blocked | upgrade to `9.x`, preferably the latest `9.x` patch | Current `8.35.0` depends on `vue ^2.7.16`, `vue-router ^3.6.5`, `@nextcloud/vue-select` with `vue 2.x`, `vue2-datepicker`, and other Vue 2 packages. The local lockfile also contains the published `@nextcloud/vue 9.6.0` tarball, which depends on `vue ^3.5.18` and `vue-router ^5.0.3`. |
+| `@nextcloud/dialogs` | toasts, undo, loading, file picker helpers | blocked | upgrade in lockstep with `@nextcloud/vue 9.x`, targeting `7.x` | Current `6.4.2` peers on `@nextcloud/vue ^8.24.0` and `vue ^2.7.16`. Package metadata research confirms the Vue 3-compatible major is `7.x`, but the exact patch still needs to be pinned when the manifest is updated. |
 | `@nextcloud/event-bus` | app event integration | upgrade | keep `3.3.x+` unless a newer Nextcloud bundle version is required by upgraded UI packages | Current `3.3.3` has no Vue peer dependency and should not block the runtime switch by itself. |
 | `@nextcloud/webpack-vue-config` | webpack baseline | upgrade | keep `6.3.0+` and align it with the final Vue version and compiler stack | Current `6.3.0` explicitly peers on `vue ^2.7.16 || ^3.5.13` and `vue-loader ^15 || ^17`, so the config layer is already migration-friendly. |
 
@@ -55,12 +55,14 @@ Status values:
 | --- | --- |
 | `vue` | `3.5.x` |
 | `vue-loader` | `15.11.1` until the Vue 3 runtime switch, then `17.4.2+` |
-| `vue-router` | `4.3.x` or newer stable `4.4.x` |
+| `vue-router` | `5.0.x` |
 | `vuex` | `4.1.x` |
 | `@vue/test-utils` | `2.4.6+` |
 | `@nextcloud/event-bus` | `3.3.x+` |
 | `@nextcloud/webpack-vue-config` | `6.3.0+` |
 | `vue-material-design-icons` | `5.3.1+` |
+| `@nextcloud/vue` | `9.x` |
+| `@nextcloud/dialogs` | `7.x` |
 
 ### Replacement targets
 
@@ -125,7 +127,8 @@ These are the packages that should be hidden behind local abstractions before th
 - Deep imports from `@nextcloud/vue/dist/...` increase migration risk because they couple Deck to package internals. Current examples include [../src/init-reference.js](../src/init-reference.js), [../src/views/BoardReferenceWidget.vue](../src/views/BoardReferenceWidget.vue), and [../src/components/card/CardSidebar.vue](../src/components/card/CardSidebar.vue).
 - Several third-party packages are better replaced than upgraded because Deck uses them as thin adapters: click-outside, infinite loading, drag and drop, and the Markdown editor wrapper.
 - No frontend tests currently reference `@vue/test-utils`, so test tooling work will mostly be setup work rather than fixture migration.
-- The exact Vue 3-compatible major versions of `@nextcloud/vue` and `@nextcloud/dialogs` still need confirmation from published Nextcloud releases or maintainers. Until that is confirmed, the rest of the package targets should be treated as provisional.
+- The local lockfile already includes published Vue 3-compatible transitive tarballs from the Nextcloud Vue 3 stack, including `@nextcloud/vue 9.6.0`, `vue 3.5.30`, `@vue/compiler-sfc 3.5.30`, and `vue-router 5.0.4`.
+- The exact patch version for `@nextcloud/dialogs 7.x` still needs to be pinned when the manifest is updated, but the compatible major line is now known.
 
 ## Audit checklist
 
@@ -159,8 +162,8 @@ npm info <package-name> repository homepage
 
 | Package | Decision | Date | Reason |
 | --- | --- | --- | --- |
-| `@nextcloud/vue` | blocked on current major | 2026-03-21 | Lockfile shows `8.35.0` still depends on Vue 2, Vue Router 3, and multiple Vue 2-only transitive packages. The likely target is a future `9.x` or `10.x` major, but that is still unconfirmed. |
-| `@nextcloud/dialogs` | blocked on current major | 2026-03-21 | Lockfile shows `6.4.2` peers on Vue 2 and `@nextcloud/vue` 8.x. The likely target is a future `7.x` or `8.x` major, but that is still unconfirmed. |
+| `@nextcloud/vue` | target `9.x` | 2026-03-21 | Lockfile shows `8.35.0` is still the Vue 2 line, while a published transitive tarball for `@nextcloud/vue 9.6.0` already exists in the workspace and depends on `vue ^3.5.18` plus `vue-router ^5.0.3`. |
+| `@nextcloud/dialogs` | target `7.x` | 2026-03-21 | The current `6.4.2` package is still the Vue 2 line. Package metadata research confirms the Vue 3-compatible major is `7.x`, to be upgraded together with `@nextcloud/vue 9.x`. |
 | `@nextcloud/webpack-vue-config` | upgrade path available | 2026-03-21 | Lockfile shows `6.3.0` already advertises Vue 3 peer compatibility. |
 | `vuex-router-sync` | replace | 2026-03-21 | The package is tightly coupled to Router 3 and Vuex 3, and repo usage is isolated to the main app bootstrap. |
 | `vue-at` | remove | 2026-03-21 | No imports were found in `src/`, so it is currently dead weight for the migration. |

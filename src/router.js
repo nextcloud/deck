@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
+import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
 import { getDeckRouterOptions, registerDeckRouterGuards } from './router/config.js'
 import { createDeckRouterInstance, installDeckRouter } from './router/runtime.js'

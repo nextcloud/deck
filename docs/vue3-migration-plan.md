@@ -30,7 +30,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [ ] Record the current baseline build and test status.
 - [ ] Confirm the supported Nextcloud and Node.js versions for the migration target.
 - [x] Audit Vue-related dependencies in [vue3-dependency-audit.md](vue3-dependency-audit.md).
-- [ ] Confirm the first Vue 3-compatible major versions of `@nextcloud/vue` and `@nextcloud/dialogs` from published releases or maintainers.
+- [x] Confirm the first Vue 3-compatible major versions of `@nextcloud/vue` and `@nextcloud/dialogs` from published releases or maintainers.
 - [ ] Decide which packages can be upgraded directly and which need replacement or isolation.
 - [x] Record the target versions and replacement candidates from [vue3-dependency-audit.md](vue3-dependency-audit.md).
 - [x] Identify the first local wrapper seams from [vue3-dependency-audit.md](vue3-dependency-audit.md).
@@ -49,6 +49,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Replace `new Vue(...)` mounting in [../src/main.js](../src/main.js) with a shared root-mount helper.
 - [x] Replace `Vue.prototype` usage in [../src/main.js](../src/main.js), [../src/init-collections.js](../src/init-collections.js), [../src/init-dashboard.js](../src/init-dashboard.js), [../src/init-reference.js](../src/init-reference.js), and [../src/init-talk.js](../src/init-talk.js) with shared bootstrap configuration.
 - [x] Introduce shared Vue 3 mount helpers for standalone entrypoints.
+- [x] Normalize entrypoint Vue imports so both Vue 2 default exports and Vue 3 module-namespace imports work through the shared helpers.
 - [ ] Move global properties, directives, and plugins to app-level registration.
 
 ### 1.1a Build isolation seams first
@@ -81,15 +82,15 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 2.1 Router
 
-- [ ] Upgrade routing from Vue Router 3 to Vue Router 4.
+- [ ] Upgrade routing from Vue Router 3 to the Vue 3-compatible router line used by `@nextcloud/vue 9.x`.
 - [x] Isolate router base URL logic, route records, and global guards behind reusable helpers in [../src/router/config.js](../src/router/config.js).
 - [x] Centralize router creation options behind [../src/router/config.js](../src/router/config.js) so only the concrete router constructor API remains in [../src/router.js](../src/router.js).
-- [x] Normalize redirect decisions behind a reusable guard helper in [../src/router/config.js](../src/router/config.js) so Router 4 can consume return-based guard results.
+- [x] Normalize redirect decisions behind a reusable guard helper in [../src/router/config.js](../src/router/config.js) so the Vue 3 router can consume return-based guard results.
 - [x] Isolate duplicate-navigation suppression behind [../src/router/navigation.js](../src/router/navigation.js) instead of inline `router.push(...).catch(...)` calls.
 - [x] Normalize component navigation calls behind [../src/router/navigation.js](../src/router/navigation.js) so route transitions do not depend on Router 3-specific promise behavior.
-- [x] Convert [../src/router.js](../src/router.js) to a `createDeckRouter()` factory so the final Router 4 runtime swap is localized.
-- [x] Isolate Router 3 vs Router 4 plugin/constructor differences behind [../src/router/runtime.js](../src/router/runtime.js).
-- [ ] Port [../src/router.js](../src/router.js) to Vue Router 4 APIs.
+- [x] Convert [../src/router.js](../src/router.js) to a `createDeckRouter()` factory so the final Vue 3 router runtime swap is localized.
+- [x] Isolate Router 3 vs Router 4/5 plugin and constructor differences behind [../src/router/runtime.js](../src/router/runtime.js).
+- [ ] Port [../src/router.js](../src/router.js) to the Vue 3 router APIs.
 - [ ] Re-verify navigation guards, redirects, and history base handling.
 - [x] Re-evaluate `vuex-router-sync` usage. No replacement is required because Deck uses `$route` directly instead of synced store route state.
 
@@ -98,6 +99,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [ ] Upgrade from Vuex 3 to Vuex 4 unless a deliberate Pinia migration is approved separately.
 - [x] Replace module-level `Vue.use(Vuex)` calls in [../src/store/main.js](../src/store/main.js), [../src/store/dashboard.js](../src/store/dashboard.js), and [../src/store/overview.js](../src/store/overview.js) with the shared helpers in [../src/lib/vuex.js](../src/lib/vuex.js).
 - [x] Centralize store construction behind [../src/lib/vuex.js](../src/lib/vuex.js) so the Vuex 4 constructor swap is localized.
+- [x] Isolate Vuex 3 vs Vuex 4 plugin/constructor differences behind [../src/lib/vuex.js](../src/lib/vuex.js).
 - [x] Replace the safe array-index and existing-property `Vue.set(...)` / `Vue.delete(...)` usage in [../src/store/main.js](../src/store/main.js), [../src/store/stack.js](../src/store/stack.js), [../src/store/comment.js](../src/store/comment.js), [../src/store/card.js](../src/store/card.js), and [../src/store/attachment.js](../src/store/attachment.js).
 - [x] Replace the remaining dynamic-key `Vue.set(...)` usage in [../src/store/comment.js](../src/store/comment.js), [../src/store/attachment.js](../src/store/attachment.js), and [../src/store/card.js](../src/store/card.js) with object/item replacement that is compatible with Vue 3 reactivity.
 - [ ] Re-test reactivity-sensitive flows for board, stack, card, comment, and attachment updates.
@@ -192,7 +194,7 @@ Use this phase only if the dependency audit shows that temporary compat mode wil
 ## Open decisions
 
 - [ ] Confirm the supported Vue 3 version range for the surrounding Nextcloud frontend stack.
-- [ ] Confirm whether `@nextcloud/vue` and related helpers can be upgraded directly in the same branch.
+- [x] Confirm whether `@nextcloud/vue` and related helpers can be upgraded directly in the same branch.
 - [ ] Confirm whether `vuex-router-sync` remains viable or should be removed.
 - [ ] Confirm replacement strategy for any Vue 2-only third-party packages.
 
@@ -201,3 +203,4 @@ Use this phase only if the dependency audit shows that temporary compat mode wil
 - Prefer small PRs grouped by subsystem rather than one long-lived migration branch.
 - If migration build is used, treat it as instrumentation and not as a shipping target.
 - Keep this file updated when phases are split, reordered, or blocked.
+- The current target stack is `vue 3.5.x`, `@vue/compiler-sfc 3.5.x`, `vue-loader 17.4.2+`, `vuex 4.1.x`, `@nextcloud/vue 9.x`, `@nextcloud/dialogs 7.x`, and the Vue 3-compatible router line used by `@nextcloud/vue 9.x`.

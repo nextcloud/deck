@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
+import * as Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router.js'
@@ -12,7 +12,7 @@ import { subscribe } from '@nextcloud/event-bus'
 import './shared-init.js'
 import './models/index.js'
 import { initSessions } from './sessions.js'
-import { configureDeckVue, mountVueRoot } from './lib/vue.js'
+import { configureDeckVue, createRenderFunction, mountVueRoot } from './lib/vue.js'
 import { configureDeckVuex } from './lib/vuex.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
@@ -69,7 +69,7 @@ mountVueRoot(Vue, {
 			this.$store.commit('setSearchQuery', '')
 		},
 	},
-	render: h => h(App),
+	render: createRenderFunction(Vue, App),
 }, '#content')
 
 if (!window.OCA.Deck) {

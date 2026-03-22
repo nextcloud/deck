@@ -12,7 +12,7 @@ import { configureDeckVue } from './lib/vue.js'
 import './shared-init.js'
 
 const prepareVue = async (Component = null) => {
-	const { default: Vue } = await import('vue')
+	const Vue = await import('vue')
 
 	return configureDeckVue(Vue, {
 		translate,

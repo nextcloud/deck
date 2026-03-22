@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
+import * as Vue from 'vue'
 import { appendMountTarget, mountComponent } from '../lib/mountComponent.js'
 
 const buildSelector = (selector, options = {}) => {

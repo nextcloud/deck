@@ -5,9 +5,17 @@
 
 const configuredConstructors = new WeakSet()
 
+function getVuexModule(Vuex) {
+	return Vuex?.default || Vuex
+}
+
+function isModernVuexApi(Vuex) {
+	return typeof getVuexModule(Vuex)?.createStore === 'function'
+}
+
 export function configureDeckVuex(Vue, Vuex) {
-	if (!configuredConstructors.has(Vue)) {
-		Vue.use(Vuex)
+	if (!isModernVuexApi(Vuex) && !configuredConstructors.has(Vue)) {
+		Vue.use(getVuexModule(Vuex))
 		configuredConstructors.add(Vue)
 	}
 
@@ -15,5 +23,10 @@ export function configureDeckVuex(Vue, Vuex) {
 }
 
 export function createDeckStore(Vuex, options) {
-	return new Vuex.Store(options)
+	const vuexModule = getVuexModule(Vuex)
+	if (isModernVuexApi(vuexModule)) {
+		return vuexModule.createStore(options)
+	}
+
+	return new vuexModule.Store(options)
 }

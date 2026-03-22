@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { mountVueRoot } from './vue.js'
+import { createRenderFunction, mountVueRoot } from './vue.js'
 
 export function appendMountTarget({ id = null, parent = document.getElementById('body-user') || document.body } = {}) {
 	const container = document.createElement('div')
@@ -19,27 +19,29 @@ export function mountComponent(Vue, Component, {
 	props = {},
 	store,
 	on = {},
+	router,
 } = {}) {
-	const root = mountVueRoot(Vue, {
+	const mounted = mountVueRoot(Vue, {
+		router,
 		store,
-		render: (createElement) => createElement(Component, { props, on }),
+		render: createRenderFunction(Vue, Component, { props, on }),
 	}, target)
 
 	let destroyed = false
 
 	return {
-		element: root.$el,
-		root,
+		element: mounted.element,
+		root: mounted.root,
 		destroy({ removeElement = false } = {}) {
 			if (destroyed) {
 				return
 			}
 
 			destroyed = true
-			if (removeElement && root.$el?.parentNode) {
-				root.$el.parentNode.removeChild(root.$el)
+			if (removeElement && mounted.element?.parentNode) {
+				mounted.element.parentNode.removeChild(mounted.element)
 			}
-			root.$destroy()
+			mounted.destroy()
 		},
 	}
 }

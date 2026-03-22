@@ -19,7 +19,7 @@ const getAsyncImports = async () => {
 		return _imports
 	}
 
-	const { default: Vue } = await import('vue')
+	const Vue = await import('vue')
 	const { default: Vuex } = await import('vuex')
 	const { default: dashboard } = await import('./store/dashboard.js')
 
