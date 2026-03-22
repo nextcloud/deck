@@ -5,6 +5,10 @@
 
 const configuredConstructors = new WeakSet()
 
+function getVueModule(Vue) {
+	return Vue?.default || Vue
+}
+
 function getVuexModule(Vuex) {
 	return Vuex?.default || Vuex
 }
@@ -14,9 +18,11 @@ function isModernVuexApi(Vuex) {
 }
 
 export function configureDeckVuex(Vue, Vuex) {
-	if (!isModernVuexApi(Vuex) && !configuredConstructors.has(Vue)) {
-		Vue.use(getVuexModule(Vuex))
-		configuredConstructors.add(Vue)
+	const vueModule = getVueModule(Vue)
+
+	if (!isModernVuexApi(Vuex) && !configuredConstructors.has(vueModule)) {
+		vueModule.use(getVuexModule(Vuex))
+		configuredConstructors.add(vueModule)
 	}
 
 	return Vuex

@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+function getVueModule(Vue) {
+	return Vue?.default || Vue
+}
+
 function getRouterModule(VueRouter) {
 	return VueRouter?.default || VueRouter
 }
@@ -14,7 +18,7 @@ export function isModernRouterApi(VueRouter) {
 
 export function installDeckRouter(Vue, VueRouter) {
 	if (!isModernRouterApi(VueRouter)) {
-		Vue.use(getRouterModule(VueRouter))
+		getVueModule(Vue).use(getRouterModule(VueRouter))
 	}
 }
 
