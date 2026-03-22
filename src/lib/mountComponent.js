@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { mountVueRoot } from './vue.js'
+
 export function appendMountTarget({ id = null, parent = document.getElementById('body-user') || document.body } = {}) {
 	const container = document.createElement('div')
 	if (id) {
@@ -18,10 +20,10 @@ export function mountComponent(Vue, Component, {
 	store,
 	on = {},
 } = {}) {
-	const root = new Vue({
+	const root = mountVueRoot(Vue, {
 		store,
 		render: (createElement) => createElement(Component, { props, on }),
-	}).$mount(target)
+	}, target)
 
 	let destroyed = false
 

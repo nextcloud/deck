@@ -7,6 +7,7 @@ import './css/dashboard.scss'
 
 import './shared-init.js'
 import { mountComponent } from './lib/mountComponent.js'
+import { configureDeckVue } from './lib/vue.js'
 
 const debug = process.env.NODE_ENV !== 'production'
 
@@ -21,9 +22,11 @@ const getAsyncImports = async () => {
 	const { default: Vuex } = await import('vuex')
 	const { default: dashboard } = await import('./store/dashboard.js')
 
-	Vue.prototype.t = t
-	Vue.prototype.n = n
-	Vue.prototype.OC = OC
+	configureDeckVue(Vue, {
+		translate: t,
+		translatePlural: n,
+		oc: OC,
+	})
 	Vue.use(Vuex)
 
 	const store = new Vuex.Store({

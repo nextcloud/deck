@@ -6,25 +6,21 @@
 import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from './lib/nextcloudVue/reference.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import storeFactory from './store/main.js'
-import clickOutside from './directives/clickOutside.js'
 import { mountComponent } from './lib/mountComponent.js'
+import { configureDeckVue } from './lib/vue.js'
 
 import './shared-init.js'
 
 const prepareVue = async (Component = null) => {
 	const { default: Vue } = await import('vue')
 
-	Vue.prototype.t = translate
-	Vue.prototype.n = translatePlural
-	Vue.prototype.OC = window.OC
-	Vue.prototype.OCA = window.OCA
-	Vue.directive('click-outside', clickOutside)
-	Vue.directive('focus', {
-		inserted(el) {
-			el.focus()
-		},
+	return configureDeckVue(Vue, {
+		translate,
+		translatePlural,
+		oc: window.OC,
+		oca: window.OCA,
+		installCommonDirectives: true,
 	})
-	return Vue
 }
 
 registerWidget('deck-card', async (el, { richObjectType, richObject, accessible }) => {

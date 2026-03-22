@@ -7,12 +7,11 @@ import App from './App.vue'
 import router from './router.js'
 import storeFactory from './store/main.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { showError } from './helpers/dialogs.js'
 import { subscribe } from '@nextcloud/event-bus'
-import clickOutside from './directives/clickOutside.js'
 import './shared-init.js'
 import './models/index.js'
 import { initSessions } from './sessions.js'
+import { configureDeckVue, mountVueRoot } from './lib/vue.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
@@ -20,28 +19,14 @@ document.body.setAttribute('data-snap-ignore', 'true')
 const store = storeFactory()
 initSessions(store)
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
-
-Vue.directive('click-outside', clickOutside)
-
-Vue.directive('focus', {
-	inserted(el) {
-		el.focus()
-	},
+configureDeckVue(Vue, {
+	translate,
+	translatePlural,
+	installCommonDirectives: true,
+	installErrorHandler: true,
 })
 
-Vue.config.errorHandler = (err, vm, info) => {
-	if (err.response && err.response.data.message) {
-		const errorMessage = t('deck', 'Something went wrong')
-		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
-	}
-	console.error(err)
-}
-
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
+mountVueRoot(Vue, {
 	// eslint-disable-next-line vue/match-component-file-name
 	name: 'Deck',
 	router,
@@ -76,7 +61,7 @@ new Vue({
 		},
 	},
 	render: h => h(App),
-})
+}, '#content')
 
 if (!window.OCA.Deck) {
 	window.OCA.Deck = {}

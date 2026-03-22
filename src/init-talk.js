@@ -8,13 +8,16 @@ import { generateUrl } from '@nextcloud/router'
 
 import CardCreateDialog from './CardCreateDialog.vue'
 import { buildSelector } from './helpers/selector.js'
+import { configureDeckVue } from './lib/vue.js'
 import './init-collections.js'
 
 import './shared-init.js'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
+configureDeckVue(Vue, {
+	translate: t,
+	translatePlural: n,
+	oc: OC,
+})
 
 window.addEventListener('DOMContentLoaded', () => {
 	if (!window.OCA?.Talk?.registerMessageAction) {

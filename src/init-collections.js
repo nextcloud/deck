@@ -8,12 +8,15 @@ import Vue from 'vue'
 import './../css/collections.css'
 import FileSharingPicker from './views/FileSharingPicker.js'
 import { buildSelector } from './helpers/selector.js'
+import { configureDeckVue } from './lib/vue.js'
 
 import './shared-init.js'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
+configureDeckVue(Vue, {
+	translate: t,
+	translatePlural: n,
+	oc: OC,
+})
 
 window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Sharing && OCA.Sharing.ShareSearch) {

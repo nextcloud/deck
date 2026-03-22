@@ -46,9 +46,9 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 1.1 Bootstrapping and app globals
 
-- [ ] Replace `new Vue(...)` mounting in [../src/main.js](../src/main.js).
-- [ ] Replace `Vue.prototype` usage in [../src/main.js](../src/main.js), [../src/init-collections.js](../src/init-collections.js), [../src/init-dashboard.js](../src/init-dashboard.js), [../src/init-reference.js](../src/init-reference.js), and [../src/init-talk.js](../src/init-talk.js).
-- [ ] Introduce shared Vue 3 mount helpers for standalone entrypoints.
+- [x] Replace `new Vue(...)` mounting in [../src/main.js](../src/main.js) with a shared root-mount helper.
+- [x] Replace `Vue.prototype` usage in [../src/main.js](../src/main.js), [../src/init-collections.js](../src/init-collections.js), [../src/init-dashboard.js](../src/init-dashboard.js), [../src/init-reference.js](../src/init-reference.js), and [../src/init-talk.js](../src/init-talk.js) with shared bootstrap configuration.
+- [x] Introduce shared Vue 3 mount helpers for standalone entrypoints.
 - [ ] Move global properties, directives, and plugins to app-level registration.
 
 ### 1.1a Build isolation seams first
