@@ -3,7 +3,9 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcDialog :open.sync="modalShow" :name="t('deck', 'Move/copy card')">
+	<NcDialog :open="modalShow"
+		:name="t('deck', 'Move/copy card')"
+		@update:open="modalShow = $event">
 		<div class="modal__content">
 			<NcSelect v-model="selectedBoard"
 				:input-label="t('deck', 'Select a board')"
@@ -73,9 +75,15 @@ export default {
 		subscribe('deck:card:show-move-dialog', this.openModal)
 	},
 	destroyed() {
-		unsubscribe('deck:card:show-move-dialog', this.openModal)
+		this.unsubscribeEvents()
+	},
+	unmounted() {
+		this.unsubscribeEvents()
 	},
 	methods: {
+		unsubscribeEvents() {
+		unsubscribe('deck:card:show-move-dialog', this.openModal)
+		},
 		openModal(card) {
 			this.card = card
 			this.selectedStack = this.stackById(this.card.stackId)

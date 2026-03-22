@@ -5,16 +5,16 @@
 <template>
 	<NcDialog :name="t('deck', 'Clone {boardTitle}', {boardTitle: boardTitle})" :show="true" @close="close(false)">
 		<div class="modal__content">
-			<NcCheckboxRadioSwitch :checked.sync="withCards">
+			<NcCheckboxRadioSwitch :checked="withCards" @update:checked="withCards = $event">
 				{{ t('deck', 'Clone cards') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withAssignments">
+			<NcCheckboxRadioSwitch v-if="withCards" :checked="withAssignments" @update:checked="withAssignments = $event">
 				{{ t('deck', 'Clone assignments') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withLabels">
+			<NcCheckboxRadioSwitch v-if="withCards" :checked="withLabels" @update:checked="withLabels = $event">
 				{{ t('deck', 'Clone labels') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withDueDate">
+			<NcCheckboxRadioSwitch v-if="withCards" :checked="withDueDate" @update:checked="withDueDate = $event">
 				{{ t('deck', 'Clone due dates') }}
 			</NcCheckboxRadioSwitch>
 			<div v-if="withCards" class="accordion" :class="{ 'is-open': accordionOpen }">
@@ -25,10 +25,10 @@
 					{{ t('deck', 'Advanced options') }}
 				</div>
 				<div v-if="accordionOpen" class="accordion__content">
-					<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="moveCardsToLeftStack">
+					<NcCheckboxRadioSwitch v-if="withCards" :checked="moveCardsToLeftStack" @update:checked="moveCardsToLeftStack = $event">
 						{{ t('deck', 'Move all cards to the first list') }}
 					</NcCheckboxRadioSwitch>
-					<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="restoreArchivedCards">
+					<NcCheckboxRadioSwitch v-if="withCards" :checked="restoreArchivedCards" @update:checked="restoreArchivedCards = $event">
 						{{ t('deck', 'Restore archived cards') }}
 					</NcCheckboxRadioSwitch>
 				</div>

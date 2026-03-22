@@ -56,9 +56,15 @@ export default {
 		this.requestLoad()
 	},
 	beforeDestroy() {
-		this.observer?.disconnect()
+		this.disconnectObserver()
+	},
+	beforeUnmount() {
+		this.disconnectObserver()
 	},
 	methods: {
+		disconnectObserver() {
+		this.observer?.disconnect()
+		},
 		reset() {
 			this.isLoading = false
 			this.isComplete = false

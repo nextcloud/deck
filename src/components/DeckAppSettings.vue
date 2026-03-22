@@ -174,8 +174,11 @@ export default {
 	},
 
 	methods: {
-		onClose() {
-			this.$emit('close')
+		onClose(open) {
+			this.$emit('update:open', open)
+			if (!open) {
+				this.$emit('close')
+			}
 		},
 
 		async updateConfig() {

@@ -47,7 +47,8 @@
 			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
 		<template #default>
-			<DeckAppSettings :open.sync="settingsOpened"
+			<DeckAppSettings :open="settingsOpened"
+				@update:open="settingsOpened = $event"
 				@close="onSettingsClose" />
 		</template>
 		<template #footer>

@@ -143,7 +143,8 @@
 			<form @submit.prevent.stop="applyEdit">
 				<NcTextField ref="inputField"
 					:disable="loading"
-					:value.sync="editTitle"
+					:value="editTitle"
+					@update:value="editTitle = $event"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />

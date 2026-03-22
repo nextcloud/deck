@@ -177,9 +177,15 @@ export default {
 		this.setupEditor()
 	},
 	async beforeDestroy() {
-		await this.destroyEditor()
+		await this.teardownEditor()
+	},
+	async beforeUnmount() {
+		await this.teardownEditor()
 	},
 	methods: {
+		async teardownEditor() {
+		await this.destroyEditor()
+		},
 		getMarkdownEditor() {
 			return this.$refs.markdownEditor?.getEasyMde()
 		},

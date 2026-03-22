@@ -370,13 +370,19 @@ export default {
 
 	},
 	beforeDestroy() {
+		this.teardownSubscriptions()
+	},
+	beforeUnmount() {
+		this.teardownSubscriptions()
+	},
+	methods: {
+		teardownSubscriptions() {
 		unsubscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		unsubscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
 		unsubscribe('deck:board:clear-filter', this.triggerClearFilter)
 		unsubscribe('deck:board:toggle-filter-by-me', this.triggerFilterByMe)
 		this.setPageTitle('')
-	},
-	methods: {
+		},
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
 				this.filter.due = ''

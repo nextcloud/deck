@@ -15,12 +15,20 @@ function focusElement(el, binding) {
 	el.focus()
 }
 
+function registerActivationHook(el, binding, vnode) {
+	vnode?.context?.$on?.('hook:activated', () => focusElement(el, binding))
+}
+
 // Register a global custom directive called `v-focus`
 export default {
 	bind(el, binding, vnode) {
 		// When the component of the element gets activated
-		vnode.context.$on('hook:activated', () => focusElement(el, binding))
+		registerActivationHook(el, binding, vnode)
+	},
+	beforeMount(el, binding, vnode) {
+		registerActivationHook(el, binding, vnode)
 	},
 	// When the bound element is inserted into the DOM...
 	inserted: focusElement,
+	mounted: focusElement,
 }

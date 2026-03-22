@@ -30,7 +30,8 @@
 					<form @submit.prevent="addNewStack()">
 						<NcTextField ref="newStackInput"
 							:disable="loading"
-							:value.sync="newStackTitle"
+							:value="newStackTitle"
+							@update:value="newStackTitle = $event"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
 						<NcButton type="secondary"
@@ -170,9 +171,15 @@ export default {
 		this.fetchData()
 	},
 	beforeDestroy() {
-		this.session?.close()
+		this.closeSession()
+	},
+	beforeUnmount() {
+		this.closeSession()
 	},
 	methods: {
+		closeSession() {
+		this.session?.close()
+		},
 		async fetchData() {
 			this.loading = true
 			try {

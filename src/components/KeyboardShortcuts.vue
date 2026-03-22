@@ -52,12 +52,18 @@ export default {
 		subscribe('deck:card:show-label-selector', this.handleShowLabel)
 	},
 	destroyed() {
+		this.teardownListeners()
+	},
+	unmounted() {
+		this.teardownListeners()
+	},
+	methods: {
+		teardownListeners() {
 		document.removeEventListener('keydown', this.onKeydown)
 		unsubscribe('deck:card:show-assignment-selector', this.handleShowAssignemnt)
 		unsubscribe('deck:card:show-due-date-selector', this.handleShowDueDate)
 		unsubscribe('deck:card:show-label-selector', this.handleShowLabel)
-	},
-	methods: {
+		},
 		onKeydown(key) {
 			if (OCP.Accessibility.disableKeyboardShortcuts()) {
 				return

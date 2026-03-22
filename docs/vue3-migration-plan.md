@@ -102,7 +102,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 3.1 Template syntax
 
-- [ ] Replace `.sync` patterns with `v-model:prop` or explicit `update:prop` events.
+- [x] Replace `.sync` patterns with `v-model:prop` or explicit `update:prop` events.
 - [ ] Verify component contracts for all Nextcloud Vue components that currently use `.sync`.
 - [ ] Re-test dialogs, board controls, sidebars, settings, and clone/export flows.
 

@@ -15,7 +15,8 @@
 			<form @submit.prevent.stop="createBoard">
 				<NcTextField ref="inputField"
 					:disable="loading"
-					:value.sync="value"
+					:value="value"
+					@update:value="value = $event"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
