@@ -23,6 +23,7 @@ import { mapState } from 'vuex'
 import TagSelector from './card/TagSelector.vue'
 import AssignmentSelector from './card/AssignmentSelector.vue'
 import CardItem from './cards/CardItem.vue'
+import { pushRoute } from '../router/navigation.js'
 
 export default {
 	name: 'KeyboardShortcuts',
@@ -94,7 +95,7 @@ export default {
 			}
 
 			if (this.$route.name === 'card' && key.code === 'Escape') {
-				this.$router.push({ name: 'board' })
+				pushRoute(this.$router, { name: 'board' })
 				return
 			}
 

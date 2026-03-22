@@ -53,6 +53,7 @@ import { mapState, mapGetters } from 'vuex'
 import SharingTabSidebar from './SharingTabSidebar.vue'
 import TagsTabSidebar from './TagsTabSidebar.vue'
 import DeletedTabSidebar from './DeletedTabSidebar.vue'
+import { pushRoute } from '../../router/navigation.js'
 import TimelineTabSidebar from './TimelineTabSidebar.vue'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
@@ -95,7 +96,7 @@ export default {
 	},
 	methods: {
 		closeSidebar() {
-			this.$router.push({ name: 'board' })
+			pushRoute(this.$router, { name: 'board' })
 		},
 	},
 }

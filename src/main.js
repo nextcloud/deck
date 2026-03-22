@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router.js'
 import storeFactory from './store/main.js'
@@ -12,12 +13,10 @@ import './shared-init.js'
 import './models/index.js'
 import { initSessions } from './sessions.js'
 import { configureDeckVue, mountVueRoot } from './lib/vue.js'
+import { configureDeckVuex } from './lib/vuex.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
-
-const store = storeFactory()
-initSessions(store)
 
 configureDeckVue(Vue, {
 	translate,
@@ -25,6 +24,10 @@ configureDeckVue(Vue, {
 	installCommonDirectives: true,
 	installErrorHandler: true,
 })
+configureDeckVuex(Vue, Vuex)
+
+const store = storeFactory()
+initSessions(store)
 
 mountVueRoot(Vue, {
 	// eslint-disable-next-line vue/match-component-file-name

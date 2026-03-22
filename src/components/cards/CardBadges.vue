@@ -52,6 +52,7 @@ import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import CommentIcon from 'vue-material-design-icons/CommentOutline.vue'
 import CommentUnreadIcon from 'vue-material-design-icons/CommentAccountOutline.vue'
 import DueDate from './badges/DueDate.vue'
+import { pushRoute } from '../../router/navigation.js'
 
 export default {
 	name: 'CardBadges',
@@ -94,7 +95,7 @@ export default {
 	methods: {
 		openComments() {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
-			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id, tabId: 'comments' } })
+			pushRoute(this.$router, { name: 'card', params: { id: boardId, cardId: this.card.id, tabId: 'comments' } })
 		},
 	},
 }

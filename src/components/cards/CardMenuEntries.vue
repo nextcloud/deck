@@ -70,6 +70,7 @@ import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '../../helpers/dialogs.js'
+import { pushRoute } from '../../router/navigation.js'
 
 import { emit } from '@nextcloud/event-bus'
 
@@ -141,7 +142,7 @@ export default {
 			const boardId = this.card?.boardId ? this.card.boardId : this.$route?.params.id ?? this.currentBoard.id
 
 			if (this.$router) {
-				this.$router?.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
+				pushRoute(this.$router, { name: 'card', params: { id: boardId, cardId: this.card.id } })
 				return
 			}
 
@@ -155,7 +156,7 @@ export default {
 			const undoCard = { ...this.card, deletedAt: 0 }
 			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
 			if (this.$route?.name === 'card') {
-				this.$router.push({ name: 'board' })
+				pushRoute(this.$router, { name: 'board' })
 			}
 		},
 		changeCardDoneStatus() {

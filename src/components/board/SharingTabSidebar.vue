@@ -85,6 +85,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '../../helpers/dialogs.js'
 import { loadState } from '@nextcloud/initial-state'
 import debounce from 'lodash/debounce.js'
+import { pushRoute } from '../../router/navigation.js'
 const SOURCE_TO_SHARE_TYPE = {
 	users: 0,
 	groups: 1,
@@ -242,7 +243,7 @@ export default {
 							})
 							const successMessage = t('deck', 'The board has been transferred to {user}', { user: newOwner })
 							showSuccess(successMessage)
-							this.$router.push({ name: 'main' })
+							pushRoute(this.$router, { name: 'main' })
 						} catch (e) {
 							const errorMessage = t('deck', 'Failed to transfer the board to {user}', { user: newOwner.user })
 							showError(errorMessage)

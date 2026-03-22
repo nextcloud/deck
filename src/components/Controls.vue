@@ -277,6 +277,7 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { pushRoute } from '../router/navigation.js'
 
 export default {
 	name: 'Controls',
@@ -430,9 +431,9 @@ export default {
 		},
 		toggleDetailsView() {
 			if (this.$route.name === 'board.details') {
-				this.$router.push({ name: 'board' })
+				pushRoute(this.$router, { name: 'board' })
 			} else {
-				this.$router.push({ name: 'board.details' })
+				pushRoute(this.$router, { name: 'board.details' })
 			}
 		},
 		clearFilter() {

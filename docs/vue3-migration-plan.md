@@ -86,6 +86,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Centralize router creation options behind [../src/router/config.js](../src/router/config.js) so only the concrete router constructor API remains in [../src/router.js](../src/router.js).
 - [x] Normalize redirect decisions behind a reusable guard helper in [../src/router/config.js](../src/router/config.js) so Router 4 can consume return-based guard results.
 - [x] Isolate duplicate-navigation suppression behind [../src/router/navigation.js](../src/router/navigation.js) instead of inline `router.push(...).catch(...)` calls.
+- [x] Normalize component navigation calls behind [../src/router/navigation.js](../src/router/navigation.js) so route transitions do not depend on Router 3-specific promise behavior.
 - [x] Convert [../src/router.js](../src/router.js) to a `createDeckRouter()` factory so the final Router 4 runtime swap is localized.
 - [ ] Port [../src/router.js](../src/router.js) to Vue Router 4 APIs.
 - [ ] Re-verify navigation guards, redirects, and history base handling.
@@ -94,8 +95,10 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 ### 2.2 Store
 
 - [ ] Upgrade from Vuex 3 to Vuex 4 unless a deliberate Pinia migration is approved separately.
-- [ ] Replace `Vue.use(Vuex)` in [../src/store/main.js](../src/store/main.js), [../src/store/dashboard.js](../src/store/dashboard.js), and [../src/store/overview.js](../src/store/overview.js).
-- [ ] Remove `Vue.set(...)` and `Vue.delete(...)` usage across store modules.
+- [x] Replace module-level `Vue.use(Vuex)` calls in [../src/store/main.js](../src/store/main.js), [../src/store/dashboard.js](../src/store/dashboard.js), and [../src/store/overview.js](../src/store/overview.js) with the shared helpers in [../src/lib/vuex.js](../src/lib/vuex.js).
+- [x] Centralize store construction behind [../src/lib/vuex.js](../src/lib/vuex.js) so the Vuex 4 constructor swap is localized.
+- [x] Replace the safe array-index and existing-property `Vue.set(...)` / `Vue.delete(...)` usage in [../src/store/main.js](../src/store/main.js), [../src/store/stack.js](../src/store/stack.js), [../src/store/comment.js](../src/store/comment.js), [../src/store/card.js](../src/store/card.js), and [../src/store/attachment.js](../src/store/attachment.js).
+- [x] Replace the remaining dynamic-key `Vue.set(...)` usage in [../src/store/comment.js](../src/store/comment.js), [../src/store/attachment.js](../src/store/attachment.js), and [../src/store/card.js](../src/store/card.js) with object/item replacement that is compatible with Vue 3 reactivity.
 - [ ] Re-test reactivity-sensitive flows for board, stack, card, comment, and attachment updates.
 
 ### Exit criteria

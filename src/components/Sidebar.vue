@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { pushRoute } from '../router/navigation.js'
+
 export default {
 	name: 'Sidebar',
 	props: {
@@ -18,7 +20,7 @@ export default {
 	},
 	methods: {
 		closeSidebar() {
-			this.$router.push({ name: 'board' })
+			pushRoute(this.$router, { name: 'board' })
 		},
 		onClickOutside(e) {
 			if (e.target?.dataset?.clickClosesSidebar) {

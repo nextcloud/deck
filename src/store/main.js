@@ -6,11 +6,11 @@
 import 'url-search-params-polyfill'
 
 import { loadState } from '@nextcloud/initial-state'
-import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
+import { createDeckStore } from '../lib/vuex.js'
 import actions from './actions.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
@@ -18,7 +18,6 @@ import comment from './comment.js'
 import trashbin from './trashbin.js'
 import attachment from './attachment.js'
 import overview from './overview.js'
-Vue.use(Vuex)
 
 const apiClient = new BoardApi()
 const debug = process.env.NODE_ENV !== 'production'
@@ -33,7 +32,7 @@ export const BOARD_FILTERS = {
  *
  */
 export default function storeFactory() {
-	return new Vuex.Store({
+	return createDeckStore(Vuex, {
 		modules: {
 			actions,
 			stack: stackModuleFactory(),
@@ -134,10 +133,10 @@ export default function storeFactory() {
 		},
 		mutations: {
 			setFullApp(state, isFullApp) {
-				Vue.set(state, 'isFullApp', isFullApp)
+				state.isFullApp = isFullApp
 			},
 			setHasCardSaveError(state, hasCardSaveError) {
-				Vue.set(state, 'hasCardSaveError', hasCardSaveError)
+				state.hasCardSaveError = hasCardSaveError
 			},
 			SET_CONFIG(state, { key, value }) {
 				const [scope, id, configKey] = key.split(':', 3)
@@ -149,11 +148,11 @@ export default function storeFactory() {
 					})
 
 					if (indexExisting > -1) {
-						Vue.set(state.boards[indexExisting].settings, configKey, value)
+						state.boards[indexExisting].settings[configKey] = value
 					}
 					break
 				default:
-					Vue.set(state.config, key, value)
+					state.config[key] = value
 				}
 			},
 			setSearchQuery(state, searchQuery) {
@@ -166,7 +165,7 @@ export default function storeFactory() {
 				Object.keys(filter).forEach((key) => {
 					switch (key) {
 					case 'due':
-						Vue.set(state.filter, key, filter.due)
+						state.filter[key] = filter.due
 						break
 					default:
 						filter[key].forEach((item) => {
@@ -193,7 +192,7 @@ export default function storeFactory() {
 				})
 
 				if (indexExisting > -1) {
-					Vue.set(state.boards, indexExisting, board)
+					state.boards.splice(indexExisting, 1, board)
 				} else {
 					state.boards.push(board)
 				}
@@ -205,7 +204,7 @@ export default function storeFactory() {
 				})
 
 				if (indexExisting > -1) {
-					Vue.set(state.boards, indexExisting, board)
+					state.boards.splice(indexExisting, 1, board)
 				} else {
 					state.boards.push(board)
 				}
@@ -238,7 +237,7 @@ export default function storeFactory() {
 				state.boards = boards
 			},
 			setSharees(state, shareesUsersAndGroups) {
-				Vue.set(state, 'sharees', shareesUsersAndGroups)
+				state.sharees = shareesUsersAndGroups
 			},
 			setAssignableUsers(state, users) {
 				state.assignableUsers = users
@@ -282,7 +281,7 @@ export default function storeFactory() {
 			updateAclFromCurrentBoard(state, acl) {
 				for (const acl_ in state.currentBoard.acl) {
 					if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
-						Vue.set(state.currentBoard.acl, acl_, acl)
+						state.currentBoard.acl.splice(Number(acl_), 1, acl)
 						break
 					}
 				}
@@ -298,7 +297,7 @@ export default function storeFactory() {
 				}
 
 				if (removeIndex > -1) {
-					Vue.delete(state.currentBoard.acl, removeIndex)
+					state.currentBoard.acl.splice(Number(removeIndex), 1)
 				}
 			},
 			TOGGLE_SHORTCUT_LOCK(state, lock) {

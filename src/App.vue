@@ -38,6 +38,7 @@ import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import CardMoveDialog from './CardMoveDialog.vue'
+import { pushRoute } from './router/navigation.js'
 
 const boardApi = new BoardApi()
 
@@ -121,7 +122,7 @@ export default {
 	},
 	methods: {
 		hideModal() {
-			this.$router.push({ name: 'board' })
+			pushRoute(this.$router, { name: 'board' })
 		},
 	},
 }

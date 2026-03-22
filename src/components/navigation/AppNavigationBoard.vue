@@ -190,6 +190,7 @@ import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
 import { showLoading, showError } from '../../helpers/dialogs.js'
 import { getCurrentUser } from '@nextcloud/auth'
+import { pushRoute } from '../../router/navigation.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -326,7 +327,7 @@ export default {
 				if (newBoard instanceof Error) {
 					throw newBoard
 				}
-				this.$router.push({ name: 'board', params: { id: newBoard.id } })
+				pushRoute(this.$router, { name: 'board', params: { id: newBoard.id } })
 			} catch (e) {
 				OC.Notification.showTemporary(t('deck', 'An error occurred'))
 				console.error(e)
@@ -396,7 +397,7 @@ export default {
 			)
 		},
 		actionDetails() {
-			this.$router.push({ name: 'board.details', params: { id: this.board.id } })
+			pushRoute(this.$router, { name: 'board.details', params: { id: this.board.id } })
 		},
 		applyEdit(e) {
 			this.editing = false
@@ -454,7 +455,7 @@ export default {
 						settings: data,
 					})
 					this.loading = false
-					this.$router.push({ name: 'board', params: { id: newBoard.id } })
+					pushRoute(this.$router, { name: 'board', params: { id: newBoard.id } })
 				} catch (e) {
 					OC.Notification.showTemporary(t('deck', 'An error occurred'))
 					console.error(e)
@@ -464,7 +465,7 @@ export default {
 		redirectToOverviewIfCurrentBoard() {
 			const currentBoardId = Number.parseInt(this.$route?.params?.id, 10)
 			if (!Number.isNaN(currentBoardId) && currentBoardId === this.board.id) {
-				this.$router.push({ name: 'main' })
+				pushRoute(this.$router, { name: 'main' })
 			}
 		},
 	},

@@ -5,7 +5,6 @@
 
 import { CardApi } from './../services/CardApi.js'
 import moment from 'moment'
-import Vue from 'vue'
 
 const apiClient = new CardApi()
 
@@ -195,7 +194,7 @@ export default function cardModuleFactory() {
 				const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 				if (existingIndex !== -1) {
 					const existingCard = state.cards[existingIndex]
-					Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
+					state.cards.splice(existingIndex, 1, Object.assign({}, existingCard, card))
 				} else {
 					state.cards.push(card)
 				}
@@ -209,16 +208,16 @@ export default function cardModuleFactory() {
 			updateCard(state, card) {
 				const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 				if (existingIndex !== -1) {
-					Vue.set(state.cards, existingIndex, Object.assign({}, state.cards[existingIndex], card))
+					state.cards.splice(existingIndex, 1, Object.assign({}, state.cards[existingIndex], card))
 				}
 			},
 			updateCardsReorder(state, cards) {
 				for (const newCard of cards) {
 					const existingIndex = state.cards.findIndex(_card => _card.id === newCard.id)
 					if (existingIndex !== -1) {
-						Vue.set(state.cards[existingIndex], 'order', newCard.order)
-						Vue.set(state.cards[existingIndex], 'stackId', newCard.stackId)
-						Vue.set(state.cards[existingIndex], 'done', newCard.done)
+						state.cards[existingIndex].order = newCard.order
+						state.cards[existingIndex].stackId = newCard.stackId
+						state.cards[existingIndex].done = newCard.done
 					}
 				}
 			},
@@ -240,26 +239,29 @@ export default function cardModuleFactory() {
 			updateCardProperty(state, { card, property }) {
 				const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 				if (existingIndex !== -1) {
-					Vue.set(state.cards[existingIndex], property, card[property])
-					Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
+					state.cards.splice(existingIndex, 1, {
+						...state.cards[existingIndex],
+						[property]: card[property],
+						lastModified: Date.now() / 1000,
+					})
 				}
 			},
 			cardSetAttachmentCount(state, { cardId, count }) {
 				const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
 				if (existingIndex !== -1) {
-					Vue.set(state.cards[existingIndex], 'attachmentCount', count)
+					state.cards[existingIndex].attachmentCount = count
 				}
 			},
 			cardIncreaseAttachmentCount(state, cardId) {
 				const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
 				if (existingIndex !== -1) {
-					Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount + 1)
+					state.cards[existingIndex].attachmentCount = state.cards[existingIndex].attachmentCount + 1
 				}
 			},
 			cardDecreaseAttachmentCount(state, cardId) {
 				const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
 				if (existingIndex !== -1) {
-					Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount - 1)
+					state.cards[existingIndex].attachmentCount = state.cards[existingIndex].attachmentCount - 1
 				}
 			},
 			addNewCard(state, card) {

@@ -156,6 +156,7 @@ import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '../../helpers/dialogs.js'
 import { DeckDragContainer, DeckDraggable } from '../../lib/dnd.js'
+import { pushRoute } from '../../router/navigation.js'
 
 import CardItem from '../cards/CardItem.vue'
 
@@ -338,7 +339,7 @@ export default {
 					this.$refs.card[(this.$refs.card.length - 1)].scrollIntoView()
 				})
 				if (!this.cardDetailsInModal) {
-					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
+					pushRoute(this.$router, { name: 'card', params: { cardId: newCard.id } })
 				}
 			} catch (e) {
 				showError('Could not create card: ' + e.response.data.message)

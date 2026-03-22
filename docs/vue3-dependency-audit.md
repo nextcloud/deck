@@ -19,7 +19,7 @@ Status values:
 | Package | Current usage | Status | Action | Notes |
 | --- | --- | --- | --- | --- |
 | `vue` | runtime | blocked | target `3.5.x` and remove compat-only APIs | Current lockfile is `2.7.16`; move to the stable Vue 3.5 line once the Nextcloud UI layer is ready. |
-| `vue-loader` | SFC build | upgrade | keep `17.4.2+` and pair it with the Vue 3 compiler stack | Current `17.4.2` is already on the modern loader line and does not itself block the migration. |
+| `vue-loader` | SFC build | blocked | keep `15.11.1` while Vue 2.7 is still the active runtime, then switch to `17.4.2+` together with the Vue 3 compiler stack | The current workspace resolved `vue-loader 17.4.2` against Vue 2.7 and `@vue/compiler-sfc 2.7`, which breaks SFC compilation because `vue-loader@17` expects the Vue 3 parser return shape. |
 | `vue-router` | main app router | blocked | target `4.3.x` or newer stable `4.4.x` | Current `3.6.5` is the Vue 2 router line. |
 | `vuex` | main, overview, dashboard stores | blocked | target `4.1.x` | Current `3.6.2` has a Vue 2 peer dependency. Keep the store migration scoped and avoid combining it with Pinia. |
 | `vuex-router-sync` | router-state sync | replace | remove dependency and sync route state manually where needed | Current `5.0.0` peers on Router 3 and Vuex 3 only, and the repo uses it only in [../src/main.js](../src/main.js). |
@@ -54,7 +54,7 @@ Status values:
 | Package | Recommended target |
 | --- | --- |
 | `vue` | `3.5.x` |
-| `vue-loader` | `17.4.2+` |
+| `vue-loader` | `15.11.1` until the Vue 3 runtime switch, then `17.4.2+` |
 | `vue-router` | `4.3.x` or newer stable `4.4.x` |
 | `vuex` | `4.1.x` |
 | `@vue/test-utils` | `2.4.6+` |

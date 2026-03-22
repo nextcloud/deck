@@ -96,6 +96,7 @@ import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import { showError, showWarning } from '../../helpers/dialogs.js'
 import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/CardMenuEntries.vue'
+import { pushRoute } from '../../router/navigation.js'
 
 const capabilities = getCapabilities()
 
@@ -213,7 +214,7 @@ export default {
 				showWarning(t('deck', 'Cannot close unsaved card!'))
 				return
 			}
-			this.$router?.push({ name: 'board' })
+			pushRoute(this.$router, { name: 'board' })
 			this.$emit('close')
 		},
 
