@@ -88,6 +88,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Isolate duplicate-navigation suppression behind [../src/router/navigation.js](../src/router/navigation.js) instead of inline `router.push(...).catch(...)` calls.
 - [x] Normalize component navigation calls behind [../src/router/navigation.js](../src/router/navigation.js) so route transitions do not depend on Router 3-specific promise behavior.
 - [x] Convert [../src/router.js](../src/router.js) to a `createDeckRouter()` factory so the final Router 4 runtime swap is localized.
+- [x] Isolate Router 3 vs Router 4 plugin/constructor differences behind [../src/router/runtime.js](../src/router/runtime.js).
 - [ ] Port [../src/router.js](../src/router.js) to Vue Router 4 APIs.
 - [ ] Re-verify navigation guards, redirects, and history base handling.
 - [x] Re-evaluate `vuex-router-sync` usage. No replacement is required because Deck uses `$route` directly instead of synced store route state.

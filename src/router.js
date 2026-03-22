@@ -4,13 +4,14 @@
  */
 
 import Vue from 'vue'
-import Router from 'vue-router'
+import * as VueRouter from 'vue-router'
 import { getDeckRouterOptions, registerDeckRouterGuards } from './router/config.js'
+import { createDeckRouterInstance, installDeckRouter } from './router/runtime.js'
 
-Vue.use(Router)
+installDeckRouter(Vue, VueRouter)
 
 export function createDeckRouter() {
-	const router = new Router(getDeckRouterOptions())
+	const router = createDeckRouterInstance(VueRouter, getDeckRouterOptions())
 	registerDeckRouterGuards(router)
 	return router
 }

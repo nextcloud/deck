@@ -165,11 +165,16 @@ export function getDeckRouteRedirect(to) {
 export function registerDeckRouterGuards(router) {
 	router.beforeEach((to, from, next) => {
 		const redirect = getDeckRouteRedirect(to)
-		if (redirect) {
-			next(redirect)
+		if (typeof next === 'function') {
+			if (redirect) {
+				next(redirect)
+				return
+			}
+
+			next()
 			return
 		}
 
-		next()
+		return redirect || true
 	})
 }
