@@ -26,7 +26,6 @@ import formatReadableDate from '../mixins/readableDate.js'
 
 const InternalLink = {
 	name: 'InternalLink',
-	functional: true,
 	props: {
 		href: {
 			type: String,
@@ -37,8 +36,8 @@ const InternalLink = {
 			default: '',
 		},
 	},
-	render(createElement, context) {
-		return createElement('a', { attrs: { href: context.props.href }, style: { 'font-weight': 600 } }, context.props.name)
+	render(createElement) {
+		return createElement('a', { attrs: { href: this.href }, style: { 'font-weight': 600 } }, this.name)
 	},
 }
 export default {

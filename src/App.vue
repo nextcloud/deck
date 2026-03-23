@@ -33,7 +33,7 @@
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation.vue'
 import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
-import { NcModal, NcContent, NcAppContent, isMobile } from '@nextcloud/vue'
+import { NcModal, NcContent, NcAppContent, useIsMobile } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
@@ -52,7 +52,11 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
-	mixins: [isMobile],
+	setup() {
+		return {
+			isMobile: useIsMobile(),
+		}
+	},
 	provide() {
 		return {
 			boardApi,

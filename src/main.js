@@ -52,15 +52,12 @@ mountVueRoot(Vue, {
 			this.time = Date.now()
 		}, 1000)
 	},
-	beforeDestroy() {
-		this.clearIntervalTimer()
-	},
 	beforeUnmount() {
 		this.clearIntervalTimer()
 	},
 	methods: {
 		clearIntervalTimer() {
-		clearInterval(this.interval)
+			clearInterval(this.interval)
 		},
 		filter(query) {
 			this.$store.commit('setSearchQuery', query)

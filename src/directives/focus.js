@@ -16,7 +16,8 @@ function focusElement(el, binding) {
 }
 
 function registerActivationHook(el, binding, vnode) {
-	vnode?.context?.$on?.('hook:activated', () => focusElement(el, binding))
+	const instance = binding.instance ?? vnode?.context
+	instance?.$on?.('hook:activated', () => focusElement(el, binding))
 }
 
 // Register a global custom directive called `v-focus`

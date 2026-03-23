@@ -3,30 +3,21 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<VueEasymde ref="editor"
-		v-model="localValue"
-		:configs="configs"
-		@initialized="onInitialized"
-		@input="onModelUpdate"
-		@update:modelValue="onModelUpdate"
-		@blur="$emit('blur', $event)" />
+	<div class="vue-easymde">
+		<textarea ref="textarea"
+			class="vue-easymde-textarea"
+			:value="localValue"
+			@input="onTextareaInput($event.target.value)" />
+	</div>
 </template>
 
 <script>
+import EasyMDE from 'easymde'
+
 export default {
 	name: 'DeckMarkdownEditor',
-	model: {
-		prop: 'value',
-		event: 'input',
-	},
-	components: {
-		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common.js'),
-	},
+	emits: ['initialized', 'update:modelValue', 'blur'],
 	props: {
-		value: {
-			type: String,
-			default: undefined,
-		},
 		modelValue: {
 			type: String,
 			default: undefined,
@@ -38,51 +29,115 @@ export default {
 	},
 	data() {
 		return {
-			localValue: this.getExternalValue(),
+			localValue: this.normalizeValue(this.modelValue),
+			easyMde: null,
+			isInnerUpdate: false,
 		}
 	},
 	watch: {
-		value(newValue) {
-			this.syncLocalValue(newValue)
-		},
 		modelValue(newValue) {
 			this.syncLocalValue(newValue)
 		},
 	},
+	mounted() {
+		this.initializeEditor()
+	},
+	beforeUnmount() {
+		this.easyMde = null
+	},
 	methods: {
-		getExternalValue() {
-			return this.modelValue !== undefined ? this.modelValue : (this.value ?? '')
+		normalizeValue(value) {
+			if (typeof value === 'string') {
+				return value
+			}
+
+			if (value instanceof String) {
+				return value.valueOf()
+			}
+
+			if (value?.target?.value !== undefined) {
+				return value.target.value
+			}
+
+			if (typeof value?.then === 'function') {
+				return this.localValue ?? ''
+			}
+
+			if (value === undefined || value === null) {
+				return ''
+			}
+
+			return this.localValue ?? ''
 		},
-		syncLocalValue(newValue) {
-			if (newValue === undefined || newValue === this.localValue) {
+		initializeEditor() {
+			const textarea = this.$refs.textarea
+			if (!textarea) {
 				return
 			}
 
-			this.localValue = newValue
-		},
-		onInitialized(...args) {
-			this.$emit('initialized', ...args)
-		},
-		onModelUpdate(value) {
-			this.localValue = value
-			this.$emit('input', value)
-			this.$emit('update:modelValue', value)
-		},
-		getEasyMde() {
-			return this.$refs.editor?.easymde
-		},
-		getValue() {
-			return this.getEasyMde()?.value() ?? this.localValue
-		},
-		setValue(value) {
-			const easyMde = this.getEasyMde()
-			if (easyMde) {
-				easyMde.value(value)
+			const editorConfig = {
+				element: textarea,
+				initialValue: this.localValue,
+				...(this.configs || {}),
 			}
 
-			this.localValue = value
-			this.$emit('input', value)
-			this.$emit('update:modelValue', value)
+			this.easyMde = new EasyMDE(editorConfig)
+			this.easyMde.codemirror.on('change', (_instance, changeObject) => {
+				if (changeObject.origin === 'setValue') {
+					return
+				}
+
+				const nextValue = this.easyMde.value()
+				this.isInnerUpdate = true
+				this.localValue = nextValue
+				this.$emit('update:modelValue', nextValue)
+			})
+			this.easyMde.codemirror.on('blur', () => {
+				this.$emit('blur', this.easyMde.value())
+			})
+
+			this.$nextTick(() => {
+				this.$emit('initialized', this.easyMde)
+			})
+		},
+		syncLocalValue(newValue) {
+			if (newValue === undefined) {
+				return
+			}
+
+			const normalizedValue = this.normalizeValue(newValue)
+			if (normalizedValue === this.localValue) {
+				this.isInnerUpdate = false
+				return
+			}
+
+			this.localValue = normalizedValue
+			if (this.easyMde && !this.isInnerUpdate) {
+				this.easyMde.value(normalizedValue)
+			}
+
+			this.isInnerUpdate = false
+		},
+		onTextareaInput(value) {
+			const normalizedValue = this.normalizeValue(value)
+			this.localValue = normalizedValue
+			this.$emit('update:modelValue', normalizedValue)
+		},
+		getEasyMde() {
+			return this.easyMde
+		},
+		getValue() {
+			return this.easyMde?.value() ?? this.localValue
+		},
+		setValue(value) {
+			const normalizedValue = this.normalizeValue(value)
+			if (this.easyMde) {
+				this.isInnerUpdate = true
+				this.easyMde.value(normalizedValue)
+			}
+
+			this.localValue = normalizedValue
+			this.$emit('update:modelValue', normalizedValue)
 		},
 	},
 }

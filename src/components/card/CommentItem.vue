@@ -87,13 +87,21 @@ import moment from 'moment'
 
 const AtMention = {
 	name: 'AtMention',
-	functional: true,
-	render(createElement, context) {
-		const { user, displayName } = context.props
+	props: {
+		user: {
+			type: String,
+			default: '',
+		},
+		displayName: {
+			type: String,
+			default: '',
+		},
+	},
+	render(createElement) {
 		return createElement(
 			'span',
 			{ attrs: { 'data-at-embedded': true, contenteditable: false } },
-			[createElement(NcUserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })],
+			[createElement(NcUserBubble, { props: { user: this.user, displayName: this.displayName }, attrs: { 'data-mention-id': this.user } })],
 		)
 	},
 }

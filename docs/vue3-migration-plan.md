@@ -31,7 +31,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [ ] Confirm the supported Nextcloud and Node.js versions for the migration target.
 - [x] Audit Vue-related dependencies in [vue3-dependency-audit.md](vue3-dependency-audit.md).
 - [x] Confirm the first Vue 3-compatible major versions of `@nextcloud/vue` and `@nextcloud/dialogs` from published releases or maintainers.
-- [ ] Decide which packages can be upgraded directly and which need replacement or isolation.
+- [x] Decide which packages can be upgraded directly and which need replacement or isolation.
 - [x] Record the target versions and replacement candidates from [vue3-dependency-audit.md](vue3-dependency-audit.md).
 - [x] Identify the first local wrapper seams from [vue3-dependency-audit.md](vue3-dependency-audit.md).
 - [ ] Decide whether a temporary migration-build branch is needed after the Nextcloud package upgrade path is confirmed.
@@ -119,13 +119,13 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 3.2 Functional components and render helpers
 
-- [ ] Replace `functional: true` components in [../src/components/ActivityEntry.vue](../src/components/ActivityEntry.vue) and [../src/components/card/CommentItem.vue](../src/components/card/CommentItem.vue).
-- [ ] Review render functions and slot usage for Vue 3 compatibility.
+- [x] Replace `functional: true` components in [../src/components/ActivityEntry.vue](../src/components/ActivityEntry.vue) and [../src/components/card/CommentItem.vue](../src/components/card/CommentItem.vue).
+- [x] Review render functions and slot usage for Vue 3 compatibility.
 
 ### 3.3 Lifecycle hooks and directives
 
-- [ ] Rename component lifecycle hooks such as `beforeDestroy` and `destroyed`.
-- [ ] Port directive hooks in [../src/directives/focus.js](../src/directives/focus.js) to Vue 3 hook names and instance access patterns.
+- [x] Rename component lifecycle hooks such as `beforeDestroy` and `destroyed`.
+- [x] Port directive hooks in [../src/directives/focus.js](../src/directives/focus.js) to Vue 3 hook names and instance access patterns.
 - [ ] Re-test focus handling, keyboard shortcuts, and editor teardown behavior.
 
 ### Exit criteria
@@ -195,8 +195,8 @@ Use this phase only if the dependency audit shows that temporary compat mode wil
 
 - [ ] Confirm the supported Vue 3 version range for the surrounding Nextcloud frontend stack.
 - [x] Confirm whether `@nextcloud/vue` and related helpers can be upgraded directly in the same branch.
-- [ ] Confirm whether `vuex-router-sync` remains viable or should be removed.
-- [ ] Confirm replacement strategy for any Vue 2-only third-party packages.
+- [x] Confirm whether `vuex-router-sync` remains viable or should be removed.
+- [x] Confirm replacement strategy for any Vue 2-only third-party packages.
 
 ## Working notes
 

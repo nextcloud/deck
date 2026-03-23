@@ -7,4 +7,4 @@ export {
 	registerWidget,
 	registerCustomPickerElement,
 	NcCustomPickerRenderResult,
-} from '@nextcloud/vue/dist/Functions/registerReference.js'
+} from '@nextcloud/vue/functions/registerReference'

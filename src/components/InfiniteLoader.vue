@@ -55,15 +55,12 @@ export default {
 		this.observer.observe(this.$refs.sentinel)
 		this.requestLoad()
 	},
-	beforeDestroy() {
-		this.disconnectObserver()
-	},
 	beforeUnmount() {
 		this.disconnectObserver()
 	},
 	methods: {
 		disconnectObserver() {
-		this.observer?.disconnect()
+			this.observer?.disconnect()
 		},
 		reset() {
 			this.isLoading = false

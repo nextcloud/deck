@@ -74,15 +74,12 @@ export default {
 	mounted() {
 		subscribe('deck:card:show-move-dialog', this.openModal)
 	},
-	destroyed() {
-		this.unsubscribeEvents()
-	},
 	unmounted() {
 		this.unsubscribeEvents()
 	},
 	methods: {
 		unsubscribeEvents() {
-		unsubscribe('deck:card:show-move-dialog', this.openModal)
+			unsubscribe('deck:card:show-move-dialog', this.openModal)
 		},
 		openModal(card) {
 			this.card = card

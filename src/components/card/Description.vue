@@ -47,10 +47,10 @@
 			<DeckMarkdownEditor v-else
 				:key="card.id"
 				ref="markdownEditor"
-				v-model="description"
+				:model-value="description"
 				:configs="mdeConfig"
 				@initialized="addKeyListeners"
-				@update:modelValue="updateDescription"
+				@update:modelValue="onMarkdownInput"
 				@blur="saveDescription" />
 		</template>
 
@@ -176,15 +176,31 @@ export default {
 	mounted() {
 		this.setupEditor()
 	},
-	async beforeDestroy() {
-		await this.teardownEditor()
-	},
 	async beforeUnmount() {
 		await this.teardownEditor()
 	},
 	methods: {
+		normalizeDescriptionValue(value) {
+			if (typeof value === 'string') {
+				return value
+			}
+
+			if (value instanceof String) {
+				return value.valueOf()
+			}
+
+			if (typeof value?.then === 'function') {
+				return this.description ?? ''
+			}
+
+			if (value === undefined || value === null) {
+				return ''
+			}
+
+			return this.description ?? ''
+		},
 		async teardownEditor() {
-		await this.destroyEditor()
+			await this.destroyEditor()
 		},
 		getMarkdownEditor() {
 			return this.$refs.markdownEditor?.getEasyMde()
@@ -192,19 +208,20 @@ export default {
 		async setupEditor() {
 			await this.destroyEditor()
 			this.descriptionLastEdit = 0
-			this.description = this.card.description
+			this.description = this.normalizeDescriptionValue(this.card.description)
 			this.editor = await window.OCA.Text.createEditor({
 				el: this.$refs.editor,
-				content: this.card.description,
+				content: this.normalizeDescriptionValue(this.card.description),
 				readOnly: !this.canEdit,
 				onLoaded: () => {
 					this.descriptionLastEdit = 0
 				},
 				onUpdate: ({ markdown }) => {
-					if (this.description === markdown) {
+					const normalizedMarkdown = this.normalizeDescriptionValue(markdown)
+					if (this.description === normalizedMarkdown) {
 						return
 					}
-					this.description = markdown
+					this.description = normalizedMarkdown
 					this.updateDescription()
 				},
 				onFileInsert: () => {
@@ -246,8 +263,12 @@ export default {
 				return
 			}
 			this.descriptionEditing = true
-			this.description = this.card.description
+			this.description = this.normalizeDescriptionValue(this.card.description)
 
+		},
+		onMarkdownInput(newValue) {
+			this.description = this.normalizeDescriptionValue(newValue)
+			this.updateDescription()
 		},
 		hideEditor() {
 			const easyMde = this.getMarkdownEditor()
@@ -272,7 +293,7 @@ export default {
 				return
 			} else {
 				const attachmentString = (asImage ? '!' : '') + '[📎 ' + fileName + '](' + this.attachmentPreview(attachment) + ')'
-				const descString = this.$refs.markdownEditor.getValue()
+				const descString = this.normalizeDescriptionValue(this.$refs.markdownEditor.getValue())
 				const newContent = descString + '\n' + attachmentString
 				this.$refs.markdownEditor.setValue(newContent)
 				this.description = newContent
@@ -326,7 +347,10 @@ export default {
 				this.descriptionSaving = false
 			}
 		},
-		updateDescription() {
+		updateDescription(newValue) {
+			if (newValue !== undefined) {
+				this.description = this.normalizeDescriptionValue(newValue)
+			}
 			this.descriptionLastEdit = Date.now()
 			this.setSaveTimeout()
 		},

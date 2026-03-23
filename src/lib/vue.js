@@ -167,7 +167,8 @@ export function mountVueRoot(Vue, options, target = null) {
 		}
 	}
 
-	const root = new vueModule(options)
+	const VueConstructor = vueModule
+	const root = new VueConstructor(options)
 	const mountedRoot = target ? root.$mount(target) : root.$mount()
 	return {
 		app: null,

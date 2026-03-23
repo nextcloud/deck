@@ -4,4 +4,4 @@
  */
 
 export { NcUserBubble } from '@nextcloud/vue'
-export { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
+export { NcReferenceList } from '@nextcloud/vue/components/NcRichText'

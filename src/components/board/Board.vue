@@ -170,15 +170,12 @@ export default {
 		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
 	},
-	beforeDestroy() {
-		this.closeSession()
-	},
 	beforeUnmount() {
 		this.closeSession()
 	},
 	methods: {
 		closeSession() {
-		this.session?.close()
+			this.session?.close()
 		},
 		async fetchData() {
 			this.loading = true

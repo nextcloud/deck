@@ -7,7 +7,7 @@
 		<div class="selector-wrapper--icon">
 			<TagMultiple :size="20" />
 		</div>
-		<NcSelect :value="assignedLabels"
+		<NcSelect :model-value="assignedLabels"
 			class="selector-wrapper--selector"
 			:multiple="true"
 			:disabled="disabled"
@@ -74,12 +74,13 @@ export default {
 		},
 	},
 	methods: {
-		onSelect(options) {
-			const addedLabel = options.filter(option => !this.card.labels.includes(option) && option.id && option.color)
-			if (addedLabel.length === 0) {
+		onSelect(selection) {
+			const selectedLabels = Array.isArray(selection) ? selection : [selection]
+			const addedLabel = selectedLabels.find((option) => option?.id && option?.color && !this.card.labels.find((label) => label.id === option.id))
+			if (!addedLabel) {
 				return
 			}
-			this.$emit('select', addedLabel[0])
+			this.$emit('select', addedLabel)
 		},
 		onRemove(removedLabel) {
 			this.$emit('remove', removedLabel)
