@@ -7,6 +7,7 @@
 		v-model="localValue"
 		:configs="configs"
 		@initialized="onInitialized"
+		@input="onModelUpdate"
 		@update:modelValue="onModelUpdate"
 		@blur="$emit('blur', $event)" />
 </template>
@@ -14,13 +15,21 @@
 <script>
 export default {
 	name: 'DeckMarkdownEditor',
+	model: {
+		prop: 'value',
+		event: 'input',
+	},
 	components: {
 		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common.js'),
 	},
 	props: {
+		value: {
+			type: String,
+			default: undefined,
+		},
 		modelValue: {
 			type: String,
-			default: '',
+			default: undefined,
 		},
 		configs: {
 			type: Object,
@@ -29,24 +38,34 @@ export default {
 	},
 	data() {
 		return {
-			localValue: this.modelValue,
+			localValue: this.getExternalValue(),
 		}
 	},
 	watch: {
+		value(newValue) {
+			this.syncLocalValue(newValue)
+		},
 		modelValue(newValue) {
-			if (newValue === this.localValue) {
+			this.syncLocalValue(newValue)
+		},
+	},
+	methods: {
+		getExternalValue() {
+			return this.modelValue !== undefined ? this.modelValue : (this.value ?? '')
+		},
+		syncLocalValue(newValue) {
+			if (newValue === undefined || newValue === this.localValue) {
 				return
 			}
 
 			this.localValue = newValue
 		},
-	},
-	methods: {
 		onInitialized(...args) {
 			this.$emit('initialized', ...args)
 		},
 		onModelUpdate(value) {
 			this.localValue = value
+			this.$emit('input', value)
 			this.$emit('update:modelValue', value)
 		},
 		getEasyMde() {
@@ -62,6 +81,7 @@ export default {
 			}
 
 			this.localValue = value
+			this.$emit('input', value)
 			this.$emit('update:modelValue', value)
 		},
 	},
