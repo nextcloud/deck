@@ -9,7 +9,7 @@
 		"vscode": {
 			"extensions": [
 				"felixfbecker.php-intellisense",
-				"octref.vetur"
+				"vue.volar"
 			],
 			"settings": {
 				"php.suggest.basic": false,
