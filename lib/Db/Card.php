@@ -18,6 +18,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method void setTitle(string $title)
  * @method string getDescription()
  * @method string getDescriptionPrev()
+ * @method string getColor()
+ * @method string setColor(string $color)
  * @method int getStackId()
  * @method void setStackId(int $stackId)
  * @method int getOrder()
@@ -65,6 +67,7 @@ class Card extends RelationalEntity {
 
 	protected string $title = '';
 	protected $description;
+	protected $color = null;
 	protected $descriptionPrev;
 	protected $stackId;
 	protected $type;

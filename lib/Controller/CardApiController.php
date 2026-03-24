@@ -68,8 +68,8 @@ class CardApiController extends ApiController {
 	 *
 	 * Get a specific card.
 	 */
-	public function create($title, $type = 'plain', $order = 999, $description = '', $duedate = null, $labels = [], $users = []) {
-		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description, $duedate);
+	public function create($title, $type = 'plain', $order = 999, $description = '', $duedate = null, $labels = [], $users = [], ?string $color = null) {
+		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description, $duedate, $color);
 
 		foreach ($labels as $labelId) {
 			$this->cardService->assignLabel($card->getId(), $labelId);
@@ -88,9 +88,9 @@ class CardApiController extends ApiController {
 	#[NoAdminRequired]
 	#[CORS]
 	#[NoCSRFRequired]
-	public function update(string $title, $type, string $owner, string $description = '', int $order = 0, $duedate = null, $archived = null): DataResponse {
+	public function update(string $title, $type, string $owner, string $description = '', int $order = 0, $duedate = null, $archived = null, ?string $color = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams()) ? new OptionalNullableValue($this->request->getParam('done', null)) : null;
-		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done);
+		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done, $color);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 

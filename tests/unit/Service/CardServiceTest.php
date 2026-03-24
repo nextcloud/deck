@@ -221,6 +221,7 @@ class CardServiceTest extends TestCase {
 			'order' => 999,
 			'type' => 'text',
 			'id' => 0,
+			'color' => '00ff00',
 		]);
 		$stack = Stack::fromParams([
 			'id' => 123,
@@ -233,13 +234,14 @@ class CardServiceTest extends TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($stack);
-		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
+		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin', '', null, '00ff00');
 
 		$this->assertEquals($b->getTitle(), 'Card title');
 		$this->assertEquals($b->getOwner(), 'admin');
 		$this->assertEquals($b->getType(), 'text');
 		$this->assertEquals($b->getOrder(), 999);
 		$this->assertEquals($b->getStackId(), 123);
+		$this->assertEquals($b->getColor(), '00ff00');
 	}
 
 	public function testClone() {
@@ -350,6 +352,7 @@ class CardServiceTest extends TestCase {
 			'title' => 'Card title',
 			'archived' => 'false',
 			'stackId' => 234,
+			'color' => '00ff00',
 		]);
 		$stack = Stack::fromParams([
 			'id' => 234,
@@ -364,13 +367,14 @@ class CardServiceTest extends TestCase {
 			->method('find')
 			->with(234)
 			->willReturn($stack);
-		$actual = $this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, '2017-01-01 00:00:00', null);
+		$actual = $this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, '2017-01-01 00:00:00', null, null, null, 'ffffff');
 		$this->assertEquals('newtitle', $actual->getTitle());
 		$this->assertEquals(234, $actual->getStackId());
 		$this->assertEquals('text', $actual->getType());
 		$this->assertEquals(999, $actual->getOrder());
 		$this->assertEquals('foo', $actual->getDescription());
 		$this->assertEquals(new \DateTime('2017-01-01T00:00:00+00:00'), $actual->getDuedate());
+		$this->assertEquals('ffffff', $actual->getColor());
 	}
 
 	public function testUpdateArchived() {

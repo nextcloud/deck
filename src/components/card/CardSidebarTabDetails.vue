@@ -5,6 +5,10 @@
 
 <template>
 	<div v-if="copiedCard">
+		<ColorSelector :card="card"
+			:can-edit="canEdit"
+			@change="updateCardColor" />
+
 		<TagSelector :card="card"
 			:labels="currentBoard.labels"
 			:disabled="!canEdit"
@@ -52,6 +56,7 @@ import Description from './Description.vue'
 import TagSelector from './TagSelector.vue'
 import AssignmentSelector from './AssignmentSelector.vue'
 import DueDateSelector from './DueDateSelector.vue'
+import ColorSelector from './ColorSelector.vue'
 import { debounce } from 'lodash'
 
 export default {
@@ -62,6 +67,7 @@ export default {
 		TagSelector,
 		Description,
 		NcCollectionList,
+		ColorSelector,
 	},
 	mixins: [Color],
 	props: {
@@ -190,6 +196,13 @@ export default {
 		},
 		parse(value) {
 			return moment(value).toDate()
+		},
+
+		updateCardColor(val) {
+			this.$store.dispatch('updateCardColor', {
+				...this.copiedCard,
+				color: val,
+			})
 		},
 	},
 }

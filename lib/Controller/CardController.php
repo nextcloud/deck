@@ -46,8 +46,8 @@ class CardController extends Controller {
 	}
 
 	#[NoAdminRequired]
-	public function create(string $title, int $stackId, string $type = 'plain', int $order = 999, string $description = '', $duedate = null, array $labels = [], array $users = []): Card {
-		$card = $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, $duedate);
+	public function create(string $title, int $stackId, string $type = 'plain', int $order = 999, string $description = '', $duedate = null, array $labels = [], array $users = [], ?string $color = null): Card {
+		$card = $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, $duedate, $color);
 
 		foreach ($labels as $label) {
 			$this->assignLabel($card->getId(), $label);
@@ -64,11 +64,11 @@ class CardController extends Controller {
 	 * @param $duedate
 	 */
 	#[NoAdminRequired]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, $archived = null): Card {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, $archived = null, ?string $color = null): Card {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
 			: null;
-		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, $archived, $done);
+		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, $archived, $done, $color);
 	}
 
 	#[NoAdminRequired]
