@@ -35,6 +35,9 @@ class CommentService {
 	}
 
 	public function list(int $cardId, int $limit = 20, int $offset = 0): DataResponse {
+		if ($limit > 200) {
+			$limit = 200;
+		}
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$comments = $this->commentsManager->getForObject(Application::COMMENT_ENTITY_TYPE, (string)$cardId, $limit, $offset);
 		$result = [];
