@@ -66,8 +66,11 @@ export default function storeFactory() {
 		},
 		getters: {
 			config: state => (key) => {
-				if (!state.isFullApp && key === 'cardDetailsInModal') {
-					return true
+				if (key === 'cardDetailsInModal') {
+					if (!state.isFullApp) {
+						return true
+					}
+					return state.config[key] ?? true
 				}
 
 				return state.config[key]

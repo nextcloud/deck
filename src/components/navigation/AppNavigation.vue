@@ -179,7 +179,7 @@ export default {
 	.app-navigation-entry__settings {
 		height: auto !important;
 		overflow: hidden !important;
-		padding-top: 0 !important;
+		padding: 8px !important;
 		// Prevent shrinking or growing
 		flex: 0 0 auto;
 	}

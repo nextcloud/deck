@@ -43,10 +43,10 @@ function unbindHandler(el) {
 }
 
 export default {
-	bind(el, binding) {
+	mounted(el, binding) {
 		bindHandler(el, binding)
 	},
-	update(el, binding) {
+	updated(el, binding) {
 		if (binding.value === binding.oldValue) {
 			return
 		}
@@ -54,7 +54,7 @@ export default {
 		unbindHandler(el)
 		bindHandler(el, binding)
 	},
-	unbind(el) {
+	unmounted(el) {
 		unbindHandler(el)
 	},
 }

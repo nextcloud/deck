@@ -126,6 +126,9 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 - [x] Rename component lifecycle hooks such as `beforeDestroy` and `destroyed`.
 - [x] Port directive hooks in [../src/directives/focus.js](../src/directives/focus.js) to Vue 3 hook names and instance access patterns.
+- [x] Port directive hooks in [../src/directives/clickOutside.js](../src/directives/clickOutside.js) to Vue 3 hook names (`mounted`, `updated`, `unmounted`).
+- [x] Remove deprecated `@nextcloud/vue` 8.x NcModal props (`close-button-contained`, `clear-view-delay`) from [../src/App.vue](../src/App.vue) and [../src/components/board/Board.vue](../src/components/board/Board.vue).
+- [x] Add frontend default for `cardDetailsInModal` config getter (`?? true`) to match the backend default and prevent modal regression when initial state is unavailable.
 - [ ] Re-test focus handling, keyboard shortcuts, and editor teardown behavior.
 
 ### Exit criteria

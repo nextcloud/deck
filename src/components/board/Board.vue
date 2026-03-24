@@ -74,8 +74,6 @@
 		</transition>
 		<GlobalSearchResults v-if="isFullApp" />
 		<NcModal v-if="localModal"
-			:clear-view-delay="0"
-			:close-button-contained="true"
 			size="large"
 			@close="localModal = null">
 			<div class="modal__content modal__card">

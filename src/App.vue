@@ -13,8 +13,6 @@
 		<div v-if="$route.params.id || $route.params.cardId">
 			<NcModal v-if="cardDetailsInModal && $route.params.cardId"
 				:name="t('deck', 'Card details')"
-				:clear-view-delay="0"
-				:close-button-contained="true"
 				size="large"
 				@close="hideModal()">
 				<div class="modal__content modal__card">
