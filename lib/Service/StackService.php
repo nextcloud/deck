@@ -304,4 +304,37 @@ class StackService {
 
 		return $result;
 	}
+
+	/**
+	 * Set or unset a stack as the "done column" for the board
+	 *
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function setDoneStack(int $stackId, int $boardId, bool $isDone): void {
+		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_MANAGE);
+
+		if ($this->boardService->isArchived($this->stackMapper, $stackId)) {
+			throw new NoPermissionException('Operation not allowed. This board is archived.');
+		}
+
+		if ($isDone) {
+			$this->stackMapper->clearDoneColumnForBoard($boardId);
+			// Mark all existing cards in the stack as done
+			/** @var Card $card */
+			foreach ($this->cardMapper->findAll($stackId) as $card) {
+				if ($card->getDone() === null) {
+					$card->setDone(new \DateTime());
+					$this->cardMapper->update($card);
+				}
+			}
+		}
+
+		$this->stackMapper->setIsDoneColumn($stackId, $isDone);
+		$this->changeHelper->boardChanged($boardId);
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
+	}
 }

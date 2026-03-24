@@ -218,6 +218,7 @@ export default function cardModuleFactory() {
 					if (existingIndex !== -1) {
 						Vue.set(state.cards[existingIndex], 'order', newCard.order)
 						Vue.set(state.cards[existingIndex], 'stackId', newCard.stackId)
+						Vue.set(state.cards[existingIndex], 'done', newCard.done)
 					}
 				}
 			},
@@ -333,7 +334,7 @@ export default function cardModuleFactory() {
 				const updatedCard = await apiClient[call](card)
 				commit('updateCard', updatedCard)
 			},
-			async changeCardDoneStatus({ commit }, card) {
+			async changeCardDoneStatus({ commit, dispatch, rootState }, card) {
 				let call = 'markCardAsDone'
 				if (card.done === false) {
 					call = 'markCardAsUndone'
@@ -341,6 +342,16 @@ export default function cardModuleFactory() {
 
 				const updatedCard = await apiClient[call](card)
 				commit('updateCardProperty', { property: 'done', card: updatedCard })
+
+				if (card.done !== false) {
+					const cardStack = rootState.stack.stacks.find(s => s.id === card.stackId)
+					const doneStack = rootState.stack.stacks.find(
+						s => s.boardId === cardStack?.boardId && s.isDoneColumn,
+					)
+					if (doneStack && card.stackId !== doneStack.id) {
+						await dispatch('reorderCard', { ...updatedCard, stackId: doneStack.id, order: 0 })
+					}
+				}
 			},
 			async assignCardToUser({ commit }, { card, assignee }) {
 				const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)

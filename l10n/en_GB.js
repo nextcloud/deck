@@ -237,6 +237,8 @@ OC.L10N.register(
     "Edit list title" : "Edit list title",
     "Archive all cards" : "Archive all cards",
     "Unarchive all cards" : "Unarchive all cards",
+    "Do not set cards as \"done\"" : "Do not set cards as \"done\"",
+    "Set cards as \"done\"" : "Set cards as \"done\"",
     "Delete list" : "Delete list",
     "Archive all cards in this list" : "Archive all cards in this list",
     "Unarchive all cards in this list" : "Unarchive all cards in this list",

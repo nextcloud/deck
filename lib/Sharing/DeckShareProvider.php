@@ -1024,7 +1024,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		while ($row = $cursor->fetch()) {
 			$type = (int)$row['share_type'];
 			if ($type === IShare::TYPE_DECK) {
-				$cardId = $row['share_with'];
+				$cardId = (int)$row['share_with'];
 				$boardId = $this->cardMapper->findBoardId($cardId);
 				if ($boardId === null) {
 					continue;

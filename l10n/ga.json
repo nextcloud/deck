@@ -235,6 +235,8 @@
     "Edit list title" : "Cuir teideal an liosta in eagar",
     "Archive all cards" : "Cartlann na cártaí go léir",
     "Unarchive all cards" : "Díchairtigh na cártaí go léir",
+    "Do not set cards as \"done\"" : "Ná socraigh cártaí mar \"déanta\"",
+    "Set cards as \"done\"" : "Socraigh cártaí mar \"déanta\"",
     "Delete list" : "Scrios an liosta",
     "Archive all cards in this list" : "Cuir gach cárta sa liosta seo i gcartlann",
     "Unarchive all cards in this list" : "Déan na cártaí go léir sa liosta seo a dhíchartlannú",
