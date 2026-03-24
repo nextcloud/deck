@@ -235,7 +235,7 @@ describe('Board title editing', function() {
 				cy.get(`.app-navigation__list .app-navigation-entry:contains("${boardBTitle}")`)
 					.parent()
 					.find('button[aria-label="Actions"]')
-					.click()
+					.click({ force: true }) // element is only visible on hover, and cypress can't hover
 
 				cy.get('button:contains("Edit board")').click()
 
