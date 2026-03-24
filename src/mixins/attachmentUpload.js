@@ -26,7 +26,7 @@ export default {
 				return
 			}
 
-			this.$set(this.uploadQueue, file.name, { name: file.name, progress: 0 })
+			this.uploadQueue[file.name] = { name: file.name, progress: 0 }
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
 			bodyFormData.append('type', type)
@@ -39,7 +39,7 @@ export default {
 						onUploadProgress: (e) => {
 							const percentCompleted = Math.round((e.loaded * 100) / e.total)
 							console.debug(percentCompleted)
-							this.$set(this.uploadQueue[file.name], 'progress', percentCompleted)
+							this.uploadQueue[file.name].progress = percentCompleted
 						},
 					})
 				} catch (err) {
@@ -50,7 +50,7 @@ export default {
 						showError(err.response.data ? err.response.data.message : 'Failed to upload file')
 					}
 				}
-				this.$delete(this.uploadQueue, file.name)
+				delete this.uploadQueue[file.name]
 			})
 
 		},

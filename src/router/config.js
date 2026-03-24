@@ -138,15 +138,6 @@ export function createDeckRoutes() {
 	]
 }
 
-export function getDeckRouterOptions() {
-	return {
-		mode: 'history',
-		base: getDeckRouterBase(),
-		linkActiveClass: 'active',
-		routes: createDeckRoutes(),
-	}
-}
-
 export function getDeckRouteRedirect(to) {
 	if (to.hash.substring(0, 2) === '#/') {
 		return normalizeRedirectPath(to.fullPath)
@@ -163,18 +154,7 @@ export function getDeckRouteRedirect(to) {
 }
 
 export function registerDeckRouterGuards(router) {
-	router.beforeEach((to, from, next) => {
-		const redirect = getDeckRouteRedirect(to)
-		if (typeof next === 'function') {
-			if (redirect) {
-				next(redirect)
-				return
-			}
-
-			next()
-			return
-		}
-
-		return redirect || true
+	router.beforeEach((to) => {
+		return getDeckRouteRedirect(to) || true
 	})
 }

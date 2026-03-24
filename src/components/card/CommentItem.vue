@@ -83,6 +83,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
 import relativeDate from '../../mixins/relativeDate.js'
 import ReplyIcon from 'vue-material-design-icons/ReplyOutline.vue'
+import { h } from 'vue'
 import moment from 'moment'
 
 const AtMention = {
@@ -97,11 +98,11 @@ const AtMention = {
 			default: '',
 		},
 	},
-	render(createElement) {
-		return createElement(
+	render() {
+		return h(
 			'span',
-			{ attrs: { 'data-at-embedded': true, contenteditable: false } },
-			[createElement(NcUserBubble, { props: { user: this.user, displayName: this.displayName }, attrs: { 'data-mention-id': this.user } })],
+			{ 'data-at-embedded': true, contenteditable: false },
+			[h(NcUserBubble, { user: this.user, displayName: this.displayName, 'data-mention-id': this.user })],
 		)
 	},
 }

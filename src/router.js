@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as Vue from 'vue'
-import * as VueRouter from 'vue-router'
-import { getDeckRouterOptions, registerDeckRouterGuards } from './router/config.js'
-import { createDeckRouterInstance, installDeckRouter } from './router/runtime.js'
-
-installDeckRouter(Vue, VueRouter)
+import { createRouter, createWebHistory } from 'vue-router'
+import { createDeckRoutes, getDeckRouterBase, registerDeckRouterGuards } from './router/config.js'
 
 export function createDeckRouter() {
-	const router = createDeckRouterInstance(VueRouter, getDeckRouterOptions())
+	const router = createRouter({
+		history: createWebHistory(getDeckRouterBase()),
+		routes: createDeckRoutes(),
+		linkActiveClass: 'active',
+	})
 	registerDeckRouterGuards(router)
 	return router
 }

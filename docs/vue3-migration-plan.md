@@ -50,7 +50,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Replace `Vue.prototype` usage in [../src/main.js](../src/main.js), [../src/init-collections.js](../src/init-collections.js), [../src/init-dashboard.js](../src/init-dashboard.js), [../src/init-reference.js](../src/init-reference.js), and [../src/init-talk.js](../src/init-talk.js) with shared bootstrap configuration.
 - [x] Introduce shared Vue 3 mount helpers for standalone entrypoints.
 - [x] Normalize entrypoint Vue imports so both Vue 2 default exports and Vue 3 module-namespace imports work through the shared helpers.
-- [ ] Move global properties, directives, and plugins to app-level registration.
+- [x] Move global properties, directives, and plugins to app-level registration.
 
 ### 1.1a Build isolation seams first
 
@@ -82,7 +82,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 2.1 Router
 
-- [ ] Upgrade routing from Vue Router 3 to the Vue 3-compatible router line used by `@nextcloud/vue 9.x`.
+- [x] Upgrade routing from Vue Router 3 to the Vue 3-compatible router line used by `@nextcloud/vue 9.x`.
 - [x] Isolate router base URL logic, route records, and global guards behind reusable helpers in [../src/router/config.js](../src/router/config.js).
 - [x] Centralize router creation options behind [../src/router/config.js](../src/router/config.js) so only the concrete router constructor API remains in [../src/router.js](../src/router.js).
 - [x] Normalize redirect decisions behind a reusable guard helper in [../src/router/config.js](../src/router/config.js) so the Vue 3 router can consume return-based guard results.
@@ -90,19 +90,19 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Normalize component navigation calls behind [../src/router/navigation.js](../src/router/navigation.js) so route transitions do not depend on Router 3-specific promise behavior.
 - [x] Convert [../src/router.js](../src/router.js) to a `createDeckRouter()` factory so the final Vue 3 router runtime swap is localized.
 - [x] Isolate Router 3 vs Router 4/5 plugin and constructor differences behind [../src/router/runtime.js](../src/router/runtime.js).
-- [ ] Port [../src/router.js](../src/router.js) to the Vue 3 router APIs.
-- [ ] Re-verify navigation guards, redirects, and history base handling.
+- [x] Port [../src/router.js](../src/router.js) to the Vue 3 router APIs.
+- [x] Re-verify navigation guards, redirects, and history base handling.
 - [x] Re-evaluate `vuex-router-sync` usage. No replacement is required because Deck uses `$route` directly instead of synced store route state.
 
 ### 2.2 Store
 
-- [ ] Upgrade from Vuex 3 to Vuex 4 unless a deliberate Pinia migration is approved separately.
+- [x] Upgrade from Vuex 3 to Vuex 4 unless a deliberate Pinia migration is approved separately.
 - [x] Replace module-level `Vue.use(Vuex)` calls in [../src/store/main.js](../src/store/main.js), [../src/store/dashboard.js](../src/store/dashboard.js), and [../src/store/overview.js](../src/store/overview.js) with the shared helpers in [../src/lib/vuex.js](../src/lib/vuex.js).
 - [x] Centralize store construction behind [../src/lib/vuex.js](../src/lib/vuex.js) so the Vuex 4 constructor swap is localized.
 - [x] Isolate Vuex 3 vs Vuex 4 plugin/constructor differences behind [../src/lib/vuex.js](../src/lib/vuex.js).
 - [x] Replace the safe array-index and existing-property `Vue.set(...)` / `Vue.delete(...)` usage in [../src/store/main.js](../src/store/main.js), [../src/store/stack.js](../src/store/stack.js), [../src/store/comment.js](../src/store/comment.js), [../src/store/card.js](../src/store/card.js), and [../src/store/attachment.js](../src/store/attachment.js).
 - [x] Replace the remaining dynamic-key `Vue.set(...)` usage in [../src/store/comment.js](../src/store/comment.js), [../src/store/attachment.js](../src/store/attachment.js), and [../src/store/card.js](../src/store/card.js) with object/item replacement that is compatible with Vue 3 reactivity.
-- [ ] Re-test reactivity-sensitive flows for board, stack, card, comment, and attachment updates.
+- [x] Re-test reactivity-sensitive flows for board, stack, card, comment, and attachment updates.
 
 ### Exit criteria
 
@@ -114,8 +114,8 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 ### 3.1 Template syntax
 
 - [x] Replace `.sync` patterns with `v-model:prop` or explicit `update:prop` events.
-- [ ] Verify component contracts for all Nextcloud Vue components that currently use `.sync`.
-- [ ] Re-test dialogs, board controls, sidebars, settings, and clone/export flows.
+- [x] Verify component contracts for all Nextcloud Vue components that currently use `.sync`.
+- [x] Re-test dialogs, board controls, sidebars, settings, and clone/export flows.
 
 ### 3.2 Functional components and render helpers
 
@@ -129,7 +129,7 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 - [x] Port directive hooks in [../src/directives/clickOutside.js](../src/directives/clickOutside.js) to Vue 3 hook names (`mounted`, `updated`, `unmounted`).
 - [x] Remove deprecated `@nextcloud/vue` 8.x NcModal props (`close-button-contained`, `clear-view-delay`) from [../src/App.vue](../src/App.vue) and [../src/components/board/Board.vue](../src/components/board/Board.vue).
 - [x] Add frontend default for `cardDetailsInModal` config getter (`?? true`) to match the backend default and prevent modal regression when initial state is unavailable.
-- [ ] Re-test focus handling, keyboard shortcuts, and editor teardown behavior.
+- [x] Re-test focus handling, keyboard shortcuts, and editor teardown behavior.
 
 ### Exit criteria
 
@@ -139,24 +139,24 @@ Use this file as the source of truth for sequencing, progress tracking, and exit
 
 ### 4.1 Small standalone pickers and helpers
 
-- [ ] Migrate [../src/helpers/selector.js](../src/helpers/selector.js).
-- [ ] Migrate [../src/views/FileSharingPicker.js](../src/views/FileSharingPicker.js).
-- [ ] Verify collaboration board and card selector flows.
+- [x] Migrate [../src/helpers/selector.js](../src/helpers/selector.js).
+- [x] Migrate [../src/views/FileSharingPicker.js](../src/views/FileSharingPicker.js).
+- [x] Verify collaboration board and card selector flows.
 
 ### 4.2 Dashboard widgets
 
-- [ ] Migrate [../src/init-dashboard.js](../src/init-dashboard.js).
-- [ ] Verify upcoming, today, and tomorrow dashboard widgets.
+- [x] Migrate [../src/init-dashboard.js](../src/init-dashboard.js).
+- [x] Verify upcoming, today, and tomorrow dashboard widgets.
 
 ### 4.3 Reference widgets
 
-- [ ] Migrate [../src/init-reference.js](../src/init-reference.js).
-- [ ] Verify board, card, comment, and custom picker render lifecycles.
+- [x] Migrate [../src/init-reference.js](../src/init-reference.js).
+- [x] Verify board, card, comment, and custom picker render lifecycles.
 
 ### 4.4 Main app shell
 
-- [ ] Migrate [../src/main.js](../src/main.js).
-- [ ] Verify board loading, navigation, sidebar behavior, modal behavior, and unified search integration.
+- [x] Migrate [../src/main.js](../src/main.js).
+- [x] Verify board loading, navigation, sidebar behavior, modal behavior, and unified search integration.
 
 ### Exit criteria
 

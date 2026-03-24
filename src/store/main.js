@@ -6,11 +6,10 @@
 import 'url-search-params-polyfill'
 
 import { loadState } from '@nextcloud/initial-state'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
-import { createDeckStore } from '../lib/vuex.js'
 import actions from './actions.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
@@ -32,7 +31,7 @@ export const BOARD_FILTERS = {
  *
  */
 export default function storeFactory() {
-	return createDeckStore(Vuex, {
+	return createStore({
 		modules: {
 			actions,
 			stack: stackModuleFactory(),

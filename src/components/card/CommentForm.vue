@@ -26,14 +26,15 @@ export default {
 		NcRichContenteditable,
 	},
 	props: {
-		value: {
+		modelValue: {
 			type: String,
 			default: '',
 		},
 	},
+	emits: ['update:modelValue', 'submit'],
 	data() {
 		return {
-			commentText: this.value,
+			commentText: this.modelValue,
 			error: null,
 		}
 	},
@@ -55,7 +56,7 @@ export default {
 		},
 	},
 	watch: {
-		value(val) {
+		modelValue(val) {
 			this.commentText = val
 		},
 	},
@@ -82,7 +83,7 @@ export default {
 				const temp = document.createElement('div')
 				temp.innerHTML = content
 				const text = temp.textContent || temp.innerText || ''
-				this.$emit('input', text)
+				this.$emit('update:modelValue', text)
 				this.$emit('submit', text)
 			}
 		},
