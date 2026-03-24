@@ -99,6 +99,10 @@ export default {
 	padding-left: 0 !important;
 }
 
+.v-select.vs--open:deep(.vs__dropdown-toggle) {
+	padding: var(--border-width-input, 2px);
+}
+
 .tag {
 	flex-grow: 0;
 	flex-shrink: 1;
