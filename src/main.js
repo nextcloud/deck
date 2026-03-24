@@ -14,6 +14,8 @@ import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
 import { initSessions } from './sessions.js'
+import { useActionsStore } from './stores/actions.js'
+import { createPinia, PiniaVuePlugin } from 'pinia'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
@@ -41,6 +43,9 @@ Vue.config.errorHandler = (err, vm, info) => {
 	console.error(err)
 }
 
+const pinia = createPinia()
+Vue.use(PiniaVuePlugin)
+
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#content',
@@ -48,6 +53,7 @@ new Vue({
 	name: 'Deck',
 	router,
 	store,
+	pinia,
 	data() {
 		return {
 			time: Date.now(),
@@ -115,5 +121,6 @@ window.OCA.Deck.registerCardAction = ({ label, callback, icon }) => {
 		callback,
 		icon,
 	}
-	store.dispatch('addCardAction', cardAction)
+	const actionsStore = useActionsStore()
+	actionsStore.addCardAction(cardAction)
 }

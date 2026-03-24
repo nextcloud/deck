@@ -11,7 +11,6 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
-import actions from './actions.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
 import comment from './comment.js'
@@ -35,7 +34,6 @@ export const BOARD_FILTERS = {
 export default function storeFactory() {
 	return new Vuex.Store({
 		modules: {
-			actions,
 			stack: stackModuleFactory(),
 			card: cardModuleFactory(),
 			comment,
@@ -385,6 +383,7 @@ export default function storeFactory() {
 			 *
 			 * @param commit.commit
 			 * @param commit
+			 * @param commit.state
 			 * @param board The board to update.
 			 * @return {Promise<void>}
 			 */

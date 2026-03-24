@@ -149,7 +149,7 @@ export default {
 			currentBoard: (state) => state.currentBoard,
 			hasCardSaveError: (state) => state.hasCardSaveError,
 		}),
-		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
+		...mapGetters(['canEdit', 'assignables', 'stackById']),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
