@@ -14,6 +14,7 @@
 			<NcModal v-if="cardDetailsInModal && $route.params.cardId"
 				:name="t('deck', 'Card details')"
 				size="large"
+				:close-on-click-outside="true"
 				@close="hideModal()">
 				<div class="modal__content modal__card">
 					<router-view name="sidebar" />
