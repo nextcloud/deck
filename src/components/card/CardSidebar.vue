@@ -26,7 +26,56 @@
 				{{ t('deck', 'Open in bigger view') }}
 			</NcActionButton>
 
-			<CardMenuEntries :card="currentCard" :hide-details-entry="true" />
+			<NcActionButton v-if="canEdit" :close-after-click="true" @click="editTitleFromEntries">
+				<template #icon>
+					<PencilIcon :size="20" decorative />
+				</template>
+				{{ t('deck', 'Edit title') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit && !isCurrentUserAssigned"
+				icon="icon-user"
+				:close-after-click="true"
+				@click="assignCardToMe()">
+				{{ t('deck', 'Assign to me') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit && isCurrentUserAssigned"
+				icon="icon-user"
+				:close-after-click="true"
+				@click="unassignCardFromMe()">
+				{{ t('deck', 'Unassign myself') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit"
+				icon="icon-checkmark"
+				:close-after-click="true"
+				:disabled="isInDoneColumn && !!currentCard.done"
+				@click="changeCardDoneStatus()">
+				{{ currentCard.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit"
+				icon="icon-external"
+				:close-after-click="true"
+				@click="openCardMoveDialog">
+				{{ t('deck', 'Move/copy card') }}
+			</NcActionButton>
+			<NcActionButton v-for="action in cardActions"
+				:key="action.label"
+				:close-after-click="true"
+				:icon="action.icon"
+				@click="action.callback(cardRichObject)">
+				{{ action.label }}
+			</NcActionButton>
+			<NcActionButton v-if="canEditBoard" :close-after-click="true" @click="archiveUnarchiveCard()">
+				<template #icon>
+					<ArchiveIcon :size="20" decorative />
+				</template>
+				{{ currentCard.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+			</NcActionButton>
+			<NcActionButton v-if="canEdit"
+				icon="icon-delete"
+				:close-after-click="true"
+				@click="deleteCard()">
+				{{ t('deck', 'Delete card') }}
+			</NcActionButton>
 		</template>
 		<template #description>
 			<NcReferenceList v-if="currentCard.referenceData"
@@ -85,17 +134,19 @@ import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
 import CardSidebarTabComments from './CardSidebarTabComments.vue'
 import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
 import relativeDate from '../../mixins/relativeDate.js'
+import cardMenu from '../../mixins/cardMenu.js'
 import moment from '@nextcloud/moment'
+import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import HomeIcon from 'vue-material-design-icons/Home.vue'
 import HomeOutlineIcon from 'vue-material-design-icons/HomeOutline.vue'
 import CommentIcon from 'vue-material-design-icons/Comment.vue'
 import CommentOutlineIcon from 'vue-material-design-icons/CommentOutline.vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 
 import { showError, showWarning } from '../../helpers/dialogs.js'
 import { getLocale } from '@nextcloud/l10n'
-import CardMenuEntries from '../cards/CardMenuEntries.vue'
 import { pushRoute } from '../../router/navigation.js'
 
 const capabilities = getCapabilities()
@@ -112,14 +163,15 @@ export default {
 		CardSidebarTabActivity,
 		CardSidebarTabDetails,
 		ActivityIcon,
+		ArchiveIcon,
 		AttachmentIcon,
 		CommentIcon,
 		CommentOutlineIcon,
 		HomeIcon,
 		HomeOutlineIcon,
-		CardMenuEntries,
+		PencilIcon,
 	},
-	mixins: [relativeDate],
+	mixins: [relativeDate, cardMenu],
 	props: {
 		id: {
 			type: Number,
@@ -151,9 +203,12 @@ export default {
 			currentBoard: (state) => state.currentBoard,
 			hasCardSaveError: (state) => state.hasCardSaveError,
 		}),
-		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
+		...mapGetters(['assignables']),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
+		},
+		card() {
+			return this.currentCard
 		},
 		subtitle() {
 			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ⸱ ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
