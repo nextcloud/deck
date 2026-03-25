@@ -124,10 +124,10 @@ export default {
 		display: flex;
 		align-items: center;
 		.icon {
-			margin-right: 4px;
+			margin-inline-end: 4px;
 		}
 		.title-icon {
-			margin-right: 8px;
+			margin-inline-end: 8px;
 		}
 	}
 }
@@ -137,10 +137,10 @@ export default {
 	min-height: min(50vh, calc(100vh - 100px));
 	max-height: calc(100vh - 120px);
 	&:deep(.controls) {
-		padding-left: 12px;
+		padding-inline-start: 12px;
 	}
 	&:deep(.board) {
-		padding-left: 0;
+		padding-inline-start: 0;
 	}
 	&:deep(*) {
 		-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */

@@ -271,12 +271,12 @@ export default {
 		gap: calc(var(--default-grid-baseline) * 3);
 
 		.icon-upload, .icon-folder {
-			padding-left: var(--default-clickable-area);
+			padding-inline-start: var(--default-clickable-area);
 			background-position: 16px center;
 			flex-grow: 1;
 			height: var(--default-clickable-area);
 			margin-bottom: 12px;
-			text-align: left;
+			text-align: start;
 		}
 	}
 
@@ -289,7 +289,7 @@ export default {
 			min-width: 200px;
 			max-height: 50%;
 			top: 50%;
-			left: 50%;
+			inset-inline-start: 50%;
 			transform: translate(-50%, -50%);
 			background-color: #eee;
 			z-index: 2;
@@ -302,7 +302,7 @@ export default {
 			padding: 0;
 			.icon-close {
 				display: inline-block;
-				float: right;
+				float: inline-end;
 			}
 		}
 
@@ -350,7 +350,7 @@ export default {
 			}
 			.app-popover-menu-utils {
 				position: relative;
-				right: -10px;
+				inset-inline-end: -10px;
 				button {
 					height: 32px;
 					width: 42px;

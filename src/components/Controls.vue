@@ -485,7 +485,7 @@ export default {
 		display: flex;
 		margin: calc(var(--default-grid-baseline) * 2);
 		height: var(--default-clickable-area);
-		padding-left: var(--default-clickable-area);
+		padding-inline-start: var(--default-clickable-area);
 
 		.board-title {
 			display: flex;
@@ -493,7 +493,7 @@ export default {
 
 			h2 {
 				margin: 0;
-				margin-right: 10px;
+				margin-inline-end: 10px;
 				font-size: 18px;
 			}
 
@@ -512,11 +512,11 @@ export default {
 			display: flex;
 
 			#new-stack-input-main {
-				margin-right: 8px;
+				margin-inline-end: 8px;
 			}
 			.icon-confirm {
 				border: 2px solid var(--color-border-maxcontrast) !important;
-				border-left: none !important;
+				border-inline-start: none !important;
 			}
 			&:focus-within, &:focus, &:focus-visible,
 			&:hover {
@@ -553,7 +553,7 @@ export default {
 		justify-content: center;
 		input[type=search] {
 			background-position: 5px;
-			padding-left: 24px !important;
+			padding-inline-start: 24px !important;
 		}
 	}
 
@@ -564,7 +564,7 @@ export default {
 			.avatardiv {
 				vertical-align: middle;
 				margin-bottom: 2px;
-				margin-right: 3px;
+				margin-inline-end: 3px;
 			}
 			.label {
 				padding: 5px;

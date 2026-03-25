@@ -386,7 +386,7 @@ export default {
 
 	@use 'sass:math';
 
-	@import './../../css/variables';
+	@import './../../css/variables.scss';
 
 	.stack {
 		width: 100%;
@@ -482,7 +482,7 @@ export default {
 			}
 			input[type="submit"] {
 				border-style: solid;
-				border-left-style: none;
+				border-inline-start-style: none;
 			}
 		}
 
@@ -526,12 +526,12 @@ export default {
 
 		&.icon-loading-small:after,
 		&.icon-loading-small-dark:after {
-			margin-left: calc(50% - 25px);
+			margin-inline-start: calc(50% - 25px);
 		}
 
 		input[type=text] {
 			flex-grow: 1;
-			padding-right: 16px;
+			padding-inline-end: 16px;
 		}
 
 		input {
@@ -573,7 +573,7 @@ export default {
 	}
 
 	.modal__content button {
-		float: right;
+		float: inline-end;
 	}
 
 	progress {

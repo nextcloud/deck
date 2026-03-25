@@ -58,11 +58,10 @@ export default {
 .avatar-list {
 	min-height: var(--default-clickable-area);
 	align-items: center;
-	padding-right: 0.5em;
+	padding-inline: 6px 0.5em;
 	border: none;
 	background-color: var(--color-main-background);
 	margin: 0;
-	padding-left: 6px;
 	display: inline-flex;
 	flex-direction: row-reverse;
 
@@ -86,6 +85,6 @@ export default {
 	z-index: 1;
 	overflow: hidden;
 	box-sizing: content-box !important;
-	margin-left: -8px;
+	margin-inline-start: -8px;
 }
 </style>

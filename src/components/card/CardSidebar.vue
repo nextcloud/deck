@@ -251,8 +251,7 @@ section.app-sidebar__tab--active {
 	min-width: calc(100% - #{$modal-padding * 2});
 	position: relative;
 	top: 0;
-	left: 0;
-	right: 0;
+	inset-inline: 0;
 	max-width: calc(100% - #{$modal-padding * 2});
 	min-height: calc(100vh - var(--header-height) * 4);
 	padding: 0 14px;

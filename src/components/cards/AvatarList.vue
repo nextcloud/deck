@@ -153,7 +153,7 @@ export default {
 		position: relative;
 		flex-grow: 1;
 		:deep(.popovermenu) {
-			margin-right: -4px;
+			margin-inline-end: -4px;
 			img {
 				padding: 0;
 				width: 32px !important;
@@ -167,11 +167,11 @@ export default {
 	$avatar-offset: 12px;
 
 	.avatar-list {
-		float: right;
+		float: inline-end;
 		display: inline-flex;
 		flex-direction: row-reverse;
 		padding: 0;
-		padding-right: $avatar-offset;
+		padding-inline-end: $avatar-offset;
 		margin: 0;
 		border: 0;
 		background: transparent;
@@ -185,7 +185,7 @@ export default {
 			width: 32px;
 			height: 32px;
 			box-sizing: content-box !important;
-			margin-right: -$avatar-offset;
+			margin-inline-end: -$avatar-offset;
 			transition: margin-right 0.2s ease-in-out;
 			border: 2px solid var(--color-main-background);
 		}

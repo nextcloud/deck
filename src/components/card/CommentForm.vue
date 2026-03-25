@@ -91,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../../css/comments';
+	@import '../../css/comments.scss';
 
 	[class^="_tribute-container-autocomplete_"],
 	[class*=" _tribute-container-autocomplete_"],

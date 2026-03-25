@@ -185,7 +185,7 @@ export default {
 
 <style scoped lang="scss">
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
-@import '../css/labels';
+@import '../css/labels.scss';
 
 .deck-comment-reference {
 	width: 100%;
@@ -206,10 +206,10 @@ export default {
 		display: flex;
 		align-items: center;
 		.icon {
-			margin-right: 4px;
+			margin-inline-end: 4px;
 		}
 		.title-icon {
-			margin-right: 8px;
+			margin-inline-end: 8px;
 		}
 	}
 
@@ -235,7 +235,7 @@ export default {
 
 		.comment,
 		.description {
-			margin-right: 8px;
+			margin-inline-end: 8px;
 			padding-top: 6px;
 			max-height: 250px;
 			overflow: scroll;

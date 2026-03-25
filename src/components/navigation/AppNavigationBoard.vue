@@ -476,7 +476,7 @@ export default {
 
 <style lang="scss" scoped>
 	.board-edit {
-		margin-left: calc(var(--default-clickable-area) / 2);
+		margin-inline-start: calc(var(--default-clickable-area) / 2);
 		order: 1;
 		display: flex;
 		height: var(--default-clickable-area);
