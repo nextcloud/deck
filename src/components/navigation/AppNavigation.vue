@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcAppNavigation :class="{'icon-loading': loading}">
+	<NcAppNavigation :aria-label="t('deck', 'Deck')" :class="{'icon-loading': loading}">
 		<template #list>
 			<NcAppNavigationItem :name="t('deck', 'Upcoming cards')"
 				:exact="true"

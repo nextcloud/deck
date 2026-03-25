@@ -152,6 +152,7 @@
 					:disabled="loading"
 					native-type="button"
 					:title="t('deck', 'Cancel edit')"
+					:aria-label="t('deck', 'Cancel edit')"
 					@click.stop.prevent="cancelEdit">
 					<template #icon>
 						<CloseIcon :size="20" />
@@ -160,7 +161,8 @@
 				<NcButton type="tertiary"
 					native-type="submit"
 					:disabled="loading"
-					:title="t('deck', 'Save board')">
+					:title="t('deck', 'Save board')"
+					:aria-label="t('deck', 'Save board')">
 					<template #icon>
 						<CheckIcon v-if="!loading" :size="20" />
 						<NcLoadingIcon v-else :size="20" />
