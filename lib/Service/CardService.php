@@ -284,7 +284,6 @@ class CardService {
 		$card->setStackId($stackId);
 		$card->setType($type);
 		$card->setOrder($order);
-		$card->setOwner($owner);
 		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
 		$card->setStartdate($startdate ? new \DateTime($startdate) : null);
 		$resetDuedateNotification = false;
