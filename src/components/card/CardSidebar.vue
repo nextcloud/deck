@@ -153,11 +153,22 @@ export default {
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
+		cardOwnerDisplayName() {
+			return this.currentCard.owner?.displayname ?? this.currentCard.owner?.uid ?? this.currentCard.owner ?? null
+		},
 		subtitle() {
-			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ⸱ ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
+			let subtitle = t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ⸱ ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
+			if (this.cardOwnerDisplayName) {
+				subtitle += ' ⸱ ' + t('deck', 'by') + ': ' + this.cardOwnerDisplayName
+			}
+			return subtitle
 		},
 		subtitleTooltip() {
-			return t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
+			let subtitleTooltip = t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
+			if (this.cardOwnerDisplayName) {
+				subtitleTooltip += '\n' + t('deck', 'by') + ': ' + this.cardOwnerDisplayName
+			}
+			return subtitleTooltip
 		},
 		cardDetailsInModal: {
 			get() {
