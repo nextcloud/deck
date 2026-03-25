@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton } from '@nextcloud/vue'
+import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
@@ -203,6 +203,7 @@ export default {
 		NcButton,
 		NcTextField,
 		NcActionButton,
+		NcLoadingIcon,
 		AccountIcon,
 		ArchiveIcon,
 		CloneIcon,
