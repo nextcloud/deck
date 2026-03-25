@@ -6,7 +6,7 @@
 <template>
 	<div v-if="users.length > 0" class="avatars">
 		<div>
-			<NcPopover>
+			<NcPopover placement="bottom">
 				<template #trigger="{ attrs }">
 					<button class="avatar-list" v-bind="attrs" @click.stop>
 						<div v-if="popover.length > 0">
@@ -150,7 +150,6 @@ export default {
 
 <style scoped lang="scss">
 	.avatars {
-		position: relative;
 		flex-grow: 1;
 		:deep(.popovermenu) {
 			margin-right: -4px;
@@ -167,7 +166,6 @@ export default {
 	$avatar-offset: 12px;
 
 	.avatar-list {
-		float: right;
 		display: inline-flex;
 		flex-direction: row-reverse;
 		padding: 0;
@@ -175,6 +173,7 @@ export default {
 		margin: 0;
 		border: 0;
 		background: transparent;
+		cursor: pointer;
 
 		& > div {
 			height: 32px;
