@@ -23,11 +23,11 @@
 					:standalone="true" />
 				<Placeholder v-if="loading" />
 				<InfiniteLoader :identifier="searchQuery" @infinite="infiniteHandler">
-					<div slot="spinner" />
-					<div slot="no-more" />
-					<div slot="no-results">
+					<template #spinner />
+					<template #no-more />
+					<template #no-results>
 						{{ t('deck', 'No results found') }}
-					</div>
+					</template>
 				</InfiniteLoader>
 			</template>
 			<template v-else>

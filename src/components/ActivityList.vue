@@ -10,9 +10,11 @@
 			:key="activity.activity_id"
 			:activity="activity" />
 		<InfiniteLoader :identifier="objectId" @infinite="infiniteHandler" @change="changeObject">
-			<div slot="spinner" class="icon-loading" />
-			<div slot="no-more" />
-			<div slot="no-results" />
+			<template #spinner>
+				<div class="icon-loading" />
+			</template>
+			<template #no-more />
+			<template #no-results />
 		</InfiniteLoader>
 	</div>
 </template>
