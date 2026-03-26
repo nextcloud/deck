@@ -369,7 +369,7 @@ export default {
 
 	&:deep {
 		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/markdown';
+		@import './../../css/markdown.scss';
 	}
 
 	&:deep(input) {
@@ -391,19 +391,19 @@ h5 {
 		display: inline-block;
 		width: 32px;
 		height: 16px;
-		float: right;
+		float: inline-end;
 		opacity: .7;
 	}
 
 	.icon-attach {
 		background-size: 16px;
-		float: right;
+		float: inline-end;
 		margin-top: -14px;
 		opacity: .7;
 	}
 
 	.icon-toggle, .icon-rename {
-		float: right;
+		float: inline-end;
 		margin-top: -14px;
 	}
 }
@@ -430,7 +430,7 @@ h5 {
 }
 
 .CodeMirror-cursor {
-	border-left: 1px solid var(--color-main-text);
+	border-inline-start: 1px solid var(--color-main-text);
 }
 
 .CodeMirror-selected,

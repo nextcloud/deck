@@ -158,7 +158,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@import '../../css/variables.scss';
 
 .global-search {
 	width: 100%;
@@ -178,7 +178,7 @@ export default {
 	.action-item.icon-close {
 		position: absolute;
 		top: 10px;
-		right: 10px;
+		inset-inline-end: 10px;
 	}
 
 	.search-header {
@@ -196,7 +196,7 @@ export default {
 		display: inline-block;
 
 		&.icon-loading-small {
-			margin-right: 20px;
+			margin-inline-end: 20px;
 		}
 	}
 

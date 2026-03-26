@@ -203,7 +203,7 @@ export default {
 	.section-label {
 		background-position: 0px center;
 		width: 28px;
-		margin-left: 9px;
+		margin-inline-start: 9px;
 		flex-shrink: 0;
 	}
 
@@ -214,7 +214,7 @@ export default {
 
 		.remove-due-button{
 			margin-top: -2px;
-			margin-left: 6px;
+			margin-inline-start: 6px;
 		}
 	}
 }
@@ -239,7 +239,7 @@ export default {
 	padding: 0px 5px;
 	border-radius: 15px;
 	font-size: 85%;
-	margin-right: 3px;
+	margin-inline-end: 3px;
 }
 
 .avatarLabel {
@@ -251,13 +251,13 @@ export default {
 }
 
 .avatar-list--readonly .avatardiv {
-	margin-right: 3px;
+	margin-inline-end: 3px;
 }
 
 .avatarlist--inline {
 	display: flex;
 	align-items: center;
-	margin-right: 3px;
+	margin-inline-end: 3px;
 	.avatarLabel {
 		padding: 0;
 	}

@@ -133,5 +133,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/selector';
+@import '../../css/selector.scss';
 </style>

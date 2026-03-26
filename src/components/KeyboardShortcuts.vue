@@ -272,7 +272,7 @@ export default {
 	box-shadow: 0 0 100px 30px rgba(0, 0, 0, 0.5);
 	max-width: 500px;
 	bottom: 32px;
-	left: 50%;
+	inset-inline-start: 50%;
 	transform: translateX(-50%);
 	background-color: var(--color-background-dark);
 	border-radius: var(--border-radius-rounded);

@@ -154,7 +154,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './../../css/variables';
+@import './../../css/variables.scss';
 
 .overview-wrapper {
 	position: relative;
@@ -197,7 +197,7 @@ export default {
 				width: 100%;
 				height: 20px;
 				top: 30px;
-				left: 0px;
+				inset-inline-start: 0px;
 				z-index: 99;
 				transition: top var(--animation-slow);
 				background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(255, 255, 255, 0) 100%);
