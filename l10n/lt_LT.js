@@ -143,6 +143,7 @@ OC.L10N.register(
     "Appearance" : "Išvaizda",
     "Show boards in calendar/tasks" : "Rodyti darbus kalendoriuje/užduotyse",
     "Search" : "Ieškoti",
+    "Show those shortcuts" : "Rodyti tuos sparčiuosius klavišus",
     "Loading board" : "Įkeliama lenta",
     "Board not found" : "Lenta nerasta",
     "Create a new list to add cards to this board" : "Norėdami pridėti korteles į šią lentą, sukurkite naują sąrašą",
