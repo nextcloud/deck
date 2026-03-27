@@ -280,6 +280,7 @@ OC.L10N.register(
     "Reply" : "回覆",
     "Update" : "更新",
     "Write a description …" : "編寫描述……",
+    "The description has been changed by another user." : "描述已被其他使用者修改。",
     "Could not save description" : "無法儲存描述",
     "Description" : "描述",
     "(Unsaved)" : "（未儲存）",
