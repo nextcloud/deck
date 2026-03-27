@@ -280,6 +280,7 @@ OC.L10N.register(
     "Reply" : "Responder",
     "Update" : "Atualizar",
     "Write a description …" : "Escreva uma descrição...",
+    "The description has been changed by another user." : "A descrição foi alterada por outro usuário.",
     "Could not save description" : "Não foi possível salvar a descrição",
     "Description" : "Descrição",
     "(Unsaved)" : "(Não salvo)",
