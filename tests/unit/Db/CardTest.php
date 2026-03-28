@@ -43,6 +43,7 @@ class CardTest extends TestCase {
 		$card->setOrder(12);
 		$card->setArchived(false);
 		$card->setDone(null);
+		$card->setColor('ffffff');
 		// TODO: relation shared labels acl
 		return $card;
 	}
@@ -91,6 +92,7 @@ class CardTest extends TestCase {
 			'ETag' => $card->getETag(),
 			'done' => null,
 			'referenceData' => null,
+			'color' => 'ffffff',
 		], (new CardDetails($card))->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
@@ -120,6 +122,7 @@ class CardTest extends TestCase {
 			'ETag' => $card->getETag(),
 			'done' => false,
 			'referenceData' => null,
+			'color' => 'ffffff',
 		], (new CardDetails($card))->jsonSerialize());
 	}
 
@@ -151,6 +154,7 @@ class CardTest extends TestCase {
 			'ETag' => $card->getETag(),
 			'done' => false,
 			'referenceData' => null,
+			'color' => 'ffffff',
 		], (new CardDetails($card))->jsonSerialize());
 	}
 }
