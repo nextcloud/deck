@@ -29,7 +29,9 @@
 					<TextIcon :size="16" decorative />
 				</div>
 
-				<div v-if="card.attachmentCount > 0" class="icon-badge">
+				<div v-if="card.attachmentCount > 0"
+					class="icon-badge"
+					@click.stop="openAttachments">
 					<AttachmentIcon :size="16" />
 					<span>{{ card.attachmentCount }}</span>
 				</div>
@@ -96,6 +98,10 @@ export default {
 		openComments() {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
 			pushRoute(this.$router, { name: 'card', params: { id: boardId, cardId: this.card.id, tabId: 'comments' } })
+		},
+		openAttachments() {
+			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
+			pushRoute(this.$router, { name: 'card', params: { id: boardId, cardId: this.card.id, tabId: 'attachments' } })
 		},
 	},
 }
