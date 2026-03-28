@@ -280,6 +280,7 @@ OC.L10N.register(
     "Reply" : "Vasta",
     "Update" : "Uuenda",
     "Write a description …" : "Koosta kirjeldus…",
+    "The description has been changed by another user." : "Teine kasutaja on muutnud kirjeldust.",
     "Could not save description" : "Kirjelduse salvestamine ei õnnestunud",
     "Description" : "Kirjeldus",
     "(Unsaved)" : "(Salvestamata)",
