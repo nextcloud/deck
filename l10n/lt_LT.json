@@ -77,6 +77,7 @@
     "The card {deck-card} on {deck-board} has reached its due date." : "Kortelė {deck-card}, esanti lentoje {deck-board} pasiekė savo galutinio termino datą.",
     "%s has mentioned you in a comment on \"%s\"." : "%s paminėjo jus komentare ties \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "Lentą \"%s\" su jumis bendrina %s.",
+    "Deck board" : "\"Deck\" lenta",
     "%s on %s" : "%s ant %s",
     "No data was provided to create an attachment." : "Priedo sukūrimui nebuvo pateikta jokių duomenų.",
     "Finished" : "Baigta",
