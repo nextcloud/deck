@@ -53,8 +53,11 @@ export default {
 		},
 	},
 	watch: {
-		navFilter(value) {
-			this.$store.commit('setBoardFilter', value)
+		navFilter: {
+			handler(value) {
+				this.$store.commit('setBoardFilter', value)
+			},
+			immediate: true,
 		},
 	},
 }
