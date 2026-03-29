@@ -269,7 +269,7 @@ export default {
 		input[type="text"] {
 			flex-grow: 1;
 		}
-		button[type="submit"] {
+		.button-vue {
 			flex-shrink: 0;
 		}
 	}
