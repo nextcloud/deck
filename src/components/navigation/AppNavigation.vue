@@ -25,6 +25,8 @@
 					<DeckIcon :size="16" />
 				</template>
 			</AppNavigationBoardCategory>
+			<AppNavigationAddBoard v-if="canCreate" />
+			<AppNavigationImportBoard v-if="canCreate" />
 			<AppNavigationBoardCategory id="deck-navigation-archived"
 				to="/board/archived"
 				:text="t('deck', 'Archived boards')"
@@ -43,8 +45,6 @@
 					<ShareVariantIcon :size="20" decorative />
 				</template>
 			</AppNavigationBoardCategory>
-			<AppNavigationAddBoard v-if="canCreate" />
-			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
 		<template #default>
 			<DeckAppSettings :open="settingsOpened"
