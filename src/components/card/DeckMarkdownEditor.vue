@@ -13,6 +13,7 @@
 
 <script>
 import EasyMDE from 'easymde'
+import 'easymde/dist/easymde.min.css'
 
 export default {
 	name: 'DeckMarkdownEditor',
@@ -142,3 +143,50 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+.vue-easymde-textarea {
+	display: none;
+}
+</style>
+
+<style>
+.vue-easymde, .CodeMirror {
+	border: none;
+	margin: 0;
+	padding: 0;
+	background-color: var(--color-main-background);
+	color: var(--color-main-text);
+	width: 100%;
+}
+
+.CodeMirror-placeholder {
+	color: var(--color-text-maxcontrast);
+}
+
+.CodeMirror-cursor {
+	border-left: 1px solid var(--color-main-text);
+}
+
+.CodeMirror-selected,
+.CodeMirror-line::selection, .CodeMirror-line>span::selection, .CodeMirror-line>span>span::selection {
+	background: var(--color-primary-element) !important;
+	color: var(--color-primary-element-text) !important;
+}
+
+.editor-preview,
+.editor-statusbar {
+	display: none;
+}
+
+.vue-easymde .cm-s-easymde .cm-link {
+	color: var(--color-main-text);
+}
+
+.vue-easymde .cm-s-easymde .cm-string.cm-url,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-link,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-url,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-image {
+	color: var(--color-text-maxcontrast);
+}
+</style>

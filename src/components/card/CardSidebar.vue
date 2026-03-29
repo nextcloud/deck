@@ -211,9 +211,11 @@ export default {
 			return this.currentCard
 		},
 		subtitle() {
+			if (!this.currentCard) return ''
 			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ⸱ ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
 		},
 		subtitleTooltip() {
+			if (!this.currentCard) return ''
 			return t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
 		},
 		cardDetailsInModal: {
@@ -236,7 +238,7 @@ export default {
 	},
 	watch: {
 		currentCard(newCard, oldCard) {
-			if (newCard.id === oldCard.id) return
+			if (!newCard || !oldCard || newCard.id === oldCard.id) return
 			this.focusHeader()
 		},
 		'currentCard.title': {
