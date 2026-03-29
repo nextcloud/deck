@@ -11,13 +11,11 @@ use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
-use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\CardCreatedEvent;
@@ -71,12 +69,19 @@ class CardService {
 	public function enrichCards(array $cards): array {
 		$user = $this->userManager->get($this->userId);
 
-		$cardIds = array_map(function (Card $card) use ($user): int {
+		$allCardIds = array_map(fn (Card $card) => $card->getId(), $cards);
+		$attachmentCounts = $this->attachmentService->countForCards($allCardIds);
+
+		// Pre-fetch all stacks for this batch in one query and index by ID
+		$stackIds = array_unique(array_map(fn (Card $card) => $card->getStackId(), $cards));
+		$stacksById = $this->stackMapper->findByIds($stackIds);
+
+		$cardIds = array_map(function (Card $card) use ($user, $attachmentCounts, $stacksById): int {
 			// Everything done in here might be heavy as it is executed for every card
 			$cardId = $card->getId();
 			$this->cardMapper->mapOwner($card);
 
-			$card->setAttachmentCount($this->attachmentService->count($cardId));
+			$card->setAttachmentCount($attachmentCounts[$cardId] ?? 0);
 
 			// TODO We should find a better way just to get the comment count so we can save 1-3 queries per card here
 			$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
@@ -85,7 +90,7 @@ class CardService {
 			$card->setCommentsUnread($countUnreadComments);
 			$card->setCommentsCount($countComments);
 
-			$stack = $this->stackMapper->find($card->getStackId());
+			$stack = $stacksById[$card->getStackId()] ?? $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($stack->getBoardId(), false);
 			$card->setRelatedStack($stack);
 			$card->setRelatedBoard($board);
@@ -96,15 +101,19 @@ class CardService {
 		$assignedLabels = $this->labelMapper->findAssignedLabelsForCards($cardIds);
 		$assignedUsers = $this->assignedUsersMapper->findIn($cardIds);
 
+		// Pre-group labels and users by card ID
+		$labelsByCard = [];
+		foreach ($assignedLabels as $label) {
+			$labelsByCard[$label->getCardId()][] = $label;
+		}
+		$usersByCard = [];
+		foreach ($assignedUsers as $assignment) {
+			$usersByCard[$assignment->getCardId()][] = $assignment;
+		}
+
 		foreach ($cards as $card) {
-			$cardLabels = array_values(array_filter($assignedLabels, function (Label $label) use ($card) {
-				return $label->getCardId() === $card->getId();
-			}));
-			$cardAssignedUsers = array_values(array_filter($assignedUsers, function (Assignment $assignment) use ($card) {
-				return $assignment->getCardId() === $card->getId();
-			}));
-			$card->setLabels($cardLabels);
-			$card->setAssignedUsers($cardAssignedUsers);
+			$card->setLabels($labelsByCard[$card->getId()] ?? []);
+			$card->setAssignedUsers($usersByCard[$card->getId()] ?? []);
 		}
 
 		return array_map(

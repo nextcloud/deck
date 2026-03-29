@@ -18,6 +18,7 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IFilenameValidator;
@@ -112,29 +113,36 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function getAttachmentCount(int $cardId): int {
+		return $this->getAttachmentCountForCards([$cardId])[$cardId] ?? 0;
+	}
+
+	public function getAttachmentCountForCards(array $cardIds): array {
+		if (empty($cardIds)) {
+			return [];
+		}
 		$qb = $this->connection->getQueryBuilder();
-		$qb->select('s.id', 'f.fileid', 'f.path')
+		$qb->select('s.id', 's.share_with', 'f.fileid', 'f.path')
 			->selectAlias('st.id', 'storage_string_id')
 			->from('share', 's')
 			->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
 			->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
 			->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
-			->andWhere($qb->expr()->eq('s.share_with', $qb->createNamedParameter($cardId)))
+			->andWhere($qb->expr()->in('s.share_with', $qb->createNamedParameter(array_map('strval', $cardIds), IQueryBuilder::PARAM_STR_ARRAY)))
 			->andWhere($qb->expr()->isNull('s.parent'))
 			->andWhere($qb->expr()->orX(
 				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('file')),
 				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('folder'))
 			));
 
-		$count = 0;
+		$counts = array_fill_keys($cardIds, 0);
 		$cursor = $qb->executeQuery();
 		while ($data = $cursor->fetch()) {
 			if ($this->shareProvider->isAccessibleResult($data)) {
-				$count++;
+				$counts[(int)$data['share_with']]++;
 			}
 		}
 		$cursor->closeCursor();
-		return $count;
+		return $counts;
 	}
 
 	public function extendData(Attachment $attachment) {

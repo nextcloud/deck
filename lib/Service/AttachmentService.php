@@ -137,21 +137,57 @@ class AttachmentService {
 	 * @throws \OCP\DB\Exception
 	 */
 	public function count(int $cardId): int {
-		$count = $this->attachmentCacheHelper->getAttachmentCount($cardId);
-		if ($count === null) {
-			$count = count($this->attachmentMapper->findAll($cardId));
+		return ($this->countForCards([$cardId]))[$cardId] ?? 0;
+	}
 
-			foreach (array_keys($this->services) as $attachmentType) {
-				$service = $this->getService($attachmentType);
-				if ($service instanceof ICustomAttachmentService) {
-					$count += $service->getAttachmentCount($cardId);
-				}
-			}
-
-			$this->attachmentCacheHelper->setAttachmentCount($cardId, $count);
+	/**
+	 * Returns a map of cardId => attachment count for the given card IDs using batch queries.
+	 *
+	 * @param int[] $cardIds
+	 * @return array<int, int>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function countForCards(array $cardIds): array {
+		if (empty($cardIds)) {
+			return [];
 		}
 
-		return $count;
+		$counts = [];
+		$uncachedIds = [];
+		foreach ($cardIds as $cardId) {
+			$cached = $this->attachmentCacheHelper->getAttachmentCount($cardId);
+			if ($cached !== null) {
+				$counts[$cardId] = $cached;
+			} else {
+				$uncachedIds[] = $cardId;
+				$counts[$cardId] = 0;
+			}
+		}
+
+		if (empty($uncachedIds)) {
+			return $counts;
+		}
+
+		// Batch query for deck_file attachments stored in the deck_attachment table
+		foreach ($this->attachmentMapper->findCountByCardIds($uncachedIds) as $cardId => $count) {
+			$counts[$cardId] = $count;
+		}
+
+		// Add counts from custom attachment services (e.g. files shared via FilesAppService)
+		foreach (array_keys($this->services) as $attachmentType) {
+			$service = $this->getService($attachmentType);
+			if ($service instanceof ICustomAttachmentService) {
+				foreach ($service->getAttachmentCountForCards($uncachedIds) as $cardId => $count) {
+					$counts[$cardId] = ($counts[$cardId] ?? 0) + $count;
+				}
+			}
+		}
+
+		foreach ($uncachedIds as $cardId) {
+			$this->attachmentCacheHelper->setAttachmentCount($cardId, $counts[$cardId]);
+		}
+
+		return $counts;
 	}
 
 	/**
