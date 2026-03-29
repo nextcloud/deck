@@ -59,7 +59,7 @@
 					<NcColorPicker v-model="addLabelColor"
 						class="color-picker-wrapper"
 						:advanced-fields="true"
-						@input="updateColor">
+						@update:modelValue="updateColor">
 						<div :style="{ backgroundColor: addLabelColor }" class="color0 icon-colorpicker" />
 					</NcColorPicker>
 					<input v-model="addLabelObj.title" type="text">

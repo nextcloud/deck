@@ -32,7 +32,7 @@
 				:input-label="t('deck', 'Limit board creation to some groups')"
 				label="displayname"
 				track-by="id"
-				@input="updateConfig" />
+				@update:modelValue="updateConfig" />
 			<p>
 				{{ t('deck', 'Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them.') }}
 			</p>
