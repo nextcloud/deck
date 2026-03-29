@@ -33,8 +33,8 @@
 							v-model="newStackTitle"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
-						<NcButton type="secondary"
-							native-type="submit"
+						<NcButton variant="secondary"
+							type="submit"
 							:disabled="loading"
 							:title="t('deck', 'Add list')">
 							<template #icon>

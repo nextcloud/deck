@@ -19,7 +19,7 @@
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:disabled="loading"
 					:title="t('deck', 'Cancel edit')"
 					:aria-label="t('deck', 'Cancel edit')"
@@ -28,8 +28,8 @@
 						<CloseIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton type="tertiary"
-					native-type="submit"
+				<NcButton variant="tertiary"
+					type="submit"
 					:disabled="loading"
 					:title="t('deck', 'Save board')"
 					:aria-label="t('deck', 'Save board')">

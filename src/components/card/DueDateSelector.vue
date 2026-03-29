@@ -78,7 +78,7 @@
 						<ClearIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton type="secondary" @click="archiveUnarchiveCard()">
+				<NcButton variant="secondary" @click="archiveUnarchiveCard()">
 					<template #icon>
 						<ArchiveIcon :size="20" />
 					</template>
