@@ -14,9 +14,8 @@
 			</NcColorPicker>
 			<form @submit.prevent.stop="createBoard">
 				<NcTextField ref="inputField"
-					:disable="loading"
-					:value="value"
-					@update:value="value = $event"
+					:disabled="loading"
+					v-model="value"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />

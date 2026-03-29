@@ -29,9 +29,8 @@
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
 						<NcTextField ref="newStackInput"
-							:disable="loading"
-							:value="newStackTitle"
-							@update:value="newStackTitle = $event"
+							:disabled="loading"
+							v-model="newStackTitle"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
 						<NcButton type="secondary"

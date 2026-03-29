@@ -142,9 +142,8 @@
 			</NcColorPicker>
 			<form @submit.prevent.stop="applyEdit">
 				<NcTextField ref="inputField"
-					:disable="loading"
-					:value="editTitle"
-					@update:value="editTitle = $event"
+					:disabled="loading"
+					v-model="editTitle"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
