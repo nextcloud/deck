@@ -280,6 +280,7 @@ OC.L10N.register(
     "Reply" : "Відповісти",
     "Update" : "Оновлення",
     "Write a description …" : "Додайте опис ...",
+    "The description has been changed by another user." : "Опис змінено іншим користувачем. ",
     "Could not save description" : "Не вдалося зберегти опис",
     "Description" : "Опис",
     "(Unsaved)" : "(Не збережено)",
