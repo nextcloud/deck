@@ -280,6 +280,7 @@ OC.L10N.register(
     "Reply" : "Reply",
     "Update" : "Update",
     "Write a description …" : "Write a description …",
+    "The description has been changed by another user." : "The description has been changed by another user.",
     "Could not save description" : "Could not save description",
     "Description" : "Description",
     "(Unsaved)" : "(Unsaved)",
