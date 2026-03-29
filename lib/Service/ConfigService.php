@@ -25,16 +25,12 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
-	private IConfig $config;
 	private ?string $userId = null;
-	private IGroupManager $groupManager;
 
 	public function __construct(
-		IConfig $config,
-		IGroupManager $groupManager,
+		private readonly IConfig $config,
+		private readonly IGroupManager $groupManager,
 	) {
-		$this->groupManager = $groupManager;
-		$this->config = $config;
 	}
 
 	public function getUserId(): ?string {
