@@ -78,6 +78,7 @@ export default {
 		cardUndoDelete(deletedCard) {
 			const copiedDeletedCard = Object.assign({}, deletedCard)
 			copiedDeletedCard.deletedAt = 0
+			copiedDeletedCard.boardId = this.board.id
 			this.$store.dispatch('cardUndoDelete', copiedDeletedCard)
 		},
 	},

@@ -70,7 +70,7 @@ export default {
 				})
 		},
 		cardUndoDelete({ commit }, card) {
-			cardApi.updateCard(card)
+			cardApi.updateCard(card, card.boardId)
 				.then((card) => {
 					commit('removeCardFromTrash', card)
 					commit('addCard', card)

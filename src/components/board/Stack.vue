@@ -111,7 +111,7 @@
 			@drag-end="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<DeckDraggable v-for="card in cardsByStack" :key="card.id">
-				<transition :appear="animate && !card.animated && (card.animated=true)"
+				<transition :appear="animate && !animatedCards[card.id] && markAnimated(card.id)"
 					:appear-class="'zoom-appear-class'"
 					:appear-active-class="'zoom-appear-active-class'">
 					<CardItem :id="card.id"
@@ -193,6 +193,7 @@ export default {
 			showAddCard: false,
 			stateCardCreating: false,
 			animate: false,
+			animatedCards: {},
 			modalArchivAllCardsShow: false,
 			stackTransfer: {
 				total: 0,
@@ -249,6 +250,10 @@ export default {
 	},
 
 	methods: {
+		markAnimated(cardId) {
+			this.animatedCards[cardId] = true
+			return true
+		},
 		stopCardCreation(e) {
 			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
 			// so we have to ignore it
