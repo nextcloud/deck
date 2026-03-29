@@ -280,6 +280,7 @@ OC.L10N.register(
     "Reply" : "Freagra",
     "Update" : "Nuashonrú",
     "Write a description …" : "Scríobh cur síos…",
+    "The description has been changed by another user." : "Tá an cur síos athraithe ag úsáideoir eile.",
     "Could not save description" : "Níorbh fhéidir an cur síos a shábháil",
     "Description" : "Cur síos",
     "(Unsaved)" : "(Gan sábháil)",
