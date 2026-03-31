@@ -661,9 +661,10 @@ ICS;
 				[123]
 			)
 			->willReturnOnConsecutiveCalls($sourceCard, $sourceCard);
-		$this->stackService->expects($this->exactly(2))
+		$this->stackService->expects($this->exactly(3))
 			->method('find')
 			->willReturnMap([
+				[42, $sourceStack],
 				[42, $sourceStack],
 				[88, $targetStack],
 			]);
@@ -727,7 +728,7 @@ ICS;
 		$currentStack = new Stack();
 		$currentStack->setId(42);
 		$currentStack->setBoardId(12);
-		$this->stackService->expects($this->once())
+		$this->stackService->expects($this->exactly(2))
 			->method('find')
 			->with(42)
 			->willReturn($currentStack);

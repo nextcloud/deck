@@ -311,7 +311,7 @@ class DeckCalendarBackend {
 		$categories = $this->extractCategories($todo);
 		if ($categories !== null) {
 			$categories = $this->normalizeCategoriesForLabelSync($boardId, $categories, $mode);
-			$this->syncCardCategories($card->getId(), $categories);
+			$this->syncCardCategories($card->getId(), $categories, $boardId);
 		}
 
 		return $card;
@@ -418,7 +418,7 @@ class DeckCalendarBackend {
 			return $card;
 		}
 		if ($isNoopUpdate && $categories !== null) {
-			$this->syncCardCategories($card->getId(), $categories);
+			$this->syncCardCategories($card->getId(), $categories, $boardId);
 			return $card;
 		}
 
@@ -437,7 +437,7 @@ class DeckCalendarBackend {
 			$boardId
 		);
 		if ($categories !== null) {
-			$this->syncCardCategories($updatedCard->getId(), $categories);
+			$this->syncCardCategories($updatedCard->getId(), $categories, $boardId);
 		}
 
 		return $updatedCard;
@@ -722,9 +722,9 @@ class DeckCalendarBackend {
 	/**
 	 * @param list<string> $categories
 	 */
-	private function syncCardCategories(int $cardId, array $categories): void {
+	private function syncCardCategories(int $cardId, array $categories, ?int $boardId = null): void {
 		$card = $this->cardService->find($cardId);
-		$boardId = $this->getBoardIdForCard($card);
+		$boardId ??= $this->getBoardIdForCard($card);
 		$board = $this->boardMapper->find($boardId, true, false);
 		$canCreateLabels = $this->checkBoardPermission($boardId, Acl::PERMISSION_MANAGE);
 		$boardLabels = $board->getLabels() ?? [];

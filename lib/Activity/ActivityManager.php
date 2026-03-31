@@ -452,11 +452,12 @@ class ActivityManager {
 	 */
 	private function sendToUsers(IEvent $event) {
 		$subjectParams = $event->getSubjectParameters();
-		if ($event->getObjectType() === self::DECK_OBJECT_BOARD) {
+		$objectType = $event->getObjectType();
+		if ($objectType === self::DECK_OBJECT_BOARD) {
 			$boardId = (int)$event->getObjectId();
 		} elseif (isset($subjectParams['board']['id'])) {
 			$boardId = (int)$subjectParams['board']['id'];
-		} elseif ($event->getObjectType() === self::DECK_OBJECT_CARD) {
+		} elseif ($objectType === self::DECK_OBJECT_CARD) {
 			$boardId = $this->cardMapper->findBoardId((int)$event->getObjectId());
 		} else {
 			return;
