@@ -130,6 +130,36 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $card;
 	}
 
+	public function findByDavUri(string $davUri, ?int $boardId = null, ?int $stackId = null, bool $includeDeleted = true): Card {
+		if ($stackId !== null) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('*')
+				->from('deck_cards')
+				->where($qb->expr()->eq('dav_uri', $qb->createNamedParameter($davUri, IQueryBuilder::PARAM_STR)))
+				->andWhere($qb->expr()->eq('stack_id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)));
+		} elseif ($boardId !== null) {
+			$qb = $this->queryCardsByBoard($boardId);
+			$qb->andWhere($qb->expr()->eq('c.dav_uri', $qb->createNamedParameter($davUri, IQueryBuilder::PARAM_STR)));
+		} else {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('*')
+				->from('deck_cards')
+				->where($qb->expr()->eq('dav_uri', $qb->createNamedParameter($davUri, IQueryBuilder::PARAM_STR)));
+		}
+
+		if (!$includeDeleted) {
+			$deletedColumn = $boardId !== null && $stackId === null ? 'c.deleted_at' : 'deleted_at';
+			$qb->andWhere($qb->expr()->eq($deletedColumn, $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+
+		$qb->orderBy('order')
+			->addOrderBy('id');
+
+		/** @var Card $card */
+		$card = $this->findEntity($qb);
+		return $card;
+	}
+
 	/**
 	 * @return Card[]
 	 * @throws \OCP\DB\Exception
@@ -234,7 +264,12 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->orderBy('c.duedate')
 			->setMaxResults($limit)
 			->setFirstResult($offset);
-		return $this->findEntities($qb);
+		$cards = $this->findEntities($qb);
+		foreach ($cards as $card) {
+			$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
+			$card->setLabels($labels);
+		}
+		return $cards;
 	}
 
 	public function findAllArchived($stackId, $limit = null, $offset = null) {

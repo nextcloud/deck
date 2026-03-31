@@ -134,9 +134,6 @@ class ActivityManagerTest extends TestCase {
 		$board = new Board();
 		$board->setId(123);
 		$board->setTitle('');
-		$this->boardMapper->expects(self::once())
-			->method('find')
-			->willReturn($board);
 		$event = $this->expectEventCreation(ActivityManager::SUBJECT_BOARD_CREATE, [
 			'author' => 'admin'
 		]);
@@ -331,18 +328,11 @@ class ActivityManagerTest extends TestCase {
 			)
 			->willReturnSelf();
 
-		$mapper = null;
-		switch ($objectType) {
-			case ActivityManager::DECK_OBJECT_BOARD:
-				$mapper = $this->boardMapper;
-				break;
-			case ActivityManager::DECK_OBJECT_CARD:
-				$mapper = $this->cardMapper;
-				break;
+		if ($objectType === ActivityManager::DECK_OBJECT_CARD) {
+			$this->cardMapper->expects(self::once())
+				->method('findBoardId')
+				->willReturn(123);
 		}
-		$mapper->expects(self::once())
-			->method('findBoardId')
-			->willReturn(123);
 		$this->permissionService->expects(self::once())
 			->method('findUsers')
 			->willReturn($users);
@@ -391,18 +381,26 @@ class ActivityManagerTest extends TestCase {
 		$card->setId(3);
 		$expected = null;
 		if ($objectType === ActivityManager::DECK_OBJECT_BOARD) {
-			$this->boardMapper->expects(self::once())
-				->method('find')
-				->with(1)
-				->willReturn($board);
-			$expected = $board;
+			if ($entity instanceof Board) {
+				$expected = $entity;
+			} else {
+				$this->boardMapper->expects(self::once())
+					->method('find')
+					->with(1)
+					->willReturn($board);
+				$expected = $board;
+			}
 		}
 		if ($objectType === ActivityManager::DECK_OBJECT_CARD) {
-			$this->cardMapper->expects(self::once())
-				->method('find')
-				->with(3)
-				->willReturn($card);
-			$expected = $card;
+			if ($entity instanceof Card) {
+				$expected = $entity;
+			} else {
+				$this->cardMapper->expects(self::once())
+					->method('find')
+					->with(3)
+					->willReturn($card);
+				$expected = $card;
+			}
 		}
 		$actual = $this->invokePrivate($this->activityManager, 'findObjectForEntity', [$objectType, $entity]);
 		$this->assertEquals($expected, $actual);

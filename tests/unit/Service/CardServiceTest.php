@@ -229,10 +229,40 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('insert')
 			->willReturn($card);
-		$this->stackMapper->expects($this->once())
+		$board = $this->createMock(Board::class);
+		$user = $this->createMock(IUser::class);
+		$this->userManager->expects($this->once())
+			->method('get')
+			->with('user1')
+			->willReturn($user);
+		$this->commentsManager->expects($this->once())
+			->method('getNumberOfCommentsForObject')
+			->with('deckCard', '0')
+			->willReturn(0);
+		$this->attachmentService->expects($this->once())
+			->method('count')
+			->with(0)
+			->willReturn(0);
+		$this->stackMapper->expects($this->exactly(2))
 			->method('find')
 			->with(123)
 			->willReturn($stack);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(1337)
+			->willReturn($board);
+		$this->labelMapper->expects($this->once())
+			->method('findAssignedLabelsForCards')
+			->with([0])
+			->willReturn([]);
+		$this->assignedUsersMapper->expects($this->once())
+			->method('findIn')
+			->with([0])
+			->willReturn([]);
+		$this->referenceManager->expects($this->once())
+			->method('extractReferences')
+			->with('Card title')
+			->willReturn([]);
 		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
 
 		$this->assertEquals($b->getTitle(), 'Card title');
