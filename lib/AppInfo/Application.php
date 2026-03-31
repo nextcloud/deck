@@ -7,7 +7,6 @@
 
 namespace OCA\Deck\AppInfo;
 
-use Closure;
 use Exception;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Deck\Capabilities;
@@ -99,8 +98,8 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+		$context->injectFn($this->registerCommentsEntity(...));
+		$context->injectFn($this->registerCollaborationResources(...));
 
 		$context->injectFn(function (IManager $shareManager) {
 			$shareManager->registerShareProvider(DeckShareProvider::class);

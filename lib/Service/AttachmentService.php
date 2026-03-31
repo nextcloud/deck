@@ -28,52 +28,22 @@ use OCP\IUserManager;
 use Psr\Container\ContainerExceptionInterface;
 
 class AttachmentService {
-	private $attachmentMapper;
-	private $cardMapper;
-	private $permissionService;
-	private $userId;
-
 	/** @var IAttachmentService[] */
-	private $services = [];
-	/** @var Application */
-	private $application;
-	/** @var AttachmentCacheHelper */
-	private $attachmentCacheHelper;
-	/** @var IL10N */
-	private $l10n;
-	/** @var ActivityManager */
-	private $activityManager;
-	/** @var ChangeHelper */
-	private $changeHelper;
-	private IUserManager $userManager;
-	/** @var AttachmentServiceValidator */
-	private AttachmentServiceValidator $attachmentServiceValidator;
+	private array $services = [];
 
 	public function __construct(
-		AttachmentMapper $attachmentMapper,
-		CardMapper $cardMapper,
-		IUserManager $userManager,
-		ChangeHelper $changeHelper,
-		PermissionService $permissionService,
-		Application $application,
-		AttachmentCacheHelper $attachmentCacheHelper,
-		$userId,
-		IL10N $l10n,
-		ActivityManager $activityManager,
-		AttachmentServiceValidator $attachmentServiceValidator,
+		private readonly AttachmentMapper $attachmentMapper,
+		private readonly CardMapper $cardMapper,
+		private readonly IUserManager $userManager,
+		private readonly ChangeHelper $changeHelper,
+		private readonly PermissionService $permissionService,
+		private readonly Application $application,
+		private readonly AttachmentCacheHelper $attachmentCacheHelper,
+		private readonly ?string $userId,
+		private readonly IL10N $l10n,
+		private readonly ActivityManager $activityManager,
+		private readonly AttachmentServiceValidator $attachmentServiceValidator,
 	) {
-		$this->attachmentMapper = $attachmentMapper;
-		$this->cardMapper = $cardMapper;
-		$this->permissionService = $permissionService;
-		$this->userId = $userId;
-		$this->application = $application;
-		$this->attachmentCacheHelper = $attachmentCacheHelper;
-		$this->l10n = $l10n;
-		$this->activityManager = $activityManager;
-		$this->changeHelper = $changeHelper;
-		$this->userManager = $userManager;
-		$this->attachmentServiceValidator = $attachmentServiceValidator;
-
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
 		$this->registerAttachmentService('deck_file', FileService::class);

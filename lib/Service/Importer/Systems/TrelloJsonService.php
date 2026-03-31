@@ -318,30 +318,19 @@ class TrelloJsonService extends ABoardImportService {
 	}
 
 	private function translateColor(?string $color): string {
-		switch ($color) {
-			case 'red':
-				return 'ff0000';
-			case 'yellow':
-				return 'ffff00';
-			case 'orange':
-				return 'ff6600';
-			case 'green':
-				return '00ff00';
-			case 'purple':
-				return '9900ff';
-			case 'blue':
-				return '0000ff';
-			case 'sky':
-				return '00ccff';
-			case 'lime':
-				return '00ff99';
-			case 'pink':
-				return 'ff66cc';
-			case 'black':
-				return '000000';
-			default:
-				return 'ffffff';
-		}
+		return match ($color) {
+			'red' => 'ff0000',
+			'yellow' => 'ffff00',
+			'orange' => 'ff6600',
+			'green' => '00ff00',
+			'purple' => '9900ff',
+			'blue' => '0000ff',
+			'sky' => '00ccff',
+			'lime' => '00ff99',
+			'pink' => 'ff66cc',
+			'black' => '000000',
+			default => 'ffffff',
+		};
 	}
 
 	private function replaceUsernames(string $text): string {

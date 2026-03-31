@@ -31,43 +31,19 @@ use OCP\Notification\INotification;
 
 class NotificationHelper {
 
-	/** @var CardMapper */
-	protected $cardMapper;
-	/** @var BoardMapper */
-	protected $boardMapper;
-	/** @var AssignmentMapper */
-	protected $assignmentMapper;
-	/** @var PermissionService */
-	protected $permissionService;
-	/** @var IConfig */
-	protected $config;
-	/** @var IManager */
-	protected $notificationManager;
-	/** @var IGroupManager */
-	protected $groupManager;
-	/** @var string */
-	protected $currentUser;
 	/** @var array */
-	private $boards = [];
+	private array $boards = [];
 
 	public function __construct(
-		CardMapper $cardMapper,
-		BoardMapper $boardMapper,
-		AssignmentMapper $assignmentMapper,
-		PermissionService $permissionService,
-		IConfig $config,
-		IManager $notificationManager,
-		IGroupManager $groupManager,
-		$userId,
+		protected readonly CardMapper $cardMapper,
+		protected readonly BoardMapper $boardMapper,
+		protected readonly AssignmentMapper $assignmentMapper,
+		protected readonly PermissionService $permissionService,
+		protected readonly IConfig $config,
+		protected readonly IManager $notificationManager,
+		protected readonly IGroupManager $groupManager,
+		protected readonly ?string $userId,
 	) {
-		$this->cardMapper = $cardMapper;
-		$this->boardMapper = $boardMapper;
-		$this->assignmentMapper = $assignmentMapper;
-		$this->permissionService = $permissionService;
-		$this->config = $config;
-		$this->notificationManager = $notificationManager;
-		$this->groupManager = $groupManager;
-		$this->currentUser = $userId;
 	}
 
 	/**
@@ -145,7 +121,7 @@ class NotificationHelper {
 			->setSubject('card-assigned', [
 				$card->getTitle(),
 				$board->getTitle(),
-				$this->currentUser
+				$this->userId
 			]);
 		$this->notificationManager->notify($notification);
 	}
@@ -174,7 +150,7 @@ class NotificationHelper {
 			$notification = $this->generateBoardShared($board, $acl->getParticipant());
 			if ($markAsRead) {
 				$this->notificationManager->markProcessed($notification);
-			} elseif ($acl->getParticipant() !== $this->currentUser) {
+			} elseif ($acl->getParticipant() !== $this->userId) {
 				$notification->setDateTime(new DateTime());
 				$this->notificationManager->notify($notification);
 			}
@@ -185,7 +161,7 @@ class NotificationHelper {
 				return;
 			}
 			foreach ($group->getUsers() as $user) {
-				if ($user->getUID() === $this->currentUser) {
+				if ($user->getUID() === $this->userId) {
 					continue;
 				}
 				$notification = $this->generateBoardShared($board, $user->getUID());
@@ -201,7 +177,7 @@ class NotificationHelper {
 
 	public function sendMention(IComment $comment): void {
 		foreach ($comment->getMentions() as $mention) {
-			if ((string)$mention['id'] === $this->currentUser) {
+			if ((string)$mention['id'] === $this->userId) {
 				continue;
 			}
 			$card = $this->cardMapper->find($comment->getObjectId());
@@ -212,7 +188,7 @@ class NotificationHelper {
 				->setUser((string)$mention['id'])
 				->setDateTime(new DateTime())
 				->setObject('card', (string)$card->getId())
-				->setSubject('card-comment-mentioned', [$card->getTitle(), $boardId, $this->currentUser])
+				->setSubject('card-comment-mentioned', [$card->getTitle(), $boardId, $this->userId])
 				->setMessage('{message}', ['message' => $comment->getMessage()]);
 			$this->notificationManager->notify($notification);
 		}
@@ -235,7 +211,7 @@ class NotificationHelper {
 			->setApp('deck')
 			->setUser($userId)
 			->setObject('board', (string)$board->getId())
-			->setSubject('board-shared', [$board->getTitle(), $this->currentUser]);
+			->setSubject('board-shared', [$board->getTitle(), $this->userId]);
 		return $notification;
 	}
 }

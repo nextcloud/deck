@@ -21,42 +21,16 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 
 class SearchService {
-
-	/** @var BoardService */
-	private $boardService;
-	/** @var CardMapper */
-	private $cardMapper;
-	/** @var CardService */
-	private $cardService;
-	/** @var ICommentsManager */
-	private $commentsManager;
-	/** @var FilterStringParser */
-	private $filterStringParser;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var IL10N */
-	private $l10n;
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
 	public function __construct(
-		BoardService $boardService,
-		CardMapper $cardMapper,
-		CardService $cardService,
-		ICommentsManager $commentsManager,
-		FilterStringParser $filterStringParser,
-		IUserManager $userManager,
-		IL10N $l10n,
-		IURLGenerator $urlGenerator,
+		private readonly BoardService $boardService,
+		private readonly CardMapper $cardMapper,
+		private readonly CardService $cardService,
+		private readonly ICommentsManager $commentsManager,
+		private readonly FilterStringParser $filterStringParser,
+		private readonly IUserManager $userManager,
+		private readonly IL10N $l10n,
+		private readonly IURLGenerator $urlGenerator,
 	) {
-		$this->boardService = $boardService;
-		$this->cardMapper = $cardMapper;
-		$this->cardService = $cardService;
-		$this->commentsManager = $commentsManager;
-		$this->filterStringParser = $filterStringParser;
-		$this->userManager = $userManager;
-		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function searchCards(string $term, ?int $limit = null, ?int $cursor = null): array {

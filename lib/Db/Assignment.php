@@ -27,15 +27,11 @@ class Assignment extends RelationalEntity implements JsonSerializable {
 	}
 
 	public function getTypeString(): string {
-		switch ($this->getType()) {
-			case self::TYPE_USER:
-				return 'user';
-			case self::TYPE_GROUP:
-				return 'group';
-			case self::TYPE_CIRCLE:
-				return 'circle';
-		}
-
-		return 'unknown';
+		return match ($this->getType()) {
+			self::TYPE_USER => 'user',
+			self::TYPE_GROUP => 'group',
+			self::TYPE_CIRCLE => 'circle',
+			default => 'unknown',
+		};
 	}
 }
