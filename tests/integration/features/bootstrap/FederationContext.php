@@ -32,6 +32,8 @@ class FederationContext implements Context {
 	private ?array $board = null;
 	/** @var array|null Last stack created/fetched */
 	private ?array $stack = null;
+	/** @var array|null Last card created */
+	private ?array $card = null;
 
 	/** @BeforeScenario */
 	public function gatherContexts(BeforeScenarioScope $scope) {
@@ -243,6 +245,50 @@ class FederationContext implements Context {
 	}
 
 	/**
+	 * @Then /^user "([^"]*)" on "([^"]*)" should see assigned user "([^"]*)" on card "([^"]*)" on the federated board "([^"]*)"$/
+	 */
+	public function userOnShouldSeeAssigned(string $user, string $server, string $assignedUser, string $cardTitle, string $boardTitle) {
+		$this->sendOCSRequest('GET', '/apps/deck/api/v1.0/boards', [], $user, $server);
+		$boards = $this->getOCSData();
+
+		$found = false;
+		foreach ($boards as $board) {
+			if ($board['title'] === $boardTitle) {
+				$found = $board;
+				break;
+			}
+		}
+
+		Assert::assertNotNull($found, "Board '{$boardTitle}' not found for user '{$user}' on {$server}");
+
+		$this->sendOCSRequest('GET', '/apps/deck/api/v1.0/stacks/' . $found['id'], [], $user, $server);
+		$stacks = $this->getOCSData();
+		$cardTitleFound = false;
+		$cardFound = false;
+		$assignedUsers = [];
+		foreach ($stacks as $stack) {
+			foreach ($stack['cards'] as $card) {
+				if ($card['title'] === $cardTitle) {
+					$cardTitleFound = true;
+					foreach ($card['assignedUsers'] as $assigned) {
+						$assignedUsers[] = $assigned;
+						if ($assigned['participant']['displayname'] === $assignedUser) {
+							$cardFound = true;
+							break 3;
+						}
+					}
+				}
+			}
+		}
+
+		Assert::assertTrue($cardTitleFound, "Card '{$cardTitle}' not found on board '{$boardTitle}'");
+
+		Assert::assertTrue($cardFound, "Assigned user '{$assignedUser}' not found on card '{$cardTitle}' on board '{$boardTitle}' found '" . json_encode($assignedUsers) . "'");
+	}
+
+
+
+	/**
 	 * @When /^user "([^"]*)" on "([^"]*)" creates a stack "([^"]*)" on the federated board$/
 	 */
 	public function userCreatesStackOnFederatedBoard(string $user, string $server, string $stackTitle) {
@@ -280,6 +326,7 @@ class FederationContext implements Context {
 			'stackId' => $stackId,
 			'boardId' => $federatedBoard['id'],
 		], $user, $server);
+		$this->card = $this->getOCSData();
 	}
 
 	/**
@@ -341,5 +388,28 @@ class FederationContext implements Context {
 		}
 
 		throw new \RuntimeException('No federated board "' . $expectedTitle . '" found for user ' . $user . ' on ' . $server);
+	}
+
+	/**
+	 * @When /^user "([^"]*)" on "([^"]*)" assigns user "([^"]*)" to card "([^"]*)" on the federated board$/
+	 *
+	 * Assign a user to a card by card title on the federated board.
+	 *
+	 * @param string $user The acting user
+	 * @param string $server LOCAL or REMOTE
+	 * @param string $userId The user id to assign
+	 * @param string $cardTitle The card title
+	 */
+	public function assignUserToCard(string $user, string $server, string $userId, string $cardTitle) {
+		$federatedBoard = $this->findFederatedBoard($user, $server);
+		Assert::assertNotNull($this->card, 'No card created in this scenario');
+		Assert::assertEquals($cardTitle, $this->card['title'], 'Last card title does not match');
+		$cardId = $this->card['id'];
+		$data = [
+			'userId' => $userId,
+			'type' => 0,
+		];
+		$this->sendOCSRequest('POST', "/apps/deck/api/v1.0/cards/{$cardId}/assign?boardId={$federatedBoard['id']}", $data, $user, $server);
+		Assert::assertEquals(200, $this->response->getStatusCode(), "Failed to assign user '{$userId}' to card '{$cardTitle}' on federated board: " . (string)$this->response->getBody());
 	}
 }
