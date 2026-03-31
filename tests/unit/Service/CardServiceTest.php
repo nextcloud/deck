@@ -373,6 +373,31 @@ class CardServiceTest extends TestCase {
 		$this->assertEquals(new \DateTime('2017-01-01T00:00:00+00:00'), $actual->getDuedate());
 	}
 
+	public function testUpdateWithStartdate() {
+		$card = Card::fromParams([
+			'title' => 'Card title',
+			'archived' => 'false',
+			'stackId' => 234,
+		]);
+		$stack = Stack::fromParams([
+			'id' => 234,
+			'boardId' => 1337,
+		]);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+			$c->setId(1);
+			return $c;
+		});
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(234)
+			->willReturn($stack);
+		$actual = $this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, '2017-01-01 00:00:00', null, null, null, '2016-12-15 00:00:00');
+		$this->assertEquals('newtitle', $actual->getTitle());
+		$this->assertEquals(new \DateTime('2017-01-01T00:00:00+00:00'), $actual->getDuedate());
+		$this->assertEquals(new \DateTime('2016-12-15T00:00:00+00:00'), $actual->getStartdate());
+	}
+
 	public function testUpdateArchived() {
 		$card = new Card();
 		$card->setTitle('title');
