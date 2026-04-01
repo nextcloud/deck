@@ -73,6 +73,7 @@ import { showUndo } from '@nextcloud/dialogs'
 
 import '@nextcloud/dialogs/style.css'
 import { emit } from '@nextcloud/event-bus'
+import { useActionsStore } from '../../stores/actions.js'
 
 export default {
 	name: 'CardMenuEntries',
@@ -88,6 +89,12 @@ export default {
 		},
 	},
 	emits: ['edit-title'],
+	setup() {
+		const actionsStore = useActionsStore()
+		return {
+			cardActions: actionsStore.actions.card,
+		}
+	},
 	data() {
 		return {
 			modalShow: false,
@@ -100,7 +107,6 @@ export default {
 		...mapGetters([
 			'isArchived',
 			'boards',
-			'cardActions',
 			'stackById',
 			'boardById',
 		]),
