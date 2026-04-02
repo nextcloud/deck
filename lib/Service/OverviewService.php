@@ -59,8 +59,8 @@ class OverviewService {
 		}, $userBoards));
 
 		$foundCards = array_merge(
-			// private board: get cards with due date
-			$this->cardMapper->findAllWithDue($boardOwnerIds),
+			// private board: get all my assigned or unassigned cards
+			$this->cardMapper->findToMeOrNotAssignedCards($boardOwnerIds, $userId),
 			// shared board: get all my assigned or unassigned cards
 			$this->cardMapper->findToMeOrNotAssignedCards($boardSharedIds, $userId)
 		);
