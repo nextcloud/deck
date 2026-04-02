@@ -65,6 +65,34 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * Returns a map of cardId => attachment count for the given card IDs in a single query.
+	 *
+	 * @param int[] $cardIds
+	 * @return array<int, int>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findCountByCardIds(array $cardIds): array {
+		if (empty($cardIds)) {
+			return [];
+		}
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('card_id')
+			->selectAlias($qb->func()->count('id'), 'attachment_count')
+			->from($this->getTableName())
+			->where($qb->expr()->in('card_id', $qb->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->groupBy('card_id');
+
+		$counts = [];
+		$cursor = $qb->executeQuery();
+		while ($row = $cursor->fetch()) {
+			$counts[(int)$row['card_id']] = (int)$row['attachment_count'];
+		}
+		$cursor->closeCursor();
+		return $counts;
+	}
+
+	/**
 	 * @return Entity[]
 	 * @throws \OCP\DB\Exception
 	 */

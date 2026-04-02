@@ -152,7 +152,8 @@ class StackServiceTest extends TestCase {
 		$this->permissionService->expects($this->once())->method('checkPermission');
 		$this->stackMapper->expects($this->once())->method('findAll')->willReturn($this->getStacks());
 		$this->labelMapper->expects($this->once())->method('getAssignedLabelsForBoard')->willReturn($this->getLabels());
-		$this->cardMapper->expects($this->any())->method('findAllArchived')->willReturn($this->getCards(222));
+		$this->cardMapper->expects($this->once())->method('findAllArchivedForStacks')->willReturn([222 => $this->getCards(222)]);
+		$this->attachmentService->method('countForCards')->willReturn([]);
 
 		$actual = $this->stackService->findAllArchived(123);
 		for ($stackId = 0; $stackId < 3; $stackId++) {

@@ -237,7 +237,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAllArchived($stackId, $limit = null, $offset = null) {
+	public function findAllArchived(int $stackId, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -250,7 +250,33 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAllByStack($stackId, $limit = null, $offset = null) {
+	/**
+	 * Batch-fetch all archived cards for multiple stacks in a single query.
+	 *
+	 * @param int[] $stackIds
+	 * @return array<int, Card[]> Map of stackId => Card[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAllArchivedForStacks(array $stackIds): array {
+		if (empty($stackIds)) {
+			return [];
+		}
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards')
+			->where($qb->expr()->in('stack_id', $qb->createNamedParameter($stackIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->orderBy('last_modified');
+
+		$cards = array_fill_keys($stackIds, []);
+		foreach ($this->findEntities($qb) as $card) {
+			$cards[$card->getStackId()][] = $card;
+		}
+		return $cards;
+	}
+
+	public function findAllByStack(int $stackId, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
