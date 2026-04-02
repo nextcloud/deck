@@ -157,18 +157,10 @@ export default {
 			return this.currentCard.owner?.displayname ?? this.currentCard.owner?.uid ?? this.currentCard.owner ?? null
 		},
 		subtitle() {
-			let subtitle = t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ⸱ ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
-			if (this.cardOwnerDisplayName) {
-				subtitle += ' ⸱ ' + t('deck', 'by') + ': ' + this.cardOwnerDisplayName
-			}
-			return subtitle
+			return this.buildSubtitle()
 		},
 		subtitleTooltip() {
-			let subtitleTooltip = t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
-			if (this.cardOwnerDisplayName) {
-				subtitleTooltip += '\n' + t('deck', 'by') + ': ' + this.cardOwnerDisplayName
-			}
-			return subtitleTooltip
+			return this.buildSubtitleTooltip()
 		},
 		cardDetailsInModal: {
 			get() {
@@ -201,6 +193,34 @@ export default {
 		},
 	},
 	methods: {
+		buildSubtitle() {
+			const modifiedDate = this.relativeDate(this.currentCard.lastModified * 1000)
+			const createdDate = this.relativeDate(this.currentCard.createdAt * 1000)
+			const owner = this.cardOwnerDisplayName
+			const cardMeta = {
+				generic: t('deck', '{modified}: {modifiedDate} ⸱ {created}: {createdDate}',
+					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate },
+					undefined, { escape: false }),
+				withOwner: t('deck', '{modified}: {modifiedDate} ⸱ {created}: {createdDate} ⸱ {by}: {owner}',
+					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate, by: t('deck', 'by'), owner },
+					undefined, { escape: false }),
+			}
+			return owner ? cardMeta.withOwner : cardMeta.generic
+		},
+		buildSubtitleTooltip() {
+			const modifiedDate = this.formatDate(this.currentCard.lastModified)
+			const createdDate = this.formatDate(this.currentCard.createdAt)
+			const owner = this.cardOwnerDisplayName
+			const cardMeta = {
+				generic: t('deck', '{modified}: {modifiedDate}\n{created}: {createdDate}',
+					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate },
+					undefined, { escape: false }),
+				withOwner: t('deck', '{modified}: {modifiedDate}\n{created}: {createdDate}\n{by}: {owner}',
+					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate, by: t('deck', 'by'), owner },
+					undefined, { escape: false }),
+			}
+			return owner ? cardMeta.withOwner : cardMeta.generic
+		},
 		focusHeader() {
 			this.$nextTick(() => {
 				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
