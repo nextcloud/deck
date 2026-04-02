@@ -62,6 +62,7 @@ export default function storeFactory() {
 			activityLoadMore: true,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			shortcutLock: false,
+			viewMode: localStorage.getItem('deck.viewMode') || 'kanban',
 		},
 		getters: {
 			config: state => (key) => {
@@ -302,6 +303,10 @@ export default function storeFactory() {
 			TOGGLE_SHORTCUT_LOCK(state, lock) {
 				state.shortcutLock = lock
 			},
+			setViewMode(state, mode) {
+				state.viewMode = mode
+				localStorage.setItem('deck.viewMode', mode)
+			},
 		},
 		actions: {
 			setFullApp({ commit }, isFullApp) {
@@ -531,6 +536,9 @@ export default function storeFactory() {
 			},
 			toggleShortcutLock({ commit }, lock) {
 				commit('TOGGLE_SHORTCUT_LOCK', lock)
+			},
+			setViewMode({ commit }, mode) {
+				commit('setViewMode', mode)
 			},
 		},
 	})
