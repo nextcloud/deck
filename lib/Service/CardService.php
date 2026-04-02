@@ -365,7 +365,7 @@ class CardService {
 			$targetStackId = $originCard->getStackId();
 		}
 		$this->permissionService->checkPermission($this->stackMapper, $targetStackId, Acl::PERMISSION_EDIT);
-		$newCard = $this->create($originCard->getTitle(), $targetStackId, $originCard->getType(), $originCard->getOrder(), $originCard->getOwner());
+		$newCard = $this->create($originCard->getTitle(), $targetStackId, $originCard->getType(), $originCard->getOrder(), $originCard->getOwner(), $originCard->getDescription(), $originCard->getDuedate());
 		$boardId = $this->stackMapper->findBoardId($targetStackId);
 		foreach ($this->labelMapper->findAssignedLabelsForCard($id) as $label) {
 			if ($boardId !== $this->stackMapper->findBoardId($originCard->getStackId())) {
@@ -388,7 +388,6 @@ class CardService {
 		$freshCard = $this->cardMapper->find($newCard->getId());
 		$freshCard->setDescription($originCard->getDescription());
 		$card = $this->enrichCards([$this->cardMapper->update($freshCard)]);
-
 		return $card[0];
 	}
 
