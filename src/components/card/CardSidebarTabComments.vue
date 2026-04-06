@@ -38,12 +38,13 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { NcAvatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem.vue'
 import CommentForm from './CommentForm.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import { getCurrentUser } from '@nextcloud/auth'
+import { useCommentStore } from '../../stores/comment.js'
 
 export default {
 	name: 'CardSidebarTabComments',
@@ -64,6 +65,10 @@ export default {
 			default: null,
 		},
 	},
+	setup() {
+		const commentStore = useCommentStore()
+		return { commentStore }
+	},
 	data() {
 		return {
 			newComment: '',
@@ -75,12 +80,16 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			replyTo: state => state.comment.replyTo,
 		}),
-		...mapGetters([
-			'getCommentsForCard',
-			'hasMoreComments',
-		]),
+		replyTo() {
+			return this.commentStore.replyTo
+		},
+		getCommentsForCard() {
+			return this.commentStore.getCommentsForCard
+		},
+		hasMoreComments() {
+			return this.commentStore.hasMoreComments
+		},
 		members() {
 			return this.currentBoard.users
 		},
@@ -110,14 +119,14 @@ export default {
 			}
 		},
 		async loadComments() {
-			this.$store.dispatch('setReplyTo', null)
+			this.commentStore.setReplyTo(null)
 			this.error = null
 			this.isLoading = true
 			try {
-				await this.$store.dispatch('fetchComments', { cardId: this.card.id })
+				await this.commentStore.fetchComments({ cardId: this.card.id })
 				this.isLoading = false
 				if (this.card.commentsUnread > 0) {
-					await this.$store.dispatch('markCommentsAsRead', this.card.id)
+					await this.commentStore.apiMarkCommentsAsRead(this.card.id)
 				}
 			} catch (e) {
 				this.isLoading = false
@@ -130,18 +139,18 @@ export default {
 				cardId: this.card.id,
 				comment: content,
 			}
-			await this.$store.dispatch('createComment', commentObj)
-			this.$store.dispatch('setReplyTo', null)
+			await this.commentStore.createComment(commentObj)
+			this.commentStore.setReplyTo(null)
 			this.newComment = ''
 			await this.loadComments()
 		},
 		async loadMore() {
 			this.isLoading = true
-			await this.$store.dispatch('fetchMore', { cardId: this.card.id })
+			await this.commentStore.fetchMore({ cardId: this.card.id })
 			this.isLoading = false
 		},
 		cancelReply() {
-			this.$store.dispatch('setReplyTo', null)
+			this.commentStore.setReplyTo(null)
 		},
 	},
 }
