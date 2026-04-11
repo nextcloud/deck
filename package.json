@@ -85,7 +85,7 @@
     "@relative-ci/agent": "^4.3.1",
     "@vue/test-utils": "^2.4.6",
     "@vue/vue2-jest": "^29.2.6",
-    "cypress": "^13.17.0",
+    "cypress": "^15.13.1",
     "cypress-split": "^1.24.31",
     "eslint-plugin-cypress": "^3.6.0",
     "eslint-webpack-plugin": "^5.0.3",
