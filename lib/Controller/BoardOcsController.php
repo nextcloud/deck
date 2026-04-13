@@ -10,9 +10,7 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
-use OCP\AppFramework\Http\Attribute\RequestHeader;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -38,8 +36,6 @@ class BoardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
-	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function read(int $boardId): DataResponse {
 		$localBoard = $this->boardService->find($boardId, true, true);
 		if ($localBoard->getExternalId() !== null) {
@@ -49,19 +45,16 @@ class BoardOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function create(string $title, string $color): DataResponse {
 		return new DataResponse($this->boardService->create($title, $this->userId, $color));
 	}
 
 	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function addAcl(int $boardId, int $type, string $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): DataResponse {
 		return new DataResponse($this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage));
 	}
 
 	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function updateAcl(int $id, bool $permissionEdit, bool $permissionShare, bool $permissionManage): DataResponse {
 		return new DataResponse($this->boardService->updateAcl($id, $permissionEdit, $permissionShare, $permissionManage));
 	}
