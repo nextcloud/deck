@@ -266,18 +266,28 @@ describe('Board import', function() {
 	})
 
 	it('Imports a board from JSON', function() {
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry:contains("Import board")')
-			.should('be.visible')
+		// Open settings dialog
+		cy.get('#app-navigation-vue').contains('Deck settings').click()
+
+		// Click "Import from device" in the Import section
+		cy.get('.app-settings-section').contains('button', 'Import from device')
 			.click()
 
 		// Upload a JSON file
-		cy.get('input[type="file"]')
+		cy.get('.app-settings-section input[type="file"]')
 			.selectFile([
 				{
 					contents: 'cypress/fixtures/import-board.json',
 					fileName: 'import-board.json',
 				},
 			], { force: true })
+
+		// Wait for import to finish and close the import result modal
+		cy.get('.csv-import-modal__result', { timeout: 30000 }).should('be.visible')
+		cy.get('.dialog__actions').contains('button', 'Close').click()
+
+		// Close the settings dialog
+		cy.get('body').type('{esc}')
 
 		cy.get('.app-navigation__list .app-navigation-entry:contains("Imported board")')
 			.should('be.visible')
