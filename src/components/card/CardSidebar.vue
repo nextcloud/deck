@@ -8,7 +8,6 @@
 		ref="cardSidebar"
 		:active="tabId"
 		:name="displayTitle"
-		:subname="subtitle"
 		:subtitle="subtitleTooltip"
 		:name-editable.sync="isEditingTitle"
 		@update:name="(value) => titleEditing = value"
@@ -17,6 +16,13 @@
 		@submit-name="handleSubmitTitle"
 		@opened="focusHeader"
 		@close="closeSidebar">
+		<template #subname>
+			<span>{{ subtitle }}</span>
+			<template v-if="cardOwner">
+				<span> ⸱ </span>
+				<NcUserBubble :user="cardOwner.uid" :display-name="cardOwner.displayName" />
+			</template>
+		</template>
 		<template #secondary-actions>
 			<NcActionButton v-if="cardDetailsInModal && isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
 				{{ t('deck', 'Open in sidebar view') }}
@@ -75,7 +81,7 @@
 </template>
 
 <script>
-import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
 import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
@@ -116,6 +122,7 @@ export default {
 		HomeIcon,
 		HomeOutlineIcon,
 		CardMenuEntries,
+		NcUserBubble,
 	},
 	mixins: [relativeDate],
 	props: {
@@ -156,11 +163,27 @@ export default {
 		cardOwnerDisplayName() {
 			return this.currentCard.owner?.displayname ?? this.currentCard.owner?.uid ?? this.currentCard.owner ?? null
 		},
+		cardOwner() {
+			const owner = this.currentCard.owner
+			if (!owner) return null
+			return {
+				uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
+				displayName: this.cardOwnerDisplayName,
+			}
+		},
 		subtitle() {
-			return this.buildSubtitle()
+			const modifiedDate = this.relativeDate(this.currentCard.lastModified * 1000)
+			const createdDate = this.relativeDate(this.currentCard.createdAt * 1000)
+			return t('deck', 'Modified: {modifiedDate} ⸱ Created: {createdDate}', { modifiedDate, createdDate })
 		},
 		subtitleTooltip() {
-			return this.buildSubtitleTooltip()
+			const modifiedDate = this.formatDate(this.currentCard.lastModified)
+			const createdDate = this.formatDate(this.currentCard.createdAt)
+			const owner = this.cardOwnerDisplayName
+			if (owner) {
+				return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}\nCreated by: {owner}', { modifiedDate, createdDate, owner })
+			}
+			return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}', { modifiedDate, createdDate })
 		},
 		cardDetailsInModal: {
 			get() {
@@ -193,34 +216,6 @@ export default {
 		},
 	},
 	methods: {
-		buildSubtitle() {
-			const modifiedDate = this.relativeDate(this.currentCard.lastModified * 1000)
-			const createdDate = this.relativeDate(this.currentCard.createdAt * 1000)
-			const owner = this.cardOwnerDisplayName
-			const cardMeta = {
-				generic: t('deck', '{modified}: {modifiedDate} ⸱ {created}: {createdDate}',
-					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate },
-					undefined, { escape: false }),
-				withOwner: t('deck', '{modified}: {modifiedDate} ⸱ {created}: {createdDate} ⸱ {by}: {owner}',
-					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate, by: t('deck', 'by'), owner },
-					undefined, { escape: false }),
-			}
-			return owner ? cardMeta.withOwner : cardMeta.generic
-		},
-		buildSubtitleTooltip() {
-			const modifiedDate = this.formatDate(this.currentCard.lastModified)
-			const createdDate = this.formatDate(this.currentCard.createdAt)
-			const owner = this.cardOwnerDisplayName
-			const cardMeta = {
-				generic: t('deck', '{modified}: {modifiedDate}\n{created}: {createdDate}',
-					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate },
-					undefined, { escape: false }),
-				withOwner: t('deck', '{modified}: {modifiedDate}\n{created}: {createdDate}\n{by}: {owner}',
-					{ modified: t('deck', 'Modified'), modifiedDate, created: t('deck', 'Created'), createdDate, by: t('deck', 'by'), owner },
-					undefined, { escape: false }),
-			}
-			return owner ? cardMeta.withOwner : cardMeta.generic
-		},
 		focusHeader() {
 			this.$nextTick(() => {
 				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
