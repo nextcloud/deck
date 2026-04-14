@@ -42,6 +42,35 @@
 			</NcFormBox>
 		</NcAppSettingsSection>
 
+		<NcAppSettingsSection v-if="canCreate" id="import-settings" :name="t('deck', 'Import')">
+			<p>{{ t('deck', 'Import a board from a JSON or CSV file.') }}</p>
+			<div class="import-buttons">
+				<NcButton type="secondary" @click="importFromNextcloud">
+					<template #icon>
+						<CloudUploadIcon :size="20" />
+					</template>
+					{{ t('deck', 'Import from Nextcloud') }}
+				</NcButton>
+				<NcButton type="secondary" @click="importFromDevice">
+					<template #icon>
+						<UploadIcon :size="20" />
+					</template>
+					{{ t('deck', 'Import from device') }}
+				</NcButton>
+			</div>
+			<input ref="fileInput"
+				type="file"
+				accept="application/json,.csv,text/csv"
+				style="display: none;"
+				@change="onLocalFileSelected">
+			<CsvImportModal v-if="importModalOpen"
+				:importing="importing"
+				:messages="importMessages"
+				:errors="importErrors"
+				:title="t('deck', 'Import board')"
+				@close="onCloseImportModal" />
+		</NcAppSettingsSection>
+
 		<NcAppSettingsShortcutsSection>
 			<NcHotkeyList :label="t('deck', 'Board actions')">
 				<NcHotkey :label="t('deck', 'Scroll sideways')" hotkey="Shift Scroll" />
@@ -74,15 +103,25 @@ import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcHotkeyList from '@nextcloud/vue/components/NcHotkeyList'
 import NcHotkey from '@nextcloud/vue/components/NcHotkey'
-import { NcSelect } from '@nextcloud/vue'
+import { NcButton, NcSelect } from '@nextcloud/vue'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
+import { getFilePickerBuilder, FilePickerType } from '@nextcloud/dialogs'
+import { getClient, getRootPath } from '@nextcloud/files/dav'
+import { loadState } from '@nextcloud/initial-state'
+import CloudUploadIcon from 'vue-material-design-icons/CloudUpload.vue'
+import UploadIcon from 'vue-material-design-icons/Upload.vue'
+import CsvImportModal from './navigation/CsvImportModal.vue'
+
+const davClient = getClient()
+const canCreateState = loadState('deck', 'canCreate')
 
 export default {
 	name: 'DeckAppSettings',
 	components: {
+		NcButton,
 		NcSelect,
 		NcAppSettingsDialog,
 		NcAppSettingsSection,
@@ -91,6 +130,9 @@ export default {
 		NcFormBoxSwitch,
 		NcHotkeyList,
 		NcHotkey,
+		CloudUploadIcon,
+		UploadIcon,
+		CsvImportModal,
 	},
 
 	props: {
@@ -104,6 +146,11 @@ export default {
 		return {
 			groups: [],
 			groupLimit: [],
+			canCreate: canCreateState,
+			importModalOpen: false,
+			importing: false,
+			importMessages: [],
+			importErrors: [],
 		}
 	},
 
@@ -182,6 +229,70 @@ export default {
 			await this.$store.dispatch('setConfig', { groupLimit: this.groupLimit })
 		},
 
+		async importFromNextcloud() {
+			try {
+				const picker = getFilePickerBuilder(t('deck', 'Select file to import'))
+					.setMultiSelect(false)
+					.setMimeTypeFilter(['application/json', 'text/csv', 'text/plain'])
+					.setType(FilePickerType.Choose)
+					.build()
+				const path = await picker.pick()
+				const contents = await davClient.getFileContents(getRootPath() + path)
+				const filename = path.split('/').pop()
+				const mime = filename.endsWith('.csv') ? 'text/csv' : 'application/json'
+				const file = new File([contents], filename, { type: mime })
+				await this.doImport(file)
+			} catch (e) {
+				// FilePicker closed without selection
+			}
+		},
+		importFromDevice() {
+			this.$refs.fileInput.value = ''
+			this.$refs.fileInput.click()
+		},
+		async onLocalFileSelected(event) {
+			const file = event.target.files[0]
+			if (file) {
+				await this.doImport(file)
+			}
+		},
+		async doImport(file) {
+			this.importModalOpen = true
+			this.importing = true
+			this.importMessages = []
+			this.importErrors = []
+
+			try {
+				const result = await this.$store.dispatch('importBoard', file)
+				if (result?.message) {
+					this.importErrors = [result.message]
+				} else if (result instanceof Error) {
+					this.importErrors = [t('deck', 'Failed to import board')]
+				} else {
+					this.importErrors = result?.import?.errors ?? []
+					const board = result?.board
+					if (board) {
+						this.importMessages.push(t('deck', 'Board "{title}" created.', { title: board.title }))
+						const stackCount = board.stacks?.length ?? 0
+						if (stackCount > 0) {
+							this.importMessages.push(n('deck',
+								'%n stack created.',
+								'%n stacks created.',
+								stackCount))
+						}
+					}
+				}
+			} catch (e) {
+				this.importErrors = [t('deck', 'Failed to import board')]
+				console.error(e)
+			}
+
+			this.importing = false
+		},
+		onCloseImportModal() {
+			this.importModalOpen = false
+		},
+
 		async showKeyboardShortcuts() {
 			this.$emit('update:open', true)
 
@@ -200,5 +311,11 @@ export default {
 	&#settings-section_admin-settings p {
 		margin-bottom: 20px;
 	}
+}
+
+.import-buttons {
+	display: flex;
+	gap: 8px;
+	margin-top: 8px;
 }
 </style>

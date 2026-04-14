@@ -4,6 +4,11 @@
 -->
 <template>
 	<span>
+		<input ref="csvFileInput"
+			type="file"
+			accept=".csv,text/csv"
+			style="display: none;"
+			@change="onLocalCsvSelected">
 		<NcAppNavigationItem v-if="!editing"
 			:name="!deleted ? board.title : undoText"
 			:loading="loading"
@@ -20,6 +25,11 @@
 					:board-title="board.title"
 					@export="onExportBoard"
 					@close="onCloseExportBoard" />
+				<CsvImportModal v-if="csvImportModalOpen"
+					:importing="csvImporting"
+					:messages="csvImportMessages"
+					:errors="csvImportErrors"
+					@close="onCloseCsvImportModal" />
 			</template>
 
 			<template #counter>
@@ -68,6 +78,22 @@
 						:close-after-click="true"
 						@click="actionExport">
 						{{ t('deck', 'Export board') }}
+					</NcActionButton>
+					<NcActionButton v-if="canManage && !board.archived"
+						:close-after-click="true"
+						@click="importCsvFromNextcloud">
+						<template #icon>
+							<CloudUploadIcon :size="20" />
+						</template>
+						{{ t('deck', 'Import cards from Nextcloud') }}
+					</NcActionButton>
+					<NcActionButton v-if="canManage && !board.archived"
+						:close-after-click="true"
+						@click="importCsvFromDevice">
+						<template #icon>
+							<UploadIcon :size="20" />
+						</template>
+						{{ t('deck', 'Import cards from device') }}
 					</NcActionButton>
 					<NcActionButton v-if="!board.archived && board.acl?.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
 						{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
@@ -181,6 +207,8 @@ import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import PinIcon from 'vue-material-design-icons/Pin.vue'
 import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
+import CloudUploadIcon from 'vue-material-design-icons/CloudUpload.vue'
+import UploadIcon from 'vue-material-design-icons/Upload.vue'
 
 import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
@@ -188,10 +216,13 @@ import { emit } from '@nextcloud/event-bus'
 import isTouchDevice from '../../mixins/isTouchDevice.js'
 import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
-import { showLoading, showError } from '@nextcloud/dialogs'
+import CsvImportModal from './CsvImportModal.vue'
+import { showError, showLoading, getFilePickerBuilder, FilePickerType } from '@nextcloud/dialogs'
+import { getClient, getRootPath } from '@nextcloud/files/dav'
 import { getCurrentUser } from '@nextcloud/auth'
 
 const canCreateState = loadState('deck', 'canCreate')
+const davClient = getClient()
 
 export default {
 	name: 'AppNavigationBoard',
@@ -209,9 +240,12 @@ export default {
 		CheckIcon,
 		PinIcon,
 		PinOffIcon,
+		CloudUploadIcon,
+		UploadIcon,
 		LeaveIcon,
 		BoardCloneModal,
 		BoardExportModal,
+		CsvImportModal,
 	},
 	directives: {
 		ClickOutside,
@@ -241,6 +275,10 @@ export default {
 			canCreate: canCreateState,
 			cloneModalOpen: false,
 			exportModalOpen: false,
+			csvImportModalOpen: false,
+			csvImporting: false,
+			csvImportMessages: [],
+			csvImportErrors: [],
 			currentUser: getCurrentUser(),
 			defaultBoardId: localStorage.getItem('deck.defaultBoardId'),
 		}
@@ -427,6 +465,81 @@ export default {
 		},
 		actionExport() {
 			this.exportModalOpen = true
+		},
+		async importCsvFromNextcloud() {
+			try {
+				const picker = getFilePickerBuilder(t('deck', 'Select CSV file to import'))
+					.setMultiSelect(false)
+					.setMimeTypeFilter(['text/csv', 'text/plain'])
+					.setType(FilePickerType.Choose)
+					.build()
+				const path = await picker.pick()
+				const contents = await davClient.getFileContents(getRootPath() + path)
+				const filename = path.split('/').pop()
+				const file = new File([contents], filename, { type: 'text/csv' })
+				await this.doImportCsv(file)
+			} catch (e) {
+				// FilePicker closed without selection
+			}
+		},
+		importCsvFromDevice() {
+			this.$refs.csvFileInput.value = ''
+			this.$refs.csvFileInput.click()
+		},
+		async onLocalCsvSelected(event) {
+			const file = event.target.files[0]
+			if (file) {
+				await this.doImportCsv(file)
+			}
+		},
+		async doImportCsv(file) {
+			this.csvImportModalOpen = true
+			this.csvImporting = true
+			this.csvImportMessages = []
+			this.csvImportErrors = []
+
+			try {
+				const result = await this.$store.dispatch('importCsvToBoard', { boardId: this.board.id, file })
+				if (result instanceof Error) {
+					this.csvImportErrors = [t('deck', 'Failed to import cards from CSV')]
+				} else {
+					const imp = result.import ?? {}
+					this.csvImportErrors = imp.errors ?? []
+					if (imp.imported > 0) {
+						this.csvImportMessages.push(n('deck',
+							'%n card imported.',
+							'%n cards imported.',
+							imp.imported))
+					}
+					if (imp.updated > 0) {
+						this.csvImportMessages.push(n('deck',
+							'%n card updated.',
+							'%n cards updated.',
+							imp.updated))
+					}
+					if (imp.stacksCreated > 0) {
+						this.csvImportMessages.push(n('deck',
+							'%n stack created.',
+							'%n stacks created.',
+							imp.stacksCreated))
+					}
+					if (imp.labelsCreated > 0) {
+						this.csvImportMessages.push(n('deck',
+							'%n label created.',
+							'%n labels created.',
+							imp.labelsCreated))
+					}
+				}
+			} catch (e) {
+				this.csvImportErrors = [t('deck', 'Failed to import cards from CSV')]
+				console.error(e)
+			}
+
+			this.csvImporting = false
+		},
+		onCloseCsvImportModal() {
+			this.csvImportModalOpen = false
+			this.$router.push({ name: 'board', params: { id: this.board.id } })
 		},
 		async onExportBoard(format) {
 			this.exportModalOpen = false

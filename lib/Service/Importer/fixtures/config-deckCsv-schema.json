@@ -1,0 +1,19 @@
+{
+    "type": "object",
+    "properties": {
+        "owner": {
+            "type": "string",
+            "required": true,
+            "comment": "Nextcloud owner username"
+        },
+        "boardTitle": {
+            "type": "string",
+            "required": true,
+            "comment": "Title for the imported board"
+        },
+        "uidRelation": {
+            "type": "object",
+            "comment": "Relationship between display names and Nextcloud usernames"
+        }
+    }
+}

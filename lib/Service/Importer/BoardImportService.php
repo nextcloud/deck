@@ -24,6 +24,7 @@ use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\FileService;
+use OCA\Deck\Service\Importer\Systems\DeckCsvService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\Importer\Systems\TrelloApiService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
@@ -181,6 +182,11 @@ class BoardImportService {
 				'name' => TrelloJsonService::$name,
 				'class' => TrelloJsonService::class,
 				'internalName' => 'TrelloJson'
+			]);
+			$this->addAllowedImportSystem([
+				'name' => DeckCsvService::$name,
+				'class' => DeckCsvService::class,
+				'internalName' => 'DeckCsv'
 			]);
 		}
 		$this->eventDispatcher->dispatchTyped(new BoardImportGetAllowedEvent($this));

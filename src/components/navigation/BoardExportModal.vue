@@ -19,7 +19,7 @@
 			</NcCheckboxRadioSwitch>
 
 			<p class="note">
-				{{ t('deck', 'Note: Only the JSON format is supported for importing back into the Deck app.') }}
+				{{ t('deck', 'Note: Both JSON and CSV formats can be imported back into Deck.') }}
 			</p>
 		</div>
 
