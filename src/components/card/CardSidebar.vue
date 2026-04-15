@@ -8,7 +8,6 @@
 		ref="cardSidebar"
 		:active="tabId"
 		:name="displayTitle"
-		:subname="subtitle"
 		:subtitle="subtitleTooltip"
 		:name-editable.sync="isEditingTitle"
 		@update:name="(value) => titleEditing = value"
@@ -17,6 +16,13 @@
 		@submit-name="handleSubmitTitle"
 		@opened="focusHeader"
 		@close="closeSidebar">
+		<template #subname>
+			<span>{{ subtitle }}</span>
+			<template v-if="cardOwner">
+				<span> ⸱ </span>
+				<NcUserBubble :user="cardOwner.uid" :display-name="cardOwner.displayName" />
+			</template>
+		</template>
 		<template #secondary-actions>
 			<NcActionButton v-if="cardDetailsInModal && isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
 				{{ t('deck', 'Open in sidebar view') }}
@@ -75,7 +81,7 @@
 </template>
 
 <script>
-import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
 import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
@@ -116,6 +122,7 @@ export default {
 		HomeIcon,
 		HomeOutlineIcon,
 		CardMenuEntries,
+		NcUserBubble,
 	},
 	mixins: [relativeDate],
 	props: {
@@ -153,11 +160,30 @@ export default {
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
+		cardOwnerDisplayName() {
+			return this.currentCard.owner?.displayname ?? this.currentCard.owner?.uid ?? this.currentCard.owner ?? null
+		},
+		cardOwner() {
+			const owner = this.currentCard.owner
+			if (!owner) return null
+			return {
+				uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
+				displayName: this.cardOwnerDisplayName,
+			}
+		},
 		subtitle() {
-			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ⸱ ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
+			const modifiedDate = this.relativeDate(this.currentCard.lastModified * 1000)
+			const createdDate = this.relativeDate(this.currentCard.createdAt * 1000)
+			return t('deck', 'Modified: {modifiedDate} ⸱ Created: {createdDate}', { modifiedDate, createdDate })
 		},
 		subtitleTooltip() {
-			return t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
+			const modifiedDate = this.formatDate(this.currentCard.lastModified)
+			const createdDate = this.formatDate(this.currentCard.createdAt)
+			const owner = this.cardOwnerDisplayName
+			if (owner) {
+				return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}\nCreated by: {owner}', { modifiedDate, createdDate, owner })
+			}
+			return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}', { modifiedDate, createdDate })
 		},
 		cardDetailsInModal: {
 			get() {
