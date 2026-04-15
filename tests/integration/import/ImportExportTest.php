@@ -61,7 +61,6 @@ class ImportExportTest extends \Test\TestCase {
 		parent::setUpBeforeClass();
 
 		$backend = new \Test\Util\User\Dummy();
-		\OC_User::useBackend($backend);
 		Server::get(IUserManager::class)->registerBackend($backend);
 		$backend->createUser('alice', 'alice');
 		$backend->createUser('jane', 'jane');
