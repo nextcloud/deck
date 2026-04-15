@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Vue from 'vue'
 import { defineStore } from 'pinia'
 import { CommentApi } from '../services/CommentApi.js'
 
@@ -34,10 +35,10 @@ export const useCommentStore = defineStore('comment', {
 		},
 		addComments({ comments, cardId }) {
 			if (this.comments[cardId] === undefined) {
-				this.comments[cardId] = {
+				Vue.set(this.comments, cardId, {
 					hasMore: comments.length > 0,
 					comments: [...comments],
-				}
+				})
 			} else {
 				const newComments = comments.filter((comment) => {
 					return this.comments[cardId].comments.findIndex((item) => item.id === comment.id) === -1
@@ -59,7 +60,7 @@ export const useCommentStore = defineStore('comment', {
 		},
 		markCommentsAsRead(cardId) {
 			this.comments[cardId].comments.forEach(_comment => {
-				_comment.isUnread = false
+				Vue.set(_comment, 'isUnread', false)
 			})
 		},
 		setReplyTo(comment) {
