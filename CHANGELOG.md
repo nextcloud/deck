@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.9
+### Fixed
+* [stable30] fix: rely on backend filter for upcoming cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7631
+* [stable30] fix: check cardId for attachment by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7739
+* [stable30] owner should not get updated when updating card by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7855
+
 ## 1.14.8
 ### Added
 * [stable30] refactor: convert store to factory functions by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7402
