@@ -5,6 +5,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## 1.17.1
+
+### Added
+- feat: live update card description by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7793
+
+### Fixed
+- fix: remove user part only at the beginning of path by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7676
+- Fix npm audit by @nextcloud-command in https://github.com/nextcloud/deck/pull/7600
+- fix: hide upload button if user has no quota by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7678
+- fix: user may be null by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7707
+- fix: check cardId for attachment by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7737
+- fix: Handle share attributes in the share provider by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7728
+- Correctly copy label and description when clon… by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7767
+- Server-side validation for whitespace in title by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7764
+- fix: showing no due cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7811
+
 ## 1.17.0
 
 ### Added
