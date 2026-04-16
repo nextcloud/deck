@@ -5,6 +5,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.4
+
+### Added
+- [stable32] feat: live update card description by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7792
+
+### Fixed
+- [stable32] Fix/display labels with invalid colors by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7541
+- [stable32] fix: Use strict comparaison by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7576
+- [stable32] fix: improve wording for global search results by @grnd-alt in https://github.com/nextcloud/deck/pull/7602
+- [stable32] fix(cron): Split Card IDs into chunks by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7621
+- [stable32] fix: rely on backend filter for upcoming cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7635
+- [stable32] fix: hide upload button if user has no quota by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7679
+- [stable32] fix: resolve MySQL Error 1093 when deleting users from boards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7700
+- [stable32] fix: user may be null by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7706
+- [stable32] fix: check cardId for attachment by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7738
+- [stable32] Correctly copy label and description when clon… by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7766
+- [stable32] Server-side validation for whitespace in title by @samin-z in https://github.com/nextcloud/deck/pull/7783
+- [stable32] fix: showing no due cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7810
+
 ## 1.16.3
 ### Added
 - [stable32] refactor: convert store to factory functions by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7400
