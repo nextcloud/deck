@@ -22,7 +22,6 @@ OC.L10N.register(
     "Delete" : "հեռացնել",
     "Edit" : "մշակել",
     "Download" : "Ներբեռնել",
-    "Modified" : "Փոփոխված",
     "Comments" : "Կարծիքներ",
     "Created:" : "Ստեղծված.",
     "Update" : "Թարմացնել",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Export" : "Արտահանում",
     "Close" : "Փակել",
+    "Modified" : "Փոփոխված",
     "Share" : "Կիսվել",
     "Save" : "Պահպանել",
     "Today" : "այսօր"
