@@ -5,8 +5,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-# 1.15.7
-## Fixed
+## 1.15.7
+### Fixed
 - [stable31] Fix/display labels with invalid colors by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7540
 - [stable31] fix: Use strict comparaison by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7575
 - [stable31] fix(cron): Split Card IDs into chunks by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7622
@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 - [stable31] Server-side validation for whitespace in title by @samin-z in https://github.com/nextcloud/deck/pull/7784
 - [stable31] owner should not get updated when updating card by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7854
 
-# 1.15.6
+## 1.15.6
 ### Added
 - [stable31] refactor: convert store to factory functions by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7401
 - [stable31] feat(sharing): ability to leave a shared board by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7474
@@ -27,17 +27,17 @@ All notable changes to this project will be documented in this file.
 - [stable31] fix: board & label color picker by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7465
 - [stable31] Focus input field when executing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7473
 
-# 1.15.5
+## 1.15.5
 ### Fixed
 * [stable31] fix: Check owner can create boards when importing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7343
 
-# 1.15.4
+## 1.15.4
 ### Fixed
 * [stable31] fix: comments with mentions cant be submitted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7296
 * [stable31] Fix: Prevent error in Whiteboard when adding a Deckboard by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7327
 * [stable31] fix: Check owner can create boards when importing by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7343
 
-# 1.15.3
+## 1.15.3
 ### Fixed
 * [stable31] fix: Use getId() method for card ID retrieval by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7144
 * [stable31]fix: ensure correct type when filtering events by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7148
@@ -53,7 +53,7 @@ All notable changes to this project will be documented in this file.
 * [stable31] Clean attachment sharing records after permanent deleted by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7180
 * Chore(deps): Bump @nextcloud/vue from 8.22.0 to 8.31.0 by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7272
 
-# 1.15.2
+## 1.15.2
 ### Fixed
 * [stable31] fix: update DeleteCron to remove deleted lists by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7029
 * [stable31] fix: not show Share with a Deck card for unauthorized users by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7061
