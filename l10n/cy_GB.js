@@ -20,7 +20,6 @@ OC.L10N.register(
     "Delete" : "Dileu",
     "Edit" : "Golygu",
     "Download" : "Llwytho i lawr",
-    "Modified" : "Addaswyd",
     "Created:" : "Crewyd:",
     "Update" : "Diweddaru",
     "Description" : "Disgrifiad",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "An error occurred" : "Digwyddodd gwall",
     "Export" : "Allforio",
     "Close" : "Cau",
+    "Modified" : "Addaswyd",
     "Share" : "Rhannu",
     "Save" : "Cadw",
     "Today" : "Heddiw"

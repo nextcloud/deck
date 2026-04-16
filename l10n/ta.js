@@ -18,7 +18,6 @@ OC.L10N.register(
     "Edit" : "தொகுக்க",
     "Show in Files" : "கோப்புகளில் காட்டவும்",
     "Download" : "பதிவிறக்குக",
-    "Modified" : "மாற்றப்பட்டது",
     "Created:" : "உருவாக்கப்பட்டது:",
     "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Export" : "ஏற்றுமதி",
     "Close" : "மூடுக",
+    "Modified" : "மாற்றப்பட்டது",
     "Share" : "பகிர்வு",
     "Save" : "சேமிக்க ",
     "Today" : "இன்று"
