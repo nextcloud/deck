@@ -360,14 +360,14 @@ class DeckProvider implements IProvider {
 			$params['before'] = [
 				'type' => 'highlight',
 				'id' => (string)$subjectParams['before'],
-				'name' => $subjectParams['before'] ?? ''
+				'name' => (string)$subjectParams['before'] ?? ''
 			];
 		}
 		if (array_key_exists('after', $subjectParams)) {
 			$params['after'] = [
 				'type' => 'highlight',
 				'id' => (string)$subjectParams['after'],
-				'name' => $subjectParams['after'] ?? ''
+				'name' => (string)$subjectParams['after'] ?? ''
 			];
 		}
 		if (array_key_exists('card', $subjectParams) && $event->getSubject() === ActivityManager::SUBJECT_CARD_UPDATE_TITLE) {
