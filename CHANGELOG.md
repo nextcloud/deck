@@ -5,6 +5,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.15.7
+## Fixed
+- [stable31] Fix/display labels with invalid colors by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7540
+- [stable31] fix: Use strict comparaison by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7575
+- [stable31] fix(cron): Split Card IDs into chunks by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7622
+- [stable31] fix: rely on backend filter for upcoming cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7633
+- [stable31] fix: hide upload button if user has no quota by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7680
+- [stable31] fix: check cardId for attachment by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7740
+- [stable31] Server-side validation for whitespace in title by @samin-z in https://github.com/nextcloud/deck/pull/7784
+- [stable31] owner should not get updated when updating card by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7854
+
 # 1.15.6
 ### Added
 - [stable31] refactor: convert store to factory functions by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7401
