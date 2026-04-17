@@ -29,7 +29,6 @@ namespace OCA\Deck\Sharing;
 use OC\Files\Cache\Cache;
 use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
@@ -48,6 +47,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
+use OCP\Share\IAttributes;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
 
@@ -150,6 +150,11 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			)
 		);*/
 
+		// set share attributes
+		$shareAttributes = $this->formatShareAttributes(
+			$share->getAttributes()
+		);
+
 		$shareId = $this->addShareToDB(
 			$share->getSharedWith(),
 			$share->getSharedBy(),
@@ -159,7 +164,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$share->getTarget(),
 			$share->getPermissions(),
 			$share->getToken() ?? '',
-			$share->getExpirationDate()
+			$share->getExpirationDate(),
+			$shareAttributes
 		);
 		$data = $this->getRawShare($shareId);
 
@@ -180,6 +186,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @param int $permissions
 	 * @param string $token
 	 * @param \DateTime|null $expirationDate
+	 * @param string|null $attributes
 	 * @return int
 	 */
 	private function addShareToDB(
@@ -191,7 +198,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		string $target,
 		int $permissions,
 		string $token,
-		?\DateTime $expirationDate
+		?\DateTime $expirationDate,
+		?string $attributes = null
 	): int {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->insert('share')
@@ -209,6 +217,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		if ($expirationDate !== null) {
 			$qb->setValue('expiration', $qb->createNamedParameter($expirationDate, 'datetime'));
+		}
+
+		if ($attributes !== null) {
+			$qb->setValue('attributes', $qb->createNamedParameter($attributes));
 		}
 
 		$qb->executeStatement();
@@ -281,6 +293,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$entryData['parent'] = $entryData['f_parent'];
 			$share->setNodeCacheEntry(Cache::cacheEntryFromData($entryData, $this->mimeTypeLoader));
 		}
+
+		$share = $this->updateShareAttributes($share, $data['attributes'] ?? null);
+
 		return $share;
 	}
 
@@ -312,8 +327,14 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->set('permissions', $qb->createNamedParameter($share->getPermissions()))
 			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
 			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE))
-			->execute();
+			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
+
+		$shareAttributes = $this->formatShareAttributes($share->getAttributes());
+		if ($shareAttributes !== null) {
+			$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+		}
+
+		$qb->execute();
 
 		/*
 		 * Update all user defined group shares
@@ -325,8 +346,14 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->set('uid_initiator', $qb->createNamedParameter($share->getSharedBy()))
 			->set('item_source', $qb->createNamedParameter($share->getNode()->getId()))
 			->set('file_source', $qb->createNamedParameter($share->getNode()->getId()))
-			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE))
-			->execute();
+			->set('expiration', $qb->createNamedParameter($share->getExpirationDate(), IQueryBuilder::PARAM_DATE));
+
+
+		if ($shareAttributes !== null) {
+			$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+		}
+
+		$qb->execute();
 
 		/*
 		 * Now update the permissions for all children that have not set it to 0
@@ -335,10 +362,50 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		$qb->update('share')
 			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
 			->andWhere($qb->expr()->neq('permissions', $qb->createNamedParameter(0)))
-			->set('permissions', $qb->createNamedParameter($share->getPermissions()))
-			->execute();
+			->set('permissions', $qb->createNamedParameter($share->getPermissions()));
+
+		if ($shareAttributes !== null) {
+			$qb->set('attributes', $qb->createNamedParameter($shareAttributes));
+		}
+		$qb->execute();
 
 		return $share;
+	}
+
+	protected function updateShareAttributes(IShare $share, ?string $data): IShare {
+		if ($data === null || $data === '') {
+			return $share;
+		}
+		$attributes = $share->getAttributes() ?? $share->newAttributes();
+		$compressedAttributes = \json_decode($data, true);
+		if ($compressedAttributes === false || $compressedAttributes === null) {
+			return $share;
+		}
+		foreach ($compressedAttributes as $compressedAttribute) {
+			$attributes->setAttribute(
+				$compressedAttribute[0],
+				$compressedAttribute[1],
+				$compressedAttribute[2]
+			);
+		}
+		$share->setAttributes($attributes);
+		return $share;
+	}
+
+	protected function formatShareAttributes(?IAttributes $attributes): ?string {
+		if ($attributes === null || empty($attributes->toArray())) {
+			return null;
+		}
+
+		$compressedAttributes = [];
+		foreach ($attributes->toArray() as $attribute) {
+			$compressedAttributes[] = [
+				0 => $attribute['scope'],
+				1 => $attribute['key'],
+				2 => $attribute['value']
+			];
+		}
+		return \json_encode($compressedAttributes) ?: null;
 	}
 
 	/**
