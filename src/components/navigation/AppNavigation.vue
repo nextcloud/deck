@@ -44,7 +44,6 @@
 				</template>
 			</AppNavigationBoardCategory>
 			<AppNavigationAddBoard v-if="canCreate" />
-			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
 		<template #default>
 			<DeckAppSettings :open.sync="settingsOpened"
@@ -77,7 +76,6 @@ import CalendarOutlineIcon from 'vue-material-design-icons/CalendarOutline.vue'
 import DeckIcon from './../icons/DeckIcon.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareOutline.vue'
 import { subscribe } from '@nextcloud/event-bus'
-import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
 import DeckAppSettings from '../DeckAppSettings.vue'
 import IconCog from 'vue-material-design-icons/CogOutline.vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -90,7 +88,6 @@ export default {
 		NcAppNavigation,
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
-		AppNavigationImportBoard,
 		NcAppNavigationItem,
 		ArchiveIcon,
 		ArchiveOutlineIcon,
