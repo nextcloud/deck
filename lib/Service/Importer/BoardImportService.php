@@ -321,9 +321,20 @@ class BoardImportService {
 
 	public function importComments(): void {
 		$allComments = $this->getImportSystem()->getComments();
+		$sourceToImportedCommentId = [];
 		foreach ($allComments as $cardId => $comments) {
 			foreach ($comments as $commentId => $comment) {
+				$metaData = $comment->getMetaData() ?? [];
+				$sourceParentId = (string)($metaData['deckImportParentId'] ?? '0');
+				if ($sourceParentId !== '0' && isset($sourceToImportedCommentId[$sourceParentId])) {
+					$comment->setParentId($sourceToImportedCommentId[$sourceParentId]);
+				} else {
+					$comment->setParentId('0');
+				}
+
 				$this->insertComment((int)$cardId, $comment);
+				$sourceId = (string)($metaData['deckImportSourceId'] ?? $commentId);
+				$sourceToImportedCommentId[$sourceId] = $comment->getId();
 				$this->getImportSystem()->updateComment((int)$cardId, $commentId, $comment);
 			}
 		}
