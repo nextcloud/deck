@@ -49,7 +49,7 @@ class ShareFileAttachmentExportService {
 
 	/**
 	 * @param array<string, mixed> $share
-	 * 
+	 *
 	 * @return array<string, int|string>|null
 	 */
 	private function serializeShareAttachment(array $share, string $fallbackUserId): ?array {

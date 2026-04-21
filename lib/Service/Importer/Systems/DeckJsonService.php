@@ -110,8 +110,6 @@ class DeckJsonService extends ABoardImportService {
 	public function getComments(): array {
 		$comments = [];
 		foreach ($this->tmpCards as $sourceCard) {
-			$this->importAttachments($sourceCard);
-
 			if (!property_exists($sourceCard, 'comments')) {
 				continue;
 			}
@@ -134,7 +132,7 @@ class DeckJsonService extends ABoardImportService {
 							->setMessage($commentOriginal->message)
 							->setCreationDateTime(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $commentOriginal->creationDateTime));
 						$comment->setMetaData([
-							'deckImportSourceId' => (string)$commentId,
+							'deckImportSourceId' => $commentId,
 							'deckImportParentId' => $parentId,
 						]);
 						$ordered[$commentId] = $comment;
@@ -152,7 +150,7 @@ class DeckJsonService extends ABoardImportService {
 							->setMessage($commentOriginal->message)
 							->setCreationDateTime(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $commentOriginal->creationDateTime));
 						$comment->setMetaData([
-							'deckImportSourceId' => (string)$commentId,
+							'deckImportSourceId' => $commentId,
 							'deckImportParentId' => '0',
 						]);
 						$ordered[$commentId] = $comment;
@@ -167,6 +165,12 @@ class DeckJsonService extends ABoardImportService {
 		}
 		/** @var array<int, array<string, IComment>> */
 		return $comments;
+	}
+
+	public function importAttachments(): void {
+		foreach ($this->tmpCards as $sourceCard) {
+			$this->importAttachmentsForCard($sourceCard);
+		}
 	}
 
 	/**
@@ -187,7 +191,7 @@ class DeckJsonService extends ABoardImportService {
 		return [$actorType, $actorId];
 	}
 
-	private function importAttachments(\stdClass $sourceCard): void {
+	private function importAttachmentsForCard(\stdClass $sourceCard): void {
 		if (!property_exists($sourceCard, 'attachments') || !isset($this->cards[$sourceCard->id])) {
 			return;
 		}

@@ -87,9 +87,9 @@ class DeckMigratorTest extends TestCase {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('admin');
 
-		$board = $this->createMock(Board::class);
-		$board->method('getId')->willReturn(42);
-		$board->method('jsonSerialize')->willReturn(['id' => 42, 'title' => 'Board A', 'stacks' => []]);
+		$board = new Board();
+		$board->setId(42);
+		$board->setTitle('Board A');
 
 		$this->boardMapper->expects($this->once())
 			->method('findAllByUser')
@@ -98,9 +98,6 @@ class DeckMigratorTest extends TestCase {
 		$this->labelMapper->expects($this->once())->method('findAll')->with(42)->willReturn([]);
 		$this->aclMapper->expects($this->once())->method('findAll')->with(42)->willReturn([]);
 		$this->stackMapper->expects($this->once())->method('findAll')->with(42)->willReturn([]);
-		$board->expects($this->once())->method('setLabels')->with([]);
-		$board->expects($this->once())->method('setAcl')->with([]);
-		$board->expects($this->once())->method('setStacks')->with([]);
 
 		$destination = $this->createMock(IExportDestination::class);
 		$destination->expects($this->once())
@@ -134,7 +131,7 @@ class DeckMigratorTest extends TestCase {
 		$user->method('getUID')->willReturn('alice');
 
 		$source = $this->createMock(IImportSource::class);
-		$source->method('getMigratorVersion')->with('deck')->willReturn('1');
+		$source->method('getMigratorVersion')->with('deck')->willReturn(1);
 		$source->method('getFileContents')->with('boards.json')->willReturn('{"boards":[{"id":1,"title":"Board A","stacks":[]}]}');
 
 		$this->boardImportService->expects($this->once())->method('setSystem')->with('DeckJson');

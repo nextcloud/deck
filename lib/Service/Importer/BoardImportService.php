@@ -125,6 +125,7 @@ class BoardImportService {
 				$this->importLabels();
 				$this->importStacks();
 				$this->importCards();
+				$this->getImportSystem()->importAttachments();
 				$this->assignCardsToLabels();
 				$this->importComments();
 				$this->importCardAssignments();

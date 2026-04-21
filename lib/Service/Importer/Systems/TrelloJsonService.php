@@ -163,6 +163,9 @@ class TrelloJsonService extends ABoardImportService {
 		return $comments;
 	}
 
+	public function importAttachments(): void {
+	}
+
 	private function sortComments(array $comments): array {
 		$comparison = function (\stdClass $a, \stdClass $b): int {
 			if ($a->date === $b->date) {

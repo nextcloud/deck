@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace OCA\Deck\UserMigration;
 
 use OCA\Deck\AppInfo\Application;
-use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\LabelMapper;
-use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AttachmentMapper;
+use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\ShareFileAttachmentExportService;
@@ -140,7 +140,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	}
 
 	private function attachSerializedCardsToStacks(array &$stacksById, string $uid): void {
-		$stackIds = array_map(static fn($stack) => $stack->getId(), $stacksById);
+		$stackIds = array_map(static fn ($stack) => $stack->getId(), $stacksById);
 		if (empty($stackIds)) {
 			return;
 		}
