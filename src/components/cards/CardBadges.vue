@@ -33,6 +33,13 @@
 					<AttachmentIcon :size="16" />
 					<span>{{ card.attachmentCount }}</span>
 				</div>
+
+				<div v-if="laneCount > 0"
+					class="icon-badge icon-badge--lanes"
+					:title="t('deck', 'In {count} lanes', { count: laneCount })">
+					<ArrowTopRightThinIcon :size="16" />
+					<span>{{ laneCount }}</span>
+				</div>
 			</div>
 		</div>
 
@@ -51,6 +58,7 @@ import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import CommentIcon from 'vue-material-design-icons/CommentOutline.vue'
 import CommentUnreadIcon from 'vue-material-design-icons/CommentAccountOutline.vue'
+import ArrowTopRightThinIcon from 'vue-material-design-icons/ArrowTopRightThin.vue'
 import DueDate from './badges/DueDate.vue'
 
 export default {
@@ -64,6 +72,7 @@ export default {
 		CommentIcon,
 		CommentUnreadIcon,
 		CardId,
+		ArrowTopRightThinIcon,
 	},
 	props: {
 		card: {
@@ -72,6 +81,23 @@ export default {
 		},
 	},
 	computed: {
+		laneCount() {
+			const board = this.$store.state.currentBoard
+			if (!board?.id) {
+				return 0
+			}
+			const mode = board?.settings?.swimlaneMode || 'none'
+			if (mode === 'none') {
+				return 0
+			}
+			if (mode === 'labels') {
+				return (this.card.labels && this.card.labels.length > 1) ? this.card.labels.length : 0
+			}
+			if (mode === 'assignees') {
+				return (this.card.assignedUsers && this.card.assignedUsers.length > 1) ? this.card.assignedUsers.length : 0
+			}
+			return 0
+		},
 		checkListCount() {
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
 		},
@@ -119,6 +145,10 @@ export default {
 			span,
 			&:deep(span) {
 				padding: 2px;
+			}
+
+			&--lanes {
+				opacity: 0.7;
 			}
 		}
 	}

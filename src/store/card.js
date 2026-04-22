@@ -184,6 +184,25 @@ export default function cardModuleFactory() {
 					})
 					.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 			},
+			cardsByStackAndLane: (state, getters) => (stackId, laneType, laneKey) => {
+				const cards = getters.cardsByStack(stackId)
+				if (!laneType || laneType === 'none') {
+					return cards
+				}
+				if (laneType === 'label') {
+					if (laneKey === '__none__') {
+						return cards.filter(c => !c.labels || c.labels.length === 0)
+					}
+					return cards.filter(c => c.labels && c.labels.some(l => l.id === laneKey))
+				}
+				if (laneType === 'assignee') {
+					if (laneKey === '__none__') {
+						return cards.filter(c => !c.assignedUsers || c.assignedUsers.length === 0)
+					}
+					return cards.filter(c => c.assignedUsers && c.assignedUsers.some(u => u.participant.uid === laneKey))
+				}
+				return cards
+			},
 			cardById: state => (id) => {
 				return state.cards.find((card) => card.id === id)
 			},
