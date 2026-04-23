@@ -38,6 +38,7 @@ OC.L10N.register(
     "Tags" : "Tags",
     "Activity" : "Faollik",
     "Undo" : "Bekor qilish",
+    "(remote)" : "(remote)",
     "Can edit" : "Can edit",
     "Owner" : "Owner",
     "Delete" : "O'chirish",
