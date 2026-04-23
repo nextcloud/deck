@@ -183,9 +183,7 @@ export default {
 		},
 		showUpdateForm() {
 			this.edit = true
-			this.$nextTick(() => {
-				this.commentMsg = this.$refs.richTextElement.children[0].innerHTML
-			})
+			this.commentMsg = this.comment.message
 		},
 		hideUpdateForm() {
 			this.commentMsg = ''
