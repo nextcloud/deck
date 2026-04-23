@@ -100,6 +100,7 @@ class CardService {
 
 		$assignedLabels = $this->labelMapper->findAssignedLabelsForCards($cardIds);
 		$assignedUsers = $this->assignedUsersMapper->findIn($cardIds);
+		$dependenciesByCard = $this->cardMapper->findDependenciesForCards($cardIds);
 
 		// Pre-group labels and users by card ID
 		$labelsByCard = [];
@@ -114,6 +115,7 @@ class CardService {
 		foreach ($cards as $card) {
 			$card->setLabels($labelsByCard[$card->getId()] ?? []);
 			$card->setAssignedUsers($usersByCard[$card->getId()] ?? []);
+			$card->setDependentCards($dependenciesByCard[$card->getId()] ?? []);
 		}
 
 		return array_map(
@@ -674,5 +676,63 @@ class CardService {
 
 	public function getRedirectUrlForCard(int $cardId): string {
 		return $this->urlGenerator->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $cardId]);
+	}
+
+	/**
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function assignDependentCard(int $cardId, int $dependentCardId): Card {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $dependentCardId, Acl::PERMISSION_READ);
+
+		if ($this->boardService->isArchived($this->cardMapper, $cardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+
+		$card = $this->cardMapper->find($cardId);
+		if ($card->getArchived()) {
+			throw new StatusException('Operation not allowed. This card is archived.');
+		}
+
+		if ($this->cardMapper->addDependency($cardId, $dependentCardId)) {
+			$this->changeHelper->cardChanged($cardId);
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_UPDATE);
+		}
+
+		[$card] = $this->enrichCards([$card]);
+		return $card;
+	}
+
+	/**
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function removeDependentCard(int $cardId, int $dependentCardId): Card {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $dependentCardId, Acl::PERMISSION_READ);
+
+		if ($this->boardService->isArchived($this->cardMapper, $cardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+
+		$card = $this->cardMapper->find($cardId);
+		if ($card->getArchived()) {
+			throw new StatusException('Operation not allowed. This card is archived.');
+		}
+
+		if ($this->cardMapper->removeDependency($cardId, $dependentCardId)) {
+			$this->changeHelper->cardChanged($cardId);
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_UPDATE);
+		}
+
+		[$card] = $this->enrichCards([$card]);
+		return $card;
 	}
 }
