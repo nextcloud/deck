@@ -44,6 +44,7 @@ class CardTest extends TestCase {
 		$card->setArchived(false);
 		$card->setDone(null);
 		$card->setColor('ffffff');
+		$card->setDependentCards([2, 3]);
 		// TODO: relation shared labels acl
 		return $card;
 	}
@@ -94,6 +95,7 @@ class CardTest extends TestCase {
 			'attachments' => [],
 			'attachmentCount' => 0,
 			'assignedUsers' => null,
+			'dependentCards' => [2, 3],
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
@@ -125,6 +127,7 @@ class CardTest extends TestCase {
 			'attachments' => [],
 			'attachmentCount' => 0,
 			'assignedUsers' => null,
+			'dependentCards' => [2, 3],
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
@@ -158,6 +161,7 @@ class CardTest extends TestCase {
 			'attachments' => [],
 			'attachmentCount' => 0,
 			'assignedUsers' => ['user1'],
+			'dependentCards' => [2, 3],
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'commentsCount' => 0,

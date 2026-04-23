@@ -207,6 +207,7 @@ class CardServiceTest extends TestCase {
 		$cardExpected->setRelatedBoard($boardMock);
 		$cardExpected->setRelatedStack($stackMock);
 		$cardExpected->setLabels([]);
+		$cardExpected->setDependentCards([]);
 		$expected = new CardDetails($cardExpected);
 
 		$actual = $this->cardService->find(123);
@@ -632,5 +633,47 @@ class CardServiceTest extends TestCase {
 		$result = $this->cardService->done(42);
 		$this->assertNotNull($result->getDone());
 		$this->assertEquals(20, $result->getStackId());
+	}
+
+	public function testAssignDependentCard() {
+		$card = Card::fromParams([
+			'id' => 42,
+			'title' => 'Card title',
+			'stackId' => 234,
+		]);
+		$stack = Stack::fromParams([
+			'id' => 234,
+			'boardId' => 1337,
+		]);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->once())->method('addDependency')->with(42, 43)->willReturn(true);
+		$this->cardMapper->expects($this->once())->method('findDependenciesForCards')->with([42])->willReturn([42 => [44, 43]]);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(234)
+			->willReturn($stack);
+		$result = $this->cardService->assignDependentCard(42, 43);
+		$this->assertEquals([44, 43], $result->getDependentCards());
+	}
+
+	public function testRemoveDependentCard() {
+		$card = Card::fromParams([
+			'id' => 42,
+			'title' => 'Card title',
+			'stackId' => 234,
+		]);
+		$stack = Stack::fromParams([
+			'id' => 234,
+			'boardId' => 1337,
+		]);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->once())->method('removeDependency')->with(42, 43)->willReturn(true);
+		$this->cardMapper->expects($this->once())->method('findDependenciesForCards')->with([42])->willReturn([42 => [44]]);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(234)
+			->willReturn($stack);
+		$result = $this->cardService->removeDependentCard(42, 43);
+		$this->assertEquals([44], $result->getDependentCards());
 	}
 }

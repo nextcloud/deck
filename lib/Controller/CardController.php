@@ -128,4 +128,14 @@ class CardController extends Controller {
 	public function unassignUser(int $cardId, string $userId, int $type = 0): Assignment {
 		return $this->assignmentService->unassignUser($cardId, $userId, $type);
 	}
+
+	#[NoAdminRequired]
+	public function assignDependentCard(int $cardId, int $dependentCardId): Card {
+		return $this->cardService->assignDependentCard($cardId, $dependentCardId);
+	}
+
+	#[NoAdminRequired]
+	public function removeDependentCard(int $cardId, int $dependentCardId): Card {
+		return $this->cardService->removeDependentCard($cardId, $dependentCardId);
+	}
 }
