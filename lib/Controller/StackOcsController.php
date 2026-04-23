@@ -11,7 +11,9 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
+use OCP\AppFramework\Http\Attribute\RequestHeader;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -29,6 +31,8 @@ class StackOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function index(int $boardId): DataResponse {
 		$localBoard = $this->boardService->find($boardId, true, true);
 		if ($localBoard->getExternalId() !== null) {
@@ -40,6 +44,8 @@ class StackOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function create(string $title, int $boardId, int $order = 0):DataResponse {
 		$board = $this->boardService->find($boardId, false);
 		if ($board->getExternalId()) {
@@ -53,6 +59,8 @@ class StackOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function setDoneStack(int $stackId, int $boardId, bool $isDone): DataResponse {
 		$board = $this->boardService->find($boardId, false);
 		if ($board->getExternalId()) {
@@ -65,6 +73,8 @@ class StackOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function delete(int $stackId, ?int $boardId = null):DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -80,6 +90,8 @@ class StackOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
+	#[NoCSRFRequired]
+	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
 	public function reorder(int $stackId, int $order, ?int $boardId):DataResponse {
 		if ($boardId !== null) {
 			$board = $this->boardService->find($boardId, false);

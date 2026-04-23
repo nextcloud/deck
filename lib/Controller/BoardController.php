@@ -11,6 +11,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\CsvImportService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
@@ -29,6 +30,7 @@ class BoardController extends ApiController {
 		private ExternalBoardService $externalBoardService,
 		private PermissionService $permissionService,
 		private BoardImportService $boardImportService,
+		private CsvImportService $csvImportService,
 		private IL10N $l10n,
 		private $userId,
 	) {
@@ -168,8 +170,9 @@ class BoardController extends ApiController {
 		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
 			$error = $phpFileUploadErrors[$file['error']];
 		}
-		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !in_array($file['type'], ['application/json', 'text/plain'], true)) {
-			$error = $this->l10n->t('Invalid file type. Only JSON files are allowed.');
+		$isCsv = $this->isCsvFile($file);
+		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !$isCsv && !in_array($file['type'], ['application/json', 'text/plain'], true)) {
+			$error = $this->l10n->t('Invalid file type. Only JSON and CSV files are allowed.');
 		}
 		if ($error !== null) {
 			return new DataResponse([
@@ -180,20 +183,45 @@ class BoardController extends ApiController {
 
 		try {
 			$fileContent = file_get_contents($file['tmp_name']);
-			$this->boardImportService->setSystem('DeckJson');
-			$config = new \stdClass();
-			$config->owner = $this->userId;
-			$this->boardImportService->setConfigInstance($config);
-			$this->boardImportService->setData(json_decode($fileContent));
+
+			if ($isCsv) {
+				$boardTitle = pathinfo($file['name'] ?? 'Imported Board', PATHINFO_FILENAME) ?: 'Imported Board';
+				$this->boardImportService->setSystem('DeckCsv');
+				$config = new \stdClass();
+				$config->owner = $this->userId;
+				$config->boardTitle = $boardTitle;
+				$this->boardImportService->setConfigInstance($config);
+				$data = new \stdClass();
+				$data->rawCsvContent = $fileContent;
+				$data->title = $boardTitle;
+				$this->boardImportService->setData($data);
+			} else {
+				$this->boardImportService->setSystem('DeckJson');
+				$config = new \stdClass();
+				$config->owner = $this->userId;
+				$this->boardImportService->setConfigInstance($config);
+				$this->boardImportService->setData(json_decode($fileContent));
+			}
+
+			$importErrors = [];
+			$this->boardImportService->registerErrorCollector(function (string $message) use (&$importErrors) {
+				$importErrors[] = $message;
+			});
+
 			$this->boardImportService->import();
 			$importedBoard = $this->boardImportService->getBoard();
 			$board = $this->boardService->find($importedBoard->getId());
 
-			return new DataResponse($board, Http::STATUS_OK);
+			return new DataResponse([
+				'board' => $board,
+				'import' => [
+					'errors' => $importErrors,
+				],
+			], Http::STATUS_OK);
 		} catch (\TypeError $e) {
 			return new DataResponse([
 				'status' => 'error',
-				'message' => $this->l10n->t('Invalid JSON data'),
+				'message' => $this->l10n->t('Invalid import data'),
 			], Http::STATUS_BAD_REQUEST);
 		} catch (\Exception $e) {
 			return new DataResponse([
@@ -201,5 +229,66 @@ class BoardController extends ApiController {
 				'message' => $this->l10n->t('Failed to import board'),
 			], Http::STATUS_BAD_REQUEST);
 		}
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function importCsv(int $boardId): DataResponse {
+		$file = $this->request->getUploadedFile('file');
+		$error = null;
+		$phpFileUploadErrors = [
+			UPLOAD_ERR_OK => $this->l10n->t('The file was uploaded'),
+			UPLOAD_ERR_INI_SIZE => $this->l10n->t('The uploaded file exceeds the upload_max_filesize directive in php.ini'),
+			UPLOAD_ERR_FORM_SIZE => $this->l10n->t('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
+			UPLOAD_ERR_PARTIAL => $this->l10n->t('The file was only partially uploaded'),
+			UPLOAD_ERR_NO_FILE => $this->l10n->t('No file was uploaded'),
+			UPLOAD_ERR_NO_TMP_DIR => $this->l10n->t('Missing a temporary folder'),
+			UPLOAD_ERR_CANT_WRITE => $this->l10n->t('Could not write file to disk'),
+			UPLOAD_ERR_EXTENSION => $this->l10n->t('A PHP extension stopped the file upload'),
+		];
+
+		if (empty($file)) {
+			$error = $this->l10n->t('No file uploaded or file size exceeds maximum of %s', [\OCP\Util::humanFileSize(\OCP\Util::uploadLimit())]);
+		}
+		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
+			$error = $phpFileUploadErrors[$file['error']];
+		}
+		if (!empty($file) && $file['error'] === UPLOAD_ERR_OK && !$this->isCsvFile($file)) {
+			$error = $this->l10n->t('Invalid file type. Only CSV files are allowed.');
+		}
+		if ($error !== null) {
+			return new DataResponse([
+				'status' => 'error',
+				'message' => $error,
+			], Http::STATUS_BAD_REQUEST);
+		}
+
+		try {
+			$fileContent = file_get_contents($file['tmp_name']);
+			$importResult = $this->csvImportService->importToBoard($boardId, $fileContent, $this->userId);
+			$board = $this->boardService->find($boardId);
+
+			return new DataResponse([
+				'board' => $board,
+				'import' => $importResult,
+			], Http::STATUS_OK);
+		} catch (\Exception $e) {
+			return new DataResponse([
+				'status' => 'error',
+				'message' => $this->l10n->t('Failed to import cards from CSV'),
+			], Http::STATUS_BAD_REQUEST);
+		}
+	}
+
+	private function isCsvFile(?array $file): bool {
+		if (empty($file)) {
+			return false;
+		}
+		if (in_array($file['type'] ?? '', ['text/csv', 'application/csv'], true)) {
+			return true;
+		}
+		$name = $file['name'] ?? '';
+		return str_ends_with(strtolower($name), '.csv');
 	}
 }

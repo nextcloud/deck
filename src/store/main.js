@@ -406,8 +406,18 @@ export default function storeFactory() {
 			},
 			async importBoard({ commit }, file) {
 				try {
-					const board = await apiClient.importBoard(file)
-					commit('addBoard', board)
+					const result = await apiClient.importBoard(file)
+					commit('addBoard', result.board)
+					return result
+				} catch (err) {
+					return err
+				}
+			},
+			async importCsvToBoard({ commit }, { boardId, file }) {
+				try {
+					const result = await apiClient.importCsvToBoard(boardId, file)
+					commit('addBoard', result.board)
+					return result
 				} catch (err) {
 					return err
 				}

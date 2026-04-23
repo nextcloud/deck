@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert;
@@ -20,6 +21,9 @@ class BoardContext implements Context {
 	private array $storedStacks = [];
 	private ?array $activities = null;
 
+	/** @var int[] Board IDs created during the current scenario */
+	private array $createdBoardIds = [];
+
 	private ServerContext $serverContext;
 
 	/** @BeforeScenario */
@@ -27,6 +31,24 @@ class BoardContext implements Context {
 		$environment = $scope->getEnvironment();
 
 		$this->serverContext = $environment->getContext('ServerContext');
+	}
+
+	/** @AfterScenario */
+	public function cleanupBoards(AfterScenarioScope $scope): void {
+		foreach ($this->createdBoardIds as $boardId) {
+			try {
+				$this->requestContext->sendJSONrequest('DELETE', '/index.php/apps/deck/boards/' . $boardId);
+			} catch (\Exception $e) {
+				// Ignore cleanup errors
+			}
+		}
+		$this->createdBoardIds = [];
+	}
+
+	private function trackBoard(?array $board): void {
+		if (is_array($board) && isset($board['id'])) {
+			$this->createdBoardIds[] = $board['id'];
+		}
 	}
 
 	public function getLastUsedCard() {
@@ -56,6 +78,7 @@ class BoardContext implements Context {
 		]);
 		$this->getResponse()->getBody()->seek(0);
 		$this->board = json_decode((string)$this->getResponse()->getBody(), true);
+		$this->trackBoard($this->board);
 	}
 
 	/**
@@ -468,6 +491,169 @@ class BoardContext implements Context {
 		}
 		Assert::assertNotNull($found, 'Current stack not found in board stacks');
 		return $found;
+	}
+
+	/**
+	 * @When /^importing a board from CSV file with content$/
+	 */
+	public function importingABoardFromCsvFileWithContent(\Behat\Gherkin\Node\PyStringNode $content) {
+		$csvContent = $content->getRaw();
+		$this->requestContext->sendPlainRequest('POST', '/index.php/apps/deck/boards/import', [
+			'multipart' => [
+				[
+					'name' => 'file',
+					'contents' => $csvContent,
+					'filename' => 'import.csv',
+					'headers' => ['Content-Type' => 'text/csv'],
+				],
+			],
+		]);
+		$this->getResponse()->getBody()->seek(0);
+		$body = json_decode((string)$this->getResponse()->getBody(), true);
+		if ($this->getResponse()->getStatusCode() === 200 && is_array($body) && isset($body['board'])) {
+			$this->board = $body['board'];
+			$this->trackBoard($this->board);
+		}
+	}
+
+	/**
+	 * @When /^importing CSV cards into the current board with content$/
+	 */
+	public function importingCsvCardsIntoTheCurrentBoardWithContent(\Behat\Gherkin\Node\PyStringNode $content) {
+		Assert::assertNotNull($this->board, 'Board must be created first');
+		$csvContent = $content->getRaw();
+		// Allow tests to reference the last created card's ID via {lastCardId}
+		if ($this->card !== null && isset($this->card['id'])) {
+			$csvContent = str_replace('{lastCardId}', (string)$this->card['id'], $csvContent);
+		}
+		$this->requestContext->sendPlainRequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/importCsv', [
+			'multipart' => [
+				[
+					'name' => 'file',
+					'contents' => $csvContent,
+					'filename' => 'cards.csv',
+					'headers' => ['Content-Type' => 'text/csv'],
+				],
+			],
+		]);
+		$this->getResponse()->getBody()->seek(0);
+		$body = json_decode((string)$this->getResponse()->getBody(), true);
+		if ($this->getResponse()->getStatusCode() === 200 && is_array($body) && isset($body['board'])) {
+			$this->board = $body['board'];
+		}
+	}
+
+	/**
+	 * @When /^importing a non-CSV file into the current board$/
+	 */
+	public function importingANonCsvFileIntoTheCurrentBoard() {
+		Assert::assertNotNull($this->board, 'Board must be created first');
+		$this->requestContext->sendPlainRequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/importCsv', [
+			'multipart' => [
+				[
+					'name' => 'file',
+					'contents' => '{"not": "csv"}',
+					'filename' => 'data.json',
+					'headers' => ['Content-Type' => 'application/json'],
+				],
+			],
+		]);
+	}
+
+	/**
+	 * @Then /^the board should have (\d+) stacks$/
+	 */
+	public function theBoardShouldHaveStacks($count) {
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/stacks/' . $this->board['id']);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$stacks = json_decode((string)$this->getResponse()->getBody(), true);
+		Assert::assertCount((int)$count, $stacks, 'Expected ' . $count . ' stacks, got ' . count($stacks));
+	}
+
+	/**
+	 * @Then /^the board should have a stack named "([^"]*)"$/
+	 */
+	public function theBoardShouldHaveAStackNamed($name) {
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/stacks/' . $this->board['id']);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$stacks = json_decode((string)$this->getResponse()->getBody(), true);
+		$found = array_filter($stacks, fn ($s) => $s['title'] === $name);
+		Assert::assertNotEmpty($found, 'Stack "' . $name . '" not found on board');
+	}
+
+	/**
+	 * @Then /^the stack "([^"]*)" should have (\d+) cards$/
+	 */
+	public function theStackShouldHaveCards($stackName, $count) {
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/stacks/' . $this->board['id']);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$stacks = json_decode((string)$this->getResponse()->getBody(), true);
+		$found = null;
+		foreach ($stacks as $stack) {
+			if ($stack['title'] === $stackName) {
+				$found = $stack;
+				break;
+			}
+		}
+		Assert::assertNotNull($found, 'Stack "' . $stackName . '" not found');
+		$cardCount = count($found['cards'] ?? []);
+		Assert::assertEquals((int)$count, $cardCount, 'Expected ' . $count . ' cards in stack "' . $stackName . '", got ' . $cardCount);
+	}
+
+	/**
+	 * @Then /^the board should have labels "([^"]*)"$/
+	 */
+	public function theBoardShouldHaveLabels($labelList) {
+		$expectedLabels = array_map('trim', explode(',', $labelList));
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards/' . $this->board['id']);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$board = json_decode((string)$this->getResponse()->getBody(), true);
+		$actualLabels = array_map(fn ($l) => $l['title'], $board['labels'] ?? []);
+		foreach ($expectedLabels as $expected) {
+			Assert::assertContains($expected, $actualLabels, 'Label "' . $expected . '" not found on board. Existing: ' . implode(', ', $actualLabels));
+		}
+	}
+
+	/**
+	 * @Then /^the card "([^"]*)" should have duedate "([^"]*)"$/
+	 */
+	public function theCardShouldHaveDuedate($cardTitle, $expectedDuedate) {
+		$card = $this->findCardOnBoard($cardTitle);
+		Assert::assertNotNull($card, 'Card "' . $cardTitle . '" not found on board');
+		Assert::assertNotEmpty($card['duedate'], 'Card "' . $cardTitle . '" has no duedate set');
+		Assert::assertEquals($expectedDuedate, $card['duedate'], 'Duedate mismatch for card "' . $cardTitle . '"');
+	}
+
+	/**
+	 * @Then /^the card "([^"]*)" should not have a duedate$/
+	 */
+	public function theCardShouldNotHaveADuedate($cardTitle) {
+		$card = $this->findCardOnBoard($cardTitle);
+		Assert::assertNotNull($card, 'Card "' . $cardTitle . '" not found on board');
+		Assert::assertEmpty($card['duedate'], 'Expected no duedate for card "' . $cardTitle . '", got "' . ($card['duedate'] ?? '') . '"');
+	}
+
+	/**
+	 * @Then /^the card "([^"]*)" should have description "([^"]*)"$/
+	 */
+	public function theCardShouldHaveDescription($cardTitle, $expectedDescription) {
+		$card = $this->findCardOnBoard($cardTitle);
+		Assert::assertNotNull($card, 'Card "' . $cardTitle . '" not found on board');
+		Assert::assertEquals($expectedDescription, $card['description'], 'Card description mismatch');
+	}
+
+	private function findCardOnBoard(string $cardTitle): ?array {
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/stacks/' . $this->board['id']);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$stacks = json_decode((string)$this->getResponse()->getBody(), true);
+		foreach ($stacks as $stack) {
+			foreach ($stack['cards'] ?? [] as $card) {
+				if ($card['title'] === $cardTitle) {
+					return $card;
+				}
+			}
+		}
+		return null;
 	}
 
 }

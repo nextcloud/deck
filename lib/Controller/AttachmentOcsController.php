@@ -11,7 +11,9 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\NotImplementedException;
 use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\BoardService;
+use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -36,6 +38,8 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
 	public function getAll(int $cardId, ?int $boardId = null): DataResponse {
 		$this->ensureLocalBoard($boardId);
 		$attachment = $this->attachmentService->findAll($cardId, true);
@@ -43,6 +47,8 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
 	public function create(int $cardId, string $type, string $data = '', ?int $boardId = null): DataResponse {
 		$this->ensureLocalBoard($boardId);
 		$attachment = $this->attachmentService->create($cardId, $type, $data);
@@ -50,6 +56,8 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
 	public function update(int $cardId, int $attachmentId, string $data, string $type = 'file', ?int $boardId = null): DataResponse {
 		$this->ensureLocalBoard($boardId);
 		$attachment = $this->attachmentService->update($cardId, $attachmentId, $data, $type);
@@ -57,6 +65,8 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
 	public function delete(int $cardId, int $attachmentId, string $type = 'file', ?int $boardId = null): DataResponse {
 		$this->ensureLocalBoard($boardId);
 		$attachment = $this->attachmentService->delete($cardId, $attachmentId, $type);
@@ -64,6 +74,8 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
 	public function restore(int $cardId, int $attachmentId, string $type = 'file', ?int $boardId = null): DataResponse {
 		$this->ensureLocalBoard($boardId);
 		$attachment = $this->attachmentService->restore($cardId, $attachmentId, $type);

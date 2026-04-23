@@ -182,7 +182,7 @@ export class BoardApi {
 						return Promise.resolve()
 					}
 
-					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), assignedUsers: t('deck', 'Assigned users'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
+					const fields = { id: t('deck', 'ID'), title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), assignedUsers: t('deck', 'Assigned users'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
 					let row = ''
 					Object.keys(fields).forEach(field => {
 						row += '"' + fields[field] + '"' + '\t'
@@ -258,6 +258,27 @@ export class BoardApi {
 		const formData = new FormData()
 		formData.append('file', file)
 		return axios.post(this.url('/boards/import'), formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	importCsvToBoard(boardId, file) {
+		const formData = new FormData()
+		formData.append('file', file)
+		return axios.post(this.url(`/boards/${boardId}/importCsv`), formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},

@@ -29,6 +29,7 @@ use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\CsvImportService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
@@ -95,6 +96,7 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 			$this->createMock(ExternalBoardService::class),
 			$this->createMock(PermissionService::class),
 			$this->createMock(BoardImportService::class),
+			$this->createMock(CsvImportService::class),
 			$this->createMock(\OCP\IL10N::class),
 			'admin'
 		);
