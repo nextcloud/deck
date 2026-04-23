@@ -10,6 +10,16 @@
 			:maxlength="1000"
 			:user-data="members"
 			@submit="submit" />
+		<NcButton v-show="hasContent"
+			type="tertiary"
+			:aria-label="t('deck', 'Submit')"
+			:title="t('deck', 'Submit')"
+			class="comment-form__submit"
+			@click="submit">
+			<template #icon>
+				<ArrowRightIcon :size="20" />
+			</template>
+		</NcButton>
 		<p v-if="error">
 			{{ error }}
 		</p>
@@ -18,11 +28,14 @@
 
 <script>
 import { mapState } from 'vuex'
-import { NcRichContenteditable } from '@nextcloud/vue'
+import { NcButton, NcRichContenteditable } from '@nextcloud/vue'
+import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 export default {
 	name: 'CommentForm',
 	components: {
+		ArrowRightIcon,
+		NcButton,
 		NcRichContenteditable,
 	},
 	props: {
@@ -52,6 +65,9 @@ export default {
 				}
 			})
 			return obj
+		},
+		hasContent() {
+			return this.commentText.trim().length > 0
 		},
 	},
 	watch: {
@@ -97,5 +113,21 @@ export default {
 	[class*=" _tribute-container-autocomplete_"],
 	[class*="_tribute-container-autocomplete_"] {
 		z-index: 9999 !important;
+	}
+
+	.comment-form {
+		position: relative;
+
+		.comment-form__submit {
+			position: absolute;
+			bottom: var(--default-grid-baseline);
+			inset-inline-end: var(--default-grid-baseline);
+			z-index: 1;
+		}
+
+		// Add padding to prevent text from going under the button
+		:deep(.rich-content-editor__input) {
+			padding-inline-end: calc(var(--default-clickable-area) + var(--default-grid-baseline));
+		}
 	}
 </style>
