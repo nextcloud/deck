@@ -77,6 +77,9 @@ export default {
 		members() {
 			return this.currentBoard.users
 		},
+		hasContent() {
+			return this.commentText.trim().length > 0
+		},
 	},
 	watch: {
 		value(val) {
@@ -195,5 +198,21 @@ export default {
 
 	.atwho-li--avatar {
 		margin-right: 10px;
+	}
+
+	.comment-form {
+		position: relative;
+
+		.comment-form__submit {
+			position: absolute;
+			bottom: var(--default-grid-baseline);
+			inset-inline-end: var(--default-grid-baseline);
+			z-index: 1;
+		}
+
+		// Add padding to prevent text from going under the button
+		:deep(.rich-content-editor__input) {
+			padding-inline-end: calc(var(--default-clickable-area) + var(--default-grid-baseline));
+		}
 	}
 </style>
