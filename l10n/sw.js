@@ -268,6 +268,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Hakuna maoni bado. Anza mjadala",
     "The comment cannot be empty." : "Maoni hayawezi kuwa tupu",
     "The comment cannot be longer than 1000 characters." : "Maoni hayawezi kuwa marefu zaidi ya vibambo 1000",
+    "Submit" : "Wasilisha",
     "Created:" : "Imetengenezwa:",
     "In reply to" : "Kwa kujibu",
     "Cancel reply" : "Ghairi jibu",

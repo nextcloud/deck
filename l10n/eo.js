@@ -95,6 +95,7 @@ OC.L10N.register(
     "Members" : "Membroj",
     "Download" : "Elŝuti",
     "Comments" : "Komentoj",
+    "Submit" : "Sendi",
     "Created:" : "Kreita:",
     "Reply" : "Respondi",
     "Update" : "Ĝisdatigi",

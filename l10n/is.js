@@ -260,6 +260,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Engar athugasemdir ennþá. Byrjaðu umræðuna!",
     "The comment cannot be empty." : "Athugasemdin má ekki vera tóm.",
     "The comment cannot be longer than 1000 characters." : "Athugasemdin má ekki vera lengri en 1000 stafir.",
+    "Submit" : "Senda inn",
     "Created:" : "Búið til:",
     "In reply to" : "Sem svar til",
     "Cancel reply" : "Hætta við svar",

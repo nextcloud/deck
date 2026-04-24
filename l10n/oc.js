@@ -41,6 +41,7 @@ OC.L10N.register(
     "Share from Files" : "Partejar a partir dels Fichièrs",
     "Download" : "Telecargar",
     "Comments" : "Comentaris",
+    "Submit" : "Transmetre",
     "Created:" : "Creat lo :",
     "Cancel reply" : "Anullar la responsa",
     "Reply" : "Respondre",

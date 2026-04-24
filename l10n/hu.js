@@ -272,6 +272,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Még nincsenek hozzászólások. Kezdje el a beszélgetést!",
     "The comment cannot be empty." : "A hozzászólás nem lehet üres.",
     "The comment cannot be longer than 1000 characters." : "A megjegyzés nem lehet 1000 karakternél hosszabb.",
+    "Submit" : "Beküldés",
     "Created:" : "Létrehozva:",
     "In reply to" : "Válaszként erre:",
     "Cancel reply" : "Válasz elvetése",

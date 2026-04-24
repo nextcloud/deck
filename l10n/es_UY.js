@@ -37,6 +37,7 @@ OC.L10N.register(
     "Members" : "Miembros",
     "Download" : "Descargar",
     "Comments" : "Comentarios",
+    "Submit" : "Enviar",
     "Created:" : "Creado:",
     "Reply" : "Responder",
     "Update" : "Actualizar",

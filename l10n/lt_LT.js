@@ -275,6 +275,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Kol kas komentarų nėra. Pradėkite diskusiją!",
     "The comment cannot be empty." : "Komentaras negali būti tuščias.",
     "The comment cannot be longer than 1000 characters." : "Komentaras negali būti ilgesnis nei 1000 simbolių.",
+    "Submit" : "Pateikti",
     "Created:" : "Sukurta:",
     "In reply to" : "Atsakant į",
     "Cancel reply" : "Atšaukti atsakymą",

@@ -275,6 +275,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Kommentaare veel pole. Asu aga keskustelema!",
     "The comment cannot be empty." : "Kommentaar ei saa olla tühi.",
     "The comment cannot be longer than 1000 characters." : "Kommentaar ei või olla pikem, kui 1000 tähemärki",
+    "Submit" : "Saada",
     "Created:" : "Loodud:",
     "In reply to" : "Vastuseks:",
     "Cancel reply" : "Katkesta vastamine",

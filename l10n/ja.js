@@ -256,6 +256,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "まだコメントはありません。議論を始めましょう！",
     "The comment cannot be empty." : "コメントを空にすることはできません。",
     "The comment cannot be longer than 1000 characters." : "コメントは1000文字を超えることはできません。",
+    "Submit" : "登録する",
     "Created:" : "作成:",
     "In reply to" : "返信",
     "Cancel reply" : "返信をキャンセル",

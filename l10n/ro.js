@@ -231,6 +231,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Niciun comentariu încă. Începeți discuția!",
     "The comment cannot be empty." : "Comentariul nu poate fi gol",
     "The comment cannot be longer than 1000 characters." : "Comentariul nu poate avea mai mult de 1000 de caractere.",
+    "Submit" : "Trimite",
     "Created:" : "Creat:",
     "In reply to" : "Ca răspuns la",
     "Cancel reply" : "Anulează răspunsul",

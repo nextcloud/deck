@@ -218,6 +218,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "هنوز نظری وجود ندارد. بحثی را آغاز کنید!",
     "The comment cannot be empty." : "نظر نمی‌تواند خالی باشد.",
     "The comment cannot be longer than 1000 characters." : "نظر نمی‌تواند طولانی‌تر از ۱۰۰۰ حرف باشد.",
+    "Submit" : "ارسال",
     "Created:" : "ایجاد شده توسط:",
     "In reply to" : "در پاسخ به",
     "Cancel reply" : "لغو پاسخ",

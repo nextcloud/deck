@@ -192,6 +192,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "אין עדיין הערות. אפשר להתחיל לדון!",
     "The comment cannot be empty." : "ההערה לא יכולה להיות ריקה.",
     "The comment cannot be longer than 1000 characters." : "אורך ההערה לא יכול לחצות את רף 1000 התווים.",
+    "Submit" : "שליחה",
     "Created:" : "מועד היצירה:",
     "In reply to" : "בתגובה אל",
     "Reply" : "תגובה",

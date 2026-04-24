@@ -39,6 +39,7 @@ OC.L10N.register(
     "Members" : "Anëtar",
     "Download" : "Shkarko",
     "Comments" : "Komentet",
+    "Submit" : "Dërgo",
     "Created:" : "Krijuar:",
     "Reply" : "Përgjigju",
     "Update" : "Përditëso",

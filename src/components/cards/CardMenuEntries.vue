@@ -5,6 +5,14 @@
 
 <template>
 	<div>
+		<NcColorPicker v-model="editingCardColor" clearable @submit="updateCardColor">
+			<NcActionButton @click="openColorPicker">
+				<template #icon>
+					<SelectColor :fill-color="cardColor" :size="20" decorative />
+				</template>
+				{{ t('deck', 'Change card color') }}
+			</NcActionButton>
+		</NcColorPicker>
 		<NcActionButton v-if="!hideDetailsEntry" :close-after-click="true" @click="openCard">
 			<CardBulletedIcon slot="icon" :size="20" decorative />
 			{{ t('deck', 'Card details') }}
@@ -62,11 +70,12 @@
 	</div>
 </template>
 <script>
-import { NcActionButton } from '@nextcloud/vue'
+import { NcActionButton, NcColorPicker } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
+import SelectColor from 'vue-material-design-icons/Circle.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
@@ -77,7 +86,7 @@ import { useActionsStore } from '../../stores/actions.js'
 
 export default {
 	name: 'CardMenuEntries',
-	components: { NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon },
+	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor },
 	props: {
 		card: {
 			type: Object,
@@ -101,6 +110,7 @@ export default {
 			selectedBoard: '',
 			selectedStack: '',
 			stacksFromBoard: [],
+			editingCardColor: '',
 		}
 	},
 	computed: {
@@ -141,6 +151,9 @@ export default {
 				stackname: this.stackById(this.card.stackId)?.title,
 				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `card/${this.card.id}`,
 			}
+		},
+		cardColor() {
+			return this.card.color ? '#' + this.card.color : ''
 		},
 	},
 	methods: {
@@ -191,6 +204,15 @@ export default {
 		},
 		openCardMoveDialog() {
 			emit('deck:card:show-move-dialog', this.card)
+		},
+		openColorPicker() {
+			this.editingCardColor = this.card.color ? '#' + this.card.color : ''
+		},
+		updateCardColor(val) {
+			this.$store.dispatch('updateCardColor', {
+				...this.card,
+				color: val ? val.substring(1) : null,
+			})
 		},
 	},
 }

@@ -252,6 +252,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "아직 댓글이 없습니다. 토론을 시작하세요!",
     "The comment cannot be empty." : "댓글은 공백일 수 없습니다.",
     "The comment cannot be longer than 1000 characters." : "설명은 1000자를 초과할 수 없습니다.",
+    "Submit" : "제출",
     "Created:" : "생성한 날짜:",
     "In reply to" : "답장",
     "Cancel reply" : "응답 취소",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "Invalid path selected" : "เลือกเส้นทางไม่ถูกต้อง",
     "Download" : "ดาวน์โหลด",
     "Comments" : "ความคิดเห็น",
+    "Submit" : "ส่ง",
     "Created:" : "สร้างเมื่อ:",
     "Reply" : "ตอบกลับ",
     "Update" : "อัปเดต",

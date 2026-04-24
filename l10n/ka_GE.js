@@ -38,6 +38,7 @@ OC.L10N.register(
     "Members" : "წევრები",
     "Download" : "ჩამოტვირთვა",
     "Comments" : "კომენტარები",
+    "Submit" : "გაგზავნა",
     "Created:" : "შექმნილია:",
     "Reply" : "პასუხი",
     "Update" : "განახლება",

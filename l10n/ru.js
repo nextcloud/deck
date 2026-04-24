@@ -253,6 +253,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Комментарии отсутствуют, начните обсуждение!",
     "The comment cannot be empty." : "Комментарий не может быть пустым.",
     "The comment cannot be longer than 1000 characters." : "Комментарий не может быть длиннее 1 000 символов.",
+    "Submit" : "Отправить ответ",
     "Created:" : "Создание:",
     "In reply to" : "В ответ",
     "Cancel reply" : "Отменить ответ",
