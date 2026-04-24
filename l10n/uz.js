@@ -46,6 +46,7 @@ OC.L10N.register(
     "Edit" : "Tahrirlash",
     "Download" : "Yuklab olish",
     "Comments" : "Comments",
+    "Submit" : "Yuborish",
     "In reply to" : "ga javoban",
     "Reply" : "Javob bering",
     "Update" : "Update",

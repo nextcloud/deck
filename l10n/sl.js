@@ -212,6 +212,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Ni še odzivov, bodite prvi!",
     "The comment cannot be empty." : "Polje opombe ne sme biti prazno.",
     "The comment cannot be longer than 1000 characters." : "Opomba ne sme biti daljša od 1000 znakov.",
+    "Submit" : "Pošlji",
     "Created:" : "Ustvarjeno:",
     "In reply to" : "V odgovor",
     "Cancel reply" : "Prekliči odgovor",

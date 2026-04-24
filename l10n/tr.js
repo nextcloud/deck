@@ -272,6 +272,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Henüz bir yorum yapılmamış. Tartışmayı başlatın!",
     "The comment cannot be empty." : "Yorum boş olamaz.",
     "The comment cannot be longer than 1000 characters." : "Yorum 1000 karakterden uzun olamaz.",
+    "Submit" : "Gönder",
     "Created:" : "Oluşturulma:",
     "In reply to" : "Şuna yanıtla",
     "Cancel reply" : "Yanıtı iptal et",

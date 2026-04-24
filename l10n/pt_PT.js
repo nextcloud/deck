@@ -136,6 +136,7 @@ OC.L10N.register(
     "Upload new files" : "Enviar novos ficheiros",
     "Download" : "Transferir",
     "Comments" : "Comentários",
+    "Submit" : "Submeter",
     "Created:" : "Criado:",
     "Reply" : "Resposta",
     "Update" : "Atualizar",

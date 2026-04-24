@@ -196,6 +196,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Perunu cummentu ancora. Cumintzat sa chistionada!",
     "The comment cannot be empty." : "Su cummentu non podet èssere bòidu",
     "The comment cannot be longer than 1000 characters." : "Su cummentu non podet èssere prus longu de 1000 caràteres.",
+    "Submit" : "Imbia",
     "Created:" : "Creadu:",
     "In reply to" : "Rispondende a ",
     "Cancel reply" : "Annulla risposta",

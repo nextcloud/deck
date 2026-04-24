@@ -58,6 +58,7 @@ OC.L10N.register(
     "Download" : "Lejupielādēt",
     "Open in sidebar view" : "Atvērt sānjoslas skatā",
     "Comments" : "Piebildes",
+    "Submit" : "Iesniegt",
     "Created:" : "Izveidots:",
     "Reply" : "Atbildēt",
     "Update" : "Atjaunināt",

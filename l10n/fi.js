@@ -188,6 +188,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Ei vielä kommentteja. Aloita keskustelu!",
     "The comment cannot be empty." : "Kommentti ei voi olla tyhjä.",
     "The comment cannot be longer than 1000 characters." : "Kommentin on oltava alle 1000 merkkiä pitkä.",
+    "Submit" : "Lähetä",
     "Created:" : "Luotu:",
     "In reply to" : "Vastauksena",
     "Cancel reply" : "Peru vastaus",

@@ -266,6 +266,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Сэтгэгдэл байхгүй байна. Хэлэлцүүлгийг эхлүүлнэ үү!",
     "The comment cannot be empty." : "Сэтгэгдэл хоосон байж болохгүй.",
     "The comment cannot be longer than 1000 characters." : "Сэтгэгдэл 1000 тэмдэгтээс урт байж болохгүй.",
+    "Submit" : "–º—ç–¥—ç–≥–¥—ç—Ö",
     "Created:" : "“Æ“Ø—Å–≥—ç—Å—ç–Ω:",
     "In reply to" : "Хариулж байна",
     "Cancel reply" : "Хариулт болих",

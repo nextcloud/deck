@@ -252,6 +252,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Ingen kommentarer ennå. Start diskusjonen!",
     "The comment cannot be empty." : "Kommentaren kan ikke være tom.",
     "The comment cannot be longer than 1000 characters." : "Kommentaren kan ikke være lenger enn 1000 tegn.",
+    "Submit" : "Send inn",
     "Created:" : "Opprettet:",
     "In reply to" : "Som svar på",
     "Cancel reply" : "Avbryt svar",

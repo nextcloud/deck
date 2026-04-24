@@ -275,6 +275,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Сеуште нема коментари. Започни дискусија!",
     "The comment cannot be empty." : "Коментарот неможе да биде празен. =",
     "The comment cannot be longer than 1000 characters." : "Коментарот неможе да биде поголем од 1000 карактери.",
+    "Submit" : "Испрати",
     "Created:" : "Создадено:",
     "In reply to" : "Како одговор на",
     "Cancel reply" : "Откажи одговор",

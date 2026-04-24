@@ -270,6 +270,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Nog geen reacties. Begin de discussie!",
     "The comment cannot be empty." : "De reactie kan niet leeg zijn.",
     "The comment cannot be longer than 1000 characters." : "De reactie kan niet langer dan 1000 tekens zijn.",
+    "Submit" : "Indienen",
     "Created:" : "Aangemaakt:",
     "In reply to" : "Als antwoord op",
     "Cancel reply" : "Antwoord annuleren",

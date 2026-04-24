@@ -149,6 +149,7 @@ OC.L10N.register(
     "Show in Files" : "Mostrar en Archivos",
     "Download" : "Descargar",
     "Comments" : "Comentarios",
+    "Submit" : "Enviar",
     "Created:" : "Creado:",
     "Reply" : "Responder",
     "Update" : "Actualizar",

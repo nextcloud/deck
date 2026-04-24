@@ -275,6 +275,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "暫無留言。開始討論吧！",
     "The comment cannot be empty." : "留言不能為空。",
     "The comment cannot be longer than 1000 characters." : "留言不能多於 1000 個字元。",
+    "Submit" : "提交",
     "Created:" : "建立：",
     "In reply to" : "回覆",
     "Cancel reply" : "取消回覆",

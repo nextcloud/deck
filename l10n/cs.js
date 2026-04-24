@@ -272,6 +272,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Zatím bez komentářů. Zahajte diskuzi!",
     "The comment cannot be empty." : "Komentář je třeba vyplnit.",
     "The comment cannot be longer than 1000 characters." : "Délka komentáře může být nejvýše 1 000 znaků.",
+    "Submit" : "Odeslat",
     "Created:" : "Vytvořeno:",
     "In reply to" : "V odpověď na",
     "Cancel reply" : "Zrušit odpověď",

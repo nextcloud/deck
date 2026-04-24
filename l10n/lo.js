@@ -267,6 +267,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "No comments yet. Begin the discussion!",
     "The comment cannot be empty." : "The comment cannot be empty.",
     "The comment cannot be longer than 1000 characters." : "The comment cannot be longer than 1000 characters.",
+    "Submit" : "ຕົກລົງ",
     "Created:" : "Created:",
     "In reply to" : "In reply to",
     "Cancel reply" : "Cancel reply",

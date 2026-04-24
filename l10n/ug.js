@@ -268,6 +268,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "ھازىرچە ھېچقانداق باھا يوق. مۇنازىرىنى باشلاڭ!",
     "The comment cannot be empty." : "باھا قۇرۇق بولالمايدۇ.",
     "The comment cannot be longer than 1000 characters." : "بۇ باھا 1000 ھەرپتىن ئېشىپ كەتسە بولمايدۇ.",
+    "Submit" : "يوللاڭ",
     "Created:" : "قۇرۇلغان ۋاقتى:",
     "In reply to" : "دەپ جاۋاب بەردى",
     "Cancel reply" : "جاۋابنى ئەمەلدىن قالدۇرۇڭ",

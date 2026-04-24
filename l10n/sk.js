@@ -272,6 +272,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Zatiaľ bez komentárov. Začnite diskusiu!",
     "The comment cannot be empty." : "Komentár nemôže byť prázdny.",
     "The comment cannot be longer than 1000 characters." : "Komentár nemôže byť dlhší ako 1000 znakov.",
+    "Submit" : "Odoslať",
     "Created:" : "Vytvorené:",
     "In reply to" : "Odpoveď na",
     "Cancel reply" : "Zrušiť odpoveď",

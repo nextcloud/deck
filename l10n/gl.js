@@ -270,6 +270,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Aínda non hai comentarios. Comece o debate!",
     "The comment cannot be empty." : "O comentario non pode estar baleiro",
     "The comment cannot be longer than 1000 characters." : "O comentario non pode ter máis de 1000 caracteres.",
+    "Submit" : "Enviar",
     "Created:" : "Creado:",
     "In reply to" : "En resposta a",
     "Cancel reply" : "Cancelar a resposta",
