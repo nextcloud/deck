@@ -203,6 +203,33 @@ class AttachmentService {
 		return $attachment;
 	}
 
+	/**
+	 * Import helper: create or reuse a file-type attachment and sync related metadata/activity.
+	 *
+	 * @param Attachment $attachment
+	 * @param string $content
+	 * @return Attachment
+	 */
+	public function createFileAttachmentFromImport(Attachment $attachment, string $content): Attachment {
+		$cardId = $attachment->getCardId();
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
+
+		$attachment->setType('file');
+		$attachment->setLastModified(time());
+		$attachment->setCreatedAt(time());
+
+		/** @var FilesAppService $fileService */
+		$fileService = $this->getService('file');
+		$fileService->createFromImport($attachment, $content);
+		$fileService->extendData($attachment);
+		$this->addCreator($attachment);
+
+		$this->changeHelper->cardChanged($cardId);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
+
+		return $attachment;
+	}
+
 
 	/**
 	 * Display the attachment

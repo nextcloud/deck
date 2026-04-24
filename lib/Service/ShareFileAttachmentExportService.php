@@ -61,7 +61,7 @@ class ShareFileAttachmentExportService {
 			}
 
 			return [
-				'type' => 'deck_file',
+				'type' => 'file',
 				'data' => (string)$node->getName(),
 				'createdBy' => (string)($share['uid_initiator'] ?? $share['uid_owner'] ?? $fallbackUserId),
 				'createdAt' => (int)($share['stime'] ?? time()),

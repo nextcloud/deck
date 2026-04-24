@@ -11,6 +11,7 @@ namespace OCA\Deck\UserMigration;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
@@ -45,6 +46,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 		protected CardMapper $cardMapper,
 		protected LabelMapper $labelMapper,
 		protected AclMapper $aclMapper,
+		protected AssignmentMapper $assignmentMapper,
 		protected AttachmentMapper $attachmentMapper,
 		protected ICommentsManager $commentsManager,
 		protected IAppData $appData,
@@ -164,11 +166,13 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	private function serializeCard(object $card, string $uid): array {
 		$cardId = $card->getId();
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
+		$card->setAssignedUsers($this->assignmentMapper->findAll($cardId));
 
 		$cardData = $card->jsonSerialize();
 		$cardData['labels'] = $cardData['labels'] ?? [];
+		$cardData['assignedUsers'] = $cardData['assignedUsers'] ?? [];
 		$cardData['comments'] = $this->serializeCardComments($cardId);
-		$cardData['attachments'] = $this->serializeCardAttachments($cardId, $uid);
+		$cardData['attachments'] = $this->shareFileAttachmentExportService->exportCardAttachments($cardId, $uid);
 
 		return $cardData;
 	}
@@ -198,36 +202,6 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 		}
 
 		return $formattedComments;
-	}
-
-	private function serializeCardAttachments(int $cardId, string $uid): array {
-		$formattedAttachments = [];
-		foreach ($this->attachmentMapper->findAll($cardId) as $attachment) {
-			$formattedAttachments[] = $this->serializeDeckFileAttachment($attachment, $cardId);
-		}
-
-		foreach ($this->getShareFileAttachments($cardId, $uid) as $share) {
-			$formattedAttachments[] = $share;
-		}
-
-		return $formattedAttachments;
-	}
-
-	private function serializeDeckFileAttachment(object $attachment, int $cardId): array {
-		$attachmentData = $attachment->jsonSerialize();
-		if (($attachmentData['type'] ?? null) === 'deck_file') {
-			try {
-				$folder = $this->appData->getFolder('file-card-' . $cardId);
-				$file = $folder->getFile((string)$attachment->getData());
-				$attachmentData['contentBase64'] = base64_encode($file->getContent());
-			} catch (\Throwable $e) {
-			}
-		}
-		return $attachmentData;
-	}
-
-	private function getShareFileAttachments(int $cardId, string $uid): array {
-		return $this->shareFileAttachmentExportService->exportCardAttachments($cardId, $uid);
 	}
 
 	private function shouldImport(IImportSource $importSource): bool {

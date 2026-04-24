@@ -23,7 +23,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\Service\FileService;
+use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\Importer\Systems\TrelloApiService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
@@ -320,13 +320,18 @@ class BoardImportService {
 		}
 	}
 
+	/**
+	 * Insert parsed comments by card and remap parent IDs from source to imported comments.
+	 *
+	 * @return void
+	 */
 	public function importComments(): void {
-		$allComments = $this->getImportSystem()->getComments();
+		$commentsByCard = $this->getImportSystem()->getComments();
 		$sourceToImportedCommentId = [];
-		foreach ($allComments as $cardId => $comments) {
+		foreach ($commentsByCard as $cardId => $comments) {
 			foreach ($comments as $commentId => $comment) {
 				$metaData = $comment->getMetaData() ?? [];
-				$sourceParentId = (string)($metaData['deckImportParentId'] ?? '0');
+				$sourceParentId = $comment->getParentId();
 				if ($sourceParentId !== '0' && isset($sourceToImportedCommentId[$sourceParentId])) {
 					$comment->setParentId($sourceToImportedCommentId[$sourceParentId]);
 				} else {
@@ -381,21 +386,8 @@ class BoardImportService {
 	}
 
 	public function insertAttachment(Attachment $attachment, string $content): Attachment {
-		$service = Server::get(FileService::class);
-		$folder = $service->getFolder($attachment);
-
-		if ($folder->fileExists($attachment->getData())) {
-			$attachment = $this->attachmentMapper->findByData($attachment->getCardId(), $attachment->getData());
-			throw new ConflictException('File already exists.', $attachment);
-		}
-
-		$target = $folder->newFile($attachment->getData());
-		$target->putContent($content);
-
-		$attachment = $this->attachmentMapper->insert($attachment);
-
-		$service->extendData($attachment);
-		return $attachment;
+		$attachmentService = Server::get(AttachmentService::class);
+		return $attachmentService->createFileAttachmentFromImport($attachment, $content);
 	}
 
 	public function setData(\stdClass $data): void {
