@@ -19,7 +19,6 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\Importer\ABoardImportService;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
-use OCP\Server;
 use OCP\IUser;
 use OCP\IUserManager;
 
@@ -114,7 +113,7 @@ class DeckJsonService extends ABoardImportService {
 	/**
 	 * Parse comments from source cards and return them as an array of comments by card ID.
 	 *
-	*/
+	 */
 	public function getComments(): array {
 		$comments = [];
 		foreach ($this->tmpCards as $sourceCard) {

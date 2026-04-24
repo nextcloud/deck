@@ -30,8 +30,8 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IPreview;
 use OCP\IRequest;
-use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\Exceptions\GenericShareException;
+use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
@@ -242,7 +242,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	/**
 	 * Ensure the file exists in the owner’s Deck attachment folder, link it to the
 	 * Reuse file/share when already present
-	 * 
+	 *
 	 * @param Attachment $attachment
 	 * @param string $content
 	 * @return Attachment

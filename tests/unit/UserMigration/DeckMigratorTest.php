@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Deck\UserMigration;
 
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -40,6 +41,8 @@ class DeckMigratorTest extends TestCase {
 	private $labelMapper;
 	/** @var AclMapper|MockObject */
 	private $aclMapper;
+	/** @var AssignmentMapper|MockObject */
+	private $assignmentMapper;
 	/** @var AttachmentMapper|MockObject */
 	private $attachmentMapper;
 	/** @var ICommentsManager|MockObject */
@@ -60,6 +63,7 @@ class DeckMigratorTest extends TestCase {
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
+		$this->assignmentMapper = $this->createMock(AssignmentMapper::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->appData = $this->createMock(IAppData::class);
@@ -74,6 +78,7 @@ class DeckMigratorTest extends TestCase {
 			$this->cardMapper,
 			$this->labelMapper,
 			$this->aclMapper,
+			$this->assignmentMapper,
 			$this->attachmentMapper,
 			$this->commentsManager,
 			$this->appData,
