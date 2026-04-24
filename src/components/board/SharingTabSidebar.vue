@@ -140,7 +140,7 @@ export default {
 					displayName: item.displayname || item.name || item.label || item.id,
 					user: item.id,
 					subname: item.shareWithDisplayNameUnique || item.subline || item.id, // NcSelectUser does its own pattern matching to filter things out
-					type: SOURCE_TO_SHARE_TYPE[item.source]
+					type: SOURCE_TO_SHARE_TYPE[item.source],
 				}
 				return res
 			}).slice(0, 10)

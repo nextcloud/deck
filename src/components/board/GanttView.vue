@@ -4,7 +4,7 @@
 -->
 <template>
 	<div class="gantt-wrapper">
-		<div class="gantt-toolbar">
+		<div v-if="ganttTasks.length" class="gantt-toolbar">
 			<NcButton v-for="mode in viewModes"
 				:key="mode.value"
 				:type="currentViewMode === mode.value ? 'primary' : 'secondary'"
@@ -20,7 +20,7 @@
 				<ChartGanttIcon />
 			</template>
 			<template #name>
-				{{ t('deck', 'No cards with dates') }}
+				{{ t('deck', 'No cards yet') }}
 			</template>
 			<template #description>
 				{{ t('deck', 'Set a start date and due date on your cards to see them on the Gantt chart') }}
@@ -47,8 +47,8 @@
 			</div>
 		</div>
 
-		<div v-if="stacksByBoard.length" class="gantt-legend">
-			<span v-for="stack in stacksByBoard"
+		<div v-if="stacks.length" class="gantt-legend">
+			<span v-for="stack in stacks"
 				:key="stack.id"
 				class="gantt-legend__item">
 				<span class="gantt-legend__dot" :style="{ backgroundColor: getStackColor(stack.id) }" />
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import Gantt from 'frappe-gantt'
 import 'frappe-gantt/dist/frappe-gantt.css' // eslint-disable-line
 import { NcButton, NcEmptyContent } from '@nextcloud/vue'
@@ -73,11 +73,40 @@ const STACK_COLORS = [
 	'#3f51b5', '#8bc34a', '#ff5722', '#009688',
 ]
 
+// Mirrors frappe-gantt date_utils.convert_scales() constants.
+// days_per_unit[scale] = how many days one unit of that scale is.
+const DAYS_PER_UNIT = {
+	millisecond: 1 / 86400000,
+	second: 1 / 86400,
+	minute: 1 / 1440,
+	hour: 1 / 24,
+	day: 1,
+	month: 30,
+	year: 365,
+}
+
 const GANTT_VIEW_MODES = [
+	{
+		name: 'Hour',
+		padding: '7d',
+		step: '1h',
+		snap_at: '1h',
+		date_format: 'YYYY-MM-DD HH:',
+		lower_text: 'HH',
+		upper_text: (d, ld, lang) =>
+			!ld || d.getDate() !== ld.getDate()
+				? Intl.DateTimeFormat(lang || 'en', { month: 'short', day: 'numeric' }).format(d)
+				: '',
+		thick_line(date) {
+			return date.getDay() === 1
+		},
+		upper_text_frequency: 24,
+	},
 	{
 		name: 'Day',
 		padding: '14d',
-		step: '1d',
+		step: '12h',
+		snap_at: '12h',
 		column_width: 38,
 		date_format: 'YYYY-MM-DD',
 		lower_text(date, last, lang) {
@@ -161,6 +190,7 @@ export default {
 			isDragging: false,
 			showUndated: false,
 			viewModes: [
+				{ value: 'Hour', label: t('deck', 'Hours') },
 				{ value: 'Day', label: t('deck', 'Days') },
 				{ value: 'Week', label: t('deck', 'Weeks') },
 				{ value: 'Month', label: t('deck', 'Months') },
@@ -168,66 +198,39 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			filter: state => state.filter,
-		}),
-		stacksByBoard() {
-			return this.stacks || []
-		},
-		allCards() {
-			const cards = []
-			for (const stack of this.stacksByBoard) {
-				const stackCards = this.$store.getters.cardsByStack(stack.id)
-				cards.push(...stackCards)
-			}
-			return cards
-		},
-		ganttTasks() {
-			return this.allCards
-				.filter(card => card.duedate || card.startdate)
-				.map(card => {
-					let start = card.startdate ? new Date(card.startdate) : null
-					let end = card.duedate ? new Date(card.duedate) : null
-
-					if (!start && end) {
-						start = new Date(end)
-						start.setDate(start.getDate() - 1)
-					}
-					if (start && !end) {
-						end = new Date(start)
-						end.setDate(end.getDate() + 1)
-					}
-
-					// Ensure start <= end
-					if (start > end) {
-						const tmp = start
-						start = end
-						end = tmp
-					}
-
-					const stackIdx = this.stacksByBoard.findIndex(s => s.id === card.stackId)
-
-					return {
-						id: String(card.id),
-						name: card.title,
-						start,
-						end,
-						progress: card.done ? 100 : 0,
-						custom_class: 'gantt-bar--color-' + (stackIdx % STACK_COLORS.length),
-						_card: card,
+		...mapGetters(['cardsByStack']),
+		partitionedCards() {
+			const undatedCards = []
+			const ganttTasks = []
+			this.stacks.forEach((stack, index) => {
+				this.cardsByStack(stack.id).forEach((card) => {
+					if (!card.duedate && !card.startdate) {
+						undatedCards.push(card)
+					} else {
+						ganttTasks.push(this.cardToGanttTask(card, index))
 					}
 				})
+			})
+			return { undatedCards, ganttTasks }
+		},
+		ganttTasks() {
+			return this.partitionedCards.ganttTasks
 		},
 		undatedCards() {
-			return this.allCards.filter(card => !card.duedate && !card.startdate)
+			return this.partitionedCards.undatedCards
 		},
 	},
 	watch: {
 		ganttTasks: {
 			deep: true,
-			handler(tasks) {
+			handler(tasks, oldTasks) {
+				if (oldTasks.length === 0 && tasks.length > 0) {
+					this.$nextTick(() => this.renderGantt())
+					return
+				}
 				if (!this.isDragging && this.ganttInstance) {
-					this.ganttInstance.refresh(JSON.parse(JSON.stringify(tasks)))
+					const cloned = tasks.map(t => ({ ...t, start: new Date(t.start), end: new Date(t.end) }))
+					this.ganttInstance.refresh(cloned)
 				}
 			},
 		},
@@ -254,12 +257,42 @@ export default {
 		this.ganttInstance = null
 	},
 	methods: {
+		cardToGanttTask(card, stackIndex) {
+			let start = card.startdate ? new Date(card.startdate) : null
+			let end = card.duedate ? new Date(card.duedate) : null
+
+			if (!start && end) {
+				start = new Date(end)
+				start.setHours(start.getHours() - 1)
+			}
+			if (start && !end) {
+				end = new Date(start)
+				end.setHours(end.getHours() + 1)
+			}
+
+			// Ensure start <= end
+			if (start > end) {
+				const tmp = start
+				start = end
+				end = tmp
+			}
+
+			return {
+				id: String(card.id),
+				name: card.title,
+				start,
+				end,
+				progress: card.done ? 100 : 0,
+				custom_class: 'gantt-bar--color-' + (stackIndex % STACK_COLORS.length),
+				_card: card,
+			}
+		},
 		getStackColor(stackId) {
-			const idx = this.stacksByBoard.findIndex(s => s.id === stackId)
+			const idx = this.stacks.findIndex(s => s.id === stackId)
 			return STACK_COLORS[idx % STACK_COLORS.length] || STACK_COLORS[0]
 		},
 		getStackTitle(stackId) {
-			const stack = this.stacksByBoard.find(s => s.id === stackId)
+			const stack = this.stacks.find(s => s.id === stackId)
 			return stack ? stack.title : ''
 		},
 		changeViewMode(mode) {
@@ -281,8 +314,7 @@ export default {
 
 			this.$refs.ganttContainer.innerHTML = ''
 
-			this.ganttInstance = new Gantt(this.$refs.ganttContainer, JSON.parse(JSON.stringify(this.ganttTasks)), {
-				view_mode: this.currentViewMode,
+			this.ganttInstance = new Gantt(this.$refs.ganttContainer, this.ganttTasks, {
 				view_modes: GANTT_VIEW_MODES,
 				bar_height: 28,
 				lower_header_height: 40,
@@ -290,8 +322,12 @@ export default {
 				scroll_to: 'today',
 				today_button: true,
 				infinite_padding: false,
+				readonly_progress: true,
+				popup: false,
 				on_click: (task) => {
-					this.openCard(task._card)
+					if (!this.isDragging) {
+						this.openCard(task._card)
+					}
 				},
 				on_date_change: (task, start, end) => {
 					this.isDragging = true
@@ -299,7 +335,37 @@ export default {
 				},
 			})
 
+			this._patchBarDuration()
+			this.ganttInstance.change_view_mode(this.currentViewMode)
 			this.fitColumnsToWidth()
+		},
+		_patchBarDuration() {
+			const bars = this.ganttInstance?.bars
+			if (!bars?.length) return
+			const BarProto = Object.getPrototypeOf(bars[0])
+			if (BarProto._deckDurationPatched) return
+			BarProto._deckDurationPatched = true
+
+			// we overwrite the compute_duration function because it enforces a minimum of 1 day duration
+			// for reference: https://github.com/frappe/gantt/issues/534
+			BarProto.compute_duration = function() {
+				const ms = this.task._end - this.task._start
+				const unit = this.gantt.config.unit
+				const step = this.gantt.config.step
+
+				// In Hour + Day view use full millisecond precision so sub-day tasks
+				// render at their true duration. In all other views enforce a
+				// minimum of 1 day so short tasks remain visible.
+				const durationInDays = this.gantt.config.view_mode.name === 'Hour' || this.gantt.config.view_mode.name === 'Day'
+					? ms / 86400000
+					: Math.max(1, ms / 86400000)
+
+				this.task.actual_duration = Math.ceil(durationInDays)
+				this.task.ignored_duration = 0
+				this.duration = (durationInDays / DAYS_PER_UNIT[unit]) / step
+				this.actual_duration_raw = this.duration
+				this.ignored_duration_raw = 0
+			}
 		},
 		fitColumnsToWidth() {
 			const gantt = this.ganttInstance
@@ -315,7 +381,6 @@ export default {
 		async onDateChange(task, start, end) {
 			const card = task._card
 			if (!card) return
-
 			try {
 				await this.$store.dispatch('updateCardStartDate', {
 					...card,
@@ -352,6 +417,7 @@ export default {
 
 .gantt-chart {
 	flex: 1 1 0;
+	width: 100%;
 	min-height: 0;
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -421,8 +487,11 @@ export default {
 </style>
 
 <style lang="scss">
+@use 'sass:list';
+
 /* Map frappe-gantt CSS variables to Nextcloud theme variables */
 .gantt-chart .gantt-container {
+	max-height: 100%;
 	/* Grid and background */
 	--g-row-color: var(--color-main-background);
 	--g-header-background: var(--color-background-dark);
@@ -449,11 +518,6 @@ export default {
 	--g-progress-color: var(--color-primary-element);
 	--g-handle-color: var(--color-primary-element);
 
-	/* Popup */
-	--g-popup-actions: var(--color-main-background);
-
-	/* Prevent vertical scrollbar */
-	overflow-y: hidden !important;
 }
 
 /* Move the Today button up into the upper header area */
@@ -463,22 +527,6 @@ export default {
 	button {
 		color: var(--color-main-text);
 		border-color: var(--color-border);
-	}
-}
-
-/* Popup theming */
-.gantt-chart .gantt-container .popup-wrapper {
-	background: var(--color-main-background);
-	border: 1px solid var(--color-border);
-
-	.pointer {
-		border-color: var(--color-main-background) transparent transparent transparent;
-	}
-	.title-container .title {
-		color: var(--color-main-text);
-	}
-	.title-container .subtitle {
-		color: var(--color-text-maxcontrast);
 	}
 }
 
@@ -492,12 +540,12 @@ export default {
 	}
 
 	// Stack color classes — bar fill and progress colors
-	@each $color in ('#0082c9', '#4caf50', '#ff9800', '#e91e63',
+	$stack-colors: '#0082c9', '#4caf50', '#ff9800', '#e91e63',
 		'#9c27b0', '#00bcd4', '#795548', '#607d8b',
-		'#3f51b5', '#8bc34a', '#ff5722', '#009688') {
-		$i: index(('#0082c9', '#4caf50', '#ff9800', '#e91e63',
-			'#9c27b0', '#00bcd4', '#795548', '#607d8b',
-			'#3f51b5', '#8bc34a', '#ff5722', '#009688'), $color) - 1;
+		'#3f51b5', '#8bc34a', '#ff5722', '#009688';
+
+	@each $color in $stack-colors {
+		$i: list.index($stack-colors, $color) - 1;
 
 		.bar-wrapper.gantt-bar--color-#{$i} {
 			.bar {

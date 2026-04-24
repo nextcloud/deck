@@ -226,14 +226,14 @@
 
 				<NcActions :aria-label="t('deck', 'View Modes')"
 					:name="t('deck', 'Toggle View Modes')">
-					<NcActionButton :class="{ 'action--active': viewMode === 'kanban' }"
+					<NcActionButton :model-value="viewMode === 'kanban'"
 						@click="setViewMode('kanban')">
 						<template #icon>
 							<ViewColumnIcon :size="20" decorative />
 						</template>
 						{{ t('deck', 'Kanban view') }}
 					</NcActionButton>
-					<NcActionButton :class="{ 'action--active': viewMode === 'gantt' }"
+					<NcActionButton :model-value="viewMode === 'gantt'"
 						@click="setViewMode('gantt')">
 						<template #icon>
 							<ChartGanttIcon :size="20" decorative />
