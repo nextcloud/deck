@@ -24,6 +24,7 @@ use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\AttachmentService;
+use OCA\Deck\Service\FilesAppService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\Importer\Systems\TrelloApiService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
@@ -73,6 +74,7 @@ class BoardImportService {
 		private ICommentsManager $commentsManager,
 		private IEventDispatcher $eventDispatcher,
 		private LoggerInterface $logger,
+		private AttachmentService $attachmentService,
 	) {
 		$this->board = new Board();
 		$this->disableCommentsEvents();
@@ -332,11 +334,7 @@ class BoardImportService {
 			foreach ($comments as $commentId => $comment) {
 				$metaData = $comment->getMetaData() ?? [];
 				$sourceParentId = $comment->getParentId();
-				if ($sourceParentId !== '0' && isset($sourceToImportedCommentId[$sourceParentId])) {
-					$comment->setParentId($sourceToImportedCommentId[$sourceParentId]);
-				} else {
-					$comment->setParentId('0');
-				}
+				$comment->setParentId($sourceToImportedCommentId[$sourceParentId] ?? '0');
 
 				$this->insertComment((int)$cardId, $comment);
 				$sourceId = (string)($metaData['deckImportSourceId'] ?? $commentId);
@@ -386,8 +384,17 @@ class BoardImportService {
 	}
 
 	public function insertAttachment(Attachment $attachment, string $content): Attachment {
-		$attachmentService = Server::get(AttachmentService::class);
-		return $attachmentService->createFileAttachmentFromImport($attachment, $content);
+		$attachment->setType('file');
+		$attachment->setLastModified(time());
+		$attachment->setCreatedAt(time());
+
+		/** @var FilesAppService $fileService */
+		$fileService = $this->attachmentService->getService('file');
+		$fileService->createFromImport($attachment, $content);
+		$fileService->extendData($attachment);
+		$this->attachmentService->syncAttachmentCreateSideEffects($attachment);
+
+		return $attachment;
 	}
 
 	public function setData(\stdClass $data): void {

@@ -156,7 +156,7 @@ class DeckJsonService extends ABoardImportService {
 	/**
 	 * @return array{0: string, 1: string}
 	 */
-	private function resolveCommentActor(\stdClass $commentOriginal): array {
+	private function resolveCommentActor(object $commentOriginal): array {
 		$actorType = (string)($commentOriginal->actorType ?? 'users');
 		$actorId = $commentOriginal->actorId ?? null;
 
@@ -171,7 +171,7 @@ class DeckJsonService extends ABoardImportService {
 		return [$actorType, $actorId];
 	}
 
-	private function importAttachmentsForCard(\stdClass $sourceCard): void {
+	private function importAttachmentsForCard(object $sourceCard): void {
 		if (!property_exists($sourceCard, 'attachments') || !isset($this->cards[$sourceCard->id])) {
 			return;
 		}
