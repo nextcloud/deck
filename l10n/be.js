@@ -53,6 +53,7 @@ OC.L10N.register(
     "Show in Files" : "Паказаць у Файлах",
     "Download" : "Спампаваць",
     "Comments" : "Каментарыі",
+    "Submit" : "Адправіць",
     "Created:" : "Створана:",
     "Cancel reply" : "Скасаваць адказ",
     "Reply" : "Адказаць",

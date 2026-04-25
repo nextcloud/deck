@@ -262,6 +262,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "لا يوجد تعليقات بعد, ابدأ النقاش الآن!",
     "The comment cannot be empty." : "التعليق لايمكن ان يكون فارغا.",
     "The comment cannot be longer than 1000 characters." : "التعليق لا يمكن ان يكون اطول من 1000 حرف.",
+    "Submit" : "إرسال ",
     "Created:" : "تاريخ الإنشاء :",
     "In reply to" : "يقوم بالرد على",
     "Cancel reply" : "إلغاء الرد",

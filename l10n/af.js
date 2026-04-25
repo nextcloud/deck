@@ -28,6 +28,7 @@ OC.L10N.register(
     "Edit" : "Wysig",
     "Download" : "Laai af",
     "Comments" : "Kommentare",
+    "Submit" : "Dien in",
     "Created:" : "Geskep:",
     "Reply" : "Antwoord",
     "Update" : "Werk by",
