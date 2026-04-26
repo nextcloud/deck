@@ -324,6 +324,7 @@ OC.L10N.register(
     "Edit card title" : "Kartentitel bearbeiten",
     "Open link" : "Link öffnen",
     "Card deleted" : "Karte gelöscht",
+    "Change card color" : "Kartenfarbe ändern",
     "Edit title" : "Titel bearbeiten",
     "Assign to me" : "Mir zuweisen",
     "Unassign myself" : "Nicht mehr mir zuweisen",
