@@ -19,6 +19,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
+use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\ShareFileAttachmentExportService;
 use OCP\Comments\ICommentsManager;
 use OCP\Files\IAppData;
@@ -55,6 +56,8 @@ class DeckMigratorTest extends TestCase {
 	private $boardService;
 	/** @var BoardImportService|MockObject */
 	private $boardImportService;
+	/** @var PermissionService|MockObject */
+	private $permissionService;
 	private DeckMigrator $migrator;
 
 	public function setUp(): void {
@@ -70,6 +73,7 @@ class DeckMigratorTest extends TestCase {
 		$this->shareFileAttachmentExportService = $this->createMock(ShareFileAttachmentExportService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->boardImportService = $this->createMock(BoardImportService::class);
+		$this->permissionService = $this->createMock(PermissionService::class);
 
 		$this->migrator = new DeckMigrator(
 			$this->createMock(IL10N::class),
@@ -85,6 +89,7 @@ class DeckMigratorTest extends TestCase {
 			$this->shareFileAttachmentExportService,
 			$this->boardService,
 			$this->boardImportService,
+			$this->permissionService,
 		);
 	}
 
@@ -100,9 +105,16 @@ class DeckMigratorTest extends TestCase {
 			->method('findAllByUser')
 			->with('admin')
 			->willReturn([$board]);
-		$this->labelMapper->expects($this->once())->method('findAll')->with(42)->willReturn([]);
-		$this->aclMapper->expects($this->once())->method('findAll')->with(42)->willReturn([]);
-		$this->stackMapper->expects($this->once())->method('findAll')->with(42)->willReturn([]);
+		$this->boardService->expects($this->once())
+			->method('setUserId')
+			->with('admin');
+		$this->permissionService->expects($this->once())
+			->method('setUserId')
+			->with('admin');
+		$this->boardService->expects($this->once())
+			->method('export')
+			->with(42)
+			->willReturn($board);
 
 		$destination = $this->createMock(IExportDestination::class);
 		$destination->expects($this->once())
@@ -112,6 +124,42 @@ class DeckMigratorTest extends TestCase {
 				$this->callback(static function (string $json): bool {
 					$decoded = json_decode($json, true);
 					return is_array($decoded) && isset($decoded['boards']) && count($decoded['boards']) === 1;
+				})
+			);
+
+		$this->migrator->export($user, $destination, $this->createMock(OutputInterface::class));
+	}
+
+	public function testExportSkipsDeletedBoards(): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('admin');
+
+		$deletedBoard = new Board();
+		$deletedBoard->setId(5202);
+		$deletedBoard->setTitle('Deleted board');
+		$deletedBoard->setDeletedAt(time());
+
+		$this->boardMapper->expects($this->once())
+			->method('findAllByUser')
+			->with('admin')
+			->willReturn([$deletedBoard]);
+		$this->boardService->expects($this->once())
+			->method('setUserId')
+			->with('admin');
+		$this->permissionService->expects($this->once())
+			->method('setUserId')
+			->with('admin');
+		$this->boardService->expects($this->never())
+			->method('export');
+
+		$destination = $this->createMock(IExportDestination::class);
+		$destination->expects($this->once())
+			->method('addFileContents')
+			->with(
+				'boards.json',
+				$this->callback(static function (string $json): bool {
+					$decoded = json_decode($json, true);
+					return is_array($decoded) && isset($decoded['boards']) && count($decoded['boards']) === 0;
 				})
 			);
 

@@ -19,6 +19,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
+use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\ShareFileAttachmentExportService;
 use OCP\Comments\ICommentsManager;
 use OCP\Files\IAppData;
@@ -53,6 +54,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 		protected ShareFileAttachmentExportService $shareFileAttachmentExportService,
 		protected BoardService $boardService,
 		protected BoardImportService $boardImportService,
+		protected PermissionService $permissionService,
 	) {
 	}
 
@@ -72,6 +74,8 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 		OutputInterface $output,
 	): void {
 		$uid = $user->getUID();
+		$this->boardService->setUserId($uid);
+		$this->permissionService->setUserId($uid);
 
 		try {
 			$exportData = $this->buildExportData($uid);
@@ -115,62 +119,58 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 		$exportData = ['boards' => []];
 
 		foreach ($boards as $board) {
-			$exportData['boards'][] = $this->serializeBoard($board, $uid);
+			// skip if the board is deleted (to align with the export service)
+			if ($board->getDeletedAt() > 0) {
+				continue;
+			}
+			$boardWithStacksAndCards = $this->boardService->export($board->getId());
+			$this->appendArchivedCards($boardWithStacksAndCards);
+			$exportData['boards'][] = $this->serializeBoard($boardWithStacksAndCards, $uid);
 		}
 
 		return $exportData;
 	}
 
 	private function serializeBoard(object $board, string $uid): array {
-		$boardId = $board->getId();
-		$board->setLabels($this->labelMapper->findAll($boardId));
-		$board->setAcl($this->aclMapper->findAll($boardId));
-
-		$stacksById = $this->getBoardStacksById($boardId);
-		$this->attachSerializedCardsToStacks($stacksById, $uid);
-		$board->setStacks($stacksById);
-
-		return $board->jsonSerialize();
-	}
-
-	private function getBoardStacksById(int $boardId): array {
-		$stacksById = [];
-		foreach ($this->stackMapper->findAll($boardId) as $stack) {
-			$stacksById[$stack->getId()] = $stack;
+		$boardData = $board->jsonSerialize();
+		$serializedStacks = [];
+		foreach ($board->getStacks() ?? [] as $stack) {
+			$stackData = $stack->jsonSerialize();
+			$serializedCards = [];
+			foreach ($stack->getCards() ?? [] as $card) {
+				$serializedCards[] = $this->serializeCard($card, $uid);
+			}
+			$stackData['cards'] = $serializedCards;
+			$serializedStacks[] = $stackData;
 		}
-		return $stacksById;
+		$boardData['stacks'] = $serializedStacks;
+
+		return $boardData;
 	}
 
-	private function attachSerializedCardsToStacks(array &$stacksById, string $uid): void {
-		$stackIds = array_map(static fn ($stack) => $stack->getId(), $stacksById);
-		if (empty($stackIds)) {
+	private function appendArchivedCards(object $board): void {
+		$stacks = $board->getStacks() ?? [];
+		if (count($stacks) === 0) {
 			return;
 		}
 
-		$allCardsByStack = $this->cardMapper->findAllForStacks($stackIds);
+		$stackIds = array_map(static fn ($stack) => $stack->getId(), $stacks);
 		$archivedCardsByStack = $this->cardMapper->findAllArchivedForStacks($stackIds);
 
-		foreach ($stacksById as $stackId => $stack) {
-			$stackCards = array_merge(
-				$allCardsByStack[$stackId] ?? [],
-				$archivedCardsByStack[$stackId] ?? []
-			);
-			$serializedCards = [];
-			foreach ($stackCards as $card) {
-				$serializedCards[] = $this->serializeCard($card, $uid);
+		foreach ($stacks as $stack) {
+			$activeCards = $stack->getCards() ?? [];
+			$archivedCards = $archivedCardsByStack[$stack->getId()] ?? [];
+			if (count($archivedCards) === 0) {
+				continue;
 			}
-			$stack->setCards($serializedCards);
+			$stack->setCards(array_merge($activeCards, $archivedCards));
 		}
 	}
 
 	private function serializeCard(object $card, string $uid): array {
 		$cardId = $card->getId();
-		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
-		$card->setAssignedUsers($this->assignmentMapper->findAll($cardId));
 
 		$cardData = $card->jsonSerialize();
-		$cardData['labels'] = $cardData['labels'] ?? [];
-		$cardData['assignedUsers'] = $cardData['assignedUsers'] ?? [];
 		$cardData['comments'] = $this->serializeCardComments($cardId);
 		$cardData['attachments'] = $this->shareFileAttachmentExportService->exportCardAttachments($cardId, $uid);
 
