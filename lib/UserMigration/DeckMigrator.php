@@ -171,8 +171,12 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 		$cardId = $card->getId();
 
 		$cardData = $card->jsonSerialize();
-		$cardData['comments'] = $this->serializeCardComments($cardId);
-		$cardData['attachments'] = $this->shareFileAttachmentExportService->exportCardAttachments($cardId, $uid);
+		$cardData['comments'] = (isset($cardData['comments']) && is_array($cardData['comments']) && $cardData['comments'] !== [])
+			? $cardData['comments']
+			: $this->serializeCardComments($cardId);
+		$cardData['attachments'] = (isset($cardData['attachments']) && is_array($cardData['attachments']) && $cardData['attachments'] !== [])
+			? $cardData['attachments']
+			: $this->shareFileAttachmentExportService->exportCardAttachments($cardId, $uid);
 
 		return $cardData;
 	}
