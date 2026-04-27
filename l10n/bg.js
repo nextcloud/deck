@@ -220,6 +220,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "Все още няма коментари. Започнете дискусията!",
     "The comment cannot be empty." : "Коментарът не може да бъде празен.",
     "The comment cannot be longer than 1000 characters." : "Коментарът не може да бъде по-дълъг от 1000 знака.",
+    "Submit" : "Изпращане",
     "Created:" : "Създадено:",
     "In reply to" : "В отговор на",
     "Cancel reply" : "Отказ на отговор",

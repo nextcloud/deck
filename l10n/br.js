@@ -31,6 +31,7 @@ OC.L10N.register(
     "Share from Files" : "Rannañ diouzh Restroù",
     "Download" : "Pellgargañ",
     "Comments" : "Displegadennoù",
+    "Submit" : "Kinnig",
     "Created:" : "Krouet :",
     "Reply" : "Respont",
     "Update" : "Adnevesaat",

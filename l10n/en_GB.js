@@ -324,6 +324,7 @@ OC.L10N.register(
     "Edit card title" : "Edit card title",
     "Open link" : "Open link",
     "Card deleted" : "Card deleted",
+    "Change card color" : "Change card colour",
     "Edit title" : "Edit title",
     "Assign to me" : "Assign to me",
     "Unassign myself" : "Unassign myself",

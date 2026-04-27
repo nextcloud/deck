@@ -261,6 +261,7 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "No hi ha comentaris encara. Començar la discussió!",
     "The comment cannot be empty." : "El comentari no pot estar buit.",
     "The comment cannot be longer than 1000 characters." : "El comentari no pot ser més llarg que 1000 caràcters.",
+    "Submit" : "Envia",
     "Created:" : "Data de creació:",
     "In reply to" : "En resposta a",
     "Cancel reply" : "Cancel·la la resposta",
