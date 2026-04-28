@@ -324,6 +324,7 @@ OC.L10N.register(
     "Edit card title" : "編輯卡片標題",
     "Open link" : "開啟連結",
     "Card deleted" : "卡片已刪除",
+    "Change card color" : "變更卡片顏色",
     "Edit title" : "編輯標題",
     "Assign to me" : "分配給我",
     "Unassign myself" : "取消分配給我",
