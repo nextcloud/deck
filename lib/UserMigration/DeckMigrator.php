@@ -102,6 +102,12 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 			return;
 		}
 
+		$this->permissionService->setUserId($user->getUID());
+		if (!$this->permissionService->canCreate()) {
+			$output->writeln('Deck import failed: user is not allowed to create boards.');
+			return;
+		}
+
 		try {
 			$data = $this->readImportData($importSource);
 			if (empty($data['boards'])) {
