@@ -72,7 +72,7 @@ class CommentService {
 			throw new NotFoundException('No comment found.');
 		}
 		if ($comment->getParentId() !== '0') {
-			$this->permissionService->checkPermission($this->cardMapper, (int)$comment->getParentId(), Acl::PERMISSION_READ);
+			$this->permissionService->checkPermission($this->cardMapper, (int)$comment->getObjectId(), Acl::PERMISSION_READ);
 		}
 
 		return $comment;
