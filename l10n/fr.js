@@ -191,6 +191,7 @@ OC.L10N.register(
     "Admin settings" : "Paramètres d'administration",
     "Limit board creation to some groups" : "Limiter la création de tableaux à certains groupes",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Les utilisateurs qui ne font pas partie de ces groupes ne pourront pas créer leurs propres tableaux, mais pourront toujours travailler sur les tableaux qui ont été partagés avec eux.",
+    "Enable federation" : "Activer la fédération",
     "Board actions" : "Actions sur le tableau",
     "Scroll sideways" : "Défilement latéral",
     "Navigate between cards" : "Naviguer entre les cartes",
