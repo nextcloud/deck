@@ -324,6 +324,7 @@ OC.L10N.register(
     "Edit card title" : "Ändra korttitel",
     "Open link" : "Öppna länken",
     "Card deleted" : "Kortet har raderats",
+    "Change card color" : "Ändra kortfärg",
     "Edit title" : "Redigera titel",
     "Assign to me" : "Tilldela till mig",
     "Unassign myself" : "Ta bort från mig själv",
