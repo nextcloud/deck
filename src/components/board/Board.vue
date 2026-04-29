@@ -140,11 +140,11 @@ export default {
 			isFullApp: state => state.isFullApp,
 			board: state => state.currentBoard,
 			showArchived: state => state.showArchived,
-			viewMode: state => state.viewMode,
 		}),
 		...mapGetters([
 			'canEdit',
 			'canManage',
+			'viewMode',
 		]),
 		stacksByBoard() {
 			return this.board?.id ? this.$store.getters.stacksByBoard(this.board.id) : []

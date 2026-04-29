@@ -197,8 +197,8 @@ export default {
 			],
 		}
 	},
-	       computed: {
-		       ...mapGetters(['cardsByStack', 'canEdit']),
+	computed: {
+		...mapGetters(['cardsByStack', 'canEdit']),
 		partitionedCards() {
 			const undatedCards = []
 			const ganttTasks = []

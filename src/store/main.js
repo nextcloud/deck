@@ -62,7 +62,7 @@ export default function storeFactory() {
 			activityLoadMore: true,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			shortcutLock: false,
-			viewMode: localStorage.getItem('deck.viewMode') || 'kanban',
+			viewModeByBoard: {},
 		},
 		getters: {
 			config: state => (key) => {
@@ -74,6 +74,15 @@ export default function storeFactory() {
 			},
 			getSearchQuery: state => {
 				return state.searchQuery
+			},
+			viewMode: state => {
+				if (!state.currentBoard) return 'kanban'
+				if (state.viewModeByBoard[state.currentBoard.id] !== undefined) {
+					return state.viewModeByBoard[state.currentBoard.id]
+				}
+
+				const stored = localStorage.getItem(`deck.viewMode.${state.currentBoard.id}`)
+				return stored !== null ? stored : 'kanban'
 			},
 			getFilter: state => {
 				return state.filter
@@ -304,8 +313,9 @@ export default function storeFactory() {
 				state.shortcutLock = lock
 			},
 			setViewMode(state, mode) {
-				state.viewMode = mode
-				localStorage.setItem('deck.viewMode', mode)
+				if (!state.currentBoard) return
+				Vue.set(state.viewModeByBoard, state.currentBoard.id, mode)
+				localStorage.setItem(`deck.viewMode.${state.currentBoard.id}`, mode)
 			},
 		},
 		actions: {

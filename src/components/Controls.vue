@@ -347,6 +347,7 @@ export default {
 		...mapGetters([
 			'canEdit',
 			'canManage',
+			'viewMode',
 		]),
 		...mapState({
 			isFullApp: state => state.isFullApp,
@@ -354,7 +355,6 @@ export default {
 			showCardCover: state => state.showCardCover,
 			searchQuery: state => state.searchQuery,
 			showArchived: state => state.showArchived,
-			viewMode: state => state.viewMode,
 		}),
 		detailsRoute() {
 			return {
