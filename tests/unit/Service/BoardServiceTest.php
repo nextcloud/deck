@@ -32,6 +32,7 @@ use OC\Federation\CloudIdManager;
 use OC\L10N\L10N;
 use OC\Security\SecureRandom;
 use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
@@ -103,6 +104,8 @@ class BoardServiceTest extends TestCase {
 
 	/** @var IUserManager */
 	private $userManager;
+	/** @var CirclesService|MockObject */
+	private $circlesService;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -125,6 +128,7 @@ class BoardServiceTest extends TestCase {
 		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 		$this->sessionMapper = $this->createMock(SessionMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->circlesService = $this->createMock(CirclesService::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -151,6 +155,7 @@ class BoardServiceTest extends TestCase {
 			$this->userManager,
 			$this->createMock(SecureRandom::class),
 			$this->createMock(ConfigService::class),
+			$this->circlesService,
 			$this->userId
 		);
 
@@ -473,5 +478,102 @@ class BoardServiceTest extends TestCase {
 			->method('dispatchTyped')
 			->with(new AclDeletedEvent($acl));
 		$this->assertEquals($acl, $this->service->deleteAcl(123));
+	}
+
+	public function testTransferBoardOwnershipToCircle(): void {
+		$board = new Board();
+		$board->setId(10);
+		$board->setOwner('alice');
+		$board->setOwnerType(Acl::PERMISSION_TYPE_USER);
+
+		$updatedBoard = new Board();
+		$updatedBoard->setId(10);
+		$updatedBoard->setOwner('circle-id-xyz');
+		$updatedBoard->setOwnerType(Acl::PERMISSION_TYPE_CIRCLE);
+
+		$this->connection->expects($this->once())->method('beginTransaction');
+		$this->connection->expects($this->once())->method('commit');
+
+		$this->boardMapper->expects($this->exactly(2))
+			->method('find')
+			->willReturnOnConsecutiveCalls($board, $updatedBoard);
+
+		$this->circlesService->expects($this->once())
+			->method('isCirclesEnabled')
+			->willReturn(true);
+		$this->circlesService->expects($this->once())
+			->method('getCircle')
+			->with('circle-id-xyz')
+			->willReturn($this->createMock(\OCA\Circles\Model\Circle::class));
+
+		$this->aclMapper->expects($this->once())
+			->method('deleteParticipantFromBoard')
+			->with(10, Acl::PERMISSION_TYPE_CIRCLE, 'circle-id-xyz');
+
+		// Previous user owner gets an ACL entry when changeContent = false
+		$this->aclMapper->expects($this->once())
+			->method('findAll')
+			->willReturn([]);
+		$this->aclMapper->expects($this->once())
+			->method('insert')
+			->willReturnCallback(fn ($acl) => $acl);
+
+		$this->boardMapper->expects($this->once())
+			->method('transferOwnership')
+			->with('alice', 'circle-id-xyz', 10, Acl::PERMISSION_TYPE_CIRCLE);
+
+		// No content remap when target is a circle
+		$this->assignedUsersMapper->expects($this->never())->method('remapAssignedUser');
+		$this->cardMapper->expects($this->never())->method('remapCardOwner');
+
+		$result = $this->service->transferBoardOwnership(10, 'circle-id-xyz', false, Acl::PERMISSION_TYPE_CIRCLE);
+		$this->assertSame($updatedBoard, $result);
+	}
+
+	public function testTransferBoardOwnershipToNonExistentUserThrows(): void {
+		$board = new Board();
+		$board->setId(10);
+		$board->setOwner('alice');
+		$board->setOwnerType(Acl::PERMISSION_TYPE_USER);
+
+		$this->connection->expects($this->once())->method('beginTransaction');
+		$this->connection->expects($this->once())->method('rollBack');
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+		$this->userManager->expects($this->once())
+			->method('userExists')
+			->with('ghost')
+			->willReturn(false);
+
+		$this->expectException(BadRequestException::class);
+		$this->service->transferBoardOwnership(10, 'ghost', false, Acl::PERMISSION_TYPE_USER);
+	}
+
+	public function testTransferBoardOwnershipToNonExistentCircleThrows(): void {
+		$board = new Board();
+		$board->setId(10);
+		$board->setOwner('alice');
+		$board->setOwnerType(Acl::PERMISSION_TYPE_USER);
+
+		$this->connection->expects($this->once())->method('beginTransaction');
+		$this->connection->expects($this->once())->method('rollBack');
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+		$this->circlesService->expects($this->once())
+			->method('isCirclesEnabled')
+			->willReturn(true);
+		$this->circlesService->expects($this->once())
+			->method('getCircle')
+			->with('bad-circle')
+			->willReturn(null);
+
+		$this->expectException(BadRequestException::class);
+		$this->service->transferBoardOwnership(10, 'bad-circle', false, Acl::PERMISSION_TYPE_CIRCLE);
 	}
 }
