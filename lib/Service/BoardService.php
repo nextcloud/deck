@@ -670,12 +670,9 @@ class BoardService {
 	}
 
 	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false, int $newOwnerType = Acl::PERMISSION_TYPE_USER): \Generator {
-		// findAllByOwner uses SELECT * so it works for both user-owned and circle-owned boards
 		$boards = $this->boardMapper->findAllByOwner($owner);
 		foreach ($boards as $board) {
-			if ($board->getOwner() === $owner) {
-				yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent, $newOwnerType);
-			}
+			yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent, $newOwnerType);
 		}
 	}
 
