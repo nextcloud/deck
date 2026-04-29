@@ -131,7 +131,23 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			return (int)$id;
 		}, $result->fetchAll(\PDO::FETCH_COLUMN));
 		$result->closeCursor();
-		return array_unique(array_merge($ownerBoards, $sharedBoards));
+
+		// Owned by circles the user is in (reuse $circles already fetched above)
+		$circleOwnedBoards = [];
+		if (count($circles) !== 0) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->selectDistinct('b.id')
+				->from($this->getTableName(), 'b')
+				->where($qb->expr()->eq('owner_type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
+				->andWhere($qb->expr()->in('owner', $qb->createNamedParameter($circles, IQueryBuilder::PARAM_STR_ARRAY)));
+			$result = $qb->executeQuery();
+			$circleOwnedBoards = array_map(function (string $id) {
+				return (int)$id;
+			}, $result->fetchAll(\PDO::FETCH_COLUMN));
+			$result->closeCursor();
+		}
+
+		return array_unique(array_merge($ownerBoards, $sharedBoards, $circleOwnedBoards));
 	}
 	/**
 	 * @param int $externalId
@@ -156,7 +172,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived, $before, $term);
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
-			$allBoards = array_values(array_unique(array_merge($userBoards, $groupBoards, $circleBoards)));
+			$circleOwnedBoards = $this->findAllByCircleOwner($userId, null, null, $since, $includeArchived, $before, $term);
+			$allBoards = array_values(array_unique(array_merge($userBoards, $groupBoards, $circleBoards, $circleOwnedBoards)));
 
 			// Could be moved outside
 			$acls = $this->aclMapper->findIn(array_map(function ($board) {
@@ -404,6 +421,60 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $entries;
 	}
 
+	/**
+	 * Find all boards that are owned by a circle the given user is a member of.
+	 *
+	 * These are boards where owner_type = PERMISSION_TYPE_CIRCLE and the owner field
+	 * holds a circle ID that the user belongs to.  They are distinct from boards that
+	 * are merely *shared* with a circle via an ACL entry (handled by findAllByCircles).
+	 */
+	public function findAllByCircleOwner(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
+		bool $includeArchived = true, ?int $before = null, ?string $term = null): array {
+		$circles = $this->circlesService->getUserCircles($userId);
+		if (count($circles) === 0) {
+			return [];
+		}
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id', 'title', 'owner', 'owner_type', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+			->from('deck_boards')
+			->where($qb->expr()->eq('owner_type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->in('owner', $qb->createNamedParameter($circles, IQueryBuilder::PARAM_STR_ARRAY)));
+		if (!$includeArchived) {
+			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+		if ($since !== null) {
+			$qb->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)));
+		}
+		if ($before !== null) {
+			$qb->andWhere($qb->expr()->lt('last_modified', $qb->createNamedParameter($before, IQueryBuilder::PARAM_INT)));
+		}
+		if ($term !== null) {
+			$qb->andWhere(
+				$qb->expr()->iLike(
+					'title',
+					$qb->createNamedParameter(
+						'%' . $this->db->escapeLikeParameter($term) . '%',
+						IQueryBuilder::PARAM_STR
+					)
+				)
+			);
+		}
+		$qb->orderBy('id');
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$entries = $this->findEntities($qb);
+		foreach ($entries as $entry) {
+			$entry->setShared(0);
+		}
+		return $entries;
+	}
+
 	public function findAllByTeam(string $teamId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('b.id', 'title', 'owner', 'owner_type', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
@@ -540,11 +611,28 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	/**
 	 * @param Board $board
 	 */
-	public function mapOwner(Board &$board) {
+	public function mapOwner(Board &$board): void {
 		$userManager = $this->userManager;
 		$cloudIdManager = $this->cloudIdManager;
+		$circlesService = $this->circlesService;
+		$logger = $this->logger;
 		$externalId = $board->getExternalId();
-		$board->resolveRelation('owner', function ($owner) use (&$userManager, &$cloudIdManager, $externalId) {
+		$ownerType = $board->getOwnerType();
+		$board->resolveRelation('owner', function ($owner) use ($userManager, $cloudIdManager, $circlesService, $logger, $externalId, $ownerType) {
+			if ($ownerType === Acl::PERMISSION_TYPE_CIRCLE) {
+				if (!$circlesService->isCirclesEnabled()) {
+					return null;
+				}
+				try {
+					$circle = $circlesService->getCircle($owner);
+					if ($circle !== null) {
+						return new Circle($circle);
+					}
+				} catch (\Throwable $e) {
+					$logger->error('Failed to get circle details when mapping board owner', ['exception' => $e]);
+				}
+				return null;
+			}
 			if ($externalId !== null) {
 				$cloudId = $cloudIdManager->resolveCloudId($owner);
 				return new FederatedUser($cloudId);
@@ -559,10 +647,11 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	/**
 	 * @throws \OCP\DB\Exception
 	 */
-	public function transferOwnership(string $ownerId, string $newOwnerId, $boardId = null): void {
+	public function transferOwnership(string $ownerId, string $newOwnerId, ?int $boardId = null, int $newOwnerType = Acl::PERMISSION_TYPE_USER): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update('deck_boards')
 			->set('owner', $qb->createNamedParameter($newOwnerId, IQueryBuilder::PARAM_STR))
+			->set('owner_type', $qb->createNamedParameter($newOwnerType, IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('owner', $qb->createNamedParameter($ownerId, IQueryBuilder::PARAM_STR)));
 		if ($boardId !== null) {
 			$qb->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
