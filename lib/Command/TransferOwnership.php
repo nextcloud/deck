@@ -6,6 +6,7 @@
  */
 namespace OCA\Deck\Command;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\PermissionService;
@@ -57,6 +58,12 @@ final class TransferOwnership extends Command {
 				InputOption::VALUE_NONE,
 				'Reassign card details of the old owner to the new one'
 			)
+			->addOption(
+				'to-circle',
+				null,
+				InputOption::VALUE_NONE,
+				'Treat <newOwner> as a circle ID instead of a user UID'
+			)
 		;
 	}
 
@@ -64,8 +71,10 @@ final class TransferOwnership extends Command {
 		$owner = $input->getArgument('owner');
 		$newOwner = $input->getArgument('newOwner');
 		$boardId = $input->getArgument('boardId');
-
 		$remapAssignment = $input->getOption('remap');
+		$toCircle = $input->getOption('to-circle');
+		$newOwnerType = $toCircle ? Acl::PERMISSION_TYPE_CIRCLE : Acl::PERMISSION_TYPE_USER;
+		$newOwnerLabel = $toCircle ? "circle $newOwner" : $newOwner;
 
 		$this->boardService->setUserId($owner);
 		$this->permissionService->setUserId($owner);
@@ -83,9 +92,9 @@ final class TransferOwnership extends Command {
 		}
 
 		if ($boardId) {
-			$output->writeln('Transfer board ' . $board->getTitle() . ' from ' . $board->getOwner() . " to $newOwner");
+			$output->writeln('Transfer board ' . $board->getTitle() . ' from ' . $board->getOwner() . " to $newOwnerLabel");
 		} else {
-			$output->writeln("Transfer all boards from $owner to $newOwner");
+			$output->writeln("Transfer all boards from $owner to $newOwnerLabel");
 		}
 
 		$question = new ConfirmationQuestion('Do you really want to continue? (y/n) ', false);
@@ -93,16 +102,21 @@ final class TransferOwnership extends Command {
 			return 1;
 		}
 
-		if ($boardId) {
-			$this->boardService->transferBoardOwnership($boardId, $newOwner, $remapAssignment);
-			$output->writeln('<info>Board ' . $board->getTitle() . ' from ' . $board->getOwner() . " transferred to $newOwner completed</info>");
-			return 0;
-		}
+		try {
+			if ($boardId) {
+				$this->boardService->transferBoardOwnership($boardId, $newOwner, $remapAssignment, $newOwnerType);
+				$output->writeln('<info>Board ' . $board->getTitle() . " transferred to $newOwnerLabel</info>");
+				return 0;
+			}
 
-		foreach ($this->boardService->transferOwnership($owner, $newOwner, $remapAssignment) as $board) {
-			$output->writeln(' - ' . $board->getTitle() . ' transferred');
+			foreach ($this->boardService->transferOwnership($owner, $newOwner, $remapAssignment, $newOwnerType) as $board) {
+				$output->writeln(' - ' . $board->getTitle() . ' transferred');
+			}
+			$output->writeln("<info>All boards from $owner transferred to $newOwnerLabel</info>");
+		} catch (\Exception $e) {
+			$output->writeln('<error>' . $e->getMessage() . '</error>');
+			return 1;
 		}
-		$output->writeln("<info>All boards from $owner to $newOwner transferred</info>");
 
 		return 0;
 	}
