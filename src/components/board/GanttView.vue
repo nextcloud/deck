@@ -167,11 +167,11 @@ const GANTT_VIEW_MODES = [
 export default {
 	name: 'GanttView',
 	components: {
-		NcButton,
-		NcEmptyContent,
-		ChartGanttIcon,
-		ChevronDown,
-		ChevronRight,
+	       NcButton,
+	       NcEmptyContent,
+	       ChartGanttIcon,
+	       ChevronDown,
+	       ChevronRight,
 	},
 	props: {
 		board: {
@@ -187,7 +187,7 @@ export default {
 		return {
 			ganttInstance: null,
 			currentViewMode: 'Day',
-			isDragging: false,
+			pendingChange: null,
 			showUndated: false,
 			viewModes: [
 				{ value: 'Hour', label: t('deck', 'Hours') },
@@ -197,8 +197,8 @@ export default {
 			],
 		}
 	},
-	computed: {
-		...mapGetters(['cardsByStack']),
+	       computed: {
+		       ...mapGetters(['cardsByStack', 'canEdit']),
 		partitionedCards() {
 			const undatedCards = []
 			const ganttTasks = []
@@ -228,7 +228,9 @@ export default {
 					this.$nextTick(() => this.renderGantt())
 					return
 				}
-				if (!this.isDragging && this.ganttInstance) {
+
+				// checking pendingChange to only refresh on updates not coming from the chart
+				if (!this.pendingChange && this.ganttInstance) {
 					const cloned = tasks.map(t => ({ ...t, start: new Date(t.start), end: new Date(t.end) }))
 					this.ganttInstance.refresh(cloned)
 				}
@@ -242,11 +244,21 @@ export default {
 		},
 	},
 	mounted() {
-		this._onMouseUp = () => {
-			if (this._pendingChange) {
-				const { task, start, end } = this._pendingChange
-				this._pendingChange = null
-				this.onDateChange(task, start, end)
+		this._onMouseUp = async (event) => {
+			if (this.pendingChange) {
+				const { task, start, end } = this.pendingChange
+				await this.updateTaskDate(task, start, end)
+				this.pendingChange = null
+				return
+			}
+
+			const barWrapper = event.target.closest('.bar-wrapper')
+			if (barWrapper) {
+				const taskId = barWrapper.getAttribute('data-id')
+				const task = this.ganttTasks.find(t => t.id === taskId)
+				if (task) {
+					this.openCard(task._card)
+				}
 			}
 		}
 		document.addEventListener('mouseup', this._onMouseUp)
@@ -323,21 +335,20 @@ export default {
 				today_button: true,
 				infinite_padding: false,
 				readonly_progress: true,
+				readonly: !this.canEdit,
 				popup: false,
-				on_click: (task) => {
-					if (!this.isDragging) {
-						this.openCard(task._card)
-					}
-				},
 				on_date_change: (task, start, end) => {
-					this.isDragging = true
-					this._pendingChange = { task, start, end }
+					this.pendingChange = { task, start, end }
 				},
 			})
 
 			this._patchBarDuration()
 			this.ganttInstance.change_view_mode(this.currentViewMode)
 			this.fitColumnsToWidth()
+		},
+		async updateTaskDate(task, start, end) {
+			await this.$store.dispatch('updateCardDue', { ...task._card, duedate: new Date(end).toISOString() })
+			await this.$store.dispatch('updateCardStartDate', { ...task._card, startdate: new Date(start).toISOString() })
 		},
 		_patchBarDuration() {
 			const bars = this.ganttInstance?.bars
@@ -376,22 +387,6 @@ export default {
 				const fitted = Math.floor(containerWidth / gantt.dates.length)
 				gantt.config.view_mode.column_width = fitted
 				gantt.change_view_mode(gantt.config.view_mode.name, true)
-			}
-		},
-		async onDateChange(task, start, end) {
-			const card = task._card
-			if (!card) return
-			try {
-				await this.$store.dispatch('updateCardStartDate', {
-					...card,
-					startdate: new Date(start).toISOString(),
-				})
-				await this.$store.dispatch('updateCardDue', {
-					...card,
-					duedate: new Date(end).toISOString(),
-				})
-			} finally {
-				this.isDragging = false
 			}
 		},
 	},
