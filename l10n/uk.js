@@ -324,6 +324,7 @@ OC.L10N.register(
     "Edit card title" : "Редагувати заголовок картки",
     "Open link" : "Відкрити посилання",
     "Card deleted" : "Картку видалено",
+    "Change card color" : "Змінити колір картки",
     "Edit title" : "Редагувати",
     "Assign to me" : "Призначити мені",
     "Unassign myself" : "Зняти з себе повноваження.",
