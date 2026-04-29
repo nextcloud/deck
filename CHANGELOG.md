@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - feat: resolve circle board owners in BoardMapper and include circle-owned boards in user board queries @jospoortvliet
 - feat: grant full owner permissions to circle members on circle-owned boards @jospoortvliet
 - feat: support transferring board ownership to a circle in BoardService @jospoortvliet
+- feat: accept newOwnerType in the transfer-ownership REST endpoint @jospoortvliet
 - feat: update default content @luka-nextcloud [#6740](https://github.com/nextcloud/deck/pull/6740)
 - feat: add board import and export @luka-nextcloud [#6872](https://github.com/nextcloud/deck/pull/6872)
 - feat: use outline icons @luka-nextcloud [#7114](https://github.com/nextcloud/deck/pull/7114)
