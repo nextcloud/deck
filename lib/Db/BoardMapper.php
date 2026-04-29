@@ -86,6 +86,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			->from($this->getTableName(), 'b')
 			->where($qb->expr()->andX(
 				$qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq('b.owner_type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)),
 			));
 		$result = $qb->executeQuery();
 		$ownerBoards = array_map(function (string $id) {
@@ -213,7 +214,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			// this does not work in MySQL/PostgreSQL
 			//->selectAlias('0', 'shared')
 			->from('deck_boards', 'b')
-			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('b.owner_type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)));
 		if (!$includeArchived) {
 			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
