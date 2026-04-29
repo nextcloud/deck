@@ -187,6 +187,13 @@ class DeckMigratorTest extends TestCase {
 		$source->method('getMigratorVersion')->with('deck')->willReturn(1);
 		$source->method('getFileContents')->with('boards.json')->willReturn('{"boards":[{"id":1,"title":"Board A","stacks":[]}]}');
 
+		$this->permissionService->expects($this->once())
+			->method('setUserId')
+			->with('alice');
+		$this->permissionService->expects($this->once())
+			->method('canCreate')
+			->willReturn(true);
+
 		$this->boardImportService->expects($this->once())->method('setSystem')->with('DeckJson');
 		$this->boardImportService->expects($this->once())
 			->method('setConfigInstance')
