@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ## 1.16.0-beta.1
 
 ### Added
+- feat: add owner_type to boards for circle ownership support @jospoortvliet
 - feat: update default content @luka-nextcloud [#6740](https://github.com/nextcloud/deck/pull/6740)
 - feat: add board import and export @luka-nextcloud [#6872](https://github.com/nextcloud/deck/pull/6872)
 - feat: use outline icons @luka-nextcloud [#7114](https://github.com/nextcloud/deck/pull/7114)
