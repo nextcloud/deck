@@ -11,6 +11,7 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
+import { PERMISSION_TYPE_USER } from '../helpers/constants.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
 import comment from './comment.js'
@@ -524,7 +525,7 @@ export default function storeFactory() {
 						dispatch('loadBoardById', acl.boardId)
 					})
 			},
-			async transferOwnership({ commit }, { boardId, newOwner, newOwnerType = 0 }) {
+			async transferOwnership({ commit }, { boardId, newOwner, newOwnerType = PERMISSION_TYPE_USER }) {
 				await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
 					newOwner,
 					newOwnerType,

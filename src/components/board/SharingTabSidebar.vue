@@ -12,14 +12,14 @@
 		<ul id="shareWithList"
 			class="shareWithList">
 			<li>
-				<NcAvatar v-if="board.ownerType !== 7" :user="board.owner.uid" />
+				<NcAvatar v-if="board.ownerType !== PERMISSION_TYPE_CIRCLE" :user="board.owner.uid" />
 				<div v-else class="avatardiv icon icon-circles" />
 				<span class="username">
 					{{ board.owner.displayname }}
-					<span v-if="board.ownerType !== 7 && !isCurrentUser(board.owner.uid)" class="board-owner-label">
+					<span v-if="board.ownerType !== PERMISSION_TYPE_CIRCLE && !isCurrentUser(board.owner.uid)" class="board-owner-label">
 						{{ t('deck', 'Board owner') }}
 					</span>
-					<span v-if="board.ownerType === 7" class="board-owner-label">
+					<span v-if="board.ownerType === PERMISSION_TYPE_CIRCLE" class="board-owner-label">
 						{{ t('deck', 'Team') }}
 					</span>
 				</span>
@@ -89,14 +89,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import debounce from 'lodash/debounce.js'
-const SOURCE_TO_SHARE_TYPE = {
-	users: 0,
-	groups: 1,
-	emails: 4,
-	remotes: 6,
-	circles: 7,
-	teams: 7,
-}
+import { PERMISSION_TYPE_CIRCLE, PERMISSION_TYPE_USER, SOURCE_TO_SHARE_TYPE } from '../../helpers/constants.js'
 
 export default {
 	name: 'SharingTabSidebar',
@@ -123,6 +116,9 @@ export default {
 			addAclForAPI: null,
 			newOwner: null,
 			projectsEnabled: loadState('core', 'projects_enabled', false),
+			// Expose ACL type constants to the template
+			PERMISSION_TYPE_CIRCLE,
+			PERMISSION_TYPE_USER,
 		}
 	},
 	computed: {
@@ -140,8 +136,8 @@ export default {
 		canTransferTo() {
 			return (acl) => {
 				// For user-owned boards: only the current owner can transfer, and only to users
-				if (this.board.ownerType !== 7) {
-					return acl.type === 0 && this.isCurrentUser(this.board.owner.uid)
+				if (this.board.ownerType !== PERMISSION_TYPE_CIRCLE) {
+					return acl.type === PERMISSION_TYPE_USER && this.isCurrentUser(this.board.owner.uid)
 				}
 				// For circle-owned boards: any circle member with manage rights can transfer to any participant
 				return this.canManage
@@ -239,7 +235,7 @@ export default {
 			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
 		},
 		clickTransferOwner(newOwner, newOwnerType) {
-			const targetLabel = newOwnerType === 7
+			const targetLabel = newOwnerType === PERMISSION_TYPE_CIRCLE
 				? t('deck', 'team {name}', { name: newOwner })
 				: newOwner
 			OC.dialogs.confirmDestructive(
