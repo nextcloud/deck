@@ -27,6 +27,8 @@ class CirclesService {
 	private bool $circlesEnabled;
 
 	private $userCircleCache = [];
+	/** @var array<string, string[]> */
+	private array $userCirclesCache = [];
 
 	public function __construct(IAppManager $appManager) {
 		$this->circlesEnabled = $appManager->isEnabledForUser('circles');
@@ -93,15 +95,21 @@ class CirclesService {
 			return [];
 		}
 
+		if (isset($this->userCirclesCache[$userId])) {
+			return $this->userCirclesCache[$userId];
+		}
+
 		try {
 			$circlesManager = Server::get(CirclesManager::class);
 			$federatedUser = $circlesManager->getFederatedUser($userId, Member::TYPE_USER);
 			$circlesManager->startSession($federatedUser);
 			$probe = new CircleProbe();
 			$probe->mustBeMember();
-			return array_map(function (Circle $circle) {
+			$circles = array_map(function (Circle $circle) {
 				return $circle->getSingleId();
 			}, $circlesManager->probeCircles($probe));
+			$this->userCirclesCache[$userId] = $circles;
+			return $circles;
 		} catch (Throwable $e) {
 		}
 		return [];
