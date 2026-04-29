@@ -156,6 +156,27 @@ class PermissionServiceTest extends \Test\TestCase {
 		$this->assertEquals(false, $this->service->userIsBoardOwner(123));
 	}
 
+	public function testUserIsBoardOwnerCircleMember() {
+		$board = new Board();
+		$board->setOwner('circle-id-abc');
+		$board->setOwnerType(Acl::PERMISSION_TYPE_CIRCLE);
+
+		$this->boardMapper->expects($this->exactly(2))
+			->method('find')
+			->willReturn($board);
+
+		$this->circlesService->expects($this->exactly(2))
+			->method('isUserInCircle')
+			->with('circle-id-abc', $this->anything())
+			->willReturnMap([
+				['circle-id-abc', 'admin', true],
+				['circle-id-abc', 'user1', false],
+			]);
+
+		$this->assertEquals(true, $this->service->userIsBoardOwner(123, 'admin'));
+		$this->assertEquals(false, $this->service->userIsBoardOwner(123, 'user1'));
+	}
+
 	public static function dataTestUserCan() {
 		return [
 			// participant permissions type
