@@ -12,11 +12,15 @@
 		<ul id="shareWithList"
 			class="shareWithList">
 			<li>
-				<NcAvatar :user="board.owner.uid" />
+				<NcAvatar v-if="board.ownerType !== 7" :user="board.owner.uid" />
+				<div v-else class="avatardiv icon icon-circles" />
 				<span class="username">
 					{{ board.owner.displayname }}
-					<span v-if="!isCurrentUser(board.owner.uid)" class="board-owner-label">
+					<span v-if="board.ownerType !== 7 && !isCurrentUser(board.owner.uid)" class="board-owner-label">
 						{{ t('deck', 'Board owner') }}
+					</span>
+					<span v-if="board.ownerType === 7" class="board-owner-label">
+						{{ t('deck', 'Team') }}
 					</span>
 				</span>
 			</li>
@@ -51,12 +55,12 @@
 						@change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
 					</NcActionCheckbox>
-					<NcActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)"
-						:checked="acl.owner"
+					<NcActionButton v-if="canTransferTo(acl)"
+						icon="icon-transfer-ownership"
 						data-cy="action:permission-owner"
-						@change="clickTransferOwner(acl.participant.uid)">
-						{{ t('deck', 'Owner') }}
-					</NcActionCheckbox>
+						@click="clickTransferOwner(acl.participant.uid || acl.participant.id, acl.type)">
+						{{ t('deck', 'Transfer ownership') }}
+					</NcActionButton>
 					<NcActionButton v-if="canManage"
 						icon="icon-delete"
 						data-cy="action:acl-delete"
@@ -132,6 +136,16 @@ export default {
 		]),
 		isCurrentUser() {
 			return (uid) => uid === getCurrentUser().uid
+		},
+		canTransferTo() {
+			return (acl) => {
+				// For user-owned boards: only the current owner can transfer, and only to users
+				if (this.board.ownerType !== 7) {
+					return acl.type === 0 && this.isCurrentUser(this.board.owner.uid)
+				}
+				// For circle-owned boards: any circle member with manage rights can transfer to any participant
+				return this.canManage
+			}
 		},
 		formatedSharees() {
 			const result = this.unallocatedSharees.map(item => {
@@ -224,10 +238,13 @@ export default {
 		clickDeleteAcl(acl) {
 			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
 		},
-		clickTransferOwner(newOwner) {
+		clickTransferOwner(newOwner, newOwnerType) {
+			const targetLabel = newOwnerType === 7
+				? t('deck', 'team {name}', { name: newOwner })
+				: newOwner
 			OC.dialogs.confirmDestructive(
-				t('deck', 'Are you sure you want to transfer the board {title} to {user}?', { title: this.board.title, user: newOwner }),
-				t('deck', 'Transfer the board.'),
+				t('deck', 'Are you sure you want to transfer the board {title} to {target}?', { title: this.board.title, target: targetLabel }),
+				t('deck', 'Transfer the board'),
 				{
 					type: OC.dialogs.YES_NO_BUTTONS,
 					confirm: t('deck', 'Transfer'),
@@ -241,12 +258,13 @@ export default {
 							await this.$store.dispatch('transferOwnership', {
 								boardId: this.board.id,
 								newOwner,
+								newOwnerType,
 							})
-							const successMessage = t('deck', 'The board has been transferred to {user}', { user: newOwner })
+							const successMessage = t('deck', 'The board has been transferred to {target}', { target: targetLabel })
 							showSuccess(successMessage)
 							this.$router.push({ name: 'main' })
 						} catch (e) {
-							const errorMessage = t('deck', 'Failed to transfer the board to {user}', { user: newOwner.user })
+							const errorMessage = t('deck', 'Failed to transfer the board to {target}', { target: targetLabel })
 							showError(errorMessage)
 						} finally {
 							this.isLoading = false

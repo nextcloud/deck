@@ -524,9 +524,10 @@ export default function storeFactory() {
 						dispatch('loadBoardById', acl.boardId)
 					})
 			},
-			async transferOwnership({ commit }, { boardId, newOwner }) {
+			async transferOwnership({ commit }, { boardId, newOwner, newOwnerType = 0 }) {
 				await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
 					newOwner,
+					newOwnerType,
 				})
 			},
 			toggleShortcutLock({ commit }, lock) {

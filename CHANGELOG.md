@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - feat: support transferring board ownership to a circle in BoardService @jospoortvliet
 - feat: accept newOwnerType in the transfer-ownership REST endpoint @jospoortvliet
 - feat: add --to-circle flag to deck:transfer-ownership OCC command @jospoortvliet
+- feat: show team icon for circle-owned boards and add Transfer ownership button in sharing sidebar @jospoortvliet
 - feat: update default content @luka-nextcloud [#6740](https://github.com/nextcloud/deck/pull/6740)
 - feat: add board import and export @luka-nextcloud [#6872](https://github.com/nextcloud/deck/pull/6872)
 - feat: use outline icons @luka-nextcloud [#7114](https://github.com/nextcloud/deck/pull/7114)
