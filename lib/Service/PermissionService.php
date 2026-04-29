@@ -293,7 +293,7 @@ class PermissionService {
 					$owningCircle = $this->circlesService->getCircle($board->getOwner());
 					if ($owningCircle !== null) {
 						foreach ($owningCircle->getInheritedMembers() as $member) {
-							if ($member->getUserType() !== 1 || $member->getLevel() < Member::LEVEL_MEMBER) {
+							if ($member->getUserType() !== Member::TYPE_USER || $member->getLevel() < Member::LEVEL_MEMBER) {
 								continue;
 							}
 							$user = $this->userManager->get($member->getUserId());
@@ -349,7 +349,7 @@ class PermissionService {
 					}
 
 					foreach ($circle->getInheritedMembers() as $member) {
-						if ($member->getUserType() !== 1 || $member->getLevel() < Member::LEVEL_MEMBER) {
+						if ($member->getUserType() !== Member::TYPE_USER || $member->getLevel() < Member::LEVEL_MEMBER) {
 							// deck currently only supports user members in circles
 							continue;
 						}
