@@ -135,11 +135,16 @@ export default {
 		},
 		canTransferTo() {
 			return (acl) => {
-				// For user-owned boards: only the current owner can transfer, and only to users
-				if (this.board.ownerType !== PERMISSION_TYPE_CIRCLE) {
-					return acl.type === PERMISSION_TYPE_USER && this.isCurrentUser(this.board.owner.uid)
+				const canBeOwnershipTarget = acl.type === PERMISSION_TYPE_USER || acl.type === PERMISSION_TYPE_CIRCLE
+				if (!canBeOwnershipTarget) {
+					return false
 				}
-				// For circle-owned boards: any circle member with manage rights can transfer to any participant
+
+				// For user-owned boards: only the current owner can transfer
+				if (this.board.ownerType !== PERMISSION_TYPE_CIRCLE) {
+					return this.isCurrentUser(this.board.owner.uid)
+				}
+				// For circle-owned boards: any circle member with manage rights can transfer
 				return this.canManage
 			}
 		},
