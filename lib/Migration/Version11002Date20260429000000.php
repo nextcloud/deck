@@ -31,6 +31,7 @@ class Version11002Date20260429000000 extends SimpleMigrationStep {
 				$table->addColumn('owner_type', 'smallint', [
 					'notnull' => true,
 					'default' => 0,
+					'unsigned' => false,
 				]);
 			}
 		}
