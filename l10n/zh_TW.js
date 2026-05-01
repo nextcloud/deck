@@ -129,6 +129,7 @@ OC.L10N.register(
     "Card not found" : "找不到卡片",
     "Path is already shared with this card" : "路徑已與此卡片分享",
     "Invalid date, date format must be YYYY-MM-DD" : "無效的日期，日期格式必須為 YYYY-MM-DD",
+    "All boards owned by you including stacks, cards, labels, assignments, and comments" : "您擁有的所有看板，包括堆疊、卡片、標籤、指派事項與留言",
     "Personal planning and team project organization" : "個人規劃與團隊專案組織",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck 是一套看板式組織工具，提供與 Nextcloud 整合的個人規劃與團隊專案組織功能。\n\n\n- 📥 將您的工作項目新增到卡片中，並將它們按順序排列\n- 📄 以 Markdown 編寫額外的註釋\n- 🔖 分配標籤讓組織更方便\n- 👥 與您的團隊、朋友與家人分享\n- 📎 附上檔案並將其嵌入到您的 Markdown 描述中\n- 💬 使用留言與您的團隊討論\n- ⚡ 追蹤活動流程中的變動\n- 🚀 整理好您的專案",
     "Add board" : "新增佈告欄",
