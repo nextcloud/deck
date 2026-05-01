@@ -623,18 +623,7 @@ class BoardService {
 			$previousOwner = $board->getOwner();
 
 			// Validate the new owner before touching anything
-			if ($newOwnerType === Acl::PERMISSION_TYPE_CIRCLE) {
-				if (!$this->circlesService->isCirclesEnabled()) {
-					throw new BadRequestException('The Circles app is not enabled');
-				}
-				if ($this->circlesService->getCircle($newOwner) === null) {
-					throw new BadRequestException('Circle not found: ' . $newOwner);
-				}
-			} else {
-				if (!$this->userManager->userExists($newOwner)) {
-					throw new BadRequestException('User not found: ' . $newOwner);
-				}
-			}
+			$this->validateTransferTarget($newOwner, $newOwnerType);
 
 			$this->clearBoardFromCache($board);
 			// Remove new owner from ACL (avoids a duplicate entry once they become the owner)
@@ -670,9 +659,28 @@ class BoardService {
 	}
 
 	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false, int $newOwnerType = Acl::PERMISSION_TYPE_USER): \Generator {
+		// Validate once up front so invalid targets fail even if no boards match.
+		$this->validateTransferTarget($newOwner, $newOwnerType);
 		$boards = $this->boardMapper->findAllByOwner($owner);
 		foreach ($boards as $board) {
 			yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent, $newOwnerType);
+		}
+	}
+
+	private function validateTransferTarget(string $newOwner, int $newOwnerType): void {
+		// Teams are represented by Circles internally (PERMISSION_TYPE_CIRCLE + circle ID).
+		if ($newOwnerType === Acl::PERMISSION_TYPE_CIRCLE) {
+			if (!$this->circlesService->isCirclesEnabled()) {
+				throw new BadRequestException('The Circles app is not enabled');
+			}
+			if ($this->circlesService->getCircle($newOwner) === null) {
+				throw new BadRequestException('Circle not found: ' . $newOwner);
+			}
+			return;
+		}
+
+		if (!$this->userManager->userExists($newOwner)) {
+			throw new BadRequestException('User not found: ' . $newOwner);
 		}
 	}
 

@@ -75,8 +75,8 @@ class AssignmentService {
 		}
 
 
-		if ($type === Assignment::TYPE_USER && $userId !== $this->userId) {
-			$this->notificationHelper->sendCardAssigned($card, $userId);
+		if ($userId !== $this->userId) {
+			$this->notificationHelper->sendCardAssignedByType($card, $userId, $type);
 		}
 
 		$assignment = new Assignment();
@@ -109,8 +109,8 @@ class AssignmentService {
 				$assignment = $this->assignedUsersMapper->delete($assignment);
 				$card = $this->cardMapper->find($cardId);
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
-				if ($type === Assignment::TYPE_USER && $userId !== $this->userId) {
-					$this->notificationHelper->markCardAssignedAsRead($card, $userId);
+				if ($userId !== $this->userId) {
+					$this->notificationHelper->markCardAssignedAsReadByType($card, $userId, $type);
 				}
 				$this->changeHelper->cardChanged($cardId);
 

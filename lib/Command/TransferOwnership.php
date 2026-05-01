@@ -9,7 +9,9 @@ namespace OCA\Deck\Command;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\CirclesService;
 use OCA\Deck\Service\PermissionService;
+use OCP\IUserManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,14 +25,18 @@ final class TransferOwnership extends Command {
 	protected $boardMapper;
 	protected $permissionService;
 	protected $questionHelper;
+	protected $userManager;
+	protected $circlesService;
 
-	public function __construct(BoardService $boardService, BoardMapper $boardMapper, PermissionService $permissionService, QuestionHelper $questionHelper) {
+	public function __construct(BoardService $boardService, BoardMapper $boardMapper, PermissionService $permissionService, QuestionHelper $questionHelper, IUserManager $userManager, CirclesService $circlesService) {
 		parent::__construct();
 
 		$this->boardService = $boardService;
 		$this->boardMapper = $boardMapper;
 		$this->permissionService = $permissionService;
 		$this->questionHelper = $questionHelper;
+		$this->userManager = $userManager;
+		$this->circlesService = $circlesService;
 	}
 
 	protected function configure() {
@@ -59,10 +65,10 @@ final class TransferOwnership extends Command {
 				'Reassign card details of the old owner to the new one'
 			)
 			->addOption(
-				'to-circle',
+				'to-team',
 				null,
 				InputOption::VALUE_NONE,
-				'Treat <newOwner> as a circle ID instead of a user UID'
+				'Treat <newOwner> as a team ID (internally stored as a circle ID) instead of a user UID'
 			)
 		;
 	}
@@ -72,9 +78,48 @@ final class TransferOwnership extends Command {
 		$newOwner = $input->getArgument('newOwner');
 		$boardId = $input->getArgument('boardId');
 		$remapAssignment = $input->getOption('remap');
-		$toCircle = $input->getOption('to-circle');
-		$newOwnerType = $toCircle ? Acl::PERMISSION_TYPE_CIRCLE : Acl::PERMISSION_TYPE_USER;
-		$newOwnerLabel = $toCircle ? "circle $newOwner" : $newOwner;
+		$toTeam = $input->getOption('to-team');
+		$newOwnerType = Acl::PERMISSION_TYPE_USER;
+		$teamDisplayName = null;
+		if ($toTeam) {
+			$newOwnerType = Acl::PERMISSION_TYPE_CIRCLE;
+			if ($this->circlesService->isCirclesEnabled()) {
+				try {
+					$circle = $this->circlesService->getCircle($newOwner);
+					if ($circle !== null) {
+						$teamDisplayName = $circle->getDisplayName();
+					}
+				} catch (\Throwable $e) {
+					$teamDisplayName = null;
+				}
+			}
+		} else {
+			$userExists = $this->userManager->userExists($newOwner);
+			$circleExists = false;
+			$circle = null;
+			if ($this->circlesService->isCirclesEnabled()) {
+				try {
+					$circle = $this->circlesService->getCircle($newOwner);
+					$circleExists = $circle !== null;
+					if ($circle !== null) {
+						$teamDisplayName = $circle->getDisplayName();
+					}
+				} catch (\Throwable $e) {
+					$circleExists = false;
+				}
+			}
+
+			if ($userExists && $circleExists) {
+				$output->writeln('<error>Ambiguous target: ' . $newOwner . ' matches both a user and a team (circle ID). Use --to-team to transfer to the team.</error>');
+				return 1;
+			}
+
+			if ($circleExists && !$userExists) {
+				$newOwnerType = Acl::PERMISSION_TYPE_CIRCLE;
+				$output->writeln('<comment>Detected team target: treating ' . $newOwner . ' as team ' . ($teamDisplayName ?: $newOwner) . '.</comment>');
+			}
+		}
+		$newOwnerLabel = $newOwnerType === Acl::PERMISSION_TYPE_CIRCLE ? 'team ' . ($teamDisplayName ?: $newOwner) : $newOwner;
 
 		$this->boardService->setUserId($owner);
 		$this->permissionService->setUserId($owner);

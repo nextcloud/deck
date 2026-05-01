@@ -58,7 +58,7 @@
 					<NcActionButton v-if="canTransferTo(acl)"
 						icon="icon-transfer-ownership"
 						data-cy="action:permission-owner"
-						@click="clickTransferOwner(acl.participant.uid || acl.participant.id, acl.type)">
+						@click="clickTransferOwner(acl.participant.uid || acl.participant.id, acl.type, acl.participant.displayname || acl.participant.id || acl.participant.uid)">
 						{{ t('deck', 'Transfer ownership') }}
 					</NcActionButton>
 					<NcActionButton v-if="canManage"
@@ -239,9 +239,9 @@ export default {
 		clickDeleteAcl(acl) {
 			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
 		},
-		clickTransferOwner(newOwner, newOwnerType) {
+		clickTransferOwner(newOwner, newOwnerType, newOwnerDisplayName = null) {
 			const targetLabel = newOwnerType === PERMISSION_TYPE_CIRCLE
-				? t('deck', 'team {name}', { name: newOwner })
+				? t('deck', 'team {name}', { name: newOwnerDisplayName || newOwner })
 				: newOwner
 			OC.dialogs.confirmDestructive(
 				t('deck', 'Are you sure you want to transfer the board {title} to {target}?', { title: this.board.title, target: targetLabel }),
