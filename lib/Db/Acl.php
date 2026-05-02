@@ -21,6 +21,8 @@ namespace OCA\Deck\Db;
  * @method void setOwner(int $owner)
  * @method void setToken(string $token)
  * @method string getToken()
+ * @method bool isRetainsAccessViaMembership()
+ * @method void setRetainsAccessViaMembership(bool $retainsAccessViaMembership)
  *
  */
 class Acl extends RelationalEntity {
@@ -28,6 +30,7 @@ class Acl extends RelationalEntity {
 	public const PERMISSION_EDIT = 1;
 	public const PERMISSION_SHARE = 2;
 	public const PERMISSION_MANAGE = 3;
+	public const PERMISSION_OWNER = 4;
 
 	public const PERMISSION_TYPE_USER = 0;
 	public const PERMISSION_TYPE_GROUP = 1;
@@ -41,6 +44,7 @@ class Acl extends RelationalEntity {
 	protected $permissionShare = false;
 	protected $permissionManage = false;
 	protected $owner = false;
+	protected $retainsAccessViaMembership = false;
 	protected $token = null;
 
 	public function __construct() {
@@ -51,8 +55,10 @@ class Acl extends RelationalEntity {
 		$this->addType('permissionManage', 'boolean');
 		$this->addType('type', 'integer');
 		$this->addType('owner', 'boolean');
+		$this->addType('retainsAccessViaMembership', 'boolean');
 		$this->addType('token', 'string');
 		$this->addRelation('owner');
+		$this->addRelation('retainsAccessViaMembership');
 		$this->addResolvable('participant');
 	}
 

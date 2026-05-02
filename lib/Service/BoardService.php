@@ -222,7 +222,8 @@ class BoardService {
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
+			'PERMISSION_OWNER' => $permissions[Acl::PERMISSION_OWNER] ?? false,
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->changeHelper->boardChanged($board->getId());
@@ -573,8 +574,9 @@ class BoardService {
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
-		]);
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
+			'PERMISSION_OWNER' => $permissions[Acl::PERMISSION_OWNER] ?? false,		
+			]);
 		$this->boardMapper->insert($newBoard);
 
 		foreach ($this->aclMapper->findAll($board->getId()) as $acl) {
@@ -711,6 +713,7 @@ class BoardService {
 				foreach ($board->getAcl() as &$acl) {
 					$this->boardMapper->mapAcl($acl);
 				}
+				$this->annotateAclRetainedAccess($board);
 			}
 
 			$permissions = $this->permissionService->matchPermissions($board);
@@ -718,7 +721,8 @@ class BoardService {
 				'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 				'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
+				'PERMISSION_OWNER' => $permissions[Acl::PERMISSION_OWNER] ?? false,
 			]);
 
 			if ($fullDetails) {
@@ -738,6 +742,40 @@ class BoardService {
 		}
 
 		return $boards;
+	}
+
+	private function annotateAclRetainedAccess(Board $board): void {
+		$acls = $board->getAcl() ?? [];
+		foreach ($acls as $acl) {
+			if ($acl->getType() !== Acl::PERMISSION_TYPE_USER) {
+				$acl->setRetainsAccessViaMembership(false);
+				continue;
+			}
+
+			$participant = (string)$acl->getParticipant();
+			if ($participant === '') {
+				$acl->setRetainsAccessViaMembership(false);
+				continue;
+			}
+
+			if ($board->getOwnerType() === Acl::PERMISSION_TYPE_USER && $board->getOwner() === $participant) {
+				$acl->setRetainsAccessViaMembership(true);
+				continue;
+			}
+
+			if ($board->getOwnerType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				try {
+					if ($this->circlesService->isUserInCircle($board->getOwner(), $participant)) {
+						$acl->setRetainsAccessViaMembership(true);
+						continue;
+					}
+				} catch (\Throwable) {
+				}
+			}
+
+			$otherAcls = array_filter($acls, static fn (Acl $candidate): bool => $candidate->getId() !== $acl->getId());
+			$acl->setRetainsAccessViaMembership($this->permissionService->userCan($otherAcls, Acl::PERMISSION_READ, $participant));
+		}
 	}
 
 	private function cloneCards(Board $board, Board $newBoard, bool $withAssignments = false, bool $withLabels = false, bool $withDueDate = false, bool $moveCardsToLeftStack = false, bool $restoreArchivedCards = false): void {

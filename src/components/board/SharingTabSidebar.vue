@@ -23,6 +23,14 @@
 						{{ t('deck', 'Team') }}
 					</span>
 				</span>
+				<NcActions v-if="board.ownerType === PERMISSION_TYPE_CIRCLE && isBoardOwner" :force-menu="true">
+					<NcActionButton
+						icon="icon-transfer-ownership"
+						data-cy="action:permission-owner-self"
+						@click="clickTransferOwner(currentUserUid, PERMISSION_TYPE_USER)">
+						{{ t('deck', 'Transfer ownership to myself') }}
+					</NcActionButton>
+				</NcActions>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.id" :data-cy="'acl-participant:' + acl.participant.uid">
 				<NcAvatar v-if="acl.type===0" :user="acl.participant.uid" />
@@ -64,8 +72,13 @@
 					<NcActionButton v-if="canManage"
 						icon="icon-delete"
 						data-cy="action:acl-delete"
+						:title="acl.type === PERMISSION_TYPE_USER && acl.retainsAccessViaMembership
+							? t('deck', 'Board access through group or team membership is retained.')
+							: undefined"
 						@click="clickDeleteAcl(acl)">
-						{{ t('deck', 'Delete') }}
+						{{ acl.type === PERMISSION_TYPE_USER && acl.retainsAccessViaMembership
+							? t('deck', 'Remove extra permissions')
+							: t('deck', 'Delete') }}
 					</NcActionButton>
 				</NcActions>
 			</li>
@@ -129,9 +142,13 @@ export default {
 			'canEdit',
 			'canManage',
 			'canShare',
+			'isBoardOwner',
 		]),
 		isCurrentUser() {
 			return (uid) => uid === getCurrentUser().uid
+		},
+		currentUserUid() {
+			return getCurrentUser().uid
 		},
 		canTransferTo() {
 			return (acl) => {
@@ -144,8 +161,8 @@ export default {
 				if (this.board.ownerType !== PERMISSION_TYPE_CIRCLE) {
 					return this.isCurrentUser(this.board.owner.uid)
 				}
-				// For circle-owned boards: any circle member with manage rights can transfer
-				return this.canManage
+				// For circle-owned boards: only actual board owners (team members) can transfer
+				return this.isBoardOwner
 			}
 		},
 		formatedSharees() {

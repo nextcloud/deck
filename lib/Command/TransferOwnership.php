@@ -46,12 +46,12 @@ final class TransferOwnership extends Command {
 			->addArgument(
 				'owner',
 				InputArgument::REQUIRED,
-				'Owner uid'
+				'Owner uid or Team (circle) ID to transfer from'
 			)
 			->addArgument(
 				'newOwner',
 				InputArgument::REQUIRED,
-				'New owner uid'
+				'New owner uid or Team (circle) ID to transfer to'
 			)
 			->addArgument(
 				'boardId',

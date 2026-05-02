@@ -127,6 +127,9 @@ export default function storeFactory() {
 			canShare: state => {
 				return state.currentBoard ? state.currentBoard.permissions.PERMISSION_SHARE : false
 			},
+			isBoardOwner: state => {
+				return state.currentBoard ? state.currentBoard.permissions.PERMISSION_OWNER : false
+			},
 			isArchived: state => {
 				return state.currentBoard && state.currentBoard.archived
 			},

@@ -135,7 +135,8 @@ class PermissionService {
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
 			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
-				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
+				&& (!$this->shareManager->sharingDisabledForUser($this->userId)),
+			Acl::PERMISSION_OWNER => $owner,
 		];
 	}
 
