@@ -279,7 +279,7 @@ class ImportExportTest extends \Test\TestCase {
 		$stackMapper = self::getFreshService(StackMapper::class);
 		$cardMapper = self::getFreshService(CardMapper::class);
 
-		$boards = $boardMapper->findAllByOwner($owner);
+		$boards = $boardMapper->findAllByOwner($owner, Acl::PERMISSION_TYPE_USER);
 		$boardNames = array_map(fn ($board) => $board->getTitle(), $boards);
 		self::assertEquals(2, count($boards));
 

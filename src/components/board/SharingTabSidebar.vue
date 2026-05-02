@@ -25,7 +25,7 @@
 				</span>
 				<NcActions v-if="board.ownerType === PERMISSION_TYPE_CIRCLE && isBoardOwner" :force-menu="true">
 					<NcActionButton
-						icon="icon-transfer-ownership"
+						icon="icon-user-admin"
 						data-cy="action:permission-owner-self"
 						@click="clickTransferOwner(currentUserUid, PERMISSION_TYPE_USER)">
 						{{ t('deck', 'Transfer ownership to myself') }}
@@ -64,7 +64,7 @@
 						{{ t('deck', 'Can manage') }}
 					</NcActionCheckbox>
 					<NcActionButton v-if="canTransferTo(acl)"
-						icon="icon-transfer-ownership"
+						icon="icon-user-admin"
 						data-cy="action:permission-owner"
 						@click="clickTransferOwner(acl.participant.uid || acl.participant.id, acl.type, acl.participant.displayname || acl.participant.id || acl.participant.uid)">
 						{{ t('deck', 'Transfer ownership') }}
@@ -72,11 +72,11 @@
 					<NcActionButton v-if="canManage"
 						icon="icon-delete"
 						data-cy="action:acl-delete"
-						:title="acl.type === PERMISSION_TYPE_USER && acl.retainsAccessViaMembership
+						:title="acl.retainsAccessViaMembership
 							? t('deck', 'Board access through group or team membership is retained.')
 							: undefined"
 						@click="clickDeleteAcl(acl)">
-						{{ acl.type === PERMISSION_TYPE_USER && acl.retainsAccessViaMembership
+						{{ acl.retainsAccessViaMembership
 							? t('deck', 'Remove extra permissions')
 							: t('deck', 'Delete') }}
 					</NcActionButton>

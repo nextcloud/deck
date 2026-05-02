@@ -32,6 +32,8 @@ namespace OCA\Deck\Db;
  * @method int | null getExternalId()
  */
 class Board extends RelationalEntity {
+	public const PERMISSION_OWNER = 4;
+
 	protected $title;
 	protected $owner;
 	protected $ownerType = 0;

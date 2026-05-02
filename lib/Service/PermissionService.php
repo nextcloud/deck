@@ -116,7 +116,7 @@ class PermissionService {
 	 * Get current user permissions for a board
 	 *
 	 * @param Board $board
-	 * @return array|bool
+	 * @return array<int, bool>
 	 * @internal param $boardId
 	 */
 	public function matchPermissions(Board $board) {
@@ -136,7 +136,7 @@ class PermissionService {
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
 			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
 				&& (!$this->shareManager->sharingDisabledForUser($this->userId)),
-			Acl::PERMISSION_OWNER => $owner,
+			Board::PERMISSION_OWNER => $owner,
 		];
 	}
 

@@ -295,11 +295,12 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $entries;
 	}
 
-	public function findAllByOwner(string $userId, ?int $limit = null, ?int $offset = null) {
+	public function findAllByOwner(string $ownerId, int $ownerType = Acl::PERMISSION_TYPE_USER, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_boards')
-			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($ownerId, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('owner_type', $qb->createNamedParameter($ownerType, IQueryBuilder::PARAM_INT)))
 			->orderBy('id');
 		if ($limit !== null) {
 			$qb->setMaxResults($limit);

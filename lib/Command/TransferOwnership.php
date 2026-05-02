@@ -70,6 +70,12 @@ final class TransferOwnership extends Command {
 				InputOption::VALUE_NONE,
 				'Treat <newOwner> as a team ID (internally stored as a circle ID) instead of a user UID'
 			)
+			->addOption(
+				'from-team',
+				null,
+				InputOption::VALUE_NONE,
+				'Treat <owner> as a team ID (internally stored as a circle ID) instead of a user UID'
+			)
 		;
 	}
 
@@ -79,8 +85,32 @@ final class TransferOwnership extends Command {
 		$boardId = $input->getArgument('boardId');
 		$remapAssignment = $input->getOption('remap');
 		$toTeam = $input->getOption('to-team');
+		$fromTeam = $input->getOption('from-team');
+		$ownerType = Acl::PERMISSION_TYPE_USER;
 		$newOwnerType = Acl::PERMISSION_TYPE_USER;
 		$teamDisplayName = null;
+		if ($fromTeam) {
+			$ownerType = Acl::PERMISSION_TYPE_CIRCLE;
+		} else {
+			$ownerUserExists = $this->userManager->userExists($owner);
+			$ownerCircleExists = false;
+			if ($this->circlesService->isCirclesEnabled()) {
+				try {
+					$ownerCircleExists = $this->circlesService->getCircle($owner) !== null;
+				} catch (\Throwable $e) {
+					$ownerCircleExists = false;
+				}
+			}
+
+			if ($ownerUserExists && $ownerCircleExists) {
+				$output->writeln('<error>Ambiguous source owner: ' . $owner . ' matches both a user and a team (circle ID). Use --from-team if you mean the team.</error>');
+				return 1;
+			}
+
+			if ($ownerCircleExists && !$ownerUserExists) {
+				$ownerType = Acl::PERMISSION_TYPE_CIRCLE;
+			}
+		}
 		if ($toTeam) {
 			$newOwnerType = Acl::PERMISSION_TYPE_CIRCLE;
 			if ($this->circlesService->isCirclesEnabled()) {
@@ -154,7 +184,7 @@ final class TransferOwnership extends Command {
 				return 0;
 			}
 
-			foreach ($this->boardService->transferOwnership($owner, $newOwner, $remapAssignment, $newOwnerType) as $board) {
+			foreach ($this->boardService->transferOwnership($owner, $newOwner, $remapAssignment, $newOwnerType, $ownerType) as $board) {
 				$output->writeln(' - ' . $board->getTitle() . ' transferred');
 			}
 			$output->writeln("<info>All boards from $owner transferred to $newOwnerLabel</info>");

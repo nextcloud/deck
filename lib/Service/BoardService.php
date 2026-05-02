@@ -223,7 +223,7 @@ class BoardService {
 			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
-			'PERMISSION_OWNER' => $permissions[Acl::PERMISSION_OWNER] ?? false,
+			'PERMISSION_OWNER' => $permissions[Board::PERMISSION_OWNER] ?? false,
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->changeHelper->boardChanged($board->getId());
@@ -575,7 +575,7 @@ class BoardService {
 			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
-			'PERMISSION_OWNER' => $permissions[Acl::PERMISSION_OWNER] ?? false,		
+			'PERMISSION_OWNER' => $permissions[Board::PERMISSION_OWNER] ?? false,		
 			]);
 		$this->boardMapper->insert($newBoard);
 
@@ -673,10 +673,10 @@ class BoardService {
 		}
 	}
 
-	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false, int $newOwnerType = Acl::PERMISSION_TYPE_USER): \Generator {
+	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false, int $newOwnerType = Acl::PERMISSION_TYPE_USER, int $ownerType = Acl::PERMISSION_TYPE_USER): \Generator {
 		// Validate once up front so invalid targets fail even if no boards match.
 		$this->validateTransferTarget($newOwner, $newOwnerType);
-		$boards = $this->boardMapper->findAllByOwner($owner);
+		$boards = $this->boardMapper->findAllByOwner($owner, $ownerType);
 		foreach ($boards as $board) {
 			yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent, $newOwnerType);
 		}
@@ -735,7 +735,7 @@ class BoardService {
 				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 				'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
-				'PERMISSION_OWNER' => $permissions[Acl::PERMISSION_OWNER] ?? false,
+				'PERMISSION_OWNER' => $permissions[Board::PERMISSION_OWNER] ?? false,
 			]);
 
 			if ($fullDetails) {
@@ -760,6 +760,22 @@ class BoardService {
 	private function annotateAclRetainedAccess(Board $board): void {
 		$acls = $board->getAcl() ?? [];
 		foreach ($acls as $acl) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+				$acl->setRetainsAccessViaMembership(true);
+				continue;
+			}
+
+			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				if ($board->getOwnerType() === Acl::PERMISSION_TYPE_CIRCLE
+					&& (string)$acl->getParticipant() === $board->getOwner()) {
+					$acl->setRetainsAccessViaMembership(true);
+					continue;
+				}
+
+				$acl->setRetainsAccessViaMembership(true);
+				continue;
+			}
+
 			if ($acl->getType() !== Acl::PERMISSION_TYPE_USER) {
 				$acl->setRetainsAccessViaMembership(false);
 				continue;

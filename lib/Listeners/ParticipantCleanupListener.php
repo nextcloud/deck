@@ -30,7 +30,7 @@ class ParticipantCleanupListener implements IEventListener {
 
 	public function handle(Event $event): void {
 		if ($event instanceof UserDeletedEvent) {
-			$boards = $this->boardMapper->findAllByOwner($event->getUser()->getUID());
+			$boards = $this->boardMapper->findAllByOwner($event->getUser()->getUID(), Acl::PERMISSION_TYPE_USER);
 			foreach ($boards as $board) {
 				$this->boardMapper->delete($board);
 			}
@@ -44,6 +44,11 @@ class ParticipantCleanupListener implements IEventListener {
 
 		if ($event instanceof CircleDestroyedEvent) {
 			$circleId = $event->getCircle()->getSingleId();
+			$boards = $this->boardMapper->findAllByOwner($circleId, Acl::PERMISSION_TYPE_CIRCLE);
+			foreach ($boards as $board) {
+				$this->boardMapper->delete($board);
+			}
+
 			$this->cleanupByParticipant(Acl::PERMISSION_TYPE_CIRCLE, $circleId);
 		}
 	}

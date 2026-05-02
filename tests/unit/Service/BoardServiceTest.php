@@ -526,7 +526,7 @@ class BoardServiceTest extends TestCase {
 				Acl::PERMISSION_EDIT => true,
 				Acl::PERMISSION_MANAGE => true,
 				Acl::PERMISSION_SHARE => true,
-				Acl::PERMISSION_OWNER => true,
+				Board::PERMISSION_OWNER => true,
 			]);
 
 		$result = $this->service->find(10, false);
@@ -593,11 +593,12 @@ class BoardServiceTest extends TestCase {
 				Acl::PERMISSION_EDIT => true,
 				Acl::PERMISSION_MANAGE => true,
 				Acl::PERMISSION_SHARE => true,
-				Acl::PERMISSION_OWNER => false,
+				Board::PERMISSION_OWNER => false,
 			]);
 
 		$result = $this->service->find(11, false);
 		$this->assertTrue($result->getAcl()[0]->isRetainsAccessViaMembership());
+		$this->assertTrue($result->getAcl()[1]->isRetainsAccessViaMembership());
 	}
 
 	public function testFindMarksUserAclAsNotRetainedWithoutInheritedAccess(): void {
@@ -646,7 +647,7 @@ class BoardServiceTest extends TestCase {
 				Acl::PERMISSION_EDIT => true,
 				Acl::PERMISSION_MANAGE => true,
 				Acl::PERMISSION_SHARE => true,
-				Acl::PERMISSION_OWNER => false,
+				Board::PERMISSION_OWNER => false,
 			]);
 
 		$result = $this->service->find(12, false);
@@ -684,10 +685,10 @@ class BoardServiceTest extends TestCase {
 			->with(10, Acl::PERMISSION_TYPE_CIRCLE, 'circle-id-xyz');
 
 		// Previous user owner gets an ACL entry when changeContent = false
-		$this->aclMapper->expects($this->once())
+		$this->aclMapper->expects($this->exactly(2))
 			->method('findAll')
 			->willReturn([]);
-		$this->aclMapper->expects($this->once())
+		$this->aclMapper->expects($this->exactly(2))
 			->method('insert')
 			->willReturnCallback(fn ($acl) => $acl);
 
@@ -701,6 +702,108 @@ class BoardServiceTest extends TestCase {
 
 		$result = $this->service->transferBoardOwnership(10, 'circle-id-xyz', false, Acl::PERMISSION_TYPE_CIRCLE);
 		$this->assertSame($updatedBoard, $result);
+	}
+
+	public function testFindMarksCircleAclAsRetainedViaMembership(): void {
+		$board = new Board();
+		$board->setId(13);
+		$board->setOwner('bob');
+		$board->setOwnerType(Acl::PERMISSION_TYPE_USER);
+
+		$circleAcl = new Acl();
+		$circleAcl->setId(801);
+		$circleAcl->setBoardId(13);
+		$circleAcl->setType(Acl::PERMISSION_TYPE_CIRCLE);
+		$circleAcl->setParticipant('circle-2');
+		$board->setAcl([$circleAcl]);
+
+		$this->permissionService->expects($this->once())
+			->method('checkPermission')
+			->with($this->boardMapper, 13, Acl::PERMISSION_READ, null, false);
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(13, true, true, false)
+			->willReturn($board);
+
+		$this->boardMapper->expects($this->once())
+			->method('mapOwner')
+			->with($board);
+
+		$this->boardMapper->expects($this->once())
+			->method('mapAcl')
+			->with($circleAcl);
+
+		$this->circlesService->expects($this->never())
+			->method('isUserInCircle');
+
+		$this->permissionService->expects($this->never())
+			->method('userCan');
+
+		$this->permissionService->expects($this->once())
+			->method('matchPermissions')
+			->with($board)
+			->willReturn([
+				Acl::PERMISSION_READ => true,
+				Acl::PERMISSION_EDIT => true,
+				Acl::PERMISSION_MANAGE => true,
+				Acl::PERMISSION_SHARE => true,
+				Board::PERMISSION_OWNER => false,
+			]);
+
+		$result = $this->service->find(13, false);
+		$this->assertTrue($result->getAcl()[0]->isRetainsAccessViaMembership());
+	}
+
+	public function testFindMarksRemoteAclAsNotRetainedViaMembership(): void {
+		$board = new Board();
+		$board->setId(14);
+		$board->setOwner('bob');
+		$board->setOwnerType(Acl::PERMISSION_TYPE_USER);
+
+		$remoteAcl = new Acl();
+		$remoteAcl->setId(901);
+		$remoteAcl->setBoardId(14);
+		$remoteAcl->setType(Acl::PERMISSION_TYPE_REMOTE);
+		$remoteAcl->setParticipant('https://remote.example');
+		$board->setAcl([$remoteAcl]);
+
+		$this->permissionService->expects($this->once())
+			->method('checkPermission')
+			->with($this->boardMapper, 14, Acl::PERMISSION_READ, null, false);
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(14, true, true, false)
+			->willReturn($board);
+
+		$this->boardMapper->expects($this->once())
+			->method('mapOwner')
+			->with($board);
+
+		$this->boardMapper->expects($this->once())
+			->method('mapAcl')
+			->with($remoteAcl);
+
+		$this->circlesService->expects($this->never())
+			->method('isUserInCircle');
+
+		$this->permissionService->expects($this->never())
+			->method('userCan');
+
+		$this->permissionService->expects($this->once())
+			->method('matchPermissions')
+			->with($board)
+			->willReturn([
+				Acl::PERMISSION_READ => true,
+				Acl::PERMISSION_EDIT => true,
+				Acl::PERMISSION_MANAGE => true,
+				Acl::PERMISSION_SHARE => true,
+				Board::PERMISSION_OWNER => false,
+			]);
+
+		$result = $this->service->find(14, false);
+		$this->assertFalse($result->getAcl()[0]->isRetainsAccessViaMembership());
 	}
 
 	public function testTransferBoardOwnershipToNonExistentUserThrows(): void {
@@ -723,6 +826,21 @@ class BoardServiceTest extends TestCase {
 
 		$this->expectException(BadRequestException::class);
 		$this->service->transferBoardOwnership(10, 'ghost', false, Acl::PERMISSION_TYPE_USER);
+	}
+
+	public function testTransferOwnershipUsesSourceOwnerTypeWhenFetchingBoards(): void {
+		$this->userManager->expects($this->once())
+			->method('userExists')
+			->with('bob')
+			->willReturn(true);
+
+		$this->boardMapper->expects($this->once())
+			->method('findAllByOwner')
+			->with('circle-1', Acl::PERMISSION_TYPE_CIRCLE)
+			->willReturn([]);
+
+		$result = iterator_to_array($this->service->transferOwnership('circle-1', 'bob', false, Acl::PERMISSION_TYPE_USER, Acl::PERMISSION_TYPE_CIRCLE));
+		$this->assertSame([], $result);
 	}
 
 	public function testTransferBoardOwnershipToNonExistentCircleThrows(): void {

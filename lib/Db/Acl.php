@@ -30,7 +30,6 @@ class Acl extends RelationalEntity {
 	public const PERMISSION_EDIT = 1;
 	public const PERMISSION_SHARE = 2;
 	public const PERMISSION_MANAGE = 3;
-	public const PERMISSION_OWNER = 4;
 
 	public const PERMISSION_TYPE_USER = 0;
 	public const PERMISSION_TYPE_GROUP = 1;
