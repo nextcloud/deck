@@ -646,6 +646,19 @@ class BoardService {
 
 			$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId, $newOwnerType);
 
+			// When transferring ownership to a circle, re-add the circle as an explicit ACL
+			// sharee with full rights so it remains visible in the sharing sidebar.
+			// (It was removed above to prevent a duplicate DB entry.)
+			if ($newOwnerType === Acl::PERMISSION_TYPE_CIRCLE) {
+				try {
+					$this->addAcl($boardId, Acl::PERMISSION_TYPE_CIRCLE, $newOwner, true, true, true);
+				} catch (DbException $e) {
+					if ($e->getReason() !== DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+						throw $e;
+					}
+				}
+			}
+
 			// Card-content remap is only meaningful when transferring to a user, not a circle
 			if ($changeContent && $newOwnerType === Acl::PERMISSION_TYPE_USER) {
 				$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
