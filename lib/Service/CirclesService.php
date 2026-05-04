@@ -17,6 +17,7 @@ use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\Circles\Model\Probes\DataProbe;
 use OCP\App\IAppManager;
 use OCP\Server;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 /**
@@ -30,7 +31,7 @@ class CirclesService {
 	/** @var array<string, string[]> */
 	private array $userCirclesCache = [];
 
-	public function __construct(IAppManager $appManager) {
+	public function __construct(IAppManager $appManager, private ?LoggerInterface $logger = null) {
 		$this->circlesEnabled = $appManager->isEnabledForUser('circles');
 	}
 
@@ -44,14 +45,21 @@ class CirclesService {
 		}
 
 		try {
-
 			// Enforce current user condition since we always want the full list of members
-			$circlesManager = Server::get(CirclesManager::class);
+			$circlesManager = $this->getCirclesManager();
 			$circlesManager->startSuperSession();
-			$dataProbe = new DataProbe();
-			$dataProbe->add(DataProbe::OWNER);
-			return $circlesManager->probeCircle($circleId, null, $dataProbe);
+			try {
+				$dataProbe = new DataProbe();
+				$dataProbe->add(DataProbe::OWNER);
+				return $circlesManager->probeCircle($circleId, null, $dataProbe);
+			} finally {
+				$this->stopSessionSafely($circlesManager, 'getCircle');
+			}
 		} catch (Throwable $e) {
+			$this->logger?->debug('CirclesService::getCircle failed', [
+				'circleId' => $circleId,
+				'exception' => $e,
+			]);
 		}
 		return null;
 	}
@@ -66,14 +74,18 @@ class CirclesService {
 		}
 
 		try {
-			$circlesManager = Server::get(CirclesManager::class);
+			$circlesManager = $this->getCirclesManager();
 			$federatedUser = $circlesManager->getFederatedUser($userId, Member::TYPE_USER);
 			$circlesManager->startSession($federatedUser);
-			$dataProbe = new DataProbe();
-			$dataProbe->add(DataProbe::INITIATOR);
-			$circle = $circlesManager->probeCircle($circleId, null, $dataProbe);
-			$member = $circle->getInitiator();
-			$isUserInCircle = $member->getLevel() >= Member::LEVEL_MEMBER;
+			try {
+				$dataProbe = new DataProbe();
+				$dataProbe->add(DataProbe::INITIATOR);
+				$circle = $circlesManager->probeCircle($circleId, null, $dataProbe);
+				$member = $circle->getInitiator();
+				$isUserInCircle = $member->getLevel() >= Member::LEVEL_MEMBER;
+			} finally {
+				$this->stopSessionSafely($circlesManager, 'isUserInCircle');
+			}
 
 			if (!isset($this->userCircleCache[$circleId])) {
 				$this->userCircleCache[$circleId] = [];
@@ -82,6 +94,11 @@ class CirclesService {
 
 			return $isUserInCircle;
 		} catch (Throwable $e) {
+			$this->logger?->debug('CirclesService::isUserInCircle failed', [
+				'circleId' => $circleId,
+				'userId' => $userId,
+				'exception' => $e,
+			]);
 		}
 		return false;
 	}
@@ -100,18 +117,87 @@ class CirclesService {
 		}
 
 		try {
-			$circlesManager = Server::get(CirclesManager::class);
+			$circlesManager = $this->getCirclesManager();
 			$federatedUser = $circlesManager->getFederatedUser($userId, Member::TYPE_USER);
 			$circlesManager->startSession($federatedUser);
-			$probe = new CircleProbe();
-			$probe->mustBeMember();
-			$circles = array_map(function (Circle $circle) {
-				return $circle->getSingleId();
-			}, $circlesManager->probeCircles($probe));
+			try {
+				$probe = new CircleProbe();
+				$probe->mustBeMember();
+				$circles = array_map(function (Circle $circle) {
+					return $circle->getSingleId();
+				}, $circlesManager->probeCircles($probe));
+			} finally {
+				$this->stopSessionSafely($circlesManager, 'getUserCircles');
+			}
 			$this->userCirclesCache[$userId] = $circles;
 			return $circles;
 		} catch (Throwable $e) {
+			$this->logger?->debug('CirclesService::getUserCircles failed', [
+				'userId' => $userId,
+				'exception' => $e,
+			]);
 		}
 		return [];
+	}
+
+	public function clearUserCircleCache(?string $circleId = null, ?string $userId = null): void {
+		if ($circleId === null && $userId === null) {
+			$this->userCircleCache = [];
+			return;
+		}
+
+		if ($circleId !== null && $userId === null) {
+			unset($this->userCircleCache[$circleId]);
+			return;
+		}
+
+		if ($circleId !== null && $userId !== null) {
+			unset($this->userCircleCache[$circleId][$userId]);
+			if (empty($this->userCircleCache[$circleId])) {
+				unset($this->userCircleCache[$circleId]);
+			}
+			return;
+		}
+
+		foreach ($this->userCircleCache as $cachedCircleId => $users) {
+			unset($users[$userId]);
+			if (empty($users)) {
+				unset($this->userCircleCache[$cachedCircleId]);
+				continue;
+			}
+			$this->userCircleCache[$cachedCircleId] = $users;
+		}
+	}
+
+	public function clearUserCirclesCache(?string $userId = null): void {
+		if ($userId === null) {
+			$this->userCirclesCache = [];
+			return;
+		}
+
+		unset($this->userCirclesCache[$userId]);
+	}
+
+	public function clearAllCaches(): void {
+		$this->clearUserCircleCache();
+		$this->clearUserCirclesCache();
+	}
+
+	protected function getCirclesManager(): CirclesManager {
+		return Server::get(CirclesManager::class);
+	}
+
+	private function stopSessionSafely(CirclesManager $circlesManager, string $method): void {
+		if (!method_exists($circlesManager, 'stopSession')) {
+			return;
+		}
+
+		try {
+			$circlesManager->stopSession();
+		} catch (Throwable $e) {
+			$this->logger?->debug('CirclesService::' . $method . ' stopSession failed', [
+				'exception' => $e,
+			]);
+		}
 	}
 }

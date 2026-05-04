@@ -405,4 +405,13 @@ class PermissionService {
 		$this->userId = $userId;
 		$this->permissionCache->clear();
 	}
+
+	public function clearUsersCache(?int $boardId = null): void {
+		if ($boardId === null) {
+			$this->users = [];
+			return;
+		}
+
+		unset($this->users[(string)$boardId]);
+	}
 }

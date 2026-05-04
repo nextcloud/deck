@@ -313,8 +313,40 @@ class BoardServiceTest extends TestCase {
 			->willReturn([
 				'admin' => 'admin',
 			]);
+		$this->permissionService->expects($this->once())
+			->method('clearUsersCache')
+			->with(123);
+		$this->circlesService->expects($this->never())
+			->method('clearUserCircleCache');
 		$this->assertEquals($acl, $this->service->addAcl(
 			123, Acl::PERMISSION_TYPE_USER, 'admin', true, true, true
+		));
+	}
+
+	public function testAddCircleAclClearsCircleMembershipCache(): void {
+		$acl = new Acl();
+		$acl->setBoardId(123);
+		$acl->setType(Acl::PERMISSION_TYPE_CIRCLE);
+		$acl->setParticipant('circle-1');
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
+		$acl->setPermissionManage(true);
+
+		$this->notificationHelper->expects($this->once())
+			->method('sendBoardShared');
+		$this->aclMapper->expects($this->once())
+			->method('insert')
+			->with($acl)
+			->willReturn($acl);
+		$this->permissionService->expects($this->once())
+			->method('clearUsersCache')
+			->with(123);
+		$this->circlesService->expects($this->once())
+			->method('clearUserCircleCache')
+			->with('circle-1');
+
+		$this->assertEquals($acl, $this->service->addAcl(
+			123, Acl::PERMISSION_TYPE_CIRCLE, 'circle-1', true, true, true
 		));
 	}
 
@@ -439,6 +471,9 @@ class BoardServiceTest extends TestCase {
 			->method('update')
 			->with($acl)
 			->willReturn($acl);
+		$this->permissionService->expects($this->once())
+			->method('clearUsersCache')
+			->with(123);
 
 		$result = $this->service->updateAcl(
 			123, false, false, false
@@ -474,6 +509,9 @@ class BoardServiceTest extends TestCase {
 			->method('delete')
 			->with($acl)
 			->willReturn($acl);
+		$this->permissionService->expects($this->once())
+			->method('clearUsersCache')
+			->with(123);
 		$this->eventDispatcher->expects(self::once())
 			->method('dispatchTyped')
 			->with(new AclDeletedEvent($acl));
@@ -510,10 +548,29 @@ class BoardServiceTest extends TestCase {
 			->method('mapAcl')
 			->with($userAcl);
 
+		$member = $this->createMock(\OCA\Circles\Model\Member::class);
+		$member->expects($this->once())
+			->method('getUserType')
+			->willReturn(\OCA\Circles\Model\Member::TYPE_USER);
+		$member->expects($this->once())
+			->method('getLevel')
+			->willReturn(\OCA\Circles\Model\Member::LEVEL_MEMBER);
+		$member->expects($this->once())
+			->method('getUserId')
+			->willReturn('alice');
+
+		$circle = $this->createMock(\OCA\Circles\Model\Circle::class);
+		$circle->expects($this->once())
+			->method('getInheritedMembers')
+			->willReturn([$member]);
+
 		$this->circlesService->expects($this->once())
-			->method('isUserInCircle')
-			->with('circle-1', 'alice')
+			->method('isCirclesEnabled')
 			->willReturn(true);
+		$this->circlesService->expects($this->once())
+			->method('getCircle')
+			->with('circle-1')
+			->willReturn($circle);
 
 		$this->permissionService->expects($this->never())
 			->method('userCan');
@@ -598,7 +655,7 @@ class BoardServiceTest extends TestCase {
 
 		$result = $this->service->find(11, false);
 		$this->assertTrue($result->getAcl()[0]->isRetainsAccessViaMembership());
-		$this->assertTrue($result->getAcl()[1]->isRetainsAccessViaMembership());
+		$this->assertFalse($result->getAcl()[1]->isRetainsAccessViaMembership());
 	}
 
 	public function testFindMarksUserAclAsNotRetainedWithoutInheritedAccess(): void {
@@ -752,7 +809,7 @@ class BoardServiceTest extends TestCase {
 			]);
 
 		$result = $this->service->find(13, false);
-		$this->assertTrue($result->getAcl()[0]->isRetainsAccessViaMembership());
+		$this->assertFalse($result->getAcl()[0]->isRetainsAccessViaMembership());
 	}
 
 	public function testFindMarksRemoteAclAsNotRetainedViaMembership(): void {
