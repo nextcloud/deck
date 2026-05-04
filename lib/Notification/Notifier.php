@@ -79,65 +79,65 @@ class Notifier implements INotifier {
 				} else {
 					$dn = $params[2];
 				}
-					$isTeamAssignment = isset($params[3]) && $params[3] === 'team';
-					if ($isTeamAssignment) {
-						$teamName = $params[4] ?? '';
-						$notification->setParsedSubject(
-							$l->t('The card "%1$s" on "%2$s" has been assigned to team "%3$s" by %4$s. You are receiving this because you are a member of that team.', [$params[0], $params[1], $teamName, $dn])
-						);
-						$notification->setRichSubject(
-							$l->t('{user} has assigned the card {deck-card} on {deck-board} to a team you are a member of.'),
-							[
-								'deck-card' => [
-									'type' => 'deck-card',
-									'id' => (string)$cardId,
-									'name' => $params[0],
-									'boardname' => (string)$params[1],
-									'stackname' => $stack->getTitle(),
-									'link' => $this->getCardUrl($boardId, $cardId),
-								],
-								'deck-board' => [
-									'type' => 'deck-board',
-									'id' => (string)$boardId,
-									'name' => (string)$params[1],
-									'link' => $this->getBoardUrl($boardId),
-								],
-								'user' => [
-									'type' => 'user',
-									'id' => (string)$params[2],
-									'name' => $dn,
-								]
+				$isTeamAssignment = isset($params[3]) && $params[3] === 'team';
+				if ($isTeamAssignment) {
+					$teamName = $params[4] ?? '';
+					$notification->setParsedSubject(
+						$l->t('The card "%1$s" on "%2$s" has been assigned to team "%3$s" by %4$s. You are receiving this because you are a member of that team.', [$params[0], $params[1], $teamName, $dn])
+					);
+					$notification->setRichSubject(
+						$l->t('{user} has assigned the card {deck-card} on {deck-board} to a team you are a member of.'),
+						[
+							'deck-card' => [
+								'type' => 'deck-card',
+								'id' => (string)$cardId,
+								'name' => $params[0],
+								'boardname' => (string)$params[1],
+								'stackname' => $stack->getTitle(),
+								'link' => $this->getCardUrl($boardId, $cardId),
+							],
+							'deck-board' => [
+								'type' => 'deck-board',
+								'id' => (string)$boardId,
+								'name' => (string)$params[1],
+								'link' => $this->getBoardUrl($boardId),
+							],
+							'user' => [
+								'type' => 'user',
+								'id' => (string)$params[2],
+								'name' => $dn,
 							]
-						);
-					} else {
-						$notification->setParsedSubject(
-							$l->t('The card "%s" on "%s" has been assigned to you by %s.', [$params[0], $params[1], $dn])
-						);
-						$notification->setRichSubject(
-							$l->t('{user} has assigned the card {deck-card} on {deck-board} to you.'),
-							[
-								'deck-card' => [
-									'type' => 'deck-card',
-									'id' => (string)$cardId,
-									'name' => $params[0],
-									'boardname' => (string)$params[1],
-									'stackname' => $stack->getTitle(),
-									'link' => $this->getCardUrl($boardId, $cardId),
-								],
-								'deck-board' => [
-									'type' => 'deck-board',
-									'id' => (string)$boardId,
-									'name' => (string)$params[1],
-									'link' => $this->getBoardUrl($boardId),
-								],
-								'user' => [
-									'type' => 'user',
-									'id' => (string)$params[2],
-									'name' => $dn,
-								]
+						]
+					);
+				} else {
+					$notification->setParsedSubject(
+						$l->t('The card "%s" on "%s" has been assigned to you by %s.', [$params[0], $params[1], $dn])
+					);
+					$notification->setRichSubject(
+						$l->t('{user} has assigned the card {deck-card} on {deck-board} to you.'),
+						[
+							'deck-card' => [
+								'type' => 'deck-card',
+								'id' => (string)$cardId,
+								'name' => $params[0],
+								'boardname' => (string)$params[1],
+								'stackname' => $stack->getTitle(),
+								'link' => $this->getCardUrl($boardId, $cardId),
+							],
+							'deck-board' => [
+								'type' => 'deck-board',
+								'id' => (string)$boardId,
+								'name' => (string)$params[1],
+								'link' => $this->getBoardUrl($boardId),
+							],
+							'user' => [
+								'type' => 'user',
+								'id' => (string)$params[2],
+								'name' => $dn,
 							]
-						);
-					}
+						]
+					);
+				}
 				$notification->setLink($this->getCardUrl($boardId, $cardId));
 				break;
 			case 'card-overdue':

@@ -31,7 +31,10 @@ class CirclesService {
 	/** @var array<string, string[]> */
 	private array $userCirclesCache = [];
 
-	public function __construct(IAppManager $appManager, private ?LoggerInterface $logger = null) {
+	public function __construct(
+		IAppManager $appManager,
+		private ?LoggerInterface $logger = null,
+	) {
 		$this->circlesEnabled = $appManager->isEnabledForUser('circles');
 	}
 
