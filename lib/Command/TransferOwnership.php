@@ -107,6 +107,7 @@ final class TransferOwnership extends Command {
 				return 1;
 			}
 
+			/** @psalm-suppress RedundantCondition -- psalm traces probeCircle() stub as non-nullable and misses the exception path */
 			if ($ownerCircleExists && !$ownerUserExists) {
 				$ownerType = Acl::PERMISSION_TYPE_CIRCLE;
 			}
@@ -130,9 +131,11 @@ final class TransferOwnership extends Command {
 			if ($this->circlesService->isCirclesEnabled()) {
 				try {
 					$circle = $this->circlesService->getCircle($newOwner);
-					$circleExists = $circle !== null;
 					if ($circle !== null) {
+						$circleExists = true;
 						$teamDisplayName = $circle->getDisplayName();
+					} else {
+						$circleExists = false;
 					}
 				} catch (\Throwable $e) {
 					$circleExists = false;
@@ -144,6 +147,7 @@ final class TransferOwnership extends Command {
 				return 1;
 			}
 
+			/** @psalm-suppress RedundantCondition -- psalm traces probeCircle() stub as non-nullable and misses the exception path */
 			if ($circleExists && !$userExists) {
 				$newOwnerType = Acl::PERMISSION_TYPE_CIRCLE;
 				$output->writeln('<comment>Detected team target: treating ' . $newOwner . ' as team ' . ($teamDisplayName ?: $newOwner) . '.</comment>');

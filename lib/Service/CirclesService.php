@@ -154,6 +154,7 @@ class CirclesService {
 			return;
 		}
 
+		/** @psalm-suppress RedundantCondition -- $userId !== null is implied by the prior guard but kept explicit for clarity */
 		if ($circleId !== null && $userId !== null) {
 			unset($this->userCircleCache[$circleId][$userId]);
 			if (empty($this->userCircleCache[$circleId])) {

@@ -72,7 +72,8 @@ namespace OCA\Circles\Model {
 		public const APP_DEFAULT = 11000;
 
 		public function getLevel(): int {}
-		public function getUserType(): int{}
+		public function getUserType(): int {}
+		public function getUserId(): string {}
 	}
 
 	class Circle {
