@@ -46,7 +46,7 @@
 					</form>
 				</template>
 			</NcEmptyContent>
-			<div v-else-if="!isEmpty && !loading"
+			<div v-else-if="!isEmpty && !loading && swimlaneMode === 'none'"
 				key="board"
 				ref="board"
 				class="board"
@@ -64,6 +64,23 @@
 						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
 						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
+					</Draggable>
+				</Container>
+			</div>
+			<div v-else-if="!isEmpty && !loading"
+				key="board-swimlanes"
+				ref="board"
+				role="region"
+				:aria-label="t('deck', 'Board grouped by {mode}', { mode: swimlaneMode })"
+				class="board board--swimlanes">
+				<Container orientation="vertical"
+					:drag-handle-selector="canEdit ? '.swimlane-header__drag-handle' : '.no-drag'"
+					@drop="onReorderLane">
+					<Draggable v-for="lane in computedLanes"
+						:key="lane.key">
+						<Swimlane :lane="lane"
+							:stacks="stacksByBoard"
+							:board-id="board.id" />
 					</Draggable>
 				</Container>
 			</div>
@@ -88,8 +105,10 @@ import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import Stack from './Stack.vue'
+import Swimlane from './Swimlane.vue'
 import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
 import CardSidebar from '../card/CardSidebar.vue'
@@ -102,6 +121,7 @@ export default {
 		DeckIcon,
 		Draggable,
 		Stack,
+		Swimlane,
 		NcEmptyContent,
 		NcModal,
 		NcTextField,
@@ -127,6 +147,7 @@ export default {
 			currentScrollPosX: null,
 			currentMousePosX: null,
 			localModal: null,
+			swimlaneModeVersion: 0,
 		}
 	},
 	computed: {
@@ -148,6 +169,92 @@ export default {
 		isEmpty() {
 			return this.stacksByBoard.length === 0
 		},
+		swimlaneMode() {
+			// eslint-disable-next-line no-unused-expressions
+			this.swimlaneModeVersion
+			return this.board?.settings?.swimlaneMode || 'none'
+		},
+		computedLanes() {
+			if (this.swimlaneMode === 'none' || !this.board) {
+				return []
+			}
+			const lanes = []
+			const seen = new Set()
+			let hasNoValue = false
+
+			for (const stack of this.stacksByBoard) {
+				const cards = this.$store.getters.cardsByStack(stack.id).filter(
+					c => this.showArchived ? c.archived : !c.archived,
+				)
+				for (const card of cards) {
+					if (this.swimlaneMode === 'labels') {
+						if (!card.labels || card.labels.length === 0) {
+							hasNoValue = true
+						} else {
+							for (const label of card.labels) {
+								if (!seen.has(label.id)) {
+									seen.add(label.id)
+									lanes.push({
+										key: 'label-' + label.id,
+										id: label.id,
+										type: 'label',
+										title: label.title,
+										color: label.color,
+									})
+								}
+							}
+						}
+					} else if (this.swimlaneMode === 'assignees') {
+						if (!card.assignedUsers || card.assignedUsers.length === 0) {
+							hasNoValue = true
+						} else {
+							for (const user of card.assignedUsers) {
+								const uid = user.participant.uid
+								if (!seen.has(uid)) {
+									seen.add(uid)
+									lanes.push({
+										key: 'assignee-' + uid,
+										id: uid,
+										type: 'assignee',
+										uid,
+										title: user.participant.displayname,
+									})
+								}
+							}
+						}
+					}
+				}
+			}
+
+			const savedOrder = this.swimlaneMode === 'labels'
+				? this.$store.state.swimlaneLabelOrder[this.board.id]
+				: this.$store.state.swimlaneUserOrder[this.board.id]
+
+			if (savedOrder && savedOrder.length > 0) {
+				lanes.sort((a, b) => {
+					const aIdx = savedOrder.indexOf(a.id)
+					const bIdx = savedOrder.indexOf(b.id)
+					const aPos = aIdx === -1 ? savedOrder.length : aIdx
+					const bPos = bIdx === -1 ? savedOrder.length : bIdx
+					return aPos - bPos
+				})
+			}
+
+			if (hasNoValue) {
+				const noValueTitle = this.swimlaneMode === 'labels'
+					? t('deck', 'No label')
+					: t('deck', 'Unassigned')
+				lanes.push({
+					key: '__none__',
+					id: '__none__',
+					type: this.swimlaneMode === 'labels' ? 'label' : 'assignee',
+					title: noValueTitle,
+					color: null,
+				})
+			}
+
+			return lanes
+		},
 	},
 	watch: {
 		id(newValue, oldValue) {
@@ -168,11 +275,16 @@ export default {
 		this.$root.$on('open-card', (cardId) => {
 			this.localModal = cardId
 		})
+		subscribe('deck:board:swimlane-mode-changed', this.onSwimlaneModeChanged)
 	},
 	beforeDestroy() {
 		this.session?.close()
+		unsubscribe('deck:board:swimlane-mode-changed', this.onSwimlaneModeChanged)
 	},
 	methods: {
+		onSwimlaneModeChanged() {
+			this.swimlaneModeVersion++
+		},
 		async fetchData() {
 			this.loading = true
 			try {
@@ -202,6 +314,22 @@ export default {
 
 		onDropStack({ removedIndex, addedIndex }) {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
+		},
+
+		onReorderLane({ removedIndex, addedIndex }) {
+			if (removedIndex === null || addedIndex === null || !this.canEdit) {
+				return
+			}
+			const lanes = [...this.computedLanes]
+			const [moved] = lanes.splice(removedIndex, 1)
+			lanes.splice(addedIndex, 0, moved)
+			const order = lanes.map(l => l.id)
+			const type = this.swimlaneMode === 'labels' ? 'labels' : 'assignees'
+			this.$store.dispatch('setSwimlaneOrder', {
+				boardId: this.board.id,
+				type,
+				order,
+			})
 		},
 
 		addNewStack() {
@@ -285,6 +413,12 @@ export default {
 		overflow-x: auto;
 		flex-grow: 1;
 		scrollbar-gutter: stable;
+
+		&--swimlanes {
+			overflow-y: auto;
+			overflow-x: auto;
+			padding: 0;
+		}
 	}
 
 	/**

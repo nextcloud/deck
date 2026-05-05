@@ -248,6 +248,26 @@
 						</template>
 						{{ showCardCover ? t('deck', 'Hide card cover images') : t('deck', 'Show card cover images') }}
 					</NcActionButton>
+					<NcActionSeparator />
+					<NcActionCaption :name="t('deck', 'Group by')" />
+					<NcActionRadio name="swimlaneMode"
+						:checked="swimlaneMode === 'none'"
+						:disabled="!canEdit"
+						@change="setSwimlaneMode('none')">
+						{{ t('deck', 'No grouping') }}
+					</NcActionRadio>
+					<NcActionRadio name="swimlaneMode"
+						:checked="swimlaneMode === 'labels'"
+						:disabled="!canEdit"
+						@change="setSwimlaneMode('labels')">
+						{{ t('deck', 'Labels') }}
+					</NcActionRadio>
+					<NcActionRadio name="swimlaneMode"
+						:checked="swimlaneMode === 'assignees'"
+						:disabled="!canEdit"
+						@change="setSwimlaneMode('assignees')">
+						{{ t('deck', 'Assignees') }}
+					</NcActionRadio>
 				</NcActions>
 				<!-- FIXME: NcActionRouter currently doesn't work as an inline action -->
 				<NcActions v-if="isFullApp">
@@ -263,8 +283,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { NcActions, NcActionButton, NcActionCaption, NcActionRadio, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -285,6 +305,9 @@ export default {
 		NcModal,
 		NcActions,
 		NcActionButton,
+		NcActionCaption,
+		NcActionRadio,
+		NcActionSeparator,
 		NcButton,
 		NcPopover,
 		NcAvatar,
@@ -345,6 +368,9 @@ export default {
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
+		swimlaneMode() {
+			return this.board?.settings?.swimlaneMode || 'none'
 		},
 		presentUsers() {
 			if (!this.board) return []
@@ -408,6 +434,12 @@ export default {
 		},
 		toggleShowArchived() {
 			this.$store.dispatch('toggleShowArchived')
+		},
+		setSwimlaneMode(mode) {
+			if (this.board?.id && this.canEdit) {
+				this.$store.dispatch('setSwimlaneMode', { boardId: this.board.id, mode })
+				emit('deck:board:swimlane-mode-changed', mode)
+			}
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }

@@ -12,6 +12,8 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Exceptions\FederationDisabledException;
 use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
@@ -25,11 +27,15 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
+	private const SWIMLANE_CONFIG_KEYS = ['swimlaneMode', 'swimlaneLabelOrder', 'swimlaneUserOrder'];
+
 	private ?string $userId = null;
 
 	public function __construct(
 		private readonly IConfig $config,
 		private readonly IGroupManager $groupManager,
+		private readonly PermissionService $permissionService,
+		private readonly BoardMapper $boardMapper,
 	) {
 	}
 
@@ -183,11 +189,18 @@ class ConfigService {
 				$result = $value;
 				break;
 			case 'board':
-				[$boardId, $boardConfigKey] = explode(':', $key);
+				$parts = explode(':', $key, 3);
+				$boardId = $parts[1] ?? '';
+				$boardConfigKey = $parts[2] ?? '';
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}
-				$this->config->setUserValue($userId, Application::APP_ID, $key, (string)$value);
+				if (in_array($boardConfigKey, self::SWIMLANE_CONFIG_KEYS, true)) {
+					$this->permissionService->checkPermission($this->boardMapper, (int)$boardId, Acl::PERMISSION_EDIT);
+					$this->config->setAppValue(Application::APP_ID, $key, (string)$value);
+				} else {
+					$this->config->setUserValue($userId, Application::APP_ID, $key, (string)$value);
+				}
 				$result = $value;
 		}
 		return $result;

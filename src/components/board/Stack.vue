@@ -101,7 +101,7 @@
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container"
-			group-name="stack"
+			:group-name="lane ? 'stack-' + lane.key : 'stack'"
 			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
@@ -184,6 +184,10 @@ export default {
 			type: Object,
 			default: undefined,
 		},
+		lane: {
+			type: Object,
+			default: null,
+		},
 	},
 	data() {
 		return {
@@ -211,6 +215,14 @@ export default {
 			showArchived: state => state.showArchived,
 		}),
 		cardsByStack() {
+			if (this.lane && this.lane.id !== undefined) {
+				return this.$store.getters.cardsByStackAndLane(this.stack.id, this.lane.type, this.lane.id).filter((card) => {
+					if (this.showArchived) {
+						return card.archived
+					}
+					return !card.archived
+				})
+			}
 			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
 				if (this.showArchived) {
 					return card.archived
