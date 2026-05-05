@@ -27,7 +27,19 @@
 			<p v-if="showArchived">
 				({{ t('deck', 'Archived cards') }})
 			</p>
+			<NcButton v-if="canEdit && !showArchived && !board.archived"
+				:title="t('deck', 'Add multiple cards')"
+				:aria-label="t('deck', 'Add multiple cards')"
+				type="tertiary"
+				@click="showBulkAddModal = true">
+				<template #icon>
+					<PlaylistPlusIcon :size="20" />
+				</template>
+			</NcButton>
 		</div>
+		<BulkAddCardsModal v-if="showBulkAddModal"
+			:board="board"
+			@close="showBulkAddModal = false" />
 		<div class="board-actions">
 			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
 				:sessions="presentUsers" />
@@ -273,7 +285,9 @@ import FilterOffIcon from 'vue-material-design-icons/FilterOffOutline.vue'
 import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
+import PlaylistPlusIcon from 'vue-material-design-icons/PlaylistPlus.vue'
 import SessionList from './SessionList.vue'
+import BulkAddCardsModal from './BulkAddCardsModal.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -282,6 +296,7 @@ export default {
 	name: 'Controls',
 	components: {
 		CreateNewCardCustomPicker,
+		BulkAddCardsModal,
 		NcModal,
 		NcActions,
 		NcActionButton,
@@ -294,6 +309,7 @@ export default {
 		FilterOffIcon,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
+		PlaylistPlusIcon,
 		TableColumnPlusAfter,
 		SessionList,
 	},
@@ -318,6 +334,7 @@ export default {
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
+			showBulkAddModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
 		}
