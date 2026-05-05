@@ -136,7 +136,7 @@ class Card extends RelationalEntity {
 		$event->UID = 'deck-card-' . $this->getId();
 		if ($this->getDuedate()) {
 			$creationDate = new DateTime();
-			$creationDate->setTimestamp($this->createdAt);
+			$creationDate->setTimestamp($this->getCreatedAt());
 			$event->DTSTAMP = $creationDate;
 			$event->DUE = new DateTime($this->getDuedate()->format('c'), new DateTimeZone('UTC'));
 		}
