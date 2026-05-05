@@ -725,3 +725,45 @@ namespace OCA\NotifyPush\Queue {
 namespace OCA\Text\Event {
 	class LoadEditor extends \OCP\EventDispatcher\Event {}
 }
+
+namespace Sabre\VObject {
+	class InvalidDataException extends \Exception {}
+
+	class Reader {
+		public static function read(string $data): Component\VCalendar {}
+	}
+}
+
+namespace Sabre\VObject\Component {
+	class VCalendar {
+		/** @return array<int, mixed> */
+		public function select(string $name): array {}
+		public function createComponent(string $name): VTodo {}
+		public function add(mixed $value): void {}
+		public function serialize(): string {}
+		public function destroy(): void {}
+	}
+
+	class VTodo {
+		public function __get(string $name): mixed {}
+		public function __set(string $name, mixed $value): void {}
+		public function __isset(string $name): bool {}
+		public function add(string $name, mixed $value): void {}
+		/** @var mixed */
+		public $SUMMARY;
+		/** @var mixed */
+		public $DESCRIPTION;
+		/** @var mixed */
+		public $DUE;
+		/** @var mixed */
+		public $COMPLETED;
+		/** @var mixed */
+		public $STATUS;
+	}
+}
+
+namespace Sabre\VObject\Property {
+	class DateTime {
+		public function getDateTime(): \DateTimeInterface {}
+	}
+}
