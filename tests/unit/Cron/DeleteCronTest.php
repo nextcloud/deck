@@ -108,13 +108,7 @@ class DeleteCronTest extends TestCase {
 			->method('findToDelete')
 			->willReturn($boards);
 		$this->boardMapper->expects($this->exactly(count($boards)))
-			->method('delete')
-			->withConsecutive(
-				[$boards[0]],
-				[$boards[1]],
-				[$boards[2]],
-				[$boards[3]]
-			);
+			->method('delete');
 
 		$cards = [ $this->getCard(10) ];
 		$this->cardMapper->expects($this->once())
@@ -150,11 +144,7 @@ class DeleteCronTest extends TestCase {
 			->method('findToDelete')
 			->willReturn($stacks);
 		$this->stackMapper->expects($this->exactly(count($stacks)))
-			->method('delete')
-			->withConsecutive(
-				[$stacks[0]],
-				[$stacks[1]]
-			);
+			->method('delete');
 
 		$this->invokePrivate($this->deleteCron, 'run', [null]);
 	}

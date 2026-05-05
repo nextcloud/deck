@@ -13,6 +13,8 @@ use OCA\Circles\CirclesManager;
 use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\FederatedUser;
 use OCA\Circles\Model\Member;
+use OCA\Circles\Model\Probes\CircleProbe;
+use OCA\Circles\Model\Probes\DataProbe;
 use OCP\App\IAppManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -35,8 +37,7 @@ class CirclesServiceTest extends TestCase {
 		$federatedUser = $this->createMock(FederatedUser::class);
 		$manager = $this->getMockBuilder(CirclesManager::class)
 			->disableOriginalConstructor()
-			->onlyMethods(['getFederatedUser', 'startSession', 'getCircles'])
-			->addMethods(['stopSession'])
+			->onlyMethods(['getFederatedUser', 'startSession', 'probeCircles', 'stopSession'])
 			->getMock();
 
 		$manager->expects($this->once())
@@ -47,7 +48,8 @@ class CirclesServiceTest extends TestCase {
 			->method('startSession')
 			->with($federatedUser);
 		$manager->expects($this->once())
-			->method('getCircles')
+			->method('probeCircles')
+			->with($this->isInstanceOf(CircleProbe::class))
 			->willReturn([$circle]);
 		$manager->expects($this->once())
 			->method('stopSession');
@@ -68,8 +70,7 @@ class CirclesServiceTest extends TestCase {
 		$federatedUser = $this->createMock(FederatedUser::class);
 		$manager = $this->getMockBuilder(CirclesManager::class)
 			->disableOriginalConstructor()
-			->onlyMethods(['getFederatedUser', 'startSession', 'getCircles'])
-			->addMethods(['stopSession'])
+			->onlyMethods(['getFederatedUser', 'startSession', 'probeCircles', 'stopSession'])
 			->getMock();
 
 		$manager->expects($this->once())
@@ -80,7 +81,8 @@ class CirclesServiceTest extends TestCase {
 			->method('startSession')
 			->with($federatedUser);
 		$manager->expects($this->once())
-			->method('getCircles')
+			->method('probeCircles')
+			->with($this->isInstanceOf(CircleProbe::class))
 			->willThrowException(new \RuntimeException('Boom'));
 		$manager->expects($this->once())
 			->method('stopSession');
@@ -100,15 +102,14 @@ class CirclesServiceTest extends TestCase {
 		$circle = $this->createMock(Circle::class);
 		$manager = $this->getMockBuilder(CirclesManager::class)
 			->disableOriginalConstructor()
-			->onlyMethods(['startSuperSession', 'getCircle'])
-			->addMethods(['stopSession'])
+			->onlyMethods(['startSuperSession', 'probeCircle', 'stopSession'])
 			->getMock();
 
 		$manager->expects($this->once())
 			->method('startSuperSession');
 		$manager->expects($this->once())
-			->method('getCircle')
-			->with('circle-1')
+			->method('probeCircle')
+			->with('circle-1', null, $this->isInstanceOf(DataProbe::class))
 			->willReturn($circle);
 		$manager->expects($this->once())
 			->method('stopSession');

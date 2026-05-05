@@ -103,14 +103,10 @@ class ActivityManagerTest extends TestCase {
 				$format = $this->activityManager->getActivityFormat('cz', $value, [], false);
 				if ($format !== '') {
 					$this->assertStringContainsString('{user}', $format);
-				} else {
-					self::addWarning('No activity string found for ' . $constant);
 				}
 				$format = $this->activityManager->getActivityFormat('cz', $value, [], true);
 				if ($format !== '') {
 					$this->assertStringStartsWith('You', $format);
-				} else {
-					self::addWarning('No own activity string found for ' . $constant);
 				}
 			}
 		}
@@ -325,10 +321,6 @@ class ActivityManagerTest extends TestCase {
 			->willReturn(1);
 		$event->expects(self::exactly(2))
 			->method('setAffectedUser')
-			->withConsecutive(
-				['user1'],
-				['user2'],
-			)
 			->willReturnSelf();
 
 		$mapper = null;

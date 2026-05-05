@@ -54,14 +54,11 @@ class BoardImportTest extends \Test\TestCase {
 		$input = $this->createMock(InputInterface::class);
 		$input
 			->method('getOption')
-			->withConsecutive(
-				['system'],
-				['config']
-			)
-			->will($this->returnValueMap([
-				['system', 'trelloJson'],
-				['config', null]
-			]));
+			->willReturnCallback(fn ($key) => match($key) {
+				'system' => 'trelloJson',
+				'config' => null,
+				default => null,
+			});
 
 		$output = $this->createMock(OutputInterface::class);
 

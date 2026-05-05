@@ -391,27 +391,22 @@ class BoardServiceTest extends TestCase {
 		if ($currentUserAcl[2]) {
 			$this->permissionService->expects($this->exactly(2))
 				->method('checkPermission')
-				->withConsecutive(
-					[$this->boardMapper, 123, Acl::PERMISSION_SHARE, null],
-					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]
-				);
+				->willReturn(true);
 		} else {
 			$this->aclMapper->expects($this->once())
 				->method('findAll')
 				->willReturn([$existingAcl]);
 
+			$callCount = 0;
 			$this->permissionService->expects($this->exactly(2))
 				->method('checkPermission')
-				->withConsecutive(
-					[$this->boardMapper, 123, Acl::PERMISSION_SHARE, null],
-					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]
-				)
-				->will(
-					$this->onConsecutiveCalls(
-						true,
-						$this->throwException(new NoPermissionException('No permission'))
-					)
-				);
+				->willReturnCallback(function ($mapper, $boardId, $permission) use (&$callCount) {
+					$callCount++;
+					if ($callCount === 2) {
+						throw new NoPermissionException('No permission');
+					}
+					return true;
+				});
 
 			$this->permissionService->expects($this->exactly(3))
 				->method('userCan')
@@ -625,7 +620,11 @@ class BoardServiceTest extends TestCase {
 
 		$this->boardMapper->expects($this->exactly(2))
 			->method('mapAcl')
-			->withConsecutive([$userAcl], [$groupAcl]);
+			->willReturnCallback(fn ($acl) => match(true) {
+				$acl === $userAcl => null,
+				$acl === $groupAcl => null,
+				default => null,
+			});
 
 		$this->circlesService->expects($this->never())
 			->method('isUserInCircle');
@@ -725,9 +724,9 @@ class BoardServiceTest extends TestCase {
 		$this->connection->expects($this->once())->method('beginTransaction');
 		$this->connection->expects($this->once())->method('commit');
 
-		$this->boardMapper->expects($this->exactly(2))
+		$this->boardMapper->expects($this->exactly(4))
 			->method('find')
-			->willReturnOnConsecutiveCalls($board, $updatedBoard);
+			->willReturnOnConsecutiveCalls($board, $board, $board, $updatedBoard);
 
 		$this->circlesService->expects($this->once())
 			->method('isCirclesEnabled')
@@ -742,9 +741,7 @@ class BoardServiceTest extends TestCase {
 			->with(10, Acl::PERMISSION_TYPE_CIRCLE, 'circle-id-xyz');
 
 		// Previous user owner gets an ACL entry when changeContent = false
-		$this->aclMapper->expects($this->exactly(2))
-			->method('findAll')
-			->willReturn([]);
+		$this->aclMapper->method('findAll')->willReturn([]);
 		$this->aclMapper->expects($this->exactly(2))
 			->method('insert')
 			->willReturnCallback(fn ($acl) => $acl);

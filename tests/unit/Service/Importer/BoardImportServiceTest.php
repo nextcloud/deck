@@ -142,14 +142,11 @@ class BoardImportServiceTest extends \Test\TestCase {
 			->willReturn('johndoe');
 		$this->userManager
 			->method('get')
-			->withConsecutive(
-				['admin'],
-				['johndoe']
-			)
-			->willReturnonConsecutiveCalls(
-				$owner,
-				$johndoe
-			);
+			->willReturnCallback(fn ($uid) => match($uid) {
+				'admin' => $owner,
+				'johndoe' => $johndoe,
+				default => null,
+			});
 	}
 
 	public function testImportSuccess() {

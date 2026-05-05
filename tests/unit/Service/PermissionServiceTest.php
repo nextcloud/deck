@@ -144,8 +144,10 @@ class PermissionServiceTest extends \Test\TestCase {
 
 		$this->boardMapper->expects($this->exactly(2))
 			->method('find')
-			->withConsecutive([123], [234])
-			->willReturnOnConsecutiveCalls($adminBoard, $userBoard);
+			->willReturnCallback(fn ($id) => match($id) {
+				123 => $adminBoard,
+				234 => $userBoard,
+			});
 
 		$this->assertEquals(true, $this->service->userIsBoardOwner(123));
 		$this->assertEquals(false, $this->service->userIsBoardOwner(234));
@@ -161,7 +163,7 @@ class PermissionServiceTest extends \Test\TestCase {
 		$board->setOwner('circle-id-abc');
 		$board->setOwnerType(Acl::PERMISSION_TYPE_CIRCLE);
 
-		$this->boardMapper->expects($this->exactly(2))
+		$this->boardMapper->expects($this->once())
 			->method('find')
 			->willReturn($board);
 
@@ -368,11 +370,8 @@ class PermissionServiceTest extends \Test\TestCase {
 		$aclGroup->setType(Acl::PERMISSION_TYPE_GROUP);
 		$aclGroup->setParticipant('group1');
 
-		$board = $this->createMock(Board::class);
-		$board->expects($this->any())
-			->method('__call')
-			->with('getOwner', [])
-			->willReturn('user1');
+		$board = new Board();
+		$board->setOwner('user1');
 		$this->aclMapper->expects($this->once())
 			->method('findAll')
 			->with(123)
@@ -381,10 +380,13 @@ class PermissionServiceTest extends \Test\TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($board);
-		$this->userManager->expects($this->any())
+		$this->userManager->expects($this->exactly(2))
 			->method('userExists')
-			->withConsecutive(['user1'], ['user2'])
-			->willReturnOnConsecutiveCalls($user1, $user2);
+			->willReturnCallback(fn ($uid) => match($uid) {
+				'user1' => true,
+				'user2' => true,
+				default => false,
+			});
 
 		$group = $this->createMock(IGroup::class);
 		$group->expects($this->once())

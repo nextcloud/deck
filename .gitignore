@@ -12,3 +12,4 @@ vendor/
 .php-cs-fixer.cache
 \.idea/
 settings.json
+runtests.sh

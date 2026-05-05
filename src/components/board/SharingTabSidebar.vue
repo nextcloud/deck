@@ -24,8 +24,7 @@
 					</span>
 				</span>
 				<NcActions v-if="board.ownerType === PERMISSION_TYPE_CIRCLE && isBoardOwner" :force-menu="true">
-					<NcActionButton
-						icon="icon-user-admin"
+					<NcActionButton icon="icon-user-admin"
 						data-cy="action:permission-owner-self"
 						@click="clickTransferOwner(currentUserUid, PERMISSION_TYPE_USER)">
 						{{ t('deck', 'Transfer ownership to myself') }}
