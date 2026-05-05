@@ -7,10 +7,15 @@
 
 namespace OCA\Deck\DAV;
 
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
+use OCA\Deck\StatusException;
+use OCP\AppFramework\Db\DoesNotExistException;
 use Sabre\CalDAV\ICalendarObject;
+use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAV\Exception\NotFound;
 use Sabre\DAVACL\IACL;
 use Sabre\VObject\Component\VCalendar;
 
@@ -44,7 +49,14 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function getACL() {
-		return $this->calendar->getACL();
+		$acl = $this->calendar->getACL();
+		if ($this->sourceItem instanceof Stack) {
+			return array_values(array_filter($acl, static function (array $entry): bool {
+				return $entry['privilege'] !== '{DAV:}write-content';
+			}));
+		}
+
+		return $acl;
 	}
 
 	public function setACL(array $acl) {
@@ -56,7 +68,35 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function put($data) {
-		throw new Forbidden('This calendar-object is read-only');
+		if (!($this->sourceItem instanceof Card)) {
+			throw new Forbidden('This calendar-object is read-only');
+		}
+
+		// MultipleObjectsReturnedException is intentionally not caught:
+		// a primary-key lookup returning multiple rows is a data integrity bug
+		// and should surface as a 500 in the log.
+		try {
+			$this->sourceItem = $this->backend->updateCardFromCalendarObject($this->sourceItem, $this->readPutData($data));
+		} catch (DoesNotExistException $e) {
+			throw new NotFound($e->getMessage(), 0, $e);
+		} catch (BadRequestException $e) {
+			throw new BadRequest($e->getMessage(), 0, $e);
+		} catch (StatusException $e) {
+			throw new Forbidden($e->getMessage(), 0, $e);
+		}
+		$this->calendarObject = $this->sourceItem->getCalendarObject();
+	}
+
+	private function readPutData($data): string {
+		if (is_resource($data)) {
+			$content = stream_get_contents($data);
+			if ($content === false) {
+				throw new BadRequest('Could not read calendar-object data');
+			}
+			return $content;
+		}
+
+		return (string)$data;
 	}
 
 	public function get() {
@@ -78,7 +118,7 @@ class CalendarObject implements ICalendarObject, IACL {
 	}
 
 	public function delete() {
-		throw new Forbidden('This calendar-object is read-only');
+		throw new Forbidden('Deleting tasks via CalDAV is not supported');
 	}
 
 	public function getName() {
