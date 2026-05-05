@@ -203,6 +203,18 @@ class AttachmentService {
 		return $attachment;
 	}
 
+	/**
+	 * Apply import side effects to keep attachment behavior consistent with regular create flow.
+	 */
+	public function syncAttachmentCreateSideEffects(Attachment $attachment): Attachment {
+		$cardId = $attachment->getCardId();
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
+		$this->addCreator($attachment);
+		$this->changeHelper->cardChanged($cardId);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
+
+		return $attachment;
+	}
 
 	/**
 	 * Display the attachment
