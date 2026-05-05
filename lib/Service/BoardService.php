@@ -580,7 +580,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
 			'PERMISSION_OWNER' => $permissions[Board::PERMISSION_OWNER] ?? false,
-			]);
+		]);
 		$this->boardMapper->insert($newBoard);
 
 		foreach ($this->aclMapper->findAll($board->getId()) as $acl) {
