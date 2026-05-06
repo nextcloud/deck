@@ -12,8 +12,9 @@ namespace OCA\Deck\Event;
 
 use OCA\Deck\Db\Acl;
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IWebhookCompatibleEvent;
 
-abstract class AAclEvent extends Event {
+abstract class AAclEvent extends Event implements IWebhookCompatibleEvent {
 	private $acl;
 
 	public function __construct(Acl $acl) {
@@ -28,5 +29,11 @@ abstract class AAclEvent extends Event {
 
 	public function getBoardId(): int {
 		return $this->acl->getBoardId();
+	}
+
+	public function getWebhookSerializable(): array {
+		return [
+			'acl' => $this->acl->jsonSerialize(),
+		];
 	}
 }
