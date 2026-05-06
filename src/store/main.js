@@ -62,6 +62,7 @@ export default function storeFactory() {
 			activityLoadMore: true,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			shortcutLock: false,
+			viewModeByBoard: {},
 		},
 		getters: {
 			config: state => (key) => {
@@ -73,6 +74,15 @@ export default function storeFactory() {
 			},
 			getSearchQuery: state => {
 				return state.searchQuery
+			},
+			viewMode: state => {
+				if (!state.currentBoard) return 'kanban'
+				if (state.viewModeByBoard[state.currentBoard.id] !== undefined) {
+					return state.viewModeByBoard[state.currentBoard.id]
+				}
+
+				const stored = localStorage.getItem(`deck.viewMode.${state.currentBoard.id}`)
+				return stored !== null ? stored : 'kanban'
 			},
 			getFilter: state => {
 				return state.filter
@@ -301,6 +311,11 @@ export default function storeFactory() {
 			},
 			TOGGLE_SHORTCUT_LOCK(state, lock) {
 				state.shortcutLock = lock
+			},
+			setViewMode(state, mode) {
+				if (!state.currentBoard) return
+				Vue.set(state.viewModeByBoard, state.currentBoard.id, mode)
+				localStorage.setItem(`deck.viewMode.${state.currentBoard.id}`, mode)
 			},
 		},
 		actions: {
@@ -531,6 +546,9 @@ export default function storeFactory() {
 			},
 			toggleShortcutLock({ commit }, lock) {
 				commit('TOGGLE_SHORTCUT_LOCK', lock)
+			},
+			setViewMode({ commit }, mode) {
+				commit('setViewMode', mode)
 			},
 		},
 	})
