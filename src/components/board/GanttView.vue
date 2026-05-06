@@ -347,8 +347,11 @@ export default {
 			this.fitColumnsToWidth()
 		},
 		async updateTaskDate(task, start, end) {
-			await this.$store.dispatch('updateCardDue', { ...task._card, duedate: new Date(end).toISOString() })
-			await this.$store.dispatch('updateCardStartDate', { ...task._card, startdate: new Date(start).toISOString() })
+			await this.$store.dispatch('updateCardDates', {
+				...task._card,
+				startdate: new Date(start).toISOString(),
+				duedate: new Date(end).toISOString(),
+			})
 		},
 		_patchBarDuration() {
 			const bars = this.ganttInstance?.bars
