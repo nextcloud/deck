@@ -71,6 +71,7 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Activity" : "Actividad",
     "Undo" : "Deshacer",
+    "Hours" : "Horas",
     "Transfer" : "Transferir",
     "(remote)" : "(remoto)",
     "Can edit" : "Puede editar",

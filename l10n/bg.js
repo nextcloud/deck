@@ -172,6 +172,7 @@ OC.L10N.register(
     "Deleted lists" : "Изтрити списъци",
     "Undo" : "Отмяна",
     "Deleted cards" : "Изтрити карти",
+    "No cards yet" : "Все още няма карти",
     "Failed to create share with {displayName}" : "Създаването на споделяне с {displayName} не бе успешно",
     "Are you sure you want to transfer the board {title} to {user}?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?",
     "Transfer the board." : "Прехвърлете таблото.",

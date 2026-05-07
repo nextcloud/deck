@@ -208,6 +208,8 @@
     "Deleted lists" : "Llistes suprimides",
     "Undo" : "Desfés",
     "Deleted cards" : "Targetes suprimides",
+    "Days" : "Dies",
+    "No cards yet" : "Encara no hi ha cap targeta.",
     "Failed to create share with {displayName}" : "Ha fallat la creació de la compartició amb {displayName}",
     "Are you sure you want to transfer the board {title} to {user}?" : "Esteu segur que voleu transferir el tauler {title} a {user}?",
     "Transfer the board." : "Transfereix el tauler.",

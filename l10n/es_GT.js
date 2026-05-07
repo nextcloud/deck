@@ -34,6 +34,7 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Activity" : "Actividad",
     "Undo" : "Deshacer",
+    "Hours" : "Horas",
     "Can edit" : "Puede editar",
     "Can share" : "Puede compartir",
     "Owner" : "Dueño",

@@ -28,6 +28,7 @@ OC.L10N.register(
     "Activity" : "Activitat",
     "Deleted lists" : "Listas suprimidas",
     "Undo" : "Desfar",
+    "Hours" : "Oras",
     "(Group)" : "(Grop)",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
