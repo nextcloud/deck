@@ -16,6 +16,7 @@ OC.L10N.register(
     "General" : "Ընդհանուր",
     "Search" : "Search",
     "Activity" : "Գործունեություն",
+    "Hours" : "Ժամ",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",

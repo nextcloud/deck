@@ -122,6 +122,7 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Activity" : "Atividade",
     "Undo" : "Desfazer",
+    "Hours" : "Horas",
     "Transfer" : "Transfere",
     "(Group)" : "(Grupo)",
     "(remote)" : "(remoto)",

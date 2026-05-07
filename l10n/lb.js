@@ -14,6 +14,7 @@ OC.L10N.register(
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",
     "Activity" : "Aktivitéit",
+    "Hours" : "Stonnen",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",

@@ -86,6 +86,7 @@ OC.L10N.register(
     "Activity" : "Aktivaĵoj",
     "Undo" : "Malfari",
     "Deleted cards" : "Forigitaj kartoj",
+    "Hours" : "Horoj",
     "(Group)" : "(grupo)",
     "Can edit" : "Povas redakti",
     "Can share" : "Can share",
