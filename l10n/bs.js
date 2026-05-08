@@ -10,6 +10,7 @@ OC.L10N.register(
     "Search" : "Search",
     "Sharing" : "Dijeljenje",
     "Activity" : "Aktivnost",
+    "Hours" : "Sati",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Vlasnik",
