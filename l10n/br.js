@@ -20,6 +20,8 @@ OC.L10N.register(
     "Tags" : "Klavioù",
     "Activity" : "Obererezh",
     "Days" : "Deiz",
+    "Weeks" : "Sizun",
+    "Months" : "Miz",
     "Transfer" : "Treuzkas",
     "Can edit" : "Posuple eo embann",
     "Can share" : "Galout a ra rannañ",
