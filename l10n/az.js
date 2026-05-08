@@ -19,6 +19,7 @@ OC.L10N.register(
     "Sharing" : "Paylaşılır",
     "Tags" : "Işarələr",
     "Activity" : "Fəallıq",
+    "Hours" : "Saatlar",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",
