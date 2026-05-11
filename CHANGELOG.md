@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.0-beta.2
+### Added
+* feat: add card dependencies by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7879
+
 ## 1.18.0-beta.1
 ### Added
 * Submit changes to board color and name on enter key press by @theoholl in https://github.com/nextcloud/deck/pull/7640
