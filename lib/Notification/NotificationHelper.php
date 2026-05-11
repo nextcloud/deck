@@ -200,9 +200,28 @@ class NotificationHelper {
 	}
 
 	public function sendMention(IComment $comment): void {
-		foreach ($comment->getMentions() as $mention) {
-			$card = $this->cardMapper->find($comment->getObjectId());
-			$boardId = $this->cardMapper->findBoardId($card->getId());
+		$mentions = $comment->getMentions();
+		if (empty($mentions)) {
+			return;
+		}
+
+		$card = $this->cardMapper->find($comment->getObjectId());
+		$boardId = $this->cardMapper->findBoardId($card->getId());
+		$boardUsers = $this->permissionService->findUsers($boardId);
+
+		foreach ($mentions as $mention) {
+			if (($mention['type'] ?? 'users') !== 'users') {
+				// skip non-user mentions
+				continue;
+			}
+			$mentionedUserId = (string)$mention['id'];
+			if ($mentionedUserId === $this->currentUser) {
+				continue;
+			}
+			if (!array_key_exists($mentionedUserId, $boardUsers)) {
+				// skip users that don't have access to the board
+				continue;
+			}
 			$notification = $this->notificationManager->createNotification();
 			$notification
 				->setApp('deck')
