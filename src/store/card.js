@@ -373,6 +373,16 @@ export default function cardModuleFactory() {
 				await apiClient.removeLabelFromCard(data)
 				commit('updateCardProperty', { property: 'labels', card: data.card })
 			},
+			async assignDependentCard({ commit }, { card, dependentCard }) {
+				const boardId = this.state.currentBoard.id
+				const updatedCard = await apiClient.assignDependentCard(card.id, dependentCard.id, boardId)
+				commit('updateCardProperty', { property: 'dependentCards', card: updatedCard })
+			},
+			async removeDependentCard({ commit }, { card, dependentCardId }) {
+				const boardId = this.state.currentBoard.id
+				const updatedCard = await apiClient.removeDependentCard(card.id, dependentCardId, boardId)
+				commit('updateCardProperty', { property: 'dependentCards', card: updatedCard })
+			},
 			async updateCardDesc({ commit, getters }, card) {
 				const stack = getters.stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)

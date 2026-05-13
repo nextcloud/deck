@@ -150,6 +150,28 @@ class CardApiController extends ApiController {
 	}
 
 	/**
+	 * Assign a dependent card
+	 */
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function assignDependentCard(int $cardId, int $dependentCardId): DataResponse {
+		$card = $this->cardService->assignDependentCard($cardId, $dependentCardId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * Remove a dependent card
+	 */
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function removeDependentCard(int $cardId, int $dependentCardId): DataResponse {
+		$card = $this->cardService->removeDependentCard($cardId, $dependentCardId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
 	 * Archive card
 	 */
 	#[NoAdminRequired]

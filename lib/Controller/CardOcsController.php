@@ -8,6 +8,7 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Model\OptionalNullableValue;
+use OCA\Deck\NotImplementedException;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
@@ -169,5 +170,29 @@ class CardOcsController extends OCSController {
 			}
 		}
 		return new DataResponse($this->cardService->reorder($cardId, $stackId, $order));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function assignDependentCard(int $cardId, int $dependentCardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				throw new NotImplementedException('Dependent cards are not supported for external boards');
+			}
+		}
+		return new DataResponse($this->cardService->assignDependentCard($cardId, $dependentCardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function removeDependentCard(int $cardId, int $dependentCardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				throw new NotImplementedException('Dependent cards are not supported for external boards');
+			}
+		}
+		return new DataResponse($this->cardService->removeDependentCard($cardId, $dependentCardId));
 	}
 }

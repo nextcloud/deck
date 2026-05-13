@@ -234,4 +234,38 @@ export class CardApi {
 			})
 	}
 
+	assignDependentCard(cardId, dependentCardId, boardId) {
+		return axios.post(this.ocsUrl(`/cards/${cardId}/dependentCards/${dependentCardId}`), { boardId: boardId ?? null })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	removeDependentCard(cardId, dependentCardId, boardId) {
+		return axios.delete(this.ocsUrl(`/cards/${cardId}/dependentCards/${dependentCardId}`), {
+			data: {
+				boardId: boardId ?? null,
+			},
+		})
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }

@@ -205,10 +205,14 @@ describe('Card', function () {
 
 			cy.reload()
 			cy.get('.modal__card').should('be.visible')
+
+			// Scroll to the bottom to ensure all content is loaded and visible
+			cy.get('.modal__card .app-sidebar-tabs, .modal__card .app-sidebar__tab--active').first().scrollTo('bottom', { ensureScrollable: false })
+			cy.contains('.modal__card .ProseMirror p', 'Paragraph').scrollIntoView().should('be.visible')
+
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(0).contains('List item').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(1).contains('with entries').should('be.visible')
-			cy.get('.modal__card .ProseMirror p').contains('Paragraph').should('be.visible')
 		})
 
 		it('Smart picker', () => {
