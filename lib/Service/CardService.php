@@ -617,7 +617,7 @@ class CardService {
 	public function assignLabel(int $cardId, int $labelId): Card {
 		$this->cardServiceValidator->check(compact('cardId', 'labelId'));
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
 
 		if ($this->boardService->isArchived($this->cardMapper, $cardId)) {
