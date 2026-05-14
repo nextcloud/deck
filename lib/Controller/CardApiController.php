@@ -200,7 +200,13 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function reorder(int $stackId, int $order): DataResponse {
-		$card = $this->cardService->reorder((int)$this->request->getParam('cardId'), $stackId, $order);
+		// Read target stackId from request body to allow moving cards between stacks.
+		// The URL's {stackId} is the source stack (used in the route), but the request
+		// body can specify a different target stack for the move operation.
+		$input = json_decode(file_get_contents('php://input'), true);
+		$targetStackId = isset($input['stackId']) ? (int)$input['stackId'] : $stackId;
+
+		$card = $this->cardService->reorder((int)$this->request->getParam('cardId'), $targetStackId, $order);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 }
