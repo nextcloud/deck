@@ -6,6 +6,8 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\ConfigService;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
@@ -17,6 +19,8 @@ class ConfigController extends OCSController {
 		$AppName,
 		IRequest $request,
 		private ConfigService $configService,
+		private PermissionService $permissionService,
+		private BoardMapper $boardMapper,
 	) {
 		parent::__construct($AppName, $request);
 	}
