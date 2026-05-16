@@ -31,6 +31,7 @@ OC.L10N.register(
     "Tags" : "แท็ก",
     "Activity" : "กิจกรรม",
     "Undo" : "เลิกทำ",
+    "Hours" : "ชั่วโมง",
     "Transfer" : "โอนย้าย",
     "Can edit" : "สามารถแก้ไข",
     "Can share" : "สามารถแชร์",

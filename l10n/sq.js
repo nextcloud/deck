@@ -31,6 +31,7 @@ OC.L10N.register(
     "Tags" : "Etiketa",
     "Activity" : "Aktiviteti",
     "Undo" : "Ktheje pas",
+    "Hours" : "Orët",
     "Can edit" : "Can edit",
     "Can share" : "Mund të ndaj",
     "Owner" : "Zotëruesi",

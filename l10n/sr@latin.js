@@ -27,6 +27,7 @@ OC.L10N.register(
     "Tags" : "Oznake",
     "Activity" : "Aktivnost",
     "Undo" : "Opozovi",
+    "No cards yet" : "Još nema kartica",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Vlasnik",
