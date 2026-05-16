@@ -11,15 +11,15 @@
 			</span>
 		</div>
 
-		<CommentItem v-if="replyTo"
-			:comment="replyTo"
+		<CommentItem v-if="commentStore.replyTo"
+			:comment="commentStore.replyTo"
 			:reply="true"
 			:preview="true"
 			@cancel="cancelReply" />
 		<CommentForm v-model="newComment" @submit="createComment" />
 
-		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
-			<CommentItem v-for="comment in getCommentsForCard(card.id)"
+		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
+			<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
 				:key="comment.id"
 				:comment="comment"
 				@doReload="loadComments" />
@@ -81,15 +81,6 @@ export default {
 		...mapState({
 			currentBoard: state => state.currentBoard,
 		}),
-		replyTo() {
-			return this.commentStore.replyTo
-		},
-		getCommentsForCard() {
-			return this.commentStore.getCommentsForCard
-		},
-		hasMoreComments() {
-			return this.commentStore.hasMoreComments
-		},
 		members() {
 			return this.currentBoard.users
 		},
@@ -107,7 +98,7 @@ export default {
 			this.error = null
 			try {
 				await this.loadMore()
-				if (this.hasMoreComments(this.card.id)) {
+				if (this.commentStore.hasMoreComments(this.card.id)) {
 					$state.loaded()
 				} else {
 					$state.complete()

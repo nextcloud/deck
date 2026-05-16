@@ -48,9 +48,9 @@ export const useCommentStore = defineStore('comment', {
 		},
 		async updateComment({ cardId, comment }) {
 			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message })
-			const existingIndex = this.comments[cardId].comments.findIndex(c => c.id === comment.id)
+			const existingIndex = this.comments[cardId].comments.findIndex(c => c.id === updatedComment.id)
 			if (existingIndex !== -1) {
-				Object.assign(this.comments[cardId].comments[existingIndex], comment)
+				Object.assign(this.comments[cardId].comments[existingIndex], updatedComment)
 			}
 		},
 		async deleteComment(comment) {
