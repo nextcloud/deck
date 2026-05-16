@@ -46,19 +46,22 @@ export const useCommentStore = defineStore('comment', {
 				this.comments[cardId].comments.push(...newComments)
 			}
 		},
-		updateComment({ cardId, comment }) {
+		async updateComment({ cardId, comment }) {
+			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message })
 			const existingIndex = this.comments[cardId].comments.findIndex(c => c.id === comment.id)
 			if (existingIndex !== -1) {
 				Object.assign(this.comments[cardId].comments[existingIndex], comment)
 			}
 		},
-		deleteComment(comment) {
+		async deleteComment(comment) {
+			await apiClient.deleteComment(comment)
 			const existingIndex = this.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.id)
 			if (existingIndex !== -1) {
 				this.comments[comment.cardId].comments.splice(existingIndex, 1)
 			}
 		},
-		markCommentsAsRead(cardId) {
+		async markCommentsAsRead(cardId) {
+			await apiClient.markCommentsAsRead(cardId)
 			this.comments[cardId].comments.forEach(_comment => {
 				Vue.set(_comment, 'isUnread', false)
 			})
@@ -87,18 +90,6 @@ export const useCommentStore = defineStore('comment', {
 		async createComment({ cardId, comment }) {
 			await apiClient.createComment({ cardId, comment, replyTo: this.replyTo })
 			await this.fetchComments({ cardId })
-		},
-		async apiDeleteComment(data) {
-			await apiClient.deleteComment(data)
-			this.deleteComment(data)
-		},
-		async apiUpdateComment(data) {
-			const comment = await apiClient.updateComment(data)
-			this.updateComment({ cardId: data.cardId, comment })
-		},
-		async apiMarkCommentsAsRead(cardId) {
-			await apiClient.markCommentsAsRead(cardId)
-			this.markCommentsAsRead(cardId)
 		},
 	},
 })

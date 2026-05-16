@@ -196,11 +196,10 @@ export default {
 		},
 		async updateComment() {
 			const data = {
-				comment: this.commentMsg,
+				comment: { id: this.comment.id, message: this.commentMsg },
 				cardId: this.comment.objectId,
-				id: this.comment.id,
 			}
-			await this.commentStore.apiUpdateComment(data)
+			await this.commentStore.updateComment(data)
 			this.hideUpdateForm()
 		},
 		deleteComment() {
@@ -208,7 +207,7 @@ export default {
 				id: this.comment.id,
 				cardId: this.comment.objectId,
 			}
-			this.commentStore.apiDeleteComment(data)
+			this.commentStore.deleteComment(data)
 		},
 	},
 }

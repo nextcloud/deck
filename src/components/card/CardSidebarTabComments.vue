@@ -126,7 +126,7 @@ export default {
 				await this.commentStore.fetchComments({ cardId: this.card.id })
 				this.isLoading = false
 				if (this.card.commentsUnread > 0) {
-					await this.commentStore.apiMarkCommentsAsRead(this.card.id)
+					await this.commentStore.markCommentsAsRead(this.card.id)
 				}
 			} catch (e) {
 				this.isLoading = false
