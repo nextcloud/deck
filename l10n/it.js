@@ -216,6 +216,7 @@ OC.L10N.register(
     "Deleted lists" : "Elenchi eliminati",
     "Undo" : "Annulla",
     "Deleted cards" : "Schede eliminate",
+    "Hours" : "Ore",
     "Days" : "Giorni",
     "Weeks" : "Settimane",
     "Months" : "Mesi",
