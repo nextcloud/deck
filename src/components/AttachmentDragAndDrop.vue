@@ -5,7 +5,7 @@
 
 <template>
 	<div class="attachments-drag-zone"
-		@dragover.prevent="!isDraggingOver && (isDraggingOver = true)"
+		@dragover.prevent="handleDragOver"
 		@dragleave.prevent="isDraggingOver && (isDraggingOver = false)"
 		@drop.prevent="handleDropFiles">
 		<slot />
@@ -83,6 +83,13 @@ export default {
 		},
 	},
 	methods: {
+		handleDragOver(event) {
+			if (!event.dataTransfer || event.dataTransfer.items?.length <= 0) {
+				return
+			}
+			!this.isDraggingOver && (this.isDraggingOver = true)
+		},
+
 		handleDropFiles(event) {
 			event.dataTransfer.dropEffect = 'copy'
 			this.isDraggingOver = false
