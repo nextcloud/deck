@@ -25,8 +25,10 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
@@ -546,6 +548,69 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->never())->method('removeLabel');
 		$this->expectException(StatusException::class);
+		$this->cardService->removeLabel(123, 999);
+	}
+
+	public function testAssignLabelWithReadPermission() {
+		// Users with READ permission (but not EDIT) should be able to assign labels
+		// This allows read-only users to label cards they are assigned to
+		$card = new Card();
+		$card->setArchived(false);
+		$card->setId(123);
+		$label = new Label();
+		$label->setBoardId(1);
+
+		$this->permissionService->expects($this->exactly(2))
+			->method('checkPermission')
+			->willReturn(true);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->once())->method('assignLabel');
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->willReturn(1);
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
+		$this->cardService->assignLabel(123, 999);
+	}
+
+	public function testAssignLabelWithoutReadPermission() {
+		// Users without READ permission should get NoPermissionException
+		$this->permissionService->expects($this->once())
+			->method('checkPermission')
+			->willThrowException(new NoPermissionException('Permission denied'));
+		$this->cardMapper->expects($this->never())->method('assignLabel');
+		$this->expectException(NoPermissionException::class);
+		$this->cardService->assignLabel(123, 999);
+	}
+
+	public function testRemoveLabelRequiresEditPermission() {
+		// Removing a label requires EDIT permission (higher than READ)
+		// This is intentional: read-only users can add labels but not remove them
+		$card = new Card();
+		$card->setArchived(false);
+		$card->setId(123);
+		$label = new Label();
+		$label->setBoardId(1);
+
+		$this->permissionService->expects($this->exactly(2))
+			->method('checkPermission')
+			->willReturn(true);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->once())->method('removeLabel');
+		$this->labelMapper->expects($this->once())
+			->method('find')
+			->willReturn($label);
+		$this->cardService->removeLabel(123, 999);
+	}
+
+	public function testRemoveLabelWithoutEditPermission() {
+		// Without EDIT permission, removing a label should fail
+		$this->permissionService->expects($this->once())
+			->method('checkPermission')
+			->willThrowException(new NoPermissionException('Permission denied'));
+		$this->cardMapper->expects($this->never())->method('removeLabel');
+		$this->expectException(NoPermissionException::class);
 		$this->cardService->removeLabel(123, 999);
 	}
 
