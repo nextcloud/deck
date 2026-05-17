@@ -35,18 +35,6 @@
       <code><![CDATA[NotFound]]></code>
     </UndefinedClass>
   </file>
-  <file src="lib/Db/Card.php">
-    <UndefinedClass>
-      <code><![CDATA[VCalendar]]></code>
-      <code><![CDATA[VCalendar]]></code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Db/Stack.php">
-    <UndefinedClass>
-      <code><![CDATA[VCalendar]]></code>
-      <code><![CDATA[VCalendar]]></code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Service/FileService.php">
     <RedundantCondition>
       <code><![CDATA[is_resource($content)]]></code>
