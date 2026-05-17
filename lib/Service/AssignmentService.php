@@ -114,7 +114,8 @@ class AssignmentService {
 		$card = $this->cardMapper->find($cardId);
 		$boardId = $this->cardMapper->findBoardId($cardId);
 		$boardUsers = array_keys($this->permissionService->findUsers($boardId, true));
-		$groups = array_filter($this->aclMapper->findAll($boardId), function (Acl $acl) use ($userId) {
+		$acls = $this->aclMapper->findAll($boardId);
+		$groups = array_filter($acls, function (Acl $acl) use ($userId) {
 			return $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $acl->getParticipant() === $userId;
 		});
 		if (!in_array($userId, $boardUsers) && count($groups) !== 1) {
