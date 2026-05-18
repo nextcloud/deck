@@ -16,7 +16,7 @@
 		"roave/security-advisories": "dev-latest",
 		"phpunit/phpunit": "^9",
 		"nextcloud/coding-standard": "^1.1",
-		"nextcloud/ocp": "dev-master"
+		"nextcloud/ocp": "dev-stable34"
 	},
 	"config": {
 		"optimize-autoloader": true,
