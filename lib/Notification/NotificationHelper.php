@@ -11,6 +11,7 @@ namespace OCA\Deck\Notification;
 
 use DateTime;
 use Exception;
+use OCA\Circles\Model\Member;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignmentMapper;
@@ -19,6 +20,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
+use OCA\Deck\Service\CirclesService;
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -39,6 +41,7 @@ class NotificationHelper {
 		protected readonly BoardMapper $boardMapper,
 		protected readonly AssignmentMapper $assignmentMapper,
 		protected readonly PermissionService $permissionService,
+		protected readonly CirclesService $circlesService,
 		protected readonly IConfig $config,
 		protected readonly IManager $notificationManager,
 		protected readonly IGroupManager $groupManager,
@@ -105,11 +108,60 @@ class NotificationHelper {
 	}
 
 	public function sendCardAssigned(Card $card, string $userId): void {
+		$this->sendCardAssignedByType($card, $userId, Acl::PERMISSION_TYPE_USER);
+	}
+
+	public function sendCardAssignedByType(Card $card, string $participantId, int $type): void {
+		if ($type === Acl::PERMISSION_TYPE_CIRCLE) {
+			if (!$this->circlesService->isCirclesEnabled()) {
+				return;
+			}
+
+			$circle = $this->circlesService->getCircle($participantId);
+			if ($circle === null) {
+				return;
+			}
+
+			$teamName = $circle->getDisplayName() ?: $participantId;
+			$members = array_filter($circle->getInheritedMembers(), static function (Member $member) {
+				return $member->getUserType() === Member::TYPE_USER;
+			});
+			foreach ($members as $member) {
+				$userId = $member->getUserId();
+				if ($userId === $this->userId) {
+					continue;
+				}
+
+				$this->sendCardAssignedToUser($card, $userId, $teamName);
+			}
+			return;
+		}
+
+		foreach ($this->resolveParticipantUserIds($participantId, $type) as $userId) {
+			if ($userId === $this->userId) {
+				continue;
+			}
+
+			$this->sendCardAssignedToUser($card, $userId);
+		}
+	}
+
+	private function sendCardAssignedToUser(Card $card, string $userId, ?string $teamName = null): void {
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		try {
 			$board = $this->getBoard($boardId);
 		} catch (Exception $e) {
 			return;
+		}
+
+		$subjectParams = [
+			$card->getTitle(),
+			$board->getTitle(),
+			$this->userId,
+		];
+		if ($teamName !== null) {
+			$subjectParams[] = 'team';
+			$subjectParams[] = $teamName;
 		}
 
 		$notification = $this->notificationManager->createNotification();
@@ -118,15 +170,25 @@ class NotificationHelper {
 			->setUser($userId)
 			->setDateTime(new DateTime())
 			->setObject('card', (string)$card->getId())
-			->setSubject('card-assigned', [
-				$card->getTitle(),
-				$board->getTitle(),
-				$this->userId
-			]);
+			->setSubject('card-assigned', $subjectParams);
 		$this->notificationManager->notify($notification);
 	}
 
 	public function markCardAssignedAsRead(Card $card, string $userId): void {
+		$this->markCardAssignedAsReadByType($card, $userId, Acl::PERMISSION_TYPE_USER);
+	}
+
+	public function markCardAssignedAsReadByType(Card $card, string $participantId, int $type): void {
+		foreach ($this->resolveParticipantUserIds($participantId, $type) as $userId) {
+			if ($userId === $this->userId) {
+				continue;
+			}
+
+			$this->markCardAssignedAsReadForUser($card, $userId);
+		}
+	}
+
+	private function markCardAssignedAsReadForUser(Card $card, string $userId): void {
 		$notification = $this->notificationManager->createNotification();
 		$notification
 			->setApp('deck')
@@ -137,7 +199,45 @@ class NotificationHelper {
 	}
 
 	/**
-	 * Send notifications that a board was shared with a user/group
+	 * Resolve assignment participant ids to concrete user ids for notifications.
+	 * Teams are represented by circles internally.
+	 *
+	 * @return string[]
+	 */
+	private function resolveParticipantUserIds(string $participantId, int $type): array {
+		if ($type === Acl::PERMISSION_TYPE_USER) {
+			return [$participantId];
+		}
+
+		if ($type === Acl::PERMISSION_TYPE_GROUP) {
+			$group = $this->groupManager->get($participantId);
+			if ($group === null) {
+				return [];
+			}
+			return array_map(static fn ($user) => $user->getUID(), $group->getUsers());
+		}
+
+		if ($type === Acl::PERMISSION_TYPE_CIRCLE) {
+			if (!$this->circlesService->isCirclesEnabled()) {
+				return [];
+			}
+
+			$circle = $this->circlesService->getCircle($participantId);
+			if ($circle === null) {
+				return [];
+			}
+
+			$members = array_filter($circle->getInheritedMembers(), static function (Member $member) {
+				return $member->getUserType() === Member::TYPE_USER;
+			});
+			return array_values(array_unique(array_map(static fn (Member $member) => $member->getUserId(), $members)));
+		}
+
+		return [];
+	}
+
+	/**
+	 * Send notifications that a board was shared with a user/group/team.
 	 */
 	public function sendBoardShared(int $boardId, Acl $acl, bool $markAsRead = false): void {
 		try {
@@ -165,6 +265,33 @@ class NotificationHelper {
 					continue;
 				}
 				$notification = $this->generateBoardShared($board, $user->getUID());
+				if ($markAsRead) {
+					$this->notificationManager->markProcessed($notification);
+				} else {
+					$notification->setDateTime(new DateTime());
+					$this->notificationManager->notify($notification);
+				}
+			}
+		}
+		if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+			if (!$this->circlesService->isCirclesEnabled()) {
+				return;
+			}
+
+			$circle = $this->circlesService->getCircle($acl->getParticipant());
+			if ($circle === null) {
+				return;
+			}
+
+			$members = array_filter($circle->getInheritedMembers(), static function (Member $member) {
+				return $member->getUserType() === Member::TYPE_USER;
+			});
+			foreach ($members as $member) {
+				$userId = $member->getUserId();
+				if ($userId === $this->userId) {
+					continue;
+				}
+				$notification = $this->generateBoardShared($board, $userId);
 				if ($markAsRead) {
 					$this->notificationManager->markProcessed($notification);
 				} else {

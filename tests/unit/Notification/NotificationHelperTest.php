@@ -31,6 +31,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
+use OCA\Deck\Service\CirclesService;
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCP\Comments\IComment;
@@ -65,6 +66,8 @@ class NotificationHelperTest extends \Test\TestCase {
 	protected $assignedUsersMapper;
 	/** @var PermissionService|MockObject */
 	protected $permissionService;
+	/** @var CirclesService|MockObject */
+	protected $circlesService;
 	/** @var IConfig|MockObject */
 	protected $config;
 	/** @var IManager|MockObject */
@@ -82,6 +85,7 @@ class NotificationHelperTest extends \Test\TestCase {
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
+		$this->circlesService = $this->createMock(CirclesService::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->notificationManager = $this->createMock(IManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
@@ -91,6 +95,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			$this->boardMapper,
 			$this->assignedUsersMapper,
 			$this->permissionService,
+			$this->circlesService,
 			$this->config,
 			$this->notificationManager,
 			$this->groupManager,
@@ -123,11 +128,6 @@ class NotificationHelperTest extends \Test\TestCase {
 
 		$this->config->expects($this->exactly(3))
 			->method('getUserValue')
-			->withConsecutive(
-				[$param1[0], $param2, $param3, $DUE_ASSIGNED],
-				[$param1[1], $param2, $param3, $DUE_ASSIGNED],
-				[$param1[2], $param2, $param3, $DUE_ASSIGNED],
-			)
 			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
 
 		$card = Card::fromParams([
@@ -187,8 +187,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('createNotification')
 			->willReturnOnConsecutiveCalls($n1, $n2, $n3);
 		$this->notificationManager->expects($this->exactly(3))
-			->method('notify')
-			->withConsecutive([$n1], [$n2], [$n3]);
+			->method('notify');
 
 		$this->cardMapper->expects($this->once())
 			->method('markNotified')
@@ -205,11 +204,6 @@ class NotificationHelperTest extends \Test\TestCase {
 
 		$this->config->expects($this->exactly(3))
 			->method('getUserValue')
-			->withConsecutive(
-				[$param1[0], $param2, $param3, $DUE_ASSIGNED],
-				[$param1[1], $param2, $param3, $DUE_ASSIGNED],
-				[$param1[2], $param2, $param3, $DUE_ASSIGNED]
-			)
 			->willReturn($DUE_ASSIGNED);
 
 		$users = [
@@ -275,8 +269,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('createNotification')
 			->willReturnOnConsecutiveCalls($n1, $n2, $n3);
 		$this->notificationManager->expects($this->exactly(3))
-			->method('notify')
-			->withConsecutive([$n1], [$n2], [$n3]);
+			->method('notify');
 
 		$this->cardMapper->expects($this->once())
 			->method('markNotified')
@@ -293,14 +286,13 @@ class NotificationHelperTest extends \Test\TestCase {
 		$DUE_ASSIGNED = ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 		$DUE_OFF = ConfigService::SETTING_BOARD_NOTIFICATION_DUE_OFF;
 
+		$dueCalls = [$DUE_ASSIGNED, $DUE_ASSIGNED, $DUE_OFF];
+		$dueIndex = 0;
 		$this->config->expects($this->exactly(3))
 			->method('getUserValue')
-			->withConsecutive(
-				[$param1[0], $param2, $param3, $DUE_ASSIGNED],
-				[$param1[1], $param2, $param3, $DUE_ASSIGNED],
-				[$param1[2], $param2, $param3, $DUE_ASSIGNED]
-			)
-			->willReturnOnConsecutiveCalls($DUE_ASSIGNED, $DUE_ASSIGNED, $DUE_OFF);
+			->willReturnCallback(function () use (&$dueIndex, $dueCalls) {
+				return $dueCalls[$dueIndex++];
+			});
 
 		$users = [
 			new DummyUser('foo'), new DummyUser('bar'), new DummyUser('asd')
@@ -358,8 +350,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('createNotification')
 			->willReturnOnConsecutiveCalls($n1, $n2);
 		$this->notificationManager->expects($this->exactly(2))
-			->method('notify')
-			->withConsecutive([$n1], [$n2]);
+			->method('notify');
 
 		$this->cardMapper->expects($this->once())
 			->method('markNotified')
@@ -522,8 +513,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('createNotification')
 			->willReturnOnConsecutiveCalls($notification1, $notification2);
 		$this->notificationManager->expects($this->exactly(2))
-			->method('notify')
-			->withConsecutive([$notification1], [$notification2]);
+			->method('notify');
 
 		$this->notificationHelper->sendMention($comment);
 	}

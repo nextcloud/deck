@@ -122,11 +122,13 @@ class BoardController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function transferOwner(int $boardId, string $newOwner): DataResponse {
-		if ($this->permissionService->userIsBoardOwner($boardId, $this->userId)) {
-			return new DataResponse($this->boardService->transferBoardOwnership($boardId, $newOwner), HTTP::STATUS_OK);
+	public function transferOwner(int $boardId, string $newOwner, int $newOwnerType = Acl::PERMISSION_TYPE_USER): DataResponse {
+		if ($newOwnerType !== Acl::PERMISSION_TYPE_USER && $newOwnerType !== Acl::PERMISSION_TYPE_CIRCLE) {
+			return new DataResponse(['message' => 'Invalid owner type'], HTTP::STATUS_BAD_REQUEST);
 		}
-
+		if ($this->permissionService->userIsBoardOwner($boardId, $this->userId)) {
+			return new DataResponse($this->boardService->transferBoardOwnership($boardId, $newOwner, false, $newOwnerType), HTTP::STATUS_OK);
+		}
 		return new DataResponse([], HTTP::STATUS_UNAUTHORIZED);
 	}
 

@@ -107,12 +107,11 @@ class CardApiControllerTest extends \Test\TestCase {
 
 		$this->request->expects($this->exactly(2))
 			->method('getParam')
-			->withConsecutive(
-				['cardId'],
-				['stackId']
-			)->willReturnonConsecutiveCalls(
-				$this->cardExample['id'],
-				$this->stackExample['id']);
+			->willReturnCallback(fn ($key) => match($key) {
+				'cardId' => $this->cardExample['id'],
+				'stackId' => $this->stackExample['id'],
+				default => null,
+			});
 
 		$this->cardService->expects($this->once())
 			->method('update')

@@ -9,5 +9,7 @@ tests/integration/composer.lock
 tests/.phpunit.result.cache
 vendor/
 .php_cs.cache
+.php-cs-fixer.cache
 \.idea/
 settings.json
+runtests.sh

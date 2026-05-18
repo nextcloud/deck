@@ -116,7 +116,7 @@ class PermissionService {
 	 * Get current user permissions for a board
 	 *
 	 * @param Board $board
-	 * @return array|bool
+	 * @return array<int, bool>
 	 * @internal param $boardId
 	 */
 	public function matchPermissions(Board $board) {
@@ -135,7 +135,8 @@ class PermissionService {
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
 			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
-				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
+				&& (!$this->shareManager->sharingDisabledForUser($this->userId)),
+			Board::PERMISSION_OWNER => $owner,
 		];
 	}
 
@@ -180,12 +181,15 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool
 	 */
-	public function userIsBoardOwner($boardId, $userId = null, bool $allowDeleted = false) {
+	public function userIsBoardOwner($boardId, $userId = null, bool $allowDeleted = false): bool {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
 		try {
 			$board = $this->getBoard($boardId, $allowDeleted);
+			if ($board->getOwnerType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				return $this->circlesService->isUserInCircle($board->getOwner(), $userId);
+			}
 			return $userId === $board->getOwner();
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 		}
@@ -283,7 +287,31 @@ class PermissionService {
 		}
 		/** @var array<string, User> */
 		$users = [];
-		if (!$this->userManager->userExists($board->getOwner())) {
+		if ($board->getOwnerType() === Acl::PERMISSION_TYPE_CIRCLE) {
+			// Board is owned by a circle: expand its members just like a circle ACL entry below.
+			if ($this->circlesService->isCirclesEnabled()) {
+				try {
+					$owningCircle = $this->circlesService->getCircle($board->getOwner());
+					if ($owningCircle !== null) {
+						foreach ($owningCircle->getInheritedMembers() as $member) {
+							if ($member->getUserType() !== Member::TYPE_USER || $member->getLevel() < Member::LEVEL_MEMBER) {
+								continue;
+							}
+							$user = $this->userManager->get($member->getUserId());
+							if ($user === null) {
+								$this->logger->info('No user found for circle owner member ' . $member->getUserId());
+							} else {
+								$users[(string)$member->getUserId()] = new User($member->getUserId(), $this->userManager);
+							}
+						}
+					} else {
+						$this->logger->info('No circle found for board owner ' . $board->getOwner());
+					}
+				} catch (\Exception $e) {
+					$this->logger->error('Failed to expand circle owner members for board ' . $board->getId(), ['exception' => $e]);
+				}
+			}
+		} elseif (!$this->userManager->userExists($board->getOwner())) {
 			$this->logger->info('No owner found for board ' . $board->getId());
 		} else {
 			$users[(string)$board->getOwner()] = new User($board->getOwner(), $this->userManager);
@@ -322,7 +350,7 @@ class PermissionService {
 					}
 
 					foreach ($circle->getInheritedMembers() as $member) {
-						if ($member->getUserType() !== 1 || $member->getLevel() < Member::LEVEL_MEMBER) {
+						if ($member->getUserType() !== Member::TYPE_USER || $member->getLevel() < Member::LEVEL_MEMBER) {
 							// deck currently only supports user members in circles
 							continue;
 						}
@@ -376,5 +404,14 @@ class PermissionService {
 	public function setUserId(string $userId): void {
 		$this->userId = $userId;
 		$this->permissionCache->clear();
+	}
+
+	public function clearUsersCache(?int $boardId = null): void {
+		if ($boardId === null) {
+			$this->users = [];
+			return;
+		}
+
+		unset($this->users[(string)$boardId]);
 	}
 }

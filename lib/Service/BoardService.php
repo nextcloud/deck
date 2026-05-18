@@ -8,6 +8,7 @@
 namespace OCA\Deck\Service;
 
 use OC\User\LazyUser;
+use OCA\Circles\Model\Member;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
@@ -82,6 +83,7 @@ class BoardService {
 		private IUserManager $userManager,
 		private ISecureRandom $random,
 		private ConfigService $configService,
+		private CirclesService $circlesService,
 		private ?string $userId,
 	) {
 	}
@@ -221,7 +223,8 @@ class BoardService {
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
+			'PERMISSION_OWNER' => $permissions[Board::PERMISSION_OWNER] ?? false,
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->changeHelper->boardChanged($board->getId());
@@ -410,6 +413,7 @@ class BoardService {
 
 		$board = $this->boardMapper->find($boardId);
 		$this->clearBoardFromCache($board);
+		$this->invalidateAclCaches($boardId, $type, (string)$participant);
 
 		// TODO: use the dispatched event for this
 		try {
@@ -472,6 +476,7 @@ class BoardService {
 		}
 
 		$this->eventDispatcher->dispatchTyped(new AclUpdatedEvent($acl));
+		$this->invalidateAclCaches($acl->getBoardId(), $acl->getType(), (string)$acl->getParticipant());
 
 		return $acl;
 	}
@@ -508,6 +513,7 @@ class BoardService {
 
 		$deletedAcl = $this->aclMapper->delete($acl);
 		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
+		$this->invalidateAclCaches($acl->getBoardId(), $acl->getType(), (string)$acl->getParticipant());
 
 		return $deletedAcl;
 	}
@@ -572,7 +578,8 @@ class BoardService {
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
+			'PERMISSION_OWNER' => $permissions[Board::PERMISSION_OWNER] ?? false,
 		]);
 		$this->boardMapper->insert($newBoard);
 
@@ -615,14 +622,23 @@ class BoardService {
 		return $this->find($newBoard->getId());
 	}
 
-	public function transferBoardOwnership(int $boardId, string $newOwner, bool $changeContent = false): Board {
+	public function transferBoardOwnership(int $boardId, string $newOwner, bool $changeContent = false, int $newOwnerType = Acl::PERMISSION_TYPE_USER): Board {
 		$this->connection->beginTransaction();
 		try {
 			$board = $this->boardMapper->find($boardId);
 			$previousOwner = $board->getOwner();
+
+			// Validate the new owner before touching anything
+			$this->validateTransferTarget($newOwner, $newOwnerType);
+
 			$this->clearBoardFromCache($board);
-			$this->aclMapper->deleteParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $newOwner);
-			if (!$changeContent) {
+			// Remove new owner from ACL (avoids a duplicate entry once they become the owner)
+			$this->aclMapper->deleteParticipantFromBoard($boardId, $newOwnerType, $newOwner);
+
+			// Preserve the previous owner's access via an explicit ACL entry unless the
+			// caller opted into a full content transfer.  Skip for circle previous-owners
+			// because a circle ID is not a valid user participant.
+			if (!$changeContent && $board->getOwnerType() === Acl::PERMISSION_TYPE_USER) {
 				try {
 					$this->addAcl($boardId, Acl::PERMISSION_TYPE_USER, $previousOwner, true, true, true);
 				} catch (DbException $e) {
@@ -631,13 +647,28 @@ class BoardService {
 					}
 				}
 			}
-			$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
 
-			// Optionally also change user assignments and card owner information
-			if ($changeContent) {
+			$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId, $newOwnerType);
+
+			// When transferring ownership to a circle, re-add the circle as an explicit ACL
+			// sharee with full rights so it remains visible in the sharing sidebar.
+			// (It was removed above to prevent a duplicate DB entry.)
+			if ($newOwnerType === Acl::PERMISSION_TYPE_CIRCLE) {
+				try {
+					$this->addAcl($boardId, Acl::PERMISSION_TYPE_CIRCLE, $newOwner, true, true, true);
+				} catch (DbException $e) {
+					if ($e->getReason() !== DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+						throw $e;
+					}
+				}
+			}
+
+			// Card-content remap is only meaningful when transferring to a user, not a circle
+			if ($changeContent && $newOwnerType === Acl::PERMISSION_TYPE_USER) {
 				$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
 				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
 			}
+
 			$this->connection->commit();
 			return $this->boardMapper->find($boardId);
 		} catch (\Throwable $e) {
@@ -646,12 +677,29 @@ class BoardService {
 		}
 	}
 
-	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false): \Generator {
-		$boards = $this->boardMapper->findAllByUser($owner);
+	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false, int $newOwnerType = Acl::PERMISSION_TYPE_USER, int $ownerType = Acl::PERMISSION_TYPE_USER): \Generator {
+		// Validate once up front so invalid targets fail even if no boards match.
+		$this->validateTransferTarget($newOwner, $newOwnerType);
+		$boards = $this->boardMapper->findAllByOwner($owner, $ownerType);
 		foreach ($boards as $board) {
-			if ($board->getOwner() === $owner) {
-				yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent);
+			yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent, $newOwnerType);
+		}
+	}
+
+	private function validateTransferTarget(string $newOwner, int $newOwnerType): void {
+		// Teams are represented by Circles internally (PERMISSION_TYPE_CIRCLE + circle ID).
+		if ($newOwnerType === Acl::PERMISSION_TYPE_CIRCLE) {
+			if (!$this->circlesService->isCirclesEnabled()) {
+				throw new BadRequestException('The Circles app is not enabled');
 			}
+			if ($this->circlesService->getCircle($newOwner) === null) {
+				throw new BadRequestException('Circle not found: ' . $newOwner);
+			}
+			return;
+		}
+
+		if (!$this->userManager->userExists($newOwner)) {
+			throw new BadRequestException('User not found: ' . $newOwner);
 		}
 	}
 
@@ -682,6 +730,7 @@ class BoardService {
 				foreach ($board->getAcl() as &$acl) {
 					$this->boardMapper->mapAcl($acl);
 				}
+				$this->annotateAclRetainedAccess($board);
 			}
 
 			$permissions = $this->permissionService->matchPermissions($board);
@@ -689,7 +738,8 @@ class BoardService {
 				'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
 				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
 				'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false,
+				'PERMISSION_OWNER' => $permissions[Board::PERMISSION_OWNER] ?? false,
 			]);
 
 			if ($fullDetails) {
@@ -709,6 +759,55 @@ class BoardService {
 		}
 
 		return $boards;
+	}
+
+	private function annotateAclRetainedAccess(Board $board): void {
+		$acls = $board->getAcl() ?? [];
+
+		// For circle-owned boards fetch members once instead of N isUserInCircle() calls
+		$circleMemberIds = null;
+		if ($board->getOwnerType() === Acl::PERMISSION_TYPE_CIRCLE
+			&& $this->circlesService->isCirclesEnabled()
+		) {
+			$circle = $this->circlesService->getCircle($board->getOwner());
+			if ($circle !== null) {
+				$circleMemberIds = [];
+				foreach ($circle->getInheritedMembers() as $member) {
+					if ($member->getUserType() === Member::TYPE_USER
+						&& $member->getLevel() >= Member::LEVEL_MEMBER
+					) {
+						$circleMemberIds[$member->getUserId()] = true;
+					}
+				}
+			}
+		}
+
+		foreach ($acls as $acl) {
+			if ($acl->getType() !== Acl::PERMISSION_TYPE_USER) {
+				$acl->setRetainsAccessViaMembership(false);
+				continue;
+			}
+
+			$participant = (string)$acl->getParticipant();
+			if ($participant === '') {
+				$acl->setRetainsAccessViaMembership(false);
+				continue;
+			}
+
+			if ($board->getOwnerType() === Acl::PERMISSION_TYPE_USER && $board->getOwner() === $participant) {
+				$acl->setRetainsAccessViaMembership(true);
+				continue;
+			}
+
+			// Circle-owned board: check prebuilt membership set (1 Circles call total)
+			if ($circleMemberIds !== null) {
+				$acl->setRetainsAccessViaMembership(isset($circleMemberIds[$participant]));
+				continue;
+			}
+
+			$otherAcls = array_filter($acls, static fn (Acl $candidate): bool => $candidate->getId() !== $acl->getId());
+			$acl->setRetainsAccessViaMembership($this->permissionService->userCan($otherAcls, Acl::PERMISSION_READ, $participant));
+		}
 	}
 
 	private function cloneCards(Board $board, Board $newBoard, bool $withAssignments = false, bool $withLabels = false, bool $withDueDate = false, bool $moveCardsToLeftStack = false, bool $restoreArchivedCards = false): void {
@@ -827,6 +926,14 @@ class BoardService {
 		$this->boardMapper->flushCache($boardId, $boardOwnerId);
 		unset($this->boardsCacheFull[$boardId]);
 		unset($this->boardsCachePartial[$boardId]);
+	}
+
+	private function invalidateAclCaches(int $boardId, int $aclType, string $participant): void {
+		$this->permissionService->clearUsersCache($boardId);
+
+		if ($aclType === Acl::PERMISSION_TYPE_CIRCLE && $participant !== '') {
+			$this->circlesService->clearUserCircleCache($participant);
+		}
 	}
 
 	private function enrichWithCards(Board $board): void {

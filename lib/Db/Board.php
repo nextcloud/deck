@@ -22,6 +22,8 @@ namespace OCA\Deck\Db;
  * @method void setLastModified(int $lastModified)
  * @method string getOwner()
  * @method void setOwner(string $owner)
+ * @method int getOwnerType()
+ * @method void setOwnerType(int $ownerType)
  * @method string getColor()
  * @method void setColor(string $color)
  * @method void setShareToken(string $shareToken)
@@ -30,8 +32,11 @@ namespace OCA\Deck\Db;
  * @method int | null getExternalId()
  */
 class Board extends RelationalEntity {
+	public const PERMISSION_OWNER = 4;
+
 	protected $title;
 	protected $owner;
+	protected $ownerType = 0;
 	protected $color;
 	protected $archived = false;
 	/** @var Label[]|null */
@@ -53,6 +58,7 @@ class Board extends RelationalEntity {
 	public function __construct() {
 		$this->addType('id', 'integer');
 		$this->addType('shared', 'integer');
+		$this->addType('ownerType', 'integer');
 		$this->addType('archived', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addType('lastModified', 'integer');

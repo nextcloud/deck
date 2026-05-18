@@ -11,6 +11,7 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
+import { PERMISSION_TYPE_USER } from '../helpers/constants.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
 import comment from './comment.js'
@@ -135,6 +136,9 @@ export default function storeFactory() {
 			},
 			canShare: state => {
 				return state.currentBoard ? state.currentBoard.permissions.PERMISSION_SHARE : false
+			},
+			isBoardOwner: state => {
+				return state.currentBoard ? state.currentBoard.permissions.PERMISSION_OWNER : false
 			},
 			isArchived: state => {
 				return state.currentBoard && state.currentBoard.archived
@@ -539,9 +543,10 @@ export default function storeFactory() {
 						dispatch('loadBoardById', acl.boardId)
 					})
 			},
-			async transferOwnership({ commit }, { boardId, newOwner }) {
+			async transferOwnership({ commit }, { boardId, newOwner, newOwnerType = PERMISSION_TYPE_USER }) {
 				await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
 					newOwner,
+					newOwnerType,
 				})
 			},
 			toggleShortcutLock({ commit }, lock) {

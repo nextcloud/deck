@@ -134,7 +134,7 @@ class ImportExportTest extends \Test\TestCase {
 		);
 	}
 
-	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared', 'version', 'done', 'referenceData', 'token']): string {
+	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared', 'version', 'done', 'referenceData', 'token', 'ownerType', 'retainsAccessViaMembership']): string {
 		$output = '';
 		$arrayIsList = array_keys($array) === range(0, count($array) - 1);
 		foreach ($array as $key => $value) {
@@ -279,7 +279,7 @@ class ImportExportTest extends \Test\TestCase {
 		$stackMapper = self::getFreshService(StackMapper::class);
 		$cardMapper = self::getFreshService(CardMapper::class);
 
-		$boards = $boardMapper->findAllByOwner($owner);
+		$boards = $boardMapper->findAllByOwner($owner, Acl::PERMISSION_TYPE_USER);
 		$boardNames = array_map(fn ($board) => $board->getTitle(), $boards);
 		self::assertEquals(2, count($boards));
 

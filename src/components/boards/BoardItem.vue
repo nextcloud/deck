@@ -16,10 +16,14 @@
 			{{ board.title }}
 		</div>
 		<div class="board-list-avatars-cell" title="">
-			<NcAvatar :user="board.owner.uid"
+			<NcAvatar v-if="board.ownerType !== PERMISSION_TYPE_CIRCLE"
+				:user="board.owner.uid"
 				:display-name="board.owner.displayname"
 				class="board-list-avatar"
 				:hide-status="true" />
+			<div v-else
+				class="avatardiv icon icon-circles board-list-avatar"
+				:title="board.owner.displayname" />
 			<NcAvatar v-for="user in limitedAcl"
 				:key="user.id"
 				:user="user.participant.uid"
@@ -34,6 +38,7 @@
 
 <script>
 import { NcAvatar } from '@nextcloud/vue'
+import { PERMISSION_TYPE_CIRCLE } from '../../helpers/constants.js'
 
 export default {
 	name: 'BoardItem',
@@ -45,6 +50,11 @@ export default {
 			type: Object,
 			default: () => { return {} },
 		},
+	},
+	data() {
+		return {
+			PERMISSION_TYPE_CIRCLE,
+		}
 	},
 	computed: {
 		routeTo() {

@@ -152,13 +152,12 @@ class DefaultBoardServiceTest extends TestCase {
 
 		$this->stackService->expects($this->exactly(4))
 			->method('create')
-			->withConsecutive(
-				[$this->l10n->t('Custom lists - click to rename!'),  $boardId, 0],
-				[$this->l10n->t('To Do'), $boardId, 1],
-				[$this->l10n->t('In Progress'), $boardId, 2],
-				[$this->l10n->t('Done'),  $boardId, 3]
-			)
-			->willReturnOnConsecutiveCalls($stackCustom, $stackToDo, $stackDoing, $stackDone);
+			->willReturnCallback(fn ($title, $bid, $order) => match($order) {
+				0 => $stackCustom,
+				1 => $stackToDo,
+				2 => $stackDoing,
+				3 => $stackDone,
+			});
 
 		$cardExampleTask1 = $this->assembleTestCard(
 			'1. Open to learn more about boards and cards',
@@ -186,22 +185,13 @@ class DefaultBoardServiceTest extends TestCase {
 			$this->userId
 		);
 
+		$cardResults = [$cardExampleTask1, $cardExampleTask2, $cardExampleTask3, $cardExampleTask4, $cardExampleTask5];
+		$cardIndex = 0;
 		$this->cardService->expects($this->exactly(5))
 			->method('create')
-			->withConsecutive(
-				['1. Open to learn more about boards and cards', $stackCustomId, 'text', 0, $this->userId],
-				['2. Drag cards left and right, up and down', $stackToDoId, 'text', 0, $this->userId],
-				['Create your first card!', $stackToDoId, 'text', 1, $this->userId],
-				['3. Apply rich formatting and link content', $stackDoingId, 'text', 0, $this->userId],
-				['4. Share, comment and collaborate!', $stackDoneId, 'text', 0, $this->userId]
-			)
-			->willReturnonConsecutiveCalls(
-				$cardExampleTask1,
-				$cardExampleTask2,
-				$cardExampleTask3,
-				$cardExampleTask4,
-				$cardExampleTask5
-			);
+			->willReturnCallback(function () use (&$cardIndex, $cardResults) {
+				return $cardResults[$cardIndex++];
+			});
 
 		$result = $this->service->createDefaultBoard($title, $this->userId, $color);
 

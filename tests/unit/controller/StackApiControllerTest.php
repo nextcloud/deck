@@ -129,11 +129,11 @@ class StackApiControllerTest extends \Test\TestCase {
 	public function testUpdate() {
 		$this->request->expects($this->exactly(2))
 			->method('getParam')
-			->withConsecutive(
-				['stackId'],
-				['boardId']
-			)
-			->willReturnonConsecutiveCalls($this->exampleStack['id'], $this->exampleBoard['boardId']);
+			->willReturnCallback(fn ($key) => match($key) {
+				'stackId' => $this->exampleStack['id'],
+				'boardId' => $this->exampleBoard['boardId'],
+				default => null,
+			});
 
 		$stack = new Stack();
 		$stack->setId($this->exampleStack['id']);
