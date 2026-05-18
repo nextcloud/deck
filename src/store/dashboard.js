@@ -17,7 +17,7 @@ export default {
 	},
 	getters: {
 		assignedCardsDashboard: state => {
-			return Object.values(state.assignedCards).flat()
+			return state.assignedCards
 		},
 	},
 	mutations: {

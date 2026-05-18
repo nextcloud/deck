@@ -11,7 +11,6 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
-import actions from './actions.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
 import comment from './comment.js'
@@ -29,10 +28,12 @@ export const BOARD_FILTERS = {
 	SHARED: 'shared',
 }
 
+/**
+ *
+ */
 export default function storeFactory() {
 	return new Vuex.Store({
 		modules: {
-			actions,
 			stack: stackModuleFactory(),
 			card: cardModuleFactory(),
 			comment,
@@ -52,15 +53,16 @@ export default function storeFactory() {
 			currentBoard: null,
 			currentCard: null,
 			hasCardSaveError: false,
-			boards: loadState('deck', 'initialBoards', []),
+			boards: loadState('deck', 'initialBoards', {}),
 			sharees: [],
 			assignableUsers: [],
 			boardFilter: BOARD_FILTERS.ALL,
 			searchQuery: '',
 			activity: [],
 			activityLoadMore: true,
-			filter: { tags: [], users: [], due: '', completed: 'both' },
+			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			shortcutLock: false,
+			viewModeByBoard: {},
 		},
 		getters: {
 			config: state => (key) => {
@@ -73,6 +75,15 @@ export default function storeFactory() {
 			getSearchQuery: state => {
 				return state.searchQuery
 			},
+			viewMode: state => {
+				if (!state.currentBoard) return 'kanban'
+				if (state.viewModeByBoard[state.currentBoard.id] !== undefined) {
+					return state.viewModeByBoard[state.currentBoard.id]
+				}
+
+				const stored = localStorage.getItem(`deck.viewMode.${state.currentBoard.id}`)
+				return stored !== null ? stored : 'kanban'
+			},
 			getFilter: state => {
 				return state.filter
 			},
@@ -84,7 +95,7 @@ export default function storeFactory() {
 			},
 			assignables: state => {
 				return [
-					...state.assignableUsers.map((user) => ({ ...user, type: 0 })),
+					...state.assignableUsers.map((user) => ({ ...user, type: user.type })),
 					...state.currentBoard.acl.filter((acl) => acl.type === 1 && typeof acl.participant === 'object').map((group) => ({ ...group.participant, type: 1 })),
 					...state.currentBoard.acl.filter((acl) => acl.type === 7 && typeof acl.participant === 'object').map((circle) => ({ ...circle.participant, type: 7 })),
 				]
@@ -235,13 +246,7 @@ export default function storeFactory() {
 				state.boards = boards
 			},
 			setSharees(state, shareesUsersAndGroups) {
-				Vue.set(state, 'sharees', shareesUsersAndGroups.exact.users)
-				state.sharees.push(...shareesUsersAndGroups.exact.groups)
-				state.sharees.push(...shareesUsersAndGroups.exact.circles)
-
-				state.sharees.push(...shareesUsersAndGroups.users)
-				state.sharees.push(...shareesUsersAndGroups.groups)
-				state.sharees.push(...shareesUsersAndGroups.circles)
+				Vue.set(state, 'sharees', shareesUsersAndGroups)
 			},
 			setAssignableUsers(state, users) {
 				state.assignableUsers = users
@@ -307,6 +312,11 @@ export default function storeFactory() {
 			TOGGLE_SHORTCUT_LOCK(state, lock) {
 				state.shortcutLock = lock
 			},
+			setViewMode(state, mode) {
+				if (!state.currentBoard) return
+				Vue.set(state.viewModeByBoard, state.currentBoard.id, mode)
+				localStorage.setItem(`deck.viewMode.${state.currentBoard.id}`, mode)
+			},
 		},
 		actions: {
 			setFullApp({ commit }, isFullApp) {
@@ -332,7 +342,7 @@ export default function storeFactory() {
 				commit('TOGGLE_FILTER', filter)
 			},
 			async loadBoardById({ commit, dispatch }, boardId) {
-				const filterReset = { tags: [], users: [], due: '' }
+				const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
 				dispatch('setFilter', filterReset)
 				commit('setCurrentBoard', null)
 				const board = await apiClient.loadById(boardId)
@@ -388,12 +398,18 @@ export default function storeFactory() {
 			 *
 			 * @param commit.commit
 			 * @param commit
+			 * @param commit.state
 			 * @param board The board to update.
 			 * @return {Promise<void>}
 			 */
-			async updateBoard({ commit }, board) {
+			async updateBoard({ commit, state }, board) {
 				const storedBoard = await apiClient.updateBoard(board)
 				commit('addBoard', storedBoard)
+
+				// keep the currently opened board title in sync after edits
+				if (state.currentBoard?.id === storedBoard.id) {
+					commit('setCurrentBoard', storedBoard)
+				}
 			},
 			async createBoard({ commit }, boardData) {
 				try {
@@ -430,17 +446,17 @@ export default function storeFactory() {
 				commit('setBoards', boards)
 			},
 			async loadSharees({ commit }, query) {
-				const params = new URLSearchParams()
 				if (typeof query === 'undefined') {
 					return
 				}
-				params.append('search', query)
-				params.append('format', 'json')
-				params.append('perPage', 20)
-				params.append('itemType', [0, 1, 4, 7])
-				params.append('lookup', false)
+				const params = {
+					search: query,
+					itemType: 'deck',
+					shareTypes: [0, 1, 6, 7],
+					limit: 20,
+				}
 
-				const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), { params })
+				const response = await axios.get(generateOcsUrl('/core/autocomplete/get'), { params })
 				commit('setSharees', response.data.ocs.data)
 			},
 
@@ -492,6 +508,7 @@ export default function storeFactory() {
 			async addLabelToCurrentBoardAndCard({ dispatch, commit }, { newLabel, card }) {
 				newLabel.boardId = this.state.currentBoard.id
 				const label = await apiClient.createLabel(newLabel)
+				card.labels.push(label)
 				commit('addLabelToCurrentBoard', label)
 				dispatch('addLabel', {
 					card,
@@ -529,6 +546,9 @@ export default function storeFactory() {
 			},
 			toggleShortcutLock({ commit }, lock) {
 				commit('TOGGLE_SHORTCUT_LOCK', lock)
+			},
+			setViewMode({ commit }, mode) {
+				commit('setViewMode', mode)
 			},
 		},
 	})

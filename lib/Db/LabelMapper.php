@@ -33,6 +33,30 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * Check if a label with the given title already exists on the board.
+	 * Pass $excludeId to skip a specific label (used during updates).
+	 *
+	 * @throws \OCP\DB\Exception
+	 */
+	public function existsByBoardIdAndTitle(int $boardId, string $title, ?int $excludeId = null): bool {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('title', $qb->createNamedParameter($title, IQueryBuilder::PARAM_STR)))
+			->setMaxResults(1);
+
+		if ($excludeId !== null) {
+			$qb->andWhere($qb->expr()->neq('id', $qb->createNamedParameter($excludeId, IQueryBuilder::PARAM_INT)));
+		}
+
+		$cursor = $qb->executeQuery();
+		$exists = $cursor->fetch() !== false;
+		$cursor->closeCursor();
+		return $exists;
+	}
+
 	public function delete(Entity $entity): Entity {
 		// delete assigned labels
 		$this->deleteLabelAssignments($entity->getId());
@@ -90,7 +114,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function insert(Entity $entity): Entity {
-		if (!in_array('lastModified', $entity->getUpdatedFields())) {
+		if (!isset($entity->getUpdatedFields()['lastModified'])) {
 			$entity->setLastModified(time());
 		}
 		return parent::insert($entity);

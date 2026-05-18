@@ -104,6 +104,14 @@ abstract class BaseValidator {
 	 * @return bool
 	 */
 	private function not_empty($value): bool {
+		// Treat string zero as a valid non-empty value while still rejecting other empty values
+		if ($value === '0') {
+			return true;
+		}
+
+		if (is_string($value)) {
+			return strlen(trim($value)) > 0;
+		}
 		return !empty($value);
 	}
 
@@ -157,13 +165,12 @@ abstract class BaseValidator {
 	}
 
 	/**
-	 * @param $rule
 	 * @param $field
 	 * @param $parameter
 	 * @return string
 	 */
-	protected function getErrorMessage($rule, $field, $parameter = null): string {
-		if (in_array($rule, ['max', 'min'])) {
+	protected function getErrorMessage(string $rule, $field, $parameter = null): string {
+		if (in_array($rule, ['max', 'min'], true)) {
 			return $rule === 'max'
 			? $field . ' cannot be longer than ' . $parameter . ' characters '
 			: $field . ' must be at least ' . $parameter . ' characters long ';

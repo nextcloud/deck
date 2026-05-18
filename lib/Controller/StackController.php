@@ -70,4 +70,5 @@ class StackController extends Controller {
 	public function deleted(int $boardId): array {
 		return $this->stackService->fetchDeleted($boardId);
 	}
+
 }

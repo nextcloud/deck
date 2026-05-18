@@ -254,7 +254,7 @@ export default defineComponent({
 }
 
 .completed-button {
-	margin-left: auto;
+	margin-inline-start: auto;
 }
 
 .due-actions {

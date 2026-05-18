@@ -12,10 +12,10 @@ namespace OCA\Deck\Search\Query;
 
 class SearchQuery {
 	public const COMPARATOR_EQUAL = 1;
-	
+
 	public const COMPARATOR_LESS = 2;
 	public const COMPARATOR_MORE = 4;
-	
+
 	public const COMPARATOR_LESS_EQUAL = 3;
 	public const COMPARATOR_MORE_EQUAL = 5;
 
@@ -42,11 +42,11 @@ class SearchQuery {
 	public function getTextTokens(): array {
 		return $this->textTokens;
 	}
-	
+
 	public function addTitle(StringQueryParameter $title): void {
 		$this->title[] = $title;
 	}
-	
+
 	public function getTitle(): array {
 		return $this->title;
 	}

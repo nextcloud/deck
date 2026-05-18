@@ -4,7 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 
 export class AttachmentApi {
 
@@ -12,54 +12,66 @@ export class AttachmentApi {
 		return generateUrl(`/apps/deck${url}`)
 	}
 
-	async fetchAttachments(cardId) {
-		const response = await axios({
-			method: 'GET',
-			url: this.url(`/cards/${cardId}/attachments`),
-		})
-		return response.data
+	ocsUrl(url) {
+		url = `/apps/deck/api/v1.0${url}`
+		return generateOcsUrl(url)
 	}
 
-	async createAttachment({ cardId, formData, onUploadProgress }) {
+	async fetchAttachments(cardId, boardId) {
+		const response = await axios({
+			method: 'GET',
+			url: this.ocsUrl(`/cards/${cardId}/attachments`),
+			params: {
+				boardId: boardId ?? null,
+			},
+		})
+		return response.data.ocs.data
+	}
+
+	async createAttachment({ cardId, formData, onUploadProgress, boardId }) {
 		const response = await axios({
 			method: 'POST',
-			url: this.url(`/cards/${cardId}/attachment`),
+			url: this.ocsUrl(`/cards/${cardId}/attachment`),
+			params: {
+				boardId: boardId ?? null,
+			},
 			data: formData,
 			onUploadProgress,
 		})
-		return response.data
+		return response.data.ocs.data
 	}
 
-	async updateAttachment({ cardId, attachment, formData }) {
+	async updateAttachment({ cardId, attachment, formData, boardId }) {
 		const response = await axios({
 		   method: 'POST',
-		   url: this.url(`/cards/${cardId}/attachment/${attachment.type}:${attachment.id}`),
+		   url: this.ocsUrl(`/cards/${cardId}/attachment/${attachment.type}:${attachment.id}`),
+		   params: {
+				boardId: boardId ?? null,
+		   },
 		   data: formData,
 	   })
 	   return response.data
 	}
 
-	async deleteAttachment(attachment) {
+	async deleteAttachment(attachment, boardId) {
 		await axios({
 			method: 'DELETE',
-			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}`),
+			url: this.ocsUrl(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}`),
+			params: {
+				boardId: boardId ?? null,
+			},
 		})
 	}
 
-	async restoreAttachment(attachment) {
+	async restoreAttachment(attachment, boardId) {
 		const response = await axios({
 			method: 'GET',
-			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}/restore`),
+			url: this.ocsUrl(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}/restore`),
+			params: {
+				boardId: boardId ?? null,
+			},
 		})
-		return response.data
-	}
-
-	async displayAttachment(attachment) {
-		const response = await axios({
-			method: 'GET',
-			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}`),
-		})
-		return response.data
+		return response.data.ocs.data
 	}
 
 }

@@ -65,10 +65,10 @@ class LiveUpdateListener implements IEventListener {
 			// else, preventing this person from getting updates
 			$causingSessionToken = $this->request->getHeader('x-nc-deck-session');
 			if (
-				$event instanceof SessionCreatedEvent ||
-				$event instanceof SessionClosedEvent ||
-				$event instanceof BoardUpdatedEvent ||
-				$event instanceof AAclEvent
+				$event instanceof SessionCreatedEvent
+				|| $event instanceof SessionClosedEvent
+				|| $event instanceof BoardUpdatedEvent
+				|| $event instanceof AAclEvent
 			) {
 				$this->sessionService->notifyAllSessions($this->queue, $event->getBoardId(), NotifyPushEvents::DeckBoardUpdate, [
 					'id' => $event->getBoardId()

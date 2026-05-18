@@ -29,7 +29,8 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Notification\NotificationHelper;
-use OCP\Comments\CommentsEvent;
+use OCP\Comments\Events\CommentAddedEvent;
+use OCP\Comments\Events\CommentUpdatedEvent;
 use OCP\Comments\IComment;
 use PHPUnit\Framework\TestCase;
 
@@ -68,7 +69,7 @@ class CommentEventListenerTest extends TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('find')
 			->willReturn($card);
-		$commentsEvent = new CommentsEvent(CommentsEvent::EVENT_ADD, $comment);
+		$commentsEvent = new CommentAddedEvent($comment);
 		$this->activityManager->expects($this->once())
 			->method('triggerEvent')
 			->with(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_COMMENT_CREATE, ['comment' => $comment]);
@@ -82,7 +83,7 @@ class CommentEventListenerTest extends TestCase {
 		$comment = $this->createMock(IComment::class);
 		$comment->expects($this->any())->method('getId')->willReturn(1);
 		$comment->expects($this->any())->method('getObjectType')->willReturn('deckCard');
-		$commentsEvent = new CommentsEvent(CommentsEvent::EVENT_UPDATE, $comment);
+		$commentsEvent = new CommentUpdatedEvent($comment);
 		$this->activityManager->expects($this->never())
 			->method('triggerEvent');
 		$this->notificationHelper->expects($this->once())
@@ -95,7 +96,7 @@ class CommentEventListenerTest extends TestCase {
 		$comment = $this->createMock(IComment::class);
 		$comment->expects($this->any())->method('getId')->willReturn(1);
 		$comment->expects($this->any())->method('getObjectType')->willReturn('other');
-		$commentsEvent = new CommentsEvent(CommentsEvent::EVENT_ADD, $comment);
+		$commentsEvent = new CommentAddedEvent($comment);
 		$this->activityManager->expects($this->never())
 			->method('triggerEvent');
 		$this->commentEventHandler->handle($commentsEvent);
@@ -104,7 +105,6 @@ class CommentEventListenerTest extends TestCase {
 	public function invokePrivate(&$object, $methodName, array $parameters = []) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
-		$method->setAccessible(true);
 		return $method->invokeArgs($object, $parameters);
 	}
 }

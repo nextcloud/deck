@@ -28,52 +28,22 @@ use OCP\IUserManager;
 use Psr\Container\ContainerExceptionInterface;
 
 class AttachmentService {
-	private $attachmentMapper;
-	private $cardMapper;
-	private $permissionService;
-	private $userId;
-
 	/** @var IAttachmentService[] */
-	private $services = [];
-	/** @var Application */
-	private $application;
-	/** @var AttachmentCacheHelper */
-	private $attachmentCacheHelper;
-	/** @var IL10N */
-	private $l10n;
-	/** @var ActivityManager */
-	private $activityManager;
-	/** @var ChangeHelper */
-	private $changeHelper;
-	private IUserManager $userManager;
-	/** @var AttachmentServiceValidator */
-	private AttachmentServiceValidator $attachmentServiceValidator;
+	private array $services = [];
 
 	public function __construct(
-		AttachmentMapper $attachmentMapper,
-		CardMapper $cardMapper,
-		IUserManager $userManager,
-		ChangeHelper $changeHelper,
-		PermissionService $permissionService,
-		Application $application,
-		AttachmentCacheHelper $attachmentCacheHelper,
-		$userId,
-		IL10N $l10n,
-		ActivityManager $activityManager,
-		AttachmentServiceValidator $attachmentServiceValidator,
+		private readonly AttachmentMapper $attachmentMapper,
+		private readonly CardMapper $cardMapper,
+		private readonly IUserManager $userManager,
+		private readonly ChangeHelper $changeHelper,
+		private readonly PermissionService $permissionService,
+		private readonly Application $application,
+		private readonly AttachmentCacheHelper $attachmentCacheHelper,
+		private readonly ?string $userId,
+		private readonly IL10N $l10n,
+		private readonly ActivityManager $activityManager,
+		private readonly AttachmentServiceValidator $attachmentServiceValidator,
 	) {
-		$this->attachmentMapper = $attachmentMapper;
-		$this->cardMapper = $cardMapper;
-		$this->permissionService = $permissionService;
-		$this->userId = $userId;
-		$this->application = $application;
-		$this->attachmentCacheHelper = $attachmentCacheHelper;
-		$this->l10n = $l10n;
-		$this->activityManager = $activityManager;
-		$this->changeHelper = $changeHelper;
-		$this->userManager = $userManager;
-		$this->attachmentServiceValidator = $attachmentServiceValidator;
-
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
 		$this->registerAttachmentService('deck_file', FileService::class);
@@ -137,21 +107,57 @@ class AttachmentService {
 	 * @throws \OCP\DB\Exception
 	 */
 	public function count(int $cardId): int {
-		$count = $this->attachmentCacheHelper->getAttachmentCount($cardId);
-		if ($count === null) {
-			$count = count($this->attachmentMapper->findAll($cardId));
+		return ($this->countForCards([$cardId]))[$cardId] ?? 0;
+	}
 
-			foreach (array_keys($this->services) as $attachmentType) {
-				$service = $this->getService($attachmentType);
-				if ($service instanceof ICustomAttachmentService) {
-					$count += $service->getAttachmentCount($cardId);
-				}
-			}
-
-			$this->attachmentCacheHelper->setAttachmentCount($cardId, $count);
+	/**
+	 * Returns a map of cardId => attachment count for the given card IDs using batch queries.
+	 *
+	 * @param int[] $cardIds
+	 * @return array<int, int>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function countForCards(array $cardIds): array {
+		if (empty($cardIds)) {
+			return [];
 		}
 
-		return $count;
+		$counts = [];
+		$uncachedIds = [];
+		foreach ($cardIds as $cardId) {
+			$cached = $this->attachmentCacheHelper->getAttachmentCount($cardId);
+			if ($cached !== null) {
+				$counts[$cardId] = $cached;
+			} else {
+				$uncachedIds[] = $cardId;
+				$counts[$cardId] = 0;
+			}
+		}
+
+		if (empty($uncachedIds)) {
+			return $counts;
+		}
+
+		// Batch query for deck_file attachments stored in the deck_attachment table
+		foreach ($this->attachmentMapper->findCountByCardIds($uncachedIds) as $cardId => $count) {
+			$counts[$cardId] = $count;
+		}
+
+		// Add counts from custom attachment services (e.g. files shared via FilesAppService)
+		foreach (array_keys($this->services) as $attachmentType) {
+			$service = $this->getService($attachmentType);
+			if ($service instanceof ICustomAttachmentService) {
+				foreach ($service->getAttachmentCountForCards($uncachedIds) as $cardId => $count) {
+					$counts[$cardId] = ($counts[$cardId] ?? 0) + $count;
+				}
+			}
+		}
+
+		foreach ($uncachedIds as $cardId) {
+			$this->attachmentCacheHelper->setAttachmentCount($cardId, $counts[$cardId]);
+		}
+
+		return $counts;
 	}
 
 	/**
@@ -160,7 +166,7 @@ class AttachmentService {
 	 * @throws StatusException
 	 * @throws BadRequestException
 	 */
-	public function create(int $cardId, string $type, string $data) {
+	public function create(int $cardId, string $type, string $data = '') {
 		$this->attachmentServiceValidator->check(compact('cardId', 'type'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
@@ -197,6 +203,18 @@ class AttachmentService {
 		return $attachment;
 	}
 
+	/**
+	 * Apply import side effects to keep attachment behavior consistent with regular create flow.
+	 */
+	public function syncAttachmentCreateSideEffects(Attachment $attachment): Attachment {
+		$cardId = $attachment->getCardId();
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
+		$this->addCreator($attachment);
+		$this->changeHelper->cardChanged($cardId);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
+
+		return $attachment;
+	}
 
 	/**
 	 * Display the attachment
@@ -251,6 +269,7 @@ class AttachmentService {
 		}
 
 		if ($service instanceof ICustomAttachmentService) {
+			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 			try {
 				$attachment = new Attachment();
 				$attachment->setId($attachmentId);

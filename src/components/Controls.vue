@@ -226,6 +226,21 @@
 
 				<NcActions :aria-label="t('deck', 'View Modes')"
 					:name="t('deck', 'Toggle View Modes')">
+					<NcActionButton :model-value="viewMode === 'kanban'"
+						@click="setViewMode('kanban')">
+						<template #icon>
+							<ViewColumnIcon :size="20" decorative />
+						</template>
+						{{ t('deck', 'Kanban view') }}
+					</NcActionButton>
+					<NcActionButton :model-value="viewMode === 'gantt'"
+						@click="setViewMode('gantt')">
+						<template #icon>
+							<ChartGanttIcon :size="20" decorative />
+						</template>
+						{{ t('deck', 'Gantt view') }}
+					</NcActionButton>
+					<NcActionSeparator />
 					<NcActionButton @click="toggleShowArchived">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
@@ -264,7 +279,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -273,6 +288,8 @@ import FilterOffIcon from 'vue-material-design-icons/FilterOffOutline.vue'
 import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
+import ViewColumnIcon from 'vue-material-design-icons/ViewColumn.vue'
+import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
 import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
@@ -294,6 +311,9 @@ export default {
 		FilterOffIcon,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
+		ViewColumnIcon,
+		ChartGanttIcon,
+		NcActionSeparator,
 		TableColumnPlusAfter,
 		SessionList,
 	},
@@ -327,6 +347,7 @@ export default {
 		...mapGetters([
 			'canEdit',
 			'canManage',
+			'viewMode',
 		]),
 		...mapState({
 			isFullApp: state => state.isFullApp,
@@ -406,6 +427,9 @@ export default {
 		toggleShowCardCover() {
 			this.$store.dispatch('toggleShowCardCover')
 		},
+		setViewMode(mode) {
+			this.$store.dispatch('setViewMode', mode)
+		},
 		toggleShowArchived() {
 			this.$store.dispatch('toggleShowArchived')
 		},
@@ -430,7 +454,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '', completed: 'both' }
+			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},
@@ -485,7 +509,7 @@ export default {
 		display: flex;
 		margin: calc(var(--default-grid-baseline) * 2);
 		height: var(--default-clickable-area);
-		padding-left: var(--default-clickable-area);
+		padding-inline-start: var(--default-clickable-area);
 
 		.board-title {
 			display: flex;
@@ -493,7 +517,7 @@ export default {
 
 			h2 {
 				margin: 0;
-				margin-right: 10px;
+				margin-inline-end: 10px;
 				font-size: 18px;
 			}
 
@@ -512,11 +536,11 @@ export default {
 			display: flex;
 
 			#new-stack-input-main {
-				margin-right: 8px;
+				margin-inline-end: 8px;
 			}
 			.icon-confirm {
 				border: 2px solid var(--color-border-maxcontrast) !important;
-				border-left: none !important;
+				border-inline-start: none !important;
 			}
 			&:focus-within, &:focus, &:focus-visible,
 			&:hover {
@@ -553,7 +577,7 @@ export default {
 		justify-content: center;
 		input[type=search] {
 			background-position: 5px;
-			padding-left: 24px !important;
+			padding-inline-start: 24px !important;
 		}
 	}
 
@@ -564,7 +588,7 @@ export default {
 			.avatardiv {
 				vertical-align: middle;
 				margin-bottom: 2px;
-				margin-right: 3px;
+				margin-inline-end: 3px;
 			}
 			.label {
 				padding: 5px;

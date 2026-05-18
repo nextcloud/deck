@@ -1,0 +1,95 @@
+<?php
+
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+namespace OCA\Deck\Controller;
+
+use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
+use OCA\Deck\Service\StackService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
+use OCP\IRequest;
+
+class StackOcsController extends OCSController {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private ExternalBoardService $externalBoardService,
+		private BoardService $boardService,
+		private StackService $stackService,
+	) {
+		parent::__construct($appName, $request);
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function index(int $boardId): DataResponse {
+		$localBoard = $this->boardService->find($boardId, true, true);
+		if ($localBoard->getExternalId() !== null) {
+			return $this->externalBoardService->getExternalStacksFromRemote($localBoard);
+		} else {
+			return new DataResponse($this->stackService->findAll($boardId));
+		}
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function create(string $title, int $boardId, int $order = 0):DataResponse {
+		$board = $this->boardService->find($boardId, false);
+		if ($board->getExternalId()) {
+			$stack = $this->externalBoardService->createStackOnRemote($board, $title, $order);
+			return new DataResponse($stack);
+		} else {
+			$stack = $this->stackService->create($title, $boardId, $order);
+			return new DataResponse($stack);
+		};
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function setDoneStack(int $stackId, int $boardId, bool $isDone): DataResponse {
+		$board = $this->boardService->find($boardId, false);
+		if ($board->getExternalId()) {
+			$result = $this->externalBoardService->setDoneStackOnRemote($board, $stackId, $isDone);
+			return new DataResponse($result);
+		}
+		$this->stackService->setDoneStack($stackId, $boardId, $isDone);
+		return new DataResponse();
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function delete(int $stackId, ?int $boardId = null):DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				$result = $this->externalBoardService->deleteStackOnRemote($board, $stackId);
+				return new DataResponse($result);
+			}
+		}
+		$result = $this->stackService->delete($stackId);
+		return new DataResponse($result);
+	}
+
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function reorder(int $stackId, int $order, ?int $boardId):DataResponse {
+		if ($boardId !== null) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				$stacks = $this->externalBoardService->reorderStackOnRemote($board, $stackId, $order);
+				return new DataResponse($stacks);
+			}
+		}
+		$stacks = $this->stackService->reorder($stackId, $order);
+		return new DataResponse($stacks);
+	}
+
+}

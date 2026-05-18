@@ -22,8 +22,6 @@ OC.L10N.register(
     "Edit" : "Endra",
     "Download" : "Last ned",
     "Remove attachment" : "Fjern vedlegg",
-    "Modified" : "Endra",
-    "Created" : "Lagd",
     "Comments" : "Kommentarar",
     "Created:" : "Oppretta:",
     "Cancel reply" : "Avbryt svar",
@@ -35,10 +33,10 @@ OC.L10N.register(
     "An error occurred" : "Det oppstod ein feil.",
     "Export" : "Eksporter",
     "Close" : "Lat att",
+    "Created" : "Lagd",
+    "Modified" : "Endra",
     "Share" : "Del",
-    "Personal" : "Personleg",
     "Save" : "Lagre",
-    "Keyboard shortcuts" : "Tastatursnarvegar",
     "Today" : "I dag"
 },
 "nplurals=2; plural=(n != 1);");

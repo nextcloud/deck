@@ -43,6 +43,8 @@ class CardTest extends TestCase {
 		$card->setOrder(12);
 		$card->setArchived(false);
 		$card->setDone(null);
+		$card->setColor('ffffff');
+		$card->setDependentCards([2, 3]);
 		// TODO: relation shared labels acl
 		return $card;
 	}
@@ -65,6 +67,14 @@ class CardTest extends TestCase {
 		$this->assertEquals($state, (new CardDetails($card))->jsonSerialize()['overdue']);
 	}
 
+	public function testStartdate() {
+		$card = $this->createCard();
+		$startdate = new DateTime('2026-03-01 09:00:00');
+		$card->setStartdate($startdate->format('Y-m-d H:i:s'));
+		$json = (new CardDetails($card))->jsonSerialize();
+		$this->assertNotNull($json['startdate']);
+	}
+
 	public function testJsonSerialize() {
 		$card = $this->createCard();
 		$this->assertEquals([
@@ -79,11 +89,13 @@ class CardTest extends TestCase {
 			'stackId' => 1,
 			'labels' => null,
 			'duedate' => null,
+			'startdate' => null,
 			'overdue' => 0,
 			'archived' => false,
 			'attachments' => [],
 			'attachmentCount' => 0,
 			'assignedUsers' => null,
+			'dependentCards' => [2, 3],
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
@@ -91,6 +103,7 @@ class CardTest extends TestCase {
 			'ETag' => $card->getETag(),
 			'done' => null,
 			'referenceData' => null,
+			'color' => 'ffffff',
 		], (new CardDetails($card))->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
@@ -108,11 +121,13 @@ class CardTest extends TestCase {
 			'stackId' => 1,
 			'labels' => [],
 			'duedate' => null,
+			'startdate' => null,
 			'overdue' => 0,
 			'archived' => false,
 			'attachments' => [],
 			'attachmentCount' => 0,
 			'assignedUsers' => null,
+			'dependentCards' => [2, 3],
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
@@ -120,6 +135,7 @@ class CardTest extends TestCase {
 			'ETag' => $card->getETag(),
 			'done' => false,
 			'referenceData' => null,
+			'color' => 'ffffff',
 		], (new CardDetails($card))->jsonSerialize());
 	}
 
@@ -139,11 +155,13 @@ class CardTest extends TestCase {
 			'stackId' => 1,
 			'labels' => [],
 			'duedate' => null,
+			'startdate' => null,
 			'overdue' => 0,
 			'archived' => false,
 			'attachments' => [],
 			'attachmentCount' => 0,
 			'assignedUsers' => ['user1'],
+			'dependentCards' => [2, 3],
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
@@ -151,6 +169,7 @@ class CardTest extends TestCase {
 			'ETag' => $card->getETag(),
 			'done' => false,
 			'referenceData' => null,
+			'color' => 'ffffff',
 		], (new CardDetails($card))->jsonSerialize());
 	}
 }

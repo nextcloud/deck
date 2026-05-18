@@ -68,15 +68,15 @@ class CardApiController extends ApiController {
 	 *
 	 * Get a specific card.
 	 */
-	public function create($title, $type = 'plain', $order = 999, $description = '', $duedate = null, $labels = [], $users = []) {
-		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description, $duedate);
+	public function create($title, $type = 'plain', $order = 999, $description = '', $duedate = null, $startdate = null, $labels = [], $users = [], ?string $color = null) {
+		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description, $duedate, $startdate, $color);
 
 		foreach ($labels as $labelId) {
-			$this->cardService->assignLabel($card->id, $labelId);
+			$this->cardService->assignLabel($card->getId(), $labelId);
 		}
 
 		foreach ($users as $user) {
-			$this->assignmentService->assignUser($card->id, $user['id'], $user['type']);
+			$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
 		}
 
 		return new DataResponse($card, HTTP::STATUS_OK);
@@ -88,9 +88,9 @@ class CardApiController extends ApiController {
 	#[NoAdminRequired]
 	#[CORS]
 	#[NoCSRFRequired]
-	public function update(string $title, $type, string $owner, string $description = '', int $order = 0, $duedate = null, $archived = null): DataResponse {
+	public function update(string $title, $type, string $owner, string $description = '', int $order = 0, $duedate = null, $startdate = null, $archived = null, ?string $color = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams()) ? new OptionalNullableValue($this->request->getParam('done', null)) : null;
-		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done);
+		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done, $startdate, $color);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -146,6 +146,28 @@ class CardApiController extends ApiController {
 	#[NoCSRFRequired]
 	public function unassignUser(int $cardId, string $userId, int $type = 0): DataResponse {
 		$card = $this->assignmentService->unassignUser($cardId, $userId, $type);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * Assign a dependent card
+	 */
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function assignDependentCard(int $cardId, int $dependentCardId): DataResponse {
+		$card = $this->cardService->assignDependentCard($cardId, $dependentCardId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * Remove a dependent card
+	 */
+	#[NoAdminRequired]
+	#[CORS]
+	#[NoCSRFRequired]
+	public function removeDependentCard(int $cardId, int $dependentCardId): DataResponse {
+		$card = $this->cardService->removeDependentCard($cardId, $dependentCardId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 

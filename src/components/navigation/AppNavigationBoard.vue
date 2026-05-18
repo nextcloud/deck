@@ -3,162 +3,171 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcAppNavigationItem v-if="!editing"
-		:name="!deleted ? board.title : undoText"
-		:loading="loading"
-		:to="routeTo"
-		:undo="deleted"
-		:menu-placement="'auto'"
-		:force-display-actions="isTouchDevice"
-		@click="onNavigate"
-		@undo="unDelete">
-		<template #icon>
-			<NcAppNavigationIconBullet :color="board.color" />
-			<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
-			<BoardExportModal v-if="exportModalOpen"
-				:board-title="board.title"
-				@export="onExportBoard"
-				@close="onCloseExportBoard" />
-		</template>
-
-		<template #counter>
-			<AccountIcon v-if="board.acl.length > 0" />
-		</template>
-
-		<template v-if="!deleted" slot="actions">
-			<template v-if="!isDueSubmenuActive">
-				<NcActionButton icon="icon-info"
-					:close-after-click="true"
-					@click="actionDetails">
-					{{ t('deck', 'Board details') }}
-				</NcActionButton>
-				<NcActionButton v-if="canManage && !board.archived"
-					icon="icon-rename"
-					:close-after-click="true"
-					@click="actionEdit">
-					{{ t('deck', 'Edit board') }}
-				</NcActionButton>
-				<NcActionButton v-if="canCreate && !board.archived"
-					:close-after-click="true"
-					@click="showCloneModal">
-					<template #icon>
-						<CloneIcon :size="20" decorative />
-					</template>
-					{{ t('deck', 'Clone board') }}
-				</NcActionButton>
-				<NcActionButton v-if="canManage && board.archived"
-					:close-after-click="true"
-					@click="actionUnarchive">
-					<template #icon>
-						<ArchiveIcon :size="20" decorative />
-					</template>
-					{{ t('deck', 'Unarchive board') }}
-				</NcActionButton>
-				<NcActionButton v-else-if="canManage && !board.archived"
-					:close-after-click="true"
-					@click="actionArchive">
-					<template #icon>
-						<ArchiveIcon :size="20" decorative />
-					</template>
-					{{ t('deck', 'Archive board') }}
-				</NcActionButton>
-				<NcActionButton v-if="canManage && !board.archived"
-					icon="icon-download"
-					:close-after-click="true"
-					@click="actionExport">
-					{{ t('deck', 'Export board') }}
-				</NcActionButton>
-				<NcActionButton v-if="!board.archived && board.acl.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
-					{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
-				</NcActionButton>
+	<span>
+		<NcAppNavigationItem v-if="!editing"
+			:name="!deleted ? board.title : undoText"
+			:loading="loading"
+			:to="routeTo"
+			:undo="deleted"
+			:menu-placement="'auto'"
+			:force-display-actions="isTouchDevice"
+			@click="onNavigate"
+			@undo="unDelete">
+			<template #icon>
+				<NcAppNavigationIconBullet :color="board.color" />
+				<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
+				<BoardExportModal v-if="exportModalOpen"
+					:board-title="board.title"
+					@export="onExportBoard"
+					@close="onCloseExportBoard" />
 			</template>
 
-			<!-- Due date reminder settings -->
-			<template v-if="isDueSubmenuActive">
-				<NcActionButton :icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
-					:disabled="updateDueSetting"
-					@click="isDueSubmenuActive=false">
-					{{ t('deck', 'Due date reminders') }}
+			<template #counter>
+				<AccountIcon v-if="board.acl?.length > 0" />
+			</template>
+
+			<template v-if="!deleted" slot="actions">
+				<template v-if="!isDueSubmenuActive">
+					<NcActionButton icon="icon-info"
+						:close-after-click="true"
+						@click="actionDetails">
+						{{ t('deck', 'Board details') }}
+					</NcActionButton>
+					<NcActionButton v-if="canManage && !board.archived"
+						icon="icon-rename"
+						:close-after-click="true"
+						@click="actionEdit">
+						{{ t('deck', 'Edit board') }}
+					</NcActionButton>
+					<NcActionButton v-if="canCreate && !board.archived"
+						:close-after-click="true"
+						@click="showCloneModal">
+						<template #icon>
+							<CloneIcon :size="20" decorative />
+						</template>
+						{{ t('deck', 'Clone board') }}
+					</NcActionButton>
+					<NcActionButton v-if="canManage && board.archived"
+						:close-after-click="true"
+						@click="actionUnarchive">
+						<template #icon>
+							<ArchiveIcon :size="20" decorative />
+						</template>
+						{{ t('deck', 'Unarchive board') }}
+					</NcActionButton>
+					<NcActionButton v-else-if="canManage && !board.archived"
+						:close-after-click="true"
+						@click="actionArchive">
+						<template #icon>
+							<ArchiveIcon :size="20" decorative />
+						</template>
+						{{ t('deck', 'Archive board') }}
+					</NcActionButton>
+					<NcActionButton v-if="canManage && !board.archived"
+						icon="icon-download"
+						:close-after-click="true"
+						@click="actionExport">
+						{{ t('deck', 'Export board') }}
+					</NcActionButton>
+					<NcActionButton v-if="!board.archived && board.acl?.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
+						{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
+					</NcActionButton>
+					<NcActionButton :close-after-click="true" @click="toggleDefaultBoard">
+						<template #icon>
+							<PinOffIcon v-if="isDefaultBoard" :size="20" decorative />
+							<PinIcon v-else :size="20" decorative />
+						</template>
+						{{ isDefaultBoard ? t('deck', 'Remove as default board') : t('deck', 'Set as default board') }}
+					</NcActionButton>
+				</template>
+
+				<!-- Due date reminder settings -->
+				<template v-if="isDueSubmenuActive">
+					<NcActionButton :icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
+						:disabled="updateDueSetting"
+						@click="isDueSubmenuActive=false">
+						{{ t('deck', 'Due date reminders') }}
+					</NcActionButton>
+
+					<NcActionButton name="notification"
+						icon="icon-sound"
+						:disabled="updateDueSetting"
+						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
+						@click="updateSetting('notify-due', 'all')">
+						{{ t('deck', 'All cards') }}
+					</NcActionButton>
+					<NcActionButton name="notification"
+						icon="icon-user"
+						:disabled="updateDueSetting"
+						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
+						@click="updateSetting('notify-due', 'assigned')">
+						{{ t('deck', 'Assigned cards') }}
+					</NcActionButton>
+					<NcActionButton name="notification"
+						icon="icon-sound-off"
+						:disabled="updateDueSetting"
+						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
+						@click="updateSetting('notify-due', 'off')">
+						{{ t('deck', 'No notifications') }}
+					</NcActionButton>
+				</template>
+				<NcActionButton v-else-if="!board.archived && board.acl?.length > 0"
+					:name="t('deck', 'Due date reminders')"
+					:icon="dueDateReminderIcon"
+					@click="isDueSubmenuActive=true">
+					{{ dueDateReminderText }}
 				</NcActionButton>
 
-				<NcActionButton name="notification"
-					icon="icon-sound"
-					:disabled="updateDueSetting"
-					:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
-					@click="updateSetting('notify-due', 'all')">
-					{{ t('deck', 'All cards') }}
+				<NcActionButton v-if="canManage && !isDueSubmenuActive"
+					icon="icon-delete"
+					:close-after-click="true"
+					@click="actionDelete">
+					{{ t('deck', 'Delete board') }}
 				</NcActionButton>
-				<NcActionButton name="notification"
-					icon="icon-user"
-					:disabled="updateDueSetting"
-					:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
-					@click="updateSetting('notify-due', 'assigned')">
-					{{ t('deck', 'Assigned cards') }}
-				</NcActionButton>
-				<NcActionButton name="notification"
-					icon="icon-sound-off"
-					:disabled="updateDueSetting"
-					:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
-					@click="updateSetting('notify-due', 'off')">
-					{{ t('deck', 'No notifications') }}
+
+				<NcActionButton v-if="canLeave && !isDueSubmenuActive"
+					icon="icon-delete"
+					:close-after-click="true"
+					@click="actionLeave">
+					<template #icon>
+						<LeaveIcon :size="20" decorative />
+					</template>
+					{{ t('deck', 'Leave board') }}
 				</NcActionButton>
 			</template>
-			<NcActionButton v-else-if="!board.archived && board.acl.length > 0"
-				:name="t('deck', 'Due date reminders')"
-				:icon="dueDateReminderIcon"
-				@click="isDueSubmenuActive=true">
-				{{ dueDateReminderText }}
-			</NcActionButton>
-
-			<NcActionButton v-if="canManage && !isDueSubmenuActive"
-				icon="icon-delete"
-				:close-after-click="true"
-				@click="actionDelete">
-				{{ t('deck', 'Delete board') }}
-			</NcActionButton>
-
-			<NcActionButton v-if="canLeave && !isDueSubmenuActive"
-				icon="icon-delete"
-				:close-after-click="true"
-				@click="actionLeave">
-				<template #icon>
-					<LeaveIcon :size="20" decorative />
-				</template>
-				{{ t('deck', 'Leave board') }}
-			</NcActionButton>
-		</template>
-	</NcAppNavigationItem>
-	<div v-else-if="editing" class="board-edit">
-		<NcColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
-			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-		</NcColorPicker>
-		<form @submit.prevent.stop="applyEdit">
-			<NcTextField ref="inputField"
-				:disable="loading"
-				:value.sync="editTitle"
-				:placeholder="t('deck', 'Board name')"
-				type="text"
-				required />
-			<NcButton type="tertiary"
-				:disabled="loading"
-				native-type="submit"
-				:title="t('deck', 'Cancel edit')"
-				@click.stop.prevent="cancelEdit">
-				<template #icon>
-					<CloseIcon :size="20" />
-				</template>
-			</NcButton>
-			<NcButton type="tertiary"
-				native-type="submit"
-				:disabled="loading"
-				:title="t('deck', 'Save board')">
-				<template #icon>
-					<CheckIcon v-if="!loading" :size="20" />
-					<NcLoadingIcon v-else :size="20" />
-				</template>
-			</NcButton>
-		</form>
-	</div>
+		</NcAppNavigationItem>
+		<div v-else-if="editing" class="board-edit">
+			<NcColorPicker v-model="editColor" class="app-navigation-entry-bullet-wrapper">
+				<button :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+			</NcColorPicker>
+			<form @submit.prevent.stop="applyEdit">
+				<NcTextField ref="inputField"
+					:disable="loading"
+					:value.sync="editTitle"
+					:placeholder="t('deck', 'Board name')"
+					type="text"
+					required />
+				<NcButton type="tertiary"
+					:disabled="loading"
+					native-type="button"
+					:title="t('deck', 'Cancel edit')"
+					@click.stop.prevent="cancelEdit">
+					<template #icon>
+						<CloseIcon :size="20" />
+					</template>
+				</NcButton>
+				<NcButton type="tertiary"
+					native-type="submit"
+					:disabled="loading"
+					:title="t('deck', 'Save board')">
+					<template #icon>
+						<CheckIcon v-if="!loading" :size="20" />
+						<NcLoadingIcon v-else :size="20" />
+					</template>
+				</NcButton>
+			</form>
+		</div>
+	</span>
 </template>
 
 <script>
@@ -170,6 +179,8 @@ import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
 import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import PinIcon from 'vue-material-design-icons/Pin.vue'
+import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
 
 import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
@@ -196,6 +207,8 @@ export default {
 		CloneIcon,
 		CloseIcon,
 		CheckIcon,
+		PinIcon,
+		PinOffIcon,
 		LeaveIcon,
 		BoardCloneModal,
 		BoardExportModal,
@@ -229,6 +242,7 @@ export default {
 			cloneModalOpen: false,
 			exportModalOpen: false,
 			currentUser: getCurrentUser(),
+			defaultBoardId: localStorage.getItem('deck.defaultBoardId'),
 		}
 	},
 	computed: {
@@ -273,6 +287,9 @@ export default {
 			}
 			return ''
 		},
+		isDefaultBoard() {
+			return this.defaultBoardId === String(this.board.id)
+		},
 	},
 	watch: {},
 	mounted() {
@@ -280,6 +297,15 @@ export default {
 		this.popupItem = this.$el
 	},
 	methods: {
+		toggleDefaultBoard() {
+			if (this.isDefaultBoard) {
+				localStorage.removeItem('deck.defaultBoardId')
+				this.defaultBoardId = null
+			} else {
+				localStorage.setItem('deck.defaultBoardId', String(this.board.id))
+				this.defaultBoardId = String(this.board.id)
+			}
+		},
 		unDelete() {
 			clearTimeout(this.undoTimeoutHandle)
 			this.boardApi.unDeleteBoard(this.board)
@@ -287,13 +313,13 @@ export default {
 					this.deleted = false
 				})
 		},
-		updateColor(newColor) {
-			this.editColor = newColor
-		},
 		actionEdit() {
 			this.editTitle = this.board.title
 			this.editColor = '#' + this.board.color
 			this.editing = true
+			this.$nextTick(() => {
+				this.$refs?.inputField.focus()
+			})
 		},
 		async actionClone() {
 			this.loading = true
@@ -334,6 +360,7 @@ export default {
 							.then(() => {
 								this.loading = false
 								this.deleted = true
+								this.redirectToOverviewIfCurrentBoard()
 								this.undoTimeoutHandle = setTimeout(() => {
 									this.$store.dispatch('removeBoard', this.board)
 								}, 7000)
@@ -359,6 +386,7 @@ export default {
 						this.boardApi.leaveBoard(this.board)
 							.then(() => {
 								this.loading = false
+								this.redirectToOverviewIfCurrentBoard()
 								this.$store.dispatch('removeBoard', this.board)
 							})
 							.catch(() => {
@@ -436,13 +464,19 @@ export default {
 				}
 			}
 		},
+		redirectToOverviewIfCurrentBoard() {
+			const currentBoardId = Number.parseInt(this.$route?.params?.id, 10)
+			if (!Number.isNaN(currentBoardId) && currentBoardId === this.board.id) {
+				this.$router.push({ name: 'main' })
+			}
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
 	.board-edit {
-		margin-left: calc(var(--default-clickable-area) / 2);
+		margin-inline-start: calc(var(--default-clickable-area) / 2);
 		order: 1;
 		display: flex;
 		height: var(--default-clickable-area);
@@ -462,8 +496,9 @@ export default {
 		height: var(--default-clickable-area);
 		.color0 {
 			width: 24px !important;
-			margin: var(--default-grid-baseline);
 			height: 24px;
+			min-height: 0;
+			margin: var(--default-grid-baseline);
 			border-radius: 50%;
 			background-size: 14px;
 		}

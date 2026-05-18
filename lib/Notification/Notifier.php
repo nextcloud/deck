@@ -19,33 +19,14 @@ use OCP\Notification\INotifier;
 use OCP\Notification\UnknownNotificationException;
 
 class Notifier implements INotifier {
-	/** @var IFactory */
-	protected $l10nFactory;
-	/** @var IURLGenerator */
-	protected $url;
-	/** @var IUserManager */
-	protected $userManager;
-	/** @var CardMapper */
-	protected $cardMapper;
-	/** @var StackMapper */
-	protected $stackMapper;
-	/** @var BoardMapper */
-	protected $boardMapper;
-
 	public function __construct(
-		IFactory $l10nFactory,
-		IURLGenerator $url,
-		IUserManager $userManager,
-		CardMapper $cardMapper,
-		StackMapper $stackMapper,
-		BoardMapper $boardMapper,
+		protected readonly IFactory $l10nFactory,
+		protected readonly IURLGenerator $url,
+		protected readonly IUserManager $userManager,
+		protected readonly CardMapper $cardMapper,
+		protected readonly StackMapper $stackMapper,
+		protected readonly BoardMapper $boardMapper,
 	) {
-		$this->l10nFactory = $l10nFactory;
-		$this->url = $url;
-		$this->userManager = $userManager;
-		$this->cardMapper = $cardMapper;
-		$this->stackMapper = $stackMapper;
-		$this->boardMapper = $boardMapper;
 	}
 
 	/**
@@ -228,6 +209,17 @@ class Notifier implements INotifier {
 							'name' => $dn ?? '',
 						]
 					]
+				);
+				$notification->setLink($this->getBoardUrl($boardId));
+				break;
+			case 'remote-board-shared':
+				$boardId = (int)$notification->getObjectId();
+				if (!$boardId) {
+					throw new AlreadyProcessedException();
+				}
+				$federationOwnerDisplayName = $params[1];
+				$notification->setParsedSubject(
+					$l->t('The remote board %1$s has been shared with you by %2$s', [$params[0], $federationOwnerDisplayName])
 				);
 				$notification->setLink($this->getBoardUrl($boardId));
 				break;

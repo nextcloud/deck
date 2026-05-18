@@ -183,9 +183,7 @@ export default {
 		},
 		showUpdateForm() {
 			this.edit = true
-			this.$nextTick(() => {
-				this.commentMsg = this.$refs.richTextElement.children[0].innerHTML
-			})
+			this.commentMsg = this.comment.message
 		},
 		hideUpdateForm() {
 			this.commentMsg = ''
@@ -212,7 +210,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import '../../css/comments';
+	@import '../../css/comments.scss';
 
 	.reply {
 		margin: 0 0 0 var(--default-clickable-area);
@@ -228,14 +226,14 @@ export default {
 			}
 
 			.reply--cancel {
-				margin-right: -12px;
+				margin-inline-end: -12px;
 				margin-top: -12px;
 			}
 		}
 
 		.reply--wrapper {
-			border-left: 4px solid var(--color-border-dark);
-			padding-left: 8px;
+			border-inline-start: 4px solid var(--color-border-dark);
+			padding-inline-start: 8px;
 		}
 
 		&:deep(.rich-text--wrapper) {

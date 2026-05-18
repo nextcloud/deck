@@ -59,11 +59,10 @@ export default {
 			'assignedCardsDashboard',
 		]),
 		cards() {
-			const list = [
-				...this.assignedCardsDashboard,
-			].filter((card) => {
-				return card.duedate !== null
-			})
+			const list = Object.values(this.assignedCardsDashboard).flat()
+				.filter((card) => {
+					return card.duedate !== null
+				})
 			list.sort((a, b) => {
 				return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
 			})
@@ -123,7 +122,7 @@ export default {
 	}
 
 	.labels {
-		margin-left: 0;
+		margin-inline-start: 0;
 		margin-top: 3px;
 	}
 
@@ -137,6 +136,6 @@ export default {
 	}
 
 	.right {
-		float: right;
+		float: inline-end;
 	}
 </style>

@@ -29,6 +29,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ConfigService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -57,12 +58,17 @@ class PageControllerTest extends TestCase {
 	 * @var mixed|CardService|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	private $cardService;
+	/**
+	 * @var mixed|ExternalBoardService|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	private $externalBoardService;
 	/** @var IConfig|\PHPUnit\Framework\MockObject\MockObject */
 	private $config;
 
 	public function setUp(): void {
 		$this->request = $this->createMock(IRequest::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
+		$this->externalBoardService = $this->createMock(ExternalBoardService::class);
 		$this->configService = $this->createMock(ConfigService::class);
 		$this->initialState = $this->createMock(IInitialState::class);
 		$this->boardService = $this->createMock(BoardService::class);
@@ -78,6 +84,7 @@ class PageControllerTest extends TestCase {
 			$this->permissionService,
 			$this->initialState,
 			$this->boardService,
+			$this->externalBoardService,
 			$this->configService,
 			$this->eventDispatcher,
 			$this->cardMapper,

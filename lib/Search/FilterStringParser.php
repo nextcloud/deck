@@ -16,14 +16,9 @@ use OCA\Deck\Search\Query\StringQueryParameter;
 use OCP\IL10N;
 
 class FilterStringParser {
-
-	/**
-	 * @var IL10N
-	 */
-	private $l10n;
-
-	public function __construct(IL10N $l10n) {
-		$this->l10n = $l10n;
+	public function __construct(
+		private readonly IL10N $l10n,
+	) {
 	}
 
 	public function parse(?string $filter): SearchQuery {
@@ -72,9 +67,9 @@ class FilterStringParser {
 					$orEquals = $param[1] === '=';
 					$value = $orEquals ? substr($param, 2) : substr($param, 1);
 					$comparator = (
-						($param[0] === '<' ? SearchQuery::COMPARATOR_LESS : 0) |
-						($param[0] === '>' ? SearchQuery::COMPARATOR_MORE : 0) |
-						($orEquals ? SearchQuery::COMPARATOR_EQUAL : 0)
+						($param[0] === '<' ? SearchQuery::COMPARATOR_LESS : 0)
+						| ($param[0] === '>' ? SearchQuery::COMPARATOR_MORE : 0)
+						| ($orEquals ? SearchQuery::COMPARATOR_EQUAL : 0)
 					);
 				}
 				$query->addDuedate(new DateQueryParameter('date', $comparator, $this->removeQuotes($value)));

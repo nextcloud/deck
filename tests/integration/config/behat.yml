@@ -1,8 +1,14 @@
 default:
+  formatters:
+    pretty:
+      output_styles:
+        comment: [ 'bright-blue' ]
   suites:
     test:
       paths:
         - '%paths.base%/../features/'
+      filters:
+        tags: '~@federation'
       contexts:
         - ServerContext:
             baseUrl:  http://localhost:8080/
@@ -12,3 +18,8 @@ default:
         - AttachmentContext
         - SearchContext
         - SessionContext
+    federation:
+      paths:
+        - '%paths.base%/../features/federation/'
+      contexts:
+        - FederationContext

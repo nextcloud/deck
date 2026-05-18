@@ -4,7 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import '../models/index.js'
 
 export class StackApi {
@@ -14,11 +14,16 @@ export class StackApi {
 		return generateUrl(url)
 	}
 
+	ocsUrl(url) {
+		url = `/apps/deck/api/v1.0${url}`
+		return generateOcsUrl(url)
+	}
+
 	loadStacks(boardId) {
-		return axios.get(this.url(`/stacks/${boardId}`))
+		return axios.get(this.ocsUrl(`/stacks/${boardId}`))
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -64,10 +69,10 @@ export class StackApi {
 	 * @return {Promise}
 	 */
 	createStack(stack) {
-		return axios.post(this.url('/stacks'), stack)
+		return axios.post(this.ocsUrl('/stacks'), stack)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -78,11 +83,11 @@ export class StackApi {
 			})
 	}
 
-	reorderStack(stackId, order) {
-		return axios.put(this.url(`/stacks/${stackId}/reorder`), { order })
+	reorderStack(stackId, order, boardId) {
+		return axios.put(this.ocsUrl(`/stacks/${stackId}/reorder`), { order, boardId: boardId ?? null })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -93,11 +98,11 @@ export class StackApi {
 			})
 	}
 
-	deleteStack(stackId) {
-		return axios.delete(this.url(`/stacks/${stackId}`))
+	deleteStack(stackId, boardId) {
+		return axios.delete(this.ocsUrl(`/stacks/${stackId}/${boardId}`))
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -113,6 +118,21 @@ export class StackApi {
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	setDoneStack(stackId, boardId, isDone) {
+		return axios.put(this.ocsUrl(`/stacks/${stackId}/done`), { boardId, isDone })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

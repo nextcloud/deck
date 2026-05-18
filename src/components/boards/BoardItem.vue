@@ -95,7 +95,7 @@ export default {
 			border-radius: 50%;
 			height: 32px;
 			width: 32px;
-			margin-left: 3px;
+			margin-inline-start: 3px;
 			&.icon-more {
 				background-color:var(--color-background-dark);
 			}

@@ -22,24 +22,13 @@ use OCP\Security\ISecureRandom;
 class SessionService {
 	public const SESSION_VALID_TIME = 92;
 
-	private SessionMapper $sessionMapper;
-	private ITimeFactory $timeFactory;
-	private $userId;
-	private IEventDispatcher $eventDispatcher;
-	private ISecureRandom $secureRandom;
-
 	public function __construct(
-		SessionMapper $sessionMapper,
-		ISecureRandom $secureRandom,
-		ITimeFactory $timeFactory,
-		$userId,
-		IEventDispatcher $eventDispatcher,
+		private readonly SessionMapper $sessionMapper,
+		private readonly ISecureRandom $secureRandom,
+		private readonly ITimeFactory $timeFactory,
+		private readonly ?string $userId,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
-		$this->sessionMapper = $sessionMapper;
-		$this->secureRandom = $secureRandom;
-		$this->timeFactory = $timeFactory;
-		$this->userId = $userId;
-		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	public function initSession(int $boardId): Session {
@@ -71,7 +60,7 @@ class SessionService {
 		}
 		$this->eventDispatcher->dispatchTyped(new SessionClosedEvent($boardId, $this->userId));
 	}
-	
+
 	public function removeInactiveSessions(): int {
 		return $this->sessionMapper->deleteInactive();
 	}
@@ -90,7 +79,7 @@ class SessionService {
 			}
 
 			// don't notify the same user multiple times
-			if (!in_array($session->getUserId(), $userIds)) {
+			if (!in_array($session->getUserId(), $userIds, true)) {
 				$userIds[] = $session->getUserId();
 			}
 		}
