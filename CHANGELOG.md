@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.5
+
+### Fixed
+* [stable32] owner should not get updated when updating card by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7853
+* [stable32] fix: Handle share attributes in the share provider by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7730
+
 ## 1.16.4
 
 ### Added
