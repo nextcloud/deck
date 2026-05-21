@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.8
+### Fixed
+- [stable31] fix: Handle share attributes in the share provider by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7829
+
 ## 1.15.7
 ### Fixed
 - [stable31] Fix/display labels with invalid colors by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7540
