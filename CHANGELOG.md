@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.10
+### Fixed
+* [stable30] fix: Handle share attributes in the share provider by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7732
+
 ## 1.14.9
 ### Fixed
 * [stable30] fix: rely on backend filter for upcoming cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7631
