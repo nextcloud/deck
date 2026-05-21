@@ -5,6 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.17.2
+
+### Fixed
+* [stable33] owner should not get updated when updating card by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7852
+* [stable33] fix(comments): use message source when updating a message by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7884
+* [stable33] fix: call findBoardId with int by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7898
+* [stable33] fix: set max comment retrieval limit to 200 by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7912
 
 ## 1.17.1
 
