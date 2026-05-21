@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b4431b40e33e42eb7c6c99d36407675",
+    "content-hash": "cb421a65101996968b7bb1c094bd7717",
     "packages": [],
     "packages-dev": [
         {
@@ -113,16 +113,16 @@
         },
         {
             "name": "behat/gherkin",
-            "version": "v4.17.0",
+            "version": "v4.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Gherkin.git",
-                "reference": "5c8b3149fac39b5a79942b64eeec59a5ee4001c0"
+                "reference": "e26037937dfd48528746764dd870bc5d0836665f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Gherkin/zipball/5c8b3149fac39b5a79942b64eeec59a5ee4001c0",
-                "reference": "5c8b3149fac39b5a79942b64eeec59a5ee4001c0",
+                "url": "https://api.github.com/repos/Behat/Gherkin/zipball/e26037937dfd48528746764dd870bc5d0836665f",
+                "reference": "e26037937dfd48528746764dd870bc5d0836665f",
                 "shasum": ""
             },
             "require": {
@@ -130,7 +130,7 @@
                 "php": ">=8.1 <8.6"
             },
             "require-dev": {
-                "cucumber/gherkin-monorepo": "dev-gherkin-v39.1.0",
+                "cucumber/gherkin-monorepo": "dev-gherkin-v37.0.0",
                 "friendsofphp/php-cs-fixer": "^3.77",
                 "mikey179/vfsstream": "^1.6",
                 "phpstan/extension-installer": "^1",
@@ -176,7 +176,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Gherkin/issues",
-                "source": "https://github.com/Behat/Gherkin/tree/v4.17.0"
+                "source": "https://github.com/Behat/Gherkin/tree/v4.16.1"
             },
             "funding": [
                 {
@@ -192,7 +192,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-18T09:33:47+00:00"
+            "time": "2025-12-08T16:12:58+00:00"
         },
         {
             "name": "composer/pcre",
@@ -4818,8 +4818,5 @@
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
-    "platform-overrides": {
-        "php": "8.2"
-    },
     "plugin-api-version": "2.6.0"
 }
