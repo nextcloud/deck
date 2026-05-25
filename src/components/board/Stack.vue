@@ -5,7 +5,8 @@
 
 <template>
 	<div class="stack" :class="{'stack--done-column': isDoneColumn}" :data-cy-stack="stack.title">
-		<div v-click-outside="stopCardCreation"
+		<div v-if="!hideHeader"
+			v-click-outside="stopCardCreation"
 			class="stack__header"
 			:class="{'stack__header--add': showAddCard, 'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
@@ -101,9 +102,10 @@
 			</div>
 		</NcModal>
 
-		<Container :get-child-payload="payloadForCard(stack.id)"
+		<Container v-if="!headerOnly"
+			:get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container"
-			group-name="stack"
+			:group-name="lane ? 'stack-' + lane.key : 'stack'"
 			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
@@ -186,6 +188,21 @@ export default {
 			type: Object,
 			default: undefined,
 		},
+		lane: {
+			type: Object,
+			default: null,
+		},
+		// Swimlane view: render only the header row (title, actions, add card)
+		headerOnly: {
+			type: Boolean,
+			default: false,
+		},
+		// Swimlane view: render only the card column, header lives in the
+		// shared sticky header row at the top of the board
+		hideHeader: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -213,6 +230,14 @@ export default {
 			showArchived: state => state.showArchived,
 		}),
 		cardsByStack() {
+			if (this.lane && this.lane.id !== undefined) {
+				return this.$store.getters.cardsByStackAndLane(this.stack.id, this.lane.type, this.lane.id).filter((card) => {
+					if (this.showArchived) {
+						return card.archived
+					}
+					return !card.archived
+				})
+			}
 			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
 				if (this.showArchived) {
 					return card.archived
