@@ -40,6 +40,9 @@ class CommentService {
 		if (!is_numeric($cardId)) {
 			throw new BadRequestException('A valid card id must be provided');
 		}
+		if ($limit > 200) {
+			$limit = 200;
+		}
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$comments = $this->commentsManager->getForObject(Application::COMMENT_ENTITY_TYPE, $cardId, $limit, $offset);
 		$result = [];
