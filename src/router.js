@@ -33,6 +33,11 @@ const router = new Router({
 			component: Overview,
 		},
 		{
+			path: '/upcoming',
+			name: 'upcoming',
+			component: Overview,
+		},
+		{
 			path: '/overview/:filter',
 			name: 'overview',
 			components: {
