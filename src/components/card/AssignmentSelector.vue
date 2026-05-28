@@ -19,19 +19,9 @@
 			label="displayname"
 			track-by="multiselectKey"
 			@option:selected="onSelect"
-			@option:deselected="onRemove">
-			<template #tag="scope">
-				<div class="avatarlist--inline">
-					<NcAvatar :user="scope.option.uid"
-						:display-name="scope.option.displayname"
-						:size="24"
-						:is-no-user="scope.option.isNoUser"
-						:disable-menu="true" />
-				</div>
-			</template>
-		</NcSelect>
+			@option:deselected="onRemove" />
 		<div v-else class="avatar-list--readonly">
-			<NcAvatar v-for="option in assignedUsers"
+			<NcUserBubble v-for="option in assignedUsers"
 				:key="option.primaryKey"
 				:user="option.uid"
 				:display-name="option.displayname"
@@ -43,7 +33,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { NcAvatar, NcSelect } from '@nextcloud/vue'
+import { NcSelect, NcUserBubble } from '@nextcloud/vue'
 import AccountMultiple from 'vue-material-design-icons/AccountMultipleOutline.vue'
 
 export default defineComponent({
@@ -51,7 +41,7 @@ export default defineComponent({
 	components: {
 		AccountMultiple,
 		NcSelect,
-		NcAvatar,
+		NcUserBubble,
 	},
 	props: {
 		card: {
@@ -116,6 +106,7 @@ export default defineComponent({
 					...item.participant,
 					isNoUser: item.participant.type !== 0,
 					multiselectKey: item.participant.type + ':' + item.participant.primaryKey,
+					user: item.participant.uid,
 				}))
 			} else {
 				this.assignedUsers = []
