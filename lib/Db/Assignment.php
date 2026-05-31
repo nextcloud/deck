@@ -17,6 +17,7 @@ class Assignment extends RelationalEntity implements JsonSerializable {
 	public const TYPE_USER = Acl::PERMISSION_TYPE_USER;
 	public const TYPE_GROUP = Acl::PERMISSION_TYPE_GROUP;
 	public const TYPE_CIRCLE = Acl::PERMISSION_TYPE_CIRCLE;
+	public const TYPE_REMOTE = Acl::PERMISSION_TYPE_REMOTE;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
@@ -26,15 +27,11 @@ class Assignment extends RelationalEntity implements JsonSerializable {
 	}
 
 	public function getTypeString(): string {
-		switch ($this->getType()) {
-			case self::TYPE_USER:
-				return 'user';
-			case self::TYPE_GROUP:
-				return 'group';
-			case self::TYPE_CIRCLE:
-				return 'circle';
-		}
-
-		return 'unknown';
+		return match ($this->getType()) {
+			self::TYPE_USER => 'user',
+			self::TYPE_GROUP => 'group',
+			self::TYPE_CIRCLE => 'circle',
+			default => 'unknown',
+		};
 	}
 }

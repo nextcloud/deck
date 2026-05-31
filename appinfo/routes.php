@@ -57,6 +57,8 @@ return [
 		['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 		['name' => 'card#assignUser', 'url' => '/cards/{cardId}/assign', 'verb' => 'POST'],
 		['name' => 'card#unassignUser', 'url' => '/cards/{cardId}/unassign', 'verb' => 'PUT'],
+		['name' => 'card#assignDependentCard', 'url' => '/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'POST'],
+		['name' => 'card#removeDependentCard', 'url' => '/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'DELETE'],
 
 		// attachments
 		['name' => 'attachment#getAll', 'url' => '/cards/{cardId}/attachments', 'verb' => 'GET'],
@@ -105,6 +107,8 @@ return [
 		['name' => 'card_api#assignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#unassignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#reorder', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		['name' => 'card_api#assignDependentCard', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'POST'],
+		['name' => 'card_api#removeDependentCard', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'DELETE'],
 		['name' => 'card_api#archive', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive', 'verb' => 'PUT'],
 		['name' => 'card_api#unarchive', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive', 'verb' => 'PUT'],
 		['name' => 'card_api#delete', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
@@ -142,8 +146,12 @@ return [
 		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
 		['name' => 'card_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}', 'verb' => 'PUT'],
 		['name' => 'card_ocs#assignLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
+		['name' => 'card_ocs#assignUser', 'url' => '/api/v{apiVersion}/cards/{cardId}/assign', 'verb' => 'POST'],
+		['name' => 'card_ocs#unAssignUser', 'url' => '/api/v{apiVersion}/cards/{cardId}/unassign', 'verb' => 'PUT'],
 		['name' => 'card_ocs#removeLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 		['name' => 'card_ocs#reorder', 'url' => '/api/v{apiVersion}/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		['name' => 'card_ocs#assignDependentCard', 'url' => '/api/v{apiVersion}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'POST'],
+		['name' => 'card_ocs#removeDependentCard', 'url' => '/api/v{apiVersion}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'DELETE'],
 
 		['name' => 'stack_ocs#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
 		['name' => 'stack_ocs#setDoneStack', 'url' => '/api/v{apiVersion}/stacks/{stackId}/done', 'verb' => 'PUT'],

@@ -16,33 +16,16 @@ use OCP\IL10N;
 use OCP\PreConditionNotMetException;
 
 class DefaultBoardService {
-	private $boardMapper;
-	private $boardService;
-	private $stackService;
-	private $cardService;
-	private $config;
-	private $l10n;
-	private LabelService $labelService;
-	private AttachmentService $attachmentService;
-
 	public function __construct(
-		IL10N $l10n,
-		BoardMapper $boardMapper,
-		BoardService $boardService,
-		StackService $stackService,
-		CardService $cardService,
-		IConfig $config,
-		LabelService $labelService,
-		AttachmentService $attachmentService,
+		private readonly IL10N $l10n,
+		private readonly BoardMapper $boardMapper,
+		private readonly BoardService $boardService,
+		private readonly StackService $stackService,
+		private readonly CardService $cardService,
+		private readonly IConfig $config,
+		private readonly LabelService $labelService,
+		private readonly AttachmentService $attachmentService,
 	) {
-		$this->boardService = $boardService;
-		$this->stackService = $stackService;
-		$this->cardService = $cardService;
-		$this->config = $config;
-		$this->boardMapper = $boardMapper;
-		$this->l10n = $l10n;
-		$this->labelService = $labelService;
-		$this->attachmentService = $attachmentService;
 	}
 
 	/**

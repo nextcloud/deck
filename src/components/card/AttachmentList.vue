@@ -197,6 +197,9 @@ export default {
 			return (attachment) => attachment?.extendedData?.info?.extension
 				?? (attachment?.name ?? attachment.data).split('.').pop()
 		},
+		cardDetailsInModal() {
+			return this.$store.getters.config('cardDetailsInModal')
+		},
 	},
 	watch: {
 		cardId: {
@@ -245,7 +248,17 @@ export default {
 		},
 		showViewer(attachment) {
 			if (attachment.extendedData.fileid && window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
-				window.OCA.Viewer.open({ path: attachment.extendedData.path })
+				// Hide the sidebar if opening card in modal to avoid wrong sidebar position calculating in Viewer app
+				const sidebar = document.querySelector('aside.app-sidebar')
+				if (sidebar && this.cardDetailsInModal) {
+					sidebar.style.display = 'none'
+				}
+				const onClose = () => {
+					if (sidebar && sidebar.style.display === 'none') {
+						sidebar.style.display = ''
+					}
+				}
+				window.OCA.Viewer.open({ path: attachment.extendedData.path, onClose })
 				return
 			}
 
@@ -271,12 +284,12 @@ export default {
 		gap: calc(var(--default-grid-baseline) * 3);
 
 		.icon-upload, .icon-folder {
-			padding-left: var(--default-clickable-area);
+			padding-inline-start: var(--default-clickable-area);
 			background-position: 16px center;
 			flex-grow: 1;
 			height: var(--default-clickable-area);
 			margin-bottom: 12px;
-			text-align: left;
+			text-align: start;
 		}
 	}
 
@@ -289,7 +302,7 @@ export default {
 			min-width: 200px;
 			max-height: 50%;
 			top: 50%;
-			left: 50%;
+			inset-inline-start: 50%;
 			transform: translate(-50%, -50%);
 			background-color: #eee;
 			z-index: 2;
@@ -302,7 +315,7 @@ export default {
 			padding: 0;
 			.icon-close {
 				display: inline-block;
-				float: right;
+				float: inline-end;
 			}
 		}
 
@@ -350,7 +363,7 @@ export default {
 			}
 			.app-popover-menu-utils {
 				position: relative;
-				right: -10px;
+				inset-inline-end: -10px;
 				button {
 					height: 32px;
 					width: 42px;

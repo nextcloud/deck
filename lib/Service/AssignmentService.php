@@ -25,69 +25,18 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class AssignmentService {
-
-	/**
-	 * @var PermissionService
-	 */
-	private $permissionService;
-	/**
-	 * @var CardMapper
-	 */
-	private $cardMapper;
-	/**
-	 * @var AssignmentMapper
-	 */
-	private $assignedUsersMapper;
-	/**
-	 * @var AclMapper
-	 */
-	private $aclMapper;
-	/**
-	 * @var NotificationHelper
-	 */
-	private $notificationHelper;
-	/**
-	 * @var ChangeHelper
-	 */
-	private $changeHelper;
-	/**
-	 * @var ActivityManager
-	 */
-	private $activityManager;
-	/**
-	 * @var IEventDispatcher
-	 */
-	private $eventDispatcher;
-	/** @var string|null */
-	private $currentUser;
-	/**
-	 * @var AssignmentServiceValidator
-	 */
-	private $assignmentServiceValidator;
-
-
 	public function __construct(
-		PermissionService $permissionService,
-		CardMapper $cardMapper,
-		AssignmentMapper $assignedUsersMapper,
-		AclMapper $aclMapper,
-		NotificationHelper $notificationHelper,
-		ActivityManager $activityManager,
-		ChangeHelper $changeHelper,
-		IEventDispatcher $eventDispatcher,
-		AssignmentServiceValidator $assignmentServiceValidator,
-		$userId,
+		private readonly PermissionService $permissionService,
+		private readonly CardMapper $cardMapper,
+		private readonly AssignmentMapper $assignedUsersMapper,
+		private readonly AclMapper $aclMapper,
+		private readonly NotificationHelper $notificationHelper,
+		private readonly ActivityManager $activityManager,
+		private readonly ChangeHelper $changeHelper,
+		private readonly IEventDispatcher $eventDispatcher,
+		private readonly AssignmentServiceValidator $assignmentServiceValidator,
+		private readonly ?string $userId,
 	) {
-		$this->assignmentServiceValidator = $assignmentServiceValidator;
-		$this->permissionService = $permissionService;
-		$this->cardMapper = $cardMapper;
-		$this->assignedUsersMapper = $assignedUsersMapper;
-		$this->aclMapper = $aclMapper;
-		$this->notificationHelper = $notificationHelper;
-		$this->changeHelper = $changeHelper;
-		$this->activityManager = $activityManager;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->currentUser = $userId;
 	}
 
 	/**
@@ -99,7 +48,7 @@ class AssignmentService {
 	public function assignUser(int $cardId, string $userId, int $type = Assignment::TYPE_USER): Assignment {
 		$this->assignmentServiceValidator->check(compact('cardId', 'userId'));
 
-		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP) {
+		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP && $type !== Assignment::TYPE_REMOTE && $type !== Assignment::TYPE_CIRCLE) {
 			throw new BadRequestException('Invalid type provided for assignemnt');
 		}
 
@@ -114,15 +63,19 @@ class AssignmentService {
 		$card = $this->cardMapper->find($cardId);
 		$boardId = $this->cardMapper->findBoardId($cardId);
 		$boardUsers = array_keys($this->permissionService->findUsers($boardId, true));
-		$groups = array_filter($this->aclMapper->findAll($boardId), function (Acl $acl) use ($userId) {
+		$acls = $this->aclMapper->findAll($boardId);
+		$groups = array_filter($acls, function (Acl $acl) use ($userId) {
 			return $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $acl->getParticipant() === $userId;
 		});
-		if (!in_array($userId, $boardUsers, true) && count($groups) !== 1) {
+		$teams = array_filter($acls, function (Acl $acl) use ($userId) {
+			return $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE && $acl->getParticipant() === $userId;
+		});
+		if (!in_array($userId, $boardUsers, true) && count($groups) !== 1 && count($teams) !== 1) {
 			throw new BadRequestException('The user is not part of the board');
 		}
 
 
-		if ($type === Assignment::TYPE_USER && $userId !== $this->currentUser) {
+		if ($type === Assignment::TYPE_USER && $userId !== $this->userId) {
 			$this->notificationHelper->sendCardAssigned($card, $userId);
 		}
 
@@ -156,7 +109,7 @@ class AssignmentService {
 				$assignment = $this->assignedUsersMapper->delete($assignment);
 				$card = $this->cardMapper->find($cardId);
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
-				if ($type === Assignment::TYPE_USER && $userId !== $this->currentUser) {
+				if ($type === Assignment::TYPE_USER && $userId !== $this->userId) {
 					$this->notificationHelper->markCardAssignedAsRead($card, $userId);
 				}
 				$this->changeHelper->cardChanged($cardId);

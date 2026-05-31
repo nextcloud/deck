@@ -26,8 +26,6 @@ OC.L10N.register(
     "Delete" : "Kkes",
     "Edit" : "Ẓreg",
     "Download" : "Sider",
-    "Modified" : "Yettwabeddel",
-    "Created" : "Yettwarna.",
     "Comments" : "Commentaires",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
@@ -38,6 +36,8 @@ OC.L10N.register(
     "No notifications" : "Ulac tisezmal",
     "Export" : "Sifeḍ",
     "Close" : "Mdel",
+    "Created" : "Yettwarna.",
+    "Modified" : "Yettwabeddel",
     "Share" : "Bḍu",
     "Save" : "Sekles",
     "Today" : "Ass-a"

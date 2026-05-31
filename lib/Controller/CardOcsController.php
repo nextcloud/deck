@@ -8,14 +8,14 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Model\OptionalNullableValue;
+use OCA\Deck\NotImplementedException;
+use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
-use OCP\AppFramework\Http\Attribute\RequestHeader;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -25,6 +25,7 @@ class CardOcsController extends OCSController {
 		string $appName,
 		IRequest $request,
 		private CardService $cardService,
+		private AssignmentService $assignmentService,
 		private StackService $stackService,
 		private BoardService $boardService,
 		private ExternalBoardService $externalBoardService,
@@ -35,9 +36,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
-	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = 999, ?string $description = '', $duedate = null, ?array $labels = [], ?array $users = []) {
+	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = 999, ?string $description = '', $duedate = null, $startdate = null, ?array $labels = [], ?array $users = [], ?string $color = null) {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
 			if ($board->getExternalId()) {
@@ -49,7 +48,7 @@ class CardOcsController extends OCSController {
 		if (!$owner) {
 			$owner = $this->userId;
 		}
-		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate);
+		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color);
 
 		// foreach ($labels as $label) {
 		// 	$this->assignLabel($card->getId(), $label);
@@ -65,7 +64,6 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
 	public function assignLabel(?int $boardId, int $cardId, int $labelId): DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -79,7 +77,30 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
+	public function assignUser(?int $boardId, int $cardId, string $userId, int $type = 0): DataResponse {
+		if ($boardId) {
+			$localBoard = $this->boardService->find($boardId, false);
+			if ($localBoard->getExternalId()) {
+				return new DataResponse($this->externalBoardService->assignUserOnRemote($localBoard, $cardId, $userId, $type));
+			}
+		}
+		return new DataResponse($this->assignmentService->assignUser($cardId, $userId, $type));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function unAssignUser(?int $boardId, int $cardId, string $userId, int $type = 0): DataResponse {
+		if ($boardId) {
+			$localBoard = $this->boardService->find($boardId, false);
+			if ($localBoard->getExternalId()) {
+				return new DataResponse($this->externalBoardService->unAssignUserOnRemote($localBoard, $cardId, $userId, $type));
+			}
+		}
+		return new DataResponse($this->assignmentService->unAssignUser($cardId, $userId, $type));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
 	public function removeLabel(?int $boardId, int $cardId, int $labelId): DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -93,9 +114,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
-	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null): DataResponse {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null, $startdate = null, ?string $color = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
 			: null;
@@ -135,13 +154,14 @@ class CardOcsController extends OCSController {
 			$duedate,
 			$deletedAt,
 			$archived,
-			$done
+			$done,
+			$startdate,
+			$color
 		));
 	}
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
 	public function reorder(int $cardId, int $stackId, int $order, ?int $boardId): DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -150,5 +170,29 @@ class CardOcsController extends OCSController {
 			}
 		}
 		return new DataResponse($this->cardService->reorder($cardId, $stackId, $order));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function assignDependentCard(int $cardId, int $dependentCardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				throw new NotImplementedException('Dependent cards are not supported for external boards');
+			}
+		}
+		return new DataResponse($this->cardService->assignDependentCard($cardId, $dependentCardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function removeDependentCard(int $cardId, int $dependentCardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				throw new NotImplementedException('Dependent cards are not supported for external boards');
+			}
+		}
+		return new DataResponse($this->cardService->removeDependentCard($cardId, $dependentCardId));
 	}
 }

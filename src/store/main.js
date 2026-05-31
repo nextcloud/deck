@@ -11,10 +11,8 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
-import actions from './actions.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
-import comment from './comment.js'
 import trashbin from './trashbin.js'
 import attachment from './attachment.js'
 import overview from './overview.js'
@@ -35,10 +33,8 @@ export const BOARD_FILTERS = {
 export default function storeFactory() {
 	return new Vuex.Store({
 		modules: {
-			actions,
 			stack: stackModuleFactory(),
 			card: cardModuleFactory(),
-			comment,
 			trashbin,
 			attachment,
 			overview,
@@ -64,6 +60,7 @@ export default function storeFactory() {
 			activityLoadMore: true,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			shortcutLock: false,
+			viewModeByBoard: {},
 		},
 		getters: {
 			config: state => (key) => {
@@ -76,6 +73,15 @@ export default function storeFactory() {
 			getSearchQuery: state => {
 				return state.searchQuery
 			},
+			viewMode: state => {
+				if (!state.currentBoard) return 'kanban'
+				if (state.viewModeByBoard[state.currentBoard.id] !== undefined) {
+					return state.viewModeByBoard[state.currentBoard.id]
+				}
+
+				const stored = localStorage.getItem(`deck.viewMode.${state.currentBoard.id}`)
+				return stored !== null ? stored : 'kanban'
+			},
 			getFilter: state => {
 				return state.filter
 			},
@@ -87,7 +93,7 @@ export default function storeFactory() {
 			},
 			assignables: state => {
 				return [
-					...state.assignableUsers.map((user) => ({ ...user, type: 0 })),
+					...state.assignableUsers.map((user) => ({ ...user, type: user.type })),
 					...state.currentBoard.acl.filter((acl) => acl.type === 1 && typeof acl.participant === 'object').map((group) => ({ ...group.participant, type: 1 })),
 					...state.currentBoard.acl.filter((acl) => acl.type === 7 && typeof acl.participant === 'object').map((circle) => ({ ...circle.participant, type: 7 })),
 				]
@@ -321,6 +327,11 @@ export default function storeFactory() {
 			TOGGLE_SHORTCUT_LOCK(state, lock) {
 				state.shortcutLock = lock
 			},
+			setViewMode(state, mode) {
+				if (!state.currentBoard) return
+				Vue.set(state.viewModeByBoard, state.currentBoard.id, mode)
+				localStorage.setItem(`deck.viewMode.${state.currentBoard.id}`, mode)
+			},
 		},
 		actions: {
 			setFullApp({ commit }, isFullApp) {
@@ -407,6 +418,7 @@ export default function storeFactory() {
 			 *
 			 * @param commit.commit
 			 * @param commit
+			 * @param commit.state
 			 * @param board The board to update.
 			 * @return {Promise<void>}
 			 */
@@ -554,6 +566,9 @@ export default function storeFactory() {
 			},
 			toggleShortcutLock({ commit }, lock) {
 				commit('TOGGLE_SHORTCUT_LOCK', lock)
+			},
+			setViewMode({ commit }, mode) {
+				commit('setViewMode', mode)
 			},
 		},
 	})

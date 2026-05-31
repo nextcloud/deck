@@ -54,6 +54,43 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * Fetch multiple stacks by their IDs in a single query.
+	 *
+	 * @param int[] $ids
+	 * @return array<int, Stack> Map of stackId => Stack
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findByIds(array $ids): array {
+		if (empty($ids)) {
+			return [];
+		}
+
+		$stacks = [];
+		$uncachedIds = [];
+		foreach ($ids as $id) {
+			if (isset($this->stackCache[(string)$id])) {
+				$stacks[$id] = $this->stackCache[(string)$id];
+			} else {
+				$uncachedIds[] = $id;
+			}
+		}
+
+		if (!empty($uncachedIds)) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('*')
+				->from($this->getTableName())
+				->where($qb->expr()->in('id', $qb->createNamedParameter($uncachedIds, IQueryBuilder::PARAM_INT_ARRAY)));
+
+			foreach ($this->findEntities($qb) as $stack) {
+				$this->stackCache[(string)$stack->getId()] = $stack;
+				$stacks[$stack->getId()] = $stack;
+			}
+		}
+
+		return $stacks;
+	}
+
+	/**
 	 * @throws \OCP\DB\Exception
 	 */
 	public function findStackFromCardId(int $cardId): ?Stack {

@@ -11,12 +11,14 @@ use OC\Comments\Comment;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\Importer\ABoardImportService;
 use OCP\Comments\IComment;
+use OCP\Comments\ICommentsManager;
 use OCP\IUser;
 use OCP\IUserManager;
 
@@ -94,6 +96,9 @@ class DeckJsonService extends ABoardImportService {
 	public function getCardAssignments(): array {
 		$assignments = [];
 		foreach ($this->tmpCards as $sourceCard) {
+			if (!property_exists($sourceCard, 'assignedUsers') || !is_iterable($sourceCard->assignedUsers)) {
+				continue;
+			}
 			foreach ($sourceCard->assignedUsers as $idMember) {
 				$assignment = new Assignment();
 				$assignment->setCardId($this->cards[$sourceCard->id]->getId());
@@ -105,22 +110,103 @@ class DeckJsonService extends ABoardImportService {
 		return $assignments;
 	}
 
+	/**
+	 * Parse comments from source cards and return them as an array of comments by card ID.
+	 *
+	 */
 	public function getComments(): array {
 		$comments = [];
 		foreach ($this->tmpCards as $sourceCard) {
-			if (!property_exists($sourceCard, 'comments')) {
+			if (!property_exists($sourceCard, 'comments') || !isset($this->cards[$sourceCard->id])) {
 				continue;
 			}
-			$commentsOriginal = $sourceCard->comments;
-			foreach ($commentsOriginal as $commentOriginal) {
+			$targetCardId = $this->cards[$sourceCard->id]->getId();
+			if (!is_iterable($sourceCard->comments)) {
+				continue;
+			}
+			foreach ($sourceCard->comments as $commentOriginal) {
+				$commentId = (string)($commentOriginal->id ?? '');
+				if ($commentId === '') {
+					continue;
+				}
+				$parentId = (string)($commentOriginal->parentId ?? '0');
+				[$actorType, $actorId] = $this->resolveCommentActor($commentOriginal);
 				$comment = new Comment();
-				$comment->setActor($commentOriginal->actorType, $commentOriginal->actorId)
-					->setMessage($commentOriginal->message)->setCreationDateTime(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $commentOriginal->creationDateTime));
-				$comments[$this->cards[$sourceCard->id]->getId()][$commentOriginal->id] = $comment;
+				$comment->setActor($actorType, $actorId)
+					->setParentId($parentId)
+					->setMessage($commentOriginal->message)
+					->setCreationDateTime(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $commentOriginal->creationDateTime));
+				$comment->setMetaData([
+					'deckImportSourceId' => $commentId,
+					'deckImportParentId' => $parentId,
+				]);
+				$comments[$targetCardId][$commentId] = $comment;
 			}
 		}
 		/** @var array<int, array<string, IComment>> */
 		return $comments;
+	}
+
+	public function importAttachments(): void {
+		foreach ($this->tmpCards as $sourceCard) {
+			$this->importAttachmentsForCard($sourceCard);
+		}
+	}
+
+	/**
+	 * @return array{0: string, 1: string}
+	 */
+	private function resolveCommentActor(object $commentOriginal): array {
+		$actorType = (string)($commentOriginal->actorType ?? 'users');
+		$actorId = $commentOriginal->actorId ?? null;
+
+		if (!is_string($actorId) || $actorId === '') {
+			return [ICommentsManager::DELETED_USER, ICommentsManager::DELETED_USER];
+		}
+
+		if ($actorType === 'users' && !$this->userManager->userExists($actorId)) {
+			return [ICommentsManager::DELETED_USER, ICommentsManager::DELETED_USER];
+		}
+
+		return [$actorType, $actorId];
+	}
+
+	private function importAttachmentsForCard(object $sourceCard): void {
+		if (!property_exists($sourceCard, 'attachments') || !isset($this->cards[$sourceCard->id])) {
+			return;
+		}
+
+		$targetCardId = $this->cards[$sourceCard->id]->getId();
+		foreach ($sourceCard->attachments as $sourceAttachment) {
+			if (($sourceAttachment->type ?? null) !== 'file') {
+				continue;
+			}
+			if (!isset($sourceAttachment->data) || !isset($sourceAttachment->contentBase64)) {
+				continue;
+			}
+
+			$attachment = new Attachment();
+			$attachment->setCardId($targetCardId);
+			$attachment->setType('file');
+			$attachment->setData((string)$sourceAttachment->data);
+			$attachment->setCreatedBy(
+				$this->mapMember($sourceAttachment->createdBy ?? $this->getImportService()->getData()->owner)
+				?? $this->mapOwner($this->getImportService()->getData()->owner)
+			);
+			$attachment->setCreatedAt((int)($sourceAttachment->createdAt ?? time()));
+			$attachment->setLastModified((int)($sourceAttachment->lastModified ?? time()));
+
+			$content = base64_decode((string)$sourceAttachment->contentBase64, true);
+			if ($content === false) {
+				continue;
+			}
+
+			try {
+				$this->getImportService()->insertAttachment($attachment, $content);
+			} catch (\Throwable $e) {
+				continue;
+			}
+		}
 	}
 
 	public function getCardLabelAssignment(): array {
@@ -184,7 +270,7 @@ class DeckJsonService extends ABoardImportService {
 
 			if (isset($source->cards)) {
 				foreach ($source->cards as $card) {
-					$card->stackId = $index;
+					$card->stackId = $source->id;
 					$this->tmpCards[] = $card;
 				}
 			}
@@ -211,6 +297,7 @@ class DeckJsonService extends ABoardImportService {
 			$boardOwner = $this->getBoard()->getOwner();
 			$card->setOwner($this->mapOwner(is_string($boardOwner) ? $boardOwner : $boardOwner->getUID()));
 			$card->setDuedate($cardSource->duedate ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->duedate) : null);
+			$card->setStartdate(isset($cardSource->startdate) && $cardSource->startdate !== null ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->startdate) : null);
 			$card->setDone(isset($cardSource->done) && $cardSource->done !== null ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->done) : null);
 			$cards[$cardSource->id] = $card;
 		}

@@ -47,7 +47,7 @@
 				</NcActionButton>
 			</NcActions>
 
-			<NcButton v-if="!card.done"
+			<NcButton v-if="!card.done && canEdit"
 				type="secondary"
 				class="completed-button"
 				@click="changeCardDoneStatus()">
@@ -67,7 +67,7 @@
 					{{ formatReadableDate(duedate) }}
 				</span>
 			</div>
-			<div class="due-actions">
+			<div v-if="canEdit" class="due-actions">
 				<NcButton v-if="!card.archived"
 					type="tertiary"
 					:name="t('deck', 'Not done')"
@@ -253,7 +253,7 @@ export default defineComponent({
 }
 
 .completed-button {
-	margin-left: auto;
+	margin-inline-start: auto;
 }
 
 .due-actions {

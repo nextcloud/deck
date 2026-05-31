@@ -28,55 +28,26 @@ use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 
 class StackService {
-	private StackMapper $stackMapper;
-	private CardMapper $cardMapper;
-	private BoardMapper $boardMapper;
-	private LabelMapper $labelMapper;
-	private PermissionService $permissionService;
-	private BoardService $boardService;
-	private CardService $cardService;
-	private AssignmentMapper $assignedUsersMapper;
-	private AttachmentService $attachmentService;
-	private ActivityManager $activityManager;
-	private ChangeHelper $changeHelper;
-	private LoggerInterface $logger;
-	private IEventDispatcher $eventDispatcher;
-	private StackServiceValidator $stackServiceValidator;
-
 	public function __construct(
-		StackMapper $stackMapper,
-		BoardMapper $boardMapper,
-		CardMapper $cardMapper,
-		LabelMapper $labelMapper,
-		PermissionService $permissionService,
-		BoardService $boardService,
-		CardService $cardService,
-		AssignmentMapper $assignedUsersMapper,
-		AttachmentService $attachmentService,
-		ActivityManager $activityManager,
-		ChangeHelper $changeHelper,
-		LoggerInterface $logger,
-		IEventDispatcher $eventDispatcher,
-		StackServiceValidator $stackServiceValidator,
+		private readonly StackMapper $stackMapper,
+		private readonly BoardMapper $boardMapper,
+		private readonly CardMapper $cardMapper,
+		private readonly LabelMapper $labelMapper,
+		private readonly PermissionService $permissionService,
+		private readonly BoardService $boardService,
+		private readonly CardService $cardService,
+		private readonly AssignmentMapper $assignedUsersMapper,
+		private readonly AttachmentService $attachmentService,
+		private readonly ActivityManager $activityManager,
+		private readonly ChangeHelper $changeHelper,
+		private readonly LoggerInterface $logger,
+		private readonly IEventDispatcher $eventDispatcher,
+		private readonly StackServiceValidator $stackServiceValidator,
 	) {
-		$this->stackMapper = $stackMapper;
-		$this->boardMapper = $boardMapper;
-		$this->cardMapper = $cardMapper;
-		$this->labelMapper = $labelMapper;
-		$this->permissionService = $permissionService;
-		$this->boardService = $boardService;
-		$this->cardService = $cardService;
-		$this->assignedUsersMapper = $assignedUsersMapper;
-		$this->attachmentService = $attachmentService;
-		$this->activityManager = $activityManager;
-		$this->changeHelper = $changeHelper;
-		$this->logger = $logger;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->stackServiceValidator = $stackServiceValidator;
 	}
 
 	/** @param Stack[] $stacks */
-	private function enrichStacksWithCards(array $stacks, $since = -1): void {
+	private function enrichStacksWithCards(array $stacks, int $since = -1): void {
 		$cardsByStackId = $this->cardMapper->findAllForStacks(array_map(fn (Stack $stack) => $stack->getId(), $stacks), null, 0, $since);
 
 		foreach ($cardsByStackId as $stackId => $cards) {
@@ -103,15 +74,20 @@ class StackService {
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_READ);
 		$stack = $this->stackMapper->find($stackId);
 
+		$allCards = $this->cardMapper->findAll($stackId);
+		$cardIds = array_map(fn (Card $card) => $card->getId(), $allCards);
+		$attachmentCounts = $this->attachmentService->countForCards($cardIds);
+		$assignedUsers = $this->assignedUsersMapper->findIn($cardIds);
+
 		$cards = array_map(
-			function (Card $card): CardDetails {
-				$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
-				$card->setAssignedUsers($assignedUsers);
-				$card->setAttachmentCount($this->attachmentService->count($card->getId()));
+			function (Card $card) use ($attachmentCounts, $assignedUsers): CardDetails {
+				$cardAssignedUsers = array_values(array_filter($assignedUsers, fn ($a) => $a->getCardId() === $card->getId()));
+				$card->setAssignedUsers($cardAssignedUsers);
+				$card->setAttachmentCount($attachmentCounts[$card->getId()] ?? 0);
 
 				return new CardDetails($card);
 			},
-			$this->cardMapper->findAll($stackId)
+			$allCards
 		);
 
 		$stack->setCards($cards);
@@ -167,13 +143,28 @@ class StackService {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
+
+		$stackIds = array_map(fn (Stack $stack) => $stack->getId(), $stacks);
+
+		// Fetch all archived cards for all stacks in a single query
+		$cardsByStackId = $this->cardMapper->findAllArchivedForStacks($stackIds);
+
+		$allArchivedCardIds = [];
+		foreach ($cardsByStackId as $cards) {
+			foreach ($cards as $card) {
+				$allArchivedCardIds[] = $card->getId();
+			}
+		}
+
+		$attachmentCounts = $this->attachmentService->countForCards($allArchivedCardIds);
+
 		foreach ($stacks as $stackIndex => $stack) {
-			$cards = $this->cardMapper->findAllArchived($stack->id);
+			$cards = $cardsByStackId[$stack->getId()] ?? [];
 			foreach ($cards as $cardIndex => $card) {
 				if (array_key_exists($card->id, $labels)) {
 					$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
-				$cards[$cardIndex]->setAttachmentCount($this->attachmentService->count($card->getId()));
+				$cards[$cardIndex]->setAttachmentCount($attachmentCounts[$card->getId()] ?? 0);
 			}
 			$stacks[$stackIndex]->setCards($cards);
 		}

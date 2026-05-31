@@ -18,7 +18,6 @@
     "Delete" : "Dileu",
     "Edit" : "Golygu",
     "Download" : "Llwytho i lawr",
-    "Modified" : "Addaswyd",
     "Created:" : "Crewyd:",
     "Update" : "Diweddaru",
     "Description" : "Disgrifiad",
@@ -29,6 +28,7 @@
     "An error occurred" : "Digwyddodd gwall",
     "Export" : "Allforio",
     "Close" : "Cau",
+    "Modified" : "Addaswyd",
     "Share" : "Rhannu",
     "Save" : "Cadw",
     "Today" : "Heddiw"

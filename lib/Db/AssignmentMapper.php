@@ -13,6 +13,7 @@ use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\Entity;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Federation\ICloudIdManager;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -29,13 +30,17 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 	/** @var CirclesService */
 	private $circleService;
 
-	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager, IGroupManager $groupManager, CirclesService $circleService) {
+	/** @var ICloudIdManager */
+	private $cloudIdManager;
+
+	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager, IGroupManager $groupManager, CirclesService $circleService, ICloudIdManager $cloudIdManager) {
 		parent::__construct($db, 'deck_assigned_users', Assignment::class);
 
 		$this->cardMapper = $cardMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->circleService = $circleService;
+		$this->cloudIdManager = $cloudIdManager;
 	}
 
 	public function findAll(int $cardId): array {
@@ -174,6 +179,9 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 		if ($assignment->getType() === Assignment::TYPE_CIRCLE) {
 			$origin = $this->circleService->getCircle($assignment->getParticipant());
 			return $origin ? new Circle($origin) : null;
+		}
+		if ($assignment->getType() === Assignment::TYPE_REMOTE) {
+			return new FederatedUser($this->cloudIdManager->resolveCloudId($assignment->getParticipant()));
 		}
 		return null;
 	}

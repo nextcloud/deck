@@ -7,7 +7,6 @@
 
 namespace OCA\Deck\AppInfo;
 
-use Closure;
 use Exception;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Deck\Capabilities;
@@ -51,6 +50,7 @@ use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
+use OCA\Deck\UserMigration\DeckMigrator;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -61,7 +61,10 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
-use OCP\Comments\CommentsEvent;
+use OCP\Comments\Events\BeforeCommentUpdatedEvent;
+use OCP\Comments\Events\CommentAddedEvent;
+use OCP\Comments\Events\CommentDeletedEvent;
+use OCP\Comments\Events\CommentUpdatedEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationProviderManager;
@@ -99,8 +102,8 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+		$context->injectFn($this->registerCommentsEntity(...));
+		$context->injectFn($this->registerCollaborationResources(...));
 
 		$context->injectFn(function (IManager $shareManager) {
 			$shareManager->registerShareProvider(DeckShareProvider::class);
@@ -156,7 +159,10 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AclCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclUpdatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclDeletedEvent::class, FullTextSearchEventListener::class);
-		$context->registerEventListener(CommentsEvent::class, CommentEventListener::class);
+		$context->registerEventListener(CommentAddedEvent::class, CommentEventListener::class);
+		$context->registerEventListener(BeforeCommentUpdatedEvent::class, CommentEventListener::class);
+		$context->registerEventListener(CommentUpdatedEvent::class, CommentEventListener::class);
+		$context->registerEventListener(CommentDeletedEvent::class, CommentEventListener::class);
 
 		// Handling cache invalidation for collections
 		$context->registerEventListener(AclCreatedEvent::class, ResourceListener::class);
@@ -181,6 +187,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, ResourceAdditionalScriptsListener::class);
 
 		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
+
+		$context->registerUserMigrator(DeckMigrator::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {

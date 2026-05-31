@@ -18,6 +18,7 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IFilenameValidator;
@@ -29,6 +30,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IPreview;
 use OCP\IRequest;
+use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
@@ -112,29 +114,36 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function getAttachmentCount(int $cardId): int {
+		return $this->getAttachmentCountForCards([$cardId])[$cardId] ?? 0;
+	}
+
+	public function getAttachmentCountForCards(array $cardIds): array {
+		if (empty($cardIds)) {
+			return [];
+		}
 		$qb = $this->connection->getQueryBuilder();
-		$qb->select('s.id', 'f.fileid', 'f.path')
+		$qb->select('s.id', 's.share_with', 'f.fileid', 'f.path')
 			->selectAlias('st.id', 'storage_string_id')
 			->from('share', 's')
 			->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
 			->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
 			->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
-			->andWhere($qb->expr()->eq('s.share_with', $qb->createNamedParameter($cardId)))
+			->andWhere($qb->expr()->in('s.share_with', $qb->createNamedParameter(array_map('strval', $cardIds), IQueryBuilder::PARAM_STR_ARRAY)))
 			->andWhere($qb->expr()->isNull('s.parent'))
 			->andWhere($qb->expr()->orX(
 				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('file')),
 				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('folder'))
 			));
 
-		$count = 0;
+		$counts = array_fill_keys($cardIds, 0);
 		$cursor = $qb->executeQuery();
 		while ($data = $cursor->fetch()) {
 			if ($this->shareProvider->isAccessibleResult($data)) {
-				$count++;
+				$counts[(int)$data['share_with']]++;
 			}
 		}
 		$cursor->closeCursor();
-		return $count;
+		return $counts;
 	}
 
 	public function extendData(Attachment $attachment) {
@@ -225,6 +234,98 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$share->setPermissions(Constants::PERMISSION_READ);
 		$share->setSharedBy($this->userId);
 		$share = $this->shareManager->createShare($share);
+		$attachment->setId((int)$share->getId());
+		$attachment->setData($target->getName());
+		return $attachment;
+	}
+
+	/**
+	 * Ensure the file exists in the owner’s Deck attachment folder, link it to the
+	 * Reuse file/share when already present
+	 *
+	 * @param Attachment $attachment
+	 * @param string $content
+	 * @return Attachment
+	 * @throws BadRequestException
+	 * @throws NoPermissionException
+	 * @throws NotFoundException
+	 * @throws StatusException
+	 */
+	public function createFromImport(Attachment $attachment, string $content): Attachment {
+		$fileName = $attachment->getData();
+		$this->validateFilename($fileName);
+
+		$ownerId = $attachment->getCreatedBy() ?: $this->userId;
+		if (!is_string($ownerId) || $ownerId === '') {
+			throw new StatusException('Could not resolve owner for imported attachment');
+		}
+
+		$userFolder = $this->rootFolder->getUserFolder($ownerId);
+		$attachmentFolderName = $this->configService->getAttachmentFolder($ownerId);
+		try {
+			$folder = $userFolder->get($attachmentFolderName);
+		} catch (NotFoundException) {
+			$folder = $userFolder->newFolder($attachmentFolderName);
+		}
+		if (!$folder instanceof Folder || $folder->isShared()) {
+			throw new NotFoundException('No target folder found');
+		}
+
+		if ($folder->nodeExists($fileName)) {
+			$node = $folder->get($fileName);
+			if (!($node instanceof File)) {
+				throw new StatusException('Attachment target is not a file');
+			}
+			$target = $node;
+		} else {
+			$target = $folder->newFile($fileName);
+			$target->putContent($content);
+		}
+
+		$cardId = $attachment->getCardId();
+		foreach ($this->shareProvider->getSharesByPath($target) as $share) {
+			if ((int)$share->getSharedWith() === $cardId) {
+				$attachment->setId((int)$share->getId());
+				$attachment->setData($target->getName());
+				return $attachment;
+			}
+		}
+
+		$this->permissionService->checkPermission(
+			$this->cardMapper,
+			$cardId,
+			Acl::PERMISSION_EDIT,
+			$ownerId,
+			true,
+			true
+		);
+		// Import usually runs in background jobs without request user context.
+		// Set the actor explicitly so DeckShareProvider permission checks evaluate correctly.
+		$this->permissionService->setUserId($ownerId);
+
+		$share = $this->shareManager->newShare();
+		$share->setNode($target);
+		$share->setShareType(IShare::TYPE_DECK);
+		$share->setSharedWith((string)$cardId);
+		$share->setPermissions(Constants::PERMISSION_READ);
+		$share->setSharedBy($ownerId);
+		$share->setShareOwner($ownerId);
+
+		try {
+			$share = $this->shareManager->createShare($share);
+		} catch (GenericShareException) {
+			$share = null;
+			foreach ($this->shareProvider->getSharesByPath($target) as $existing) {
+				if ((int)$existing->getSharedWith() === $cardId) {
+					$share = $existing;
+					break;
+				}
+			}
+			if ($share === null) {
+				throw new StatusException('Could not create deck share for imported attachment');
+			}
+		}
+
 		$attachment->setId((int)$share->getId());
 		$attachment->setData($target->getName());
 		return $attachment;

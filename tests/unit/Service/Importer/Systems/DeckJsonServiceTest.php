@@ -88,18 +88,23 @@ class DeckJsonServiceTest extends \Test\TestCase {
 		$this->assertInstanceOf(\DateTime::class, $card114->getDone());
 		$this->assertEquals('2023-07-18T10:00:00+00:00', $card114->getDone()->format(\DateTime::ATOM));
 		$this->assertEquals('2050-07-24T22:00:00+00:00', $card114->getDuedate()->format(\DateTime::ATOM));
+		$this->assertInstanceOf(\DateTime::class, $card114->getStartdate());
+		$this->assertEquals('2023-07-10T08:00:00+00:00', $card114->getStartdate()->format(\DateTime::ATOM));
 		$this->assertFalse($card114->getArchived());
 		$this->assertEquals('admin', $card114->getOwner());
 
-		// Card 115 (title "2") has no done value in the fixture
+		// Card 115 (title "2") has a startdate but no done value in the fixture
 		$card115 = $cards[115];
 		$this->assertEquals('2', $card115->getTitle());
 		$this->assertNull($card115->getDone());
+		$this->assertInstanceOf(\DateTime::class, $card115->getStartdate());
+		$this->assertEquals('2023-07-15T08:00:00+00:00', $card115->getStartdate()->format(\DateTime::ATOM));
 
-		// Card 119 (title "6") — from stack B, no done value
+		// Card 119 (title "6") — from stack B, no done or startdate value
 		$card119 = $cards[119];
 		$this->assertEquals('6', $card119->getTitle());
 		$this->assertNull($card119->getDone());
+		$this->assertNull($card119->getStartdate());
 		$this->assertEquals('# Test description' . "\n\n" . 'Hello world', $card119->getDescription());
 	}
 

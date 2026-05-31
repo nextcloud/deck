@@ -122,7 +122,7 @@ export default {
 	}
 
 	.labels {
-		margin-left: 0;
+		margin-inline-start: 0;
 		margin-top: 3px;
 	}
 
@@ -136,6 +136,6 @@ export default {
 	}
 
 	.right {
-		float: right;
+		float: inline-end;
 	}
 </style>

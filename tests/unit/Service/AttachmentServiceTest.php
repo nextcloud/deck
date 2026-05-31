@@ -283,7 +283,7 @@ class AttachmentServiceTest extends TestCase {
 
 	public function testCount() {
 		$this->attachmentCacheHelper->expects($this->once())->method('getAttachmentCount')->with(123)->willReturn(null);
-		$this->attachmentMapper->expects($this->once())->method('findAll')->willReturn([1,2,3,4]);
+		$this->attachmentMapper->expects($this->once())->method('findCountByCardIds')->with([123])->willReturn([123 => 4]);
 		$this->attachmentCacheHelper->expects($this->once())->method('setAttachmentCount')->with(123, 4);
 		$this->assertEquals(4, $this->attachmentService->count(123));
 	}

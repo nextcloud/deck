@@ -33,4 +33,7 @@ if (isDevServer) {
 // Workaround for https://github.com/nextcloud/webpack-vue-config/pull/432 causing problems with nextcloud-vue-collections
 webpackConfig.resolve.alias = {}
 
+// Allow importing frappe-gantt CSS (not exposed via package.json exports field)
+webpackConfig.resolve.alias['frappe-gantt/dist/frappe-gantt.css'] = path.resolve(__dirname, 'node_modules/frappe-gantt/dist/frappe-gantt.css')
+
 module.exports = webpackConfig
