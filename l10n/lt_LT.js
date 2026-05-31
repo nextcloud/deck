@@ -364,7 +364,7 @@ OC.L10N.register(
     "Failed to leave the board" : "Nepavyko išeiti iš lentos",
     "Exporting board..." : "Eksportuojama lenta...",
     "Board details" : "Išsamiau apie lentą",
-    "Edit board" : "Taisyti lentą",
+    "Edit board" : "Redaguoti lentą",
     "Clone board" : "Dubliuoti lentą",
     "Unarchive board" : "Išarchyvuoti lentą",
     "Archive board" : "Archyvuoti lentą",
