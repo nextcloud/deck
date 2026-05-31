@@ -12,7 +12,8 @@
 				v-model="duedate"
 				:placeholder="t('deck', 'Set a due date')"
 				:hide-label="true"
-				type="datetime-local" />
+				type="datetime-local"
+				:max="new Date('9999-12-31T23:59:59')" />
 			<NcActions v-if="canEdit"
 				:menu-title="!duedate ? t('deck', 'Add due date') : null"
 				type="tertiary"
@@ -253,7 +254,7 @@ export default defineComponent({
 }
 
 .completed-button {
-	margin-left: auto;
+	margin-inline-start: auto;
 }
 
 .due-actions {
