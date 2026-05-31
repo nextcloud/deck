@@ -13,12 +13,14 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Cache\CappedMemoryCache;
+use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -26,7 +28,12 @@ use OCP\Share\IManager;
 use Psr\Log\LoggerInterface;
 
 class PermissionService {
-	private array $users = [];
+
+	/** @var array<string, array<string, User|FederatedUser>> */
+	private $users = [];
+
+	// accessToken to check permission for federated shares
+	private ?string $accessToken = null;
 
 	private CappedMemoryCache $boardCache;
 	/** @var CappedMemoryCache<array<Acl::PERMISSION_*, bool>> */
@@ -38,9 +45,11 @@ class PermissionService {
 		private AclMapper $aclMapper,
 		private BoardMapper $boardMapper,
 		private IUserManager $userManager,
+		private ConfigService $configService,
 		private IGroupManager $groupManager,
 		private IManager $shareManager,
 		private IConfig $config,
+		private ICloudIdManager $cloudIdManager,
 		private ?string $userId,
 	) {
 		$this->boardCache = new CappedMemoryCache();
@@ -48,30 +57,50 @@ class PermissionService {
 	}
 
 	/**
+	 * Set AccessToken for requests from federation shares
+	 */
+	public function setAccessToken(string $token) {
+		$this->accessToken = $token;
+	}
+
+	/**
 	 * Get current user permissions for a board by id
 	 *
 	 * @return array<Acl::PERMISSION_*, bool>
 	 */
-	public function getPermissions(int $boardId, ?string $userId = null): array {
+	public function getPermissions(int $boardId, ?string $userId = null, bool $allowDeleted = false): array {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
 
-		$cacheKey = $boardId . '-' . $userId;
-		if ($cached = $this->permissionCache->get($cacheKey)) {
-			/** @var array<Acl::PERMISSION_*, bool> $cached */
-			return $cached;
+		// check chache if not a federated request
+		if ($this->accessToken === null) {
+			$cacheKey = $boardId . '-' . $userId;
+			if ($cached = $this->permissionCache->get($cacheKey)) {
+				/** @var array<Acl::PERMISSION_*, bool> $cached */
+				return $cached;
+			}
+		}
+		$board = $this->getBoard($boardId, $allowDeleted);
+		if ($this->accessToken !== null) {
+			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
+			$permissions = [
+				Acl::PERMISSION_READ => $this->externalUserCan($acls, Acl::PERMISSION_READ, $this->accessToken),
+				Acl::PERMISSION_EDIT => $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $this->accessToken),
+				Acl::PERMISSION_MANAGE => $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $this->accessToken),
+				Acl::PERMISSION_SHARE => $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $this->accessToken)
+			];
+			return $permissions;
 		}
 
+
 		try {
-			$board = $this->getBoard($boardId);
-			$owner = $this->userIsBoardOwner($boardId, $userId);
+			$owner = $this->userIsBoardOwner($boardId, $userId, $allowDeleted);
 			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
 			$owner = false;
 			$acls = [];
 		}
-
 		$permissions = [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
@@ -93,6 +122,14 @@ class PermissionService {
 	public function matchPermissions(Board $board) {
 		$owner = $this->userIsBoardOwner($board->getId());
 		$acls = $board->getAcl() ?? [];
+		if ($this->accessToken !== null) {
+			return [
+				Acl::PERMISSION_READ => $this->externalUserCan($acls, Acl::PERMISSION_READ, $this->accessToken),
+				Acl::PERMISSION_EDIT => $this->externalUserCan($acls, Acl::PERMISSION_EDIT, $this->accessToken),
+				Acl::PERMISSION_MANAGE => $this->externalUserCan($acls, Acl::PERMISSION_MANAGE, $this->accessToken),
+				Acl::PERMISSION_SHARE => $this->externalUserCan($acls, Acl::PERMISSION_SHARE, $this->accessToken)
+			];
+		}
 		return [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
@@ -107,17 +144,18 @@ class PermissionService {
 	 *
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false): bool {
+	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, bool $allowDeletedBoard = false): bool {
 		$boardId = (int)$id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
 		}
-		if ($boardId === null) {
+		// (int)null === 0 so we have to check if any of these are null
+		if ($boardId === null || $id === null) {
 			// Throw NoPermission to not leak information about existing entries
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId, $userId);
+		$permissions = $this->getPermissions($boardId, $userId, $allowDeletedBoard);
 		if ($permissions[$permission] === true) {
 
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
@@ -142,12 +180,12 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool
 	 */
-	public function userIsBoardOwner($boardId, $userId = null) {
+	public function userIsBoardOwner($boardId, $userId = null, bool $allowDeleted = false) {
 		if ($userId === null) {
 			$userId = $this->userId;
 		}
 		try {
-			$board = $this->getBoard($boardId);
+			$board = $this->getBoard($boardId, $allowDeleted);
 			return $userId === $board->getOwner();
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 		}
@@ -158,11 +196,24 @@ class PermissionService {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	private function getBoard(int $boardId): Board {
+	private function getBoard(int $boardId, bool $allowDeleted = false): Board {
 		if (!isset($this->boardCache[(string)$boardId])) {
-			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true);
+			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true, $allowDeleted);
 		}
 		return $this->boardCache[(string)$boardId];
+	}
+
+
+	public function externalUserCan(array $acls, int $permission, string $shareToken):bool {
+		$this->configService->ensureFederationEnabled();
+		foreach ($acls as $acl) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				if ($acl->getToken() === $shareToken) {
+					return $acl->getPermission($permission);
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -202,13 +253,21 @@ class PermissionService {
 		return $hasGroupPermission;
 	}
 
+	public function getUserId(): ?string {
+		if ($this->userId === null && $this->accessToken === null) {
+			return null;
+		}
+		return $this->userId ?? $this->aclMapper->findByAccessToken($this->accessToken)->getParticipant();
+	}
+
 	/**
 	 * Find a list of all users (including the ones from groups)
 	 * Required to allow assigning them to cards
 	 *
 	 * @param $boardId
-	 * @return array
-	 */
+	 * @param $refresh
+	 * @return array<string, User | FederatedUser>
+	 * */
 	public function findUsers($boardId, $refresh = false) {
 		// cache users of a board so we don't query them for every cards
 		if (array_key_exists((string)$boardId, $this->users) && !$refresh) {
@@ -222,12 +281,12 @@ class PermissionService {
 		} catch (MultipleObjectsReturnedException $e) {
 			return [];
 		}
-
+		/** @var array<string, User> */
 		$users = [];
 		if (!$this->userManager->userExists($board->getOwner())) {
 			$this->logger->info('No owner found for board ' . $board->getId());
 		} else {
-			$users[$board->getOwner()] = new User($board->getOwner(), $this->userManager);
+			$users[(string)$board->getOwner()] = new User($board->getOwner(), $this->userManager);
 		}
 		$acls = $this->aclMapper->findAll($boardId);
 		/** @var Acl $acl */
@@ -237,7 +296,7 @@ class PermissionService {
 					$this->logger->info('No user found for acl rule ' . $acl->getId());
 					continue;
 				}
-				$users[$acl->getParticipant()] = new User($acl->getParticipant(), $this->userManager);
+				$users[(string)$acl->getParticipant()] = new User($acl->getParticipant(), $this->userManager);
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $this->groupManager->get($acl->getParticipant());
@@ -246,8 +305,12 @@ class PermissionService {
 					continue;
 				}
 				foreach ($group->getUsers() as $user) {
-					$users[$user->getUID()] = new User($user->getUID(), $this->userManager);
+					$users[(string)$user->getUID()] = new User($user->getUID(), $this->userManager);
 				}
+			}
+
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				$users[(string)$acl->getParticipant()] = new FederatedUser($this->cloudIdManager->resolveCloudId($acl->getParticipant()));
 			}
 
 			if ($this->circlesService->isCirclesEnabled() && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
@@ -267,7 +330,7 @@ class PermissionService {
 						if ($user === null) {
 							$this->logger->info('No user found for circle member ' . $member->getUserId());
 						} else {
-							$users[$member->getUserId()] = new User($member->getUserId(), $this->userManager);
+							$users[(string)$member->getUserId()] = new User($member->getUserId(), $this->userManager);
 						}
 					}
 				} catch (\Exception $e) {

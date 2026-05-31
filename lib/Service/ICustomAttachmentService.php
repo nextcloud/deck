@@ -20,4 +20,13 @@ interface ICustomAttachmentService {
 	public function listAttachments(int $cardId): array;
 
 	public function getAttachmentCount(int $cardId): int;
+
+	/**
+	 * Returns a map of cardId => attachment count for the given card IDs in a single query.
+	 * Implementations should avoid issuing one query per card.
+	 *
+	 * @param int[] $cardIds
+	 * @return array<int, int>
+	 */
+	public function getAttachmentCountForCards(array $cardIds): array;
 }

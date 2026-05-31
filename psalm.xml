@@ -38,6 +38,8 @@
 				<referencedClass name="Symfony\Component\Console\Question\ChoiceQuestion" />
 				<referencedClass name="Symfony\Component\Console\Question\Question" />
 				<referencedClass name="Symfony\Component\EventDispatcher\GenericEvent" />
+				<referencedClass name="GuzzleHttp\Exception\ClientException" />
+				<referencedClass name="GuzzleHttp\Exception\ServerException" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>

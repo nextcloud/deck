@@ -12,6 +12,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Exceptions\FederationDisabledException;
 use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
@@ -24,16 +25,12 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
-	private IConfig $config;
 	private ?string $userId = null;
-	private IGroupManager $groupManager;
 
 	public function __construct(
-		IConfig $config,
-		IGroupManager $groupManager,
+		private readonly IConfig $config,
+		private readonly IGroupManager $groupManager,
 	) {
-		$this->groupManager = $groupManager;
-		$this->config = $config;
 	}
 
 	public function getUserId(): ?string {
@@ -60,6 +57,7 @@ class ConfigService {
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
+			$data['federationEnabled'] = $this->get('federationEnabled');
 		}
 		return $data;
 	}
@@ -76,6 +74,8 @@ class ConfigService {
 					throw new NoPermissionException('You must be admin to get the group limit');
 				}
 				return $this->getGroupLimit();
+			case 'federationEnabled':
+				return $this->config->getAppValue(Application::APP_ID, 'federationEnabled', 'no') === 'yes';
 			case 'calendar':
 				if ($this->getUserId() === null) {
 					return false;
@@ -135,6 +135,19 @@ class ConfigService {
 		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
 	}
 
+	public function ensureFederationEnabled() {
+		if (!$this->get('federationEnabled')) {
+			throw new FederationDisabledException();
+		}
+		// @TODO fine tune these config values to respect incoming and outgoing federation separately
+		if ($this->config->getAppValue('files_sharing', 'outgoing_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
+		if ($this->config->getAppValue('files_sharing', 'incoming_server2server_share_enabled', 'no') !== 'yes') {
+			throw new FederationDisabledException();
+		}
+	}
+
 	public function set($key, $value) {
 		$userId = $this->getUserId();
 		if ($userId === null) {
@@ -150,6 +163,13 @@ class ConfigService {
 				}
 				$result = $this->setGroupLimit($value);
 				break;
+			case 'federationEnabled':
+				if (!$this->groupManager->isAdmin($userId)) {
+					throw new NoPermissionException('You must be admin to set the federation enabled setting');
+				}
+				$this->config->setAppValue(Application::APP_ID, 'federationEnabled', (string)$value);
+				$result = $value;
+				break;
 			case 'calendar':
 				$this->config->setUserValue($userId, Application::APP_ID, 'calendar', (string)$value);
 				$result = $value;
@@ -163,7 +183,12 @@ class ConfigService {
 				$result = $value;
 				break;
 			case 'board':
-				[$boardId, $boardConfigKey] = explode(':', $key);
+				// extra check that user only send one of the allowed board settings and not something random
+				$parts = explode(':', $key, 3);
+				if (count($parts) < 3) {
+					break;
+				}
+				$boardConfigKey = $parts[2];
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}

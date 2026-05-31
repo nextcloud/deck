@@ -7,7 +7,7 @@ HIDE_OC_LOGS=$2
 
 # Nextcloud integration tests composer
 (
-    cd ${OC_PATH}build/integration
+    cd ${OC_PATH}vendor-bin/behat
     composer install
 )
 INSTALLED=$($OCC status | grep installed: | cut -d " " -f 5)
@@ -33,7 +33,7 @@ echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:$PORT/ocs/"
 
-vendor/bin/behat --colors $SCENARIO_TO_RUN
+vendor/bin/behat --colors --suite=test $SCENARIO_TO_RUN
 RESULT=$?
 
 kill -9 $PHPPID

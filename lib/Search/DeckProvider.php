@@ -21,18 +21,11 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 
 class DeckProvider implements IProvider {
-	private IL10N $l10n;
-	private SearchService $searchService;
-	private IURLGenerator $urlGenerator;
-
 	public function __construct(
-		SearchService $searchService,
-		IURLGenerator $urlGenerator,
-		IL10N $l10n,
+		private readonly SearchService $searchService,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly IL10N $l10n,
 	) {
-		$this->l10n = $l10n;
-		$this->searchService = $searchService;
-		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function getId(): string {

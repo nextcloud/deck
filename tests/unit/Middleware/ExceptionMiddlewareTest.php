@@ -29,6 +29,7 @@ use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Controller;
@@ -91,6 +92,7 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 			'deck',
 			$this->createMock(IRequest::class),
 			$this->createMock(BoardService::class),
+			$this->createMock(ExternalBoardService::class),
 			$this->createMock(PermissionService::class),
 			$this->createMock(BoardImportService::class),
 			$this->createMock(\OCP\IL10N::class),

@@ -17,29 +17,13 @@ use OCA\Deck\Validators\LabelServiceValidator;
 
 class LabelService {
 
-	/** @var LabelMapper */
-	private $labelMapper;
-	/** @var PermissionService */
-	private $permissionService;
-	/** @var BoardService */
-	private $boardService;
-	/** @var ChangeHelper */
-	private $changeHelper;
-	/** @var LabelServiceValidator */
-	private LabelServiceValidator $labelServiceValidator;
-
 	public function __construct(
-		LabelMapper $labelMapper,
-		PermissionService $permissionService,
-		BoardService $boardService,
-		ChangeHelper $changeHelper,
-		LabelServiceValidator $labelServiceValidator,
+		private LabelMapper $labelMapper,
+		private PermissionService $permissionService,
+		private BoardService $boardService,
+		private ChangeHelper $changeHelper,
+		private LabelServiceValidator $labelServiceValidator,
 	) {
-		$this->labelMapper = $labelMapper;
-		$this->permissionService = $permissionService;
-		$this->boardService = $boardService;
-		$this->changeHelper = $changeHelper;
-		$this->labelServiceValidator = $labelServiceValidator;
 	}
 
 	/**
@@ -65,12 +49,8 @@ class LabelService {
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 
-		$boardLabels = $this->labelMapper->findAll($boardId);
-		foreach ($boardLabels as $boardLabel) {
-			if ($boardLabel->getTitle() === $title) {
-				throw new BadRequestException('title must be unique');
-				break;
-			}
+		if ($this->labelMapper->existsByBoardIdAndTitle($boardId, $title)) {
+			throw new BadRequestException('title must be unique');
 		}
 
 		if ($this->boardService->isArchived(null, $boardId)) {
@@ -81,6 +61,7 @@ class LabelService {
 		$label->setColor($color);
 		$label->setBoardId($boardId);
 		$this->changeHelper->boardChanged($boardId);
+
 		return $this->labelMapper->insert($label);
 	}
 
@@ -90,10 +71,10 @@ class LabelService {
 		$originLabel = $this->find($labelId);
 		$filteredValues = array_values(array_filter($boardLabels, fn ($item) => $item->getTitle() === $originLabel->getTitle()));
 		if (empty($filteredValues)) {
-			$label = $this->create($originLabel->getTitle(), $originLabel->getColor(), $targetBoardId);
-			return $label;
+			return $this->create($originLabel->getTitle(), $originLabel->getColor(), $targetBoardId);
 		}
-		return $originLabel;
+
+		return $filteredValues[0];
 	}
 
 	/**
@@ -112,6 +93,7 @@ class LabelService {
 		}
 		$label = $this->labelMapper->delete($this->find($id));
 		$this->changeHelper->boardChanged($label->getBoardId());
+
 		return $label;
 	}
 
@@ -129,15 +111,8 @@ class LabelService {
 
 		$label = $this->find($id);
 
-		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
-		foreach ($boardLabels as $boardLabel) {
-			if ($boardLabel->getId() === $label->getId()) {
-				continue;
-			}
-			if ($boardLabel->getTitle() === $title) {
-				throw new BadRequestException('title must be unique');
-				break;
-			}
+		if ($this->labelMapper->existsByBoardIdAndTitle($label->getBoardId(), $title, $label->getId())) {
+			throw new BadRequestException('title must be unique');
 		}
 
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
@@ -147,6 +122,7 @@ class LabelService {
 		$label->setTitle($title);
 		$label->setColor($color);
 		$this->changeHelper->boardChanged($label->getBoardId());
+
 		return $this->labelMapper->update($label);
 	}
 }

@@ -43,6 +43,7 @@ class StackTest extends \Test\TestCase {
 			'deletedAt' => 0,
 			'lastModified' => 0,
 			'ETag' => $stack->getETag(),
+			'isDoneColumn' => false,
 		], $stack->jsonSerialize());
 	}
 	public function testJsonSerializeWithCards() {
@@ -58,6 +59,7 @@ class StackTest extends \Test\TestCase {
 			'deletedAt' => 0,
 			'lastModified' => 0,
 			'ETag' => $stack->getETag(),
+			'isDoneColumn' => false,
 		], $stack->jsonSerialize());
 	}
 }

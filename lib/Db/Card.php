@@ -18,6 +18,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method void setTitle(string $title)
  * @method string getDescription()
  * @method string getDescriptionPrev()
+ * @method string getColor()
+ * @method string setColor(string $color)
  * @method int getStackId()
  * @method void setStackId(int $stackId)
  * @method int getOrder()
@@ -32,6 +34,11 @@ use Sabre\VObject\Component\VCalendar;
  * @method bool getNotified()
  * @method ?DateTime getDone()
  * @method void setDone(?DateTime $done)
+ * @method ?DateTime getStartdate()
+ * @method void setStartdate(?DateTime $startdate)
+ *
+ * @method void setDependentCards(array $cardIds)
+ * @method null|array getDependentCards()
  *
  * @method void setLabels(Label[] $labels)
  * @method null|Label[] getLabels()
@@ -65,6 +72,7 @@ class Card extends RelationalEntity {
 
 	protected string $title = '';
 	protected $description;
+	protected $color = null;
 	protected $descriptionPrev;
 	protected $stackId;
 	protected $type;
@@ -80,10 +88,12 @@ class Card extends RelationalEntity {
 	protected $archived = false;
 	protected $done = null;
 	protected $duedate;
+	protected $startdate;
 	protected $notified = false;
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
 	protected $commentsCount = 0;
+	protected ?array $dependentCards = null;
 
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
@@ -106,6 +116,8 @@ class Card extends RelationalEntity {
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addType('duedate', 'datetime');
+		$this->addType('startdate', 'datetime');
+		$this->addRelation('dependentCards');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
@@ -132,6 +144,9 @@ class Card extends RelationalEntity {
 			$creationDate->setTimestamp($this->createdAt);
 			$event->DTSTAMP = $creationDate;
 			$event->DUE = new DateTime($this->getDuedate()->format('c'), new DateTimeZone('UTC'));
+		}
+		if ($this->getStartdate()) {
+			$event->DTSTART = new DateTime($this->getStartdate()->format('c'), new DateTimeZone('UTC'));
 		}
 		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
 

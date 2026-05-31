@@ -7,7 +7,6 @@
 
 namespace OCA\Deck\AppInfo;
 
-use Closure;
 use Exception;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Deck\Capabilities;
@@ -27,6 +26,8 @@ use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
+use OCA\Deck\Federation\DeckFederationProvider;
+use OCA\Deck\Listeners\AclCreatedRemovedListener;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
@@ -34,8 +35,10 @@ use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
+use OCA\Deck\Listeners\ResourceTypeRegisterListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
+use OCA\Deck\Middleware\FederationMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Reference\BoardReferenceProvider;
 use OCA\Deck\Reference\CardReferenceProvider;
@@ -47,6 +50,7 @@ use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
+use OCA\Deck\UserMigration\DeckMigrator;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -57,11 +61,18 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
-use OCP\Comments\CommentsEvent;
+use OCP\Comments\Events\BeforeCommentUpdatedEvent;
+use OCP\Comments\Events\CommentAddedEvent;
+use OCP\Comments\Events\CommentDeletedEvent;
+use OCP\Comments\Events\CommentUpdatedEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationProvider;
+use OCP\Federation\ICloudFederationProviderManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\OCM\Events\ResourceTypeRegisterEvent;
+use OCP\Server;
 use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
@@ -91,8 +102,8 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+		$context->injectFn($this->registerCommentsEntity(...));
+		$context->injectFn($this->registerCollaborationResources(...));
 
 		$context->injectFn(function (IManager $shareManager) {
 			$shareManager->registerShareProvider(DeckShareProvider::class);
@@ -101,6 +112,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
 			$listener->register($eventDispatcher);
 		});
+		$context->injectFn([$this, 'registerCloudFederationProviderManager']);
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -109,6 +121,7 @@ class Application extends App implements IBootstrap {
 		}
 
 		$context->registerCapability(Capabilities::class);
+		$context->registerMiddleWare(FederationMiddleware::class);
 		$context->registerMiddleWare(ExceptionMiddleware::class);
 		$context->registerMiddleWare(DefaultBoardMiddleware::class);
 
@@ -133,6 +146,11 @@ class Application extends App implements IBootstrap {
 		$context->registerReferenceProvider(CommentReferenceProvider::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+		$context->registerEventListener(ResourceTypeRegisterEvent::class, ResourceTypeRegisterListener::class);
+
+		// Event listening to emit UserShareAccessUpdatedEvent for files_sharing
+		$context->registerEventListener(AclCreatedEvent::class, AclCreatedRemovedListener::class);
+		$context->registerEventListener(AclDeletedEvent::class, AclCreatedRemovedListener::class);
 
 		// Event listening for full text search indexing
 		$context->registerEventListener(CardCreatedEvent::class, FullTextSearchEventListener::class);
@@ -141,7 +159,10 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AclCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclUpdatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclDeletedEvent::class, FullTextSearchEventListener::class);
-		$context->registerEventListener(CommentsEvent::class, CommentEventListener::class);
+		$context->registerEventListener(CommentAddedEvent::class, CommentEventListener::class);
+		$context->registerEventListener(BeforeCommentUpdatedEvent::class, CommentEventListener::class);
+		$context->registerEventListener(CommentUpdatedEvent::class, CommentEventListener::class);
+		$context->registerEventListener(CommentDeletedEvent::class, CommentEventListener::class);
 
 		// Handling cache invalidation for collections
 		$context->registerEventListener(AclCreatedEvent::class, ResourceListener::class);
@@ -166,6 +187,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, ResourceAdditionalScriptsListener::class);
 
 		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
+
+		$context->registerUserMigrator(DeckMigrator::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
@@ -188,5 +211,16 @@ class Application extends App implements IBootstrap {
 	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
+	}
+
+	public function registerCloudFederationProviderManager(
+		IConfig $config,
+		ICloudFederationProviderManager $manager,
+	): void {
+		$manager->addCloudFederationProvider(
+			DeckFederationProvider::PROVIDER_ID,
+			'Deck Federation',
+			static fn (): ICloudFederationProvider => Server::get(DeckFederationProvider::class),
+		);
 	}
 }

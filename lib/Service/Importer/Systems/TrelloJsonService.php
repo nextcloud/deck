@@ -140,9 +140,9 @@ class TrelloJsonService extends ABoardImportService {
 						]
 					);
 					$message = $this->l10n->t(
-						"This comment has more than %s characters.\n" .
-						"Added as an attachment to the card with name %s.\n" .
-						'Accessible on URL: %s.',
+						"This comment has more than %s characters.\n"
+						. "Added as an attachment to the card with name %s.\n"
+						. 'Accessible on URL: %s.',
 						[
 							IComment::MAX_MESSAGE_LENGTH,
 							'comment_' . $commentId . '.md',
@@ -163,9 +163,12 @@ class TrelloJsonService extends ABoardImportService {
 		return $comments;
 	}
 
+	public function importAttachments(): void {
+	}
+
 	private function sortComments(array $comments): array {
 		$comparison = function (\stdClass $a, \stdClass $b): int {
-			if ($a->date == $b->date) {
+			if ($a->date === $b->date) {
 				return 0;
 			}
 			return ($a->date < $b->date) ? -1 : 1;
@@ -318,30 +321,19 @@ class TrelloJsonService extends ABoardImportService {
 	}
 
 	private function translateColor(?string $color): string {
-		switch ($color) {
-			case 'red':
-				return 'ff0000';
-			case 'yellow':
-				return 'ffff00';
-			case 'orange':
-				return 'ff6600';
-			case 'green':
-				return '00ff00';
-			case 'purple':
-				return '9900ff';
-			case 'blue':
-				return '0000ff';
-			case 'sky':
-				return '00ccff';
-			case 'lime':
-				return '00ff99';
-			case 'pink':
-				return 'ff66cc';
-			case 'black':
-				return '000000';
-			default:
-				return 'ffffff';
-		}
+		return match ($color) {
+			'red' => 'ff0000',
+			'yellow' => 'ffff00',
+			'orange' => 'ff6600',
+			'green' => '00ff00',
+			'purple' => '9900ff',
+			'blue' => '0000ff',
+			'sky' => '00ccff',
+			'lime' => '00ff99',
+			'pink' => 'ff66cc',
+			'black' => '000000',
+			default => 'ffffff',
+		};
 	}
 
 	private function replaceUsernames(string $text): string {
@@ -352,7 +344,7 @@ class TrelloJsonService extends ABoardImportService {
 	}
 
 	private function checklistItem(\stdClass $item): string {
-		if (($item->state == 'incomplete')) {
+		if (($item->state === 'incomplete')) {
 			$string_start = '- [ ]';
 		} else {
 			$string_start = '- [x]';

@@ -50,7 +50,7 @@ class DummyUser extends \OC\User\User {
 		$this->uid = $uid;
 	}
 
-	public function getUID() {
+	public function getUID():string {
 		return $this->uid;
 	}
 }
@@ -489,8 +489,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$comment->expects($this->once())
 			->method('getMentions')
 			->willReturn([
-				['id' => 'user1'],
-				['id' => 'user2']
+				['id' => 'user1', 'type' => 'users'],
+				['id' => 'user2', 'type' => 'users'],
 			]);
 		$card = new Card();
 		$card->setId(123);
@@ -503,6 +503,13 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('findBoardId')
 			->with(123)
 			->willReturn(1);
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->with(1)
+			->willReturn([
+				'user1' => $this->createUserMock('user1'),
+				'user2' => $this->createUserMock('user2'),
+			]);
 
 		$notification1 = $this->createMock(INotification::class);
 		$notification1->expects($this->once())->method('setApp')->with('deck')->willReturn($notification1);
@@ -525,6 +532,183 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('notify')
 			->withConsecutive([$notification1], [$notification2]);
 
+		$this->notificationHelper->sendMention($comment);
+	}
+
+	/**
+	 * When a comment mentions the current user ('admin'), that mention must
+	 * be silently skipped while other mentioned users still get notified.
+	 */
+	public function testSendMentionSkipsSelf() {
+		$comment = $this->createMock(IComment::class);
+		$comment->expects($this->any())
+			->method('getObjectId')
+			->willReturn(123);
+		$comment->expects($this->any())
+			->method('getMessage')
+			->willReturn('@admin @user1 This is a message.');
+		$comment->expects($this->once())
+			->method('getMentions')
+			->willReturn([
+				['id' => 'admin', 'type' => 'users'],
+				['id' => 'user1', 'type' => 'users'],
+			]);
+		$card = new Card();
+		$card->setId(123);
+		$card->setTitle('MyCard');
+		$this->cardMapper->expects($this->any())
+			->method('find')
+			->with(123)
+			->willReturn($card);
+		$this->cardMapper->expects($this->any())
+			->method('findBoardId')
+			->with(123)
+			->willReturn(1);
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->with(1)
+			->willReturn([
+				'admin' => $this->createUserMock('admin'),
+				'user1' => $this->createUserMock('user1'),
+			]);
+
+		// Only one notification should be created — for user1, not for admin
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
+		$notification->expects($this->once())->method('setUser')->with('user1')->willReturn($notification);
+		$notification->expects($this->once())->method('setObject')->with('card', 123)->willReturn($notification);
+		$notification->expects($this->once())->method('setSubject')->with('card-comment-mentioned', ['MyCard', 1, 'admin'])->willReturn($notification);
+		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
+
+		$this->notificationManager->expects($this->once())
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->once())
+			->method('notify')
+			->with($notification);
+
+		$this->notificationHelper->sendMention($comment);
+	}
+
+	/**
+	 * Sharing a board with yourself must not trigger a notification.
+	 */
+	public function testSendBoardSharedUserSkipsSelf() {
+		$board = new Board();
+		$board->setId(123);
+		$board->setTitle('MyBoardTitle');
+		$acl = new Acl();
+		$acl->setParticipant('admin');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($board);
+
+		// generateBoardShared still creates the notification object,
+		// but notify() must never be called for the acting user
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
+		$notification->expects($this->once())->method('setUser')->with('admin')->willReturn($notification);
+		$notification->expects($this->once())->method('setObject')->with('board', 123)->willReturn($notification);
+		$notification->expects($this->once())->method('setSubject')->with('board-shared', ['MyBoardTitle', 'admin'])->willReturn($notification);
+
+		$this->notificationManager->expects($this->once())
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->never())
+			->method('notify');
+
+		$this->notificationHelper->sendBoardShared(123, $acl);
+	}
+
+	/**
+	 * Unsharing a board (markAsRead=true) must still clean up stale
+	 * notifications via markProcessed, even when the participant is the
+	 * acting user. This ensures pre-existing self-notifications get removed.
+	 */
+	public function testSendBoardSharedSelfMarkAsReadStillCleansUp() {
+		$board = new Board();
+		$board->setId(123);
+		$board->setTitle('MyBoardTitle');
+		$acl = new Acl();
+		$acl->setParticipant('admin');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($board);
+
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
+		$notification->expects($this->once())->method('setUser')->with('admin')->willReturn($notification);
+		$notification->expects($this->once())->method('setObject')->with('board', 123)->willReturn($notification);
+		$notification->expects($this->once())->method('setSubject')->with('board-shared', ['MyBoardTitle', 'admin'])->willReturn($notification);
+
+		$this->notificationManager->expects($this->once())
+			->method('createNotification')
+			->willReturn($notification);
+		// markProcessed must be called to clean up any stale notification
+		$this->notificationManager->expects($this->once())
+			->method('markProcessed')
+			->with($notification);
+		$this->notificationManager->expects($this->never())
+			->method('notify');
+
+		$this->notificationHelper->sendBoardShared(123, $acl, true);
+	}
+
+	/**
+	 * A mention of a user who is not a board member must not trigger a notification.
+	 */
+	public function testSendMentionSkipsNonBoardMembers(): void {
+		$comment = $this->createMock(IComment::class);
+		$comment->expects($this->any())
+			->method('getObjectId')
+			->willReturn(123);
+		$comment->expects($this->any())
+			->method('getMessage')
+			->willReturn('@user1 @outsider This is a message.');
+		$comment->expects($this->once())
+			->method('getMentions')
+			->willReturn([
+				['id' => 'user1', 'type' => 'users'],
+				['id' => 'outsider', 'type' => 'users'],
+			]);
+
+		$card = new Card();
+		$card->setId(123);
+		$card->setTitle('MyCard');
+		$this->cardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($card);
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->with(123)
+			->willReturn(1);
+		// Only user1 is a board member; outsider is not
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->with(1)
+			->willReturn([
+				'user1' => $this->createUserMock('user1'),
+			]);
+
+		// Exactly one notification must be created and sent — for user1 only
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
+		$notification->expects($this->once())->method('setUser')->with('user1')->willReturn($notification);
+		$notification->expects($this->once())->method('setObject')->with('card', 123)->willReturn($notification);
+		$notification->expects($this->once())->method('setSubject')->with('card-comment-mentioned', ['MyCard', 1, 'admin'])->willReturn($notification);
+		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
+
+		$this->notificationManager->expects($this->once())
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->once())
+			->method('notify')
+			->with($notification);
 		$this->notificationHelper->sendMention($comment);
 	}
 }

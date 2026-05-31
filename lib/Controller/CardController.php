@@ -9,6 +9,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Card;
+use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Controller;
@@ -45,8 +46,8 @@ class CardController extends Controller {
 	}
 
 	#[NoAdminRequired]
-	public function create(string $title, int $stackId, string $type = 'plain', int $order = 999, string $description = '', $duedate = null, array $labels = [], array $users = []): Card {
-		$card = $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, $duedate);
+	public function create(string $title, int $stackId, string $type = 'plain', int $order = 999, string $description = '', $duedate = null, $startdate = null, array $labels = [], array $users = [], ?string $color = null): Card {
+		$card = $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, $duedate, $startdate, $color);
 
 		foreach ($labels as $label) {
 			$this->assignLabel($card->getId(), $label);
@@ -63,8 +64,11 @@ class CardController extends Controller {
 	 * @param $duedate
 	 */
 	#[NoAdminRequired]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt): Card {
-		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt);
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, $archived = null, $startdate = null, ?string $color = null): Card {
+		$done = array_key_exists('done', $this->request->getParams())
+			? new OptionalNullableValue($this->request->getParam('done', null))
+			: null;
+		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, $archived, $done, $startdate, $color);
 	}
 
 	#[NoAdminRequired]
@@ -123,5 +127,15 @@ class CardController extends Controller {
 	#[NoAdminRequired]
 	public function unassignUser(int $cardId, string $userId, int $type = 0): Assignment {
 		return $this->assignmentService->unassignUser($cardId, $userId, $type);
+	}
+
+	#[NoAdminRequired]
+	public function assignDependentCard(int $cardId, int $dependentCardId): Card {
+		return $this->cardService->assignDependentCard($cardId, $dependentCardId);
+	}
+
+	#[NoAdminRequired]
+	public function removeDependentCard(int $cardId, int $dependentCardId): Card {
+		return $this->cardService->removeDependentCard($cardId, $dependentCardId);
 	}
 }

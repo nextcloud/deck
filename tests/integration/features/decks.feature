@@ -59,6 +59,29 @@ Feature: decks
 			|duedate||
 			|overdue|0|
 
+	Scenario: Setting a startdate on a card
+		Given acting as user "user0"
+		And creates a board named "MyBoard" with color "000000"
+		And create a stack named "ToDo"
+		And create a card named "Scheduled task"
+		When get the card details
+		And the response should be a JSON array with the following mandatory values
+			|key|value|
+			|title|Scheduled task|
+			|startdate||
+		And set the card attribute "startdate" to "2026-03-01 09:00:00"
+		When get the card details
+		And the response should be a JSON array with the following mandatory values
+			|key|value|
+			|title|Scheduled task|
+			|startdate|2026-03-01T09:00:00+00:00|
+		And set the card attribute "startdate" to ""
+		When get the card details
+		And the response should be a JSON array with the following mandatory values
+			|key|value|
+			|title|Scheduled task|
+			|startdate||
+
 	Scenario: Cannot access card on a deleted board
 		Given acting as user "user0"
 		And creates a board named "MyBoard" with color "000000"

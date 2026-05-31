@@ -40,14 +40,7 @@ export default {
 			'assignedCardsDashboard',
 		]),
 		cards() {
-			const today = new Date()
-			const list = [
-				...this.assignedCardsDashboard,
-			].filter((card) => {
-				return card.duedate !== null
-			}).filter((card) => {
-				return (new Date(card.duedate)).getDate() === (new Date(today)).getDate()
-			})
+			const list = [...this.assignedCardsDashboard.today || []]
 			list.sort((a, b) => {
 				return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
 			})

@@ -5,6 +5,14 @@
 
 <template>
 	<div>
+		<NcColorPicker v-model="editingCardColor" clearable @submit="updateCardColor">
+			<NcActionButton @click="openColorPicker">
+				<template #icon>
+					<SelectColor :fill-color="cardColor" :size="20" decorative />
+				</template>
+				{{ t('deck', 'Change card color') }}
+			</NcActionButton>
+		</NcColorPicker>
 		<NcActionButton v-if="!hideDetailsEntry" :close-after-click="true" @click="openCard">
 			<CardBulletedIcon slot="icon" :size="20" decorative />
 			{{ t('deck', 'Card details') }}
@@ -30,6 +38,7 @@
 		<NcActionButton v-if="canEdit"
 			icon="icon-checkmark"
 			:close-after-click="true"
+			:disabled="isInDoneColumn && !!card.done"
 			@click="changeCardDoneStatus()">
 			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
 		</NcActionButton>
@@ -61,21 +70,23 @@
 	</div>
 </template>
 <script>
-import { NcActionButton } from '@nextcloud/vue'
+import { NcActionButton, NcColorPicker } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
+import SelectColor from 'vue-material-design-icons/Circle.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
 
 import '@nextcloud/dialogs/style.css'
 import { emit } from '@nextcloud/event-bus'
+import { useActionsStore } from '../../stores/actions.js'
 
 export default {
 	name: 'CardMenuEntries',
-	components: { NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon },
+	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor },
 	props: {
 		card: {
 			type: Object,
@@ -87,19 +98,25 @@ export default {
 		},
 	},
 	emits: ['edit-title'],
+	setup() {
+		const actionsStore = useActionsStore()
+		return {
+			cardActions: actionsStore.actions.card,
+		}
+	},
 	data() {
 		return {
 			modalShow: false,
 			selectedBoard: '',
 			selectedStack: '',
 			stacksFromBoard: [],
+			editingCardColor: '',
 		}
 	},
 	computed: {
 		...mapGetters([
 			'isArchived',
 			'boards',
-			'cardActions',
 			'stackById',
 			'boardById',
 		]),
@@ -110,6 +127,9 @@ export default {
 		canEdit() {
 			return !this.card.archived
 		},
+		isInDoneColumn() {
+			return this.stackById(this.card.stackId)?.isDoneColumn === true
+		},
 		canEditBoard() {
 			if (this.currentBoard) {
 				return this.$store.getters.canEdit
@@ -118,7 +138,7 @@ export default {
 			return !!board?.permissions?.PERMISSION_EDIT
 		},
 		isCurrentUserAssigned() {
-			return this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
+			return this.card.assignedUsers.find((item) => (item.type === 0 || item.type === 6) && item.participant.uid === getCurrentUser()?.uid)
 		},
 		boardId() {
 			return this.card?.boardId ? this.card.boardId : Number(this.$route.params.id)
@@ -131,6 +151,9 @@ export default {
 				stackname: this.stackById(this.card.stackId)?.title,
 				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `card/${this.card.id}`,
 			}
+		},
+		cardColor() {
+			return this.card.color ? '#' + this.card.color : ''
 		},
 	},
 	methods: {
@@ -181,6 +204,15 @@ export default {
 		},
 		openCardMoveDialog() {
 			emit('deck:card:show-move-dialog', this.card)
+		},
+		openColorPicker() {
+			this.editingCardColor = this.card.color ? '#' + this.card.color : ''
+		},
+		updateCardColor(val) {
+			this.$store.dispatch('updateCardColor', {
+				...this.card,
+				color: val ? val.substring(1) : null,
+			})
 		},
 	},
 }

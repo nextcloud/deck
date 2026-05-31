@@ -20,7 +20,6 @@ OC.L10N.register(
     "Delete" : "Dileu",
     "Edit" : "Golygu",
     "Download" : "Llwytho i lawr",
-    "Modified" : "Addaswyd",
     "Created:" : "Crewyd:",
     "Update" : "Diweddaru",
     "Description" : "Disgrifiad",
@@ -31,10 +30,9 @@ OC.L10N.register(
     "An error occurred" : "Digwyddodd gwall",
     "Export" : "Allforio",
     "Close" : "Cau",
+    "Modified" : "Addaswyd",
     "Share" : "Rhannu",
-    "Personal" : "Personol",
     "Save" : "Cadw",
-    "Keyboard shortcuts" : "Llwybrau byr bysellfwrdd",
     "Today" : "Heddiw"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

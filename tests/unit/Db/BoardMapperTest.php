@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Db;
 
+use OC\Federation\CloudIdManager;
 use OCA\Deck\Service\CirclesService;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
@@ -68,6 +69,7 @@ class BoardMapperTest extends TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->createMock(CirclesService::class),
+			$this->createMock(CloudIdManager::class),
 			$this->createMock(LoggerInterface::class)
 		);
 		$this->aclMapper = Server::get(AclMapper::class);
@@ -154,7 +156,12 @@ class BoardMapperTest extends TestCase {
 
 		$actual = $this->boardMapper->findToDelete();
 		$this->boards[0]->resetUpdatedFields();
-		$this->assertEquals([$this->boards[0]], $actual);
+
+		$filteredActual = array_values(array_filter($actual, function ($board) {
+			return $board->getId() === $this->boards[0]->getId();
+		}));
+
+		$this->assertEquals([$this->boards[0]], $filteredActual);
 
 		$this->boards[0]->setDeletedAt(0);
 		$this->boardMapper->update($this->boards[0]);

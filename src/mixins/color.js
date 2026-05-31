@@ -3,11 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { isDarkTheme } from '@nextcloud/vue'
 import chroma from 'chroma-js'
 
 export default {
 	methods: {
 		textColor(hex) {
+			if (!this.colorIsValid(hex)) {
+				return isDarkTheme ? '#ffffff' : '#000000'
+			}
 			return chroma(hex ?? 'ffffff').get('lab.l') > 50 ? '#000000' : '#ffffff'
 		},
 		colorIsValid(hex) {

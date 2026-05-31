@@ -13,11 +13,16 @@ export class CardApi {
 		return generateUrl(url)
 	}
 
+	ocsUrl(url) {
+		url = `/apps/deck/api/v1.0${url}`
+		return generateOcsUrl(url)
+	}
+
 	addCard(card) {
-		return axios.post(this.url('/cards'), card)
+		return axios.post(this.ocsUrl('/cards'), card)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -75,11 +80,11 @@ export class CardApi {
 			})
 	}
 
-	updateCard(card) {
-		return axios.put(this.url(`/cards/${card.id}`), card)
+	updateCard(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}`), { ...card, boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -90,11 +95,11 @@ export class CardApi {
 			})
 	}
 
-	reorderCard(card) {
-		return axios.put(this.url(`/cards/${card.id}/reorder`), card)
+	reorderCard(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}/reorder`), { ...card, boardId: boardId ?? null })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -105,11 +110,11 @@ export class CardApi {
 			})
 	}
 
-	assignUser(cardId, id, type) {
-		return axios.post(this.url(`/cards/${cardId}/assign`), { userId: id, type })
+	assignUser(cardId, id, type, boardId) {
+		return axios.post(this.ocsUrl(`/cards/${cardId}/assign`), { userId: id, type, boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -120,11 +125,11 @@ export class CardApi {
 			})
 	}
 
-	removeUser(cardId, id, type) {
-		return axios.put(this.url(`/cards/${cardId}/unassign`), { userId: id, type })
+	removeUser(cardId, id, type, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${cardId}/unassign`), { userId: id, type, boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -196,10 +201,10 @@ export class CardApi {
 	}
 
 	assignLabelToCard(data) {
-		return axios.post(this.url(`/cards/${data.card.id}/label/${data.labelId}`))
+		return axios.post(this.ocsUrl(`/cards/${data.card.id}/label/${data.labelId}`), { boardId: data.boardId ? data.boardId : null })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -211,10 +216,48 @@ export class CardApi {
 	}
 
 	removeLabelFromCard(data) {
-		return axios.delete(this.url(`/cards/${data.card.id}/label/${data.labelId}`))
+		return axios.delete(this.ocsUrl(`/cards/${data.card.id}/label/${data.labelId}`), {
+			data: {
+				boardId: data.boardId ? data.boardId : null,
+			},
+		})
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	assignDependentCard(cardId, dependentCardId, boardId) {
+		return axios.post(this.ocsUrl(`/cards/${cardId}/dependentCards/${dependentCardId}`), { boardId: boardId ?? null })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	removeDependentCard(cardId, dependentCardId, boardId) {
+		return axios.delete(this.ocsUrl(`/cards/${cardId}/dependentCards/${dependentCardId}`), {
+			data: {
+				boardId: boardId ?? null,
+			},
+		})
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\User\LazyUser;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
@@ -34,14 +35,20 @@ use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
+use OCA\Files_Sharing\Event\UserShareAccessUpdatedEvent;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudFederationFactory;
+use OCP\Federation\ICloudFederationProviderManager;
+use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
+use OCP\Security\ISecureRandom;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -63,12 +70,18 @@ class BoardService {
 		private NotificationHelper $notificationHelper,
 		private AssignmentMapper $assignedUsersMapper,
 		private ActivityManager $activityManager,
+		private readonly ICloudFederationProviderManager $cloudFederationProviderManager,
+		private readonly ICloudIdManager $cloudIdManager,
+		private readonly ICloudFederationFactory $federationFactory,
 		private IEventDispatcher $eventDispatcher,
 		private ChangeHelper $changeHelper,
 		private IURLGenerator $urlGenerator,
 		private IDBConnection $connection,
 		private BoardServiceValidator $boardServiceValidator,
 		private SessionMapper $sessionMapper,
+		private IUserManager $userManager,
+		private ISecureRandom $random,
+		private ConfigService $configService,
 		private ?string $userId,
 	) {
 	}
@@ -114,7 +127,7 @@ class BoardService {
 			return $this->boardsCachePartial[$boardId];
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ, null, false);
 		$board = $this->boardMapper->find($boardId, true, true, $allowDeleted);
 		[$board] = $this->enrichBoards([$board], $fullDetails);
 		return $board;
@@ -235,6 +248,15 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		$this->changeHelper->boardChanged($board->getId());
 
+		if (class_exists(UserShareAccessUpdatedEvent::class)) {
+			$acls = $this->aclMapper->findAll($id);
+			foreach ($acls as $acl) {
+				$user = new LazyUser($acl->getParticipant(), $this->userManager);
+				$event = new UserShareAccessUpdatedEvent($user);
+				$this->eventDispatcher->dispatchTyped($event);
+			}
+		}
+
 		return $board;
 	}
 
@@ -246,12 +268,21 @@ class BoardService {
 	public function deleteUndo(int $id): Board {
 		$this->boardServiceValidator->check(compact('id'));
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE, allowDeletedBoard: true);
 		$board = $this->find($id, allowDeleted: true);
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		$this->changeHelper->boardChanged($board->getId());
+
+		if (class_exists(UserShareAccessUpdatedEvent::class)) {
+			$acls = $this->aclMapper->findAll($id);
+			foreach ($acls as $acl) {
+				$user = new LazyUser($acl->getParticipant(), $this->userManager);
+				$event = new UserShareAccessUpdatedEvent($user);
+				$this->eventDispatcher->dispatchTyped($event);
+			}
+		}
 
 		return $board;
 	}
@@ -265,7 +296,7 @@ class BoardService {
 	public function deleteForce(int $id): Board {
 		$this->boardServiceValidator->check(compact('id'));
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE, allowDeletedBoard: true);
 		$board = $this->find($id, allowDeleted: true);
 		$delete = $this->boardMapper->delete($board);
 
@@ -342,6 +373,28 @@ class BoardService {
 		[$edit, $share, $manage] = $this->applyPermissions($boardId, $edit, $share, $manage);
 
 		$acl = new Acl();
+		if ($type === Acl::PERMISSION_TYPE_REMOTE) {
+			$this->configService->ensureFederationEnabled();
+			$sharedBy = $this->userManager->get($this->userId);
+			$board = $this->find($boardId);
+			$token = $this->random->generate(32);
+			$cloudShare = $this->federationFactory->getCloudFederationShare(
+				$participant,
+				$board->getTitle(),
+				'',
+				(string)$boardId,
+				$sharedBy->getCloudId(),
+				$sharedBy->getDisplayName(),
+				$sharedBy->getCloudId(),
+				$sharedBy->getDisplayName(),
+				$token,
+				'user',
+				'deck'
+			);
+			$this->cloudFederationProviderManager->sendCloudShare($cloudShare);
+			$acl->setToken($token);
+		}
+
 		$acl->setBoardId($boardId);
 		$acl->setType($type);
 		$acl->setParticipant($participant);
@@ -367,6 +420,18 @@ class BoardService {
 
 		$this->eventDispatcher->dispatchTyped(new AclCreatedEvent($acl));
 
+		// Sync permissions to remote server since shareReceived() creates ACL with no permissions
+		if ($type === Acl::PERMISSION_TYPE_REMOTE && ($edit || $share || $manage)) {
+			$notification = $this->federationFactory->getCloudFederationNotification();
+			$payload = [
+				$newAcl->jsonSerialize(),
+				'sharedSecret' => $newAcl->getToken(),
+			];
+			$notification->setMessage('update-permissions', 'deck', (string)$boardId, $payload);
+			$url = $this->cloudIdManager->resolveCloudId($participant);
+			$this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
+		}
+
 		return $newAcl;
 	}
 
@@ -390,6 +455,21 @@ class BoardService {
 		$this->boardMapper->mapAcl($acl);
 		$acl = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
+
+		if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+			$this->configService->ensureFederationEnabled();
+			$notification = $this->federationFactory->getCloudFederationNotification();
+
+			$payload = [
+				$acl->jsonSerialize(),
+				'sharedSecret' => $acl->getToken(),
+			];
+
+			$notification->setMessage('update-permissions', 'deck', (string)$acl->getBoardId(), $payload);
+
+			$url = $this->cloudIdManager->resolveCloudId($acl->getParticipant());
+			$this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
+		}
 
 		$this->eventDispatcher->dispatchTyped(new AclUpdatedEvent($acl));
 
@@ -519,7 +599,7 @@ class BoardService {
 		foreach ($stacks as $stack) {
 			$newStack = new Stack();
 			$newStack->setTitle($stack->getTitle());
-			if ($stack->getOrder() == null) {
+			if ($stack->getOrder() === null) {
 				$newStack->setOrder(999);
 			} else {
 				$newStack->setOrder($stack->getOrder());
@@ -641,13 +721,14 @@ class BoardService {
 		usort($stacks, $stackSorter);
 		usort($newStacks, $stackSorter);
 
+		$stackIds = array_map(fn (Stack $stack) => $stack->getId(), $stacks);
+		$activeCardsByStack = $this->cardMapper->findAllForStacks($stackIds);
+		$archivedCardsByStack = $this->cardMapper->findAllArchivedForStacks($stackIds);
+
 		$i = 0;
 		foreach ($stacks as $stack) {
-			$cards = $this->cardMapper->findAll($stack->getId());
-			$archivedCards = $this->cardMapper->findAllArchived($stack->getId());
-
 			/** @var Card[] $cards */
-			$cards = array_merge($cards, $archivedCards);
+			$cards = array_merge($activeCardsByStack[$stack->getId()] ?? [], $archivedCardsByStack[$stack->getId()] ?? []);
 
 			foreach ($cards as $card) {
 				$targetStackId = $moveCardsToLeftStack ? $newStacks[0]->getId() : $newStacks[$i]->getId();
@@ -750,20 +831,36 @@ class BoardService {
 
 	private function enrichWithCards(Board $board): void {
 		$stacks = $this->stackMapper->findAll($board->getId());
-		foreach ($stacks as $stack) {
-			$cards = $this->cardMapper->findAllByStack($stack->getId());
-			$fullCards = [];
-			foreach ($cards as $card) {
-				$fullCard = $this->cardMapper->find($card->getId());
-				$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
-				$fullCard->setAssignedUsers($assignedUsers);
-				array_push($fullCards, $fullCard);
-			}
-			$stack->setCards($fullCards);
-		}
-
 		if (\count($stacks) === 0) {
 			return;
+		}
+
+		$stackIds = array_map(fn (Stack $stack) => $stack->getId(), $stacks);
+
+		// Fetch all active cards for all stacks in one query
+		$cardsByStack = $this->cardMapper->findAllForStacks($stackIds);
+
+		$allCards = array_merge(...array_values(array_filter($cardsByStack)));
+		$allCardIds = array_map(fn (Card $card) => $card->getId(), $allCards);
+
+		// Batch-fetch labels and assigned users for all cards
+		$labelsByCard = [];
+		foreach ($this->labelMapper->findAssignedLabelsForCards($allCardIds) as $label) {
+			$labelsByCard[$label->getCardId()][] = $label;
+		}
+		$usersByCard = [];
+		foreach ($this->assignedUsersMapper->findIn($allCardIds) as $assignment) {
+			$usersByCard[$assignment->getCardId()][] = $assignment;
+		}
+
+		foreach ($stacks as $stack) {
+			$fullCards = [];
+			foreach ($cardsByStack[$stack->getId()] ?? [] as $card) {
+				$card->setLabels($labelsByCard[$card->getId()] ?? []);
+				$card->setAssignedUsers($usersByCard[$card->getId()] ?? []);
+				$fullCards[] = $card;
+			}
+			$stack->setCards($fullCards);
 		}
 
 		$board->setStacks($stacks);

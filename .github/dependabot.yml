@@ -8,7 +8,56 @@ updates:
     day: saturday
     time: "03:00"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   open-pull-requests-limit: 10
+  labels:
+  - 3. to review
+  - dependencies
+  reviewers:
+  - juliushaertl
+  - luka-nextcloud
+
+- package-ecosystem: npm
+  target-branch: stable34
+  versioning-strategy: lockfile-only
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:15"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]
+  open-pull-requests-limit: 30
+  labels:
+  - 3. to review
+  - dependencies
+  reviewers:
+  - juliushaertl
+  - luka-nextcloud
+
+- package-ecosystem: npm
+  target-branch: stable33
+  versioning-strategy: lockfile-only
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:15"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]
+  open-pull-requests-limit: 30
+  labels:
+  - 3. to review
+  - dependencies
   reviewers:
   - juliushaertl
   - luka-nextcloud
@@ -22,6 +71,8 @@ updates:
     day: saturday
     time: "03:15"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-major"]
@@ -29,40 +80,9 @@ updates:
   labels:
   - 3. to review
   - dependencies
-
-- package-ecosystem: npm
-  target-branch: stable31
-  versioning-strategy: lockfile-only
-  directory: "/"
-  schedule:
-    interval: weekly
-    day: saturday
-    time: "03:15"
-    timezone: Europe/Paris
-  ignore:
-    - dependency-name: "*"
-      update-types: ["version-update:semver-major"]
-  open-pull-requests-limit: 30
-  labels:
-  - 3. to review
-  - dependencies
-
-- package-ecosystem: npm
-  target-branch: stable30
-  versioning-strategy: lockfile-only
-  directory: "/"
-  schedule:
-    interval: weekly
-    day: saturday
-    time: "03:30"
-    timezone: Europe/Paris
-  ignore:
-    - dependency-name: "*"
-      update-types: ["version-update:semver-major"]
-  open-pull-requests-limit: 30
-  labels:
-  - 3. to review
-  - dependencies
+  reviewers:
+  - juliushaertl
+  - luka-nextcloud
 
 - package-ecosystem: composer
   directory: "/"
@@ -71,6 +91,8 @@ updates:
     day: saturday
     time: "03:45"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   open-pull-requests-limit: 10
   reviewers:
   - juliushaertl
@@ -83,6 +105,8 @@ updates:
     day: saturday
     time: "04:00"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   open-pull-requests-limit: 10
   reviewers:
   - juliushaertl
@@ -95,6 +119,8 @@ updates:
     day: saturday
     time: "04:15"
     timezone: Europe/Paris
+  cooldown:
+    default-days: 10
   open-pull-requests-limit: 10
   reviewers:
   - juliushaertl

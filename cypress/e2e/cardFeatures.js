@@ -66,7 +66,7 @@ describe('Card', function () {
 	it('Create card from overview', function () {
 		cy.visit(`/apps/deck/#/`)
 		const newCardTitle = 'Test create from overview'
-		cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+		cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 		cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 
 		cy.get('.button-vue[aria-label*="Add card"]')
@@ -194,7 +194,7 @@ describe('Card', function () {
 
 		it('Shows the modal with the editor', () => {
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
-			cy.intercept({ method: 'PUT', url: '**/apps/deck/cards/*' }).as('save')
+			cy.intercept({ method: 'PUT', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards/*' }).as('save')
 			cy.get('.modal__card').should('be.visible')
 			cy.get('.app-sidebar-header__mainname').contains('Hello world')
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world').should('be.visible')
@@ -205,15 +205,19 @@ describe('Card', function () {
 
 			cy.reload()
 			cy.get('.modal__card').should('be.visible')
+
+			// Scroll to the bottom to ensure all content is loaded and visible
+			cy.get('.modal__card .app-sidebar-tabs, .modal__card .app-sidebar__tab--active').first().scrollTo('bottom', { ensureScrollable: false })
+			cy.contains('.modal__card .ProseMirror p', 'Paragraph').scrollIntoView().should('be.visible')
+
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(0).contains('List item').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(1).contains('with entries').should('be.visible')
-			cy.get('.modal__card .ProseMirror p').contains('Paragraph').should('be.visible')
 		})
 
 		it('Smart picker', () => {
 			const newCardTitle = 'Test smart picker'
-			cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+			cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 			cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('.modal__card').should('be.visible')

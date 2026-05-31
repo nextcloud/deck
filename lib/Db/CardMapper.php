@@ -237,7 +237,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAllArchived($stackId, $limit = null, $offset = null) {
+	public function findAllArchived(int $stackId, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -250,7 +250,33 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAllByStack($stackId, $limit = null, $offset = null) {
+	/**
+	 * Batch-fetch all archived cards for multiple stacks in a single query.
+	 *
+	 * @param int[] $stackIds
+	 * @return array<int, Card[]> Map of stackId => Card[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAllArchivedForStacks(array $stackIds): array {
+		if (empty($stackIds)) {
+			return [];
+		}
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards')
+			->where($qb->expr()->in('stack_id', $qb->createNamedParameter($stackIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->orderBy('last_modified');
+
+		$cards = array_fill_keys($stackIds, []);
+		foreach ($this->findEntities($qb) as $card) {
+			$cards[$card->getStackId()][] = $card;
+		}
+		return $cards;
+	}
+
+	public function findAllByStack(int $stackId, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -588,6 +614,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function delete(Entity $entity): Entity {
 		$this->labelMapper->deleteLabelAssignmentsForCard($entity->getId());
+		$this->removeDependenciesForCard($entity->getId());
 		$this->cache->remove('findBoardId:' . $entity->getId());
 		return parent::delete($entity);
 	}
@@ -615,6 +642,76 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($card, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('label_id', $qb->createNamedParameter($label, IQueryBuilder::PARAM_INT)));
 		$qb->executeStatement();
+	}
+
+	/**
+	 * @param int[] $cardIds
+	 * @return array<int, int[]>
+	 */
+	public function findDependenciesForCards(array $cardIds): array {
+		if ($cardIds === []) {
+			return [];
+		}
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('card_id', 'dependent_card_id')
+			->from('deck_dependent_cards')
+			->where($qb->expr()->in('card_id', $qb->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->orderBy('card_id')
+			->addOrderBy('dependent_card_id');
+
+		$result = [];
+		$queryResult = $qb->executeQuery();
+		while ($row = $queryResult->fetch()) {
+			$cardId = (int)$row['card_id'];
+			$result[$cardId][] = (int)$row['dependent_card_id'];
+		}
+
+		return $result;
+	}
+
+	public function addDependency(int $cardId, int $dependentCardId): bool {
+		if ($this->hasDependency($cardId, $dependentCardId)) {
+			return false;
+		}
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->insert('deck_dependent_cards')
+			->values([
+				'card_id' => $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT),
+				'dependent_card_id' => $qb->createNamedParameter($dependentCardId, IQueryBuilder::PARAM_INT),
+			]);
+		$qb->executeStatement();
+
+		return true;
+	}
+
+	public function removeDependency(int $cardId, int $dependentCardId): bool {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('deck_dependent_cards')
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('dependent_card_id', $qb->createNamedParameter($dependentCardId, IQueryBuilder::PARAM_INT)));
+
+		return $qb->executeStatement() > 0;
+	}
+
+	public function removeDependenciesForCard(int $cardId): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('deck_dependent_cards')
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+			->orWhere($qb->expr()->eq('dependent_card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));
+		$qb->executeStatement();
+	}
+
+	private function hasDependency(int $cardId, int $dependentCardId): bool {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id')
+			->from('deck_dependent_cards')
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('dependent_card_id', $qb->createNamedParameter($dependentCardId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults(1);
+
+		return $qb->executeQuery()->fetchOne() !== false;
 	}
 
 	public function isOwner(string $userId, int $id): bool {

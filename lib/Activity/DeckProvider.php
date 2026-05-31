@@ -9,6 +9,8 @@ namespace OCA\Deck\Activity;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\CirclesService;
+use OCP\Activity\Exceptions\UnknownActivityException;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\Comments\IComment;
@@ -38,7 +40,10 @@ class DeckProvider implements IProvider {
 	/** @var CardService */
 	private $cardService;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService) {
+	/** @var CirclesService */
+	private $circlesService;
+
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService, CirclesService $circlesService) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
@@ -47,6 +52,7 @@ class DeckProvider implements IProvider {
 		$this->l10nFactory = $l10n;
 		$this->config = $config;
 		$this->cardService = $cardService;
+		$this->circlesService = $circlesService;
 	}
 
 	/**
@@ -56,19 +62,18 @@ class DeckProvider implements IProvider {
 	 *                                   To do so, simply use setChildEvent($previousEvent) after setting the
 	 *                                   combined subject on the current event.
 	 * @return IEvent
-	 * @throws \InvalidArgumentException Should be thrown if your provider does not know this event
+	 * @throws UnknownActivityException Should be thrown if your provider does not know this event
 	 * @since 11.0.0
 	 */
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null): IEvent {
 		if ($event->getApp() !== 'deck') {
-			throw new \InvalidArgumentException();
+			throw new UnknownActivityException();
 		}
 
 		$event = $this->getIcon($event);
 
 		$subjectIdentifier = $event->getSubject();
 		$subjectParams = $event->getSubjectParameters();
-		$ownActivity = ($event->getAuthor() === $this->userId);
 
 		/**
 		 * Map stored parameter objects to rich string types
@@ -80,6 +85,7 @@ class DeckProvider implements IProvider {
 			$author = $subjectParams['author'];
 			unset($subjectParams['author']);
 		}
+		$ownActivity = ($author === $this->userId);
 		$user = $this->userManager->get($author);
 		$params = [];
 		if ($user !== null) {
@@ -102,7 +108,7 @@ class DeckProvider implements IProvider {
 		}
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
 			if (!$this->activityManager->canSeeBoardActivity($event->getObjectId(), $event->getAffectedUser())) {
-				throw new \InvalidArgumentException();
+				throw new UnknownActivityException();
 			}
 			if (isset($subjectParams['board']) && $event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['board']['title']);
@@ -119,7 +125,7 @@ class DeckProvider implements IProvider {
 
 		if (isset($subjectParams['card']) && $event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
 			if (!$this->activityManager->canSeeCardActivity($event->getObjectId(), $event->getAffectedUser())) {
-				throw new \InvalidArgumentException();
+				throw new UnknownActivityException();
 			}
 			if ($event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['card']['title']);
@@ -274,6 +280,17 @@ class DeckProvider implements IProvider {
 					'type' => 'user',
 					'id' => $subjectParams['acl']['participant'],
 					'name' => $user !== null ? $user->getDisplayName() : $subjectParams['acl']['participant']
+				];
+			} elseif ($subjectParams['acl']['type'] === Acl::PERMISSION_TYPE_CIRCLE) {
+				$circle = $this->circlesService->getCircle($subjectParams['acl']['participant']);
+
+				// suppressing psalm because $circle is typed as Circle|null but psalm doesnt know about the OCA class
+				// $circle->getName() will be defined when $circle is not null
+				/** @psalm-suppress UndefinedMethod */
+				$params['acl'] = [
+					'type' => 'highlight',
+					'id' => $subjectParams['acl']['participant'],
+					'name' => $circle ? $circle->getName() : $subjectParams['acl']['participant']
 				];
 			} else {
 				$params['acl'] = [

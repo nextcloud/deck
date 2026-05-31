@@ -61,7 +61,6 @@ class ImportExportTest extends \Test\TestCase {
 		parent::setUpBeforeClass();
 
 		$backend = new \Test\Util\User\Dummy();
-		\OC_User::useBackend($backend);
 		Server::get(IUserManager::class)->registerBackend($backend);
 		$backend->createUser('alice', 'alice');
 		$backend->createUser('jane', 'jane');
@@ -135,12 +134,12 @@ class ImportExportTest extends \Test\TestCase {
 		);
 	}
 
-	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared', 'version', 'done', 'referenceData']): string {
+	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared', 'version', 'done', 'referenceData', 'token']): string {
 		$output = '';
 		$arrayIsList = array_keys($array) === range(0, count($array) - 1);
 		foreach ($array as $key => $value) {
 			$tmpPrefix = $prefix;
-			if (in_array($key, $skipKeyList)) {
+			if (in_array($key, $skipKeyList, true)) {
 				continue;
 			}
 			if (is_array($value)) {
@@ -328,12 +327,15 @@ class ImportExportTest extends \Test\TestCase {
 			'lastModified' => 1689667779,
 			'createdAt' => 1689667569,
 			'owner' => $owner,
+			'done' => new \DateTime('2023-07-18T10:00:00+00:00'),
+			'startdate' => new \DateTime('2023-07-10T08:00:00+00:00'),
 			'duedate' => new \DateTime('2050-07-24T22:00:00.000000+0000'),
 			'order' => 999,
 			'stackId' => $stacks[0]->getId(),
 		]), $cards[0]);
 		self::assertEntity(Card::fromRow([
 			'title' => '2',
+			'startdate' => new \DateTime('2023-07-15T08:00:00+00:00'),
 			'duedate' => new \DateTime('2050-07-24T22:00:00.000000+0000'),
 		]), $cards[1], true);
 		self::assertEntity(Card::fromParams([

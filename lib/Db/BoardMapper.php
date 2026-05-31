@@ -12,6 +12,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Federation\ICloudIdManager;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -32,6 +33,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		private IUserManager $userManager,
 		private IGroupManager $groupManager,
 		private CirclesService $circlesService,
+		private ICloudIdManager $cloudIdManager,
 		private LoggerInterface $logger,
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
@@ -103,8 +105,12 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		));
 
 		// Shared to user groups of the user
-		$groupIds = $this->groupManager->getUserGroupIds($this->userManager->get($userId));
-		if (count($groupIds) !== 0) {
+		$user = $this->userManager->get($userId);
+		$groupIds = null;
+		if ($user !== null) {
+			$groupIds = $this->groupManager->getUserGroupIds($user);
+		}
+		if ($groupIds !== null && count($groupIds) !== 0) {
 			$qb->orWhere($qb->expr()->andX(
 				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
 				$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)),
@@ -127,6 +133,18 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		$result->closeCursor();
 		return array_unique(array_merge($ownerBoards, $sharedBoards));
 	}
+	/**
+	 * @param int $externalId
+	 * @return Board[]
+	 */
+	public function findByExternalId(int $externalId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('external_id', $qb->createNamedParameter($externalId, IQueryBuilder::PARAM_INT)))
+			->orderBy('id');
+		return $this->findEntities($qb);
+	}
 
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
 		?string $term = null): array {
@@ -145,12 +163,14 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 				return $board->getId();
 			}, $allBoards));
 
+			// Pre-group ACLs by board ID
+			$aclsByBoard = [];
+			foreach ($acls as $acl) {
+				$aclsByBoard[$acl->getBoardId()][] = $acl;
+			}
 			/* @var Board $entry */
 			foreach ($allBoards as $entry) {
-				$boardAcls = array_values(array_filter($acls, function ($acl) use ($entry) {
-					return $acl->getBoardId() === $entry->getId();
-				}));
-				$entry->setAcl($boardAcls);
+				$entry->setAcl($aclsByBoard[$entry->getId()] ?? []);
 			}
 
 			foreach ($allBoards as $board) {
@@ -172,7 +192,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		// FIXME this used to be a UNION to get boards owned by $userId and the user shares in one single query
 		// Is it possible with the query builder?
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			// this does not work in MySQL/PostgreSQL
 			//->selectAlias('0', 'shared')
 			->from('deck_boards', 'b')
@@ -212,7 +232,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 		// shared with user
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			//->selectAlias('1', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -280,7 +300,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			return [];
 		}
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			//->selectAlias('2', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -336,7 +356,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		}
 
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			//->selectAlias('2', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -386,7 +406,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 	public function findAllByTeam(string $teamId): array {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
 			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
@@ -414,7 +434,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 	public function isSharedWithTeam(int $boardId, string $teamId): bool {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
 			->where($qb->expr()->eq('b.id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
@@ -440,7 +460,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		// add buffer of 5 min
 		$timeLimit = time() - (60 * 5);
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			->from('deck_boards')
 			->where($qb->expr()->gt('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->lt('deleted_at', $qb->createNamedParameter($timeLimit, IQueryBuilder::PARAM_INT)));
@@ -509,6 +529,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 				}
 				return null;
 			}
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				return new FederatedUser($this->cloudIdManager->resolveCloudId($acl->getParticipant()));
+			}
 			$this->logger->warning('Unknown permission type for mapping acl ' . $acl->getId());
 			return null;
 		});
@@ -519,8 +542,14 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 */
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
-		$board->resolveRelation('owner', function ($owner) use (&$userManager) {
-			if ($this->userManager->userExists($owner)) {
+		$cloudIdManager = $this->cloudIdManager;
+		$externalId = $board->getExternalId();
+		$board->resolveRelation('owner', function ($owner) use (&$userManager, &$cloudIdManager, $externalId) {
+			if ($externalId !== null) {
+				$cloudId = $cloudIdManager->resolveCloudId($owner);
+				return new FederatedUser($cloudId);
+			}
+			if ($userManager->userExists($owner)) {
 				return new User($owner, $userManager);
 			}
 			return null;

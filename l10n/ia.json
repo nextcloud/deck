@@ -17,6 +17,7 @@
     "Tags" : "Etiquettas",
     "Activity" : "Activitate",
     "Undo" : "Disfacer",
+    "Hours" : "Horas",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",
@@ -24,7 +25,6 @@
     "Edit" : "Modificar",
     "Members" : "Membros",
     "Download" : "Discargar",
-    "Modified" : "Modificate",
     "Comments" : "Commentarios",
     "Created:" : "Create:",
     "Reply" : "Responder",
@@ -37,11 +37,9 @@
     "Advanced options" : "Optiones avantiate",
     "Export" : "Exportar",
     "Close" : "Clauder",
+    "Modified" : "Modificate",
     "Share" : "Compartir",
-    "Personal" : "Personal",
     "Save" : "Salveguardar",
-    "Keyboard shortcuts" : "Combinationes de claves",
-    "Keyboard shortcut" : "Combination de claves",
     "Today" : "Hodie",
     "Tomorrow" : "Deman"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

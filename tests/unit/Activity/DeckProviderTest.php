@@ -28,6 +28,8 @@ use OC\Activity\Event;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\CirclesService;
+use OCP\Activity\Exceptions\UnknownActivityException;
 use OCP\Activity\IEvent;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
@@ -67,6 +69,9 @@ class DeckProviderTest extends TestCase {
 	/** @var CardService|MockObject */
 	private $cardService;
 
+	/** @var CirclesService|MockObject */
+	private $circlesService;
+
 	/** @var string */
 	private $userId = 'admin';
 
@@ -79,7 +84,8 @@ class DeckProviderTest extends TestCase {
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->cardService = $this->createMock(CardService::class);
-		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->l10nFactory, $this->config, $this->userId, $this->cardService);
+		$this->circlesService = $this->createMock(CirclesService::class);
+		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->l10nFactory, $this->config, $this->userId, $this->cardService, $this->circlesService);
 
 		$this->activityManager->method('canSeeCardActivity')->willReturn(true);
 		$this->activityManager->method('canSeeBoardActivity')->willReturn(true);
@@ -117,7 +123,7 @@ class DeckProviderTest extends TestCase {
 	}
 
 	public function testParseFailureApp() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(UnknownActivityException::class);
 		$event = $this->createMock(IEvent::class);
 		$event->expects($this->once())->method('getApp')->willReturn('notdeck');
 		$this->provider->parse('en_US', $event, $event);
@@ -516,7 +522,6 @@ class DeckProviderTest extends TestCase {
 	public function invokePrivate(&$object, $methodName, array $parameters = []) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
-		$method->setAccessible(true);
 		return $method->invokeArgs($object, $parameters);
 	}
 }

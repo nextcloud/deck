@@ -7,6 +7,7 @@
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
 			:class="{'compact': compactMode, 'current-card': currentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+			:style="{backgroundColor: color}"
 			tag="div"
 			:tabindex="0"
 			class="card"
@@ -20,7 +21,7 @@
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
 				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
-					<span class="dragDisabled" contenteditable="false">{{ displayTitle }}</span>
+					<span contenteditable="false">{{ displayTitle }}</span>
 				</h4>
 				<h4 v-if="editingTitle >= 1"
 					key="title-edit"
@@ -193,6 +194,9 @@ export default {
 			}
 			return this.hasBadges
 		},
+		color() {
+			return this.card.color ? '#' + this.card.color : null
+		},
 	},
 	watch: {
 		currentCard(newValue) {
@@ -318,8 +322,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/animations';
-	@import './../../css/variables';
+	@import './../../css/animations.scss';
+	@import './../../css/variables.scss';
 
 	@mixin dark-card {
 		border: 2px solid var(--color-border-dark);
@@ -364,7 +368,7 @@ export default {
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
-				word-wrap: break-word;
+				overflow-wrap: break-word;
 				align-self: center;
 
 				:deep(a) {
@@ -394,13 +398,13 @@ export default {
 		}
 
 		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/labels';
+		@import './../../css/labels.scss';
 
 		.card-controls {
 			display: flex;
 		}
 		&.card__editable .card-controls {
-			margin-right: 0;
+			margin-inline-end: 0;
 		}
 		&.card__archived {
 			background-color: var(--color-background-dark);
@@ -452,7 +456,7 @@ export default {
 			border-radius: 50%;
 			background-color: transparent;
 			margin-top: 4px;
-			margin-right: 4px;
+			margin-inline-end: 4px;
 		}
 	}
 
@@ -460,7 +464,7 @@ export default {
 		min-height: var(--default-clickable-area);
 
 		.duedate {
-			margin-right: 0;
+			margin-inline-end: 0;
 			display: flex;
 			height: 32px;
 			width: 32px;

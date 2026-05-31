@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace OCA\Deck\Search\Query;
 
 class StringQueryParameter extends AQueryParameter {
-	
+
 	/** @var string */
 	protected $value;
-	
+
 	public function __construct(string $field, int $comparator, string $value) {
 		$this->field = $field;
 		$this->comparator = $comparator;

@@ -155,6 +155,14 @@ router.beforeEach((to, from, next) => {
 		next(path)
 		return
 	}
+	// Redirect to the pinned default board if set and navigating to the main route
+	if (to.name === 'main') {
+		const defaultBoardId = localStorage.getItem('deck.defaultBoardId')
+		if (defaultBoardId) {
+			next({ name: 'board', params: { id: parseInt(defaultBoardId, 10) } })
+			return
+		}
+	}
 	next()
 })
 
