@@ -166,6 +166,9 @@ router.beforeEach((to, from, next) => {
 		if (defaultBoardId) {
 			next({ name: 'board', params: { id: parseInt(defaultBoardId, 10) } })
 			return
+		} else {
+			next({ name: 'upcoming' })
+			return
 		}
 	}
 	next()
