@@ -8,6 +8,7 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#indexUpcoming', 'url' => '/upcoming', 'verb' => 'GET'],
 		['name' => 'page#indexList', 'url' => '/board', 'verb' => 'GET'],
 		['name' => 'page#indexBoard', 'url' => '/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'page#indexBoardDetails', 'url' => '/board/{boardId}/details', 'verb' => 'GET'],
