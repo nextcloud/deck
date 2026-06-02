@@ -46,7 +46,6 @@ class AttachmentTest extends \Test\TestCase {
 			'createdBy' => 'admin',
 			'deletedAt' => 0,
 			'extendedData' => []
-
 		], $board->jsonSerialize());
 	}
 }

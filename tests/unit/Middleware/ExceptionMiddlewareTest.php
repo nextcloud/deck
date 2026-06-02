@@ -59,7 +59,6 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 		);
 	}
 
-
 	public static function dataAfterException() {
 		return [
 			[new NoPermissionException('No permission'), 403, 'No permission'],

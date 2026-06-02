@@ -15,7 +15,6 @@ class Capabilities implements ICapability {
 	private IAppManager $appManager;
 	private PermissionService $permissionService;
 
-
 	public function __construct(IAppManager $appManager, PermissionService $permissionService) {
 		$this->appManager = $appManager;
 		$this->permissionService = $permissionService;

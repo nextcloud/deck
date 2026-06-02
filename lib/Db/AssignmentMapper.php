@@ -111,7 +111,6 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 		}
 	}
 
-
 	public function isOwner(string $userId, int $id): bool {
 		return $this->cardMapper->isOwner($userId, $id);
 	}
