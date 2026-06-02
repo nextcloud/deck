@@ -121,7 +121,6 @@ class BoardContext implements Context {
 		]);
 	}
 
-
 	/**
 	 * @When /^fetching the board list$/
 	 */
@@ -304,7 +303,6 @@ class BoardContext implements Context {
 	public function deleteTheBoard() {
 		$this->requestContext->sendJSONrequest('DELETE', '/index.php/apps/deck/boards/' . $this->board['id']);
 	}
-
 
 	/**
 	 * @Given /^get the activities for the last card$/

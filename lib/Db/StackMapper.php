@@ -33,7 +33,6 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		$this->cache = $cacheFactory->createDistributed('deck-stackMapper');
 	}
 
-
 	/**
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException

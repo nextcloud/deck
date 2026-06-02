@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Event;
 
 use OCP\EventDispatcher\Event;

@@ -61,7 +61,6 @@ class CardOcsController extends OCSController {
 		return new DataResponse($card);
 	}
 
-
 	#[NoAdminRequired]
 	#[PublicPage]
 	public function assignLabel(?int $boardId, int $cardId, int $labelId): DataResponse {

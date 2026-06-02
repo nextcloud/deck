@@ -42,7 +42,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		$this->boardCache = new CappedMemoryCache();
 	}
 
-
 	/**
 	 * @param $id
 	 * @param bool $withLabels

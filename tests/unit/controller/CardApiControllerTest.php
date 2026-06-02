@@ -23,13 +23,13 @@ declare(strict_types=1);
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Card;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Http;
-
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use PHPUnit\Framework\MockObject\MockObject;

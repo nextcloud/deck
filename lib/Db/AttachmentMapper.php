@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -103,7 +102,6 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
-
 		return $this->findEntities($qb);
 	}
 
@@ -128,7 +126,6 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 		return $this->findEntities($qb);
 	}
-
 
 	/**
 	 * Check if $userId is owner of Entity with $id

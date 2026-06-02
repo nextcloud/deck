@@ -74,7 +74,6 @@ class AssignmentService {
 			throw new BadRequestException('The user is not part of the board');
 		}
 
-
 		if ($type === Assignment::TYPE_USER && $userId !== $this->userId) {
 			$this->notificationHelper->sendCardAssigned($card, $userId);
 		}
@@ -113,7 +112,6 @@ class AssignmentService {
 					$this->notificationHelper->markCardAssignedAsRead($card, $userId);
 				}
 				$this->changeHelper->cardChanged($cardId);
-
 
 				$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
