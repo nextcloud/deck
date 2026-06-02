@@ -10,7 +10,7 @@
 				:exact="true"
 				to="/upcoming">
 				<template #icon>
-					<CalendarIcon v-if="$route.path === '/'" :size="20" />
+					<CalendarIcon v-if="$route.path === '/upcoming'" :size="20" />
 					<CalendarOutlineIcon v-else :size="20" />
 				</template>
 			</NcAppNavigationItem>
