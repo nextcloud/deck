@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.6
+
+### Fixed
+* fix: set max comment retrieval limit to 200 by @grnd-alt in https://github.com/nextcloud/deck/pull/7965
+* [stable32] fix(notifciations) by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7985
+
 ## 1.16.5
 
 ### Fixed
