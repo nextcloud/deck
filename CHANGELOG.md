@@ -5,6 +5,59 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.0
+### Added
+* card dependencies by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7939
+* automatic setting of done status by @miaulalala in https://github.com/nextcloud/deck/pull/7702
+* Federated board sharing by @grnd-alt in https://github.com/nextcloud/deck/pull/7330
+* Update filter to show cards where any of the selected users is assigned to by @theoholl in https://github.com/nextcloud/deck/pull/7624
+* A board can be pinned as default board by @ramteid in https://github.com/nextcloud/deck/pull/7675
+* Assign labels on federated boards by @grnd-alt in https://github.com/nextcloud/deck/pull/7684
+* Federation reorder by @grnd-alt in https://github.com/nextcloud/deck/pull/7712
+* Show creator and created date in card by @samin-z in https://github.com/nextcloud/deck/pull/7650
+* Live update card description by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7716
+* Add start date field to cards by @aparcar in https://github.com/nextcloud/deck/pull/7749
+* Assign users on federated boards by @grnd-alt in https://github.com/nextcloud/deck/pull/7703
+* Add color property to cards and implement color selection by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7787
+* Add deck to user migration by @samin-z in https://github.com/nextcloud/deck/pull/7870
+* Add Gantt chart view for boards by @aparcar in https://github.com/nextcloud/deck/pull/7812
+* Make card, ACL and board events webhook-compatible by @cbcoutinho in https://github.com/nextcloud/deck/pull/7910
+
+### Fixed
+* fix: use unknownActivityException by @grnd-alt in https://github.com/nextcloud/deck/pull/7960
+* Migrate `comment.js` Vuex store to Pinia by @theoholl in https://github.com/nextcloud/deck/pull/7827
+* fix: avoid breaking card details modal when viewing attachment by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7978
+* fix: show avatars in selector by @grnd-alt in https://github.com/nextcloud/deck/pull/7921
+* fix: board notify-due by @samin-z in https://github.com/nextcloud/deck/pull/7990
+* fix: make upcoming view reachable again by @grnd-alt in https://github.com/nextcloud/deck/pull/7989
+* fix(lint): apply new nextcloud code style by @grnd-alt in https://github.com/nextcloud/deck/pull/8011
+* Submit changes to board color and name on enter key press by @theoholl in https://github.com/nextcloud/deck/pull/7640
+* Use strict comparison by @CarlSchwan in https://github.com/nextcloud/deck/pull/7546
+* Cast shareID to string by @grnd-alt in https://github.com/nextcloud/deck/pull/7594
+* Increase minimum card width by @grnd-alt in https://github.com/nextcloud/deck/pull/7590
+* Stop ignoring certain share rows by @salmart-dev in https://github.com/nextcloud/deck/pull/7603
+* Add null check for boardId in createSession by @solracsf in https://github.com/nextcloud/deck/pull/7660
+* Show unknown federated users in search by @grnd-alt in https://github.com/nextcloud/deck/pull/7683
+* Use positional placeholders in translations by @rakekniven in https://github.com/nextcloud/deck/pull/7664
+* Do not notify users about their own actions by @ramteid in https://github.com/nextcloud/deck/pull/7661
+* Handle null user case by @miaulalala in https://github.com/nextcloud/deck/pull/7705
+* Check cardId for attachment by @grnd-alt in https://github.com/nextcloud/deck/pull/7727
+* Keep done state when importing a board by @miaulalala in https://github.com/nextcloud/deck/pull/7735
+* Hide not required JSON fields for federation by @grnd-alt in https://github.com/nextcloud/deck/pull/7726
+* Correctly copy label and description when cloning cards by @solracsf in https://github.com/nextcloud/deck/pull/7714
+* Pass boardId to attachmentController by @grnd-alt in https://github.com/nextcloud/deck/pull/7708
+* Call findBoardId with int by @grnd-alt in https://github.com/nextcloud/deck/pull/7761
+* Prevent accidental text selection when dragging a card by @theoholl in https://github.com/nextcloud/deck/pull/7765
+* Adapt to stricter stylelint rules by @grnd-alt in https://github.com/nextcloud/deck/pull/7794
+* Set max comment retrieval limit to 200 by @grnd-alt in https://github.com/nextcloud/deck/pull/7788
+* Fix showing no due cards by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7797
+* Use correct controller attributes for federation endpoints by @grnd-alt in https://github.com/nextcloud/deck/pull/7816
+* Fix share and assign team issue by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7687
+* Use message source when updating a comment by @mejo- in https://github.com/nextcloud/deck/pull/7878
+* Use lighter probeCircles() in teams by @ArtificialOwl in https://github.com/nextcloud/deck/pull/7857
+* Allow updating replies in comments by @grnd-alt in https://github.com/nextcloud/deck/pull/7896
+* Register event listener for typed comment events by @miaulalala in https://github.com/nextcloud/deck/pull/7894
+
 ## 1.18.0-beta.3
 ### Added
 * feat: add card dependencies by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7939
