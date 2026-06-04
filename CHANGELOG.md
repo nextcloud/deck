@@ -5,6 +5,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.17.3
+
+### Fixed
+* [stable33] fix: avoid breaking card details modal when viewing attachment by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8004
+* [stable33] fix(ci): use server behat binary by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7972
+* [stable33] fix(notifciations) by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7986
+
+
 ## 1.17.2
 
 ### Fixed
