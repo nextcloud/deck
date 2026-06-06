@@ -429,7 +429,7 @@ OC.L10N.register(
     "Due date" : "Galutinio termino data",
     "Created" : "Sukurta",
     "Modified" : "Pakeistas",
-    "Error creating the share" : "Klaida kuriant viešinį",
+    "Error creating the share" : "Klaida kuriant bendrinimą",
     "Share with a Deck card" : "Pasidalinti su Darbų kortele",
     "Share {file} with a Deck card" : "Pasidalinti {file} su Darbų kortele",
     "Share" : "Bendrinti",
