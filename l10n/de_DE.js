@@ -323,7 +323,7 @@ OC.L10N.register(
     "Add due date" : "Fälligkeitsdatum hinzufügen",
     "Choose a date" : "Datum auswählen",
     "Remove due date" : "Fälligkeitsdatum entfernen",
-    "Due at:" : "Fallig am:",
+    "Due at:" : "Fällig am:",
     "Not done" : "Nicht erledigt",
     "Unarchive card" : "Karte dearchivieren",
     "Archive card" : "Karte archivieren",
