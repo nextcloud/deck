@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.9
+### Fixed## What's Changed
+* fix: set max comment retrieval limit to 200 by @grnd-alt in https://github.com/nextcloud/deck/pull/7966
+* fix(notifciations) by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7984
+
 ## 1.15.8
 ### Fixed
 - [stable31] fix: Handle share attributes in the share provider by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7829
