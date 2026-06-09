@@ -1,0 +1,94 @@
+/*!
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+// Vazirmatn variable font for Persian/Arabic text. The single variable woff2
+// covers every weight from 100 to 900.
+
+// `unicode-range` restricts the font to Arabic/Persian codepoints, so the
+// browser only reaches for Vazirmatn when it renders those glyphs and keeps the
+// Nextcloud system font for everything else. This makes Persian/Arabic text use
+// Vazirmatn regardless of the interface language (e.g. Persian content inside an
+// English UI), without affecting Latin text.
+@font-face {
+	font-family: 'Vazirmatn';
+	src: url('../../css/fonts/Vazirmatn.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+	// ZWNJ/ZWJ (U+200C-200D, needed for Persian word joining), Arabic,
+	// Arabic Supplement, Arabic Extended-A, and Arabic Presentation Forms A/B.
+	unicode-range: U+200C-200D, U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+// Prepend Vazirmatn to the global font stack. Because of the `unicode-range`
+// above the browser only uses it for Arabic/Persian glyphs; all other text
+// falls through to the Nextcloud system font stack.
+html,
+body,
+#content,
+#content-vue,
+input,
+textarea,
+button,
+select {
+	font-family: 'Vazirmatn', var(--font-face, system-ui, 'Segoe UI', Roboto, Oxygen-Sans, Cantarell, Ubuntu, 'Helvetica Neue', 'Noto Sans', sans-serif);
+}
+
+// The rich-text editors hard-code their own `font-family`, which overrides the
+// inherited stack above. Re-assert Vazirmatn on them — it is still scoped to
+// Arabic/Persian glyphs by the @font-face `unicode-range`, so Latin text keeps
+// each editor's intended font. `!important` is needed to beat the components'
+// scoped styles.
+
+// Comment input — Deck's comment form is a plain `contenteditable` (vue-at);
+// the mention input (NcRichContenteditable) hard-codes `font-family:
+// var(--font-face)`. Re-assert Vazirmatn on both.
+.comment-form__contenteditable,
+.rich-contenteditable__input {
+	font-family: 'Vazirmatn', var(--font-face, system-ui, 'Segoe UI', Roboto, Oxygen-Sans, Cantarell, Ubuntu, 'Helvetica Neue', 'Noto Sans', sans-serif) !important;
+}
+
+// Card description editor (EasyMDE/CodeMirror) — overrides `font-family: monospace`.
+// Latin text stays monospace; only Arabic/Persian glyphs render in Vazirmatn.
+.CodeMirror,
+.cm-s-easymde {
+	font-family: 'Vazirmatn', monospace !important;
+}
+
+// Card description editor (Nextcloud Text/ProseMirror) — used instead of EasyMDE
+// when the Text app is installed. Text hard-codes its own `font-family` on the
+// editor content, overriding the inherited stack, so re-assert Vazirmatn here.
+.description__text .ProseMirror {
+	font-family: 'Vazirmatn', var(--font-face, system-ui, 'Segoe UI', Roboto, Oxygen-Sans, Cantarell, Ubuntu, 'Helvetica Neue', 'Noto Sans', sans-serif) !important;
+}
+
+// Content-driven direction. helpers/autoTextDirection.js sets `dir="auto"` on
+// editable fields (inputs, textareas, contenteditables) and on elements that
+// display user content (e.g. the sidebar card title), so the browser resolves
+// them to RTL when their content starts with a Persian/Arabic character.
+// `text-align: start` already lands RTL text on the right, but some components
+// hard-code `text-align: left`, so re-assert right alignment for the
+// resolved-RTL case. `!important` beats those scoped component styles.
+input:dir(rtl),
+textarea:dir(rtl),
+[contenteditable]:dir(rtl),
+.app-sidebar-header__mainname:dir(rtl),
+.app-sidebar-header__subname:dir(rtl),
+.comment--content:dir(rtl) {
+	text-align: right !important;
+}
+
+// Right-to-left layout when the interface language is Persian or Arabic. This
+// follows the UI locale rather than content; per-card direction should rely on
+// the element's `dir` attribute.
+html[lang^='fa'],
+html[lang^='ar'] {
+	&,
+	body,
+	#content,
+	#content-vue {
+		direction: rtl;
+	}
+}

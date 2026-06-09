@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="comment-form">
+	<div class="comment-form" :dir="contentDir">
 		<NcRichContenteditable v-model="commentText"
 			:auto-complete="autoComplete"
 			:maxlength="1000"
@@ -69,6 +69,32 @@ export default {
 		hasContent() {
 			return this.commentText.trim().length > 0
 		},
+		// Derive the form direction from the first strong character the user
+		// typed so the submit button (positioned with inset-inline-end) sits on
+		// the correct side: right for LTR text, left for Persian/Arabic. The
+		// editor input declares its own dir="auto", which a dir="auto" ancestor
+		// would skip, so we compute it here instead. Returns null while empty so
+		// the form simply inherits the surrounding UI direction.
+		contentDir() {
+			const text = this.commentText.replace(/<[^>]*>/g, '')
+			for (const ch of text) {
+				const code = ch.codePointAt(0)
+				// Latin letters (Basic Latin, Latin-1 Supplement, Latin
+				// Extended-A/Additional) → left-to-right.
+				if ((code >= 0x41 && code <= 0x5A) || (code >= 0x61 && code <= 0x7A)
+					|| (code >= 0xC0 && code <= 0x24F) || (code >= 0x1E00 && code <= 0x1EFF)) {
+					return 'ltr'
+				}
+				// Hebrew, Arabic, Arabic Supplement/Extended-A and the
+				// Hebrew/Arabic presentation forms → right-to-left.
+				if ((code >= 0x0591 && code <= 0x05F4) || (code >= 0x0600 && code <= 0x06FF)
+					|| (code >= 0x0750 && code <= 0x077F) || (code >= 0x08A0 && code <= 0x08FF)
+					|| (code >= 0xFB1D && code <= 0xFDFD) || (code >= 0xFE70 && code <= 0xFEFC)) {
+					return 'rtl'
+				}
+			}
+			return null
+		},
 	},
 	watch: {
 		value(val) {
@@ -123,6 +149,11 @@ export default {
 			bottom: var(--default-grid-baseline);
 			inset-inline-end: var(--default-grid-baseline);
 			z-index: 1;
+		}
+
+		// Point the send arrow toward the writing direction in RTL.
+		&[dir="rtl"] .comment-form__submit .arrow-right-icon {
+			transform: scaleX(-1);
 		}
 
 		// Add padding to prevent text from going under the button
