@@ -15,6 +15,7 @@
 					<CheckCircleOutline v-if="isDoneColumn"
 						class="stack__done-icon"
 						decorative />
+					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
 				<h3 v-else-if="!editing"
 					tabindex="0"
@@ -27,6 +28,7 @@
 					<CheckCircleOutline v-if="isDoneColumn"
 						class="stack__done-icon"
 						decorative />
+					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
 				<form v-else-if="editing"
 					v-click-outside="cancelEdit"
@@ -473,6 +475,18 @@ export default {
 				width: 1em;
 				height: 1em;
 			}
+		}
+
+		.stack__card-count {
+			flex-shrink: 0;
+			margin-inline-start: 6px;
+			padding: 0 8px;
+			border-radius: var(--border-radius-pill, 16px);
+			background-color: var(--color-background-darker);
+			color: var(--color-text-maxcontrast);
+			font-size: var(--default-font-size);
+			font-weight: normal;
+			line-height: 1.5;
 		}
 
 		form {
