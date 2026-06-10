@@ -396,7 +396,7 @@ class StackService {
 		}
 
 		$this->activityManager->triggerEvent(
-			ActivityManager::DECK_OBJECT_BOARD, $newStack, ActivityManager::SUBJECT_STACK_CREATE, [], $this->permissionService->getUserId()
+			ActivityManager::DECK_OBJECT_BOARD, $newStack, ActivityManager::SUBJECT_STACK_CREATE
 		);
 		$this->changeHelper->boardChanged($targetBoardId);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($targetBoardId));
