@@ -6,6 +6,7 @@
 <template>
 	<div class="comment-form">
 		<NcRichContenteditable v-model="commentText"
+			dir="auto"
 			:auto-complete="autoComplete"
 			:maxlength="1000"
 			:user-data="members"
