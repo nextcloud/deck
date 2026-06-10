@@ -63,6 +63,12 @@
 					</template>
 					{{ isDoneColumn ? t('deck', 'Do not set cards as "done"') : t('deck', 'Set cards as "done"') }}
 				</NcActionButton>
+				<NcActionButton close-after-click @click="openMoveDialog">
+					<template #icon>
+						<ExportVariant :size="20" />
+					</template>
+					{{ t('deck', 'Move/copy list') }}
+				</NcActionButton>
 				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</NcActionButton>
@@ -152,8 +158,10 @@ import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
+import ExportVariant from 'vue-material-design-icons/ExportVariant.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 
 import CardItem from '../cards/CardItem.vue'
 
@@ -171,6 +179,7 @@ export default {
 		ArchiveIcon,
 		CardPlusOutline,
 		CheckCircleOutline,
+		ExportVariant,
 	},
 	directives: {
 		ClickOutside,
@@ -293,6 +302,9 @@ export default {
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
 			showUndo(t('deck', 'List deleted'), () => this.$store.dispatch('stackUndoDelete', stack))
+		},
+		openMoveDialog() {
+			emit('deck:stack:show-move-dialog', this.stack)
 		},
 		setArchivedToAllCardsFromStack(stack, isArchived) {
 

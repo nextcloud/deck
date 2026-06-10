@@ -91,4 +91,16 @@ class StackOcsController extends OCSController {
 		return new DataResponse($stacks);
 	}
 
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function move(int $stackId, int $targetBoardId): DataResponse {
+		return new DataResponse($this->stackService->move($stackId, $targetBoardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function clone(int $stackId, int $targetBoardId): DataResponse {
+		return new DataResponse($this->stackService->cloneStack($stackId, $targetBoardId));
+	}
+
 }

@@ -36,6 +36,7 @@ class StackService {
 		private readonly PermissionService $permissionService,
 		private readonly BoardService $boardService,
 		private readonly CardService $cardService,
+		private readonly LabelService $labelService,
 		private readonly AssignmentMapper $assignedUsersMapper,
 		private readonly AttachmentService $attachmentService,
 		private readonly ActivityManager $activityManager,
@@ -293,6 +294,115 @@ class StackService {
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stackToSort->getBoardId()));
 
 		return $result;
+	}
+
+	/**
+	 * Move a stack (with all of its cards) to another board.
+	 *
+	 * The stack keeps its identity, so the cards keep their comments,
+	 * attachments and activity history. Board-specific labels assigned to the
+	 * cards are remapped onto the target board by title (creating missing ones
+	 * when the user may manage the target board), mirroring the behaviour of
+	 * moving a single card across boards.
+	 *
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function move(int $id, int $targetBoardId): Stack {
+		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission($this->boardMapper, $targetBoardId, Acl::PERMISSION_MANAGE);
+
+		if ($this->boardService->isArchived($this->stackMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+		if ($this->boardService->isArchived(null, $targetBoardId)) {
+			throw new StatusException('Operation not allowed. The target board is archived.');
+		}
+
+		$stack = $this->stackMapper->find($id);
+		$sourceBoardId = $stack->getBoardId();
+		if ($sourceBoardId === $targetBoardId) {
+			$this->enrichStacksWithCards([$stack]);
+			return $stack;
+		}
+
+		$changes = new ChangeSet($stack);
+		// Append the stack at the end of the target board.
+		$targetStacks = $this->stackMapper->findAll($targetBoardId);
+		$stack->setBoardId($targetBoardId);
+		$stack->setOrder(count($targetStacks));
+		$stack = $this->stackMapper->update($stack);
+		$changes->setAfter($stack);
+
+		// Remap each card's board-specific labels onto the target board.
+		foreach ($this->cardMapper->findAllByStack($id) as $card) {
+			foreach ($this->labelMapper->findAssignedLabelsForCard($card->getId()) as $label) {
+				$this->cardMapper->removeLabel($card->getId(), $label->getId());
+				try {
+					$newLabel = $this->labelService->cloneLabelIfNotExists($label->getId(), $targetBoardId);
+				} catch (NoPermissionException $e) {
+					continue;
+				}
+				$this->cardMapper->assignLabel($card->getId(), $newLabel->getId());
+			}
+			$this->changeHelper->cardChanged($card->getId());
+		}
+
+		$this->activityManager->triggerUpdateEvents(
+			ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE
+		);
+		$this->changeHelper->boardChanged($sourceBoardId);
+		$this->changeHelper->boardChanged($targetBoardId);
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($sourceBoardId));
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($targetBoardId));
+
+		$this->enrichStacksWithCards([$stack]);
+		return $stack;
+	}
+
+	/**
+	 * Copy a stack and all of its cards to another board (which may be the same
+	 * board). The new cards are clones, so board-specific labels and
+	 * assignments are remapped through {@see CardService::cloneCard()}.
+	 *
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function cloneStack(int $id, int $targetBoardId): Stack {
+		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $targetBoardId, Acl::PERMISSION_MANAGE);
+
+		if ($this->boardService->isArchived(null, $targetBoardId)) {
+			throw new StatusException('Operation not allowed. The target board is archived.');
+		}
+
+		$sourceStack = $this->stackMapper->find($id);
+		$targetStacks = $this->stackMapper->findAll($targetBoardId);
+
+		$newStack = new Stack();
+		$newStack->setTitle($sourceStack->getTitle());
+		$newStack->setBoardId($targetBoardId);
+		$newStack->setOrder(count($targetStacks));
+		$newStack = $this->stackMapper->insert($newStack);
+
+		foreach ($this->cardMapper->findAllByStack($id) as $card) {
+			$this->cardService->cloneCard($card->getId(), $newStack->getId());
+		}
+
+		$this->activityManager->triggerEvent(
+			ActivityManager::DECK_OBJECT_BOARD, $newStack, ActivityManager::SUBJECT_STACK_CREATE, [], $this->permissionService->getUserId()
+		);
+		$this->changeHelper->boardChanged($targetBoardId);
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($targetBoardId));
+
+		$this->enrichStacksWithCards([$newStack]);
+		return $newStack;
 	}
 
 	/**
