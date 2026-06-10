@@ -276,28 +276,34 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $cards;
 	}
 
-	public function findAllByStack(int $stackId, ?int $limit = null, ?int $offset = null): array {
+	public function findAllByStack(int $stackId, ?int $limit = null, ?int $offset = null, bool $includeDeleted = false): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
 			->where($qb->expr()->eq('stack_id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
-			->setMaxResults($limit)
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)));
+		if (!$includeDeleted) {
+			$qb->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+		$qb->setMaxResults($limit)
 			->setFirstResult($offset)
 			->orderBy('order')
 			->addOrderBy('id');
 		return $this->findEntities($qb);
 	}
 
-	public function findAllByBoardId(int $boardId, ?int $limit = null, ?int $offset = null): array {
+	public function findAllByBoardId(int $boardId, ?int $limit = null, ?int $offset = null, bool $includeDeleted = false): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
 			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
 			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
 			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
-			->setMaxResults($limit)
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)));
+		if (!$includeDeleted) {
+			$qb->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+		$qb->setMaxResults($limit)
 			->setFirstResult($offset)
 			->orderBy('c.lastmodified')
 			->addOrderBy('c.id');
