@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.1
+### Fixed
+* [stable34] fix: use unknownActivityException by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8034
+
 ## 1.18.0
 ### Added
 * card dependencies by @luka-nextcloud in https://github.com/nextcloud/deck/pull/7939
