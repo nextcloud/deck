@@ -17,6 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
+use Sabre\VObject\InvalidDataException;
 use Test\TestCase;
 
 class CalendarObjectTest extends TestCase {
@@ -204,6 +205,22 @@ class CalendarObjectTest extends TestCase {
 		$backend = $this->createMock(DeckCalendarBackend::class);
 		$backend->method('updateCardFromCalendarObject')
 			->willThrowException(new BadRequestException('Invalid card data'));
+
+		$object = new CalendarObject(
+			$this->createCalendarMock(),
+			'card-1.ics',
+			$backend,
+			$this->createCard()
+		);
+
+		$this->expectException(BadRequest::class);
+		$object->put("BEGIN:VCALENDAR\r\nEND:VCALENDAR");
+	}
+
+	public function testPutMapsInvalidDataExceptionToBadRequest(): void {
+		$backend = $this->createMock(DeckCalendarBackend::class);
+		$backend->method('updateCardFromCalendarObject')
+			->willThrowException(new InvalidDataException('Calendar payload must contain exactly one VTODO'));
 
 		$object = new CalendarObject(
 			$this->createCalendarMock(),

@@ -18,6 +18,7 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAVACL\IACL;
 use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\InvalidDataException;
 
 class CalendarObject implements ICalendarObject, IACL {
 
@@ -79,6 +80,8 @@ class CalendarObject implements ICalendarObject, IACL {
 			$this->sourceItem = $this->backend->updateCardFromCalendarObject($this->sourceItem, $this->readPutData($data));
 		} catch (DoesNotExistException $e) {
 			throw new NotFound($e->getMessage(), 0, $e);
+		} catch (InvalidDataException $e) {
+			throw new BadRequest($e->getMessage(), 0, $e);
 		} catch (BadRequestException $e) {
 			throw new BadRequest($e->getMessage(), 0, $e);
 		} catch (StatusException $e) {
