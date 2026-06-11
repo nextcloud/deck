@@ -59,7 +59,16 @@ class ShareReviewSource implements ISource {
 	}
 
 	public function deleteShare(string $shareId): bool {
-		return false;
+		$this->logger->info('Deck ShareReview: deleting share {id}', ['id' => $shareId]);
+		try {
+			$qb = $this->db->getQueryBuilder();
+			$qb->delete(self::ACL_TABLE)
+				->where($qb->expr()->eq('id', $qb->createNamedParameter((int)$shareId, IQueryBuilder::PARAM_INT)));
+			return $qb->executeStatement() > 0;
+		} catch (Exception $e) {
+			$this->logger->error('Deck ShareReview: failed to delete share {id}: {message}', ['id' => $shareId, 'message' => $e->getMessage()]);
+			return false;
+		}
 	}
 
 	/** @return list<array<string, mixed>> */
