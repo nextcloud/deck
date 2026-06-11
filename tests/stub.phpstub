@@ -725,3 +725,15 @@ namespace OCA\NotifyPush\Queue {
 namespace OCA\Text\Event {
 	class LoadEditor extends \OCP\EventDispatcher\Event {}
 }
+
+namespace OCA\ShareReview\Sources {
+	class SourceEvent extends \OCP\EventDispatcher\Event {
+		abstract public function registerSource(string $source): void {}
+	}
+
+	interface ISource {
+		public function getName(): string;
+		public function getShares(): array;
+		public function deleteShare(string $shareId): bool;
+	}
+}
