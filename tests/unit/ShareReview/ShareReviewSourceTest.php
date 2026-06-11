@@ -47,13 +47,13 @@ final class ShareReviewSourceTest extends TestCase {
 		$qb = $this->createMock(IQueryBuilder::class);
 		$qb->method('select')->willReturnSelf();
 		$qb->method('addSelect')->willReturnSelf();
+		$qb->method('selectAlias')->willReturnSelf();
 		$qb->method('from')->willReturnSelf();
 		$qb->method('leftJoin')->willReturnSelf();
 		$qb->method('where')->willReturnSelf();
 		$qb->method('orderBy')->willReturnSelf();
 		$qb->method('delete')->willReturnSelf();
 		$qb->method('createNamedParameter')->willReturn('?');
-		$qb->method('createFunction')->willReturnArgument(0);
 		$qb->method('expr')->willReturn($expr);
 		$qb->method('executeQuery')->willReturn($this->makeResult($fetchRows));
 		$qb->method('executeStatement')->willReturn($statementRows);
@@ -67,13 +67,13 @@ final class ShareReviewSourceTest extends TestCase {
 		$qb = $this->createMock(IQueryBuilder::class);
 		$qb->method('select')->willReturnSelf();
 		$qb->method('addSelect')->willReturnSelf();
+		$qb->method('selectAlias')->willReturnSelf();
 		$qb->method('from')->willReturnSelf();
 		$qb->method('leftJoin')->willReturnSelf();
 		$qb->method('where')->willReturnSelf();
 		$qb->method('orderBy')->willReturnSelf();
 		$qb->method('delete')->willReturnSelf();
 		$qb->method('createNamedParameter')->willReturn('?');
-		$qb->method('createFunction')->willReturnArgument(0);
 		$qb->method('expr')->willReturn($expr);
 		$qb->method('executeQuery')->willThrowException($this->createMock(Exception::class));
 		$qb->method('executeStatement')->willThrowException($this->createMock(Exception::class));
@@ -84,6 +84,7 @@ final class ShareReviewSourceTest extends TestCase {
 	private function makeShareRow(array $overrides = []): array {
 		return array_merge([
 			'id' => 1,
+			'board_id' => 10,
 			'type' => 0,
 			'participant' => 'bob',
 			'board_title' => 'My Board',
@@ -157,7 +158,7 @@ final class ShareReviewSourceTest extends TestCase {
 
 	public function testGetSharesMissingBoardFallback(): void {
 		$this->db->method('getQueryBuilder')->willReturn(
-			$this->makeQb([$this->makeShareRow(['id' => 42, 'board_title' => null, 'board_owner' => null])])
+			$this->makeQb([$this->makeShareRow(['board_id' => 42, 'board_title' => null, 'board_owner' => null])])
 		);
 
 		$shares = $this->source->getShares();

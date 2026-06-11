@@ -76,11 +76,11 @@ class ShareReviewSource implements ISource {
 		try {
 			$qb = $this->db->getQueryBuilder();
 			$qb->select(
-				'a.id', 'a.type', 'a.participant',
+				'a.id', 'a.board_id', 'a.type', 'a.participant',
 				'a.permission_edit', 'a.permission_share', 'a.permission_manage'
 			)
-				->addSelect($qb->createFunction('b.title AS board_title'))
-				->addSelect($qb->createFunction('b.owner AS board_owner'))
+				->selectAlias('b.title', 'board_title')
+				->selectAlias('b.owner', 'board_owner')
 				->from(self::ACL_TABLE, 'a')
 				->leftJoin('a', self::BOARDS_TABLE, 'b', $qb->expr()->eq('a.board_id', 'b.id'))
 				->orderBy('a.id', 'ASC');
@@ -97,7 +97,7 @@ class ShareReviewSource implements ISource {
 	/** @param array<string, mixed> $share */
 	private function resolveObjectName(array $share): string {
 		$title = (string)($share['board_title'] ?? '');
-		$boardId = (int)$share['id'];
+		$boardId = (int)($share['board_id'] ?? $share['id']);
 		return ($title !== '' ? $title : "Board $boardId") . ' (Board)';
 	}
 
