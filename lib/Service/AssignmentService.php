@@ -99,7 +99,7 @@ class AssignmentService {
 	public function assignUser(int $cardId, string $userId, int $type = Assignment::TYPE_USER): Assignment {
 		$this->assignmentServiceValidator->check(compact('cardId', 'userId'));
 
-		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP) {
+		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP && $type !== Assignment::TYPE_CIRCLE) {
 			throw new BadRequestException('Invalid type provided for assignemnt');
 		}
 
@@ -114,10 +114,14 @@ class AssignmentService {
 		$card = $this->cardMapper->find($cardId);
 		$boardId = $this->cardMapper->findBoardId($cardId);
 		$boardUsers = array_keys($this->permissionService->findUsers($boardId, true));
-		$groups = array_filter($this->aclMapper->findAll($boardId), function (Acl $acl) use ($userId) {
+		$acls = $this->aclMapper->findAll($boardId);
+		$groups = array_filter($acls, function (Acl $acl) use ($userId) {
 			return $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $acl->getParticipant() === $userId;
 		});
-		if (!in_array($userId, $boardUsers) && count($groups) !== 1) {
+		$teams = array_filter($acls, function (Acl $acl) use ($userId) {
+			return $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE && $acl->getParticipant() === $userId;
+		});
+		if (!in_array($userId, $boardUsers, true) && count($groups) !== 1 && count($teams) !== 1) {
 			throw new BadRequestException('The user is not part of the board');
 		}
 
