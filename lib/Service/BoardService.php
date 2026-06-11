@@ -566,6 +566,42 @@ class BoardService {
 		return $deletedAcl;
 	}
 
+	/**
+	 * Delete an ACL entry on behalf of a trusted share-review operation.
+	 *
+	 * PERMISSION_MANAGE is intentionally not checked. The caller must verify
+	 * operator access via ShareReviewAccessCheckEvent before invoking this
+	 * method. All other side effects of deleteAcl() are preserved so the
+	 * deletion is indistinguishable from an in-app unshare: card assignments
+	 * of a removed user are dropped, the unshare activity is recorded and the
+	 * recipient's share notification is retracted.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if $aclId does not exist
+	 */
+	public function deleteAclForShareReview(int $aclId): void {
+		/** @var Acl $acl */
+		$acl = $this->aclMapper->find($aclId);
+		$this->boardMapper->mapAcl($acl);
+		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+			$this->assignedUsersMapper->deleteByParticipantOnBoard($acl->getParticipant(), $acl->getBoardId());
+		}
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
+		$this->notificationHelper->sendBoardShared($acl->getBoardId(), $acl, true);
+
+		$version = \OCP\Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($acl->getBoardId());
+			} catch (\Exception $e) {
+			}
+		}
+
+		$this->aclMapper->delete($acl);
+		$this->changeHelper->boardChanged($acl->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
+	}
+
 	public function leave(int $boardId): ?Acl {
 		if ($this->permissionService->userIsBoardOwner($boardId)) {
 			throw new BadRequestException('Board owner cannot leave board');
