@@ -27,6 +27,7 @@ OC.L10N.register(
     "Edit" : "Ẓreg",
     "Download" : "Sider",
     "Comments" : "Commentaires",
+    "Submit" : "Azen",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
     "Description" : "Aglam",
