@@ -12,6 +12,7 @@
 			:menu-placement="'auto'"
 			:force-display-actions="isTouchDevice"
 			@click="onNavigate"
+			@update:menuOpen="onUpdateMenuOpen"
 			@undo="unDelete">
 			<template #icon>
 				<NcAppNavigationIconBullet :color="board.color" />
@@ -89,22 +90,19 @@
 						{{ t('deck', 'Due date reminders') }}
 					</NcActionButton>
 
-					<NcActionButton name="notification"
-						icon="icon-sound"
+					<NcActionButton icon="icon-sound"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 						@click="updateSetting('notify-due', 'all')">
 						{{ t('deck', 'All cards') }}
 					</NcActionButton>
-					<NcActionButton name="notification"
-						icon="icon-user"
+					<NcActionButton icon="icon-user"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 						@click="updateSetting('notify-due', 'assigned')">
 						{{ t('deck', 'Assigned cards') }}
 					</NcActionButton>
-					<NcActionButton name="notification"
-						icon="icon-sound-off"
+					<NcActionButton icon="icon-sound-off"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 						@click="updateSetting('notify-due', 'off')">
@@ -238,6 +236,7 @@ export default {
 			editColor: '',
 			isDueSubmenuActive: false,
 			updateDueSetting: null,
+			loadingDueReminderSettings: false,
 			canCreate: canCreateState,
 			cloneModalOpen: false,
 			exportModalOpen: false,
@@ -275,17 +274,22 @@ export default {
 			} else if (this.board.settings['notify-due'] === 'off') {
 				return 'icon-sound-off'
 			}
+
 			return ''
 		},
 		dueDateReminderText() {
 			if (this.board.settings['notify-due'] === 'all') {
 				return t('deck', 'All cards')
 			} else if (this.board.settings['notify-due'] === 'assigned') {
-				return t('deck', 'Only assigned cards')
+				return t('deck', 'Assigned cards')
 			} else if (this.board.settings['notify-due'] === 'off') {
-				return t('deck', 'No reminder')
+				return t('deck', 'No notifications')
 			}
+
 			return ''
+		},
+		hasDueDateReminderSetting() {
+			return ['all', 'assigned', 'off'].includes(this.board.settings?.['notify-due'])
 		},
 		isDefaultBoard() {
 			return this.defaultBoardId === String(this.board.id)
@@ -416,6 +420,29 @@ export default {
 		},
 		cancelEdit(e) {
 			this.editing = false
+		},
+		async onUpdateMenuOpen(menuOpen) {
+			this.menuOpen = menuOpen
+
+			if (!menuOpen) {
+				this.isDueSubmenuActive = false
+				return
+			}
+
+			if (this.board.archived || this.board.acl?.length === 0 || this.hasDueDateReminderSetting || this.loadingDueReminderSettings) {
+				return
+			}
+
+			this.loadingDueReminderSettings = true
+
+			try {
+				await this.$store.dispatch('hydrateBoardSettings', this.board.id)
+			} catch (error) {
+				OC.Notification.showTemporary(t('deck', 'Failed to load due date reminder settings'))
+				console.error(error)
+			} finally {
+				this.loadingDueReminderSettings = false
+			}
 		},
 		async updateSetting(key, value) {
 			this.updateDueSetting = value
