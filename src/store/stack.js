@@ -117,6 +117,29 @@ export default function stackModuleFactory() {
 						commit('updateStack', stack)
 					})
 			},
+			async moveStack({ commit }, { stackId, targetBoardId }) {
+				const movedStack = await apiClient.moveStack(stackId, targetBoardId)
+				if (parseInt(targetBoardId) === parseInt(this.state.currentBoard.id)) {
+					// No-op move within the same board: keep the stack in view.
+					commit('addStack', movedStack)
+				} else {
+					// The stack now lives on another board; drop it from this one.
+					commit('deleteStack', { id: stackId })
+				}
+				return movedStack
+			},
+			async cloneStack({ commit }, { stackId, targetBoardId }) {
+				const newStack = await apiClient.cloneStack(stackId, targetBoardId)
+				if (parseInt(targetBoardId) === parseInt(this.state.currentBoard.id)) {
+					const cards = newStack.cards || []
+					delete newStack.cards
+					commit('addStack', newStack)
+					for (const card of cards) {
+						commit('addCard', card)
+					}
+				}
+				return newStack
+			},
 			async setDoneStack({ commit, state, rootState }, { stackId, boardId, isDone }) {
 				await apiClient.setDoneStack(stackId, boardId, isDone)
 				// Mirror the backend bulk-clear: clear the flag on any other stack in this board

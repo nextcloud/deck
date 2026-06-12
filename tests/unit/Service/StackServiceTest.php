@@ -69,6 +69,8 @@ class StackServiceTest extends TestCase {
 	private $boardService;
 	/** @var CardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $cardService;
+	/** @var LabelService|\PHPUnit\Framework\MockObject\MockObject */
+	private $labelService;
 	/** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
 	private $activityManager;
 	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
@@ -88,6 +90,7 @@ class StackServiceTest extends TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->cardService = $this->createMock(CardService::class);
+		$this->labelService = $this->createMock(LabelService::class);
 		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
@@ -105,6 +108,7 @@ class StackServiceTest extends TestCase {
 			$this->permissionService,
 			$this->boardService,
 			$this->cardService,
+			$this->labelService,
 			$this->assignedUsersMapper,
 			$this->attachmentService,
 			$this->activityManager,
@@ -318,5 +322,64 @@ class StackServiceTest extends TestCase {
 		$this->stackMapper->expects($this->never())->method('setIsDoneColumn');
 		$this->expectException(\OCA\Deck\NoPermissionException::class);
 		$this->stackService->setDoneStack(5, 1, true);
+	}
+
+	public function testMove(): void {
+		$this->permissionService->expects($this->exactly(2))->method('checkPermission');
+		$this->boardService->method('isArchived')->willReturn(false);
+		$stack = new Stack();
+		$stack->setId(1);
+		$stack->setBoardId(1);
+		$this->stackMapper->expects($this->once())->method('find')->with(1)->willReturn($stack);
+		// Two existing stacks on the target board -> moved stack lands at order 2.
+		$this->stackMapper->expects($this->once())->method('findAll')->with(2)->willReturn([new Stack(), new Stack()]);
+		$this->stackMapper->expects($this->once())->method('update')->willReturnArgument(0);
+		$this->cardMapper->expects($this->once())->method('findAllByStack')->with(1)->willReturn([]);
+		$this->cardMapper->method('findAllForStacks')->willReturn([]);
+
+		$result = $this->stackService->move(1, 2);
+
+		$this->assertEquals(2, $result->getBoardId());
+		$this->assertEquals(2, $result->getOrder());
+	}
+
+	public function testMoveToSameBoardIsNoop(): void {
+		$this->boardService->method('isArchived')->willReturn(false);
+		$stack = new Stack();
+		$stack->setId(1);
+		$stack->setBoardId(1);
+		$this->stackMapper->expects($this->once())->method('find')->with(1)->willReturn($stack);
+		$this->stackMapper->expects($this->never())->method('update');
+		$this->cardMapper->method('findAllForStacks')->willReturn([]);
+
+		$result = $this->stackService->move(1, 1);
+
+		$this->assertEquals(1, $result->getBoardId());
+	}
+
+	public function testCloneStack(): void {
+		$this->permissionService->expects($this->exactly(2))->method('checkPermission');
+		$this->boardService->method('isArchived')->willReturn(false);
+		$sourceStack = new Stack();
+		$sourceStack->setId(1);
+		$sourceStack->setBoardId(1);
+		$sourceStack->setTitle('Todo');
+		$newStack = new Stack();
+		$newStack->setId(99);
+		$newStack->setBoardId(2);
+		$newStack->setTitle('Todo');
+		$this->stackMapper->expects($this->once())->method('find')->with(1)->willReturn($sourceStack);
+		$this->stackMapper->expects($this->once())->method('findAll')->with(2)->willReturn([]);
+		$this->stackMapper->expects($this->once())->method('insert')->willReturn($newStack);
+		$card = new Card();
+		$card->setId(5);
+		$this->cardMapper->expects($this->once())->method('findAllByStack')->with(1)->willReturn([$card]);
+		$this->cardService->expects($this->once())->method('cloneCard')->with(5, 99);
+		$this->cardMapper->method('findAllForStacks')->willReturn([]);
+
+		$result = $this->stackService->cloneStack(1, 2);
+
+		$this->assertEquals(2, $result->getBoardId());
+		$this->assertEquals('Todo', $result->getTitle());
 	}
 }
