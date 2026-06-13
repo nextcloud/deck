@@ -263,6 +263,31 @@
 						</template>
 						{{ showCardCover ? t('deck', 'Hide card cover images') : t('deck', 'Show card cover images') }}
 					</NcActionButton>
+					<template v-if="viewMode === 'kanban'">
+						<NcActionSeparator />
+						<NcActionCaption :name="t('deck', 'Group by')" />
+						<NcActionRadio name="swimlaneMode"
+							value="none"
+							:model-value="swimlaneMode"
+							:disabled="!canEdit"
+							@update:model-value="setSwimlaneMode">
+							{{ t('deck', 'No grouping') }}
+						</NcActionRadio>
+						<NcActionRadio name="swimlaneMode"
+							value="labels"
+							:model-value="swimlaneMode"
+							:disabled="!canEdit"
+							@update:model-value="setSwimlaneMode">
+							{{ t('deck', 'Labels') }}
+						</NcActionRadio>
+						<NcActionRadio name="swimlaneMode"
+							value="assignees"
+							:model-value="swimlaneMode"
+							:disabled="!canEdit"
+							@update:model-value="setSwimlaneMode">
+							{{ t('deck', 'Assignees') }}
+						</NcActionRadio>
+					</template>
 				</NcActions>
 				<!-- FIXME: NcActionRouter currently doesn't work as an inline action -->
 				<NcActions v-if="isFullApp">
@@ -279,7 +304,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionCaption, NcActionRadio, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -302,6 +327,9 @@ export default {
 		NcModal,
 		NcActions,
 		NcActionButton,
+		NcActionCaption,
+		NcActionRadio,
+		NcActionSeparator,
 		NcButton,
 		NcPopover,
 		NcAvatar,
@@ -313,7 +341,6 @@ export default {
 		ArrowExpandVerticalIcon,
 		ViewColumnIcon,
 		ChartGanttIcon,
-		NcActionSeparator,
 		TableColumnPlusAfter,
 		SessionList,
 	},
@@ -366,6 +393,9 @@ export default {
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
+		swimlaneMode() {
+			return this.board?.settings?.swimlaneMode || 'none'
 		},
 		presentUsers() {
 			if (!this.board) return []
@@ -432,6 +462,11 @@ export default {
 		},
 		toggleShowArchived() {
 			this.$store.dispatch('toggleShowArchived')
+		},
+		setSwimlaneMode(mode) {
+			if (this.board?.id && this.canEdit) {
+				this.$store.dispatch('setSwimlaneMode', { boardId: this.board.id, mode })
+			}
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }

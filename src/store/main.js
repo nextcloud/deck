@@ -59,6 +59,8 @@ export default function storeFactory() {
 			activity: [],
 			activityLoadMore: true,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
+			swimlaneLabelOrder: {},
+			swimlaneUserOrder: {},
 			shortcutLock: false,
 			viewModeByBoard: {},
 		},
@@ -307,6 +309,15 @@ export default function storeFactory() {
 					Vue.delete(state.currentBoard.acl, removeIndex)
 				}
 			},
+			SET_SWIMLANE_MODE(state, { mode }) {
+				if (state.currentBoard?.settings) {
+					Vue.set(state.currentBoard.settings, 'swimlaneMode', mode)
+				}
+			},
+			SET_SWIMLANE_ORDER(state, { boardId, type, order }) {
+				const key = type === 'labels' ? 'swimlaneLabelOrder' : 'swimlaneUserOrder'
+				Vue.set(state[key], boardId, order)
+			},
 			TOGGLE_SHORTCUT_LOCK(state, lock) {
 				state.shortcutLock = lock
 			},
@@ -346,6 +357,20 @@ export default function storeFactory() {
 				const board = await apiClient.loadById(boardId)
 				commit('setCurrentBoard', board)
 				commit('setAssignableUsers', board.users)
+				if (board.settings) {
+					try {
+						const labelOrder = JSON.parse(board.settings.swimlaneLabelOrder || '[]')
+						if (labelOrder.length > 0) {
+							commit('SET_SWIMLANE_ORDER', { boardId, type: 'labels', order: labelOrder })
+						}
+					} catch (e) { /* ignore parse errors */ }
+					try {
+						const userOrder = JSON.parse(board.settings.swimlaneUserOrder || '[]')
+						if (userOrder.length > 0) {
+							commit('SET_SWIMLANE_ORDER', { boardId, type: 'assignees', order: userOrder })
+						}
+					} catch (e) { /* ignore parse errors */ }
+				}
 			},
 
 			async refreshBoard({ commit, dispatch }, boardId) {
@@ -541,6 +566,33 @@ export default function storeFactory() {
 				await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
 					newOwner,
 				})
+			},
+			async setSwimlaneMode({ commit, dispatch, state }, { boardId, mode }) {
+				// Optimistic update with rollback so the UI does not stay out of
+				// sync with the server when the config write is rejected (403,
+				// validation 400, network error).
+				const previous = state.currentBoard?.settings?.swimlaneMode || 'none'
+				commit('SET_SWIMLANE_MODE', { mode })
+				try {
+					await dispatch('setConfig', { [`board:${boardId}:swimlaneMode`]: mode })
+				} catch (e) {
+					commit('SET_SWIMLANE_MODE', { mode: previous })
+					throw e
+				}
+			},
+			async setSwimlaneOrder({ commit, dispatch, state }, { boardId, type, order }) {
+				const configKey = type === 'labels' ? 'swimlaneLabelOrder' : 'swimlaneUserOrder'
+				const stateKey = type === 'labels' ? 'swimlaneLabelOrder' : 'swimlaneUserOrder'
+				const previous = state[stateKey][boardId] ? [...state[stateKey][boardId]] : null
+				commit('SET_SWIMLANE_ORDER', { boardId, type, order })
+				try {
+					await dispatch('setConfig', { [`board:${boardId}:${configKey}`]: JSON.stringify(order) })
+				} catch (e) {
+					if (previous) {
+						commit('SET_SWIMLANE_ORDER', { boardId, type, order: previous })
+					}
+					throw e
+				}
 			},
 			toggleShortcutLock({ commit }, lock) {
 				commit('TOGGLE_SHORTCUT_LOCK', lock)
