@@ -77,7 +77,6 @@ class StackOcsController extends OCSController {
 		return new DataResponse($result);
 	}
 
-
 	#[NoAdminRequired]
 	#[PublicPage]
 	public function reorder(int $stackId, int $order, ?int $boardId):DataResponse {

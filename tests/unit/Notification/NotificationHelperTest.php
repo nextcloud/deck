@@ -153,13 +153,11 @@ class NotificationHelperTest extends \Test\TestCase {
 			$this->createUserMock('foo'),
 			$this->createUserMock('bar'),
 			$this->createUserMock('asd')
-
 		];
 		$this->permissionService->expects($this->once())
 			->method('findUsers')
 			->with(234)
 			->willReturn($users);
-
 
 		$n1 = $this->createMock(INotification::class);
 		$n2 = $this->createMock(INotification::class);
@@ -238,7 +236,6 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with(234)
 			->willReturn($board);
 
-
 		$this->permissionService->expects($this->once())
 			->method('findUsers')
 			->with(234)
@@ -247,7 +244,6 @@ class NotificationHelperTest extends \Test\TestCase {
 		$this->assignedUsersMapper->expects($this->exactly(3))
 			->method('isUserAssigned')
 			->willReturn(true);
-
 
 		$n1 = $this->createMock(INotification::class);
 		$n2 = $this->createMock(INotification::class);
@@ -284,7 +280,6 @@ class NotificationHelperTest extends \Test\TestCase {
 
 		$this->notificationHelper->sendCardDuedate($card);
 	}
-
 
 	public function testSendCardDuedateNever() {
 		$param1 = ['foo', 'bar', 'asd'];
@@ -328,7 +323,6 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with(234)
 			->willReturn($board);
 
-
 		$this->permissionService->expects($this->once())
 			->method('findUsers')
 			->with(234)
@@ -337,7 +331,6 @@ class NotificationHelperTest extends \Test\TestCase {
 		$this->assignedUsersMapper->expects($this->exactly(2))
 			->method('isUserAssigned')
 			->willReturn(true);
-
 
 		$n1 = $this->createMock(INotification::class);
 		$n2 = $this->createMock(INotification::class);

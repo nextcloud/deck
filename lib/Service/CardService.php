@@ -311,7 +311,6 @@ class CardService {
 			$card->setDone(null);
 		}
 
-
 		// Trigger update events before setting description as it is handled separately
 		$changes->setAfter($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
@@ -530,7 +529,6 @@ class CardService {
 	public function unarchive(int $id): Card {
 		$this->cardServiceValidator->check(compact('id'));
 
-
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -647,7 +645,6 @@ class CardService {
 	 */
 	public function removeLabel(int $cardId, int $labelId): Card {
 		$this->cardServiceValidator->check(compact('cardId', 'labelId'));
-
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);

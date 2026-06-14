@@ -8,6 +8,7 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#indexUpcoming', 'url' => '/upcoming', 'verb' => 'GET'],
 		['name' => 'page#indexList', 'url' => '/board', 'verb' => 'GET'],
 		['name' => 'page#indexBoard', 'url' => '/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'page#indexBoardDetails', 'url' => '/board/{boardId}/details', 'verb' => 'GET'],
@@ -70,7 +71,6 @@ return [
 		['name' => 'attachment#delete', 'url' => '/cards/{cardId}/attachment/{attachmentId}', 'verb' => 'DELETE'],
 		['name' => 'attachment#restore', 'url' => '/cards/{cardId}/attachment/{attachmentId}/restore', 'verb' => 'GET'],
 
-
 		// labels
 		['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],
 		['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
@@ -90,7 +90,6 @@ return [
 		['name' => 'board_import_api#getAllowedSystems', 'url' => '/api/v{apiVersion}/boards/import/getSystems','verb' => 'GET'],
 		['name' => 'board_import_api#getConfigSchema', 'url' => '/api/v{apiVersion}/boards/import/config/schema/{name}','verb' => 'GET'],
 		['name' => 'board_import_api#import', 'url' => '/api/v{apiVersion}/boards/import','verb' => 'POST'],
-
 
 		['name' => 'stack_api#index', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks', 'verb' => 'GET'],
 		['name' => 'stack_api#getArchived', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/archived', 'verb' => 'GET'],
