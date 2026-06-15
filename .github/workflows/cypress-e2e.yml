@@ -24,7 +24,7 @@ jobs:
       matrix:
         node-version: [20.x]
         containers: [1, 2, 3]
-        php-versions: [ '8.2' ]
+        php-versions: [ '8.3' ]
         server-versions: [ 'master' ]
 
     name: runner ${{ matrix.containers }}
