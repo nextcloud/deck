@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.2']
+        php-versions: ['8.3']
         server-versions: ['master']
 
     name: php${{ matrix.php-versions }}-${{ matrix.server-versions }}
