@@ -303,7 +303,7 @@ class PermissionService {
 					continue;
 				}
 				foreach ($group->getUsers() as $user) {
-					$users[(string)$user->getUID()] = new User($user->getUID(), $this->userManager);
+					$users[$user->getUID()] = new User($user->getUID(), $this->userManager);
 				}
 			}
 
