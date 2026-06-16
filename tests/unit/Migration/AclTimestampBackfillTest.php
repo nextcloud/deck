@@ -45,17 +45,39 @@ class AclTimestampBackfillTest extends TestCase {
 		$this->backfill->run($this->output);
 	}
 
-	public function testRunUpdatesTwoRows(): void {
+	public function testRunGroupsRowsWithSameTimestampIntoOneUpdate(): void {
+		// Two ACLs from the same board share the same timestamp → only 1 UPDATE
+		$rows = [
+			['acl_id' => 1, 'board_last_modified' => 1000000],
+			['acl_id' => 2, 'board_last_modified' => 1000000],
+		];
+		[$selectQb] = $this->buildSelectQb($rows);
+		$updateQb = $this->buildUpdateQb(1); // single IN-clause UPDATE for both IDs
+
+		$this->db->expects($this->exactly(2)) // 1 SELECT + 1 UPDATE
+			->method('getQueryBuilder')
+			->willReturnOnConsecutiveCalls($selectQb, $updateQb);
+
+		$this->output->expects($this->once())
+			->method('info')
+			->with($this->stringContains('2'));
+
+		$this->backfill->run($this->output);
+	}
+
+	public function testRunIssuesSeparateUpdatePerDistinctTimestamp(): void {
+		// Two ACLs from different boards → two distinct timestamps → 2 UPDATEs
 		$rows = [
 			['acl_id' => 1, 'board_last_modified' => 1000000],
 			['acl_id' => 2, 'board_last_modified' => 2000000],
 		];
 		[$selectQb] = $this->buildSelectQb($rows);
-		$updateQb = $this->buildUpdateQb(2);
+		$updateQb1 = $this->buildUpdateQb(1);
+		$updateQb2 = $this->buildUpdateQb(1);
 
-		$this->db->expects($this->exactly(2))
+		$this->db->expects($this->exactly(3)) // 1 SELECT + 2 UPDATEs
 			->method('getQueryBuilder')
-			->willReturnOnConsecutiveCalls($selectQb, $updateQb);
+			->willReturnOnConsecutiveCalls($selectQb, $updateQb1, $updateQb2);
 
 		$this->output->expects($this->once())
 			->method('info')
@@ -69,8 +91,8 @@ class AclTimestampBackfillTest extends TestCase {
 		[$selectQb] = $this->buildSelectQb($rows);
 
 		$capturedTs = null;
-		$updateQb = $this->buildUpdateQb(1, function (string $name, mixed $value) use (&$capturedTs): void {
-			if ($name === 'ts') {
+		$updateQb = $this->buildUpdateQb(1, function (mixed $value, int $type) use (&$capturedTs): void {
+			if ($type === IQueryBuilder::PARAM_INT) {
 				$capturedTs = $value;
 			}
 		});
@@ -91,8 +113,8 @@ class AclTimestampBackfillTest extends TestCase {
 
 		$capturedTs = null;
 		$before = time();
-		$updateQb = $this->buildUpdateQb(1, function (string $name, mixed $value) use (&$capturedTs): void {
-			if ($name === 'ts') {
+		$updateQb = $this->buildUpdateQb(1, function (mixed $value, int $type) use (&$capturedTs): void {
+			if ($type === IQueryBuilder::PARAM_INT) {
 				$capturedTs = $value;
 			}
 		});
@@ -132,25 +154,26 @@ class AclTimestampBackfillTest extends TestCase {
 		return [$qb];
 	}
 
-	private function buildUpdateQb(int $expectedExecutions, ?\Closure $onSetParameter = null): IQueryBuilder&MockObject {
+	private function buildUpdateQb(int $expectedExecutions, ?\Closure $onCreateNamedParameter = null): IQueryBuilder&MockObject {
 		$expr = $this->createMock(IExpressionBuilder::class);
-		$expr->method('eq')->willReturn('1=1');
+		$expr->method('in')->willReturn('1=1');
 
 		$qb = $this->createMock(IQueryBuilder::class);
 		$qb->method('update')->willReturnSelf();
 		$qb->method('set')->willReturnSelf();
 		$qb->method('where')->willReturnSelf();
-		$qb->method('createParameter')->willReturn('?');
 		$qb->method('expr')->willReturn($expr);
 		$qb->expects($this->exactly($expectedExecutions))->method('executeStatement');
 
-		if ($onSetParameter !== null) {
-			$qb->method('setParameter')->willReturnCallback(function (string $name, mixed $value) use ($onSetParameter, $qb) {
-				$onSetParameter($name, $value);
-				return $qb;
-			});
+		if ($onCreateNamedParameter !== null) {
+			$qb->method('createNamedParameter')->willReturnCallback(
+				function (mixed $value, int $type) use ($onCreateNamedParameter): string {
+					$onCreateNamedParameter($value, $type);
+					return '?';
+				}
+			);
 		} else {
-			$qb->method('setParameter')->willReturnSelf();
+			$qb->method('createNamedParameter')->willReturn('?');
 		}
 
 		return $qb;

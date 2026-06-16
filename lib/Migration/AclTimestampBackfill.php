@@ -40,20 +40,27 @@ class AclTimestampBackfill implements IRepairStep {
 			return;
 		}
 
-		$updateQb = $this->db->getQueryBuilder();
-		$updateQb->update('deck_board_acl')
-			->set('created_at', $updateQb->createParameter('ts'))
-			->set('last_modified_at', $updateQb->createParameter('ts'))
-			->where($updateQb->expr()->eq('id', $updateQb->createParameter('acl_id')));
-
+		// Group ACL IDs by target timestamp to issue one UPDATE per group
+		// rather than one UPDATE per row (avoids N+1 queries).
 		$now = time();
-		$updated = 0;
+		$groups = [];
 		foreach ($rows as $row) {
 			$timestamp = ((int)$row['board_last_modified'] > 0) ? (int)$row['board_last_modified'] : $now;
-			$updateQb->setParameter('ts', $timestamp, IQueryBuilder::PARAM_INT);
-			$updateQb->setParameter('acl_id', (int)$row['acl_id'], IQueryBuilder::PARAM_INT);
-			$updateQb->executeStatement();
-			$updated++;
+			$groups[$timestamp][] = (int)$row['acl_id'];
+		}
+
+		$updated = 0;
+		foreach ($groups as $timestamp => $ids) {
+			// Chunk at 1000 for Oracle compatibility (same limit used by chunkQuery).
+			foreach (array_chunk($ids, 1000) as $chunk) {
+				$updateQb = $this->db->getQueryBuilder();
+				$updateQb->update('deck_board_acl')
+					->set('created_at', $updateQb->createNamedParameter($timestamp, IQueryBuilder::PARAM_INT))
+					->set('last_modified_at', $updateQb->createNamedParameter($timestamp, IQueryBuilder::PARAM_INT))
+					->where($updateQb->expr()->in('id', $updateQb->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
+				$updateQb->executeStatement();
+				$updated += count($chunk);
+			}
 		}
 
 		$output->info('AclTimestampBackfill: updated ' . $updated . ' row(s)');
