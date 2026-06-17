@@ -163,7 +163,12 @@ class ConfigService {
 				$result = $value;
 				break;
 			case 'board':
-				[$boardId, $boardConfigKey] = explode(':', $key);
+				// extra check that user only send one of the allowed board settings and not something random
+				$parts = explode(':', $key, 3);
+				if (count($parts) < 3) {
+					break;
+				}
+				$boardConfigKey = $parts[2];
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}
