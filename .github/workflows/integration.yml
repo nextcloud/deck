@@ -56,7 +56,7 @@ jobs:
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           repository: nextcloud/server
@@ -64,13 +64,13 @@ jobs:
           submodules: true
 
       - name: Checkout app
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           path: apps/${{ env.APP_NAME }}
 
       -   name: Checkout activity
-          uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+          uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
           with:
               persist-credentials: false
               repository: nextcloud/activity
