@@ -62,6 +62,7 @@ OC.L10N.register(
     "Delete board" : "Borrar tableros",
     "Advanced options" : "Opciones avanzadas",
     "Export" : "Exportar",
+    "Close" : "Close",
     "Due date" : "Fecha de vencimiento",
     "Created" : "Creado",
     "Modified" : "Modificado",

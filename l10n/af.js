@@ -40,6 +40,7 @@ OC.L10N.register(
     "No notifications" : "Geen kennisgewings",
     "Advanced options" : "Gevorderde opsies",
     "Export" : "Voer uit",
+    "Close" : "Close",
     "Due date" : "Sperdatum",
     "Created" : "Geskep",
     "Modified" : "Gewysig",
