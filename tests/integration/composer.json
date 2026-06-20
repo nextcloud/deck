@@ -2,7 +2,7 @@
     "require-dev": {
         "phpunit/phpunit": "~13",
         "behat/behat": "~3.31.0",
-        "guzzlehttp/guzzle": "7.10.4",
+        "guzzlehttp/guzzle": "7.12.1",
         "jarnaiz/behat-junit-formatter": "^1.3",
         "sabre/dav": "4.7.0",
         "symfony/event-dispatcher": "~5.4"
