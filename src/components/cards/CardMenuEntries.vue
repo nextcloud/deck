@@ -24,28 +24,36 @@
 			{{ t('deck', 'Edit title') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit && !isCurrentUserAssigned"
-			icon="icon-user"
 			:close-after-click="true"
 			@click="assignCardToMe()">
+			<template #icon>
+				<AccountPlusIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Assign to me') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit && isCurrentUserAssigned"
-			icon="icon-user"
 			:close-after-click="true"
 			@click="unassignCardFromMe()">
+			<template #icon>
+				<AccountMinusIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Unassign myself') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-checkmark"
 			:close-after-click="true"
 			:disabled="isInDoneColumn && !!card.done"
 			@click="changeCardDoneStatus()">
+			<template #icon>
+				<CheckIcon :size="20" decorative />
+			</template>
 			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-external"
 			:close-after-click="true"
 			@click="openCardMoveDialog">
+			<template #icon>
+				<OpenInNewIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Move/copy card') }}
 		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
@@ -62,9 +70,11 @@
 			{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-delete"
 			:close-after-click="true"
 			@click="deleteCard()">
+			<template #icon>
+				<DeleteIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Delete card') }}
 		</NcActionButton>
 	</div>
@@ -76,6 +86,11 @@ import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import SelectColor from 'vue-material-design-icons/Circle.vue'
+import AccountPlusIcon from 'vue-material-design-icons/AccountPlusOutline.vue'
+import AccountMinusIcon from 'vue-material-design-icons/AccountMinusOutline.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
@@ -86,7 +101,7 @@ import { useActionsStore } from '../../stores/actions.js'
 
 export default {
 	name: 'CardMenuEntries',
-	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor },
+	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor, AccountPlusIcon, AccountMinusIcon, CheckIcon, OpenInNewIcon, DeleteIcon },
 	props: {
 		card: {
 			type: Object,

@@ -28,15 +28,19 @@
 
 			<template v-if="!deleted" slot="actions">
 				<template v-if="!isDueSubmenuActive">
-					<NcActionButton icon="icon-info"
-						:close-after-click="true"
+					<NcActionButton :close-after-click="true"
 						@click="actionDetails">
+						<template #icon>
+							<InformationOutlineIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Board details') }}
 					</NcActionButton>
 					<NcActionButton v-if="canManage && !board.archived"
-						icon="icon-rename"
 						:close-after-click="true"
 						@click="actionEdit">
+						<template #icon>
+							<PencilIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Edit board') }}
 					</NcActionButton>
 					<NcActionButton v-if="canCreate && !board.archived"
@@ -64,12 +68,18 @@
 						{{ t('deck', 'Archive board') }}
 					</NcActionButton>
 					<NcActionButton v-if="canManage && !board.archived"
-						icon="icon-download"
 						:close-after-click="true"
 						@click="actionExport">
+						<template #icon>
+							<DownloadIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Export board') }}
 					</NcActionButton>
-					<NcActionButton v-if="!board.archived && board.acl?.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
+					<NcActionButton v-if="!board.archived && board.acl?.length === 0" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
+						<template #icon>
+							<BellOutlineIcon v-if="board.settings['notify-due'] === 'off'" :size="20" decorative />
+							<BellOffOutlineIcon v-else :size="20" decorative />
+						</template>
 						{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
 					</NcActionButton>
 					<NcActionButton :close-after-click="true" @click="toggleDefaultBoard">
@@ -83,50 +93,62 @@
 
 				<!-- Due date reminder settings -->
 				<template v-if="isDueSubmenuActive">
-					<NcActionButton :icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
-						:disabled="updateDueSetting"
+					<NcActionButton :disabled="updateDueSetting"
 						@click="isDueSubmenuActive=false">
+						<template #icon>
+							<NcLoadingIcon v-if="updateDueSetting" :size="20" />
+							<ChevronLeftIcon v-else :size="20" decorative />
+						</template>
 						{{ t('deck', 'Due date reminders') }}
 					</NcActionButton>
 
 					<NcActionButton name="notification"
-						icon="icon-sound"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 						@click="updateSetting('notify-due', 'all')">
+						<template #icon>
+							<BellOutlineIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'All cards') }}
 					</NcActionButton>
 					<NcActionButton name="notification"
-						icon="icon-user"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 						@click="updateSetting('notify-due', 'assigned')">
+						<template #icon>
+							<AccountIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Assigned cards') }}
 					</NcActionButton>
 					<NcActionButton name="notification"
-						icon="icon-sound-off"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 						@click="updateSetting('notify-due', 'off')">
+						<template #icon>
+							<BellOffOutlineIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'No notifications') }}
 					</NcActionButton>
 				</template>
 				<NcActionButton v-else-if="!board.archived && board.acl?.length > 0"
 					:name="t('deck', 'Due date reminders')"
-					:icon="dueDateReminderIcon"
 					@click="isDueSubmenuActive=true">
+					<template #icon>
+						<component :is="dueDateReminderIcon" :size="20" decorative />
+					</template>
 					{{ dueDateReminderText }}
 				</NcActionButton>
 
 				<NcActionButton v-if="canManage && !isDueSubmenuActive"
-					icon="icon-delete"
 					:close-after-click="true"
 					@click="actionDelete">
+					<template #icon>
+						<DeleteIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Delete board') }}
 				</NcActionButton>
 
 				<NcActionButton v-if="canLeave && !isDueSubmenuActive"
-					icon="icon-delete"
 					:close-after-click="true"
 					@click="actionLeave">
 					<template #icon>
@@ -171,7 +193,7 @@
 </template>
 
 <script>
-import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton } from '@nextcloud/vue'
+import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
@@ -181,6 +203,13 @@ import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import PinIcon from 'vue-material-design-icons/Pin.vue'
 import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
+import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
+import BellOutlineIcon from 'vue-material-design-icons/BellOutline.vue'
+import BellOffOutlineIcon from 'vue-material-design-icons/BellOffOutline.vue'
 
 import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
@@ -202,6 +231,7 @@ export default {
 		NcButton,
 		NcTextField,
 		NcActionButton,
+		NcLoadingIcon,
 		AccountIcon,
 		ArchiveIcon,
 		CloneIcon,
@@ -210,6 +240,13 @@ export default {
 		PinIcon,
 		PinOffIcon,
 		LeaveIcon,
+		InformationOutlineIcon,
+		PencilIcon,
+		DownloadIcon,
+		DeleteIcon,
+		ChevronLeftIcon,
+		BellOutlineIcon,
+		BellOffOutlineIcon,
 		BoardCloneModal,
 		BoardExportModal,
 	},
@@ -269,13 +306,13 @@ export default {
 		},
 		dueDateReminderIcon() {
 			if (this.board.settings['notify-due'] === 'all') {
-				return 'icon-sound'
+				return 'BellOutlineIcon'
 			} else if (this.board.settings['notify-due'] === 'assigned') {
-				return 'icon-user'
+				return 'AccountIcon'
 			} else if (this.board.settings['notify-due'] === 'off') {
-				return 'icon-sound-off'
+				return 'BellOffOutlineIcon'
 			}
-			return ''
+			return 'BellOutlineIcon'
 		},
 		dueDateReminderText() {
 			if (this.board.settings['notify-due'] === 'all') {
