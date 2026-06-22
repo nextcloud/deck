@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.2
+### Fixed
+* fix: board notify-due by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8074
+* fix: cast boardUsers to string by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8101
+
+
 ## 1.18.1
 ### Fixed
 * [stable34] fix: use unknownActivityException by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8034
