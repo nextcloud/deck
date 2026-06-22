@@ -5,6 +5,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## 1.16.7
+
+### Fixed
+* fix: cast boardUsers to string by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8100
+* fix: exclude deleted cards by @grnd-alt in https://github.com/nextcloud/deck/pull/8045
+* fix: share and assign team issue by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7880
+* fix: board notify-due by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7992
+
 ## 1.16.6
 
 ### Fixed
