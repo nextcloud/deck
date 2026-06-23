@@ -11,11 +11,13 @@ namespace OCA\Deck\ShareReview;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Service\BoardService;
 use OCA\ShareReview\Sources\ISource;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\Share\Events\ShareReviewAccessCheckEvent;
 use OCP\Constants;
 use OCP\DB\Exception;
-use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IDBConnection;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
@@ -26,8 +28,9 @@ class ShareReviewSource implements ISource {
 
 	public function __construct(
 		private readonly AclMapper $aclMapper,
-		private readonly IDBConnection $db,
 		private readonly LoggerInterface $logger,
+		private readonly BoardService $boardService,
+		private readonly IEventDispatcher $eventDispatcher,
 		private readonly IL10N $l,
 	) {
 	}
@@ -53,14 +56,21 @@ class ShareReviewSource implements ISource {
 	}
 
 	public function deleteShare(string $shareId): bool {
-		$this->logger->info('Deck ShareReview: deleting share {id}', ['id' => $shareId]);
+		if (!is_numeric($shareId)) {
+			return false;
+		}
+
+		$event = new ShareReviewAccessCheckEvent('Deck', $shareId);
+		$this->eventDispatcher->dispatchTyped($event);
+
+		if (!$event->isHandled() || !$event->isGranted()) {
+			return false;
+		}
+
 		try {
-			$qb = $this->db->getQueryBuilder();
-			$qb->delete(AclMapper::TABLE_NAME)
-				->where($qb->expr()->eq('id', $qb->createNamedParameter((int)$shareId, IQueryBuilder::PARAM_INT)));
-			return $qb->executeStatement() > 0;
-		} catch (Exception $e) {
-			$this->logger->error('Deck ShareReview: failed to delete share {id}: {message}', ['id' => $shareId, 'message' => $e->getMessage()]);
+			$this->boardService->deleteAclForShareReview((int)$shareId);
+			return true;
+		} catch (DoesNotExistException) {
 			return false;
 		}
 	}
