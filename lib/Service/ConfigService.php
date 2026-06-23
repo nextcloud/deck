@@ -52,7 +52,8 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
-			'cardIdBadge' => $this->isCardIdBadgeEnabled()
+			'cardIdBadge' => $this->isCardIdBadgeEnabled(),
+			'hideNoDueOnOverview' => $this->isHideNoDueOnOverviewEnabled()
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -85,6 +86,11 @@ class ConfigService {
 					return false;
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
+			case 'hideNoDueOnOverview':
+				if ($this->getUserId() === null) {
+					return false;
+				}
+				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'hideNoDueOnOverview', true);
 			case 'cardIdBadge':
 				if ($this->getUserId() === null) {
 					return false;
@@ -121,6 +127,20 @@ class ConfigService {
 		}
 
 		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'board:' . $boardId . ':cardDetailsInModal', $defaultState);
+	}
+
+	public function isHideNoDueOnOverviewEnabled(?int $boardId = null): bool {
+		$userId = $this->getUserId();
+		if ($userId === null) {
+			return false;
+		}
+
+		$defaultState = (bool)$this->config->getUserValue($userId, Application::APP_ID, 'hideNoDueOnOverview', false);
+		if ($boardId === null) {
+			return $defaultState;
+		}
+
+		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'board:' . $boardId . ':hideNoDueOnOverview', $defaultState);
 	}
 
 	public function isCardIdBadgeEnabled(): bool {
@@ -175,6 +195,10 @@ class ConfigService {
 				break;
 			case 'cardDetailsInModal':
 				$this->config->setUserValue($userId, Application::APP_ID, 'cardDetailsInModal', (string)$value);
+				$result = $value;
+				break;
+			case 'hideNoDueOnOverview':
+				$this->config->setUserValue($userId, Application::APP_ID, 'hideNoDueOnOverview', (string)$value);
 				$result = $value;
 				break;
 			case 'cardIdBadge':
