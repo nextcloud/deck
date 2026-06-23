@@ -214,8 +214,72 @@ export default {
 				this.titleEditing = newTitle
 			},
 		},
+		isEditingTitle(editing) {
+			if (editing) {
+				// The sidebar header uses a single-line <input> for the title.
+				// Replace it with a <textarea> so long titles wrap and stay readable.
+				this.$nextTick(this.setupTitleTextarea)
+			}
+		},
 	},
 	methods: {
+		setupTitleTextarea() {
+			const root = this.$refs?.cardSidebar?.$el
+			const input = root?.querySelector('input.app-sidebar-header__mainname-input')
+			if (!input || input.dataset.deckTextarea === 'done') {
+				return
+			}
+
+			const textarea = document.createElement('textarea')
+			textarea.className = input.className
+			textarea.value = this.titleEditing ?? ''
+			textarea.rows = 1
+			textarea.placeholder = input.getAttribute('placeholder') || ''
+			const ariaLabel = input.getAttribute('aria-label')
+			if (ariaLabel) {
+				textarea.setAttribute('aria-label', ariaLabel)
+			}
+
+			// Keep the original input in the DOM (hidden) so the library's form
+			// submit / click-outside handling keeps working, but show our textarea.
+			input.style.display = 'none'
+			input.dataset.deckTextarea = 'done'
+			input.after(textarea)
+
+			const autoGrow = () => {
+				textarea.style.height = 'auto'
+				textarea.style.height = textarea.scrollHeight + 'px'
+			}
+
+			textarea.addEventListener('input', () => {
+				this.titleEditing = textarea.value
+				autoGrow()
+			})
+			textarea.addEventListener('keydown', (event) => {
+				// Ignore Enter while composing (e.g. IME for RTL/CJK input).
+				if (event.isComposing || event.keyCode === 229) {
+					return
+				}
+				if (event.key === 'Enter') {
+					// Enter applies the title instead of adding a new line.
+					event.preventDefault()
+					event.stopPropagation()
+					this.handleSubmitTitle()
+				} else if (event.key === 'Escape' || event.key === 'Esc') {
+					event.preventDefault()
+					event.stopPropagation()
+					this.titleEditing = this.currentCard.title
+					this.isEditingTitle = false
+				}
+			})
+
+			this.$nextTick(() => {
+				textarea.focus()
+				const end = textarea.value.length
+				textarea.setSelectionRange(end, end)
+				autoGrow()
+			})
+		},
 		focusHeader() {
 			this.$nextTick(() => {
 				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
@@ -257,6 +321,23 @@ export default {
 
 <style lang="scss">
 
+// Multi-line title editor injected in place of the sidebar header's single-line
+// <input>. Mirrors the look of `input.app-sidebar-header__mainname-input`.
+textarea.app-sidebar-header__mainname-input {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: 7px;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 1.3;
+	font-family: inherit;
+	resize: none;
+	overflow: hidden;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+}
+
 section.app-sidebar__tab--active {
 	min-height: auto;
 	display: flex;
@@ -288,6 +369,26 @@ section.app-sidebar__tab--active {
 
 	.app-sidebar-header__mainname-container {
 		padding-top: calc(var(--default-grid-baseline, 4px) * 2);
+		// Allow the title to wrap onto multiple lines instead of being clipped
+		align-items: flex-start;
+	}
+
+	// Show the full title instead of truncating it with an ellipsis
+	.app-sidebar-header__mainname {
+		overflow: visible !important;
+		white-space: normal !important;
+		text-overflow: clip !important;
+		word-break: break-word;
+		overflow-wrap: anywhere;
+	}
+
+	// Let the edit input grow to show the whole title
+	.app-sidebar-header__mainname-form {
+		min-width: 0;
+
+		.app-sidebar-header__mainname-input {
+			min-width: 0;
+		}
 	}
 
 	.app-sidebar-tabs {
