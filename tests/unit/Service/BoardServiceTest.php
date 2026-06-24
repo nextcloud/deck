@@ -301,7 +301,16 @@ class BoardServiceTest extends TestCase {
 			->method('sendBoardShared');
 		$this->aclMapper->expects($this->once())
 			->method('insert')
-			->with($acl)
+			->with($this->callback(function (Acl $actual) use ($acl) {
+				return $actual->getBoardId() === $acl->getBoardId()
+					&& $actual->getType() === $acl->getType()
+					&& $actual->getParticipant() === $acl->getParticipant()
+					&& $actual->getPermissionEdit() === $acl->getPermissionEdit()
+					&& $actual->getPermissionShare() === $acl->getPermissionShare()
+					&& $actual->getPermissionManage() === $acl->getPermissionManage()
+					&& $actual->getCreatedAt() > 0
+					&& $actual->getLastModifiedAt() > 0;
+			}))
 			->willReturn($acl);
 		$this->permissionService->expects($this->any())
 			->method('findUsers')
@@ -407,11 +416,30 @@ class BoardServiceTest extends TestCase {
 		$expected = clone $acl;
 		$this->aclMapper->expects($this->once())
 			->method('insert')
-			->with($acl)
+			->with($this->callback(function (Acl $actual) use ($acl) {
+				return $actual->getBoardId() === $acl->getBoardId()
+					&& $actual->getType() === $acl->getType()
+					&& $actual->getParticipant() === $acl->getParticipant()
+					&& $actual->getPermissionEdit() === $acl->getPermissionEdit()
+					&& $actual->getPermissionShare() === $acl->getPermissionShare()
+					&& $actual->getPermissionManage() === $acl->getPermissionManage()
+					&& $actual->getCreatedAt() > 0
+					&& $actual->getLastModifiedAt() > 0;
+			}))
 			->willReturn($acl);
 		$this->eventDispatcher->expects(self::once())
 			->method('dispatchTyped')
-			->with(new AclCreatedEvent($acl));
+			->with($this->callback(function (AclCreatedEvent $event) use ($acl) {
+				$eventAcl = $event->getAcl();
+				return $eventAcl->getBoardId() === $acl->getBoardId()
+					&& $eventAcl->getType() === $acl->getType()
+					&& $eventAcl->getParticipant() === $acl->getParticipant()
+					&& $eventAcl->getPermissionEdit() === $acl->getPermissionEdit()
+					&& $eventAcl->getPermissionShare() === $acl->getPermissionShare()
+					&& $eventAcl->getPermissionManage() === $acl->getPermissionManage()
+					&& $eventAcl->getCreatedAt() > 0
+					&& $eventAcl->getLastModifiedAt() > 0;
+			}));
 		$this->assertEquals($expected, $this->service->addAcl(
 			123, Acl::PERMISSION_TYPE_USER, 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
 		));
