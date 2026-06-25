@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+
 namespace OCA\Deck\Listeners;
 
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;

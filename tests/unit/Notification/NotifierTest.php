@@ -123,6 +123,7 @@ class NotifierTest extends \Test\TestCase {
 			->method('setParsedSubject')
 			->with($expectedMessage);
 
+
 		$this->url->expects($this->once())
 			->method('imagePath')
 			->with('deck', 'deck-dark.svg')
@@ -167,6 +168,7 @@ class NotifierTest extends \Test\TestCase {
 		$notification->expects($this->once())
 			->method('setRichSubject')
 			->with('{user} has mentioned you in a comment on {deck-card}.');
+
 
 		$this->url->expects($this->once())
 			->method('imagePath')

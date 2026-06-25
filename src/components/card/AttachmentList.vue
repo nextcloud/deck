@@ -197,9 +197,6 @@ export default {
 			return (attachment) => attachment?.extendedData?.info?.extension
 				?? (attachment?.name ?? attachment.data).split('.').pop()
 		},
-		cardDetailsInModal() {
-			return this.$store.getters.config('cardDetailsInModal')
-		},
 	},
 	watch: {
 		cardId: {
@@ -248,17 +245,7 @@ export default {
 		},
 		showViewer(attachment) {
 			if (attachment.extendedData.fileid && window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
-				// Hide the sidebar if opening card in modal to avoid wrong sidebar position calculating in Viewer app
-				const sidebar = document.querySelector('aside.app-sidebar')
-				if (sidebar && this.cardDetailsInModal) {
-					sidebar.style.display = 'none'
-				}
-				const onClose = () => {
-					if (sidebar && sidebar.style.display === 'none') {
-						sidebar.style.display = ''
-					}
-				}
-				window.OCA.Viewer.open({ path: attachment.extendedData.path, onClose })
+				window.OCA.Viewer.open({ path: attachment.extendedData.path })
 				return
 			}
 

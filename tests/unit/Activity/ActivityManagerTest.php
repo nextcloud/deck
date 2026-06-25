@@ -427,6 +427,7 @@ class ActivityManagerTest extends TestCase {
 		], $this->invokePrivate($this->activityManager, 'findDetailsForStack', [123]));
 	}
 
+
 	public function testFindDetailsForCard() {
 		$card = new Card();
 		$card->setId(555);

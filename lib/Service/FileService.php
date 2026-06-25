@@ -83,7 +83,7 @@ class FileService implements IAttachmentService {
 	}
 
 	/**
-	 * @return array|null
+	 * @return array
 	 * @throws StatusException
 	 */
 	private function getUploadedFile() {

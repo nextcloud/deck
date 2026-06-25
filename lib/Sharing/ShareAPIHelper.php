@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+
 namespace OCA\Deck\Sharing;
 
 use OCA\Deck\Db\Acl;

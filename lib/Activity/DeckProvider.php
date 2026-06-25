@@ -10,7 +10,6 @@ namespace OCA\Deck\Activity;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\CirclesService;
-use OCP\Activity\Exceptions\UnknownActivityException;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\Comments\IComment;
@@ -62,12 +61,12 @@ class DeckProvider implements IProvider {
 	 *                                   To do so, simply use setChildEvent($previousEvent) after setting the
 	 *                                   combined subject on the current event.
 	 * @return IEvent
-	 * @throws UnknownActivityException Should be thrown if your provider does not know this event
+	 * @throws \InvalidArgumentException Should be thrown if your provider does not know this event
 	 * @since 11.0.0
 	 */
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null): IEvent {
 		if ($event->getApp() !== 'deck') {
-			throw new UnknownActivityException();
+			throw new \InvalidArgumentException();
 		}
 
 		$event = $this->getIcon($event);
@@ -108,7 +107,7 @@ class DeckProvider implements IProvider {
 		}
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
 			if (!$this->activityManager->canSeeBoardActivity($event->getObjectId(), $event->getAffectedUser())) {
-				throw new UnknownActivityException();
+				throw new \InvalidArgumentException();
 			}
 			if (isset($subjectParams['board']) && $event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['board']['title']);
@@ -125,7 +124,7 @@ class DeckProvider implements IProvider {
 
 		if (isset($subjectParams['card']) && $event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
 			if (!$this->activityManager->canSeeCardActivity($event->getObjectId(), $event->getAffectedUser())) {
-				throw new UnknownActivityException();
+				throw new \InvalidArgumentException();
 			}
 			if ($event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['card']['title']);

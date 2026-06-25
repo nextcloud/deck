@@ -5,7 +5,6 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
 namespace OCA\Deck\Service;
 
 use OC\FullTextSearch\Model\DocumentAccess;
@@ -28,6 +27,7 @@ use OCP\FullTextSearch\Model\IIndexDocument;
  * @package OCA\Deck\Service
  */
 class FullTextSearchService {
+
 
 	/** @var BoardMapper */
 	private $boardMapper;
@@ -58,6 +58,7 @@ class FullTextSearchService {
 		return $document;
 	}
 
+
 	/**
 	 * @param IIndexDocument $document
 	 *
@@ -70,6 +71,7 @@ class FullTextSearchService {
 		$document->setContent(!empty($card->getDescription()) ? $card->getDescription() : '');
 		$document->setAccess($this->generateDocumentAccessFromCardId((int)$card->getId()));
 	}
+
 
 	/**
 	 * @param int $cardId
@@ -84,6 +86,7 @@ class FullTextSearchService {
 		/** @psalm-var IDocumentAccess */
 		return new DocumentAccess($board->getOwner());
 	}
+
 
 	/**
 	 * @param string $userId
@@ -103,6 +106,7 @@ class FullTextSearchService {
 		return $cards;
 	}
 
+
 	/**
 	 * @param int $boardId
 	 *
@@ -118,6 +122,7 @@ class FullTextSearchService {
 		return $cards;
 	}
 
+
 	/**
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
@@ -130,6 +135,7 @@ class FullTextSearchService {
 		return $this->boardMapper->find($boardId);
 	}
 
+
 	/**
 	 * @param int $stackId
 	 *
@@ -139,6 +145,7 @@ class FullTextSearchService {
 		return $this->cardMapper->findAll($stackId);
 	}
 
+
 	/**
 	 * @param int $boardId
 	 *
@@ -147,6 +154,7 @@ class FullTextSearchService {
 	private function getStacksFromBoard(int $boardId): array {
 		return $this->stackMapper->findAll($boardId);
 	}
+
 
 	/**
 	 * @param string $userId

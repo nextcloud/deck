@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+
 namespace OCA\Deck\Search\Query;
 
 class SearchQuery {
@@ -32,6 +33,7 @@ class SearchQuery {
 	private $assigned = [];
 	/** @var DateQueryParameter[] */
 	private $duedate = [];
+
 
 	public function addTextToken(string $textToken): void {
 		$this->textTokens[] = $textToken;

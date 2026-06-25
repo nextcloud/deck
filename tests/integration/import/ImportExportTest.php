@@ -297,6 +297,7 @@ class ImportExportTest extends \Test\TestCase {
 			'color' => '31CC7C',
 		]), $fullBoard->getLabels(), true);
 
+
 		$stacks = $stackMapper->findAll($board->getId());
 		self::assertCount(3, $stacks);
 		self::assertEntity(Stack::fromRow([

@@ -109,12 +109,6 @@ class PageController extends Controller {
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function indexUpcoming(): TemplateResponse {
-		return $this->index();
-	}
-
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function redirectToCard($cardId): RedirectResponse {
 		try {
 			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);

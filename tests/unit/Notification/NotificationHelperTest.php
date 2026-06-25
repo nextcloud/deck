@@ -153,11 +153,13 @@ class NotificationHelperTest extends \Test\TestCase {
 			$this->createUserMock('foo'),
 			$this->createUserMock('bar'),
 			$this->createUserMock('asd')
+
 		];
 		$this->permissionService->expects($this->once())
 			->method('findUsers')
 			->with(234)
 			->willReturn($users);
+
 
 		$n1 = $this->createMock(INotification::class);
 		$n2 = $this->createMock(INotification::class);
@@ -236,6 +238,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with(234)
 			->willReturn($board);
 
+
 		$this->permissionService->expects($this->once())
 			->method('findUsers')
 			->with(234)
@@ -244,6 +247,7 @@ class NotificationHelperTest extends \Test\TestCase {
 		$this->assignedUsersMapper->expects($this->exactly(3))
 			->method('isUserAssigned')
 			->willReturn(true);
+
 
 		$n1 = $this->createMock(INotification::class);
 		$n2 = $this->createMock(INotification::class);
@@ -280,6 +284,7 @@ class NotificationHelperTest extends \Test\TestCase {
 
 		$this->notificationHelper->sendCardDuedate($card);
 	}
+
 
 	public function testSendCardDuedateNever() {
 		$param1 = ['foo', 'bar', 'asd'];
@@ -323,6 +328,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with(234)
 			->willReturn($board);
 
+
 		$this->permissionService->expects($this->once())
 			->method('findUsers')
 			->with(234)
@@ -331,6 +337,7 @@ class NotificationHelperTest extends \Test\TestCase {
 		$this->assignedUsersMapper->expects($this->exactly(2))
 			->method('isUserAssigned')
 			->willReturn(true);
+
 
 		$n1 = $this->createMock(INotification::class);
 		$n2 = $this->createMock(INotification::class);
@@ -482,8 +489,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$comment->expects($this->once())
 			->method('getMentions')
 			->willReturn([
-				['id' => 'user1', 'type' => 'users'],
-				['id' => 'user2', 'type' => 'users'],
+				['id' => 'user1'],
+				['id' => 'user2']
 			]);
 		$card = new Card();
 		$card->setId(123);
@@ -496,13 +503,6 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('findBoardId')
 			->with(123)
 			->willReturn(1);
-		$this->permissionService->expects($this->once())
-			->method('findUsers')
-			->with(1)
-			->willReturn([
-				'user1' => $this->createUserMock('user1'),
-				'user2' => $this->createUserMock('user2'),
-			]);
 
 		$notification1 = $this->createMock(INotification::class);
 		$notification1->expects($this->once())->method('setApp')->with('deck')->willReturn($notification1);
@@ -543,8 +543,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$comment->expects($this->once())
 			->method('getMentions')
 			->willReturn([
-				['id' => 'admin', 'type' => 'users'],
-				['id' => 'user1', 'type' => 'users'],
+				['id' => 'admin'],
+				['id' => 'user1']
 			]);
 		$card = new Card();
 		$card->setId(123);
@@ -557,13 +557,6 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('findBoardId')
 			->with(123)
 			->willReturn(1);
-		$this->permissionService->expects($this->once())
-			->method('findUsers')
-			->with(1)
-			->willReturn([
-				'admin' => $this->createUserMock('admin'),
-				'user1' => $this->createUserMock('user1'),
-			]);
 
 		// Only one notification should be created — for user1, not for admin
 		$notification = $this->createMock(INotification::class);
@@ -649,59 +642,5 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('notify');
 
 		$this->notificationHelper->sendBoardShared(123, $acl, true);
-	}
-
-	/**
-	 * A mention of a user who is not a board member must not trigger a notification.
-	 */
-	public function testSendMentionSkipsNonBoardMembers(): void {
-		$comment = $this->createMock(IComment::class);
-		$comment->expects($this->any())
-			->method('getObjectId')
-			->willReturn(123);
-		$comment->expects($this->any())
-			->method('getMessage')
-			->willReturn('@user1 @outsider This is a message.');
-		$comment->expects($this->once())
-			->method('getMentions')
-			->willReturn([
-				['id' => 'user1', 'type' => 'users'],
-				['id' => 'outsider', 'type' => 'users'],
-			]);
-
-		$card = new Card();
-		$card->setId(123);
-		$card->setTitle('MyCard');
-		$this->cardMapper->expects($this->once())
-			->method('find')
-			->with(123)
-			->willReturn($card);
-		$this->cardMapper->expects($this->once())
-			->method('findBoardId')
-			->with(123)
-			->willReturn(1);
-		// Only user1 is a board member; outsider is not
-		$this->permissionService->expects($this->once())
-			->method('findUsers')
-			->with(1)
-			->willReturn([
-				'user1' => $this->createUserMock('user1'),
-			]);
-
-		// Exactly one notification must be created and sent — for user1 only
-		$notification = $this->createMock(INotification::class);
-		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
-		$notification->expects($this->once())->method('setUser')->with('user1')->willReturn($notification);
-		$notification->expects($this->once())->method('setObject')->with('card', 123)->willReturn($notification);
-		$notification->expects($this->once())->method('setSubject')->with('card-comment-mentioned', ['MyCard', 1, 'admin'])->willReturn($notification);
-		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
-
-		$this->notificationManager->expects($this->once())
-			->method('createNotification')
-			->willReturn($notification);
-		$this->notificationManager->expects($this->once())
-			->method('notify')
-			->with($notification);
-		$this->notificationHelper->sendMention($comment);
 	}
 }

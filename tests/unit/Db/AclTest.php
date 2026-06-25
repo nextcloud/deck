@@ -89,6 +89,7 @@ class AclTest extends \Test\TestCase {
 		], $acl->jsonSerialize());
 	}
 
+
 	public function testGetPermission() {
 		$acl = $this->createAclUser();
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_READ));

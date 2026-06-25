@@ -286,6 +286,8 @@ class FederationContext implements Context {
 		Assert::assertTrue($cardFound, "Assigned user '{$assignedUser}' not found on card '{$cardTitle}' on board '{$boardTitle}' found '" . json_encode($assignedUsers) . "'");
 	}
 
+
+
 	/**
 	 * @When /^user "([^"]*)" on "([^"]*)" creates a stack "([^"]*)" on the federated board$/
 	 */

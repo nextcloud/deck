@@ -120,6 +120,7 @@ class AclMapperTest extends TestCase {
 		$this->assertEquals($this->boards[0]->getId(), $this->aclMapper->findBoardId($this->acls[1]->getId()));
 	}
 
+
 	public function tearDown(): void {
 		parent::tearDown();
 		foreach ($this->acls as $acl) {

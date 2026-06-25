@@ -87,6 +87,22 @@ const DAYS_PER_UNIT = {
 
 const GANTT_VIEW_MODES = [
 	{
+		name: 'Hour',
+		padding: '7d',
+		step: '1h',
+		snap_at: '1h',
+		date_format: 'YYYY-MM-DD HH:',
+		lower_text: 'HH',
+		upper_text: (d, ld, lang) =>
+			!ld || d.getDate() !== ld.getDate()
+				? Intl.DateTimeFormat(lang || 'en', { month: 'short', day: 'numeric' }).format(d)
+				: '',
+		thick_line(date) {
+			return date.getDay() === 1
+		},
+		upper_text_frequency: 24,
+	},
+	{
 		name: 'Day',
 		padding: '14d',
 		step: '12h',
@@ -106,22 +122,6 @@ const GANTT_VIEW_MODES = [
 		thick_line(date) {
 			return date.getDay() === 1
 		},
-	},
-	{
-		name: 'Hour',
-		padding: '7d',
-		step: '1h',
-		snap_at: '1h',
-		date_format: 'YYYY-MM-DD HH:',
-		lower_text: 'HH',
-		upper_text: (d, ld, lang) =>
-			!ld || d.getDate() !== ld.getDate()
-				? Intl.DateTimeFormat(lang || 'en', { month: 'short', day: 'numeric' }).format(d)
-				: '',
-		thick_line(date) {
-			return date.getDay() === 1
-		},
-		upper_text_frequency: 24,
 	},
 	{
 		name: 'Week',
@@ -207,31 +207,6 @@ export default {
 					if (!card.duedate && !card.startdate) {
 						undatedCards.push(card)
 					} else {
-						// gantt renders everything at once so large date ranges cause performance issues on render
-						// therefore we limit the timeframe of visible tasks
-						const duedate = new Date(card.duedate)
-						switch (this.currentViewMode) {
-						case 'Hour':
-							if (duedate < new Date() - 2 * 24 * 3600 * 1000) {
-								return
-							}
-							break
-						case 'Day':
-							if (duedate < new Date() - 30 * 24 * 3600 * 1000) {
-								return
-							}
-							break
-						case 'Week':
-							if (duedate < new Date() - 90 * 24 * 3600 * 1000) {
-								return
-							}
-							break
-						case 'Month':
-							if (duedate < new Date() - 365 * 24 * 3600 * 1000) {
-								return
-							}
-							break
-						}
 						ganttTasks.push(this.cardToGanttTask(card, index))
 					}
 				})
@@ -368,6 +343,7 @@ export default {
 			})
 
 			this._patchBarDuration()
+			this.ganttInstance.change_view_mode(this.currentViewMode)
 			this.fitColumnsToWidth()
 		},
 		async updateTaskDate(task, start, end) {

@@ -22,7 +22,6 @@ OC.L10N.register(
     "Months" : "මාස",
     "(Group)" : "(සමූහය)",
     "Owner" : "හිමිකරු",
-    "Delete" : "Delete",
     "Edit" : "සංස්කරණය",
     "Download" : "බාගන්න",
     "Comments" : "අදහස්",

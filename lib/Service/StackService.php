@@ -55,6 +55,7 @@ class StackService {
 				continue;
 			}
 
+
 			foreach ($stacks as $stack) {
 				if ($stack->getId() === $stackId) {
 					$stack->setCards($this->cardService->enrichCards($cards));

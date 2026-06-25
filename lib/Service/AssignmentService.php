@@ -62,7 +62,7 @@ class AssignmentService {
 
 		$card = $this->cardMapper->find($cardId);
 		$boardId = $this->cardMapper->findBoardId($cardId);
-		$boardUsers = array_map(fn (string|int $userId) => (string)$userId, array_keys($this->permissionService->findUsers($boardId, true)));
+		$boardUsers = array_keys($this->permissionService->findUsers($boardId, true));
 		$acls = $this->aclMapper->findAll($boardId);
 		$groups = array_filter($acls, function (Acl $acl) use ($userId) {
 			return $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $acl->getParticipant() === $userId;
@@ -73,6 +73,7 @@ class AssignmentService {
 		if (!in_array($userId, $boardUsers, true) && count($groups) !== 1 && count($teams) !== 1) {
 			throw new BadRequestException('The user is not part of the board');
 		}
+
 
 		if ($type === Assignment::TYPE_USER && $userId !== $this->userId) {
 			$this->notificationHelper->sendCardAssigned($card, $userId);
@@ -112,6 +113,7 @@ class AssignmentService {
 					$this->notificationHelper->markCardAssignedAsRead($card, $userId);
 				}
 				$this->changeHelper->cardChanged($cardId);
+
 
 				$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 

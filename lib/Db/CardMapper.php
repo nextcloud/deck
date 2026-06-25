@@ -587,6 +587,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $qb->createNamedParameter($dateTime, IQueryBuilder::PARAM_DATE);
 	}
 
+
+
 	public function searchRaw($boardIds, $term, $limit = null, $offset = null) {
 		$qb = $this->queryCardsByBoards($boardIds)
 			->select('s.board_id', 'board_id')

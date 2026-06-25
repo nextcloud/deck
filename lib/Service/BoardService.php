@@ -181,6 +181,7 @@ class BoardService {
 		return $board->getDeletedAt() > 0;
 	}
 
+
 	/**
 	 * @throws BadRequestException
 	 */
@@ -584,6 +585,7 @@ class BoardService {
 				$acl->getPermissionManage());
 		}
 
+
 		$labels = $this->labelMapper->findAll($id);
 		foreach ($labels as $label) {
 			$newLabel = new Label();
@@ -747,6 +749,7 @@ class BoardService {
 				// Persist the cloned card.
 				$newCard = $this->cardMapper->insert($newCard);
 
+
 				// Copy labels.
 				if ($withLabels) {
 					$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
@@ -763,6 +766,7 @@ class BoardService {
 						}
 					}
 				}
+
 
 				// Copy assignments.
 				if ($withAssignments) {

@@ -41,6 +41,7 @@ use Test\TestCase;
 
 class AssignmentServiceTest extends TestCase {
 
+
 	/**
 	 * @var MockObject|PermissionService
 	 */
@@ -81,6 +82,7 @@ class AssignmentServiceTest extends TestCase {
 	 * @var AssignmentServiceValidator
 	 */
 	private $assignmentServiceValidator;
+
 
 	public function setUp(): void {
 		parent::setUp();

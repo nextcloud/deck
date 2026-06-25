@@ -11,15 +11,15 @@
 			</span>
 		</div>
 
-		<CommentItem v-if="commentStore.replyTo"
-			:comment="commentStore.replyTo"
+		<CommentItem v-if="replyTo"
+			:comment="replyTo"
 			:reply="true"
 			:preview="true"
 			@cancel="cancelReply" />
 		<CommentForm v-model="newComment" @submit="createComment" />
 
-		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
-			<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
+		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
+			<CommentItem v-for="comment in getCommentsForCard(card.id)"
 				:key="comment.id"
 				:comment="comment"
 				@doReload="loadComments" />
@@ -38,13 +38,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { NcAvatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem.vue'
 import CommentForm from './CommentForm.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import { getCurrentUser } from '@nextcloud/auth'
-import { useCommentStore } from '../../stores/comment.js'
 
 export default {
 	name: 'CardSidebarTabComments',
@@ -65,10 +64,6 @@ export default {
 			default: null,
 		},
 	},
-	setup() {
-		const commentStore = useCommentStore()
-		return { commentStore }
-	},
 	data() {
 		return {
 			newComment: '',
@@ -80,7 +75,12 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
+			replyTo: state => state.comment.replyTo,
 		}),
+		...mapGetters([
+			'getCommentsForCard',
+			'hasMoreComments',
+		]),
 		members() {
 			return this.currentBoard.users
 		},
@@ -98,7 +98,7 @@ export default {
 			this.error = null
 			try {
 				await this.loadMore()
-				if (this.commentStore.hasMoreComments(this.card.id)) {
+				if (this.hasMoreComments(this.card.id)) {
 					$state.loaded()
 				} else {
 					$state.complete()
@@ -110,14 +110,14 @@ export default {
 			}
 		},
 		async loadComments() {
-			this.commentStore.setReplyTo(null)
+			this.$store.dispatch('setReplyTo', null)
 			this.error = null
 			this.isLoading = true
 			try {
-				await this.commentStore.fetchComments({ cardId: this.card.id })
+				await this.$store.dispatch('fetchComments', { cardId: this.card.id })
 				this.isLoading = false
 				if (this.card.commentsUnread > 0) {
-					await this.commentStore.markCommentsAsRead(this.card.id)
+					await this.$store.dispatch('markCommentsAsRead', this.card.id)
 				}
 			} catch (e) {
 				this.isLoading = false
@@ -130,18 +130,18 @@ export default {
 				cardId: this.card.id,
 				comment: content,
 			}
-			await this.commentStore.createComment(commentObj)
-			this.commentStore.setReplyTo(null)
+			await this.$store.dispatch('createComment', commentObj)
+			this.$store.dispatch('setReplyTo', null)
 			this.newComment = ''
 			await this.loadComments()
 		},
 		async loadMore() {
 			this.isLoading = true
-			await this.commentStore.fetchMore({ cardId: this.card.id })
+			await this.$store.dispatch('fetchMore', { cardId: this.card.id })
 			this.isLoading = false
 		},
 		cancelReply() {
-			this.commentStore.setReplyTo(null)
+			this.$store.dispatch('setReplyTo', null)
 		},
 	},
 }

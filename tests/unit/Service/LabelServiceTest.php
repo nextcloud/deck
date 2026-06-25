@@ -88,6 +88,7 @@ class LabelServiceTest extends TestCase {
 		$this->assertEquals($b->getColor(), '00ff00');
 	}
 
+
 	public function testUpdate() {
 		$label = new Label();
 		$label->setTitle('Title');

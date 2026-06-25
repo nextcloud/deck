@@ -33,11 +33,6 @@ const router = new Router({
 			component: Overview,
 		},
 		{
-			path: '/upcoming',
-			name: 'upcoming',
-			component: Overview,
-		},
-		{
 			path: '/overview/:filter',
 			name: 'overview',
 			components: {
@@ -165,9 +160,6 @@ router.beforeEach((to, from, next) => {
 		const defaultBoardId = localStorage.getItem('deck.defaultBoardId')
 		if (defaultBoardId) {
 			next({ name: 'board', params: { id: parseInt(defaultBoardId, 10) } })
-			return
-		} else {
-			next({ name: 'upcoming' })
 			return
 		}
 	}

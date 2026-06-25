@@ -4,7 +4,6 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
 namespace OCA\Deck\DAV;
 
 use OCA\DAV\CalDAV\Integration\ExternalCalendar;
@@ -150,6 +149,7 @@ class Calendar extends ExternalCalendar {
 			}
 		)) > 0;
 	}
+
 
 	public function delete() {
 		throw new Forbidden('Deleting an entry is not implemented');
