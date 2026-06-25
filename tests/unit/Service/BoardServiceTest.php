@@ -502,4 +502,34 @@ class BoardServiceTest extends TestCase {
 			->with(new AclDeletedEvent($acl));
 		$this->assertEquals($acl, $this->service->deleteAcl(123));
 	}
+
+	public function testDeleteAclForShareReviewCallsSideEffects(): void {
+		$acl = new Acl();
+		$acl->setBoardId(99);
+		$this->aclMapper->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($acl);
+		$this->aclMapper->expects($this->once())
+			->method('delete')
+			->with($acl);
+		$this->changeHelper->expects($this->once())
+			->method('boardChanged')
+			->with(99);
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new AclDeletedEvent($acl));
+
+		$this->service->deleteAclForShareReview(42);
+	}
+
+	public function testDeleteAclForShareReviewPropagatesDoesNotExist(): void {
+		$this->aclMapper->expects($this->once())
+			->method('find')
+			->with(99)
+			->willThrowException(new \OCP\AppFramework\Db\DoesNotExistException(''));
+
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+		$this->service->deleteAclForShareReview(99);
+	}
 }

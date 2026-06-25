@@ -515,6 +515,22 @@ class BoardService {
 		return $deletedAcl;
 	}
 
+	/**
+	 * Delete an ACL entry on behalf of a trusted share-review operation.
+	 *
+	 * PERMISSION_MANAGE is intentionally not checked. The caller must verify
+	 * operator access via ShareReviewAccessCheckEvent before invoking this
+	 * method. All other side effects are preserved so the deletion is auditable.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if $aclId does not exist
+	 */
+	public function deleteAclForShareReview(int $aclId): void {
+		$acl = $this->aclMapper->find($aclId);
+		$this->aclMapper->delete($acl);
+		$this->changeHelper->boardChanged($acl->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
+	}
+
 	public function leave(int $boardId): ?Acl {
 		if ($this->permissionService->userIsBoardOwner($boardId)) {
 			throw new BadRequestException('Board owner cannot leave board');
