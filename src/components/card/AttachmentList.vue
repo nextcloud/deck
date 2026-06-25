@@ -209,10 +209,71 @@ export default {
 			},
 		},
 	},
+	mounted() {
+		document.addEventListener('paste', this.handlePaste)
+	},
+	beforeDestroy() {
+		document.removeEventListener('paste', this.handlePaste)
+	},
 	methods: {
 		...mapActions([
 			'fetchAttachments',
 		]),
+		handlePaste(event) {
+			if (this.isReadOnly) {
+				return
+			}
+			// Only react when the attachments tab is actually visible (offsetParent
+			// is null when the tab is hidden or the component is detached).
+			if (!this.$el || this.$el.offsetParent === null) {
+				return
+			}
+			// Don't hijack pastes happening inside text fields (e.g. the comment box).
+			const target = event.target
+			if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+				return
+			}
+			const items = event.clipboardData?.items ?? []
+			const images = []
+			for (const item of items) {
+				if (item.kind === 'file' && item.type.startsWith('image/')) {
+					const file = item.getAsFile()
+					if (file) {
+						images.push(file)
+					}
+				}
+			}
+			if (images.length === 0) {
+				return
+			}
+			event.preventDefault()
+			for (const image of images) {
+				this.onLocalAttachmentSelected(this.namePastedImage(image), 'file')
+			}
+		},
+		namePastedImage(file) {
+			// Clipboard images are usually named "image.png", which collides across
+			// multiple pastes. Give each a unique, human-readable name.
+			const extensions = {
+				'image/png': 'png',
+				'image/jpeg': 'jpg',
+				'image/gif': 'gif',
+				'image/webp': 'webp',
+				'image/bmp': 'bmp',
+				'image/svg+xml': 'svg',
+			}
+			const extension = extensions[file.type] ?? (file.type.split('/')[1] ?? 'png')
+			const d = new Date()
+			const pad = (n) => String(n).padStart(2, '0')
+			const stamp = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`
+			const name = `Pasted-image-${stamp}.${extension}`
+			try {
+				return new File([file], name, { type: file.type, lastModified: file.lastModified })
+			} catch (e) {
+				// Fall back to the original file if File construction is unsupported.
+				return file
+			}
+		},
 		handleUploadFile(event) {
 			const files = event.target.files ?? []
 			for (const file of files) {
