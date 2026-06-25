@@ -10,8 +10,11 @@
 			:class="{'stack__header--add': showAddCard, 'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!canManage || isArchived" tabindex="0">
-					{{ stack.title }}
+				<h3 v-if="!canManage || isArchived"
+					tabindex="0"
+					:title="stack.title"
+					class="stack__title">
+					<span dir="auto">{{ stack.title }}</span>
 					<CheckCircleOutline v-if="isDoneColumn"
 						class="stack__done-icon"
 						decorative />
