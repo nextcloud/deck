@@ -156,6 +156,8 @@ return [
 		['name' => 'stack_ocs#setDoneStack', 'url' => '/api/v{apiVersion}/stacks/{stackId}/done', 'verb' => 'PUT'],
 		['name' => 'stack_ocs#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],
 		['name' => 'stack_ocs#reorder', 'url' => '/api/v{apiVersion}/stacks/{stackId}/reorder', 'verb' => 'PUT'],
+		['name' => 'stack_ocs#move', 'url' => '/api/v{apiVersion}/stacks/{stackId}/move', 'verb' => 'PUT'],
+		['name' => 'stack_ocs#clone', 'url' => '/api/v{apiVersion}/stacks/{stackId}/clone', 'verb' => 'POST'],
 
 		['name' => 'attachment_ocs#getAll', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment_ocs#create', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachment', 'verb' => 'POST'],
