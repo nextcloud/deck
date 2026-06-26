@@ -98,6 +98,14 @@ export default {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
 		},
+		hideNoDueOnOverview: {
+			get() {
+				return this.$store.getters.config('hideNoDueOnOverview')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { hideNoDueOnOverview: newValue })
+			},
+		},
 	},
 	created() {
 		const initialState = loadState('deck', 'initialBoards', null)

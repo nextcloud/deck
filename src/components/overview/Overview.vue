@@ -74,11 +74,6 @@ const COLUMN_PROPS_LIST = [
 		title: 'Later',
 		filter: 'later',
 	},
-	{
-		title: 'No due',
-		filter: 'nodue',
-		sort: false,
-	},
 ]
 
 export default {
@@ -95,9 +90,17 @@ export default {
 		},
 	},
 	data() {
+		const dynamicList = [...COLUMN_PROPS_LIST];
+		if(hideNoDueOnOverview) {
+			dynamicList.push({
+				title: 'No due',
+				filter: 'nodue',
+				sort: false,
+			});
+		}
 		return {
 			loading: true,
-			columnPropsList: COLUMN_PROPS_LIST,
+			columnPropsList: dynamicList,
 		}
 	},
 	computed: {
@@ -111,6 +114,14 @@ export default {
 			default:
 				return ''
 			}
+		},
+		hideNoDueOnOverview: {
+			get() {
+				return this.$store.getters.config('hideNoDueOnOverview')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { hideNoDueOnOverview: newValue })
+			},
 		},
 		...mapGetters(['assignedCardsDashboard']),
 	},
