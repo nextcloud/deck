@@ -283,6 +283,7 @@
     "Update" : "Aktualizovat",
     "Mark as done" : "Označit jako hotové",
     "Mark as not done" : "Označit jako nehotové",
+    "Remove dependency" : "Odebrat závislost",
     "Write a description …" : "Zadejte popis …",
     "Could not save description" : "Nebylo možné uložit popis",
     "Description" : "Popis",
