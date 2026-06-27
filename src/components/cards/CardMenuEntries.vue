@@ -16,27 +16,35 @@
 			{{ t('deck', 'Edit title') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit && !isCurrentUserAssigned"
-			icon="icon-user"
 			:close-after-click="true"
 			@click="assignCardToMe()">
+			<template #icon>
+				<AccountPlusIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Assign to me') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit && isCurrentUserAssigned"
-			icon="icon-user"
 			:close-after-click="true"
 			@click="unassignCardFromMe()">
+			<template #icon>
+				<AccountMinusIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Unassign myself') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-checkmark"
 			:close-after-click="true"
 			@click="changeCardDoneStatus()">
+			<template #icon>
+				<CheckIcon :size="20" decorative />
+			</template>
 			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-external"
 			:close-after-click="true"
 			@click="openCardMoveDialog">
+			<template #icon>
+				<OpenInNewIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Move/copy card') }}
 		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
@@ -53,9 +61,11 @@
 			{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-delete"
 			:close-after-click="true"
 			@click="deleteCard()">
+			<template #icon>
+				<DeleteIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Delete card') }}
 		</NcActionButton>
 	</div>
