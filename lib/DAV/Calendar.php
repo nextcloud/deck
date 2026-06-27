@@ -29,6 +29,8 @@ class Calendar extends ExternalCalendar {
 	private $backend;
 	/** @var Board */
 	private $board;
+	/** @var array|null */
+	private $acl;
 
 	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend) {
 		parent::__construct('deck', $calendarUri);
@@ -43,9 +45,22 @@ class Calendar extends ExternalCalendar {
 		return $this->principalUri;
 	}
 
+	/**
+	 * Nextcloud's DAV Schedule Plugin calls this for writable external
+	 * calendars. Deck calendars are not shared scheduling calendars, and Deck
+	 * does not process iTIP/ATTENDEE scheduling data here.
+	 */
+	public function isShared(): bool {
+		return false;
+	}
+
 	public function getACL() {
-		// the calendar should always have the read and the write-properties permissions
-		// write-properties is needed to allow the user to toggle the visibility of shared deck calendars
+		if ($this->acl !== null) {
+			return $this->acl;
+		}
+
+		// write-content covers PUT on existing objects but not bind/unbind, so
+		// CREATE and DELETE are rejected at the ACL layer before any hooks run.
 		$acl = [
 			[
 				'privilege' => '{DAV:}read',
@@ -58,8 +73,16 @@ class Calendar extends ExternalCalendar {
 				'protected' => true,
 			]
 		];
+		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT)) {
+			$acl[] = [
+				'privilege' => '{DAV:}write-content',
+				'principal' => $this->getOwner(),
+				'protected' => true,
+			];
+		}
 
-		return $acl;
+		$this->acl = $acl;
+		return $this->acl;
 	}
 
 	public function setACL(array $acl) {
