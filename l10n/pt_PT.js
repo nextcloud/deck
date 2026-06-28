@@ -118,6 +118,7 @@ OC.L10N.register(
     "Active filters" : "Filtros ativos",
     "Open" : "Abrir",
     "Completed" : "Concluída",
+    "No due date" : "Sem data de vencimento",
     "Clear filter" : "Limpar filtro",
     "Hide archived cards" : "Esconder cartões arquivados",
     "Show archived cards" : "Mostrar cartões arquivados",
