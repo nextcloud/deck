@@ -451,7 +451,7 @@ export default function storeFactory() {
 					search: query,
 					itemType: 'deck',
 					shareTypes: [0, 1, 6, 7],
-					limit: 20,
+					limit: 200,
 				}
 
 				const response = await axios.get(generateOcsUrl('/core/autocomplete/get'), { params })
