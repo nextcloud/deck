@@ -400,6 +400,9 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
+		$now = time();
+		$acl->setCreatedAt($now);
+		$acl->setLastModifiedAt($now);
 		$newAcl = $this->aclMapper->insert($acl);
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE, [], $this->userId);
@@ -451,6 +454,7 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
+		$acl->setLastModifiedAt(time());
 		$this->boardMapper->mapAcl($acl);
 		$acl = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
