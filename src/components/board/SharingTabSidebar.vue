@@ -5,6 +5,7 @@
 <template>
 	<div>
 		<NcSelectUsers v-model="addAcl"
+			:input-label="t('deck', 'Select account')"
 			:options="formatedSharees"
 			:loading="isLoading"
 			@search="(search) => asyncFind(search)" />
