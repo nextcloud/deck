@@ -48,12 +48,12 @@
 				class="add-dependency-button"
 				type="button"
 				variant="tertiary"
-				:aria-label="t('deck', 'Add dependent card')"
+				:aria-label="t('deck', 'Add child card')"
 				@click="openSelector">
 				<template #icon>
 					<Plus :size="20" />
 				</template>
-				{{ t('deck', 'Add dependent card') }}
+				{{ t('deck', 'Add child card') }}
 			</NcButton>
 
 			<div v-if="isEditable && showSelector" class="selector-row">
