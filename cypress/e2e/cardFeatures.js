@@ -272,16 +272,14 @@ describe('Card', function () {
 
 			cy.get('#app-sidebar-vue [data-cy-due-date-actions]').should('be.visible').click()
 
+			const now = new Date().setHours(11, 0, 0, 0)
+			cy.clock(now)
 			// Set a due date through shortcut
 			cy.get('[data-cy-due-date-shortcut="tomorrow"] button').should('be.visible').click()
 
 			const tomorrow = moment().add(1, 'days').hour(8).minutes(0).seconds(0)
 			cy.get('#card-duedate-picker').should('have.value', tomorrow.format('YYYY-MM-DDTHH:mm'))
 
-			const now = moment().hour(11).minutes(0).seconds(0).toDate()
-			cy.clock(now)
-			cy.log(now)
-			cy.tick(60_000)
 
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state="Now"]').should('be.visible').should('contain', '21 hours')
 
