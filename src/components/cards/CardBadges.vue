@@ -94,7 +94,7 @@ export default {
 	methods: {
 		openComments() {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
-			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id, tabId: 'comments' } })
+			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id, tabId: 'details' } })
 		},
 	},
 }
