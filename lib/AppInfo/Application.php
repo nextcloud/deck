@@ -47,10 +47,12 @@ use OCA\Deck\Reference\CreateCardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
+use OCA\Deck\ShareReview\ShareReviewListener;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
 use OCA\Deck\UserMigration\DeckMigrator;
+use OCA\ShareReview\Sources\SourceEvent;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -189,6 +191,8 @@ class Application extends App implements IBootstrap {
 		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
 
 		$context->registerUserMigrator(DeckMigrator::class);
+
+		$context->registerEventListener(SourceEvent::class, ShareReviewListener::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
