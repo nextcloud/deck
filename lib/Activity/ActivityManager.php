@@ -560,7 +560,7 @@ class ActivityManager {
 			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, $userId);
 			$card = $this->cardMapper->find($cardId);
 			return $card->getDeletedAt() === 0;
-		} catch (NoPermissionException $e) {
+		} catch (NoPermissionException|DoesNotExistException $e) {
 			return false;
 		}
 	}
@@ -570,7 +570,7 @@ class ActivityManager {
 			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ, $userId);
 			$board = $this->boardMapper->find($boardId);
 			return $board->getDeletedAt() === 0;
-		} catch (NoPermissionException $e) {
+		} catch (NoPermissionException|DoesNotExistException $e) {
 			return false;
 		}
 	}
