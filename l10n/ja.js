@@ -205,6 +205,8 @@ OC.L10N.register(
     "Deleted lists" : "削除済みリスト",
     "Undo" : "元に戻す",
     "Deleted cards" : "削除済みのカード",
+    "Hours" : "時間",
+    "Days" : "日",
     "Weeks" : "週",
     "Months" : "月",
     "No cards yet" : "まだカードはありません",
