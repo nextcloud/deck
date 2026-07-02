@@ -6,6 +6,7 @@
 import Vue from 'vue'
 import { StackApi } from './../services/StackApi.js'
 import applyOrderToArray from './../helpers/applyOrderToArray.js'
+import { useTrashbinStore } from '../stores/trashbin.js'
 
 const apiClient = new StackApi()
 
@@ -108,7 +109,7 @@ export default function stackModuleFactory() {
 				apiClient.deleteStack(stack.id, stack.boardId)
 					.then((stack) => {
 						commit('deleteStack', stack)
-						commit('moveStackToTrash', stack)
+						useTrashbinStore().moveStackToTrash(stack)
 					})
 			},
 			updateStack({ commit }, stack) {

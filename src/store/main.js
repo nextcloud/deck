@@ -13,7 +13,6 @@ import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
-import trashbin from './trashbin.js'
 import attachment from './attachment.js'
 import overview from './overview.js'
 Vue.use(Vuex)
@@ -35,7 +34,6 @@ export default function storeFactory() {
 		modules: {
 			stack: stackModuleFactory(),
 			card: cardModuleFactory(),
-			trashbin,
 			attachment,
 			overview,
 		},
