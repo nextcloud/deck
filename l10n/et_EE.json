@@ -65,7 +65,7 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} on taastanud „{card}“ kaardi „{attachment}“ manuse",
     "You have commented on card {card}" : "Sina oled kommenteerinud „{card}“ kaarti",
     "{user} has commented on card {card}" : "{user} on kommenteerinud „{card}“ kaarti",
-    "Deck" : "Deck",
+    "Deck" : "Kanban",
     "Changes in the <strong>Deck app</strong>" : "Muudatused <strong>Kanbani rakenduses</strong>",
     "A <strong>board, list or card</strong> was changed" : "<strong>Tahvel, loend või kaart</strong> on muutunud",
     "A <strong>comment</strong> was created on a card" : "Kaardile on lisatud<strong>kommentaar</strong>",
