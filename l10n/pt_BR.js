@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Atribuir a mim",
     "Unassign myself" : "Desatribuir-me",
     "Delete card" : "Excluir cartão",
-    "seconds ago" : "segundos atrás",
     "All boards" : "Todos os painéis",
     "Archived boards" : "Painéis arquivados",
     "Shared with you" : "Compartilhado com você",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Pesquisando usuários, grupos e equipes …",
     "No participants found" : "Nenhum participante encontrado",
     "Save" : "Salvar",
+    "seconds ago" : "segundos atrás",
     "Today" : "Hoje",
     "Tomorrow" : "Amanhã",
     "No due" : "Sem vencimento"

@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "اختصاص به من",
     "Unassign myself" : "لغو اختصاص خودم",
     "Delete card" : "حذف کارت",
-    "seconds ago" : "ثانیه پیش",
     "All boards" : "همه بوردها",
     "Archived boards" : "بوردهای بایگانی شده",
     "Shared with you" : "اشتراک‌گذاری شده با شما",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "در حال جستجوی کاربران، گروه‌ها و تیم‌ها …",
     "No participants found" : "هیچ شرکت‌کننده‌ای یافت نشد",
     "Save" : "ذخیره",
+    "seconds ago" : "ثانیه پیش",
     "Today" : "امروز",
     "Tomorrow" : "فردا",
     "No due" : "بدون سررسید"

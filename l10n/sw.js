@@ -322,7 +322,6 @@ OC.L10N.register(
     "Assign to me" : "Kabidhi kwangu",
     "Unassign myself" : "Sijajikabidhi mwenyewe",
     "Delete card" : "Futa kadi",
-    "seconds ago" : "sukunde zilizopita",
     "All boards" : "Bodi zote",
     "Archived boards" : "Bodi zilizohifadhiwa",
     "Shared with you" : "Imeshirikiwa na wewe",
@@ -413,6 +412,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Inatafuta watumiaji, vikundi na timu",
     "No participants found" : "Hakuna mshiriki aliyepatikana",
     "Save" : "Hifadhi",
+    "seconds ago" : "sukunde zilizopita",
     "Today" : "Leo",
     "Tomorrow" : "Kesho",
     "No due" : "Hakuna ukomo"

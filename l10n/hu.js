@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Hozzám rendelés",
     "Unassign myself" : "Saját magam hozzárendelésének eltávolítása",
     "Delete card" : "Kártya törlése",
-    "seconds ago" : "másodperce",
     "All boards" : "Az összes tábla",
     "Archived boards" : "Archivált táblák",
     "Shared with you" : "Megosztva Önnel",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Felhasználók, csoportok és csapatok keresése…",
     "No participants found" : "Nem találhatók résztvevők",
     "Save" : "Mentés",
+    "seconds ago" : "másodperce",
     "Today" : "Ma",
     "Tomorrow" : "Holnap",
     "No due" : "Nincs határidő"

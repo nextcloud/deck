@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Sann dom",
     "Unassign myself" : "Díshannadh mé féin",
     "Delete card" : "Scrios cárta",
-    "seconds ago" : "soicind ó shin",
     "All boards" : "Gach boird",
     "Archived boards" : "Boird chartlainne",
     "Shared with you" : "Roinnte leat",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Ag cuardach úsáideoirí, grúpaí agus foirne…",
     "No participants found" : "Níor aimsíodh rannpháirtithe ar bith",
     "Save" : "Sábháil",
+    "seconds ago" : "soicind ó shin",
     "Today" : "Inniu",
     "Tomorrow" : "Amárach",
     "No due" : "Níl dlite"

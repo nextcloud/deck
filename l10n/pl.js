@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Przydziel do mnie",
     "Unassign myself" : "Cofnij moje przypisanie",
     "Delete card" : "Usuń kartę",
-    "seconds ago" : "przed chwilą",
     "All boards" : "Wszystkie tablice",
     "Archived boards" : "Zarchiwizowane tablice",
     "Shared with you" : "Udostępnione Tobie",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Wyszukiwanie użytkowników, grup i zespołów…",
     "No participants found" : "Nie znaleziono uczestników",
     "Save" : "Zapisz",
+    "seconds ago" : "przed chwilą",
     "Today" : "Dzisiaj",
     "Tomorrow" : "Jutro",
     "No due" : "Bez ważności"

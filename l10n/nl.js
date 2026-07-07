@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Aan mij toewijzen",
     "Unassign myself" : "Eigen toewijzing opheffen",
     "Delete card" : "Kaart verwijderen",
-    "seconds ago" : "seconden geleden",
     "All boards" : "Alle borden",
     "Archived boards" : "Gearchiveerde borden",
     "Shared with you" : "Deelde met jou",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Bezig met zoeken naar gebruikers, groepen en teams...",
     "No participants found" : "Geen deelnemers gevonden",
     "Save" : "Opslaan",
+    "seconds ago" : "seconden geleden",
     "Today" : "Vandaag",
     "Tomorrow" : "Morgen",
     "No due" : "Geen vervaldatum"

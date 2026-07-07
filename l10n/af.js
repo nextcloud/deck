@@ -34,7 +34,6 @@ OC.L10N.register(
     "Update" : "Werk by",
     "Description" : "Beskrywing",
     "Select Date" : "Kies Datum",
-    "seconds ago" : "sekondes gelede",
     "Shared with you" : "Met u gedeel",
     "An error occurred" : "'n Fout het voorgekom",
     "No notifications" : "Geen kennisgewings",
@@ -47,6 +46,7 @@ OC.L10N.register(
     "Share" : "Deel",
     "No participants found" : "Geen deelnemers gevind",
     "Save" : "Stoor",
+    "seconds ago" : "sekondes gelede",
     "Today" : "Vandag",
     "Tomorrow" : "Môre"
 },

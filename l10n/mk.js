@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Доделени мене",
     "Unassign myself" : "Откажи се",
     "Delete card" : "Избриши картица",
-    "seconds ago" : "пред неколку секунди",
     "All boards" : "Сите табли",
     "Archived boards" : "Архивирани табли",
     "Shared with you" : "Споделено со тебе",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Пребарување на корисници, групи или тимови...",
     "No participants found" : "Не се пронајдени учесници",
     "Save" : "Зачувај",
+    "seconds ago" : "пред неколку секунди",
     "Today" : "Денес",
     "Tomorrow" : "Утре",
     "No due" : "Не истекува"

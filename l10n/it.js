@@ -322,7 +322,6 @@ OC.L10N.register(
     "Assign to me" : "Assegna a me",
     "Unassign myself" : "Rimuovi assegnazione da me",
     "Delete card" : "Elimina scheda",
-    "seconds ago" : "secondi fa",
     "All boards" : "Tutte le lavagne",
     "Archived boards" : "Lavagne archiviate",
     "Shared with you" : "Condiviso con te",
@@ -413,6 +412,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Ricerca di utenti, gruppi e squadre …",
     "No participants found" : "Nessun partecipante trovato",
     "Save" : "Salva",
+    "seconds ago" : "secondi fa",
     "Today" : "Oggi",
     "Tomorrow" : "Domani",
     "No due" : "Nessuna scadenza"

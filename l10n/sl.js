@@ -263,7 +263,6 @@ OC.L10N.register(
     "Assign to me" : "Nalogo dodeli meni",
     "Unassign myself" : "Odstrani me z naloge",
     "Delete card" : "Izbriši nalogo",
-    "seconds ago" : "pred nekaj sekundami",
     "All boards" : "Vse zbirke",
     "Archived boards" : "Arhivirane zbirke",
     "Shared with you" : "V souporabi z vami",
@@ -323,6 +322,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Naloga »%s« na »%s« je dosegla datum preteka.",
     "No participants found" : "Ni zaznanih udeleženev",
     "Save" : "Shrani",
+    "seconds ago" : "pred nekaj sekundami",
     "Today" : "Danes",
     "Tomorrow" : "Jutri",
     "No due" : "Ni datuma preteka"

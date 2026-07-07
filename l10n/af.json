@@ -32,7 +32,6 @@
     "Update" : "Werk by",
     "Description" : "Beskrywing",
     "Select Date" : "Kies Datum",
-    "seconds ago" : "sekondes gelede",
     "Shared with you" : "Met u gedeel",
     "An error occurred" : "'n Fout het voorgekom",
     "No notifications" : "Geen kennisgewings",
@@ -45,6 +44,7 @@
     "Share" : "Deel",
     "No participants found" : "Geen deelnemers gevind",
     "Save" : "Stoor",
+    "seconds ago" : "sekondes gelede",
     "Today" : "Vandag",
     "Tomorrow" : "Môre"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

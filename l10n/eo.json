@@ -106,7 +106,6 @@
     "Archive card" : "Arĥivigi karton",
     "(group)" : "(grupo)",
     "Delete card" : "Forigi karton",
-    "seconds ago" : "antaŭ kelkaj sekundoj",
     "Archived boards" : "Arĥivigitaj tabuloj",
     "Shared with you" : "Kunhavata kun vi",
     "An error occurred" : "Eraro okazis",
@@ -127,6 +126,7 @@
     "Share" : "Kunhavigi",
     "The card \"%s\" on \"%s\" has reached its due date." : "La karto „%s“ sur „%s“ atingis sian limdaton.",
     "Save" : "Konservi",
+    "seconds ago" : "antaŭ kelkaj sekundoj",
     "Today" : "Hodiaŭ",
     "Tomorrow" : "Morgaŭ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

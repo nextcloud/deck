@@ -24,7 +24,6 @@ OC.L10N.register(
     "Update" : "Diweddaru",
     "Description" : "Disgrifiad",
     "Select Date" : "Dewis Dyddiad",
-    "seconds ago" : "eiliad yn ôl",
     "Shared with you" : "Shared with you",
     "No reminder" : "Dim nodyn atgoffa",
     "An error occurred" : "Digwyddodd gwall",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "Modified" : "Addaswyd",
     "Share" : "Rhannu",
     "Save" : "Cadw",
+    "seconds ago" : "eiliad yn ôl",
     "Today" : "Heddiw"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

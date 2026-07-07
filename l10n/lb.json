@@ -24,7 +24,6 @@
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "Description" : "Beschreiwung",
-    "seconds ago" : "Sekonnen hier",
     "Shared with you" : "Mat dir gedeelt",
     "Advanced options" : "Erweidert Astellungen",
     "Export" : "Exportéieren",
@@ -32,6 +31,7 @@
     "Modified" : "Geännert",
     "Share" : "Deelen",
     "Save" : "Späicheren",
+    "seconds ago" : "Sekonnen hier",
     "Today" : "Haut",
     "Tomorrow" : "Muer"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

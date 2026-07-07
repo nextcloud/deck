@@ -305,7 +305,6 @@ OC.L10N.register(
     "Assign to me" : "Tildel meg",
     "Unassign myself" : "Fjern meg fra tildeling",
     "Delete card" : "Slett kort",
-    "seconds ago" : "sekunder siden",
     "All boards" : "Alle tabler",
     "Archived boards" : "Arkiverte tavler",
     "Shared with you" : "Delt med deg",
@@ -377,6 +376,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Søker etter brukere, grupper og lag...",
     "No participants found" : "Ingen deltakere funnet",
     "Save" : "Lagre",
+    "seconds ago" : "sekunder siden",
     "Today" : "I dag",
     "Tomorrow" : "I morgen",
     "No due" : "Ingen forfall"
