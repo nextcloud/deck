@@ -6,6 +6,7 @@
 import { CardApi } from './../services/CardApi.js'
 import moment from 'moment'
 import Vue from 'vue'
+import { useTrashbinStore } from '../stores/trashbin.js'
 
 const apiClient = new CardApi()
 
@@ -323,7 +324,7 @@ export default function cardModuleFactory() {
 			async deleteCard({ commit }, card) {
 				await apiClient.deleteCard(card.id)
 				commit('deleteCard', card)
-				commit('moveCardToTrash', card)
+				useTrashbinStore().moveCardToTrash(card)
 			},
 			async archiveUnarchiveCard({ commit }, card) {
 				let call = 'archiveCard'
