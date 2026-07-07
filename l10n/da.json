@@ -223,7 +223,6 @@
     "Assign to me" : "Tildel til mig",
     "Unassign myself" : "Fjern mig selv",
     "Delete card" : "Slet kort",
-    "seconds ago" : "få sekunder siden",
     "All boards" : "Alle tavler",
     "Archived boards" : "Arkiverede lister",
     "Shared with you" : "Delt med dig",
@@ -282,6 +281,7 @@
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nået sin forfaldsdato.",
     "No participants found" : "Ingen deltagere fundet",
     "Save" : "Gem",
+    "seconds ago" : "få sekunder siden",
     "Today" : "I dag",
     "Tomorrow" : "I morgen",
     "No due" : "Ikke forfalden"

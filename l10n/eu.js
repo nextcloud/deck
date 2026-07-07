@@ -304,7 +304,6 @@ OC.L10N.register(
     "Assign to me" : "Esleitu niri",
     "Unassign myself" : "Niri esleitzeari utzi",
     "Delete card" : "Ezabatu txartela",
-    "seconds ago" : "segundo lehenago",
     "All boards" : "Taula guztiak",
     "Archived boards" : "Artxibatutako taulak",
     "Shared with you" : "Zurekin partekatua",
@@ -376,6 +375,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Erabiltzaileak, taldeak, lantaldeak... bilatzen",
     "No participants found" : "Ez da parte-hartzailerik aurkitu",
     "Save" : "Gorde",
+    "seconds ago" : "segundo lehenago",
     "Today" : "Gaur",
     "Tomorrow" : "Bihar",
     "No due" : "Epemugarik ez"

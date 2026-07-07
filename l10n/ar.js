@@ -315,7 +315,6 @@ OC.L10N.register(
     "Assign to me" : "ينسب لي",
     "Unassign myself" : "إلغاء تعييني ",
     "Delete card" : "حذف البطاقة",
-    "seconds ago" : "ثوانٍ مضت",
     "All boards" : "جميع الالواح",
     "Archived boards" : "الالواح المؤرشفة",
     "Shared with you" : "تم مشاركتها معك",
@@ -393,6 +392,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "البحث عن مستخدِمين، أو مجموعات، أو فرق",
     "No participants found" : "لم يتم العثور على مشاركين",
     "Save" : "حفظ",
+    "seconds ago" : "ثوانٍ مضت",
     "Today" : "اليوم",
     "Tomorrow" : "غدا",
     "No due" : "غير محدد"

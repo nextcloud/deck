@@ -30,10 +30,10 @@ OC.L10N.register(
     "Update" : "යාවත්කාල",
     "Description" : "විස්තරය",
     "Select Date" : "දිනය තෝරන්න",
-    "seconds ago" : "තත්පර කිහිපයකට පෙර",
     "Close" : "වසන්න",
     "Share" : "බෙදාගන්න",
     "Save" : "සුරකින්න",
+    "seconds ago" : "තත්පර කිහිපයකට පෙර",
     "Today" : "අද",
     "Tomorrow" : "හෙට"
 },

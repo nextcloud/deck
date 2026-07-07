@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Priskirti sau",
     "Unassign myself" : "Atšaukti savo priskyrimą",
     "Delete card" : "Ištrinti kortelę",
-    "seconds ago" : "prieš keletą sekundžių",
     "All boards" : "Visos lentos",
     "Archived boards" : "Archyvuotos lentos",
     "Shared with you" : "Bendrinama su jumis",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Ieškoti vartotojų, grupių ar komandų…",
     "No participants found" : "Nerasta jokių dalyvių",
     "Save" : "Įrašyti",
+    "seconds ago" : "prieš keletą sekundžių",
     "Today" : "Šiandien",
     "Tomorrow" : "Rytoj",
     "No due" : "Be galutinio termino"

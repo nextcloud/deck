@@ -60,7 +60,6 @@ OC.L10N.register(
     "Archive card" : "Arxiv kartasi",
     "Edit title" : "Sarlavhani tahrirlash",
     "Delete card" : "Kartani o'chirish",
-    "seconds ago" : "seconds ago",
     "Archived boards" : "Arxivlangan taxtalar",
     "Shared with you" : "Shared with you",
     "Cancel edit" : "Tahrirni bekor qilish",
@@ -79,6 +78,7 @@ OC.L10N.register(
     "Modified" : "Modified",
     "Share" : "Ulashish",
     "Save" : "Saqlash",
+    "seconds ago" : "seconds ago",
     "Today" : "Today",
     "Tomorrow" : "Ertaga"
 },

@@ -21,13 +21,13 @@ OC.L10N.register(
     "Created:" : "உருவாக்கப்பட்டது:",
     "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
-    "seconds ago" : "செக்கன்களுக்கு முன்",
     "Shared with you" : "Shared with you",
     "Export" : "ஏற்றுமதி",
     "Close" : "மூடுக",
     "Modified" : "மாற்றப்பட்டது",
     "Share" : "பகிர்வு",
     "Save" : "சேமிக்க ",
+    "seconds ago" : "செக்கன்களுக்கு முன்",
     "Today" : "இன்று"
 },
 "nplurals=2; plural=(n != 1);");

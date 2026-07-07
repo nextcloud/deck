@@ -309,7 +309,6 @@ OC.L10N.register(
     "Assign to me" : "自分に割り当てる",
     "Unassign myself" : "自分への割り当てを解除",
     "Delete card" : "カードを削除する",
-    "seconds ago" : "数秒前",
     "All boards" : "すべてのボード",
     "Archived boards" : "アーカイブ済みのボード",
     "Shared with you" : "あなたと共有済み",
@@ -380,6 +379,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "ユーザー、グループ、チームの検索中...",
     "No participants found" : "参加者が見つかりません",
     "Save" : "保存",
+    "seconds ago" : "数秒前",
     "Today" : "今日",
     "Tomorrow" : "明日",
     "No due" : "日付なし"

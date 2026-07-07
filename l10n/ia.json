@@ -31,7 +31,6 @@
     "Update" : "Actualisation",
     "Description" : "Description",
     "(group)" : "(gruppo)",
-    "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
     "Advanced options" : "Optiones avantiate",
@@ -40,6 +39,7 @@
     "Modified" : "Modificate",
     "Share" : "Compartir",
     "Save" : "Salveguardar",
+    "seconds ago" : "secundas passate",
     "Today" : "Hodie",
     "Tomorrow" : "Deman"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

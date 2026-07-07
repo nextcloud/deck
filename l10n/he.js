@@ -223,7 +223,6 @@ OC.L10N.register(
     "Assign to me" : "הקצאה אלי",
     "Unassign myself" : "לבטל את הקצאת עצמי",
     "Delete card" : "מחיקת כרטיס לארכיון",
-    "seconds ago" : "לפני מספר שניות",
     "All boards" : "כל הלוחות",
     "Archived boards" : "לוחות שנשמרו בארכיון",
     "Shared with you" : "משותף אתך",
@@ -268,6 +267,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "הכרטיס „%s” שתחת „%s” הגיע למועד התפוגה שלו.",
     "No participants found" : "לא נמצאו משתתפים",
     "Save" : "שמור",
+    "seconds ago" : "לפני מספר שניות",
     "Today" : "היום",
     "Tomorrow" : "מחר",
     "No due" : "אין תאריך יעד"

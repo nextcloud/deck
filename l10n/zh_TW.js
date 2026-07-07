@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "分配給我",
     "Unassign myself" : "取消分配給我",
     "Delete card" : "刪除卡片",
-    "seconds ago" : "幾秒前",
     "All boards" : "所有佈告欄",
     "Archived boards" : "已封存的佈告欄",
     "Shared with you" : "與您分享",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "搜尋使用者、群組與團隊……",
     "No participants found" : "找不到參與者",
     "Save" : "儲存",
+    "seconds ago" : "幾秒前",
     "Today" : "今天",
     "Tomorrow" : "明天",
     "No due" : "無到期日"

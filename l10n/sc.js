@@ -229,7 +229,6 @@ OC.L10N.register(
     "Assign to me" : "Assigna a mie",
     "Unassign myself" : "Annulla s'assignatzione a mie",
     "Delete card" : "Cantzella ischeda",
-    "seconds ago" : "segundos a immoe",
     "All boards" : "Totu is lavagnas",
     "Archived boards" : "Lavagnas archiviadas",
     "Shared with you" : "Cumpartzidu cun tegus",
@@ -286,6 +285,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "S'ischeda \"%s\" in \"%s\" est cròmpida a sa data de iscadèntzia.",
     "No participants found" : "Perunu partetzipante agatadu",
     "Save" : "Sarva",
+    "seconds ago" : "segundos a immoe",
     "Today" : "Oe",
     "Tomorrow" : "Cras",
     "No due" : "Peruna iscadèntzia"

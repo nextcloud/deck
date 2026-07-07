@@ -277,7 +277,6 @@ OC.L10N.register(
     "Assign to me" : "Atribuie-mi mie",
     "Unassign myself" : "Dezasociază-mi-l",
     "Delete card" : "Șterge card",
-    "seconds ago" : "secunde în urmă",
     "All boards" : "Toate panourile",
     "Archived boards" : "Panouri arhivate",
     "Shared with you" : "Partajat cu tine",
@@ -345,6 +344,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Cardul \"%s\" din \"%s\" a ajuns la scadență.",
     "No participants found" : "Nu s-au găsit participanți",
     "Save" : "Salvează",
+    "seconds ago" : "secunde în urmă",
     "Today" : "Azi",
     "Tomorrow" : "Mâine",
     "No due" : "Fără scadență"

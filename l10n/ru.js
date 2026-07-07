@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Назначить себе",
     "Unassign myself" : "Отказаться от назначения",
     "Delete card" : "Удалить",
-    "seconds ago" : "несколько секунд назад",
     "All boards" : "Все доски",
     "Archived boards" : "Архив досок",
     "Shared with you" : "Предоставленные вам",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Поиск пользователей, групп и команд…",
     "No participants found" : "Не удалось найти ни одного участника",
     "Save" : "Сохранить",
+    "seconds ago" : "несколько секунд назад",
     "Today" : "Сегодня",
     "Tomorrow" : "Завтра",
     "No due" : "Без назначенной даты"

@@ -252,7 +252,6 @@ OC.L10N.register(
     "Assign to me" : "Asignarme la tarjeta",
     "Unassign myself" : "Desasignarme la tarjeta",
     "Delete card" : "Eliminar tarjeta",
-    "seconds ago" : "hace segundos",
     "All boards" : "Todos los tableros",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido con usted",
@@ -318,6 +317,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "No participants found" : "No se encontraron participantes",
     "Save" : "Guardar",
+    "seconds ago" : "hace segundos",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "No due" : "Sin vencimiento"

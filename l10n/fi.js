@@ -230,7 +230,6 @@ OC.L10N.register(
     "Assign to me" : "Määritä minulle",
     "Unassign myself" : "Poista määritys minulta",
     "Delete card" : "Poista kortti",
-    "seconds ago" : "sekuntia sitten",
     "All boards" : "Kaikki taulut",
     "Archived boards" : "Arkistoidut taulut",
     "Shared with you" : "Jaettu kanssasi",
@@ -286,6 +285,7 @@ OC.L10N.register(
     "Share board with a user, group or team …" : "Jaa taulu käyttäjän, ryhmän tai tiimin kanssa...",
     "No participants found" : "Ei osallistujia löydetty",
     "Save" : "Tallenna",
+    "seconds ago" : "sekuntia sitten",
     "Today" : "Tänään",
     "Tomorrow" : "Huomenna"
 },

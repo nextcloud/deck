@@ -309,7 +309,6 @@ OC.L10N.register(
     "Assign to me" : "Надад оноох",
     "Unassign myself" : "Өөрийгөө хасах",
     "Delete card" : "Карт устгах",
-    "seconds ago" : "—Ö–æ—ë—Ä–¥–∞—Ö—å ”©–º–Ω”©",
     "All boards" : "Бүх самбар",
     "Archived boards" : "Архивлагдсан самбарууд",
     "Shared with you" : "—Ç–∞–Ω—Ç–∞–π —Ö—É–≤–∞–∞–ª—Ü—Å–∞–Ω",
@@ -397,6 +396,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "\"%s\" дээрх \"%s\" картын хугацаа дууслаа.",
     "No participants found" : "Оролцогч олдсонгүй",
     "Save" : "–•–∞–¥–≥–∞–ª–∞—Ö",
+    "seconds ago" : "—Ö–æ—ë—Ä–¥–∞—Ö—å ”©–º–Ω”©",
     "Today" : "”©–Ω”©”©–¥”©—Ä",
     "Tomorrow" : "–º–∞—Ä–≥–∞–∞—à",
     "No due" : "Дуусах огноо байхгүй"
