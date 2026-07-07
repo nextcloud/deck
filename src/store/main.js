@@ -14,7 +14,6 @@ import { BoardApi } from '../services/BoardApi.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
 import attachment from './attachment.js'
-import overview from './overview.js'
 Vue.use(Vuex)
 
 const apiClient = new BoardApi()
@@ -35,7 +34,6 @@ export default function storeFactory() {
 			stack: stackModuleFactory(),
 			card: cardModuleFactory(),
 			attachment,
-			overview,
 		},
 		strict: debug,
 		state: {
