@@ -13,7 +13,6 @@ import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
 import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
-import attachment from './attachment.js'
 Vue.use(Vuex)
 
 const apiClient = new BoardApi()
@@ -33,7 +32,6 @@ export default function storeFactory() {
 		modules: {
 			stack: stackModuleFactory(),
 			card: cardModuleFactory(),
-			attachment,
 		},
 		strict: debug,
 		state: {

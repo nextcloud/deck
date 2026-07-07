@@ -6,6 +6,8 @@ import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 // eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue'
+import { mapActions } from 'pinia'
+import { useAttachmentStore } from '../stores/attachment.js'
 
 const queue = new PQueue({ concurrency: 2 })
 
@@ -33,7 +35,7 @@ export default {
 			bodyFormData.append('file', file)
 			await queue.add(async () => {
 				try {
-					await this.$store.dispatch('createAttachment', {
+					await this.createAttachment({
 						cardId: this.cardId,
 						formData: bodyFormData,
 						onUploadProgress: (e) => {
@@ -54,13 +56,17 @@ export default {
 			})
 
 		},
+		...mapActions(useAttachmentStore, [
+			'createAttachment',
+			'updateAttachment',
+		]),
 
 		overrideAttachment() {
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', this.file)
-			this.$store.dispatch('updateAttachment', {
+			this.updateAttachment({
 				cardId: this.cardId,
 				attachment: this.overwriteAttachment,
 				formData: bodyFormData,
