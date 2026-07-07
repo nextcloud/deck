@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Anna täitmiseks mulle",
     "Unassign myself" : "Võta endalt see ülesanne ära",
     "Delete card" : "Kustuta kaart",
-    "seconds ago" : "sekundit tagasi",
     "All boards" : "Kõik tahvlid",
     "Archived boards" : "Arhiveeritud tahvlid",
     "Shared with you" : "Sinuga jagatud",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Otsin kasutajaid, gruppe või tiime…",
     "No participants found" : "Osalejaid ei leidu",
     "Save" : "Salvesta",
+    "seconds ago" : "sekundit tagasi",
     "Today" : "Täna",
     "Tomorrow" : "Homme",
     "No due" : "Tähtaega pole"

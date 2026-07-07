@@ -314,7 +314,6 @@ OC.L10N.register(
     "Assign to me" : "Assigna'm a mi",
     "Unassign myself" : "Desasignar a mi mateix",
     "Delete card" : "Suprimeix targeta",
-    "seconds ago" : "fa uns segons",
     "All boards" : "Tots els taulers",
     "Archived boards" : "Taulers arxivats",
     "Shared with you" : "Us han compartit",
@@ -392,6 +391,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Cercant usuaris, grups i equips …",
     "No participants found" : "No s'han trobat participants",
     "Save" : "Desa",
+    "seconds ago" : "fa uns segons",
     "Today" : "Avui",
     "Tomorrow" : "Demà",
     "No due" : "Sense venciment"

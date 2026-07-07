@@ -322,7 +322,6 @@ OC.L10N.register(
     "Assign to me" : "ماڭا تاپشۇرۇڭ",
     "Unassign myself" : "ئۆزۈمنى بەلگىلىمەڭ",
     "Delete card" : "كارتىنى ئۆچۈرۈڭ",
-    "seconds ago" : "سېكۇنت بۇرۇن",
     "All boards" : "بارلىق تاختايلار",
     "Archived boards" : "ئارخىپ تاختىسى",
     "Shared with you" : "سىز بىلەن ھەمبەھىرلىدى",
@@ -413,6 +412,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "ئىشلەتكۈچى ، گۇرۇپپا ۋە گۇرۇپپىلارنى ئىزدەش…",
     "No participants found" : "قاتناشقۇچىلار تېپىلمىدى",
     "Save" : "ساقلا",
+    "seconds ago" : "سېكۇنت بۇرۇن",
     "Today" : "بۈگۈن",
     "Tomorrow" : "ئەتە",
     "No due" : "مۇۋاپىق ئەمەس"

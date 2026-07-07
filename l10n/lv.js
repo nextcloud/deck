@@ -74,7 +74,6 @@ OC.L10N.register(
     "Set due date for later today" : "Iestatīt beigu datumu vēlāk šodienā",
     "(group)" : "(grupa)",
     "Open link" : "Atvērt saiti",
-    "seconds ago" : "pirms vairākām sekundēm",
     "Shared with you" : "Koplietots ar tevi",
     "No reminder" : "Nav atgādinājuma",
     "An error occurred" : "Gadījās kļūda",
@@ -90,6 +89,7 @@ OC.L10N.register(
     "Share" : "Koplietot",
     "Searching for users, groups and teams …" : "Meklē lietotājus, kopas un komandas …",
     "Save" : "Saglabāt",
+    "seconds ago" : "pirms vairākām sekundēm",
     "Today" : "Šodien",
     "Tomorrow" : "Rīt"
 },

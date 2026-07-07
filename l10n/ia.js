@@ -33,7 +33,6 @@ OC.L10N.register(
     "Update" : "Actualisation",
     "Description" : "Description",
     "(group)" : "(gruppo)",
-    "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
     "Advanced options" : "Optiones avantiate",
@@ -42,6 +41,7 @@ OC.L10N.register(
     "Modified" : "Modificate",
     "Share" : "Compartir",
     "Save" : "Salveguardar",
+    "seconds ago" : "secundas passate",
     "Today" : "Hodie",
     "Tomorrow" : "Deman"
 },

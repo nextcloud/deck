@@ -304,7 +304,6 @@ OC.L10N.register(
     "Assign to me" : "나에게 할당",
     "Unassign myself" : "스스로를 할당 해제",
     "Delete card" : "카드 삭제",
-    "seconds ago" : "초 전",
     "All boards" : "모든 보드",
     "Archived boards" : "보관된 게시판",
     "Shared with you" : "나와 공유됨",
@@ -374,6 +373,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "사용자, 그룹, 팀 검색 중…",
     "No participants found" : "참가자를 찾을 수 없음",
     "Save" : "저장",
+    "seconds ago" : "초 전",
     "Today" : "오늘",
     "Tomorrow" : "내일",
     "No due" : "기한 없음"

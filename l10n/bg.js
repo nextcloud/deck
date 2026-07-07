@@ -260,7 +260,6 @@ OC.L10N.register(
     "Assign to me" : "Зачисляване към мен",
     "Unassign myself" : "Отмяна на зачисляването към мен",
     "Delete card" : "Изтриване на карта",
-    "seconds ago" : "преди секунди",
     "All boards" : "Всички табла",
     "Archived boards" : "Архивирани табла",
     "Shared with you" : "Споделени с вас",
@@ -326,6 +325,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Картата \"%s\" on \"%s\" е достигнала датата на падежа си.",
     "No participants found" : "Няма намерени участници",
     "Save" : "Запазване",
+    "seconds ago" : "преди секунди",
     "Today" : "Днес",
     "Tomorrow" : "Утре",
     "No due" : "Не се дължи"

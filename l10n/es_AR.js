@@ -91,7 +91,6 @@ OC.L10N.register(
     "Select Date" : "Seleccionar fecha",
     "Remove due date" : "Eliminar fecha de vencimiento",
     "(group)" : "(grupo)",
-    "seconds ago" : "segundos",
     "All boards" : "Todos los Tableros",
     "Shared with you" : "Compartido con usted",
     "An error occurred" : "Ocurrió un error",
@@ -115,6 +114,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
     "Share" : "Compartir",
     "Save" : "Guardar",
+    "seconds ago" : "segundos",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "No due" : "Sin finalizar"

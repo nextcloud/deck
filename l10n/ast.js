@@ -95,7 +95,6 @@ OC.L10N.register(
     "(group)" : "(grupu)",
     "Edit title" : "Editar el títulu",
     "Delete card" : "Desaniciar la tarxeta",
-    "seconds ago" : "hai segundos",
     "Shared with you" : "Compartióse contigo",
     "Cancel edit" : "Anular la edición",
     "All cards" : "Toles tarxetes",
@@ -114,6 +113,7 @@ OC.L10N.register(
     "Error creating the share" : "Hebo un error al crear la compartición",
     "Share" : "Compartir",
     "Save" : "Guardar",
+    "seconds ago" : "hai segundos",
     "Today" : "Güei",
     "Tomorrow" : "Mañana"
 },

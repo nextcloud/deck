@@ -26,7 +26,6 @@ OC.L10N.register(
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "Description" : "Beschreiwung",
-    "seconds ago" : "Sekonnen hier",
     "Shared with you" : "Mat dir gedeelt",
     "Advanced options" : "Erweidert Astellungen",
     "Export" : "Exportéieren",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Modified" : "Geännert",
     "Share" : "Deelen",
     "Save" : "Späicheren",
+    "seconds ago" : "Sekonnen hier",
     "Today" : "Haut",
     "Tomorrow" : "Muer"
 },

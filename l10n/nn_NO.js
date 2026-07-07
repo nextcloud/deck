@@ -28,7 +28,6 @@ OC.L10N.register(
     "Reply" : "Svare",
     "Update" : "Oppdater",
     "Description" : "Skildring",
-    "seconds ago" : "sekund sidan",
     "Shared with you" : "Shared with you",
     "An error occurred" : "Det oppstod ein feil.",
     "Export" : "Eksporter",
@@ -37,6 +36,7 @@ OC.L10N.register(
     "Modified" : "Endra",
     "Share" : "Del",
     "Save" : "Lagre",
+    "seconds ago" : "sekund sidan",
     "Today" : "I dag"
 },
 "nplurals=2; plural=(n != 1);");

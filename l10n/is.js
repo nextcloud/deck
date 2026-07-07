@@ -313,7 +313,6 @@ OC.L10N.register(
     "Assign to me" : "Úthluta mér",
     "Unassign myself" : "Aftengja úthlutun sjálfs mín",
     "Delete card" : "Eyða spjaldi",
-    "seconds ago" : "sekúndum síðan",
     "All boards" : "Öll borð",
     "Archived boards" : "Borð í geymslu",
     "Shared with you" : "Deilt með þér",
@@ -389,6 +388,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Leita að notendum, hópum og teymum …",
     "No participants found" : "No participants found",
     "Save" : "Vista",
+    "seconds ago" : "sekúndum síðan",
     "Today" : "Í dag",
     "Tomorrow" : "Á morgun",
     "No due" : "Enginn skilatími"
