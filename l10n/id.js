@@ -322,7 +322,6 @@ OC.L10N.register(
     "Assign to me" : "Tugaskan saya",
     "Unassign myself" : "Batalkan penetapan diri saya",
     "Delete card" : "Hapus kartu",
-    "seconds ago" : "beberapa detik yang lalu",
     "All boards" : "Semua papan",
     "Archived boards" : "Papan terarsip",
     "Shared with you" : "Shared with you",
@@ -413,6 +412,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Mencari pengguna, grup, dan tim …",
     "No participants found" : "Tidak ada peserta ditemukan",
     "Save" : "Simpan",
+    "seconds ago" : "beberapa detik yang lalu",
     "Today" : "Hari ini",
     "Tomorrow" : "Besok",
     "No due" : "Tanpa jatuh tempo"

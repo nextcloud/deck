@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Bana ata",
     "Unassign myself" : "Kendi atamamı kaldır",
     "Delete card" : "Kartı sil",
-    "seconds ago" : "saniye önce",
     "All boards" : "Tüm panolar",
     "Archived boards" : "Arşivlenmiş panolar",
     "Shared with you" : "Sizinle paylaşıldı",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Kullanıcılar, gruplar ve takımlar aranıyor…",
     "No participants found" : "Herhangi bir katılımcı bulunamadı",
     "Save" : "Kaydet",
+    "seconds ago" : "saniye önce",
     "Today" : "Bugün",
     "Tomorrow" : "Yarın",
     "No due" : "Bitiş yok"

@@ -320,7 +320,6 @@ OC.L10N.register(
     "Assign to me" : "Ανάθεση σε εμένα",
     "Unassign myself" : "Αποδέσμευσή μου",
     "Delete card" : "Διαγραφή καρτέλας",
-    "seconds ago" : " δευτερόλεπτα πριν ",
     "All boards" : "Όλοι οι πίνακες",
     "Archived boards" : "Αρχειοθέτηση πινάκων ",
     "Shared with you" : "Διαμοιρασμένα μαζί σας",
@@ -407,6 +406,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Αναζήτηση χρηστών, ομάδων και teams …",
     "No participants found" : "Δε βρέθηκαν συμμετέχοντες",
     "Save" : "Αποθήκευση",
+    "seconds ago" : " δευτερόλεπτα πριν ",
     "Today" : "Σήμερα",
     "Tomorrow" : "Αύριο",
     "No due" : "Χωρίς λήξη"

@@ -30,13 +30,13 @@
     "Update" : "Yenilənmə",
     "Description" : "Açıqlanma",
     "(group)" : "(qrup)",
-    "seconds ago" : "saniyələr öncə",
     "Shared with you" : "Shared with you",
     "Export" : "Çıxarış",
     "Close" : "Bağla",
     "Modified" : "Dəyişdirildi",
     "Share" : "Paylaş",
     "Save" : "Saxla",
+    "seconds ago" : "saniyələr öncə",
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -316,7 +316,6 @@ OC.L10N.register(
     "Assign to me" : "Phân công cho tôi",
     "Unassign myself" : "Hủy bỏ phân công cho tôi",
     "Delete card" : "Xoá thẻ",
-    "seconds ago" : "vài giây trước",
     "All boards" : "Tất cả các bảng",
     "Archived boards" : "Dự án đã lưu trữ",
     "Shared with you" : "Đã chia sẻ với bạn",
@@ -401,6 +400,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Đang tìm kiếm người dùng, nhóm và đội ...",
     "No participants found" : "Không tìm thấy người tham gia",
     "Save" : "Lưu",
+    "seconds ago" : "vài giây trước",
     "Today" : "Hôm nay",
     "Tomorrow" : "Ngày mai",
     "No due" : "Không có ngày hết hạn"

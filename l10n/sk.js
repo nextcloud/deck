@@ -331,7 +331,6 @@ OC.L10N.register(
     "Assign to me" : "Priradiť mne",
     "Unassign myself" : "Zrušiť priradenie mne",
     "Delete card" : "Zmazať kartu",
-    "seconds ago" : "pred niekoľkými sekundami",
     "All boards" : "Všetky nástenky",
     "Archived boards" : "Archivované nástenky",
     "Shared with you" : "Vám sprístupnené",
@@ -424,6 +423,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Vyhľadávam užívateľov, skupiny a tímy ...",
     "No participants found" : "Nenašli sa žiadni účastníci",
     "Save" : "Uložiť",
+    "seconds ago" : "pred niekoľkými sekundami",
     "Today" : "Dnes",
     "Tomorrow" : "Zajtra",
     "No due" : "Žiadny termín dokončenia"

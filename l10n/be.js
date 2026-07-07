@@ -72,7 +72,6 @@ OC.L10N.register(
     "Todo items" : "Элементы спісу задач",
     "Open link" : "Адкрыць спасылку",
     "Edit title" : "Рэдагаваць загаловак",
-    "seconds ago" : "с таму",
     "Shared with you" : "Абагулена з вамі",
     "Cancel edit" : "Скасаваць рэдагаванне",
     "An error occurred" : "Узнікла памылка",
@@ -87,6 +86,7 @@ OC.L10N.register(
     "Modified" : "Зменены",
     "Share" : "Абагуліць",
     "Save" : "Захаваць",
+    "seconds ago" : "с таму",
     "Today" : "Сёння",
     "Tomorrow" : "Заўтра"
 },

@@ -21,13 +21,13 @@ OC.L10N.register(
     "Reply" : "ឆ្លើយតប",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
     "Description" : "ការ​អធិប្បាយ",
-    "seconds ago" : "វិនាទី​មុន",
     "Shared with you" : "Shared with you",
     "Export" : "នាំចេញ",
     "Close" : "បិទ",
     "Modified" : "បាន​កែ​ប្រែ",
     "Share" : "ចែក​រំលែក",
     "Save" : "រក្សាទុក",
+    "seconds ago" : "វិនាទី​មុន",
     "Today" : "ថ្ងៃ​នេះ"
 },
 "nplurals=1; plural=0;");

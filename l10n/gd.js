@@ -25,11 +25,11 @@ OC.L10N.register(
     "Delete" : "Sguab às",
     "Edit" : "Deasaich",
     "Download" : "Luchdaich a-nuas",
-    "seconds ago" : "diog air ais",
     "No notifications" : "Gun bhrath",
     "Close" : "Dùin",
     "Share" : "Co-roinn",
     "Save" : "Sàbhail",
+    "seconds ago" : "diog air ais",
     "Today" : "An-diugh"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");

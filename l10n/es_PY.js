@@ -48,7 +48,6 @@ OC.L10N.register(
     "Formatting help" : "Ayuda de formato",
     "Remove due date" : "Eliminar fecha de expiración",
     "(group)" : "(grupo)",
-    "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido con usted",
     "An error occurred" : "Se presentó un error",
@@ -67,6 +66,7 @@ OC.L10N.register(
     "Share" : "Compartir",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "Save" : "Guardar",
+    "seconds ago" : "hace segundos",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana"
 },

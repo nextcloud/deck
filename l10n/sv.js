@@ -345,7 +345,6 @@ OC.L10N.register(
     "Assign to me" : "Tilldela till mig",
     "Unassign myself" : "Ta bort från mig själv",
     "Delete card" : "Ta bort kort",
-    "seconds ago" : "sekunder sedan",
     "All boards" : "Alla tavlor",
     "Archived boards" : "Arkiverade tavlor",
     "Shared with you" : "Delad med dig",
@@ -438,6 +437,7 @@ OC.L10N.register(
     "Searching for users, groups and teams …" : "Söker efter användare, grupper och team …",
     "No participants found" : "Inga deltagare hittades",
     "Save" : "Spara",
+    "seconds ago" : "sekunder sedan",
     "Today" : "Idag",
     "Tomorrow" : "Imorgon",
     "No due" : "Inget slut"
