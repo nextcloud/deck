@@ -392,7 +392,7 @@ OC.L10N.register(
     "Export {boardTitle}" : "Експорт {boardTitle}",
     "Export as JSON" : "Експорт як JSON",
     "Export as CSV" : "Експорт у CSV",
-    "Note: Only the JSON format is supported for importing back into the Deck app." : "Примітка: Для імпорту в додаток Deck підтримується лише формат JSON.",
+    "Note: Only the JSON format is supported for importing back into the Deck app." : "Примітка: Дані для імпорту до застосунку Колоди підтримуються лише у форматі JSON.",
     "Export" : "Експортувати",
     "Loading filtered view" : "Завантаження відфільтрованого перегляду",
     "Search for {searchQuery} in other boards" : "Шукати {searchQuery} на інших дошках",
