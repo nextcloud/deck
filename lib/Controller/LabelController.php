@@ -36,4 +36,9 @@ class LabelController extends Controller {
 	public function delete(int $labelId): Label {
 		return $this->labelService->delete($labelId);
 	}
+
+	#[NoAdminRequired]
+	public function reorder(int $boardId, array $labelIds): array {
+		return $this->labelService->reorder($boardId, $labelIds);
+	}
 }

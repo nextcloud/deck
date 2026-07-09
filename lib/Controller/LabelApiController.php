@@ -76,4 +76,15 @@ class LabelApiController extends ApiController {
 		$label = $this->labelService->delete($this->request->getParam('labelId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
+
+	/**
+	 * Reorder the labels of a board
+	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function reorder(int $boardId, array $labelIds): DataResponse {
+		$labels = $this->labelService->reorder($boardId, $labelIds);
+		return new DataResponse($labels, HTTP::STATUS_OK);
+	}
 }

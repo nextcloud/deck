@@ -75,6 +75,7 @@ return [
 		['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],
 		['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
 		['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
+		['name' => 'label#reorder', 'url' => '/boards/{boardId}/labels/reorder', 'verb' => 'PUT'],
 
 		// api
 		['name' => 'board_api#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
@@ -116,6 +117,9 @@ return [
 
 		['name' => 'label_api#get', 'url' => '/api/v{apiVersion}/boards/{boardId}/labels/{labelId}', 'verb' => 'GET'],
 		['name' => 'label_api#create', 'url' => '/api/v{apiVersion}/boards/{boardId}/labels', 'verb' => 'POST'],
+		// must be registered before label_api#update: both are PUT and {labelId} would otherwise
+		// greedily match the literal "reorder" segment, since Symfony routing resolves in declaration order
+		['name' => 'label_api#reorder', 'url' => '/api/v{apiVersion}/boards/{boardId}/labels/reorder', 'verb' => 'PUT'],
 		['name' => 'label_api#update', 'url' => '/api/v{apiVersion}/boards/{boardId}/labels/{labelId}', 'verb' => 'PUT'],
 		['name' => 'label_api#delete', 'url' => '/api/v{apiVersion}/boards/{boardId}/labels/{labelId}', 'verb' => 'DELETE'],
 

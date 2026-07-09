@@ -60,6 +60,16 @@ class LabelService {
 		$label->setTitle($title);
 		$label->setColor($color);
 		$label->setBoardId($boardId);
+		$existingLabels = $this->labelMapper->findAll($boardId);
+		$maxOrder = null;
+		foreach ($existingLabels as $existingLabel) {
+			if ($existingLabel->getOrder() !== null) {
+				$maxOrder = $maxOrder === null ? $existingLabel->getOrder() : max($maxOrder, $existingLabel->getOrder());
+			}
+		}
+		if ($maxOrder !== null) {
+			$label->setOrder($maxOrder + 1);
+		}
 		$this->changeHelper->boardChanged($boardId);
 
 		return $this->labelMapper->insert($label);
@@ -124,5 +134,48 @@ class LabelService {
 		$this->changeHelper->boardChanged($label->getBoardId());
 
 		return $this->labelMapper->update($label);
+	}
+
+	/**
+	 * Set the manual sort order of all labels of a board.
+	 *
+	 * @param int[] $labelIds every label id of the board, in the wanted order
+	 * @return Label[] the board labels in their new order
+	 * @throws BadRequestException
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 */
+	public function reorder(int $boardId, array $labelIds): array {
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+
+		if ($this->boardService->isArchived(null, $boardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+
+		$byId = [];
+		foreach ($this->labelMapper->findAll($boardId) as $label) {
+			$byId[$label->getId()] = $label;
+		}
+
+		$labelIds = array_values(array_unique(array_map('intval', $labelIds)));
+		foreach ($labelIds as $labelId) {
+			if (!isset($byId[$labelId])) {
+				throw new BadRequestException('Label ' . $labelId . ' does not belong to board ' . $boardId);
+			}
+		}
+		if (count($labelIds) !== count($byId)) {
+			throw new BadRequestException('The ordered list must contain every label of the board exactly once');
+		}
+
+		foreach ($labelIds as $position => $labelId) {
+			$label = $byId[$labelId];
+			if ($label->getOrder() !== $position) {
+				$label->setOrder($position);
+				$this->labelMapper->update($label);
+			}
+		}
+		$this->changeHelper->boardChanged($boardId);
+
+		return $this->labelMapper->findAll($boardId);
 	}
 }
