@@ -276,6 +276,9 @@ export default function storeFactory() {
 			addLabelToCurrentBoard(state, newLabel) {
 				state.currentBoard.labels.push(newLabel)
 			},
+			setLabelsOfCurrentBoard(state, labels) {
+				state.currentBoard.labels = labels
+			},
 
 			// acl mutators
 			addAclToCurrentBoard(state, createdAcl) {
@@ -498,6 +501,19 @@ export default function storeFactory() {
 					.then((newLabel) => {
 						commit('addLabelToCurrentBoard', newLabel)
 					})
+			},
+			async reorderLabelsOfCurrentBoard({ commit, dispatch, state }, labelIds) {
+				const previousLabels = state.currentBoard.labels
+				const labelsById = new Map(previousLabels.map((label) => [label.id, label]))
+				commit('setLabelsOfCurrentBoard', labelIds.map((id, index) => ({ ...labelsById.get(id), order: index })))
+				try {
+					const labels = await apiClient.reorderLabels(state.currentBoard.id, labelIds)
+					commit('setLabelsOfCurrentBoard', labels)
+				} catch (error) {
+					commit('setLabelsOfCurrentBoard', previousLabels)
+					throw error
+				}
+				await dispatch('loadStacks', state.currentBoard.id)
 			},
 			async addLabelToCurrentBoardAndCard({ dispatch, commit }, { newLabel, card }) {
 				newLabel.boardId = this.state.currentBoard.id

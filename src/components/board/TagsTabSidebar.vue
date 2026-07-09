@@ -5,53 +5,60 @@
 <template>
 	<div>
 		<ul class="labels">
-			<li v-for="label in labelsSorted" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
-				<!-- Edit Tag -->
-				<template v-if="editingLabelId === label.id">
-					<form class="label-form" @submit.prevent="updateLabel(label)">
-						<NcColorPicker v-model="editingLabelColor"
-							class="color-picker-wrapper"
-							:advanced-fields="true"
-							@submit="updateColor">
-							<div :style="{ backgroundColor: editingLabelColor }" class="color0 icon-colorpicker" />
-						</NcColorPicker>
-						<input v-model="editingLabel.title" type="text">
-						<input :disabled="!editLabelObjValidated"
-							type="submit"
-							value=""
-							class="icon-confirm">
-						<NcActions>
-							<NcActionButton :disabled="!editLabelObjValidated"
-								icon="icon-close"
-								@click="editingLabelId = null">
-								{{ t('deck', 'Cancel') }}
-							</NcActionButton>
-						</NcActions>
-					</form>
-					<p v-if="!editLabelObjValidated">
-						{{ missingDataLabel }}
-					</p>
-				</template>
-				<template v-else>
-					<div v-if="canManage && !isArchived" class="label-title" @click="clickEdit(label)">
-						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
-					</div>
-					<div v-else class="label-title">
-						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
-					</div>
+			<Container lock-axis="y"
+				tag="div"
+				:drag-handle-selector="canManage && !isArchived ? null : '.__nodrag__'"
+				@drop="onDropLabel">
+				<Draggable v-for="label in labelsSorted" :key="label.id">
+					<li :class="{editing: (editingLabelId === label.id)}">
+						<!-- Edit Tag -->
+						<template v-if="editingLabelId === label.id">
+							<form class="label-form" @submit.prevent="updateLabel(label)">
+								<NcColorPicker v-model="editingLabelColor"
+									class="color-picker-wrapper"
+									:advanced-fields="true"
+									@submit="updateColor">
+									<div :style="{ backgroundColor: editingLabelColor }" class="color0 icon-colorpicker" />
+								</NcColorPicker>
+								<input v-model="editingLabel.title" type="text">
+								<input :disabled="!editLabelObjValidated"
+									type="submit"
+									value=""
+									class="icon-confirm">
+								<NcActions>
+									<NcActionButton :disabled="!editLabelObjValidated"
+										icon="icon-close"
+										@click="editingLabelId = null">
+										{{ t('deck', 'Cancel') }}
+									</NcActionButton>
+								</NcActions>
+							</form>
+							<p v-if="!editLabelObjValidated">
+								{{ missingDataLabel }}
+							</p>
+						</template>
+						<template v-else>
+							<div v-if="canManage && !isArchived" class="label-title" @click="clickEdit(label)">
+								<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
+							</div>
+							<div v-else class="label-title">
+								<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
+							</div>
 
-					<NcActions v-if="canManage && !isArchived">
-						<NcActionButton icon="icon-rename" @click="clickEdit(label)">
-							{{ t('deck', 'Edit') }}
-						</NcActionButton>
-					</NcActions>
-					<NcActions v-if="canManage && !isArchived">
-						<NcActionButton icon="icon-delete" @click="deleteLabel(label.id)">
-							{{ t('deck', 'Delete') }}
-						</NcActionButton>
-					</NcActions>
-				</template>
-			</li>
+							<NcActions v-if="canManage && !isArchived">
+								<NcActionButton icon="icon-rename" @click="clickEdit(label)">
+									{{ t('deck', 'Edit') }}
+								</NcActionButton>
+							</NcActions>
+							<NcActions v-if="canManage && !isArchived">
+								<NcActionButton icon="icon-delete" @click="deleteLabel(label.id)">
+									{{ t('deck', 'Delete') }}
+								</NcActionButton>
+							</NcActions>
+						</template>
+					</li>
+				</Draggable>
+			</Container>
 
 			<li v-if="addLabel" class="editing">
 				<!-- New Tag -->
@@ -87,7 +94,10 @@
 <script>
 
 import { mapGetters } from 'vuex'
+import { Container, Draggable } from 'vue-smooth-dnd'
+import { showError } from '@nextcloud/dialogs'
 import Color from '../../mixins/color.js'
+import { sortLabels } from '../../helpers/labelSort.js'
 import { NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 
 export default {
@@ -96,6 +106,8 @@ export default {
 		NcColorPicker,
 		NcActions,
 		NcActionButton,
+		Container,
+		Draggable,
 	},
 	mixins: [Color],
 	data() {
@@ -139,7 +151,7 @@ export default {
 			return true
 		},
 		labelsSorted() {
-			return [...this.labels].sort((a, b) => a.title.localeCompare(b.title))
+			return sortLabels(this.labels)
 		},
 
 	},
@@ -173,6 +185,20 @@ export default {
 			this.addLabel = false
 			this.addLabelObj = null
 			this.addLabelColor = null
+		},
+		async onDropLabel({ removedIndex, addedIndex }) {
+			if (removedIndex === null || addedIndex === null || removedIndex === addedIndex) {
+				return
+			}
+			const ordered = [...this.labelsSorted]
+			const [moved] = ordered.splice(removedIndex, 1)
+			ordered.splice(addedIndex, 0, moved)
+			try {
+				await this.$store.dispatch('reorderLabelsOfCurrentBoard', ordered.map((label) => label.id))
+			} catch (error) {
+				console.error('Failed to reorder tags', error)
+				showError(t('deck', 'Failed to reorder tags'))
+			}
 		},
 	},
 }
