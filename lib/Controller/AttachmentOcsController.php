@@ -51,7 +51,7 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
-	public function update(int $cardId, int $attachmentId, string $data, string $type = 'file', ?int $boardId = null): DataResponse {
+	public function update(int $cardId, int $attachmentId, string $data = '', string $type = 'file', ?int $boardId = null): DataResponse {
 		$this->ensureLocalBoard($boardId);
 		$attachment = $this->attachmentService->update($cardId, $attachmentId, $data, $type);
 		return new DataResponse($attachment);
