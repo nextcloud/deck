@@ -9,7 +9,17 @@
 		:exact="true"
 		:allow-collapse="collapsible"
 		:open="opened">
-		<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
+		<Container v-if="sortable"
+			lock-axis="y"
+			tag="div"
+			@drop="onDropBoard">
+			<Draggable v-for="board in boardsSorted" :key="board.id">
+				<AppNavigationBoard :board="board" />
+			</Draggable>
+		</Container>
+		<template v-else>
+			<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
+		</template>
 		<template #icon>
 			<slot name="icon" />
 		</template>
@@ -19,12 +29,17 @@
 <script>
 import AppNavigationBoard from './AppNavigationBoard.vue'
 import { NcAppNavigationItem } from '@nextcloud/vue'
+import { Container, Draggable } from 'vue-smooth-dnd'
+import { showError } from '@nextcloud/dialogs'
+import { sortBoards } from '../../helpers/boardSort.js'
 
 export default {
 	name: 'AppNavigationBoardCategory',
 	components: {
 		NcAppNavigationItem,
 		AppNavigationBoard,
+		Container,
+		Draggable,
 	},
 	props: {
 		to: {
@@ -55,6 +70,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		sortable: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -63,7 +82,7 @@ export default {
 	},
 	computed: {
 		boardsSorted() {
-			return [...this.boards].sort((a, b) => a.title.localeCompare(b.title))
+			return sortBoards(this.boards, this.sortable ? this.$store.getters.config('boardOrder') : null)
 		},
 		collapsible() {
 			return this.boards.length > 0
@@ -79,5 +98,29 @@ export default {
 	mounted() {
 		this.opened = this.defaultOpen
 	},
+	methods: {
+		async onDropBoard({ removedIndex, addedIndex }) {
+			if (removedIndex === null || addedIndex === null || removedIndex === addedIndex) {
+				return
+			}
+			const ordered = [...this.boardsSorted]
+			const [moved] = ordered.splice(removedIndex, 1)
+			ordered.splice(addedIndex, 0, moved)
+			try {
+				await this.$store.dispatch('setConfig', { boardOrder: ordered.map((board) => board.id) })
+			} catch (error) {
+				console.error('Failed to reorder boards', error)
+				showError(t('deck', 'Failed to reorder boards'))
+			}
+		},
+	},
 }
 </script>
+
+<style lang="scss" scoped>
+.smooth-dnd-container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--default-grid-baseline, 4px);
+}
+</style>
