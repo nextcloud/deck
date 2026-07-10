@@ -503,17 +503,23 @@ export default function storeFactory() {
 					})
 			},
 			async reorderLabelsOfCurrentBoard({ commit, dispatch, state }, labelIds) {
+				const boardId = state.currentBoard.id
 				const previousLabels = state.currentBoard.labels
 				const labelsById = new Map(previousLabels.map((label) => [label.id, label]))
 				commit('setLabelsOfCurrentBoard', labelIds.map((id, index) => ({ ...labelsById.get(id), order: index })))
 				try {
-					const labels = await apiClient.reorderLabels(state.currentBoard.id, labelIds)
+					const labels = await apiClient.reorderLabels(boardId, labelIds)
+					if (state.currentBoard?.id !== boardId) {
+						return
+					}
 					commit('setLabelsOfCurrentBoard', labels)
 				} catch (error) {
-					commit('setLabelsOfCurrentBoard', previousLabels)
+					if (state.currentBoard?.id === boardId) {
+						commit('setLabelsOfCurrentBoard', previousLabels)
+					}
 					throw error
 				}
-				await dispatch('loadStacks', state.currentBoard.id)
+				await dispatch('loadStacks', boardId)
 			},
 			async addLabelToCurrentBoardAndCard({ dispatch, commit }, { newLabel, card }) {
 				newLabel.boardId = this.state.currentBoard.id

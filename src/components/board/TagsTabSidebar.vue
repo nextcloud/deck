@@ -8,6 +8,7 @@
 			<Container lock-axis="y"
 				tag="div"
 				:drag-handle-selector="canManage && !isArchived ? null : '.__nodrag__'"
+				non-drag-area-selector=".label-form"
 				@drop="onDropLabel">
 				<Draggable v-for="label in labelsSorted" :key="label.id">
 					<li :class="{editing: (editingLabelId === label.id)}">

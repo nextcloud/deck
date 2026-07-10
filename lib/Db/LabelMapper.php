@@ -114,6 +114,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	public function findAssignedLabelsForBoard(int $boardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.id as id', 'l.title as title', 'l.color as color')
+			->selectAlias('l.order', 'order')
 			->selectAlias('c.id', 'card_id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_assigned_labels', 'al', 'al.label_id = l.id')

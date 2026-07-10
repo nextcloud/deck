@@ -294,6 +294,7 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { sortLabels } from '../helpers/labelSort.js'
 
 export default {
 	name: 'Controls',
@@ -365,7 +366,7 @@ export default {
 			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.completed !== 'both'
 		},
 		labelsSorted() {
-			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+			return sortLabels(this.board.labels)
 		},
 		presentUsers() {
 			if (!this.board) return []
