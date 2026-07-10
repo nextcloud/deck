@@ -12,6 +12,7 @@
 		<Container v-if="sortable"
 			lock-axis="y"
 			tag="div"
+			non-drag-area-selector="input, .app-navigation-entry__actions"
 			@drop="onDropBoard">
 			<Draggable v-for="board in boardsSorted" :key="board.id">
 				<AppNavigationBoard :board="board" />
