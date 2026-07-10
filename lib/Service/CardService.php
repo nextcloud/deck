@@ -246,7 +246,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null, ?string $startdate = null, ?string $color = null): Card {
+	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null, ?string $startdate = null, ?OptionalNullableValue $color = null): Card {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
@@ -289,7 +289,10 @@ class CardService {
 		$card->setOrder($order);
 		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
 		$card->setStartdate($startdate ? new \DateTime($startdate) : null);
-		$card->setColor($color);
+		if ($color !== null) {
+			$colorValue = $color->getValue();
+			$card->setColor(is_string($colorValue) && $colorValue !== '' ? $colorValue : null);
+		}
 		$resetDuedateNotification = false;
 		if (
 			$card->getDuedate() === null

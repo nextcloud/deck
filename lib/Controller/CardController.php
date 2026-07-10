@@ -64,9 +64,12 @@ class CardController extends Controller {
 	 * @param $duedate
 	 */
 	#[NoAdminRequired]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, $archived = null, $startdate = null, ?string $color = null): Card {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, $archived = null, $startdate = null): Card {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
+			: null;
+		$color = array_key_exists('color', $this->request->getParams())
+			? new OptionalNullableValue($this->request->getParam('color', null))
 			: null;
 		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, $archived, $done, $startdate, $color);
 	}

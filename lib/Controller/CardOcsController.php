@@ -113,9 +113,12 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null, $startdate = null, ?string $color = null): DataResponse {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
+			: null;
+		$color = array_key_exists('color', $this->request->getParams())
+			? new OptionalNullableValue($this->request->getParam('color', null))
 			: null;
 		if (!$owner) {
 			$owner = $this->userId;
