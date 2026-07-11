@@ -46,7 +46,7 @@ class AttachmentApiController extends ApiController {
 	#[NoAdminRequired]
 	#[CORS]
 	#[NoCSRFRequired]
-	public function create(int $cardId, string $type, string $data): DataResponse {
+	public function create(int $cardId, string $type, ?string $data): DataResponse {
 		$attachment = $this->attachmentService->create($cardId, $type, $data);
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
