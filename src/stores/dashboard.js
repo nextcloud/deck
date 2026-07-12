@@ -13,8 +13,8 @@ export const useDashboardStore = defineStore('dashboard', {
 		assignedCards: [],
 	}),
 	actions: {
-		async loadUpcoming() {
-			const upcommingCards = await apiClient.get('upcoming')
+		async loadUpcoming(hideNoDueOnOverview) {
+			const upcommingCards = await apiClient.get('upcoming', hideNoDueOnOverview)
 			this.assignedCards = upcommingCards
 		},
 	},

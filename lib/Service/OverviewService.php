@@ -23,7 +23,7 @@ class OverviewService {
 	) {
 	}
 
-	public function findUpcomingCards(string $userId): array {
+	public function findUpcomingCards(string $userId, bool $filterNoDue): array {
 		$userBoards = $this->boardMapper->findAllForUser($userId);
 
 		$boardOwnerIds = array_filter(array_map(function (Board $board) {
@@ -35,9 +35,9 @@ class OverviewService {
 
 		$foundCards = array_merge(
 			// private board: get all my assigned or unassigned cards
-			$this->cardMapper->findToMeOrNotAssignedCards($boardOwnerIds, $userId),
+			$this->cardMapper->findToMeOrNotAssignedCards($boardOwnerIds, $userId, $filterNoDue),
 			// shared board: get all my assigned or unassigned cards
-			$this->cardMapper->findToMeOrNotAssignedCards($boardSharedIds, $userId)
+			$this->cardMapper->findToMeOrNotAssignedCards($boardSharedIds, $userId, $filterNoDue)
 		);
 
 		$this->cardService->enrichCards($foundCards);

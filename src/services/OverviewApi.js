@@ -12,9 +12,12 @@ export class OverviewApi {
 		return generateOcsUrl(`apps/deck/api/v1.0/${url}`)
 	}
 
-	get(filter) {
+	get(filter, hideNoDueOnOverview) {
 		return axios.get(this.url(`overview/${filter}`), {
 			headers: { 'OCS-APIRequest': 'true' },
+			params: {
+				hideNoDueOnOverview: hideNoDueOnOverview,
+			}
 		})
 			.then(
 				(response) => Promise.resolve(response.data.ocs.data),
