@@ -47,6 +47,7 @@ import CardItem from '../cards/CardItem.vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { useOverviewStore } from '../../stores/overview.js'
 import { mapActions, mapState } from 'pinia'
+import { mapGetters } from 'vuex'
 
 const FILTER_UPCOMING = 'upcoming'
 
@@ -124,7 +125,7 @@ export default {
 				this.$store.dispatch('setConfig', { hideNoDueOnOverview: newValue })
 			},
 		},
-		...mapGetters(['assignedCardsDashboard']),
+		...mapState(useOverviewStore, ['assignedCards']),
 	},
 	watch: {
 		'$route.params.filter'() {
