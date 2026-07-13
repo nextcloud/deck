@@ -49,11 +49,11 @@ export class CardApi {
 			})
 	}
 
-	deleteCard(cardId) {
-		return axios.delete(this.url(`/cards/${cardId}`))
+	deleteCard(card, boardId) {
+		return axios.delete(this.ocsUrl(`/cards/${card.id}?boardId=${boardId}`))
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -139,11 +139,11 @@ export class CardApi {
 			})
 	}
 
-	archiveCard(card) {
-		return axios.put(this.url(`/cards/${card.id}/archive`))
+	archiveCard(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}/archive`), { boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -154,11 +154,11 @@ export class CardApi {
 			})
 	}
 
-	unArchiveCard(card) {
-		return axios.put(this.url(`/cards/${card.id}/unarchive`))
+	unArchiveCard(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}/unarchive`), { boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -169,11 +169,11 @@ export class CardApi {
 			})
 	}
 
-	markCardAsDone(card) {
-		return axios.put(this.url(`/cards/${card.id}/done`))
+	markCardAsDone(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}/done`), { boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -184,11 +184,11 @@ export class CardApi {
 			})
 	}
 
-	markCardAsUndone(card) {
-		return axios.put(this.url(`/cards/${card.id}/undone`))
+	markCardAsUndone(card, boardId) {
+		return axios.put(this.ocsUrl(`/cards/${card.id}/undone`), { boardId })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
