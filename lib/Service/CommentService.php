@@ -20,6 +20,7 @@ use OCP\Comments\ICommentsManager;
 use OCP\Comments\MessageTooLongException;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudIdManager;
 use OCP\IUserManager;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OutOfBoundsException;
@@ -33,6 +34,7 @@ class CommentService {
 		private CardMapper $cardMapper,
 		private IUserManager $userManager,
 		private LoggerInterface $logger,
+		private ICloudIdManager $cloudIdManager,
 		private ?string $userId,
 		private IEventDispatcher $eventDispatcher,
 	) {
@@ -114,7 +116,7 @@ class CommentService {
 		}
 
 		try {
-			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, (string)$cardId);
+			$comment = $this->commentsManager->create('users', $this->userId ?? $this->permissionService->getUserId(), Application::COMMENT_ENTITY_TYPE, (string)$cardId);
 			$comment->setMessage($message);
 			$comment->setVerb('comment');
 			$comment->setParentId((string)$replyTo);
@@ -170,6 +172,7 @@ class CommentService {
 			'objectId' => (int)$comment->getObjectId(),
 			'message' => $comment->getMessage(),
 			'actorId' => $comment->getActorId(),
+			'actorRemote' => $this->cloudIdManager->isValidCloudId($comment->getActorId()) ? $this->cloudIdManager->resolveCloudId($comment->getActorId())->getRemote() : null,
 			'actorType' => $comment->getActorType(),
 			'actorDisplayName' => $actorDisplayName,
 			'creationDateTime' => $comment->getCreationDateTime()->format(\DateTime::ATOM),
