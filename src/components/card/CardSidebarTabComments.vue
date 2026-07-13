@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<div v-v-infinite-scroll="[infiniteHandler, {distance: 10, canLoadMore: () => commentStore.hasMoreComments(card.id)}]" class="comments">
+	<div>
 		<div class="comment--header">
 			<NcAvatar :user="currentUser.uid" />
 			<span class="username">
@@ -11,20 +11,23 @@
 			</span>
 		</div>
 
-		<CommentItem
-			v-if="commentStore.replyTo"
+		<CommentItem v-if="commentStore.replyTo"
 			:comment="commentStore.replyTo"
 			:reply="true"
 			:preview="true"
 			@cancel="cancelReply" />
-		<CommentForm v-model="newComment" @submit="createComment($event)" />
+		<CommentForm v-model="newComment" @submit="createComment" />
 
 		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
-			<CommentItem
-				v-for="comment in commentStore.getCommentsForCard(card.id)"
+			<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
 				:key="comment.id"
 				:comment="comment"
 				@doReload="loadComments" />
+			<InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
+				<div slot="spinner" class="icon-loading" />
+				<div slot="no-more" />
+				<div slot="no-results" />
+			</InfiniteLoading>
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
@@ -35,14 +38,12 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
+import { mapState } from 'vuex'
 import { NcAvatar } from '@nextcloud/vue'
-import { vInfiniteScroll } from '@vueuse/components'
-import { mapState } from 'pinia'
-import CommentForm from './CommentForm.vue'
 import CommentItem from './CommentItem.vue'
-import logger from '../../logger.js'
-import { useBoardStore } from '../../stores/board.js'
+import CommentForm from './CommentForm.vue'
+import InfiniteLoading from 'vue-infinite-loading'
+import { getCurrentUser } from '@nextcloud/auth'
 import { useCommentStore } from '../../stores/comment.js'
 
 export default {
@@ -51,30 +52,23 @@ export default {
 		NcAvatar,
 		CommentItem,
 		CommentForm,
+		InfiniteLoading,
 	},
-
-	directives: {
-		vInfiniteScroll,
-	},
-
 	props: {
 		card: {
 			type: Object,
 			default: undefined,
 		},
-
 		tabQuery: {
 			type: String,
 			required: false,
 			default: null,
 		},
 	},
-
 	setup() {
 		const commentStore = useCommentStore()
 		return { commentStore }
 	},
-
 	data() {
 		return {
 			newComment: '',
@@ -83,17 +77,14 @@ export default {
 			error: null,
 		}
 	},
-
 	computed: {
-		...mapState(useBoardStore, {
-			currentBoard: 'currentBoard',
+		...mapState({
+			currentBoard: state => state.currentBoard,
 		}),
-
 		members() {
 			return this.currentBoard.users
 		},
 	},
-
 	watch: {
 		card: {
 			immediate: true,
@@ -102,52 +93,54 @@ export default {
 			},
 		},
 	},
-
 	methods: {
-		async infiniteHandler() {
+		async infiniteHandler($state) {
 			this.error = null
 			try {
 				await this.loadMore()
+				if (this.commentStore.hasMoreComments(this.card.id)) {
+					$state.loaded()
+				} else {
+					$state.complete()
+				}
 			} catch (e) {
-				logger.error('Failed to fetch more comments during infinite loading', { error: e })
+				console.error('Failed to fetch more comments during infinite loading', e)
 				this.error = t('deck', 'Failed to load comments')
+				$state.complete()
 			}
 		},
-
 		async loadComments() {
 			this.commentStore.setReplyTo(null)
 			this.error = null
 			this.isLoading = true
 			try {
-				await this.commentStore.fetchComments({ cardId: this.card.id })
+				await this.commentStore.fetchComments({ cardId: this.card.id, boardId: this.currentBoard.id })
 				this.isLoading = false
 				if (this.card.commentsUnread > 0) {
 					await this.commentStore.markCommentsAsRead(this.card.id)
 				}
 			} catch (e) {
 				this.isLoading = false
-				logger.error('Failed to fetch more comments during infinite loading', { error: e })
+				console.error('Failed to fetch more comments during infinite loading', e)
 				this.error = t('deck', 'Failed to load comments')
 			}
 		},
-
-		async createComment(comment) {
+		async createComment(content) {
 			const commentObj = {
 				cardId: this.card.id,
-				comment,
+				comment: content,
+				boardId: this.currentBoard.id,
 			}
 			await this.commentStore.createComment(commentObj)
 			this.commentStore.setReplyTo(null)
 			this.newComment = ''
 			await this.loadComments()
 		},
-
 		async loadMore() {
 			this.isLoading = true
 			await this.commentStore.fetchMore({ cardId: this.card.id })
 			this.isLoading = false
 		},
-
 		cancelReply() {
 			this.commentStore.setReplyTo(null)
 		},
@@ -156,5 +149,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@use '../../css/comments.scss';
+	@import '../../css/comments.scss';
 </style>
