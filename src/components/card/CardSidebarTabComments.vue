@@ -114,7 +114,7 @@ export default {
 			this.error = null
 			this.isLoading = true
 			try {
-				await this.commentStore.fetchComments({ cardId: this.card.id })
+				await this.commentStore.fetchComments({ cardId: this.card.id, boardId: this.currentBoard.id })
 				this.isLoading = false
 				if (this.card.commentsUnread > 0) {
 					await this.commentStore.markCommentsAsRead(this.card.id)
@@ -129,6 +129,7 @@ export default {
 			const commentObj = {
 				cardId: this.card.id,
 				comment: content,
+				boardId: this.currentBoard.id,
 			}
 			await this.commentStore.createComment(commentObj)
 			this.commentStore.setReplyTo(null)

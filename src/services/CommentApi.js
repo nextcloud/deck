@@ -13,18 +13,19 @@ export class CommentApi {
 		return generateRemoteUrl(url)
 	}
 
-	async loadComments({ cardId, limit, offset }) {
+	async loadComments({ cardId, limit, offset, boardId }) {
 		const api = await axios.get(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/comments`), {
-			params: { limit, offset },
+			params: { limit, offset, boardId },
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 		return api.data.ocs.data
 	}
 
-	async createComment({ cardId, comment, replyTo }) {
+	async createComment({ cardId, comment, replyTo, boardId }) {
 		const api = await axios.post(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/comments`), {
 			message: `${comment}`,
 			parentId: replyTo ? replyTo.id : null,
+			boardId: boardId,
 		})
 		return api.data.ocs.data
 	}

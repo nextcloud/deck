@@ -7,9 +7,12 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CommentService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -22,6 +25,9 @@ class CommentsApiController extends OCSController {
 		string $appName,
 		IRequest $request,
 		private CommentService $commentService,
+		private BoardService $boardService,
+		private ExternalBoardService $externalBoardService,
+		private ?string $userId,
 		string $corsMethods = 'PUT, POST, GET, DELETE, PATCH',
 		string $corsAllowedHeaders = 'Authorization, Content-Type, Accept',
 		int $corsMaxAge = 1728000,
@@ -33,7 +39,14 @@ class CommentsApiController extends OCSController {
 	 * @throws StatusException
 	 */
 	#[NoAdminRequired]
-	public function list(int $cardId, int $limit = 20, int $offset = 0): DataResponse {
+	#[PublicPage]
+	public function list(int $cardId, int $limit = 20, int $offset = 0, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->getCardCommentsFromRemote($board, $cardId, $limit, $offset));
+			}
+		}
 		return $this->commentService->list($cardId, $limit, $offset);
 	}
 
@@ -41,7 +54,15 @@ class CommentsApiController extends OCSController {
 	 * @throws StatusException
 	 */
 	#[NoAdminRequired]
-	public function create(int $cardId, string $message, int $parentId = 0): DataResponse {
+	#[PublicPage]
+	public function create(int $cardId, string $message, int $parentId = 0, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->createCardCommentOnRemote($board, $cardId, $message, $parentId));
+			}
+		}
+
 		return $this->commentService->create($cardId, $message, $parentId);
 	}
 

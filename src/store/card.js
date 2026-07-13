@@ -321,27 +321,30 @@ export default function cardModuleFactory() {
 					commit('updateCardsReorder', Object.values(cards))
 				})
 			},
-			async deleteCard({ commit }, card) {
-				await apiClient.deleteCard(card.id)
+			async deleteCard({ commit, getters }, card) {
+				const stack = getters.stackById(card.stackId)
+				await apiClient.deleteCard(card, stack.boardId)
 				commit('deleteCard', card)
 				useTrashbinStore().moveCardToTrash(card)
 			},
-			async archiveUnarchiveCard({ commit }, card) {
+			async archiveUnarchiveCard({ commit, getters }, card) {
 				let call = 'archiveCard'
 				if (card.archived === false) {
 					call = 'unArchiveCard'
 				}
 
-				const updatedCard = await apiClient[call](card)
+				const stack = getters.stackById(card.stackId)
+				const updatedCard = await apiClient[call](card, stack.boardId)
 				commit('updateCard', updatedCard)
 			},
-			async changeCardDoneStatus({ commit, dispatch, rootState }, card) {
+			async changeCardDoneStatus({ commit, dispatch, rootState, getters }, card) {
 				let call = 'markCardAsDone'
 				if (card.done === false) {
 					call = 'markCardAsUndone'
 				}
 
-				const updatedCard = await apiClient[call](card)
+				const stack = getters.stackById(card.stackId)
+				const updatedCard = await apiClient[call](card, stack.boardId)
 				commit('updateCardProperty', { property: 'done', card: updatedCard })
 
 				if (card.done !== false) {

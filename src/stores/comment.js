@@ -69,11 +69,12 @@ export const useCommentStore = defineStore('comment', {
 		setReplyTo(comment) {
 			this.replyTo = comment
 		},
-		async fetchComments({ cardId, offset }) {
+		async fetchComments({ cardId, offset, boardId }) {
 			const comments = await apiClient.loadComments({
 				cardId,
 				limit: COMMENT_FETCH_LIMIT,
 				offset: offset || 0,
+				boardId,
 			})
 
 			this.addComments({ cardId, comments })
@@ -87,8 +88,8 @@ export const useCommentStore = defineStore('comment', {
 			await this.fetchComments({ cardId })
 			await this.fetchComments({ cardId, offset: this.getCommentsForCard(cardId).length })
 		},
-		async createComment({ cardId, comment }) {
-			await apiClient.createComment({ cardId, comment, replyTo: this.replyTo })
+		async createComment({ cardId, comment, boardId }) {
+			await apiClient.createComment({ cardId, comment, replyTo: this.replyTo, boardId })
 			await this.fetchComments({ cardId })
 		},
 	},
