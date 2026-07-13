@@ -21,12 +21,6 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class CardOcsController extends OCSController {
-	/**
-	 * Sentinel order used when the client does not request a specific position.
-	 * Cards created with this order are appended to the end of the stack.
-	 */
-	private const DEFAULT_ORDER = 999;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -42,7 +36,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = self::DEFAULT_ORDER, ?string $description = '', $duedate = null, $startdate = null, ?array $labels = [], ?array $users = [], ?string $color = null) {
+	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = 999, ?string $description = '', $duedate = null, $startdate = null, ?array $labels = [], ?array $users = [], ?string $color = null) {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
 			if ($board->getExternalId()) {
@@ -54,8 +48,7 @@ class CardOcsController extends OCSController {
 		if (!$owner) {
 			$owner = $this->userId;
 		}
-		// An explicit order means the client wants the card at that position, so shift the surrounding cards
-		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color, insertAtPosition: $order !== self::DEFAULT_ORDER);
+		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color);
 
 		// foreach ($labels as $label) {
 		// 	$this->assignLabel($card->getId(), $label);
@@ -120,7 +113,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, ?int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
 			: null;
@@ -135,24 +128,24 @@ class CardOcsController extends OCSController {
 			}
 		}
 
-		if ($boardId) {
-			$localBoard = $this->boardService->find($boardId, false);
-			if ($localBoard->getExternalId()) {
-				return new DataResponse($this->externalBoardService->updateCardOnRemote(
-					$localBoard,
-					$id,
-					$title,
-					$stackId,
-					$type,
-					$owner,
-					$description,
-					$order,
-					$duedate,
-					$deletedAt,
-					$archived,
-					$done
-				));
-			}
+		$localBoard = $this->boardService->find($boardId, false);
+		if ($localBoard->getExternalId()) {
+			return new DataResponse($this->externalBoardService->updateCardOnRemote(
+				$localBoard,
+				$id,
+				$title,
+				$stackId,
+				$type,
+				$owner,
+				$description,
+				$order,
+				$duedate,
+				$deletedAt,
+				$archived,
+				$done,
+				$startdate,
+				$color,
+			));
 		}
 
 		return new DataResponse($this->cardService->update($id,
@@ -173,6 +166,18 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
+	public function delete(int $cardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->deleteCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->delete($cardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
 	public function reorder(int $cardId, int $stackId, int $order, ?int $boardId): DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -181,6 +186,30 @@ class CardOcsController extends OCSController {
 			}
 		}
 		return new DataResponse($this->cardService->reorder($cardId, $stackId, $order));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function archive(int $cardId, int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->archiveCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->archive($cardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function unarchive(int $cardId, int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->unarchiveCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->unarchive($cardId));
 	}
 
 	#[NoAdminRequired]
@@ -205,5 +234,29 @@ class CardOcsController extends OCSController {
 			}
 		}
 		return new DataResponse($this->cardService->removeDependentCard($cardId, $dependentCardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function done(int $cardId, ?int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->setDoneCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->done($cardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function undone(int $cardId, ?int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->setUndoneCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->undone($cardId));
 	}
 }
