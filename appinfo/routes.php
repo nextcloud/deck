@@ -160,6 +160,8 @@ return [
 		['name' => 'attachment_ocs#getAll', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment_ocs#create', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachment', 'verb' => 'POST'],
 		['name' => 'attachment_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'PUT'],
+		// POST is needed next to PUT as file uploads (multipart/form-data) are only parsed by PHP for POST requests
+		['name' => 'attachment_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'POST'],
 		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
 		['name' => 'attachment_ocs#restore', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
 

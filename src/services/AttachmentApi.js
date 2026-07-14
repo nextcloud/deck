@@ -42,22 +42,25 @@ export class AttachmentApi {
 	}
 
 	async updateAttachment({ cardId, attachment, formData, boardId }) {
+		// POST instead of PUT as multipart/form-data bodies are only parsed by PHP for POST requests
 		const response = await axios({
 		   method: 'POST',
-		   url: this.ocsUrl(`/cards/${cardId}/attachment/${attachment.type}:${attachment.id}`),
+		   url: this.ocsUrl(`/cards/${cardId}/attachments/${attachment.id}`),
 		   params: {
+				type: attachment.type,
 				boardId: boardId ?? null,
 		   },
 		   data: formData,
 	   })
-	   return response.data
+	   return response.data.ocs.data
 	}
 
 	async deleteAttachment(attachment, boardId) {
 		await axios({
 			method: 'DELETE',
-			url: this.ocsUrl(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}`),
+			url: this.ocsUrl(`/cards/${attachment.cardId}/attachments/${attachment.id}`),
 			params: {
+				type: attachment.type,
 				boardId: boardId ?? null,
 			},
 		})
@@ -65,9 +68,10 @@ export class AttachmentApi {
 
 	async restoreAttachment(attachment, boardId) {
 		const response = await axios({
-			method: 'GET',
-			url: this.ocsUrl(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}/restore`),
+			method: 'PUT',
+			url: this.ocsUrl(`/cards/${attachment.cardId}/attachments/${attachment.id}/restore`),
 			params: {
+				type: attachment.type,
 				boardId: boardId ?? null,
 			},
 		})
