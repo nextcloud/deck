@@ -12,10 +12,15 @@
 		<Container v-if="sortable"
 			lock-axis="y"
 			tag="div"
-			non-drag-area-selector="input, .app-navigation-entry__actions"
+			drag-handle-selector=".board-drag-handle"
 			@drop="onDropBoard">
 			<Draggable v-for="board in boardsSorted" :key="board.id">
-				<AppNavigationBoard :board="board" />
+				<div class="board-drag-row">
+					<span class="board-drag-handle" :title="t('deck', 'Drag to reorder')">
+						<DragVertical :size="20" />
+					</span>
+					<AppNavigationBoard :board="board" />
+				</div>
 			</Draggable>
 		</Container>
 		<template v-else>
@@ -32,6 +37,7 @@ import AppNavigationBoard from './AppNavigationBoard.vue'
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { showError } from '@nextcloud/dialogs'
+import DragVertical from 'vue-material-design-icons/DragVertical.vue'
 import { sortBoards } from '../../helpers/boardSort.js'
 
 export default {
@@ -41,6 +47,7 @@ export default {
 		AppNavigationBoard,
 		Container,
 		Draggable,
+		DragVertical,
 	},
 	props: {
 		to: {
@@ -123,5 +130,31 @@ export default {
 	display: flex;
 	flex-direction: column;
 	gap: var(--default-grid-baseline, 4px);
+}
+
+.board-drag-row {
+	display: flex;
+	align-items: center;
+
+	> :last-child {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+}
+
+.board-drag-handle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 24px;
+	color: var(--color-text-maxcontrast);
+	cursor: grab;
+	opacity: 0;
+	transition: opacity var(--animation-quick, 100ms) ease;
+}
+
+.board-drag-row:hover .board-drag-handle,
+.board-drag-handle:focus-visible {
+	opacity: 1;
 }
 </style>

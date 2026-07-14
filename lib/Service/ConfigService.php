@@ -63,7 +63,7 @@ class ConfigService {
 	}
 
 	/**
-	 * @return bool|array{id: string, displayname: string}[]
+	 * @return bool|array{id: string, displayname: string}[]|int[]
 	 * @throws NoPermissionException
 	 */
 	public function get(string $key) {
