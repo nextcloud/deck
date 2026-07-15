@@ -13,7 +13,7 @@
 				:hide-label="true"
 				type="datetime-local" />
 			<NcActions v-if="canEdit"
-				:menu-title="!startdate ? t('deck', 'Add start date') : null"
+				:force-name="!startdate"
 				type="tertiary">
 				<template v-if="!startdate" #icon>
 					<Plus :size="20" />
@@ -24,7 +24,7 @@
 					<template #icon>
 						<Plus :size="20" />
 					</template>
-					{{ t('deck', 'Choose a date') }}
+					{{ t('deck', 'Add start date') }}
 				</NcActionButton>
 				<NcActionButton v-else
 					icon="icon-delete"
