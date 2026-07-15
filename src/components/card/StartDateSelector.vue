@@ -99,7 +99,6 @@ export default defineComponent({
 		},
 		removeStartDate() {
 			this.startdate = null
-			this.$emit('change', null)
 		},
 	},
 })
