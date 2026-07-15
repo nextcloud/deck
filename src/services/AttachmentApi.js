@@ -56,7 +56,7 @@ export class AttachmentApi {
 	async deleteAttachment(attachment, boardId) {
 		await axios({
 			method: 'DELETE',
-			url: this.ocsUrl(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}`),
+			url: this.ocsUrl(`/cards/${attachment.cardId}/attachments/${attachment.type}:${attachment.id}`),
 			params: {
 				boardId: boardId ?? null,
 			},

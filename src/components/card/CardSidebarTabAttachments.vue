@@ -11,7 +11,9 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia'
 import AttachmentList from './AttachmentList.vue'
+import { useAttachmentStore } from '../../stores/attachment.js'
 export default {
 	name: 'CardSidebarTabAttachments',
 	components: {
@@ -24,12 +26,10 @@ export default {
 		},
 	},
 	methods: {
-		deleteAttachment(attachment) {
-			this.$store.dispatch('deleteAttachment', attachment)
-		},
-		restoreAttachment(attachment) {
-			this.$store.dispatch('restoreAttachment', attachment)
-		},
+		...mapActions(useAttachmentStore, [
+			'deleteAttachment',
+			'restoreAttachment',
+		]),
 	},
 }
 </script>
