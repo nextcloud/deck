@@ -49,7 +49,7 @@
 			<GanttView v-else-if="!isEmpty && !loading && viewMode === 'gantt'"
 				key="gantt"
 				:board="board"
-				:stacks="stacksByBoard" />
+				:stacks="stacks" />
 			<div v-else-if="!isEmpty && !loading"
 				key="board"
 				ref="board"
@@ -62,7 +62,7 @@
 					@drag-start="draggingStack = true"
 					@drag-end="draggingStack = false"
 					@drop="onDropStack">
-					<Draggable v-for="stack in stacksByBoard"
+					<Draggable v-for="stack in stacks"
 						:key="stack.id"
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
@@ -87,7 +87,7 @@
 
 <script>
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -98,6 +98,8 @@ import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
 import CardSidebar from '../card/CardSidebar.vue'
+import { mapActions, mapState } from 'pinia'
+import { useStackStore } from '../../stores/stack.js'
 export default {
 	name: 'Board',
 	components: {
@@ -136,7 +138,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useStackStore, ['stacksByBoard']),
+		...mapStateVuex({
 			isFullApp: state => state.isFullApp,
 			board: state => state.currentBoard,
 			showArchived: state => state.showArchived,
@@ -146,14 +149,14 @@ export default {
 			'canManage',
 			'viewMode',
 		]),
-		stacksByBoard() {
-			return this.board?.id ? this.$store.getters.stacksByBoard(this.board.id) : []
+		stacks() {
+			return this.board?.id ? this.stacksByBoard(this.board.id) : []
 		},
 		dragHandleSelector() {
 			return this.canEdit ? '.stack__title' : '.no-drag'
 		},
 		isEmpty() {
-			return this.stacksByBoard.length === 0
+			return this.stacks.length === 0
 		},
 	},
 	watch: {
@@ -180,16 +183,17 @@ export default {
 		this.session?.close()
 	},
 	methods: {
+		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
 		async fetchData() {
 			this.loading = true
 			try {
 				await this.$store.dispatch('loadBoardById', this.id)
-				await this.$store.dispatch('loadStacks', this.id)
+				await this.loadStacks(this.id)
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
 				if (routeCardId && !this.$store.getters.cardById(routeCardId)) {
-					await this.$store.dispatch('loadArchivedStacks', this.id)
+					await this.loadArchivedStacks(this.id)
 
 					if (this.$store.getters.cardById(routeCardId)) {
 						this.$store.commit('toggleShowArchived', true)
@@ -208,7 +212,7 @@ export default {
 		},
 
 		onDropStack({ removedIndex, addedIndex }) {
-			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
+			this.orderStack({ stack: this.stacks[removedIndex], removedIndex, addedIndex })
 		},
 
 		addNewStack() {
@@ -216,7 +220,7 @@ export default {
 				title: this.newStackTitle,
 				boardId: this.id,
 			}
-			this.$store.dispatch('createStack', newStack)
+			this.createStack(newStack)
 			this.newStackTitle = ''
 		},
 

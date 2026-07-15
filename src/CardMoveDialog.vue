@@ -38,6 +38,8 @@ import { generateOcsUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useStackStore } from './stores/stack.js'
 
 export default {
 	name: 'CardMoveDialog',
@@ -52,7 +54,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['stackById', 'boardById']),
+		...mapGetters(['boardById']),
+		...mapState(useStackStore, ['stackById']),
 		activeBoards() {
 			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
 		},

@@ -11,8 +11,8 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
-import stackModuleFactory from './stack.js'
 import cardModuleFactory from './card.js'
+import { useStackStore } from '../stores/stack.js'
 Vue.use(Vuex)
 
 const apiClient = new BoardApi()
@@ -30,7 +30,6 @@ export const BOARD_FILTERS = {
 export default function storeFactory() {
 	return new Vuex.Store({
 		modules: {
-			stack: stackModuleFactory(),
 			card: cardModuleFactory(),
 		},
 		strict: debug,
@@ -349,7 +348,7 @@ export default function storeFactory() {
 				commit('setAssignableUsers', board.users)
 
 				if (etagHasChanged) {
-					dispatch('loadStacks', boardId)
+					useStackStore().loadStacks(boardId)
 				}
 			},
 

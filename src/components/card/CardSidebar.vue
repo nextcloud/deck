@@ -84,7 +84,7 @@
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
 import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
 import CardSidebarTabComments from './CardSidebarTabComments.vue'
@@ -151,12 +151,12 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
+		...mapStateVuex({
 			isFullApp: (state) => state.isFullApp,
 			currentBoard: (state) => state.currentBoard,
 			hasCardSaveError: (state) => state.hasCardSaveError,
 		}),
-		...mapGetters(['canEdit', 'assignables', 'stackById']),
+		...mapGetters(['canEdit', 'assignables']),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
@@ -205,7 +205,7 @@ export default {
 	},
 	watch: {
 		currentCard(newCard, oldCard) {
-			if (newCard.id === oldCard.id) return
+			if (newCard.id === oldCard?.id) return
 			this.focusHeader()
 		},
 		'currentCard.title': {

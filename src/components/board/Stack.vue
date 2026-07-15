@@ -65,7 +65,7 @@
 					</template>
 					{{ isDoneColumn ? t('deck', 'Do not set cards as "done"') : t('deck', 'Set cards as "done"') }}
 				</NcActionButton>
-				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
+				<NcActionButton icon="icon-delete" @click="deleteStackShowUndo(stack)">
 					{{ t('deck', 'Delete list') }}
 				</NcActionButton>
 			</NcActions>
@@ -162,6 +162,7 @@ import CardItem from '../cards/CardItem.vue'
 import '@nextcloud/dialogs/style.css'
 import { mapActions } from 'pinia'
 import { useTrashbinStore } from '../../stores/trashbin.js'
+import { useStackStore } from '../../stores/stack.js'
 
 export default {
 	name: 'Stack',
@@ -255,6 +256,7 @@ export default {
 
 	methods: {
 		...mapActions(useTrashbinStore, ['stackUndoDelete']),
+		...mapActions(useStackStore, ['setDoneStack', 'deleteStack', 'updateStack']),
 		stopCardCreation(e) {
 			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
 			// so we have to ignore it
@@ -289,14 +291,14 @@ export default {
 			}
 		},
 		toggleDoneColumn() {
-			this.$store.dispatch('setDoneStack', {
+			this.setDoneStack({
 				stackId: this.stack.id,
 				boardId: this.stack.boardId,
 				isDone: !this.isDoneColumn,
 			})
 		},
-		deleteStack(stack) {
-			this.$store.dispatch('deleteStack', stack)
+		deleteStackShowUndo(stack) {
+			this.deleteStack(stack)
 			showUndo(t('deck', 'List deleted'), () => this.stackUndoDelete(stack))
 		},
 		setArchivedToAllCardsFromStack(stack, isArchived) {
@@ -318,7 +320,7 @@ export default {
 		},
 		finishedEdit(stack) {
 			if (this.copiedStack.title !== stack.title) {
-				this.$store.dispatch('updateStack', this.copiedStack)
+				this.updateStack(this.copiedStack)
 			}
 			this.editing = false
 		},

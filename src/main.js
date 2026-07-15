@@ -21,6 +21,10 @@ import { createPinia, PiniaVuePlugin } from 'pinia'
 document.body.setAttribute('data-snap-ignore', 'true')
 
 const store = storeFactory()
+const pinia = createPinia()
+Vue.use(PiniaVuePlugin)
+pinia.use(() => ({ $vuex: store }))
+
 sync(store, router)
 initSessions(store)
 
@@ -42,10 +46,6 @@ Vue.config.errorHandler = (err, vm, info) => {
 	}
 	console.error(err)
 }
-
-const pinia = createPinia()
-Vue.use(PiniaVuePlugin)
-pinia.use(() => ({ $vuex: store }))
 
 /* eslint-disable-next-line no-new */
 new Vue({

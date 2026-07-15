@@ -7,6 +7,7 @@ import { CardApi } from './../services/CardApi.js'
 import moment from 'moment'
 import Vue from 'vue'
 import { useTrashbinStore } from '../stores/trashbin.js'
+import { useStackStore } from '../stores/stack.js'
 
 const apiClient = new CardApi()
 
@@ -107,7 +108,7 @@ export default function cardModuleFactory() {
 								if (isEmptyQuery) {
 									continue
 								}
-								const stack = getters.stackById(card.stackId)
+								const stack = useStackStore().stackById(card.stackId)
 								if (!stack) {
 									return false
 								}
@@ -290,7 +291,7 @@ export default function cardModuleFactory() {
 				return createdCard
 			},
 			async updateCardTitle({ commit, getters }, card) {
-				const stack = getters.stackById(card.stackId)
+				const stack = useStackStore().stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'title', card: updatedCard })
 				commit('updateCardProperty', { property: 'referenceData', card: updatedCard })
@@ -316,7 +317,7 @@ export default function cardModuleFactory() {
 				newCards.push(card)
 				await commit('updateCardsReorder', newCards)
 
-				const stack = getters.stackById(card.stackId)
+				const stack = useStackStore().stackById(card.stackId)
 				apiClient.reorderCard(card, stack.boardId).then((cards) => {
 					commit('updateCardsReorder', Object.values(cards))
 				})
@@ -345,8 +346,8 @@ export default function cardModuleFactory() {
 				commit('updateCardProperty', { property: 'done', card: updatedCard })
 
 				if (card.done !== false) {
-					const cardStack = rootState.stack.stacks.find(s => s.id === card.stackId)
-					const doneStack = rootState.stack.stacks.find(
+					const cardStack = useStackStore().stackById(card.stackId)
+					const doneStack = useStackStore().stacks.find(
 						s => s.boardId === cardStack?.boardId && s.isDoneColumn,
 					)
 					if (doneStack && card.stackId !== doneStack.id) {
@@ -385,35 +386,35 @@ export default function cardModuleFactory() {
 				commit('updateCardProperty', { property: 'dependentCards', card: updatedCard })
 			},
 			async updateCardDesc({ commit, getters }, card) {
-				const stack = getters.stackById(card.stackId)
+				const stack = useStackStore().stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'description', card: updatedCard })
 			},
 			async updateCardDue({ commit, getters }, card) {
-				const stack = getters.stackById(card.stackId)
+				const stack = useStackStore().stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'duedate', card: updatedCard })
 			},
 			async updateCardStartDate({ commit, getters }, card) {
-				const stack = getters.stackById(card.stackId)
+				const stack = useStackStore().stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'startdate', card: updatedCard })
 			},
 			async updateCardDates({ commit, getters }, card) {
-				const stack = getters.stackById(card.stackId)
+				const stack = useStackStore().stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'duedate', card: updatedCard })
 				commit('updateCardProperty', { property: 'startdate', card: updatedCard })
 			},
 			async updateCardColor({ commit, getters }, card) {
-				const stack = getters.stackById(card.stackId)
+				const stack = useStackStore().stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'color', card: updatedCard })
 			},
 
 			addCardData({ commit }, cardData) {
 				const card = { ...cardData }
-				commit('addStack', card.relatedStack)
+				useStackStore().addStack(card.relatedStack)
 				commit('addBoard', card.relatedBoard)
 				delete card.relatedStack
 				delete card.relatedBoard
