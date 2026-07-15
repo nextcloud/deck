@@ -14,7 +14,7 @@
 				:hide-label="true"
 				type="datetime-local" />
 			<NcActions v-if="canEdit"
-				:menu-title="!duedate ? t('deck', 'Add due date') : null"
+				:menu-name="!duedate ? t('deck', 'Add due date') : null"
 				type="tertiary"
 				data-cy-due-date-actions>
 				<template v-if="!duedate" #icon>
@@ -220,12 +220,10 @@ export default defineComponent({
 		},
 		removeDue() {
 			this.duedate = null
-			this.$emit('change', null)
 
 		},
 		selectShortcut(shortcut) {
 			this.duedate = shortcut.timestamp
-			this.$emit('change', shortcut.timestamp)
 		},
 		getTimestamp(momentObject) {
 			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null

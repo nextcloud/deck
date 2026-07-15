@@ -20,12 +20,10 @@
 
 		<StartDateSelector :card="card"
 			:can-edit="canEdit"
-			@change="updateCardStartDate"
 			@input="debouncedUpdateCardStartDate" />
 
 		<DueDateSelector :card="card"
 			:can-edit="canEdit"
-			@change="updateCardDue"
 			@input="debouncedUpdateCardDue" />
 
 		<DependentCardsSelector :card="card"
@@ -163,7 +161,7 @@ export default {
 
 		debouncedUpdateCardDue: debounce(function(val) {
 			this.updateCardDue(val)
-		}, 500),
+		}, 500, { leading: true }),
 
 		updateCardStartDate(val) {
 			this.$store.dispatch('updateCardStartDate', {
@@ -174,7 +172,7 @@ export default {
 
 		debouncedUpdateCardStartDate: debounce(function(val) {
 			this.updateCardStartDate(val)
-		}, 500),
+		}, 500, { leading: true }),
 
 		addLabelToCard(newLabel) {
 			this.copiedCard.labels.push(newLabel)
