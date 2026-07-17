@@ -8,7 +8,9 @@
 			<div class="reply--header">
 				<div class="reply--hint">
 					{{ t('deck', 'In reply to') }}
-					<NcUserBubble :user="comment.actorId" :display-name="comment.actorDisplayName" />
+					<NcUserBubble :user="comment.actorRemote !== null ? undefined : comment.actorId"
+						:display-name="comment.actorDisplayName"
+						:is-no-user="comment.actorRemote !== null" />
 				</div>
 				<NcActions v-if="preview" class="reply--cancel">
 					<NcActionButton icon="icon-close" @click="$emit('cancel')">
@@ -26,7 +28,7 @@
 	</div>
 	<li v-else class="comment">
 		<div class="comment--header">
-			<NcAvatar :user="comment.actorId" />
+			<NcAvatar :user="comment.actorId" :is-no-user="comment.actorRemote !== null" />
 			<span class="username">
 				{{ comment.actorDisplayName }}
 			</span>
@@ -77,6 +79,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { NcAvatar, NcActions, NcActionButton, NcRichText, NcUserBubble } from '@nextcloud/vue'
 import CommentForm from './CommentForm.vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -149,6 +152,9 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			currentBoard: state => state.currentBoard,
+		}),
 		canEdit() {
 			return this.comment.actorId === getCurrentUser().uid
 		},
@@ -210,6 +216,7 @@ export default {
 			const data = {
 				comment: { id: this.comment.id, message },
 				cardId: this.comment.objectId,
+				boardId: this.currentBoard.id,
 			}
 			await this.commentStore.updateComment(data)
 			this.hideUpdateForm()
@@ -218,6 +225,7 @@ export default {
 			const data = {
 				id: this.comment.id,
 				cardId: this.comment.objectId,
+				boardId: this.currentBoard.id,
 			}
 			this.commentStore.deleteComment(data)
 		},
