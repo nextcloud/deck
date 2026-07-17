@@ -67,7 +67,12 @@ class BoardController extends ApiController {
 
 	#[NoAdminRequired]
 	public function leave(int $boardId) {
-		return $this->boardService->leave($boardId);
+		$localBoard = $this->boardService->find($boardId, true, true);
+		$result = $this->boardService->leave($boardId);
+		if ($localBoard->getExternalId() !== null) {
+			$this->externalBoardService->leaveBoardOnRemote($localBoard);
+		}
+		return $result;
 	}
 
 	#[NoAdminRequired]
