@@ -14,6 +14,7 @@ use OCA\Deck\Search\Query\SearchQuery;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Federation\ICloudIdManager;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
@@ -36,6 +37,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	private $notificationManager;
 	/** @var ICache */
 	private $cache;
+	/** @var ICloudIdManager */
+	private $cloudIdManager;
 	private $databaseType;
 	private $database4ByteSupport;
 
@@ -46,6 +49,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		IGroupManager $groupManager,
 		IManager $notificationManager,
 		ICacheFactory $cacheFactory,
+		ICloudIdManager $cloudIdManager,
 		$databaseType = 'sqlite3',
 		$database4ByteSupport = true,
 	) {
@@ -55,6 +59,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$this->groupManager = $groupManager;
 		$this->notificationManager = $notificationManager;
 		$this->cache = $cacheFactory->createDistributed('deck-cardMapper');
+		$this->cloudIdManager = $cloudIdManager;
 		$this->databaseType = $databaseType;
 		$this->database4ByteSupport = $database4ByteSupport;
 	}
@@ -747,9 +752,14 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function mapOwner(Card &$card) {
 		$userManager = $this->userManager;
-		$card->resolveRelation('owner', function ($owner) use (&$userManager) {
+		$cloudIdManager = $this->cloudIdManager;
+		$card->resolveRelation('owner', function ($owner) use (&$userManager, &$cloudIdManager) {
 			if ($userManager->userExists($owner)) {
 				return new User($owner, $this->userManager);
+			}
+			if ($cloudIdManager->isValidCloudId($owner)) {
+				$cloudId = $cloudIdManager->resolveCloudId($owner);
+				return new FederatedUser($cloudId);
 			}
 			return null;
 		});

@@ -51,7 +51,7 @@ export class CardApi {
 	}
 
 	deleteCard(card, boardId) {
-		return axios.delete(this.ocsUrl(`/cards/${card.id}?boardId=${boardId}`))
+		return axios.delete(this.ocsUrl(`/cards/${card.id}`), { params: { boardId } })
 			.then(
 				(response) => {
 					return Promise.resolve(response.data.ocs.data)

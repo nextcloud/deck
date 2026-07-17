@@ -29,10 +29,10 @@ export class BoardApi {
 	 * @return {Promise}
 	 */
 	updateBoard(board) {
-		return axios.put(this.url(`/boards/${board.id}`), board)
+		return axios.put(this.ocsUrl(`/boards/${board.id}`), board)
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

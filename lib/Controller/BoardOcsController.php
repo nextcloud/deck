@@ -50,6 +50,18 @@ class BoardOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[PublicPage]
+	public function update(int $boardId, string $title, string $color, bool $archived): DataResponse {
+		$updatedBoard = $this->boardService->update($boardId, $title, $color, $archived);
+
+		if ($updatedBoard->getExternalId()) {
+			return $this->externalBoardService->updateBoardOnRemote($updatedBoard, $title, $color, $archived);
+		}
+
+		return new DataResponse($updatedBoard);
+	}
+
+	#[NoAdminRequired]
 	public function addAcl(int $boardId, int $type, string $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): DataResponse {
 		return new DataResponse($this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage));
 	}
@@ -57,5 +69,11 @@ class BoardOcsController extends OCSController {
 	#[NoAdminRequired]
 	public function updateAcl(int $id, bool $permissionEdit, bool $permissionShare, bool $permissionManage): DataResponse {
 		return new DataResponse($this->boardService->updateAcl($id, $permissionEdit, $permissionShare, $permissionManage));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function leave(int $boardId): DataResponse {
+		return new DataResponse($this->boardService->leave($boardId));
 	}
 }

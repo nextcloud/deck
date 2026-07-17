@@ -141,7 +141,9 @@ return [
 		['name' => 'stack_ocs#index', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
 		['name' => 'stack_ocs#getArchived', 'url' => '/api/v{apiVersion}/stacks/{boardId}/archived', 'verb' => 'GET'],
 		['name' => 'board_ocs#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
+		['name' => 'board_ocs#update', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'PUT'],
 		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
+		['name' => 'board_ocs#leave', 'url' => '/api/v{apiVersion}/boards/{boardId}/leave', 'verb' => 'POST'],
 
 		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
 		['name' => 'card_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}', 'verb' => 'PUT'],

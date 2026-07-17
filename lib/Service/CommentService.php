@@ -130,7 +130,8 @@ class CommentService {
 
 	public function update(int $cardId, int $commentId, string $message): DataResponse {
 		$comment = $this->get($cardId, $commentId);
-		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
+		$userId = $this->userId ?? $this->permissionService->getUserId();
+		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
 
@@ -150,7 +151,8 @@ class CommentService {
 		} catch (CommentNotFoundException $e) {
 			throw new NotFoundException('No comment found.');
 		}
-		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
+		$userId = $this->userId ?? $this->permissionService->getUserId();
+		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
 		$this->commentsManager->delete((string)$commentId);
