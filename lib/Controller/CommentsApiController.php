@@ -70,7 +70,14 @@ class CommentsApiController extends OCSController {
 	 * @throws StatusException
 	 */
 	#[NoAdminRequired]
-	public function update(int $cardId, int $commentId, string $message): DataResponse {
+	#[PublicPage]
+	public function update(int $cardId, int $commentId, string $message, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->updateCardCommentOnRemote($board, $cardId, $commentId, $message));
+			}
+		}
 		return $this->commentService->update($cardId, $commentId, $message);
 	}
 
@@ -78,7 +85,14 @@ class CommentsApiController extends OCSController {
 	 * @throws StatusException
 	 */
 	#[NoAdminRequired]
-	public function delete(int $cardId, int $commentId): DataResponse {
+	#[PublicPage]
+	public function delete(int $cardId, int $commentId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->deleteCardCommentOnRemote($board, $cardId, $commentId));
+			}
+		}
 		return $this->commentService->delete($cardId, $commentId);
 	}
 }
