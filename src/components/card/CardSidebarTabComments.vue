@@ -138,7 +138,7 @@ export default {
 		},
 		async loadMore() {
 			this.isLoading = true
-			await this.commentStore.fetchMore({ cardId: this.card.id })
+			await this.commentStore.fetchMore({ cardId: this.card.id, boardId: this.currentBoard.id })
 			this.isLoading = false
 		},
 		cancelReply() {

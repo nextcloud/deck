@@ -55,6 +55,7 @@ const commentToObject = (tag) => {
 		id: tag['d:prop']['oc:id']['#text'],
 		actorId: tag['d:prop']['oc:actorId']['#text'],
 		actorDisplayName: tag['d:prop']['oc:actorDisplayName']['#text'],
+		actorRemote: tag['d:prop']['oc:actorRemote']['#text'],
 		creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
 		message: tag['d:prop']['oc:message']['#text'],
 		isUnread: tag['d:prop']['oc:isUnread']['#text'] === 'true',
