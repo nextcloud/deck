@@ -45,23 +45,23 @@ export const useCommentStore = defineStore('comment', {
 				this.comments[cardId].comments = [...this.comments[cardId].comments, ...newComments]
 			}
 		},
-		async updateComment({ cardId, comment }) {
-			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message })
-			const existingIndex = this.comments[cardId].comments.findIndex((c) => c.id === updatedComment.id)
+		async updateComment({ cardId, comment, boardId }) {
+			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message, boardId })
+			const existingIndex = this.comments[cardId].comments.findIndex(c => c.id === updatedComment.id)
 			if (existingIndex !== -1) {
 				Object.assign(this.comments[cardId].comments[existingIndex], updatedComment)
 			}
 		},
 		async deleteComment(comment) {
 			await apiClient.deleteComment(comment)
-			const existingIndex = this.comments[comment.cardId].comments.findIndex((_comment) => _comment.id === comment.id)
+			const existingIndex = this.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.id)
 			if (existingIndex !== -1) {
 				this.comments[comment.cardId].comments.splice(existingIndex, 1)
 			}
 		},
 		async markCommentsAsRead(cardId) {
 			await apiClient.markCommentsAsRead(cardId)
-			this.comments[cardId].comments.forEach((_comment) => {
+			this.comments[cardId].comments.forEach(_comment => {
 				_comment.isUnread = false
 			})
 		},
@@ -82,14 +82,14 @@ export const useCommentStore = defineStore('comment', {
 				this.endReached(cardId)
 			}
 		},
-		async fetchMore({ cardId }) {
+		async fetchMore({ cardId, boardId }) {
 			// fetch newer comments first
-			await this.fetchComments({ cardId })
-			await this.fetchComments({ cardId, offset: this.getCommentsForCard(cardId).length })
+			await this.fetchComments({ cardId, boardId })
+			await this.fetchComments({ cardId, offset: this.getCommentsForCard(cardId).length, boardId })
 		},
 		async createComment({ cardId, comment, boardId }) {
 			await apiClient.createComment({ cardId, comment, replyTo: this.replyTo, boardId })
-			await this.fetchComments({ cardId })
+			await this.fetchComments({ cardId, boardId })
 		},
 	},
 })
