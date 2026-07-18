@@ -179,6 +179,7 @@ OC.L10N.register(
     "Show boards in calendar/tasks" : "カレンダー/タスクでボードを表示する",
     "Limit board creation to some groups" : "ボード作成は一部のグループに制限する",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "これらのグループ以外のユーザーは、独自のボードを作成することはできませんが、共有されているボードで作業することはできます。",
+    "Enable federation" : "フェデレーションを有効にする",
     "Board actions" : "ボードアクション",
     "Scroll sideways" : "横にスクロール",
     "Navigate between cards" : "カード間を移動する",
