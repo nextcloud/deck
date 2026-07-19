@@ -146,7 +146,7 @@ class ConfigService {
 			return false;
 		}
 
-		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'stackAddCardAtTop', true);
+		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'stackAddCardAtTop', false);
 	}
 
 	public function ensureFederationEnabled() {
