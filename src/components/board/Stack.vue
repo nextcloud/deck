@@ -9,6 +9,7 @@
 		:class="{
 			'stack--done-column': isDoneColumn,
 			'stack--bottom-add-inline': bottomAddCardInline,
+			'stack--bottom-add-empty': isEmptyBottomAddCardStack,
 			'stack--add-card-at-top': canAddCardAtTop,
 		}"
 		:data-cy-stack="stack.title">
@@ -292,6 +293,12 @@ export default {
 		canAddCardAtBottom() {
 			return this.canEdit && !this.showArchived && !this.isArchived && !this.stackAddCardAtTop
 		},
+		isEmptyStack() {
+			return this.cardsByStack.length === 0
+		},
+		isEmptyBottomAddCardStack() {
+			return this.canAddCardAtBottom && this.isEmptyStack
+		},
 	},
 	watch: {
 		cardsByStack() {
@@ -533,6 +540,21 @@ export default {
 		&.stack--bottom-add-inline {
 			.dnd-container {
 				flex-grow: 0;
+			}
+		}
+
+		&.stack--bottom-add-empty {
+			.dnd-container {
+				order: 2;
+				flex-grow: 0;
+				padding-block: 0;
+			}
+
+			.stack__card-add--bottom {
+				order: 1;
+				padding-top: $stack-gap;
+				padding-bottom: 0;
+				position: relative;
 			}
 		}
 
