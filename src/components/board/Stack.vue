@@ -6,7 +6,11 @@
 <template>
 	<div ref="stack"
 		class="stack"
-		:class="{'stack--done-column': isDoneColumn, 'stack--bottom-add-inline': bottomAddCardInline}"
+		:class="{
+			'stack--done-column': isDoneColumn,
+			'stack--bottom-add-inline': bottomAddCardInline,
+			'stack--add-card-at-top': canAddCardAtTop,
+		}"
 		:data-cy-stack="stack.title">
 		<div ref="header"
 			v-click-outside="stopCardCreation"
@@ -525,6 +529,25 @@ export default {
 		&.stack--bottom-add-inline {
 			.dnd-container {
 				flex-grow: 0;
+			}
+		}
+
+		&.stack--add-card-at-top {
+			.dnd-container {
+				-webkit-mask-image: linear-gradient(
+					180deg,
+					transparent 0,
+					black $stack-gap,
+					black calc(100% - #{$stack-gap}),
+					transparent 100%
+				);
+				mask-image: linear-gradient(
+					180deg,
+					transparent 0,
+					black $stack-gap,
+					black calc(100% - #{$stack-gap}),
+					transparent 100%
+				);
 			}
 		}
 
