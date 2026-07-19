@@ -533,21 +533,16 @@ export default {
 		}
 
 		&.stack--add-card-at-top {
-			.dnd-container {
-				-webkit-mask-image: linear-gradient(
-					180deg,
-					transparent 0,
-					black $stack-gap,
-					black calc(100% - #{$stack-gap}),
-					transparent 100%
-				);
-				mask-image: linear-gradient(
-					180deg,
-					transparent 0,
-					black $stack-gap,
-					black calc(100% - #{$stack-gap}),
-					transparent 100%
-				);
+			&:after {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 100%;
+				height: $stack-gap;
+				bottom: 0;
+				z-index: 99;
+				pointer-events: none;
+				background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
 			}
 		}
 
@@ -672,6 +667,19 @@ export default {
 
 		&--top {
 			padding-top: $stack-gap;
+
+			&:after {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 100%;
+				height: $stack-gap;
+				bottom: 0;
+				z-index: 99;
+				pointer-events: none;
+				background-image: linear-gradient(180deg, var(--color-main-background) 0%, transparent 100%);
+				transform: translateY(100%);
+			}
 		}
 
 		&--bottom {
