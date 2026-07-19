@@ -69,14 +69,6 @@
 					{{ t('deck', 'Delete list') }}
 				</NcActionButton>
 			</NcActions>
-			<NcActions v-if="canEdit && !showArchived && !isArchived">
-				<NcActionButton data-cy="action:add-card" @click.stop="showAddCard=true">
-					{{ t('deck', 'Add card') }}
-					<template #icon>
-						<CardPlusOutline :size="20" />
-					</template>
-				</NcActionButton>
-			</NcActions>
 		</div>
 
 		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
@@ -101,6 +93,39 @@
 			</div>
 		</NcModal>
 
+		<transition name="slide-top" appear>
+			<div v-if="canAddCardAtTop" class="stack__card-add stack__card-add--top">
+				<NcButton v-if="!showAddCard"
+					data-cy="action:add-card"
+					class="stack__card-add-button"
+					type="tertiary"
+					:wide="true"
+					@click.stop="showAddCard=true">
+					{{ t('deck', '+ Add card') }}
+				</NcButton>
+				<form v-else
+					:class="{ 'icon-loading-small': stateCardCreating }"
+					@submit.prevent.stop="clickAddCard()">
+					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
+					<input id="new-stack-input-main"
+						ref="newCardInput"
+						v-model="newCardTitle"
+						type="text"
+						class="no-close"
+						:disabled="stateCardCreating"
+						:placeholder="t('deck', 'Card name')"
+						required
+						pattern=".*\S+.*"
+						@focus="onCreateCardFocus"
+						@keydown.esc="stopCardCreation">
+					<input v-show="!stateCardCreating"
+						class="icon-confirm"
+						type="submit"
+						value="">
+				</form>
+			</div>
+		</transition>
+
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container"
 			group-name="stack"
@@ -122,8 +147,17 @@
 		</Container>
 
 		<transition name="slide-bottom" appear>
-			<div v-if="showAddCard" class="stack__card-add">
-				<form :class="{ 'icon-loading-small': stateCardCreating }"
+			<div v-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
+				<NcButton v-if="!showAddCard"
+					data-cy="action:add-card"
+					class="stack__card-add-button"
+					type="tertiary"
+					:wide="true"
+					@click.stop="showAddCard=true">
+					{{ t('deck', '+ Add card') }}
+				</NcButton>
+				<form v-else
+					:class="{ 'icon-loading-small': stateCardCreating }"
 					@submit.prevent.stop="clickAddCard()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
 					<input id="new-stack-input-main"
@@ -152,9 +186,8 @@ import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
-import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 
 import CardItem from '../cards/CardItem.vue'
@@ -166,12 +199,12 @@ export default {
 	components: {
 		NcActions,
 		NcActionButton,
+		NcButton,
 		CardItem,
 		Container,
 		Draggable,
 		NcModal,
 		ArchiveIcon,
-		CardPlusOutline,
 		CheckCircleOutline,
 	},
 	directives: {
@@ -233,6 +266,15 @@ export default {
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
+		},
+		stackAddCardAtTop() {
+			return this.$store.getters.config('stackAddCardAtTop') !== false
+		},
+		canAddCardAtTop() {
+			return this.canEdit && !this.showArchived && !this.isArchived && this.stackAddCardAtTop
+		},
+		canAddCardAtBottom() {
+			return this.canEdit && !this.showArchived && !this.isArchived && !this.stackAddCardAtTop
 		},
 	},
 	watch: {
@@ -325,18 +367,30 @@ export default {
 		async clickAddCard() {
 			this.stateCardCreating = true
 			try {
+				const addCardAtTop = this.stackAddCardAtTop
 				this.animate = true
 				const newCard = await this.$store.dispatch('addCard', {
 					title: this.newCardTitle,
 					stackId: this.stack.id,
 					boardId: this.stack.boardId,
+					order: addCardAtTop ? 0 : 999,
 				})
+				if (addCardAtTop) {
+					await this.$store.dispatch('reorderCard', {
+						...newCard,
+						stackId: this.stack.id,
+						order: 0,
+					})
+				}
 				this.newCardTitle = ''
 				this.showAddCard = true
 				this.$nextTick(() => {
 					this.$refs.newCardInput.focus()
 					this.animate = false
-					this.$refs.card[(this.$refs.card.length - 1)].scrollIntoView()
+					if (this.$refs.card && this.$refs.card.length > 0) {
+						const index = addCardAtTop ? 0 : this.$refs.card.length - 1
+						this.$refs.card[index].scrollIntoView()
+					}
 				})
 				if (!this.cardDetailsInModal) {
 					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
@@ -512,9 +566,16 @@ export default {
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
-		padding-bottom: $stack-gap;
 		background-color: var(--color-main-background);
 		position: relative;
+
+		&--top {
+			padding-top: $stack-gap;
+		}
+
+		&--bottom {
+			padding-bottom: $stack-gap;
+		}
 
 		// Smooth fade out of the cards at the top
 		&:before {
