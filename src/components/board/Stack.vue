@@ -125,7 +125,7 @@
 						required
 						pattern=".*\S+.*"
 						@focus="onCreateCardFocus"
-						@keydown.esc="stopCardCreation">
+						@keydown.esc.stop="closeCardCreation">
 					<input v-show="!stateCardCreating"
 						class="icon-confirm"
 						type="submit"
@@ -179,7 +179,7 @@
 						required
 						pattern=".*\S+.*"
 						@focus="onCreateCardFocus"
-						@keydown.esc="stopCardCreation">
+						@keydown.esc.stop="closeCardCreation">
 					<input v-show="!stateCardCreating"
 						class="icon-confirm"
 						type="submit"
@@ -319,6 +319,10 @@ export default {
 	},
 
 	methods: {
+		closeCardCreation() {
+			this.showAddCard = false
+			return false
+		},
 		stopCardCreation(e) {
 			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
 			// so we have to ignore it
