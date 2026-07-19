@@ -45,6 +45,7 @@ Vue.config.errorHandler = (err, vm, info) => {
 
 const pinia = createPinia()
 Vue.use(PiniaVuePlugin)
+pinia.use(() => ({ $vuex: store }))
 
 /* eslint-disable-next-line no-new */
 new Vue({

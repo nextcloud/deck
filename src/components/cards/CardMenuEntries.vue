@@ -98,6 +98,7 @@ import { showUndo } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/style.css'
 import { emit } from '@nextcloud/event-bus'
 import { useActionsStore } from '../../stores/actions.js'
+import { useTrashbinStore } from '../../stores/trashbin.js'
 
 export default {
 	name: 'CardMenuEntries',
@@ -188,7 +189,7 @@ export default {
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)
 			const undoCard = { ...this.card, deletedAt: 0 }
-			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
+			showUndo(t('deck', 'Card deleted'), () => useTrashbinStore().cardUndoDelete(undoCard))
 			if (this.$router.currentRoute.name === 'card') {
 				this.$router.push({ name: 'board' })
 			}

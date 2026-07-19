@@ -202,6 +202,8 @@ import { showError, showUndo } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem.vue'
 
 import '@nextcloud/dialogs/style.css'
+import { mapActions } from 'pinia'
+import { useTrashbinStore } from '../../stores/trashbin.js'
 
 export default {
 	name: 'Stack',
@@ -319,6 +321,7 @@ export default {
 	},
 
 	methods: {
+		...mapActions(useTrashbinStore, ['stackUndoDelete']),
 		closeCardCreation() {
 			this.showAddCard = false
 			return false
@@ -405,7 +408,7 @@ export default {
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
-			showUndo(t('deck', 'List deleted'), () => this.$store.dispatch('stackUndoDelete', stack))
+			showUndo(t('deck', 'List deleted'), () => this.stackUndoDelete(stack))
 		},
 		setArchivedToAllCardsFromStack(stack, isArchived) {
 

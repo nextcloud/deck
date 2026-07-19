@@ -14,7 +14,7 @@
 				</div>
 				<button :title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="stackUndoDelete(deletedStack)" />
+					@click="stackUndoDeleteLocal(deletedStack)" />
 			</li>
 		</ul>
 
@@ -28,14 +28,15 @@
 				</div>
 				<button :title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="cardUndoDelete(deletedCard)" />
+					@click="cardUndoDeleteLocal(deletedCard)" />
 			</li>
 		</ul>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useTrashbinStore } from '../../stores/trashbin.js'
 import relativeDate from '../../mixins/relativeDate.js'
 
 export default {
@@ -55,30 +56,30 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			deletedStacks: state => [...state.trashbin.deletedStacks].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
-			deletedCards: state => [...state.trashbin.deletedCards].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
+		...mapState(useTrashbinStore, {
+			deletedStacks: state => [...state.deletedStacks].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
+			deletedCards: state => [...state.deletedCards].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
 		}),
-
 	},
 	created() {
 		this.getData()
 	},
 	methods: {
+		...mapActions(useTrashbinStore, ['fetchDeletedItems', 'stackUndoDelete', 'cardUndoDelete']),
 		async getData() {
 			this.isLoading = true
-			await this.$store.dispatch('fetchDeletedItems', this.board.id)
+			this.fetchDeletedItems(this.board.id)
 			this.isLoading = false
 		},
-		stackUndoDelete(deletedStack) {
+		stackUndoDeleteLocal(deletedStack) {
 			const copiedDeletedStack = Object.assign({}, deletedStack)
 			copiedDeletedStack.deletedAt = 0
-			this.$store.dispatch('stackUndoDelete', copiedDeletedStack)
+			this.stackUndoDelete(copiedDeletedStack)
 		},
-		cardUndoDelete(deletedCard) {
+		cardUndoDeleteLocal(deletedCard) {
 			const copiedDeletedCard = Object.assign({}, deletedCard)
 			copiedDeletedCard.deletedAt = 0
-			this.$store.dispatch('cardUndoDelete', copiedDeletedCard)
+			this.cardUndoDelete(copiedDeletedCard)
 		},
 	},
 }
