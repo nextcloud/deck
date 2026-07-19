@@ -9,7 +9,7 @@
 		:class="{
 			'stack--done-column': isDoneColumn,
 			'stack--bottom-add-inline': bottomAddCardInline,
-			'stack--bottom-add-empty': isEmptyBottomAddCardStack,
+			'stack--bottom-add-empty': isEmptyStackWithBottomAddCard,
 			'stack--add-card-at-top': canAddCardAtTop,
 		}"
 		:data-cy-stack="stack.title">
@@ -301,7 +301,7 @@ export default {
 		isEmptyStack() {
 			return this.cardsByStack.length === 0
 		},
-		isEmptyBottomAddCardStack() {
+		isEmptyStackWithBottomAddCard() {
 			return this.canAddCardAtBottom && this.isEmptyStack
 		},
 	},
