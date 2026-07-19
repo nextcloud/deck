@@ -123,7 +123,7 @@ export default {
 		},
 		stackAddCardAtTop: {
 			get() {
-				return this.$store.getters.config('stackAddCardAtTop') !== false
+				return this.$store.getters.config('stackAddCardAtTop') === true
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { stackAddCardAtTop: newValue })
