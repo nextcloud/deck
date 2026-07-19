@@ -285,7 +285,7 @@ export default {
 			},
 		},
 		stackAddCardAtTop() {
-			return this.$store.getters.config('stackAddCardAtTop') !== false
+			return this.$store.getters.config('stackAddCardAtTop') === true
 		},
 		canAddCardAtTop() {
 			return this.canEdit && !this.showArchived && !this.isArchived && this.stackAddCardAtTop
