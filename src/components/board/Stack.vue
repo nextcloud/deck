@@ -110,7 +110,10 @@
 					type="tertiary"
 					:wide="true"
 					@click.stop="showAddCard=true">
-					{{ t('deck', '+ Add card') }}
+					<template #icon>
+						<PlusIcon :size="20" />
+					</template>
+					{{ t('deck', 'Add card') }}
 				</NcButton>
 				<form v-else
 					:class="{ 'icon-loading-small': stateCardCreating }"
@@ -164,7 +167,10 @@
 					type="tertiary"
 					:wide="true"
 					@click.stop="showAddCard=true">
-					{{ t('deck', '+ Add card') }}
+					<template #icon>
+						<PlusIcon :size="20" />
+					</template>
+					{{ t('deck', 'Add card') }}
 				</NcButton>
 				<form v-else
 					:class="{ 'icon-loading-small': stateCardCreating }"
@@ -197,6 +203,7 @@ import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 
@@ -218,6 +225,7 @@ export default {
 		NcModal,
 		ArchiveIcon,
 		CheckCircleOutline,
+		PlusIcon,
 	},
 	directives: {
 		ClickOutside,
