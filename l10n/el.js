@@ -188,6 +188,7 @@ OC.L10N.register(
     "Show boards in calendar/tasks" : "Εμφάνιση πινάκων στο ημερολόγιο / εργασίες",
     "Limit board creation to some groups" : "Περιορισμός της δημιουργίας πινάκων σε ορισμένες ομάδες",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Οι χρήστες εκτός αυτών των ομάδων δεν θα μπορούν να δημιουργούν τους δικούς τους πίνακες, αλλά θα μπορούν να εργάζονται σε πίνακες που τους έχουν διαμοιραστεί.",
+    "Enable federation" : "Ενεργοποίηση ομοσπονδίας",
     "Board actions" : "Ενέργειες πίνακα",
     "Scroll sideways" : "Κύλιση οριζόντια",
     "Navigate between cards" : "Πλοήγηση μεταξύ καρτών",
