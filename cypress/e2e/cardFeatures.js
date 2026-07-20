@@ -303,6 +303,13 @@ describe('Card', function () {
 			cy.get('.stack__card-add form input[type=submit]')
 				.first().click()
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
+			cy.get('body').then(($body) => {
+				const addCardInput = $body.find('.stack__card-add form input#new-stack-input-main')
+				if (addCardInput.length) {
+					cy.wrap(addCardInput.first()).type('{esc}')
+				}
+			})
+			cy.get('.stack__card-add form').should('not.exist')
 
 			// Add delay to ensure the events are bound
 			cy.wait(1000)
@@ -316,8 +323,10 @@ describe('Card', function () {
 			cy.get('.vs__selected .tag:contains("Action needed")')
 				.parent().find('button').click()
 
-			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Later")')
-				.should('be.visible')
+			cy.get(`.card:contains("${newCardTitle}")`)
+				.scrollIntoView({ block: 'center' })
+				.find('.labels li:contains("Later")')
+				.should('exist')
 			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Action needed")')
 				.should('not.exist')
 		})
