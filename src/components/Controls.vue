@@ -14,7 +14,7 @@
 				{{ overviewName }}
 			</h2>
 			<NcActions>
-				<NcActionButton icon="icon-add" @click="clickShowAddCardModel">
+				<NcActionButton data-cy="action:add-card" icon="icon-add" @click="clickShowAddCardModel">
 					{{ t('deck', 'Add card') }}
 				</NcActionButton>
 			</NcActions>
