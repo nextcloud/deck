@@ -52,7 +52,7 @@ describe('Card', function () {
 		cy.get('.board .stack').eq(0).within(() => {
 			cy.get('.card:contains("Hello world")').should('be.visible')
 
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.first().click()
 
 			cy.get('.stack__card-add form input#new-stack-input-main')
@@ -69,7 +69,7 @@ describe('Card', function () {
 		cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 		cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 
-		cy.get('.button-vue[aria-label*="Add card"]')
+		cy.get('[data-cy="action:add-card"]')
 			.first().click()
 
 		// Somehow this avoids the electron crash
@@ -98,7 +98,7 @@ describe('Card', function () {
 		cy.visit(`/apps/deck/#/board/${boardId}`)
 		const absoluteUrl = `https://example.com`
 		cy.get('.board .stack').eq(0).within(() => {
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.first().click()
 
 			cy.get('.stack__card-add form input#new-stack-input-main')
@@ -120,7 +120,7 @@ describe('Card', function () {
 		const absoluteUrl = `https://example.com`
 		const plainTitle = 'New title'
 		cy.get('.board .stack').eq(0).within(() => {
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.first().click()
 
 			cy.get('.stack__card-add form input#new-stack-input-main')
@@ -260,7 +260,7 @@ describe('Card', function () {
 		it('Set a due date', function () {
 			const newCardTitle = 'Card with a due date'
 
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.first().click()
 			cy.get('.stack__card-add form input#new-stack-input-main')
 				.type(newCardTitle)
@@ -296,7 +296,7 @@ describe('Card', function () {
 		it('Add a label', function () {
 			const newCardTitle = 'Card with labels'
 
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.first().click()
 			cy.get('.stack__card-add form input#new-stack-input-main')
 				.type(newCardTitle)

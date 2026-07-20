@@ -46,7 +46,7 @@ describe('Card color', function () {
 
 		const newCardTitle = 'Card with color'
 
-		cy.get('.button-vue[aria-label*="Add card"]')
+		cy.get('[data-cy="action:add-card"]')
 			.first().click()
 		cy.get('.stack__card-add form input#new-stack-input-main')
 			.type(newCardTitle)
