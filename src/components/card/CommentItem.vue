@@ -152,9 +152,9 @@ export default {
 				comment.mentions.forEach((mention, index) => {
 					// Currently only [a-z\-_0-9] are allowed inside of placeholders so we use a hash of the mention id as a unique identifier
 					const hash = md5(mention.mentionId)
+					message = message.replace('federated_user/', '')
 					message = message.split('@' + mention.mentionId + '').join(`{user-${hash}}`)
 					message = message.split('@"' + mention.mentionId + '"').join(`{user-${hash}}`)
-
 				})
 				return message
 			}
@@ -167,7 +167,7 @@ export default {
 					result[itemKey] = {
 						component: AtMention,
 						props: {
-							user: item.mentionId,
+							user: (item.mentionType === 'federated_user' ? 'federated_user/' : '') + item.mentionId,
 							displayName: item.mentionDisplayName,
 						},
 					}
