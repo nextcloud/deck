@@ -5,15 +5,13 @@
 
 <template>
 	<div class="comment-form">
-		<NcRichContenteditable
-			v-model="commentText"
+		<NcRichContenteditable v-model="commentText"
 			dir="auto"
-			:autoComplete="autoComplete"
+			:auto-complete="autoComplete"
 			:maxlength="1000"
-			:userData="members"
+			:user-data="members"
 			@submit="submit" />
-		<NcButton
-			v-show="hasContent"
+		<NcButton v-show="hasContent"
 			variant="tertiary"
 			:aria-label="t('deck', 'Submit')"
 			:title="t('deck', 'Submit')"
@@ -30,8 +28,8 @@
 </template>
 
 <script>
-import { NcButton, NcRichContenteditable } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import { NcButton, NcRichContenteditable } from '@nextcloud/vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { useBoardStore } from '../../stores/board.js'
 
@@ -42,59 +40,50 @@ export default {
 		NcButton,
 		NcRichContenteditable,
 	},
-
 	props: {
 		modelValue: {
 			type: String,
 			default: '',
 		},
 	},
-
 	emits: ['update:modelValue', 'submit'],
 	data() {
 		return {
 			error: null,
 		}
 	},
-
 	computed: {
 		...mapState(useBoardStore, {
 			currentBoard: 'currentBoard',
 		}),
-
 		commentText: {
 			get() {
 				return this.modelValue
 			},
-
 			set(value) {
 				this.$emit('update:modelValue', value)
 			},
 		},
-
 		members() {
 			const obj = {}
-			this.currentBoard.users.forEach((user) => {
-				obj[user.uid] = {
+			this.currentBoard.users.forEach(user => {
+				obj[user.remote ? `federated_user/${user.uid}` : user.uid] = {
 					icon: 'icon-user',
-					id: user.uid,
-					label: user.displayname,
-					source: 'users',
+					id: user.remote ? `federated_user/${user.uid}` : user.uid,
+					label: user.remote ? user.uid : user.displayname,
+					source: user.remote ? 'federated_user' : 'users',
 				}
 			})
 			return obj
 		},
-
 		hasContent() {
 			return this.modelValue.trim().length > 0
 		},
 	},
-
 	methods: {
 		autoComplete(search, callback) {
 			callback(Object.values(this.members))
 		},
-
 		validate(submit) {
 			this.error = null
 			const content = this.modelValue
@@ -106,7 +95,6 @@ export default {
 			}
 			return this.error === null ? content : null
 		},
-
 		submit() {
 			const content = this.validate(true)
 			if (content) {
