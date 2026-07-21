@@ -309,6 +309,20 @@ export default function storeFactory() {
 				Vue.set(state.viewModeByBoard, state.currentBoard.id, mode)
 				localStorage.setItem(`deck.viewMode.${state.currentBoard.id}`, mode)
 			},
+			/**
+			 * Set the view mode without storing it as the user's preference.
+			 *
+			 * Used by the /board/:id/:viewMode routes, so that opening a link
+			 * to a specific view does not change how the recipient sees that
+			 * board afterwards.
+			 *
+			 * @param {object} state the store state
+			 * @param {string} mode the view mode to apply
+			 */
+			setViewModeForSession(state, mode) {
+				if (!state.currentBoard) return
+				Vue.set(state.viewModeByBoard, state.currentBoard.id, mode)
+			},
 		},
 		actions: {
 			setFullApp({ commit }, isFullApp) {
