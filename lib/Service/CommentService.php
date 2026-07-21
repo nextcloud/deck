@@ -177,7 +177,7 @@ class CommentService {
 				} catch (OutOfBoundsException $e) {
 					$this->logger->warning('Mention type not registered, can not resolve display name.', ['exception' => $e, 'mention_type' => $mention['type']]);
 					// No display name, upon client's discretion what to display.
-					$displayName = '';
+					$displayName = $mention['id'] ?? '';
 				}
 
 				return [
