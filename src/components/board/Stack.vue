@@ -677,6 +677,12 @@ export default {
 
 		:deep(.stack__card-add-button.button-vue) {
 			--button-size: var(--stack-card-add-control-height);
+			color: var(--color-text-maxcontrast);
+
+			&:hover:not(:disabled),
+			&:focus-visible {
+				color: var(--color-main-text);
+			}
 		}
 
 		form {
