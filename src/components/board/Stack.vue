@@ -626,6 +626,7 @@ export default {
 	}
 
 	.stack__card-add {
+		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
@@ -666,9 +667,15 @@ export default {
 			transform: translateY(-100%);
 		}
 
+		:deep(.stack__card-add-button.button-vue) {
+			--button-size: var(--stack-card-add-control-height);
+		}
+
 		form {
 			display: flex;
 			width: 100%;
+			height: var(--stack-card-add-control-height);
+			box-sizing: border-box;
 			border: 2px solid var(--color-border-maxcontrast);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;
