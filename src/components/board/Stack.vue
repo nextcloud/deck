@@ -4,17 +4,14 @@
 -->
 
 <template>
-	<div ref="stack"
-		class="stack"
+	<div class="stack"
 		:class="{
 			'stack--done-column': isDoneColumn,
-			'stack--bottom-add-inline': bottomAddCardInline,
 			'stack--bottom-add-empty': isEmptyStackWithBottomAddCard,
 			'stack--add-card-at-top': canAddCardAtTop,
 		}"
 		:data-cy-stack="stack.title">
-		<div ref="header"
-			v-click-outside="stopCardCreation"
+		<div v-click-outside="stopCardCreation"
 			class="stack__header"
 			:class="{'stack__header--add': showAddCard, 'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
@@ -138,8 +135,7 @@
 			</div>
 		</transition>
 
-		<Container ref="cardsContainer"
-			:get-child-payload="payloadForCard(stack.id)"
+		<Container :get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container"
 			group-name="stack"
 			data-click-closes-sidebar="true"
@@ -160,7 +156,7 @@
 		</Container>
 
 		<transition name="slide-bottom" appear>
-			<div v-if="canAddCardAtBottom" ref="bottomAddCard" class="stack__card-add stack__card-add--bottom">
+			<div v-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
 				<NcButton v-if="!showAddCard"
 					data-cy="action:add-card"
 					class="stack__card-add-button"
@@ -251,8 +247,6 @@ export default {
 			showAddCard: false,
 			stateCardCreating: false,
 			animate: false,
-			bottomAddCardInline: false,
-			bottomAddCardResizeObserver: null,
 			modalArchivAllCardsShow: false,
 			stackTransfer: {
 				total: 0,
@@ -309,9 +303,6 @@ export default {
 		},
 	},
 	watch: {
-		cardsByStack() {
-			this.$nextTick(this.updateBottomAddCardLayout)
-		},
 		showAddCard(newValue) {
 			if (!newValue) {
 				this.$store.dispatch('toggleShortcutLock', false)
@@ -320,22 +311,11 @@ export default {
 					this.$refs.newCardInput.focus()
 				})
 			}
-			this.$nextTick(this.updateBottomAddCardLayout)
-		},
-		canAddCardAtBottom() {
-			this.$nextTick(this.updateBottomAddCardLayout)
 		},
 	},
 
 	mounted() {
 		this.setupAutoscrollOnDrag()
-		this.setupBottomAddCardLayout()
-	},
-
-	beforeDestroy() {
-		if (this.bottomAddCardResizeObserver) {
-			this.bottomAddCardResizeObserver.disconnect()
-		}
 	},
 
 	methods: {
@@ -382,46 +362,6 @@ export default {
 			return index => {
 				return this.cardsByStack[index]
 			}
-		},
-		getCardsContainerElement() {
-			return this.$refs.cardsContainer?.$el || this.$refs.cardsContainer
-		},
-		setupBottomAddCardLayout() {
-			this.$nextTick(() => {
-				this.updateBottomAddCardLayout()
-
-				if (typeof ResizeObserver === 'undefined') {
-					return
-				}
-
-				this.bottomAddCardResizeObserver = new ResizeObserver(() => {
-					this.updateBottomAddCardLayout()
-				})
-
-				const observedElements = [
-					this.$refs.stack,
-					this.getCardsContainerElement(),
-					this.$refs.bottomAddCard,
-				].filter(Boolean)
-
-				observedElements.forEach((element) => {
-					this.bottomAddCardResizeObserver.observe(element)
-				})
-			})
-		},
-		updateBottomAddCardLayout() {
-			const stackElement = this.$refs.stack
-			const headerElement = this.$refs.header
-			const cardsContainerElement = this.getCardsContainerElement()
-			const bottomAddCardElement = this.$refs.bottomAddCard
-
-			if (!this.canAddCardAtBottom || !stackElement || !headerElement || !cardsContainerElement || !bottomAddCardElement) {
-				this.bottomAddCardInline = false
-				return
-			}
-
-			const availableCardsHeight = stackElement.clientHeight - headerElement.offsetHeight - bottomAddCardElement.offsetHeight
-			this.bottomAddCardInline = cardsContainerElement.scrollHeight <= availableCardsHeight
 		},
 		toggleDoneColumn() {
 			this.setDoneStack({
@@ -545,9 +485,10 @@ export default {
 			flex-grow: 1;
 		}
 
-		&.stack--bottom-add-inline {
+		&:not(.stack--add-card-at-top) {
 			.dnd-container {
-				flex-grow: 0;
+			flex: 0 1 auto;
+			min-height: 0;
 			}
 		}
 
@@ -718,8 +659,6 @@ export default {
 
 		&--bottom {
 			padding-bottom: $stack-gap;
-			position: sticky;
-			bottom: 0;
 		}
 
 		// Smooth fade out of the cards at the top
