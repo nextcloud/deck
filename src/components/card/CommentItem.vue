@@ -149,12 +149,17 @@ export default {
 		richText() {
 			return (comment) => {
 				let message = this.parsedMessage(comment.message)
+				message = message.replace('federated_user/', '')
 				comment.mentions.forEach((mention, index) => {
+					let mentionId = mention.mentionId
+					if (mention.mentionRemote === window.location.origin) {
+						mentionId = mention.mentionId.replace('@' + window.location.origin, '')
+						message = message.replace(mention.mentionId, mentionId)
+					}
 					// Currently only [a-z\-_0-9] are allowed inside of placeholders so we use a hash of the mention id as a unique identifier
-					const hash = md5(mention.mentionId)
-					message = message.replace('federated_user/', '')
-					message = message.split('@' + mention.mentionId + '').join(`{user-${hash}}`)
-					message = message.split('@"' + mention.mentionId + '"').join(`{user-${hash}}`)
+					const hash = md5(mentionId)
+					message = message.split('@' + mentionId + '').join(`{user-${hash}}`)
+					message = message.split('@"' + mentionId + '"').join(`{user-${hash}}`)
 				})
 				return message
 			}
@@ -163,11 +168,15 @@ export default {
 			return (comment) => {
 				const mentions = [...comment.mentions]
 				const result = mentions.reduce((result, item, index) => {
-					const itemKey = 'user-' + md5(item.mentionId)
+					let mentionId = item.mentionId
+					if (item.mentionRemote === window.location.origin) {
+						mentionId = item.mentionId.replace('@' + window.location.origin, '')
+					}
+					const itemKey = 'user-' + md5(mentionId)
 					result[itemKey] = {
 						component: AtMention,
 						props: {
-							user: (item.mentionType === 'federated_user' ? 'federated_user/' : '') + item.mentionId,
+							user: mentionId,
 							displayName: item.mentionDisplayName,
 						},
 					}

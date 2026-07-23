@@ -58,11 +58,17 @@ export default {
 		members() {
 			const obj = {}
 			this.currentBoard.users.forEach(user => {
-				obj[user.remote ? `federated_user/${user.uid}` : user.uid] = {
+				let uid = user.uid
+				if (user.remote) {
+					uid = `federated_user/${user.uid}`
+				} else if (this.currentBoard.externalId) {
+					uid = `federated_user/${user.uid}@${window.location.origin}`
+				}
+				obj[uid] = {
 					icon: 'icon-user',
-					id: user.remote ? `federated_user/${user.uid}` : user.uid,
+					id: uid,
 					label: user.remote ? user.uid : user.displayname,
-					source: user.remote ? 'federated_user' : 'users',
+					source: 'users',
 				}
 			})
 			return obj
