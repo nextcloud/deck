@@ -5,6 +5,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.3
+### Fixed
+* fix: Replace icon attributes with template slots by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8095
+* fix: loading notifications by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8160
+* Fix/date selector names by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8162
+* fix: validate board permission in setDoneStack method by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8191
+
+
 ## 1.18.2
 ### Fixed
 * fix: board notify-due by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8074
