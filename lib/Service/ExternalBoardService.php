@@ -108,6 +108,7 @@ class ExternalBoardService {
 		$remoteBoard['acl'] = $localBoard->getAcl();
 		$remoteBoard['permissions'] = $localBoard->getPermissions();
 		$remoteBoard['users'] = $this->localizeRemoteUsers($remoteBoard['users'], $localBoard);
+		$remoteBoard['externalId'] = $localBoard->getExternalId();
 		return $remoteBoard;
 	}
 
@@ -122,6 +123,7 @@ class ExternalBoardService {
 
 	public function localizeRemoteComments(Board $localBoard, array $comments): array {
 		foreach ($comments as $i => $comment) {
+			// Localize actors
 			$localizedActor = $this->localizeRemoteUser($localBoard, ['uid' => $comment['actorId'], 'remote' => $comment['actorRemote']]);
 			if ($localizedActor instanceof FederatedUser) {
 				$comments[$i]['actorDisplayName'] = $localizedActor->getCloudId()->getId();
@@ -144,6 +146,25 @@ class ExternalBoardService {
 					$comments[$i]['replyTo']['actorDisplayName'] = $localizedReplyActor->getDisplayName();
 					$comments[$i]['replyTo']['actorId'] = $localizedReplyActor->getUID();
 					$comments[$i]['replyTo']['actorRemote'] = null;
+				}
+			}
+
+			// Localize mentions
+			foreach ($comment['mentions'] as $j => $mention) {
+				$localizedMention = $this->localizeRemoteUser($localBoard, ['uid' => $mention['mentionId'], 'remote' => $mention['mentionRemote']]);
+				if ($localizedMention instanceof User) {
+					$comments[$i]['message'] = str_replace('@"federated_user/' . $mention['mentionId'], '@"' . $localizedMention->getUID(), $comment['message']);
+					$comments[$i]['mentions'][$j]['mentionDisplayName'] = $localizedMention->getDisplayName();
+					$comments[$i]['mentions'][$j]['mentionId'] = $localizedMention->getUID();
+					$comments[$i]['mentions'][$j]['mentionRemote'] = null;
+					$comments[$i]['mentions'][$j]['mentionType'] = 'user';
+				}
+				if ($localizedMention instanceof FederatedUser) {
+					$comments[$i]['message'] = str_replace('@' . $mention['mentionId'], '@federated_user/' . $localizedMention->getUID(), $comment['message']);
+					$comments[$i]['mentions'][$j]['mentionDisplayName'] = $localizedMention->getCloudId()->getId();
+					$comments[$i]['mentions'][$j]['mentionId'] = $localizedMention->getCloudId()->getId();
+					$comments[$i]['mentions'][$j]['mentionRemote'] = $localizedMention->getCloudId()->getRemote();
+					$comments[$i]['mentions'][$j]['mentionType'] = 'federated_user';
 				}
 			}
 		}
@@ -499,6 +520,7 @@ class ExternalBoardService {
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
 		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/comments';
+
 		$params = [
 			'boardId' => $localBoard->getExternalId(),
 			'message' => $message,

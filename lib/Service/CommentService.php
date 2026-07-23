@@ -21,6 +21,7 @@ use OCP\Comments\MessageTooLongException;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Federation\ICloudIdManager;
+use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OutOfBoundsException;
@@ -35,6 +36,7 @@ class CommentService {
 		private IUserManager $userManager,
 		private LoggerInterface $logger,
 		private ICloudIdManager $cloudIdManager,
+		private IURLGenerator $urlGenerator,
 		private ?string $userId,
 		private IEventDispatcher $eventDispatcher,
 	) {
@@ -179,16 +181,23 @@ class CommentService {
 			'actorDisplayName' => $actorDisplayName,
 			'creationDateTime' => $comment->getCreationDateTime()->format(\DateTime::ATOM),
 			'mentions' => array_map(function ($mention) {
+				$remote = $this->cloudIdManager->isValidCloudId($mention['id']) ? $this->cloudIdManager->resolveCloudId($mention['id'])->getRemote() : null;
+
 				try {
 					$displayName = $this->commentsManager->resolveDisplayName($mention['type'], $mention['id']);
 				} catch (OutOfBoundsException $e) {
 					$this->logger->warning('Mention type not registered, can not resolve display name.', ['exception' => $e, 'mention_type' => $mention['type']]);
 					// No display name, upon client's discretion what to display.
 					$displayName = $mention['id'] ?? '';
+					if ($remote === $this->urlGenerator->getBaseUrl()) {
+						$uid = $this->cloudIdManager->resolveCloudId($mention['id'])->getUser();
+						$displayName = $this->commentsManager->resolveDisplayName('user', $uid);
+					}
 				}
 
 				return [
 					'mentionId' => $mention['id'],
+					'mentionRemote' => $remote,
 					'mentionType' => $mention['type'],
 					'mentionDisplayName' => $displayName
 				];
