@@ -59,7 +59,7 @@ updates:
   - 3. to review
   - dependencies
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
 
 - package-ecosystem: npm
@@ -95,7 +95,7 @@ updates:
     default-days: 10
   open-pull-requests-limit: 10
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
 
 - package-ecosystem: composer
@@ -109,7 +109,7 @@ updates:
     default-days: 10
   open-pull-requests-limit: 10
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
 
 - package-ecosystem: github-actions
@@ -123,5 +123,5 @@ updates:
     default-days: 10
   open-pull-requests-limit: 10
   reviewers:
-  - juliushaertl
+  - juliusknorr
   - luka-nextcloud
