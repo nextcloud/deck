@@ -50,7 +50,7 @@
 				key="gantt"
 				:board="board"
 				:stacks="stacksByBoard" />
-			<div v-else-if="!isEmpty && !loading"
+			<div v-else-if="!isEmpty && !loading && swimlaneMode === 'none'"
 				key="board"
 				ref="board"
 				class="board"
@@ -68,6 +68,41 @@
 						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
 						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
+					</Draggable>
+				</Container>
+			</div>
+			<div v-else-if="!isEmpty && !loading && viewMode === 'kanban'"
+				key="board-swimlanes"
+				ref="board"
+				role="region"
+				:aria-label="t('deck', 'Board grouped by {mode}', { mode: swimlaneMode })"
+				class="board board--swimlanes">
+				<div class="board__stack-headers">
+					<Container orientation="horizontal"
+						:drag-handle-selector="dragHandleSelector"
+						data-click-closes-sidebar="true"
+						@drag-start="draggingStack = true"
+						@drag-end="draggingStack = false"
+						@drop="onDropStack">
+						<Draggable v-for="stack in stacksByBoard"
+							:key="stack.id"
+							data-click-closes-sidebar="true"
+							class="stack-draggable-wrapper">
+							<Stack :stack="stack"
+								:dragging="draggingStack"
+								header-only
+								data-click-closes-sidebar="true" />
+						</Draggable>
+					</Container>
+				</div>
+				<Container orientation="vertical"
+					:drag-handle-selector="canEdit ? '.swimlane-header__drag-handle' : '.no-drag'"
+					@drop="onReorderLane">
+					<Draggable v-for="lane in computedLanes"
+						:key="lane.key">
+						<Swimlane :lane="lane"
+							:stacks="stacksByBoard"
+							:board-id="board.id" />
 					</Draggable>
 				</Container>
 			</div>
@@ -93,6 +128,7 @@ import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import Stack from './Stack.vue'
 import GanttView from './GanttView.vue'
+import Swimlane from './Swimlane.vue'
 import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
@@ -108,6 +144,7 @@ export default {
 		Draggable,
 		Stack,
 		GanttView,
+		Swimlane,
 		NcEmptyContent,
 		NcModal,
 		NcTextField,
@@ -154,6 +191,104 @@ export default {
 		},
 		isEmpty() {
 			return this.stacksByBoard.length === 0
+		},
+		swimlaneMode() {
+			return this.board?.settings?.swimlaneMode || 'none'
+		},
+		computedLanes() {
+			if (this.swimlaneMode === 'none' || !this.board) {
+				return []
+			}
+			const lanes = []
+			const seen = new Set()
+			let hasNoValue = false
+
+			for (const stack of this.stacksByBoard) {
+				const cards = this.$store.getters.cardsByStack(stack.id).filter(
+					c => this.showArchived ? c.archived : !c.archived,
+				)
+				for (const card of cards) {
+					if (this.swimlaneMode === 'labels') {
+						if (!card.labels || card.labels.length === 0) {
+							hasNoValue = true
+						} else {
+							for (const label of card.labels) {
+								if (!seen.has(label.id)) {
+									seen.add(label.id)
+									lanes.push({
+										key: 'label-' + label.id,
+										id: label.id,
+										type: 'label',
+										title: label.title,
+										color: label.color,
+									})
+								}
+							}
+						}
+					} else if (this.swimlaneMode === 'assignees') {
+						if (!card.assignedUsers || card.assignedUsers.length === 0) {
+							hasNoValue = true
+						} else {
+							for (const user of card.assignedUsers) {
+								// Skip entries whose participant was deleted or
+								// couldn't be resolved (e.g. broken federation)
+								// so the whole view doesn't unmount on bad data
+								const uid = user?.participant?.uid
+								if (!uid) continue
+								if (!seen.has(uid)) {
+									seen.add(uid)
+									lanes.push({
+										key: 'assignee-' + uid,
+										id: uid,
+										type: 'assignee',
+										uid,
+										title: user.participant.displayname,
+									})
+								}
+							}
+						}
+					}
+				}
+			}
+
+			const savedOrder = this.swimlaneMode === 'labels'
+				? this.$store.state.swimlaneLabelOrder[this.board.id]
+				: this.$store.state.swimlaneUserOrder[this.board.id]
+
+			// Always sort to keep lane order stable across card moves.
+			// Lanes in savedOrder come first in their saved order; the rest
+			// fall back to a deterministic by-id ordering instead of card-
+			// iteration order (which shuffles when cards are moved).
+			lanes.sort((a, b) => {
+				if (savedOrder && savedOrder.length > 0) {
+					const aIdx = savedOrder.indexOf(a.id)
+					const bIdx = savedOrder.indexOf(b.id)
+					const aInSaved = aIdx !== -1
+					const bInSaved = bIdx !== -1
+					if (aInSaved && bInSaved) return aIdx - bIdx
+					if (aInSaved) return -1
+					if (bInSaved) return 1
+				}
+				if (typeof a.id === 'number' && typeof b.id === 'number') {
+					return a.id - b.id
+				}
+				return String(a.id).localeCompare(String(b.id))
+			})
+
+			if (hasNoValue) {
+				const noValueTitle = this.swimlaneMode === 'labels'
+					? t('deck', 'No label')
+					: t('deck', 'Unassigned')
+				lanes.push({
+					key: '__none__',
+					id: '__none__',
+					type: this.swimlaneMode === 'labels' ? 'label' : 'assignee',
+					title: noValueTitle,
+					color: null,
+				})
+			}
+
+			return lanes
 		},
 	},
 	watch: {
@@ -209,6 +344,22 @@ export default {
 
 		onDropStack({ removedIndex, addedIndex }) {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
+		},
+
+		onReorderLane({ removedIndex, addedIndex }) {
+			if (removedIndex === null || addedIndex === null || !this.canEdit) {
+				return
+			}
+			const lanes = [...this.computedLanes]
+			const [moved] = lanes.splice(removedIndex, 1)
+			lanes.splice(addedIndex, 0, moved)
+			const order = lanes.map(l => l.id)
+			const type = this.swimlaneMode === 'labels' ? 'labels' : 'assignees'
+			this.$store.dispatch('setSwimlaneOrder', {
+				boardId: this.board.id,
+				type,
+				order,
+			})
 		},
 
 		addNewStack() {
@@ -292,6 +443,23 @@ export default {
 		overflow-x: auto;
 		flex-grow: 1;
 		scrollbar-gutter: stable;
+
+		&--swimlanes {
+			overflow-y: auto;
+			overflow-x: auto;
+			padding: 0;
+		}
+
+		&__stack-headers {
+			position: sticky;
+			top: 0;
+			z-index: 150;
+			background-color: var(--color-main-background);
+
+			.smooth-dnd-container.horizontal {
+				height: auto;
+			}
+		}
 	}
 
 	/**

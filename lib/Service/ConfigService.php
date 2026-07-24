@@ -24,6 +24,8 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
+	private const SWIMLANE_CONFIG_KEYS = ['swimlaneMode', 'swimlaneLabelOrder', 'swimlaneUserOrder'];
+
 	private ?string $userId = null;
 
 	public function __construct(
@@ -187,14 +189,61 @@ class ConfigService {
 				if (count($parts) < 3) {
 					break;
 				}
+				$boardId = $parts[1];
 				$boardConfigKey = $parts[2];
+				if ($boardId === '' || $boardConfigKey === '') {
+					throw new BadRequestException('Board config key must be in the form board:<id>:<setting>');
+				}
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}
-				$this->config->setUserValue($userId, Application::APP_ID, $key, (string)$value);
+				if (in_array($boardConfigKey, self::SWIMLANE_CONFIG_KEYS, true)) {
+					// Shared board-level setting (visible to every board member).
+					// EDIT permission is enforced in ConfigController::setValue(),
+					// whose board:(\d+): match requires a numeric board id — so a
+					// numeric id is required here too, otherwise the permission
+					// check could be bypassed.
+					if (!ctype_digit($boardId)) {
+						throw new BadRequestException('Board id must be numeric');
+					}
+					$this->validateSwimlaneValue($boardConfigKey, $value);
+					$this->config->setAppValue(Application::APP_ID, $key, (string)$value);
+				} else {
+					$this->config->setUserValue($userId, Application::APP_ID, $key, (string)$value);
+				}
 				$result = $value;
 		}
 		return $result;
+	}
+
+	/**
+	 * Shared swimlane settings live in app config and are delivered to every
+	 * board member on board load, so reject malformed values before storing.
+	 */
+	private function validateSwimlaneValue(string $boardConfigKey, mixed $value): void {
+		if ($boardConfigKey === 'swimlaneMode') {
+			if (!in_array($value, ['none', 'labels', 'assignees'], true)) {
+				throw new BadRequestException('Swimlane mode must be one of: none, labels, assignees');
+			}
+			return;
+		}
+
+		// swimlaneLabelOrder / swimlaneUserOrder: JSON array of lane ids
+		// (label ids, user ids or the '__none__' catch-all lane).
+		if (!is_string($value) || strlen($value) > 8192) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
+		$order = json_decode($value, true);
+		if (!is_array($order) || !array_is_list($order) || count($order) > 1000) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
+		foreach ($order as $laneId) {
+			$isIntId = is_int($laneId);
+			$isStringId = is_string($laneId) && $laneId !== '' && strlen($laneId) <= 64;
+			if (!$isIntId && !$isStringId) {
+				throw new BadRequestException('Swimlane order entries must be label ids, user ids or "__none__"');
+			}
+		}
 	}
 
 	/**

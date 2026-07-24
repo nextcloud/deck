@@ -341,9 +341,13 @@ class BoardService {
 
 	public function enrichWithBoardSettings(Board $board): void {
 		$globalCalendarConfig = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
+		$boardId = $board->getId();
 		$settings = [
-			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
-			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':calendar', $globalCalendarConfig),
+			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
+			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $globalCalendarConfig),
+			'swimlaneMode' => $this->config->getAppValue(Application::APP_ID, 'board:' . $boardId . ':swimlaneMode', 'none'),
+			'swimlaneLabelOrder' => $this->config->getAppValue(Application::APP_ID, 'board:' . $boardId . ':swimlaneLabelOrder', '[]'),
+			'swimlaneUserOrder' => $this->config->getAppValue(Application::APP_ID, 'board:' . $boardId . ':swimlaneUserOrder', '[]'),
 		];
 		$board->setSettings($settings);
 	}
