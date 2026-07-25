@@ -1330,16 +1330,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "13.2.3",
+            "version": "13.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d76d0e24225e587d6a5f0c6f6d9fef0d90712b54"
+                "reference": "8f5180f4627fc1978be2f61d8d9979dbe37e0c10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d76d0e24225e587d6a5f0c6f6d9fef0d90712b54",
-                "reference": "d76d0e24225e587d6a5f0c6f6d9fef0d90712b54",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8f5180f4627fc1978be2f61d8d9979dbe37e0c10",
+                "reference": "8f5180f4627fc1978be2f61d8d9979dbe37e0c10",
                 "shasum": ""
             },
             "require": {
@@ -1353,7 +1353,7 @@
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.4.1",
-                "phpunit/php-code-coverage": "^14.2.2",
+                "phpunit/php-code-coverage": "^14.2.3",
                 "phpunit/php-file-iterator": "^7.0.0",
                 "phpunit/php-invoker": "^7.0.0",
                 "phpunit/php-text-template": "^6.0.0",
@@ -1410,7 +1410,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.2.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.2.4"
             },
             "funding": [
                 {
@@ -1418,7 +1418,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-07-06T14:55:56+00:00"
+            "time": "2026-07-08T08:36:51+00:00"
         },
         {
             "name": "psr/container",
