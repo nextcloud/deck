@@ -155,8 +155,51 @@
 			</Draggable>
 		</Container>
 
-		<transition name="slide-bottom" appear>
-			<div v-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
+		<Container v-if="canAddCardAtBottom && isEmptyStackWithBottomAddCard"
+				:get-child-payload="payloadForCard(stack.id)"
+				class="dnd-container stack__card-add stack__card-add--bottom stack__card-add--dropzone"
+				group-name="stack"
+				data-click-closes-sidebar="true"
+				non-drag-area-selector=".dragDisabled"
+				:drag-handle-selector="dragHandleSelector"
+				data-dragscroll-enabled
+				@should-accept-drop="canEdit"
+				@drag-start="draggingCard = true"
+				@drag-end="draggingCard = false"
+				@drop="($event) => onDropCard(stack.id, $event)">
+				<NcButton v-if="!showAddCard"
+					data-cy="action:add-card"
+					class="stack__card-add-button"
+					type="tertiary"
+					:wide="true"
+					@click.stop="showAddCard=true">
+					<template #icon>
+						<PlusIcon :size="20" />
+					</template>
+					{{ t('deck', 'Add card') }}
+				</NcButton>
+				<form v-else
+					:class="{ 'icon-loading-small': stateCardCreating }"
+					@submit.prevent.stop="clickAddCard()">
+					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
+					<input id="new-stack-input-main"
+						ref="newCardInput"
+						v-model="newCardTitle"
+						type="text"
+						class="no-close"
+						:disabled="stateCardCreating"
+						:placeholder="t('deck', 'Card name')"
+						required
+						pattern=".*\S+.*"
+						@focus="onCreateCardFocus"
+						@keydown.esc.stop="closeCardCreation">
+					<input v-show="!stateCardCreating"
+						class="icon-confirm"
+						type="submit"
+						value="">
+				</form>
+				</Container>
+				<div v-else-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
 				<NcButton v-if="!showAddCard"
 					data-cy="action:add-card"
 					class="stack__card-add-button"
@@ -189,7 +232,6 @@
 						value="">
 				</form>
 			</div>
-		</transition>
 	</div>
 </template>
 
@@ -480,6 +522,7 @@ export default {
 	@import './../../css/variables.scss';
 
 	.stack {
+		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));
 		width: 100%;
 		.dnd-container {
 			flex-grow: 1;
@@ -499,10 +542,20 @@ export default {
 				padding-block: 0;
 			}
 
-			.stack__card-add--bottom {
+			:deep(.smooth-dnd-container.vertical.stack__card-add--dropzone) {
+				padding: 0;
+				margin: 0;
+			}
+
+			.stack__card-add--dropzone {
+				flex: 0 0 auto;
 				order: 1;
-				padding-top: $stack-gap;
-				padding-bottom: 0;
+				display: flex;
+				align-items: center;
+				padding-block: $stack-gap;
+				padding-inline: 0;
+				height: calc(var(--stack-card-add-control-height) + (2 * #{$stack-gap}));
+				box-sizing: border-box;
 				position: relative;
 			}
 		}
@@ -634,7 +687,6 @@ export default {
 	}
 
 	.stack__card-add {
-		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
@@ -723,16 +775,6 @@ export default {
 
 	.slide-top-enter, .slide-top-leave-to {
 		transform: translateY(-10px);
-		opacity: 0;
-	}
-
-	.slide-bottom-enter-active,
-	.slide-bottom-leave-active {
-		transition: all 100ms ease;
-	}
-
-	.slide-bottom-enter, .slide-bottom-leave-to {
-		transform: translateY(20px);
 		opacity: 0;
 	}
 
