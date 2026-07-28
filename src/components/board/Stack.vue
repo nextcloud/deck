@@ -99,44 +99,42 @@
 			</div>
 		</NcModal>
 
-		<transition name="slide-top" appear>
-			<div v-if="canAddCardAtTop" class="stack__card-add stack__card-add--top">
-				<NcButton v-if="!showAddCard"
-					data-cy="action:add-card"
-					class="stack__card-add-button"
-					type="tertiary"
-					:wide="true"
-					@click.stop="showAddCard=true">
-					<template #icon>
-						<PlusIcon :size="20" />
-					</template>
-					{{ t('deck', 'Add card') }}
-				</NcButton>
-				<form v-else
-					:class="{ 'icon-loading-small': stateCardCreating }"
-					@submit.prevent.stop="clickAddCard()">
-					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-					<input id="new-stack-input-main"
-						ref="newCardInput"
-						v-model="newCardTitle"
-						type="text"
-						class="no-close"
-						:disabled="stateCardCreating"
-						:placeholder="t('deck', 'Card name')"
-						required
-						pattern=".*\S+.*"
-						@focus="onCreateCardFocus"
-						@keydown.esc.stop="closeCardCreation">
-					<input v-show="!stateCardCreating"
-						class="icon-confirm"
-						type="submit"
-						value="">
-				</form>
-			</div>
-		</transition>
+		<div v-if="canAddCardAtTop" class="stack__card-add stack__card-add--top">
+			<NcButton v-if="!showAddCard"
+				data-cy="action:add-card"
+				class="stack__card-add-button"
+				type="tertiary"
+				:wide="true"
+				@click.stop="showAddCard=true">
+				<template #icon>
+					<PlusIcon :size="20" />
+				</template>
+				{{ t('deck', 'Add card') }}
+			</NcButton>
+			<form v-else
+				:class="{ 'icon-loading-small': stateCardCreating }"
+				@submit.prevent.stop="clickAddCard()">
+				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
+				<input id="new-stack-input-main"
+					ref="newCardInput"
+					v-model="newCardTitle"
+					type="text"
+					class="no-close"
+					:disabled="stateCardCreating"
+					:placeholder="t('deck', 'Card name')"
+					required
+					pattern=".*\S+.*"
+					@focus="onCreateCardFocus"
+					@keydown.esc.stop="closeCardCreation">
+				<input v-show="!stateCardCreating"
+					class="icon-confirm"
+					type="submit"
+					value="">
+			</form>
+		</div>
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
-			class="dnd-container"
+			class="dnd-container stack__cards-list"
 			group-name="stack"
 			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
@@ -156,82 +154,81 @@
 		</Container>
 
 		<Container v-if="canAddCardAtBottom && isEmptyStackWithBottomAddCard"
-				:get-child-payload="payloadForCard(stack.id)"
-				class="dnd-container stack__card-add stack__card-add--bottom stack__card-add--dropzone"
-				group-name="stack"
-				data-click-closes-sidebar="true"
-				non-drag-area-selector=".dragDisabled"
-				:drag-handle-selector="dragHandleSelector"
-				data-dragscroll-enabled
-				@should-accept-drop="canEdit"
-				@drag-start="draggingCard = true"
-				@drag-end="draggingCard = false"
-				@drop="($event) => onDropCard(stack.id, $event)">
-				<NcButton v-if="!showAddCard"
-					data-cy="action:add-card"
-					class="stack__card-add-button"
-					type="tertiary"
-					:wide="true"
-					@click.stop="showAddCard=true">
-					<template #icon>
-						<PlusIcon :size="20" />
-					</template>
-					{{ t('deck', 'Add card') }}
-				</NcButton>
-				<form v-else
-					:class="{ 'icon-loading-small': stateCardCreating }"
-					@submit.prevent.stop="clickAddCard()">
-					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-					<input id="new-stack-input-main"
-						ref="newCardInput"
-						v-model="newCardTitle"
-						type="text"
-						class="no-close"
-						:disabled="stateCardCreating"
-						:placeholder="t('deck', 'Card name')"
-						required
-						pattern=".*\S+.*"
-						@focus="onCreateCardFocus"
-						@keydown.esc.stop="closeCardCreation">
-					<input v-show="!stateCardCreating"
-						class="icon-confirm"
-						type="submit"
-						value="">
-				</form>
-				</Container>
-				<div v-else-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
-				<NcButton v-if="!showAddCard"
-					data-cy="action:add-card"
-					class="stack__card-add-button"
-					type="tertiary"
-					:wide="true"
-					@click.stop="showAddCard=true">
-					<template #icon>
-						<PlusIcon :size="20" />
-					</template>
-					{{ t('deck', 'Add card') }}
-				</NcButton>
-				<form v-else
-					:class="{ 'icon-loading-small': stateCardCreating }"
-					@submit.prevent.stop="clickAddCard()">
-					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-					<input id="new-stack-input-main"
-						ref="newCardInput"
-						v-model="newCardTitle"
-						type="text"
-						class="no-close"
-						:disabled="stateCardCreating"
-						:placeholder="t('deck', 'Card name')"
-						required
-						pattern=".*\S+.*"
-						@focus="onCreateCardFocus"
-						@keydown.esc.stop="closeCardCreation">
-					<input v-show="!stateCardCreating"
-						class="icon-confirm"
-						type="submit"
-						value="">
-				</form>
-			</div>
+			:get-child-payload="payloadForCard(stack.id)"
+			class="dnd-container stack__card-add stack__card-add--bottom stack__card-add--dropzone"
+			group-name="stack"
+			data-click-closes-sidebar="true"
+			non-drag-area-selector=".dragDisabled"
+			:drag-handle-selector="dragHandleSelector"
+			@should-accept-drop="canEdit"
+			@drag-start="draggingCard = true"
+			@drag-end="draggingCard = false"
+			@drop="($event) => onDropCard(stack.id, $event)">
+			<NcButton v-if="!showAddCard"
+				data-cy="action:add-card"
+				class="stack__card-add-button"
+				type="tertiary"
+				:wide="true"
+				@click.stop="showAddCard=true">
+				<template #icon>
+					<PlusIcon :size="20" />
+				</template>
+				{{ t('deck', 'Add card') }}
+			</NcButton>
+			<form v-else
+				:class="{ 'icon-loading-small': stateCardCreating }"
+				@submit.prevent.stop="clickAddCard()">
+				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
+				<input id="new-stack-input-main"
+					ref="newCardInput"
+					v-model="newCardTitle"
+					type="text"
+					class="no-close"
+					:disabled="stateCardCreating"
+					:placeholder="t('deck', 'Card name')"
+					required
+					pattern=".*\S+.*"
+					@focus="onCreateCardFocus"
+					@keydown.esc.stop="closeCardCreation">
+				<input v-show="!stateCardCreating"
+					class="icon-confirm"
+					type="submit"
+					value="">
+			</form>
+		</Container>
+		<div v-else-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
+			<NcButton v-if="!showAddCard"
+				data-cy="action:add-card"
+				class="stack__card-add-button"
+				type="tertiary"
+				:wide="true"
+				@click.stop="showAddCard=true">
+				<template #icon>
+					<PlusIcon :size="20" />
+				</template>
+				{{ t('deck', 'Add card') }}
+			</NcButton>
+			<form v-else
+				:class="{ 'icon-loading-small': stateCardCreating }"
+				@submit.prevent.stop="clickAddCard()">
+				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
+				<input id="new-stack-input-main"
+					ref="newCardInput"
+					v-model="newCardTitle"
+					type="text"
+					class="no-close"
+					:disabled="stateCardCreating"
+					:placeholder="t('deck', 'Card name')"
+					required
+					pattern=".*\S+.*"
+					@focus="onCreateCardFocus"
+					@keydown.esc.stop="closeCardCreation">
+				<input v-show="!stateCardCreating"
+					class="icon-confirm"
+					type="submit"
+					value="">
+			</form>
+		</div>
 	</div>
 </template>
 
@@ -536,25 +533,25 @@ export default {
 		}
 
 		&.stack--bottom-add-empty {
-			.dnd-container {
-				order: 2;
+			:deep(.smooth-dnd-container.vertical.stack__cards-list:empty) {
 				flex-grow: 0;
-				padding-block: 0;
+				padding: 0 !important;
+				min-height: 0;
 			}
 
 			:deep(.smooth-dnd-container.vertical.stack__card-add--dropzone) {
 				padding: 0;
 				margin: 0;
+				overflow-y: visible;
 			}
 
 			.stack__card-add--dropzone {
 				flex: 0 0 auto;
-				order: 1;
 				display: flex;
 				align-items: center;
 				padding-block: $stack-gap;
 				padding-inline: 0;
-				height: calc(var(--stack-card-add-control-height) + (2 * #{$stack-gap}));
+				min-height: calc(var(--stack-card-add-control-height) + (2 * #{$stack-gap}));
 				box-sizing: border-box;
 				position: relative;
 			}
@@ -762,20 +759,6 @@ export default {
 			border: none;
 			margin: 0;
 		}
-	}
-
-	/**
-	 * Rules to handle scrolling behaviour are inherited from Board.vue
-	 */
-
-	.slide-top-enter-active,
-	.slide-top-leave-active {
-		transition: all 100ms ease;
-	}
-
-	.slide-top-enter, .slide-top-leave-to {
-		transform: translateY(-10px);
-		opacity: 0;
 	}
 
 	.modal__content {
