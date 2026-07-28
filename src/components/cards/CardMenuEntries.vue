@@ -100,7 +100,8 @@ import { emit } from '@nextcloud/event-bus'
 import { useActionsStore } from '../../stores/actions.js'
 import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
-import { mapState } from 'pinia'
+import { useCardStore } from '../../stores/card.js'
+import { mapActions, mapState } from 'pinia'
 
 export default {
 	name: 'CardMenuEntries',
@@ -175,6 +176,14 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			deleteCardInStore: 'deleteCard',
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+			assignCardToUserInStore: 'assignCardToUser',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			updateCardColorInStore: 'updateCardColor',
+		}),
 		openCard() {
 			const boardId = this.card?.boardId ? this.card.boardId : this.$route?.params.id ?? this.currentBoard.id
 
@@ -189,7 +198,7 @@ export default {
 			this.$emit('edit-title', this.card.id)
 		},
 		deleteCard() {
-			this.$store.dispatch('deleteCard', this.card)
+			this.deleteCardInStore(this.card)
 			const undoCard = { ...this.card, deletedAt: 0 }
 			showUndo(t('deck', 'Card deleted'), () => useTrashbinStore().cardUndoDelete(undoCard))
 			if (this.$router.currentRoute.name === 'card') {
@@ -197,13 +206,13 @@ export default {
 			}
 		},
 		changeCardDoneStatus() {
-			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+			this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
 		},
 		archiveUnarchiveCard() {
-			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+			this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
 		},
 		assignCardToMe() {
-			this.$store.dispatch('assignCardToUser', {
+			this.assignCardToUserInStore({
 				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
@@ -212,7 +221,7 @@ export default {
 			})
 		},
 		unassignCardFromMe() {
-			this.$store.dispatch('removeUserFromCard', {
+			this.removeUserFromCardInStore({
 				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
@@ -227,7 +236,7 @@ export default {
 			this.editingCardColor = this.card.color ? '#' + this.card.color : ''
 		},
 		updateCardColor(val) {
-			this.$store.dispatch('updateCardColor', {
+			this.updateCardColorInStore({
 				...this.card,
 				color: val ? val.substring(1) : null,
 			})

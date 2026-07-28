@@ -100,6 +100,7 @@ import { createSession } from '../../sessions.js'
 import CardSidebar from '../card/CardSidebar.vue'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
 export default {
 	name: 'Board',
 	components: {
@@ -139,6 +140,7 @@ export default {
 	},
 	computed: {
 		...mapState(useStackStore, ['stacksByBoard']),
+		...mapState(useCardStore, ['cardById']),
 		...mapStateVuex({
 			isFullApp: state => state.isFullApp,
 			board: state => state.currentBoard,
@@ -192,10 +194,10 @@ export default {
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
-				if (routeCardId && !this.$store.getters.cardById(routeCardId)) {
+				if (routeCardId && !this.cardById(routeCardId)) {
 					await this.loadArchivedStacks(this.id)
 
-					if (this.$store.getters.cardById(routeCardId)) {
+					if (this.cardById(routeCardId)) {
 						this.$store.commit('toggleShowArchived', true)
 					}
 				}

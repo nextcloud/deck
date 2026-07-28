@@ -101,6 +101,8 @@ import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import { showError, showWarning } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/CardMenuEntries.vue'
+import { mapActions, mapState } from 'pinia'
+import { useCardStore } from '../../stores/card.js'
 
 const capabilities = getCapabilities()
 
@@ -151,6 +153,7 @@ export default {
 		}
 	},
 	computed: {
+		...mapState(useCardStore, ['cardById']),
 		...mapStateVuex({
 			isFullApp: (state) => state.isFullApp,
 			currentBoard: (state) => state.currentBoard,
@@ -158,7 +161,7 @@ export default {
 		}),
 		...mapGetters(['canEdit', 'assignables']),
 		currentCard() {
-			return this.$store.getters.cardById(this.id)
+			return this.cardById(this.id)
 		},
 		cardOwnerDisplayName() {
 			return this.currentCard.owner?.displayname ?? this.currentCard.owner?.uid ?? this.currentCard.owner ?? null
@@ -216,6 +219,9 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			updateCardTitleInStore: 'updateCardTitle',
+		}),
 		focusHeader() {
 			this.$nextTick(() => {
 				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
@@ -227,7 +233,7 @@ export default {
 				return
 			}
 			this.isEditingTitle = false
-			this.$store.dispatch('updateCardTitle', {
+			this.updateCardTitleInStore({
 				...this.currentCard,
 				title: this.titleEditing,
 			})

@@ -89,6 +89,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { mapActions } from 'pinia'
 import {
 	NcActionButton,
 	NcActions,
@@ -106,6 +107,7 @@ import CalendarCheck from 'vue-material-design-icons/CalendarCheckOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import ClearIcon from 'vue-material-design-icons/Close.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
+import { useCardStore } from '../../stores/card.js'
 
 export default defineComponent({
 	name: 'DueDateSelector',
@@ -207,6 +209,10 @@ export default defineComponent({
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+		}),
 		initDate() {
 			if (this.duedate === null) {
 				// We initialize empty dates with a time once clicked to make picking a day easier
@@ -229,10 +235,10 @@ export default defineComponent({
 			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
 		},
 		changeCardDoneStatus() {
-			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+			this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
 		},
 		archiveUnarchiveCard() {
-			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+			this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
 		},
 	},
 })
