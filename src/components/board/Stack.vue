@@ -9,6 +9,8 @@
 			'stack--done-column': isDoneColumn,
 			'stack--bottom-add-empty': isEmptyStackWithBottomAddCard,
 			'stack--add-card-at-top': canAddCardAtTop,
+			'stack--dragging-card': draggingCard,
+			'stack--drag-over': draggingOverStack,
 		}"
 		:data-cy-stack="stack.title">
 		<div v-click-outside="stopCardCreation"
@@ -142,7 +144,9 @@
 			data-dragscroll-enabled
 			@should-accept-drop="canEdit"
 			@drag-start="draggingCard = true"
-			@drag-end="draggingCard = false"
+			@drag-end="onDragEnd"
+			@drag-enter="draggingOverStack = true"
+			@drag-leave="draggingOverStack = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
 				<transition :appear="animate && !card.animated && (card.animated=true)"
@@ -153,50 +157,7 @@
 			</Draggable>
 		</Container>
 
-		<Container v-if="canAddCardAtBottom && isEmptyStackWithBottomAddCard"
-			:get-child-payload="payloadForCard(stack.id)"
-			class="dnd-container stack__card-add stack__card-add--bottom stack__card-add--dropzone"
-			group-name="stack"
-			data-click-closes-sidebar="true"
-			non-drag-area-selector=".dragDisabled"
-			:drag-handle-selector="dragHandleSelector"
-			@should-accept-drop="canEdit"
-			@drag-start="draggingCard = true"
-			@drag-end="draggingCard = false"
-			@drop="($event) => onDropCard(stack.id, $event)">
-			<NcButton v-if="!showAddCard"
-				data-cy="action:add-card"
-				class="stack__card-add-button"
-				type="tertiary"
-				:wide="true"
-				@click.stop="showAddCard=true">
-				<template #icon>
-					<PlusIcon :size="20" />
-				</template>
-				{{ t('deck', 'Add card') }}
-			</NcButton>
-			<form v-else
-				:class="{ 'icon-loading-small': stateCardCreating }"
-				@submit.prevent.stop="clickAddCard()">
-				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-				<input id="new-stack-input-main"
-					ref="newCardInput"
-					v-model="newCardTitle"
-					type="text"
-					class="no-close"
-					:disabled="stateCardCreating"
-					:placeholder="t('deck', 'Card name')"
-					required
-					pattern=".*\S+.*"
-					@focus="onCreateCardFocus"
-					@keydown.esc.stop="closeCardCreation">
-				<input v-show="!stateCardCreating"
-					class="icon-confirm"
-					type="submit"
-					value="">
-			</form>
-		</Container>
-		<div v-else-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
+		<div v-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
 			<NcButton v-if="!showAddCard"
 				data-cy="action:add-card"
 				class="stack__card-add-button"
@@ -279,6 +240,7 @@ export default {
 		return {
 			editing: false,
 			draggingCard: false,
+			draggingOverStack: false,
 			copiedStack: '',
 			newCardTitle: '',
 			showAddCard: false,
@@ -369,6 +331,11 @@ export default {
 			}
 			this.showAddCard = false
 			return false
+		},
+		onDragEnd() {
+			this.draggingCard = false
+			// drag-leave is not emitted when the card is dropped inside the stack
+			this.draggingOverStack = false
 		},
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
@@ -517,7 +484,7 @@ export default {
 			flex-grow: 1;
 		}
 
-		&:not(.stack--add-card-at-top) {
+		&:not(.stack--add-card-at-top):not(.stack--bottom-add-empty) {
 			.dnd-container {
 			flex: 0 1 auto;
 			min-height: 0;
@@ -525,22 +492,28 @@ export default {
 		}
 
 		&.stack--bottom-add-empty {
-			// Collapse the card list while it is empty so the add card control is
-			// not pushed down. Once a card is dragged over, the drop placeholder
-			// becomes a child and the regular spacing applies again.
-			:deep(.stack__cards-list:empty) {
-				--stack-cards-spacing: 0;
+			// The empty card list keeps filling the column so that it stays an
+			// easy drop target, while the add card control floats on top of it,
+			// right where the first card would be.
+			.stack__card-add--bottom {
+				position: absolute;
+				inset-inline: 0;
+				top: calc(var(--default-clickable-area) + #{$stack-gap});
+				transition: top var(--animation-quick);
 			}
 
-			// Spacing comes from the shared vertical dnd container rule in
-			// Board.vue, the min-height accounts for its vertical padding
-			.stack__card-add--dropzone {
-				flex: 0 0 auto;
-				display: flex;
-				align-items: center;
-				min-height: calc(var(--stack-card-add-control-height) + (2 * #{$stack-gap}));
-				box-sizing: border-box;
-				position: relative;
+			// Make way for the drop placeholder while a card is dragged over the
+			// list. The list itself is left untouched, resizing it would move it
+			// away from under the pointer.
+			&.stack--drag-over .stack__card-add--bottom {
+				top: calc(var(--default-clickable-area) + var(--stack-card-add-control-height) + 2 * #{$stack-gap});
+			}
+
+			// smooth-dnd resolves the hovered container with elementFromPoint(), so
+			// the floating control has to let the drag through to the list below it,
+			// otherwise dragging over it would count as leaving the list.
+			&.stack--dragging-card .stack__card-add--bottom {
+				pointer-events: none;
 			}
 		}
 
