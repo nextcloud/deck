@@ -47,6 +47,7 @@ use OCA\Deck\Reference\CreateCardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
+use OCA\Deck\ShareReview\ShareReviewListener;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
@@ -74,6 +75,7 @@ use OCP\IDBConnection;
 use OCP\OCM\Events\ResourceTypeRegisterEvent;
 use OCP\Server;
 use OCP\Share\IManager;
+use OCP\Share\ShareReview\RegisterShareReviewSourceEvent;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
@@ -189,6 +191,8 @@ class Application extends App implements IBootstrap {
 		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
 
 		$context->registerUserMigrator(DeckMigrator::class);
+
+		$context->registerEventListener(RegisterShareReviewSourceEvent::class, ShareReviewListener::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
