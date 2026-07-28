@@ -43,6 +43,11 @@
 			:can-edit="canEdit"
 			show-attachments
 			@change="descriptionChanged" />
+
+		<div class="comments-section">
+			<h5>{{ t('deck', 'Comments') }}</h5>
+			<CardSidebarTabComments :card="card" />
+		</div>
 	</div>
 </template>
 
@@ -63,6 +68,7 @@ import DueDateSelector from './DueDateSelector.vue'
 import StartDateSelector from './StartDateSelector.vue'
 import { debounce } from 'lodash'
 import DependentCardsSelector from './DependentCardsSelector.vue'
+import CardSidebarTabComments from './CardSidebarTabComments.vue'
 
 export default {
 	name: 'CardSidebarTabDetails',
@@ -73,6 +79,7 @@ export default {
 		AssignmentSelector,
 		TagSelector,
 		Description,
+		CardSidebarTabComments,
 		NcCollectionList,
 	},
 	mixins: [Color],
@@ -251,6 +258,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.comments-section {
+	margin-top: 20px;
+
+	h5 {
+		border-bottom: 1px solid var(--color-border);
+		color: var(--color-text-maxcontrast);
+		margin-bottom: 10px;
+	}
+}
+
 .section-wrapper {
 	display: flex;
 	max-width: 100%;

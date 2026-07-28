@@ -58,19 +58,9 @@
 			<CardSidebarTabAttachments :card="currentCard" />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab id="comments"
-			:order="2"
-			:name="t('deck', 'Comments')">
-			<template #icon>
-				<CommentIcon v-if="activeTabId === 'comments'" :size="20" />
-				<CommentOutlineIcon v-else :size="20" />
-			</template>
-			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
-		</NcAppSidebarTab>
-
 		<NcAppSidebarTab v-if="hasActivity"
 			id="timeline"
-			:order="3"
+			:order="2"
 			:name="t('deck', 'Activity')">
 			<template #icon>
 				<ActivityIcon :size="20" />
@@ -87,15 +77,12 @@ import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
-import CardSidebarTabComments from './CardSidebarTabComments.vue'
 import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
 import relativeDate from '../../mixins/relativeDate.js'
 import moment from '@nextcloud/moment'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import HomeIcon from 'vue-material-design-icons/Home.vue'
 import HomeOutlineIcon from 'vue-material-design-icons/HomeOutline.vue'
-import CommentIcon from 'vue-material-design-icons/Comment.vue'
-import CommentOutlineIcon from 'vue-material-design-icons/CommentOutline.vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import { showError, showWarning } from '@nextcloud/dialogs'
@@ -112,13 +99,10 @@ export default {
 		NcActionButton,
 		NcReferenceList,
 		CardSidebarTabAttachments,
-		CardSidebarTabComments,
 		CardSidebarTabActivity,
 		CardSidebarTabDetails,
 		ActivityIcon,
 		AttachmentIcon,
-		CommentIcon,
-		CommentOutlineIcon,
 		HomeIcon,
 		HomeOutlineIcon,
 		CardMenuEntries,
