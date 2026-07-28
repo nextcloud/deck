@@ -334,14 +334,11 @@ export default {
 				position: relative;
 
 				.smooth-dnd-container.vertical {
-					// Stacks may adjust the spacing, e.g. to collapse an empty card
-					// list, by setting --stack-cards-spacing (see Stack.vue)
-					$spacing: var(--stack-cards-spacing, #{$stack-gap});
 					display: flex;
 					flex-direction: column;
-					gap: $spacing;
-					padding: $spacing;
-					margin: 0 calc(#{$spacing} * -1);
+					gap: $stack-gap;
+					padding: $stack-gap;
+					margin: 0 calc(#{$stack-gap} * -1);
 					overflow-y: auto;
 					scrollbar-gutter: stable;
 				}
