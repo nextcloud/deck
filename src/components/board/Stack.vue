@@ -525,24 +525,19 @@ export default {
 		}
 
 		&.stack--bottom-add-empty {
-			:deep(.smooth-dnd-container.vertical.stack__cards-list:empty) {
-				flex-grow: 0;
-				padding: 0 !important;
-				min-height: 0;
+			// Collapse the card list while it is empty so the add card control is
+			// not pushed down. Once a card is dragged over, the drop placeholder
+			// becomes a child and the regular spacing applies again.
+			:deep(.stack__cards-list:empty) {
+				--stack-cards-spacing: 0;
 			}
 
-			:deep(.smooth-dnd-container.vertical.stack__card-add--dropzone) {
-				padding: 0;
-				margin: 0;
-				overflow-y: visible;
-			}
-
+			// Spacing comes from the shared vertical dnd container rule in
+			// Board.vue, the min-height accounts for its vertical padding
 			.stack__card-add--dropzone {
 				flex: 0 0 auto;
 				display: flex;
 				align-items: center;
-				padding-block: $stack-gap;
-				padding-inline: 0;
 				min-height: calc(var(--stack-card-add-control-height) + (2 * #{$stack-gap}));
 				box-sizing: border-box;
 				position: relative;
