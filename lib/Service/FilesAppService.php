@@ -13,6 +13,7 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
@@ -234,6 +235,23 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$share->setPermissions(Constants::PERMISSION_READ);
 		$share->setSharedBy($this->userId);
 		$share = $this->shareManager->createShare($share);
+
+		// Create share for federated users
+		$boardId = $this->cardMapper->findBoardId($attachment->getCardId());
+		foreach ($this->permissionService->findUsers($boardId) as $user) {
+			if (!$user instanceof FederatedUser) {
+				continue;
+			}
+			$remoteShare = $this->shareManager->newShare();
+			$remoteShare->setParent((int)$share->getId());
+			$remoteShare->setNode($target);
+			$remoteShare->setShareType(ISHARE::TYPE_REMOTE);
+			$remoteShare->setSharedWith($user->getUID());
+			$remoteShare->setPermissions(Constants::PERMISSION_READ);
+			$remoteShare->setSharedBy($this->userId);
+			$this->shareManager->createShare($remoteShare);
+		}
+
 		$attachment->setId((int)$share->getId());
 		$attachment->setData($target->getName());
 		return $attachment;
