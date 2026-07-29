@@ -9,7 +9,6 @@ import storeFactory from './store/main.js'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
-import { subscribe } from '@nextcloud/event-bus'
 import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
@@ -62,27 +61,12 @@ new Vue({
 		}
 	},
 	created() {
-		subscribe('nextcloud:unified-search.search', ({ query }) => {
-			this.$store.commit('setSearchQuery', query)
-		})
-		subscribe('nextcloud:unified-search.reset', () => {
-			this.$store.commit('setSearchQuery', '')
-		})
-
 		this.interval = setInterval(() => {
 			this.time = Date.now()
 		}, 1000)
 	},
 	beforeDestroy() {
 		clearInterval(this.interval)
-	},
-	methods: {
-		filter(query) {
-			this.$store.commit('setSearchQuery', query)
-		},
-		cleanSearch() {
-			this.$store.commit('setSearchQuery', '')
-		},
 	},
 	render: h => h(App),
 })

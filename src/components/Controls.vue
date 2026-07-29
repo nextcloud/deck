@@ -31,18 +31,6 @@
 		<div class="board-actions">
 			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
 				:sessions="presentUsers" />
-			<!-- Hide but not remove for now as search might change in the future -->
-			<div v-if="false" class="deck-search">
-				<input id="deck-search-input"
-					ref="search"
-					:tabindex="0"
-					type="search"
-					class="icon-search"
-					:value="searchQuery"
-					@focus="$store.dispatch('toggleShortcutLock', true)"
-					@blur="$store.dispatch('toggleShortcutLock', false)"
-					@input="$store.commit('setSearchQuery', $event.target.value)">
-			</div>
 			<div v-if="board && canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
@@ -71,6 +59,26 @@
 						value="">
 				</form>
 			</div>
+			<template v-if="showSearch">
+				<!-- Not type="search": NcTextField only fills the trailing button's icon
+					slot when type !== 'search', which leaves the clear button iconless. -->
+				<NcTextField id="deck-search-input"
+					class="board-search"
+					type="text"
+					:label="searchLabel"
+					:value="searchQuery"
+					:title="searchHint || null"
+					:show-trailing-button="searchQuery !== ''"
+					:trailing-button-label="t('deck', 'Clear search')"
+					:aria-describedby="searchHint ? 'deck-search-hint' : null"
+					@update:value="setSearchQuery"
+					@trailing-button-click="clearSearchQuery"
+					@focus="$store.dispatch('toggleShortcutLock', true)"
+					@blur="$store.dispatch('toggleShortcutLock', false)" />
+				<!-- title is for pointer users, aria-describedby for assistive tech. No double
+					announcement: title is only the fallback description per HTML-AAM. -->
+				<span v-if="searchHint" id="deck-search-hint" class="hidden-visually">{{ searchHint }}</span>
+			</template>
 			<div v-if="board" class="board-action-buttons">
 				<div class="board-action-buttons__filter">
 					<NcPopover :placement="'bottom-end'"
@@ -279,7 +287,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal, NcTextField } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -304,6 +312,7 @@ export default {
 		NcActionButton,
 		NcButton,
 		NcPopover,
+		NcTextField,
 		NcAvatar,
 		ArchiveIcon,
 		ImageIcon,
@@ -328,6 +337,19 @@ export default {
 			type: String,
 			required: false,
 			default: null,
+		},
+		showSearch: {
+			type: Boolean,
+			default: false,
+		},
+		searchLabel: {
+			type: String,
+			default: '',
+		},
+		// Only pass this where the card prefixes actually apply
+		searchHint: {
+			type: String,
+			default: '',
 		},
 	},
 	data() {
@@ -418,6 +440,12 @@ export default {
 			}
 			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
 		},
+		setSearchQuery(value) {
+			this.$store.commit('setSearchQuery', value)
+		},
+		clearSearchQuery() {
+			this.$store.commit('setSearchQuery', '')
+		},
 		toggleNav() {
 			this.$store.dispatch('toggleNav')
 		},
@@ -486,9 +514,6 @@ export default {
 		triggerOpenFilters() {
 			this.$refs.filterPopover.$el.click()
 		},
-		triggerOpenSearch() {
-			this.$refs.search.focus()
-		},
 		triggerClearFilter() {
 			this.clearFilter()
 		},
@@ -505,20 +530,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	@import '../css/variables.scss';
+
 	.controls {
 		display: flex;
+		// min-height, not height: the search wraps to a second row on narrow screens
+		flex-wrap: wrap;
+		row-gap: var(--default-grid-baseline);
 		margin: calc(var(--default-grid-baseline) * 2);
-		height: var(--default-clickable-area);
+		min-height: var(--default-clickable-area);
 		padding-inline-start: var(--default-clickable-area);
 
 		.board-title {
 			display: flex;
 			align-items: center;
+			// lets the h2 below actually truncate
+			min-width: 0;
 
 			h2 {
 				margin: 0;
 				margin-inline-end: 10px;
 				font-size: 18px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 
 			.board-bullet {
@@ -564,6 +599,9 @@ export default {
 		flex-grow: 1;
 		order: 100;
 		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		row-gap: var(--default-grid-baseline);
 		justify-content: flex-end;
 	}
 
@@ -571,13 +609,20 @@ export default {
 		display: flex;
 	}
 
-	.deck-search {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		input[type=search] {
-			background-position: 5px;
-			padding-inline-start: 24px !important;
+	.board-search {
+		flex: 0 1 15rem;
+		min-width: 0;
+		margin-inline-end: var(--default-grid-baseline);
+	}
+
+	@media (max-width: $breakpoint-small-mobile) {
+		// Own row below the buttons, spanning the full header. The negative margin cancels
+		// the padding .controls reserves for the navigation toggle, which only occupies the
+		// first row; the oversized basis keeps the search alone on its line, so it is safe.
+		.board-search {
+			order: 1;
+			flex-basis: calc(100% + var(--default-clickable-area));
+			margin-inline: calc(-1 * var(--default-clickable-area)) 0;
 		}
 	}
 
