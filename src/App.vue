@@ -143,7 +143,7 @@ export default {
 
 		&.nav-hidden {
 			#app-content {
-				margin-left: 0;
+				margin-inline-start: 0;
 			}
 		}
 
@@ -157,7 +157,7 @@ export default {
 </style>
 
 <style lang="scss">
-	@import '../css/print';
+	@import '../css/print.scss';
 
 	.icon-activity {
 		background-image: url(../img/activity-dark.svg);

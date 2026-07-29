@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Search;
 
 use OCA\Deck\Search\Query\DateQueryParameter;
@@ -16,14 +15,9 @@ use OCA\Deck\Search\Query\StringQueryParameter;
 use OCP\IL10N;
 
 class FilterStringParser {
-
-	/**
-	 * @var IL10N
-	 */
-	private $l10n;
-
-	public function __construct(IL10N $l10n) {
-		$this->l10n = $l10n;
+	public function __construct(
+		private readonly IL10N $l10n,
+	) {
 	}
 
 	public function parse(?string $filter): SearchQuery {

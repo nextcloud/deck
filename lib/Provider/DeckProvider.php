@@ -5,6 +5,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Deck\Provider;
 
 use OC\FullTextSearch\Model\IndexDocument;
@@ -38,7 +39,6 @@ class DeckProvider implements IFullTextSearchProvider {
 	private ?IRunner $runner = null;
 	private ?IIndexOptions $indexOptions = null;
 
-
 	/**
 	 * DeckProvider constructor.
 	 *
@@ -54,14 +54,12 @@ class DeckProvider implements IFullTextSearchProvider {
 		$this->fullTextSearchService = $fullTextSearchService;
 	}
 
-
 	/**
 	 * return unique id of the provider
 	 */
 	public function getId(): string {
 		return self::DECK_PROVIDER_ID;
 	}
-
 
 	/**
 	 * return name of the provider
@@ -70,14 +68,12 @@ class DeckProvider implements IFullTextSearchProvider {
 		return 'Deck';
 	}
 
-
 	/**
 	 * @return array
 	 */
 	public function getConfiguration(): array {
 		return [];
 	}
-
 
 	/**
 	 * @param IRunner $runner
@@ -86,14 +82,12 @@ class DeckProvider implements IFullTextSearchProvider {
 		$this->runner = $runner;
 	}
 
-
 	/**
 	 * @param IIndexOptions $options
 	 */
 	public function setIndexOptions(IIndexOptions $options) {
 		$this->indexOptions = $options;
 	}
-
 
 	public function getSearchTemplate(): ISearchTemplate {
 		/** @psalm-var ISearchTemplate */
@@ -102,14 +96,11 @@ class DeckProvider implements IFullTextSearchProvider {
 		return $template;
 	}
 
-
 	/**
 	 *
 	 */
 	public function loadProvider() {
 	}
-
-
 
 	/**
 	 * @param string $userId
@@ -119,7 +110,6 @@ class DeckProvider implements IFullTextSearchProvider {
 	public function generateChunks(string $userId): array {
 		return [];
 	}
-
 
 	/**
 	 * @param string $userId
@@ -138,7 +128,6 @@ class DeckProvider implements IFullTextSearchProvider {
 		return $documents;
 	}
 
-
 	/**
 	 * @param IIndexDocument $document
 	 *
@@ -150,7 +139,6 @@ class DeckProvider implements IFullTextSearchProvider {
 		$this->updateRunnerInfo('info', $document->getTitle());
 	}
 
-
 	/**
 	 * @param IIndexDocument $document
 	 *
@@ -159,7 +147,6 @@ class DeckProvider implements IFullTextSearchProvider {
 	public function isDocumentUpToDate(IIndexDocument $document): bool {
 		return false;
 	}
-
 
 	/**
 	 * @param IIndex $index
@@ -178,13 +165,11 @@ class DeckProvider implements IFullTextSearchProvider {
 		return $document;
 	}
 
-
 	/**
 	 * @param IFullTextSearchPlatform $platform
 	 */
 	public function onInitializingIndex(IFullTextSearchPlatform $platform) {
 	}
-
 
 	/**
 	 * @param IFullTextSearchPlatform $platform
@@ -192,13 +177,11 @@ class DeckProvider implements IFullTextSearchProvider {
 	public function onResettingIndex(IFullTextSearchPlatform $platform) {
 	}
 
-
 	/**
 	 * not used yet
 	 */
 	public function unloadProvider() {
 	}
-
 
 	/**
 	 * before a search, improve the request
@@ -207,7 +190,6 @@ class DeckProvider implements IFullTextSearchProvider {
 	 */
 	public function improveSearchRequest(ISearchRequest $searchRequest) {
 	}
-
 
 	/**
 	 * after a search, improve results
@@ -226,7 +208,6 @@ class DeckProvider implements IFullTextSearchProvider {
 			}
 		}
 	}
-
 
 	/**
 	 * @param string $info

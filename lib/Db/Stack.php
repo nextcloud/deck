@@ -32,6 +32,7 @@ class Stack extends RelationalEntity {
 	protected $lastModified = 0;
 	protected $cards = [];
 	protected $order;
+	protected $isDoneColumn = false;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
@@ -39,6 +40,7 @@ class Stack extends RelationalEntity {
 		$this->addType('deletedAt', 'integer');
 		$this->addType('lastModified', 'integer');
 		$this->addType('order', 'integer');
+		$this->addType('isDoneColumn', 'boolean');
 	}
 
 	public function setCards($cards) {

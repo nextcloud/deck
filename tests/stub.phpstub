@@ -99,17 +99,27 @@ namespace OCA\Circles\Model\Probes {
 		public function __construct() {}
 		public function mustBeMember(bool $must = true): self {}
 	}
+	class DataProbe {
+		public const OWNER = 'd';
+		public const INITIATOR = 'h';
+		public function __construct() {}
+		public function add(string $key, array $path = []): self {}
+		public function mustBeMember(bool $must = true): self {}
+	}
 }
 
 namespace OCA\Circles {
 	use OCA\Circles\Model\Circle;
 	use OCA\Circles\Model\FederatedUser;
 	use OCA\Circles\Model\Probes\CircleProbe;
+	use OCA\Circles\Model\Probes\DataProbe;
 	class CirclesManager {
 		public function startSuperSession(): void {}
 		public function startSession(?FederatedUser $federatedUser = null): void {}
 		public function getCircles(?CircleProbe $probe = null): array {}
 		public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
+		public function probeCircles(?CircleProbe $circleProbe = null, ?DataProbe $dataProbe = null): array {}
+		public function probeCircle(string $singleId, ?CircleProbe $probe = null, ?DataProbe $dataProbe = null): Circle {}
 		public function getFederatedUser(string $federatedId, int $type = Member::TYPE_SINGLE): FederatedUser {}
 	}
 }

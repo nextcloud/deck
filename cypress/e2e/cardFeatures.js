@@ -205,10 +205,14 @@ describe('Card', function () {
 
 			cy.reload()
 			cy.get('.modal__card').should('be.visible')
+
+			// Scroll to the bottom to ensure all content is loaded and visible
+			cy.get('.modal__card .app-sidebar-tabs, .modal__card .app-sidebar__tab--active').first().scrollTo('bottom', { ensureScrollable: false })
+			cy.contains('.modal__card .ProseMirror p', 'Paragraph').scrollIntoView().should('be.visible')
+
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(0).contains('List item').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(1).contains('with entries').should('be.visible')
-			cy.get('.modal__card .ProseMirror p').contains('Paragraph').should('be.visible')
 		})
 
 		it('Smart picker', () => {
@@ -266,18 +270,16 @@ describe('Card', function () {
 
 			cy.get('.card:contains("Card with a due date")').should('be.visible').click()
 
+			const now = new Date().setHours(11, 0, 0, 0)
+			cy.clock(now)
 			cy.get('#app-sidebar-vue [data-cy-due-date-actions]').should('be.visible').click()
-
+			cy.tick(1_000)
 			// Set a due date through shortcut
 			cy.get('[data-cy-due-date-shortcut="tomorrow"] button').should('be.visible').click()
 
 			const tomorrow = moment().add(1, 'days').hour(8).minutes(0).seconds(0)
 			cy.get('#card-duedate-picker').should('have.value', tomorrow.format('YYYY-MM-DDTHH:mm'))
 
-			const now = moment().hour(11).minutes(0).seconds(0).toDate()
-			cy.clock(now)
-			cy.log(now)
-			cy.tick(60_000)
 
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state="Now"]').should('be.visible').should('contain', '21 hours')
 

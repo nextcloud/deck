@@ -7,8 +7,6 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 namespace OCA\Deck\Cron;
 
 use OCA\Deck\Service\SessionService;
@@ -19,7 +17,6 @@ use Psr\Log\LoggerInterface;
 class SessionsCleanup extends TimedJob {
 	private $documentService;
 	private $imageService;
-
 
 	public function __construct(
 		ITimeFactory $time,

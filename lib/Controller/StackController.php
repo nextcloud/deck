@@ -9,9 +9,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\StackService;
-
 use OCP\AppFramework\Controller;
-
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\IRequest;
 
@@ -70,4 +68,5 @@ class StackController extends Controller {
 	public function deleted(int $boardId): array {
 		return $this->stackService->fetchDeleted($boardId);
 	}
+
 }

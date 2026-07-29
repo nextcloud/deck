@@ -29,6 +29,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\CirclesService;
+use OCP\Activity\Exceptions\UnknownActivityException;
 use OCP\Activity\IEvent;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
@@ -122,7 +123,7 @@ class DeckProviderTest extends TestCase {
 	}
 
 	public function testParseFailureApp() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(UnknownActivityException::class);
 		$event = $this->createMock(IEvent::class);
 		$event->expects($this->once())->method('getApp')->willReturn('notdeck');
 		$this->provider->parse('en_US', $event, $event);

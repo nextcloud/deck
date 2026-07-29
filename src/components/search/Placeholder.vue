@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@import '../../css/variables.scss';
 $clickable-area: var(--default-clickable-area);
 
 .card--placeholder {

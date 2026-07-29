@@ -50,8 +50,8 @@
     "Share from Files" : "Абагуліць з Файлаў",
     "Show in Files" : "Паказаць у Файлах",
     "Download" : "Спампаваць",
-    "Modified" : "Зменены",
     "Comments" : "Каментарыі",
+    "Submit" : "Адправіць",
     "Created:" : "Створана:",
     "Cancel reply" : "Скасаваць адказ",
     "Reply" : "Адказаць",
@@ -70,7 +70,6 @@
     "Todo items" : "Элементы спісу задач",
     "Open link" : "Адкрыць спасылку",
     "Edit title" : "Рэдагаваць загаловак",
-    "seconds ago" : "с таму",
     "Shared with you" : "Абагулена з вамі",
     "Cancel edit" : "Скасаваць рэдагаванне",
     "An error occurred" : "Узнікла памылка",
@@ -82,8 +81,10 @@
     "Close" : "Закрыць",
     "Message from {author} in {conversationName}" : "Паведамленне ад {author} у {conversationName}",
     "Failed to upload {name}" : "Не ўдалося запампаваць {name}",
+    "Modified" : "Зменены",
     "Share" : "Абагуліць",
     "Save" : "Захаваць",
+    "seconds ago" : "с таму",
     "Today" : "Сёння",
     "Tomorrow" : "Заўтра"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"

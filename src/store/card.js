@@ -6,6 +6,7 @@
 import { CardApi } from './../services/CardApi.js'
 import moment from 'moment'
 import Vue from 'vue'
+import { useTrashbinStore } from '../stores/trashbin.js'
 
 const apiClient = new CardApi()
 
@@ -218,6 +219,7 @@ export default function cardModuleFactory() {
 					if (existingIndex !== -1) {
 						Vue.set(state.cards[existingIndex], 'order', newCard.order)
 						Vue.set(state.cards[existingIndex], 'stackId', newCard.stackId)
+						Vue.set(state.cards[existingIndex], 'done', newCard.done)
 					}
 				}
 			},
@@ -322,7 +324,7 @@ export default function cardModuleFactory() {
 			async deleteCard({ commit }, card) {
 				await apiClient.deleteCard(card.id)
 				commit('deleteCard', card)
-				commit('moveCardToTrash', card)
+				useTrashbinStore().moveCardToTrash(card)
 			},
 			async archiveUnarchiveCard({ commit }, card) {
 				let call = 'archiveCard'
@@ -333,7 +335,7 @@ export default function cardModuleFactory() {
 				const updatedCard = await apiClient[call](card)
 				commit('updateCard', updatedCard)
 			},
-			async changeCardDoneStatus({ commit }, card) {
+			async changeCardDoneStatus({ commit, dispatch, rootState }, card) {
 				let call = 'markCardAsDone'
 				if (card.done === false) {
 					call = 'markCardAsUndone'
@@ -341,13 +343,25 @@ export default function cardModuleFactory() {
 
 				const updatedCard = await apiClient[call](card)
 				commit('updateCardProperty', { property: 'done', card: updatedCard })
+
+				if (card.done !== false) {
+					const cardStack = rootState.stack.stacks.find(s => s.id === card.stackId)
+					const doneStack = rootState.stack.stacks.find(
+						s => s.boardId === cardStack?.boardId && s.isDoneColumn,
+					)
+					if (doneStack && card.stackId !== doneStack.id) {
+						await dispatch('reorderCard', { ...updatedCard, stackId: doneStack.id, order: 0 })
+					}
+				}
 			},
 			async assignCardToUser({ commit }, { card, assignee }) {
-				const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)
+				const boardId = this.state.currentBoard.id
+				const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type, boardId)
 				commit('assignCardToUser', user)
 			},
 			async removeUserFromCard({ commit }, { card, assignee }) {
-				const user = await apiClient.removeUser(card.id, assignee.userId, assignee.type)
+				const boardId = this.state.currentBoard.id
+				const user = await apiClient.removeUser(card.id, assignee.userId, assignee.type, boardId)
 				commit('removeUserFromCard', user)
 			},
 			async addLabel({ commit }, data) {
@@ -360,6 +374,16 @@ export default function cardModuleFactory() {
 				await apiClient.removeLabelFromCard(data)
 				commit('updateCardProperty', { property: 'labels', card: data.card })
 			},
+			async assignDependentCard({ commit }, { card, dependentCard }) {
+				const boardId = this.state.currentBoard.id
+				const updatedCard = await apiClient.assignDependentCard(card.id, dependentCard.id, boardId)
+				commit('updateCardProperty', { property: 'dependentCards', card: updatedCard })
+			},
+			async removeDependentCard({ commit }, { card, dependentCardId }) {
+				const boardId = this.state.currentBoard.id
+				const updatedCard = await apiClient.removeDependentCard(card.id, dependentCardId, boardId)
+				commit('updateCardProperty', { property: 'dependentCards', card: updatedCard })
+			},
 			async updateCardDesc({ commit, getters }, card) {
 				const stack = getters.stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
@@ -369,6 +393,22 @@ export default function cardModuleFactory() {
 				const stack = getters.stackById(card.stackId)
 				const updatedCard = await apiClient.updateCard(card, stack.boardId)
 				commit('updateCardProperty', { property: 'duedate', card: updatedCard })
+			},
+			async updateCardStartDate({ commit, getters }, card) {
+				const stack = getters.stackById(card.stackId)
+				const updatedCard = await apiClient.updateCard(card, stack.boardId)
+				commit('updateCardProperty', { property: 'startdate', card: updatedCard })
+			},
+			async updateCardDates({ commit, getters }, card) {
+				const stack = getters.stackById(card.stackId)
+				const updatedCard = await apiClient.updateCard(card, stack.boardId)
+				commit('updateCardProperty', { property: 'duedate', card: updatedCard })
+				commit('updateCardProperty', { property: 'startdate', card: updatedCard })
+			},
+			async updateCardColor({ commit, getters }, card) {
+				const stack = getters.stackById(card.stackId)
+				const updatedCard = await apiClient.updateCard(card, stack.boardId)
+				commit('updateCardProperty', { property: 'color', card: updatedCard })
 			},
 
 			addCardData({ commit }, cardData) {

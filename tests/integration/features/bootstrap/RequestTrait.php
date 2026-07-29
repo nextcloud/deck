@@ -24,11 +24,9 @@
 
 declare(strict_types=1);
 
-
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
-
 
 trait RequestTrait {
 

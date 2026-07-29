@@ -67,7 +67,6 @@ class AssignmentMapperTest extends \Test\TestCase {
 		parent::setUpBeforeClass();
 
 		$backend = new \Test\Util\User\Dummy();
-		\OC_User::useBackend($backend);
 		Server::get(IUserManager::class)->registerBackend($backend);
 		$backend->createUser(self::TEST_USER1, self::TEST_USER1);
 		$backend->createUser(self::TEST_USER2, self::TEST_USER2);

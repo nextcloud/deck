@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
-	@import '../../css/labels';
+	@import '../../css/labels.scss';
 
 	.card {
 		display: block;
@@ -68,7 +68,7 @@ export default {
 	}
 
 	.labels {
-		margin-left: 0;
+		margin-inline-start: 0;
 	}
 
 	.duedate:deep(.due) {
@@ -78,6 +78,6 @@ export default {
 	}
 
 	.right {
-		float: right;
+		float: inline-end;
 	}
 </style>

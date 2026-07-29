@@ -7,13 +7,13 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Service;
 
 use OCA\Circles\CirclesManager;
 use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\Member;
 use OCA\Circles\Model\Probes\CircleProbe;
+use OCA\Circles\Model\Probes\DataProbe;
 use OCP\App\IAppManager;
 use OCP\Server;
 use Throwable;
@@ -45,7 +45,9 @@ class CirclesService {
 			// Enforce current user condition since we always want the full list of members
 			$circlesManager = Server::get(CirclesManager::class);
 			$circlesManager->startSuperSession();
-			return $circlesManager->getCircle($circleId);
+			$dataProbe = new DataProbe();
+			$dataProbe->add(DataProbe::OWNER);
+			return $circlesManager->probeCircle($circleId, null, $dataProbe);
 		} catch (Throwable $e) {
 		}
 		return null;
@@ -64,7 +66,9 @@ class CirclesService {
 			$circlesManager = Server::get(CirclesManager::class);
 			$federatedUser = $circlesManager->getFederatedUser($userId, Member::TYPE_USER);
 			$circlesManager->startSession($federatedUser);
-			$circle = $circlesManager->getCircle($circleId);
+			$dataProbe = new DataProbe();
+			$dataProbe->add(DataProbe::INITIATOR);
+			$circle = $circlesManager->probeCircle($circleId, null, $dataProbe);
 			$member = $circle->getInitiator();
 			$isUserInCircle = $member->getLevel() >= Member::LEVEL_MEMBER;
 
@@ -96,7 +100,7 @@ class CirclesService {
 			$probe->mustBeMember();
 			return array_map(function (Circle $circle) {
 				return $circle->getSingleId();
-			}, $circlesManager->getCircles($probe));
+			}, $circlesManager->probeCircles($probe));
 		} catch (Throwable $e) {
 		}
 		return [];

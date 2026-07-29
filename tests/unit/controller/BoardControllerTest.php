@@ -92,7 +92,6 @@ class BoardControllerTest extends \Test\TestCase {
 		);
 	}
 
-
 	public function testIndex() {
 		$this->boardService->expects($this->once())
 			->method('findAll')

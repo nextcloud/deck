@@ -7,7 +7,10 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\ConfigService;
+use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -20,6 +23,8 @@ class ConfigController extends OCSController {
 		$AppName,
 		IRequest $request,
 		private ConfigService $configService,
+		private PermissionService $permissionService,
+		private BoardMapper $boardMapper,
 	) {
 		parent::__construct($AppName, $request);
 	}
@@ -33,6 +38,14 @@ class ConfigController extends OCSController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function setValue(string $key, mixed $value): DataResponse|NotFoundResponse {
+		if (preg_match('/^board:(\d+):/', $key, $matches) === 1) {
+			$this->permissionService->checkPermission(
+				$this->boardMapper,
+				(int)$matches[1],
+				Acl::PERMISSION_EDIT,
+			);
+		}
+
 		$result = $this->configService->set($key, $value);
 		if ($result === null) {
 			return new NotFoundResponse();

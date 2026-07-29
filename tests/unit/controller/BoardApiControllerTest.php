@@ -21,12 +21,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Board;
 use OCA\Deck\Service\BoardService;
 use OCP\AppFramework\Http;
-
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 

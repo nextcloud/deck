@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/variables';
+	@import './../../css/variables.scss';
 
 	.badges {
 		display: flex;
@@ -114,7 +114,7 @@ export default {
 			color: var(--color-text-maxcontrast);
 			display: flex;
 			align-items: center;
-			margin-right: 2px;
+			margin-inline-end: 2px;
 
 			span,
 			&:deep(span) {

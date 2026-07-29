@@ -6,6 +6,7 @@
 import Vue from 'vue'
 import { StackApi } from './../services/StackApi.js'
 import applyOrderToArray from './../helpers/applyOrderToArray.js'
+import { useTrashbinStore } from '../stores/trashbin.js'
 
 const apiClient = new StackApi()
 
@@ -108,7 +109,7 @@ export default function stackModuleFactory() {
 				apiClient.deleteStack(stack.id, stack.boardId)
 					.then((stack) => {
 						commit('deleteStack', stack)
-						commit('moveStackToTrash', stack)
+						useTrashbinStore().moveStackToTrash(stack)
 					})
 			},
 			updateStack({ commit }, stack) {
@@ -116,6 +117,24 @@ export default function stackModuleFactory() {
 					.then((stack) => {
 						commit('updateStack', stack)
 					})
+			},
+			async setDoneStack({ commit, state, rootState }, { stackId, boardId, isDone }) {
+				await apiClient.setDoneStack(stackId, boardId, isDone)
+				// Mirror the backend bulk-clear: clear the flag on any other stack in this board
+				if (isDone) {
+					state.stacks
+						.filter((s) => s.id !== stackId && s.boardId === boardId && s.isDoneColumn)
+						.forEach((s) => commit('addStack', { ...s, isDoneColumn: false }))
+					// Mirror the backend bulk-done: mark all undone cards in this stack as done
+					const now = new Date().toISOString()
+					rootState.card.cards
+						.filter((c) => c.stackId === stackId && c.done == null)
+						.forEach((c) => commit('updateCardProperty', { property: 'done', card: { ...c, done: now } }))
+				}
+				const stack = state.stacks.find((s) => s.id === stackId)
+				if (stack) {
+					commit('addStack', { ...stack, isDoneColumn: isDone })
+				}
 			},
 		},
 	}

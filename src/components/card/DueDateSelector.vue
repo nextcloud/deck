@@ -14,7 +14,7 @@
 				:hide-label="true"
 				type="datetime-local" />
 			<NcActions v-if="canEdit"
-				:menu-title="!duedate ? t('deck', 'Add due date') : null"
+				:menu-name="!duedate ? t('deck', 'Add due date') : null"
 				type="tertiary"
 				data-cy-due-date-actions>
 				<template v-if="!duedate" #icon>
@@ -47,7 +47,7 @@
 				</NcActionButton>
 			</NcActions>
 
-			<NcButton v-if="!card.done"
+			<NcButton v-if="!card.done && canEdit"
 				type="secondary"
 				class="completed-button"
 				@click="changeCardDoneStatus()">
@@ -67,7 +67,7 @@
 					{{ formatReadableDate(duedate) }}
 				</span>
 			</div>
-			<div class="due-actions">
+			<div v-if="canEdit" class="due-actions">
 				<NcButton v-if="!card.archived"
 					type="tertiary"
 					:name="t('deck', 'Not done')"
@@ -220,12 +220,10 @@ export default defineComponent({
 		},
 		removeDue() {
 			this.duedate = null
-			this.$emit('change', null)
 
 		},
 		selectShortcut(shortcut) {
 			this.duedate = shortcut.timestamp
-			this.$emit('change', shortcut.timestamp)
 		},
 		getTimestamp(momentObject) {
 			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
@@ -253,7 +251,7 @@ export default defineComponent({
 }
 
 .completed-button {
-	margin-left: auto;
+	margin-inline-start: auto;
 }
 
 .due-actions {

@@ -25,7 +25,6 @@ class ServerContext implements Context {
 		$this->__tConstruct($this->rawBaseUrl . '/ocs/', ['admin', 'admin'], '123456');
 	}
 
-
 	/**
 	 * @BeforeSuite
 	 */

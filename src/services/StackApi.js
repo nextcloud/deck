@@ -128,4 +128,19 @@ export class StackApi {
 			})
 	}
 
+	setDoneStack(stackId, boardId, isDone) {
+		return axios.put(this.ocsUrl(`/stacks/${stackId}/done`), { boardId, isDone })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }

@@ -6,7 +6,8 @@
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': currentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+			:class="{'compact': compactMode, 'current-card': isCurrentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+			:style="{backgroundColor: color}"
 			tag="div"
 			:tabindex="0"
 			class="card"
@@ -20,7 +21,7 @@
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
 				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
-					<span class="dragDisabled" contenteditable="false">{{ displayTitle }}</span>
+					<span contenteditable="false">{{ displayTitle }}</span>
 				</h4>
 				<h4 v-if="editingTitle >= 1"
 					key="title-edit"
@@ -47,15 +48,13 @@
 			</div>
 
 			<div v-if="hasLabels" class="card-labels">
-				<transition-group v-if="card.labels && card.labels.length"
-					name="zoom"
-					tag="ul"
+				<ul v-if="card.labels && card.labels.length"
 					class="labels"
 					@click.stop="openCard">
 					<li v-for="label in labelsSorted" :key="label?.id ?? label?.title" :style="labelStyle(label)">
 						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 					</li>
-				</transition-group>
+				</ul>
 				<CardMenu v-if="showMenuAtLabels"
 					:card="card"
 					class="right"
@@ -124,6 +123,7 @@ export default {
 		return {
 			highlight: false,
 			editingTitle: TITLE_EDITING_STATE.OFF,
+			isCurrentCard: false,
 		}
 	},
 	computed: {
@@ -156,9 +156,6 @@ export default {
 		displayTitle() {
 			const reference = this.card?.referenceData
 			return reference ? reference.openGraphObject.name : this.card.title
-		},
-		currentCard() {
-			return this.card && this.$route && this.$route.params.cardId === this.card.id
 		},
 		labelsSorted() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -193,12 +190,26 @@ export default {
 			}
 			return this.hasBadges
 		},
+		color() {
+			return this.card.color ? '#' + this.card.color : null
+		},
 	},
 	watch: {
-		currentCard(newValue) {
-			if (newValue) {
-				this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
-			}
+		'$route.params.cardId': {
+			immediate: true,
+			handler(cardId) {
+				if (!this.card) {
+					return
+				}
+				const newValue = cardId && parseInt(cardId, 10) === this.card.id
+				if (newValue === this.isCurrentCard) {
+					return
+				}
+				this.isCurrentCard = newValue
+				if (newValue) {
+					this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
+				}
+			},
 		},
 	},
 	methods: {
@@ -318,8 +329,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/animations';
-	@import './../../css/variables';
+	@import './../../css/animations.scss';
+	@import './../../css/variables.scss';
 
 	@mixin dark-card {
 		border: 2px solid var(--color-border-dark);
@@ -364,7 +375,7 @@ export default {
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
-				word-wrap: break-word;
+				overflow-wrap: break-word;
 				align-self: center;
 
 				:deep(a) {
@@ -394,13 +405,13 @@ export default {
 		}
 
 		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/labels';
+		@import './../../css/labels.scss';
 
 		.card-controls {
 			display: flex;
 		}
 		&.card__editable .card-controls {
-			margin-right: 0;
+			margin-inline-end: 0;
 		}
 		&.card__archived {
 			background-color: var(--color-background-dark);
@@ -452,7 +463,7 @@ export default {
 			border-radius: 50%;
 			background-color: transparent;
 			margin-top: 4px;
-			margin-right: 4px;
+			margin-inline-end: 4px;
 		}
 	}
 
@@ -460,7 +471,7 @@ export default {
 		min-height: var(--default-clickable-area);
 
 		.duedate {
-			margin-right: 0;
+			margin-inline-end: 0;
 			display: flex;
 			height: 32px;
 			width: 32px;

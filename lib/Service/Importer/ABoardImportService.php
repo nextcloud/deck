@@ -74,6 +74,8 @@ abstract class ABoardImportService {
 	 */
 	abstract public function getComments(): array;
 
+	abstract public function importAttachments(): void;
+
 	/** @return Label[] */
 	abstract public function getLabels(): array;
 

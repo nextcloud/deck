@@ -143,7 +143,7 @@ export default {
 
 	.drop-upload--sidebar .dragover {
 		top: 20%;
-		left: 10%;
+		inset-inline-start: 10%;
 		width: 80%;
 		height: 60%;
 		box-shadow: 0px 0px 36px var(--color-box-shadow);
@@ -154,7 +154,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		top: 0;
-		left: 0;
+		inset-inline-start: 0;
 
 		h2 {
 			font-size: 13px;

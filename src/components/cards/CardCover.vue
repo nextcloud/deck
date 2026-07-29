@@ -12,8 +12,9 @@
 	</div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'pinia'
 import { generateUrl } from '@nextcloud/router'
+import { useAttachmentStore } from '../../stores/attachment.js'
 export default {
 	name: 'CardCover',
 	props: {
@@ -61,7 +62,7 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions([
+		...mapActions(useAttachmentStore, [
 			'fetchAttachments',
 		]),
 	},
@@ -69,7 +70,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@import '../../css/variables.scss';
 
 .card-cover {
 	height: 90px;

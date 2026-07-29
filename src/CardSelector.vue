@@ -149,7 +149,7 @@ export default {
 	}
 
 	button {
-		float: right;
+		float: inline-end;
 	}
 
 	.card-selector:deep(.modal-container) {

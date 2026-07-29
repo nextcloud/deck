@@ -337,7 +337,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../css/selector';
+@import '../css/selector.scss';
 
 .modal-scroller {
 	overflow: scroll;
@@ -348,8 +348,7 @@ export default {
 
 #modal-inner {
 	width: auto;
-	margin-left: 10px;
-	margin-right: 10px;
+	margin-inline: 10px;
 }
 
 h2 {

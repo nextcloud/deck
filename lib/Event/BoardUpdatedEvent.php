@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Event;
 
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IWebhookCompatibleEvent;
 
-class BoardUpdatedEvent extends Event {
+class BoardUpdatedEvent extends Event implements IWebhookCompatibleEvent {
 	private $boardId;
 
 	public function __construct(int $boardId) {
@@ -23,5 +23,11 @@ class BoardUpdatedEvent extends Event {
 
 	public function getBoardId(): int {
 		return $this->boardId;
+	}
+
+	public function getWebhookSerializable(): array {
+		return [
+			'boardId' => $this->boardId,
+		];
 	}
 }

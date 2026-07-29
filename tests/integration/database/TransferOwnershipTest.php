@@ -41,7 +41,6 @@ class TransferOwnershipTest extends \Test\TestCase {
 		parent::setUpBeforeClass();
 
 		$backend = new \Test\Util\User\Dummy();
-		\OC_User::useBackend($backend);
 		Server::get(IUserManager::class)->registerBackend($backend);
 		$backend->createUser(self::TEST_USER_1, self::TEST_USER_1);
 		$backend->createUser(self::TEST_USER_2, self::TEST_USER_2);

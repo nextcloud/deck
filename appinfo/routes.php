@@ -8,6 +8,7 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#indexUpcoming', 'url' => '/upcoming', 'verb' => 'GET'],
 		['name' => 'page#indexList', 'url' => '/board', 'verb' => 'GET'],
 		['name' => 'page#indexBoard', 'url' => '/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'page#indexBoardDetails', 'url' => '/board/{boardId}/details', 'verb' => 'GET'],
@@ -57,6 +58,8 @@ return [
 		['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 		['name' => 'card#assignUser', 'url' => '/cards/{cardId}/assign', 'verb' => 'POST'],
 		['name' => 'card#unassignUser', 'url' => '/cards/{cardId}/unassign', 'verb' => 'PUT'],
+		['name' => 'card#assignDependentCard', 'url' => '/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'POST'],
+		['name' => 'card#removeDependentCard', 'url' => '/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'DELETE'],
 
 		// attachments
 		['name' => 'attachment#getAll', 'url' => '/cards/{cardId}/attachments', 'verb' => 'GET'],
@@ -67,7 +70,6 @@ return [
 		['name' => 'attachment#update', 'url' => '/cards/{cardId}/attachment/{attachmentId}', 'verb' => 'POST'],
 		['name' => 'attachment#delete', 'url' => '/cards/{cardId}/attachment/{attachmentId}', 'verb' => 'DELETE'],
 		['name' => 'attachment#restore', 'url' => '/cards/{cardId}/attachment/{attachmentId}/restore', 'verb' => 'GET'],
-
 
 		// labels
 		['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],
@@ -89,7 +91,6 @@ return [
 		['name' => 'board_import_api#getConfigSchema', 'url' => '/api/v{apiVersion}/boards/import/config/schema/{name}','verb' => 'GET'],
 		['name' => 'board_import_api#import', 'url' => '/api/v{apiVersion}/boards/import','verb' => 'POST'],
 
-
 		['name' => 'stack_api#index', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks', 'verb' => 'GET'],
 		['name' => 'stack_api#getArchived', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/archived', 'verb' => 'GET'],
 		['name' => 'stack_api#get', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}', 'verb' => 'GET'],
@@ -105,6 +106,8 @@ return [
 		['name' => 'card_api#assignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#unassignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#reorder', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		['name' => 'card_api#assignDependentCard', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'POST'],
+		['name' => 'card_api#removeDependentCard', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'DELETE'],
 		['name' => 'card_api#archive', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive', 'verb' => 'PUT'],
 		['name' => 'card_api#unarchive', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive', 'verb' => 'PUT'],
 		['name' => 'card_api#delete', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
@@ -135,24 +138,29 @@ return [
 	'ocs' => [
 		['name' => 'board_ocs#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
 		['name' => 'board_ocs#read', 'url' => '/api/v{apiVersion}/board/{boardId}', 'verb' => 'GET'],
-		['name' => 'board_ocs#stacks', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
+		['name' => 'stack_ocs#index', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_ocs#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
 		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 
 		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
 		['name' => 'card_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}', 'verb' => 'PUT'],
 		['name' => 'card_ocs#assignLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
+		['name' => 'card_ocs#assignUser', 'url' => '/api/v{apiVersion}/cards/{cardId}/assign', 'verb' => 'POST'],
+		['name' => 'card_ocs#unAssignUser', 'url' => '/api/v{apiVersion}/cards/{cardId}/unassign', 'verb' => 'PUT'],
 		['name' => 'card_ocs#removeLabel', 'url' => '/api/v{apiVersion}/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 		['name' => 'card_ocs#reorder', 'url' => '/api/v{apiVersion}/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		['name' => 'card_ocs#assignDependentCard', 'url' => '/api/v{apiVersion}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'POST'],
+		['name' => 'card_ocs#removeDependentCard', 'url' => '/api/v{apiVersion}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'DELETE'],
 
 		['name' => 'stack_ocs#create', 'url' => '/api/v{apiVersion}/stacks', 'verb' => 'POST'],
+		['name' => 'stack_ocs#setDoneStack', 'url' => '/api/v{apiVersion}/stacks/{stackId}/done', 'verb' => 'PUT'],
 		['name' => 'stack_ocs#delete', 'url' => '/api/v{apiVersion}/stacks/{stackId}/{boardId}', 'verb' => 'DELETE', 'defaults' => ['boardId' => null]],
 		['name' => 'stack_ocs#reorder', 'url' => '/api/v{apiVersion}/stacks/{stackId}/reorder', 'verb' => 'PUT'],
 
 		['name' => 'attachment_ocs#getAll', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment_ocs#create', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachment', 'verb' => 'POST'],
 		['name' => 'attachment_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'PUT'],
-		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
+		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{type}:{attachmentId}', 'verb' => 'DELETE'],
 		['name' => 'attachment_ocs#restore', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
 
 		['name' => 'Config#get', 'url' => '/api/v{apiVersion}/config', 'verb' => 'GET'],

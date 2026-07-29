@@ -25,6 +25,7 @@
 use OCA\Deck\Db\Board;
 use OCA\Deck\Service\BoardService;
 use OCP\IGroupManager;
+use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Server;
 
@@ -45,7 +46,7 @@ class BoardDatabaseTest extends \Test\TestCase {
 		parent::setUpBeforeClass();
 
 		$backend = new \Test\Util\User\Dummy();
-		\OC_User::useBackend($backend);
+		Server::get(IUserManager::class)->registerBackend($backend);
 		$backend->createUser(self::TEST_USER1, self::TEST_USER1);
 		$backend->createUser(self::TEST_USER2, self::TEST_USER2);
 		$backend->createUser(self::TEST_USER3, self::TEST_USER3);

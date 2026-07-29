@@ -157,7 +157,6 @@ class RequestContext implements Context {
 		}
 	}
 
-
 	public function getResponse(): ResponseInterface {
 		return $this->response;
 	}

@@ -33,10 +33,11 @@
 <script>
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcButton, NcDashboardWidget, NcModal } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
 import Card from '../components/dashboard/Card.vue'
 import { generateUrl } from '@nextcloud/router'
 import CreateNewCardCustomPicker from './CreateNewCardCustomPicker.vue'
+import { useDashboardStore } from '../stores/dashboard.js'
+import { mapActions, mapState } from 'pinia'
 
 export default {
 	name: 'DashboardUpcoming',
@@ -55,11 +56,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
-			'assignedCardsDashboard',
-		]),
+		...mapState(useDashboardStore, ['assignedCards']),
 		cards() {
-			const list = Object.values(this.assignedCardsDashboard).flat()
+			const list = Object.values(this.assignedCards).flat()
 				.filter((card) => {
 					return card.duedate !== null
 				})
@@ -74,11 +73,12 @@ export default {
 	},
 	beforeMount() {
 		this.loading = true
-		this.$store.dispatch('loadUpcoming').then(() => {
+		this.loadUpcoming().then(() => {
 			this.loading = false
 		})
 	},
 	methods: {
+		...mapActions(useDashboardStore, ['loadUpcoming']),
 		toggleAddCardModel() {
 			this.showAddCardModal = !this.showAddCardModal
 		},
@@ -122,7 +122,7 @@ export default {
 	}
 
 	.labels {
-		margin-left: 0;
+		margin-inline-start: 0;
 		margin-top: 3px;
 	}
 
@@ -136,6 +136,6 @@ export default {
 	}
 
 	.right {
-		float: right;
+		float: inline-end;
 	}
 </style>

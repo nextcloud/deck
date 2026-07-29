@@ -92,10 +92,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/selector';
+@import '../../css/selector.scss';
 
 .v-select:deep(.vs__selected) {
-	padding-left: 0 !important;
+	padding-inline-start: 0 !important;
 }
 
 .tag {
@@ -105,7 +105,7 @@ export default {
 	padding: 3px 12px;
 	display: inline-block;
 	border-radius: var(--border-radius-pill);
-	margin-right: 3px;
+	margin-inline-end: 3px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }

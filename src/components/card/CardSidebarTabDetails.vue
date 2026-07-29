@@ -18,10 +18,18 @@
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
+		<StartDateSelector :card="card"
+			:can-edit="canEdit"
+			@input="debouncedUpdateCardStartDate" />
+
 		<DueDateSelector :card="card"
 			:can-edit="canEdit"
-			@change="updateCardDue"
 			@input="debouncedUpdateCardDue" />
+
+		<DependentCardsSelector :card="card"
+			:can-edit="canEdit"
+			@select="assignDependentCard"
+			@remove="removeDependentCard" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
 			<NcCollectionList v-if="card.id"
@@ -52,12 +60,16 @@ import Description from './Description.vue'
 import TagSelector from './TagSelector.vue'
 import AssignmentSelector from './AssignmentSelector.vue'
 import DueDateSelector from './DueDateSelector.vue'
+import StartDateSelector from './StartDateSelector.vue'
 import { debounce } from 'lodash'
+import DependentCardsSelector from './DependentCardsSelector.vue'
 
 export default {
 	name: 'CardSidebarTabDetails',
 	components: {
+		DependentCardsSelector,
 		DueDateSelector,
+		StartDateSelector,
 		AssignmentSelector,
 		TagSelector,
 		Description,
@@ -149,7 +161,18 @@ export default {
 
 		debouncedUpdateCardDue: debounce(function(val) {
 			this.updateCardDue(val)
-		}, 500),
+		}, 500, { leading: true }),
+
+		updateCardStartDate(val) {
+			this.$store.dispatch('updateCardStartDate', {
+				...this.copiedCard,
+				startdate: val ? (new Date(val)).toISOString() : null,
+			})
+		},
+
+		debouncedUpdateCardStartDate: debounce(function(val) {
+			this.updateCardStartDate(val)
+		}, 500, { leading: true }),
 
 		addLabelToCard(newLabel) {
 			this.copiedCard.labels.push(newLabel)
@@ -185,6 +208,39 @@ export default {
 			}
 			this.$store.dispatch('removeLabel', data)
 		},
+		assignDependentCard(dependentCard) {
+			if (!dependentCard?.id) {
+				return
+			}
+
+			if (!Array.isArray(this.copiedCard.dependentCards)) {
+				this.copiedCard.dependentCards = []
+			}
+
+			if (!this.copiedCard.dependentCards.includes(dependentCard.id)) {
+				this.copiedCard.dependentCards.push(dependentCard.id)
+			}
+
+			this.$store.dispatch('assignDependentCard', {
+				card: this.copiedCard,
+				dependentCard,
+			})
+		},
+		removeDependentCard(dependentCard) {
+			const dependentCardId = dependentCard?.id
+			if (!dependentCardId) {
+				return
+			}
+
+			if (Array.isArray(this.copiedCard.dependentCards)) {
+				this.copiedCard.dependentCards = this.copiedCard.dependentCards.filter((id) => id !== dependentCardId)
+			}
+
+			this.$store.dispatch('removeDependentCard', {
+				card: this.copiedCard,
+				dependentCardId,
+			})
+		},
 		stringify(date) {
 			return moment(date).locale(this.locale).format('LLL')
 		},
@@ -203,7 +259,7 @@ export default {
 	.section-label {
 		background-position: 0px center;
 		width: 28px;
-		margin-left: 9px;
+		margin-inline-start: 9px;
 		flex-shrink: 0;
 	}
 
@@ -214,7 +270,7 @@ export default {
 
 		.remove-due-button{
 			margin-top: -2px;
-			margin-left: 6px;
+			margin-inline-start: 6px;
 		}
 	}
 }
@@ -239,7 +295,7 @@ export default {
 	padding: 0px 5px;
 	border-radius: 15px;
 	font-size: 85%;
-	margin-right: 3px;
+	margin-inline-end: 3px;
 }
 
 .avatarLabel {
@@ -251,13 +307,13 @@ export default {
 }
 
 .avatar-list--readonly .avatardiv {
-	margin-right: 3px;
+	margin-inline-end: 3px;
 }
 
 .avatarlist--inline {
 	display: flex;
 	align-items: center;
-	margin-right: 3px;
+	margin-inline-end: 3px;
 	.avatarLabel {
 		padding: 0;
 	}
