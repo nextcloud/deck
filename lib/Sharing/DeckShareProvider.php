@@ -14,6 +14,7 @@ use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
@@ -1209,6 +1210,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			}
 
 			foreach ($this->permissionService->findUsers($boardId) as $user) {
+				if ($user instanceof FederatedUser) {
+					continue;
+				}
 				yield $user->getUserObject();
 			}
 		}
