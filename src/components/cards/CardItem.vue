@@ -82,6 +82,7 @@ import { mapState, mapGetters } from 'vuex'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
+import { sortLabels } from '../../helpers/labelSort.js'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
@@ -158,7 +159,7 @@ export default {
 			return reference ? reference.openGraphObject.name : this.card.title
 		},
 		labelsSorted() {
-			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+			return sortLabels(this.card.labels)
 		},
 		hasLabels() {
 			return this.card.labels.length > 0

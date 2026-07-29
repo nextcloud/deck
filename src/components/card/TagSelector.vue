@@ -44,6 +44,7 @@
 <script>
 import { NcSelect } from '@nextcloud/vue'
 import Color from '../../mixins/color.js'
+import { sortLabels } from '../../helpers/labelSort.js'
 import TagMultiple from 'vue-material-design-icons/TagMultipleOutline.vue'
 
 export default {
@@ -66,11 +67,10 @@ export default {
 	},
 	computed: {
 		labelsSorted() {
-			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
-				.filter(label => this.card.labels.findIndex((l) => l.id === label.id) === -1)
+			return sortLabels(this.labels).filter(label => this.card.labels.findIndex((l) => l.id === label.id) === -1)
 		},
 		assignedLabels() {
-			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+			return sortLabels(this.card.labels)
 		},
 	},
 	methods: {

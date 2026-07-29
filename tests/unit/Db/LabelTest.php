@@ -45,6 +45,7 @@ class LabelTest extends TestCase {
 			'lastModified' => null,
 			'color' => '000000',
 			'ETag' => $label->getETag(),
+			'order' => null,
 		], $label->jsonSerialize());
 	}
 	public function testJsonSerializeCard() {
@@ -58,6 +59,18 @@ class LabelTest extends TestCase {
 			'lastModified' => null,
 			'color' => '000000',
 			'ETag' => $label->getETag(),
+			'order' => null,
 		], $label->jsonSerialize());
+	}
+	public function testJsonSerializeContainsOrder() {
+		$label = new Label();
+		$label->setId(1);
+		$label->setTitle('Priority');
+		$label->setColor('ff0000');
+		$label->setBoardId(2);
+		$this->assertArrayHasKey('order', $label->jsonSerialize());
+		$this->assertNull($label->jsonSerialize()['order']);
+		$label->setOrder(3);
+		$this->assertSame(3, $label->jsonSerialize()['order']);
 	}
 }

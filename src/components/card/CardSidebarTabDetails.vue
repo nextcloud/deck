@@ -103,9 +103,6 @@ export default {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
 		},
-		labelsSorted() {
-			return [...this.currentBoard.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
-		},
 	},
 	watch: {
 		card() {

@@ -86,6 +86,7 @@ import CommentProcessingOutlineIcon from 'vue-material-design-icons/CommentProce
 import DeckIcon from '../components/icons/DeckIcon.vue'
 import AvatarList from '../components/cards/AvatarList.vue'
 import labelStyle from '../mixins/labelStyle.js'
+import { sortLabels } from '../helpers/labelSort.js'
 
 import { NcRichText } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
@@ -174,7 +175,7 @@ export default {
 				: null
 		},
 		labelsSorted() {
-			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+			return sortLabels(this.card.labels)
 		},
 	},
 

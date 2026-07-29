@@ -30,7 +30,20 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
 			->setFirstResult($offset);
-		return $this->findEntities($qb);
+		$labels = $this->findEntities($qb);
+		// manual order first (see LabelService::reorder), NULLs last, then id for stability
+		usort($labels, static function (Label $a, Label $b): int {
+			$aOrder = $a->getOrder();
+			$bOrder = $b->getOrder();
+			if ($aOrder !== null && $bOrder !== null && $aOrder !== $bOrder) {
+				return $aOrder <=> $bOrder;
+			}
+			if (($aOrder === null) !== ($bOrder === null)) {
+				return $aOrder === null ? 1 : -1;
+			}
+			return $a->getId() <=> $b->getId();
+		});
+		return $labels;
 	}
 
 	/**
@@ -101,6 +114,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	public function findAssignedLabelsForBoard(int $boardId, ?int $limit = null, int $offset = 0): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.id as id', 'l.title as title', 'l.color as color')
+			->selectAlias('l.order', 'order')
 			->selectAlias('c.id', 'card_id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_assigned_labels', 'al', 'al.label_id = l.id')

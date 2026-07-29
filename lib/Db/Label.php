@@ -18,6 +18,8 @@ namespace OCA\Deck\Db;
  * @method void setCardId(int $cardId)
  * @method int getLastModified()
  * @method void setLastModified(int $lastModified)
+ * @method int|null getOrder()
+ * @method void setOrder(?int $order)
  */
 class Label extends RelationalEntity {
 	protected $title;
@@ -25,12 +27,14 @@ class Label extends RelationalEntity {
 	protected $boardId;
 	protected $cardId;
 	protected $lastModified;
+	protected $order;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
 		$this->addType('boardId', 'integer');
 		$this->addType('cardId', 'integer');
 		$this->addType('lastModified', 'integer');
+		$this->addType('order', 'integer');
 	}
 
 	public function getETag(): string {

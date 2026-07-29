@@ -594,6 +594,7 @@ class BoardService {
 			$newLabel->setTitle($label->getTitle());
 			$newLabel->setColor($label->getColor());
 			$newLabel->setBoardId($newBoard->getId());
+			$newLabel->setOrder($label->getOrder());
 			$this->labelMapper->insert($newLabel);
 		}
 

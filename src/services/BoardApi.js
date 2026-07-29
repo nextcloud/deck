@@ -306,6 +306,21 @@ export class BoardApi {
 			})
 	}
 
+	reorderLabels(boardId, labelIds) {
+		return axios.put(this.url(`/boards/${boardId}/labels/reorder`), { labelIds })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	createLabel(labelData) {
 		return axios.post(this.url('/labels'), labelData)
 			.then(

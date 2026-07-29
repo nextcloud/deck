@@ -868,9 +868,12 @@ The request can fail with a bad request response for the following reasons:
   "color": "31CC7C",
   "boardId": "2",
   "cardId": null,
+  "order": null,
   "id": 5
 }
 ```
+
+The `order` field (int, nullable) reflects the manual sorting position set through the reorder endpoint below. Labels with `order: null` have not been manually ordered yet and are sorted alphabetically after the ordered ones.
 
 ### POST /boards/{boardId}/labels - Create a new label
 
@@ -928,6 +931,38 @@ The request can fail with a bad request response for the following reasons:
 #### Response
 
 ##### 200 Success
+
+### PUT /boards/{boardId}/labels/reorder - Change the sorting order of the board's labels
+
+Requires `PERMISSION_MANAGE` on the board.
+
+#### Request parameters
+
+| Parameter | Type    | Description                              |
+| --------- | ------- | ---------------------------------------- |
+| boardId   | Integer | The id of the board the labels belong to |
+
+#### Request data
+
+| Parameter | Type      | Description                                                                 |
+| --------- | --------- | ---------------------------------------------------------------------------|
+| labelIds  | Integer[] | The ids of every label of the board, listed exactly once, in the desired display order |
+
+```json
+{
+  "labelIds": [39, 37, 40, 38]
+}
+```
+
+#### Response
+
+##### 200 Success
+
+Returns the board's labels in their new order (same format as the label list above).
+
+##### 400 Bad request
+
+A bad request response is returned if `labelIds` does not contain every label of the board exactly once, for example because a label id is missing, unknown/foreign to the board, or duplicated.
 
 ## Attachments
 

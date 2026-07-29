@@ -166,4 +166,56 @@ class LabelServiceTest extends TestCase {
 			->willReturn($label);
 		$this->assertEquals($label, $this->labelService->delete(1));
 	}
+
+	public function testReorder() {
+		$labelA = new Label();
+		$labelA->setId(1);
+		$labelB = new Label();
+		$labelB->setId(2);
+		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
+		$this->labelMapper->expects($this->exactly(2))->method('findAll')->with(123)
+			->willReturnOnConsecutiveCalls([$labelA, $labelB], [$labelB, $labelA]);
+		$this->labelMapper->expects($this->exactly(2))->method('update');
+		$result = $this->labelService->reorder(123, [2, 1]);
+		// the ordered list [2, 1] puts label 2 at position 0 and label 1 at position 1
+		$this->assertSame(0, $labelB->getOrder());
+		$this->assertSame(1, $labelA->getOrder());
+		$this->assertSame([$labelB, $labelA], $result);
+	}
+
+	public function testReorderRejectsForeignLabel() {
+		$labelA = new Label();
+		$labelA->setId(1);
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
+		$this->labelMapper->expects($this->once())->method('findAll')->with(123)->willReturn([$labelA]);
+		$this->expectException(\OCA\Deck\BadRequestException::class);
+		$this->labelService->reorder(123, [99]);
+	}
+
+	public function testReorderRejectsArchivedBoard() {
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(true);
+		$this->expectException(\OCA\Deck\StatusException::class);
+		$this->labelService->reorder(123, [1]);
+	}
+
+	public function testReorderRejectsIncompleteList() {
+		$labelA = new Label();
+		$labelA->setId(1);
+		$labelB = new Label();
+		$labelB->setId(2);
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
+		$this->labelMapper->expects($this->once())->method('findAll')->with(123)->willReturn([$labelA, $labelB]);
+		$this->expectException(\OCA\Deck\BadRequestException::class);
+		$this->labelService->reorder(123, [1]);
+	}
+
+	public function testReorderRejectsEmptyList() {
+		$labelA = new Label();
+		$labelA->setId(1);
+		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
+		$this->labelMapper->expects($this->once())->method('findAll')->with(123)->willReturn([$labelA]);
+		$this->expectException(\OCA\Deck\BadRequestException::class);
+		$this->labelService->reorder(123, []);
+	}
 }
