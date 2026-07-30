@@ -106,7 +106,10 @@ return [
 		['name' => 'card_api#removeLabel', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel', 'verb' => 'PUT'],
 		['name' => 'card_api#assignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#unassignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser', 'verb' => 'PUT'],
-		['name' => 'card_api#reorder', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		// The stack in the path is the one the card currently sits in, while the
+		// request body carries the stack to move it to. Naming the placeholder
+		// stackId would shadow that body value, as url parameters take precedence.
+		['name' => 'card_api#reorder', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{currentStackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
 		['name' => 'card_api#assignDependentCard', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'POST'],
 		['name' => 'card_api#removeDependentCard', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/dependentCards/{dependentCardId}', 'verb' => 'DELETE'],
 		['name' => 'card_api#archive', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive', 'verb' => 'PUT'],
