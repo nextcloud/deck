@@ -20,7 +20,9 @@
 			<span>{{ subtitle }}</span>
 			<template v-if="cardOwner">
 				<span> ⸱ </span>
-				<NcUserBubble :user="cardOwner.uid" :display-name="cardOwner.displayName" />
+				<NcUserBubble :user="cardOwner.isNoUser ? undefined : cardOwner.uid"
+					:display-name="cardOwner.displayName"
+					:is-no-user="cardOwner.isNoUser" />
 			</template>
 		</template>
 		<template #secondary-actions>
@@ -168,7 +170,8 @@ export default {
 			if (!owner) return null
 			return {
 				uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
-				displayName: this.cardOwnerDisplayName,
+				displayName: owner?.type === 6 ? owner.uid : this.cardOwnerDisplayName,
+				isNoUser: owner?.type !== 0,
 			}
 		},
 		subtitle() {

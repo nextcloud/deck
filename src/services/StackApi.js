@@ -50,10 +50,10 @@ export class StackApi {
 	}
 
 	loadArchivedStacks(boardId) {
-		return axios.get(this.url(`/stacks/${boardId}/archived`))
+		return axios.get(this.ocsUrl(`/stacks/${boardId}/archived`))
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)

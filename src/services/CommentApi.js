@@ -13,31 +13,35 @@ export class CommentApi {
 		return generateRemoteUrl(url)
 	}
 
-	async loadComments({ cardId, limit, offset }) {
+	async loadComments({ cardId, limit, offset, boardId }) {
 		const api = await axios.get(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/comments`), {
-			params: { limit, offset },
+			params: { limit, offset, boardId },
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 		return api.data.ocs.data
 	}
 
-	async createComment({ cardId, comment, replyTo }) {
+	async createComment({ cardId, comment, replyTo, boardId }) {
 		const api = await axios.post(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/comments`), {
 			message: `${comment}`,
 			parentId: replyTo ? replyTo.id : null,
+			boardId,
 		})
 		return api.data.ocs.data
 	}
 
-	async updateComment({ cardId, id, comment }) {
+	async updateComment({ cardId, id, comment, boardId }) {
 		const api = await axios.put(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/comments/${id}`), {
 			message: `${comment}`,
+			boardId,
 		})
 		return api.data.ocs.data
 	}
 
-	async deleteComment({ cardId, id }) {
-		const api = await axios.delete(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/comments/${id}`))
+	async deleteComment({ cardId, id, boardId }) {
+		const api = await axios.delete(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/comments/${id}`), {
+			params: { boardId },
+		})
 		return api.data.ocs.data
 	}
 

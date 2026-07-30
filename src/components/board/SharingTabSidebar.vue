@@ -12,21 +12,20 @@
 		<ul id="shareWithList"
 			class="shareWithList">
 			<li>
-				<NcAvatar :user="board.owner.uid" />
+				<NcAvatar :user="board.owner.uid" :is-no-user="board.owner.type !== 0" />
 				<span class="username">
-					{{ board.owner.displayname }}
+					{{ board.owner.type===6 ? board.owner.uid : board.owner.displayname }}
 					<span v-if="!isCurrentUser(board.owner.uid)" class="board-owner-label">
 						{{ t('deck', 'Board owner') }}
 					</span>
 				</span>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.id" :data-cy="'acl-participant:' + acl.participant.uid">
-				<NcAvatar v-if="acl.type===0" :user="acl.participant.uid" />
+				<NcAvatar v-if="acl.type===0 || acl.type===6" :user="acl.participant.uid" :is-no-user="acl.type!==0" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
-				<div v-if="acl.type===6" class="avatardiv icon" />
 				<span class="username">
-					{{ acl.participant.displayname || acl.participant }}
+					{{ acl.type===6 ? acl.participant.uid : acl.participant.displayname || acl.participant }}
 					<span v-if="acl.type===1">{{ t('deck', '(Group)') }}</span>
 					<span v-if="acl.type===7">{{ t('deck', '(Team)') }}</span>
 					<span v-if="acl.type===6">{{ t('deck', '(remote)') }}</span>
@@ -272,6 +271,7 @@ export default {
 	.username {
 		padding: 12px 9px;
 		flex-grow: 1;
+		min-width: 0;
 	}
 
 	.board-owner-label {

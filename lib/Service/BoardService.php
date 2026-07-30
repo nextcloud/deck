@@ -520,7 +520,8 @@ class BoardService {
 			throw new BadRequestException('Board owner cannot leave board');
 		}
 
-		$acl = $this->aclMapper->findParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $this->userId);
+		$userId = $this->userId ?? $this->permissionService->getUserId();
+		$acl = $this->aclMapper->findParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $userId);
 
 		if (!$acl) {
 			throw new BadRequestException('Not a participant of this board');

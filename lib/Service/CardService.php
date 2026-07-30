@@ -85,7 +85,7 @@ class CardService {
 
 			// TODO We should find a better way just to get the comment count so we can save 1-3 queries per card here
 			$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
-			$lastRead = $countComments > 0 ? $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user) : null;
+			$lastRead = $countComments > 0 && $user ? $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user) : null;
 			$countUnreadComments = $lastRead ? $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead) : 0;
 			$card->setCommentsUnread($countUnreadComments);
 			$card->setCommentsCount($countComments);

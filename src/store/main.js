@@ -252,6 +252,12 @@ export default function storeFactory() {
 			setCurrentCard(state, card) {
 				state.currentCard = card
 			},
+			setBoard(state, board) {
+				const existingIndex = state.boards.findIndex(b => b?.id === board?.id)
+				if (existingIndex > -1) {
+					Vue.set(state.boards, existingIndex, board)
+				}
+			},
 
 			// label mutators
 			removeLabelFromCurrentBoard(state, labelId) {
@@ -339,6 +345,7 @@ export default function storeFactory() {
 				commit('setCurrentBoard', null)
 				const board = await apiClient.loadById(boardId)
 				commit('setCurrentBoard', board)
+				commit('setBoard', board)
 				commit('setAssignableUsers', board.users)
 			},
 

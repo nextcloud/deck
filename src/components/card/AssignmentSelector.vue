@@ -23,7 +23,7 @@
 		<div v-else class="avatar-list--readonly">
 			<NcUserBubble v-for="option in assignedUsers"
 				:key="option.primaryKey"
-				:user="option.uid"
+				:user="option.isNoUser ? undefined : option.uid"
 				:display-name="option.displayname"
 				:is-no-user="option.isNoUser"
 				:size="32" />
@@ -68,7 +68,7 @@ export default defineComponent({
 				const assignable = {
 					...item,
 					user: item.primaryKey,
-					displayName: item.displayname,
+					displayname: item.displayname,
 					icon: 'icon-user',
 					isNoUser: false,
 					multiselectKey: item.type + ':' + item.uid,
@@ -81,6 +81,11 @@ export default defineComponent({
 				if (item.type === 7) {
 					assignable.icon = 'icon-circles'
 					assignable.isNoUser = true
+				}
+				if (item.type === 6) {
+					assignable.isNoUser = true
+					assignable.icon = null
+					assignable.displayname = item.primaryKey
 				}
 
 				return assignable
@@ -107,6 +112,7 @@ export default defineComponent({
 					isNoUser: item.participant.type !== 0,
 					multiselectKey: item.participant.type + ':' + item.participant.primaryKey,
 					user: item.participant.uid,
+					displayname: item.participant.type === 6 ? item.participant.uid : item.participant.displayname,
 				}))
 			} else {
 				this.assignedUsers = []

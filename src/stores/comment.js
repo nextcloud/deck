@@ -46,8 +46,8 @@ export const useCommentStore = defineStore('comment', {
 				this.comments[cardId].comments.push(...newComments)
 			}
 		},
-		async updateComment({ cardId, comment }) {
-			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message })
+		async updateComment({ cardId, comment, boardId }) {
+			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message, boardId })
 			const existingIndex = this.comments[cardId].comments.findIndex(c => c.id === updatedComment.id)
 			if (existingIndex !== -1) {
 				Object.assign(this.comments[cardId].comments[existingIndex], updatedComment)
@@ -69,11 +69,12 @@ export const useCommentStore = defineStore('comment', {
 		setReplyTo(comment) {
 			this.replyTo = comment
 		},
-		async fetchComments({ cardId, offset }) {
+		async fetchComments({ cardId, offset, boardId }) {
 			const comments = await apiClient.loadComments({
 				cardId,
 				limit: COMMENT_FETCH_LIMIT,
 				offset: offset || 0,
+				boardId,
 			})
 
 			this.addComments({ cardId, comments })
@@ -82,14 +83,14 @@ export const useCommentStore = defineStore('comment', {
 				this.endReached(cardId)
 			}
 		},
-		async fetchMore({ cardId }) {
+		async fetchMore({ cardId, boardId }) {
 			// fetch newer comments first
-			await this.fetchComments({ cardId })
-			await this.fetchComments({ cardId, offset: this.getCommentsForCard(cardId).length })
+			await this.fetchComments({ cardId, boardId })
+			await this.fetchComments({ cardId, offset: this.getCommentsForCard(cardId).length, boardId })
 		},
-		async createComment({ cardId, comment }) {
-			await apiClient.createComment({ cardId, comment, replyTo: this.replyTo })
-			await this.fetchComments({ cardId })
+		async createComment({ cardId, comment, boardId }) {
+			await apiClient.createComment({ cardId, comment, replyTo: this.replyTo, boardId })
+			await this.fetchComments({ cardId, boardId })
 		},
 	},
 })

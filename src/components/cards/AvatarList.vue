@@ -13,26 +13,28 @@
 							<AccountMultiple class="avatardiv more-avatars" :size="24" />
 						</div>
 						<div v-for="user in firstUsers" :key="user.id">
-							<NcAvatar v-if="user.type === 0"
+							<NcAvatar v-if="user.participant.type === 0"
 								:user="user.participant.uid"
 								:display-name="user.participant.displayname"
 								:disable-menu="true"
 								:hide-status="true"
 								:size="32" />
-							<NcAvatar v-if="user.type === 6"
+							<NcAvatar v-if="user.participant.type === 6"
 								:user="user.participant.uid"
-								:display-name="user.participant.displayname"
+								:display-name="user.participant.uid"
+								:tooltip-message="user.participant.uid + ' ' + t('deck', '(remote)')"
 								:disable-menu="true"
 								:hide-status="true"
+								:is-no-user="true"
 								:size="32" />
-							<NcAvatar v-if="user.type === 1"
+							<NcAvatar v-if="user.participant.type === 1"
 								:user="user.participant.uid"
 								:display-name="user.participant.displayname"
 								:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Group)')"
 								:is-no-user="true"
 								:disable-="true"
 								:size="32" />
-							<NcAvatar v-if="user.type === 7"
+							<NcAvatar v-if="user.participant.type === 7"
 								:user="user.participant.uid"
 								:display-name="user.participant.displayname"
 								:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Team)')"
