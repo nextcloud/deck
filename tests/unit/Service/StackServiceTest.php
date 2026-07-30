@@ -276,6 +276,10 @@ class StackServiceTest extends TestCase {
 
 	public function testSetDoneStackSetsDoneColumn(): void {
 		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(5)
+			->willReturn($this->createStack(5, 0));
 		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
 		$this->stackMapper->expects($this->once())
 			->method('clearDoneColumnForBoard')
@@ -303,6 +307,10 @@ class StackServiceTest extends TestCase {
 	public function testSetDoneStackDoesNotMarkCardsWhenUnsetting(): void {
 		$this->permissionService->expects($this->once())->method('checkPermission');
 		$this->boardService->expects($this->once())->method('isArchived')->willReturn(false);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(5)
+			->willReturn($this->createStack(5, 0));
 		$this->stackMapper->expects($this->never())->method('clearDoneColumnForBoard');
 		$this->cardMapper->expects($this->never())->method('findAll');
 		$this->cardMapper->expects($this->never())->method('update');
@@ -314,9 +322,24 @@ class StackServiceTest extends TestCase {
 
 	public function testSetDoneStackThrowsOnArchivedBoard(): void {
 		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(5)
+			->willReturn($this->createStack(5, 0));
 		$this->boardService->expects($this->once())->method('isArchived')->willReturn(true);
 		$this->stackMapper->expects($this->never())->method('setIsDoneColumn');
 		$this->expectException(\OCA\Deck\NoPermissionException::class);
 		$this->stackService->setDoneStack(5, 1, true);
+	}
+
+	public function testSetDoneStackThrowsOnMismatchBoardId(): void {
+		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(5)
+			->willReturn($this->createStack(5, 0));
+		$this->stackMapper->expects($this->never())->method('setIsDoneColumn');
+		$this->expectException(\OCA\Deck\BadRequestException::class);
+		$this->stackService->setDoneStack(5, 2, true);
 	}
 }

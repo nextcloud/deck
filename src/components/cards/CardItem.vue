@@ -78,7 +78,7 @@
 
 <script>
 import ClickOutside from 'vue-click-outside'
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex, mapGetters } from 'vuex'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
@@ -87,6 +87,8 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapState } from 'pinia'
+import { useStackStore } from '../../stores/stack.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -127,7 +129,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useStackStore, ['stackById']),
+		...mapStateVuex({
 			compactMode: state => state.compactMode,
 			showArchived: state => state.showArchived,
 			currentBoard: state => state.currentBoard,
@@ -137,11 +140,12 @@ export default {
 		...mapGetters([
 			'isArchived',
 		]),
+
 		board() {
 			return this.$store.getters.boardById(this?.stack?.boardId)
 		},
 		stack() {
-			return this.$store.getters.stackById(this?.card?.stackId)
+			return this.stackById(this?.card?.stackId)
 		},
 		canEdit() {
 			if (this.currentBoard) {

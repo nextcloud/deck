@@ -6,6 +6,7 @@
 import { defineStore } from 'pinia'
 import { StackApi } from '../services/StackApi.js'
 import { CardApi } from '../services/CardApi.js'
+import { useStackStore } from './stack.js'
 
 const stackApi = new StackApi()
 const cardApi = new CardApi()
@@ -56,7 +57,7 @@ export const useTrashbinStore = defineStore('trashbin', {
 		},
 		stackUndoDelete(stack) {
 			stackApi.updateStack(stack).then((restoredStack) => {
-				this.$vuex.commit('addStack', restoredStack)
+				useStackStore().addStack(restoredStack)
 				this.removeStackFromTrash(restoredStack)
 			})
 		},

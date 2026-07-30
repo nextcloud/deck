@@ -294,6 +294,8 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapActions } from 'pinia'
+import { useStackStore } from '../stores/stack.js'
 
 export default {
 	name: 'Controls',
@@ -398,6 +400,7 @@ export default {
 		this.setPageTitle('')
 	},
 	methods: {
+		...mapActions(useStackStore, ['createStack']),
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
 				this.filter.due = ''
@@ -435,7 +438,7 @@ export default {
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }
-			this.$store.dispatch('createStack', this.stack)
+			this.createStack(this.stack)
 			this.newStackTitle = ''
 			this.stack = null
 			this.isAddStackVisible = false

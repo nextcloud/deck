@@ -88,7 +88,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState as mapStateVuex } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { NcSelect, NcButton } from '@nextcloud/vue'
 import ListBoxOutline from 'vue-material-design-icons/ListBoxOutline.vue'
@@ -97,6 +97,8 @@ import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
+import { mapState } from 'pinia'
+import { useStackStore } from '../../stores/stack.js'
 
 export default defineComponent({
 	name: 'DependentCardsSelector',
@@ -126,10 +128,11 @@ export default defineComponent({
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useStackStore, ['stackById']),
+		...mapStateVuex({
 			cards: state => state.card.cards,
 		}),
-		...mapGetters(['cardById', 'stackById']),
+		...mapGetters(['cardById']),
 		isEditable() {
 			return this.canEdit && !this.card?.done && !this.card?.archived
 		},
