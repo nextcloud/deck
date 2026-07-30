@@ -7,10 +7,9 @@
 	<div class="stack"
 		:class="{
 			'stack--done-column': isDoneColumn,
-			'stack--bottom-add-empty': isEmptyStackWithBottomAddCard,
 			'stack--add-card-at-top': canAddCardAtTop,
+			'stack--add-card-at-bottom': canAddCardAtBottom,
 			'stack--dragging-card': draggingCard,
-			'stack--drag-over': draggingOverStack,
 		}"
 		:data-cy-stack="stack.title">
 		<div v-click-outside="stopCardCreation"
@@ -144,9 +143,7 @@
 			data-dragscroll-enabled
 			@should-accept-drop="canEdit"
 			@drag-start="draggingCard = true"
-			@drag-end="onDragEnd"
-			@drag-enter="draggingOverStack = true"
-			@drag-leave="draggingOverStack = false"
+			@drag-end="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
 				<transition :appear="animate && !card.animated && (card.animated=true)"
@@ -242,7 +239,6 @@ export default {
 		return {
 			editing: false,
 			draggingCard: false,
-			draggingOverStack: false,
 			copiedStack: '',
 			newCardTitle: '',
 			showAddCard: false,
@@ -296,12 +292,6 @@ export default {
 		canAddCardAtBottom() {
 			return this.canEdit && !this.showArchived && !this.isArchived && !this.stackAddCardAtTop
 		},
-		isEmptyStack() {
-			return this.cardsByStack.length === 0
-		},
-		isEmptyStackWithBottomAddCard() {
-			return this.canAddCardAtBottom && this.isEmptyStack
-		},
 	},
 	watch: {
 		showAddCard(newValue) {
@@ -340,11 +330,6 @@ export default {
 			}
 			this.showAddCard = false
 			return false
-		},
-		onDragEnd() {
-			this.draggingCard = false
-			// drag-leave is not emitted when the card is dropped inside the stack
-			this.draggingOverStack = false
 		},
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
@@ -414,14 +399,12 @@ export default {
 					title: this.newCardTitle,
 					stackId: this.stack.id,
 					boardId: this.stack.boardId,
-					order: addCardAtTop ? 0 : 999,
+					// Without an order the API appends the card to the end of the stack
+					...(addCardAtTop ? { order: 0 } : {}),
 				})
 				if (addCardAtTop) {
-					await this.$store.dispatch('reorderCard', {
-						...newCard,
-						stackId: this.stack.id,
-						order: 0,
-					})
+					// Creating a card does not move the existing cards down, so reorder
+					await this.$store.dispatch('reorderCard', { ...newCard, order: 0 })
 				}
 				this.newCardTitle = ''
 				this.showAddCard = true
@@ -487,40 +470,21 @@ export default {
 
 	.stack {
 		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));
+		--stack-card-add-box-height: calc(var(--stack-card-add-control-height) + #{$stack-gap});
 		width: 100%;
 		.dnd-container {
-			flex-grow: 1;
-		}
-
-		&:not(.stack--add-card-at-top):not(.stack--bottom-add-empty) {
-			.dnd-container {
-			flex: 0 1 auto;
+			flex: 1 1 auto;
 			min-height: 0;
-			}
 		}
 
-		&.stack--bottom-add-empty {
-			// The empty card list keeps filling the column so that it stays an
-			// easy drop target, while the add card control floats on top of it,
-			// right where the first card would be.
-			.stack__card-add--bottom {
-				position: absolute;
-				inset-inline: 0;
-				top: calc(var(--default-clickable-area) + #{$stack-gap});
-				transition: top var(--animation-quick);
-			}
-
-			// Make way for the drop placeholder while a card is dragged over the
-			// list. The list itself is left untouched, resizing it would move it
-			// away from under the pointer.
-			&.stack--drag-over .stack__card-add--bottom {
-				top: calc(var(--default-clickable-area) + var(--stack-card-add-control-height) + 2 * #{$stack-gap});
-			}
-
-			// smooth-dnd resolves the hovered container with elementFromPoint(), so
-			// the floating control has to let the drag through to the list below it,
-			// otherwise dragging over it would count as leaving the list.
+		&.stack--add-card-at-bottom {
+			// The card list fills the column and reaches underneath the add card
+			// control (see Board.vue), so that cards can be dropped anywhere in
+			// the free space of the list.
 			&.stack--dragging-card .stack__card-add--bottom {
+				// smooth-dnd resolves the hovered container with elementFromPoint(),
+				// so the control has to let the drag through to the list underneath
+				// it, otherwise dragging over it would count as leaving the list.
 				pointer-events: none;
 			}
 		}
