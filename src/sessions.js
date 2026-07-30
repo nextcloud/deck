@@ -6,6 +6,7 @@
 import { listen } from '@nextcloud/notify_push'
 import { sessionApi } from './services/SessionApi.js'
 import axios from '@nextcloud/axios'
+import { useStackStore } from './stores/stack.js'
 
 const SESSION_INTERVAL = 90 // in seconds
 
@@ -55,7 +56,7 @@ export function initSessions(storeInstance) {
 		const currentBoardId = store.state.currentBoard?.id
 		if (body.boardId !== currentBoardId) return
 
-		store.dispatch('loadStacks', currentBoardId)
+		useStackStore().loadStacks(currentBoardId)
 	})
 }
 

@@ -81,7 +81,7 @@
 </template>
 <script>
 import { NcActionButton, NcColorPicker } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState as mapStateVuex } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
@@ -99,6 +99,8 @@ import '@nextcloud/dialogs/style.css'
 import { emit } from '@nextcloud/event-bus'
 import { useActionsStore } from '../../stores/actions.js'
 import { useTrashbinStore } from '../../stores/trashbin.js'
+import { useStackStore } from '../../stores/stack.js'
+import { mapState } from 'pinia'
 
 export default {
 	name: 'CardMenuEntries',
@@ -130,13 +132,13 @@ export default {
 		}
 	},
 	computed: {
+		...mapState(useStackStore, ['stackById']),
 		...mapGetters([
 			'isArchived',
 			'boards',
-			'stackById',
 			'boardById',
 		]),
-		...mapState({
+		...mapStateVuex({
 			showArchived: state => state.showArchived,
 			currentBoard: state => state.currentBoard,
 		}),
