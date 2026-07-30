@@ -403,10 +403,8 @@ export default {
 				this.$nextTick(() => {
 					this.$refs.newCardInput.focus()
 					this.animate = false
-					if (this.$refs.card && this.$refs.card.length > 0) {
-						const index = addCardAtTop ? 0 : this.$refs.card.length - 1
-						this.$refs.card[index].scrollIntoView()
-					}
+					// Refs of a v-for are registered in creation order, not in list order
+					this.$refs.card?.find((card) => card.id === newCard.id)?.scrollIntoView()
 				})
 				if (!this.cardDetailsInModal) {
 					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
