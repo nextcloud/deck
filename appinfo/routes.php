@@ -86,6 +86,7 @@ return [
 		['name' => 'board_api#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 		['name' => 'board_api#deleteAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
 		['name' => 'board_api#updateAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl/{aclId}', 'verb' => 'PUT'],
+		['name' => 'board_api#clone', 'url' => '/api/v{apiVersion}/boards/{boardId}/clone', 'verb' => 'POST'],
 
 		['name' => 'board_import_api#getAllowedSystems', 'url' => '/api/v{apiVersion}/boards/import/getSystems','verb' => 'GET'],
 		['name' => 'board_import_api#getConfigSchema', 'url' => '/api/v{apiVersion}/boards/import/config/schema/{name}','verb' => 'GET'],
