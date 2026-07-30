@@ -7,8 +7,8 @@
 	<div class="stack"
 		:class="{
 			'stack--done-column': isDoneColumn,
-			'stack--add-card-at-top': canAddCardAtTop,
-			'stack--add-card-at-bottom': canAddCardAtBottom,
+			'stack--add-card-at-top': canAddCard && stackAddCardAtTop,
+			'stack--add-card-at-bottom': canAddCard && !stackAddCardAtTop,
 			'stack--dragging-card': draggingCard,
 		}"
 		:data-cy-stack="stack.title">
@@ -100,40 +100,6 @@
 			</div>
 		</NcModal>
 
-		<div v-if="canAddCardAtTop" class="stack__card-add stack__card-add--top">
-			<NcButton v-if="!showAddCard"
-				data-cy="action:add-card"
-				class="stack__card-add-button"
-				type="tertiary"
-				:wide="true"
-				@click.stop="showAddCard=true">
-				<template #icon>
-					<PlusIcon :size="20" />
-				</template>
-				{{ t('deck', 'Add card') }}
-			</NcButton>
-			<form v-else
-				:class="{ 'icon-loading-small': stateCardCreating }"
-				@submit.prevent.stop="clickAddCard()">
-				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-				<input id="new-stack-input-main"
-					ref="newCardInput"
-					v-model="newCardTitle"
-					type="text"
-					class="no-close"
-					:disabled="stateCardCreating"
-					:placeholder="t('deck', 'Card name')"
-					required
-					pattern=".*\S+.*"
-					@focus="onCreateCardFocus"
-					@keydown.esc.stop="closeCardCreation">
-				<input v-show="!stateCardCreating"
-					class="icon-confirm"
-					type="submit"
-					value="">
-			</form>
-		</div>
-
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container stack__cards-list"
 			group-name="stack"
@@ -154,7 +120,7 @@
 			</Draggable>
 		</Container>
 
-		<div v-if="canAddCardAtBottom" class="stack__card-add stack__card-add--bottom">
+		<div v-if="canAddCard" class="stack__card-add">
 			<NcButton v-if="!showAddCard"
 				data-cy="action:add-card"
 				class="stack__card-add-button"
@@ -180,7 +146,7 @@
 					required
 					pattern=".*\S+.*"
 					@focus="onCreateCardFocus"
-					@keydown.esc.stop="closeCardCreation">
+					@keydown.esc.stop="showAddCard = false">
 				<input v-show="!stateCardCreating"
 					class="icon-confirm"
 					type="submit"
@@ -284,11 +250,8 @@ export default {
 		stackAddCardAtTop() {
 			return this.$store.getters.config('stackAddCardAtTop') === true
 		},
-		canAddCardAtTop() {
-			return this.canEdit && !this.showArchived && !this.isArchived && this.stackAddCardAtTop
-		},
-		canAddCardAtBottom() {
-			return this.canEdit && !this.showArchived && !this.isArchived && !this.stackAddCardAtTop
+		canAddCard() {
+			return this.canEdit && !this.showArchived && !this.isArchived
 		},
 	},
 	watch: {
@@ -310,10 +273,6 @@ export default {
 	methods: {
 		...mapActions(useTrashbinStore, ['stackUndoDelete']),
 		...mapActions(useStackStore, ['setDoneStack', 'deleteStack', 'updateStack']),
-		closeCardCreation() {
-			this.showAddCard = false
-			return false
-		},
 		stopCardCreation(e) {
 			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
 			// so we have to ignore it
@@ -469,19 +428,26 @@ export default {
 			min-height: 0;
 		}
 
-		&.stack--add-card-at-bottom {
-			// The card list fills the column and reaches underneath the add card
-			// control (see Board.vue), so that cards can be dropped anywhere in
-			// the free space of the list.
-			&.stack--dragging-card .stack__card-add--bottom {
-				// smooth-dnd resolves the hovered container with elementFromPoint(),
-				// so the control has to let the drag through to the list underneath
-				// it, otherwise dragging over it would count as leaving the list.
-				pointer-events: none;
-			}
+		&.stack--add-card-at-bottom.stack--dragging-card .stack__card-add {
+			// The card list reaches underneath the control (see Board.vue) and
+			// smooth-dnd resolves the hovered container with elementFromPoint(),
+			// so the control must not swallow the drag.
+			pointer-events: none;
 		}
 
 		&.stack--add-card-at-top {
+			.stack__header {
+				order: 1;
+			}
+
+			.stack__card-add {
+				order: 2;
+			}
+
+			.stack__cards-list {
+				order: 3;
+			}
+
 			&:after {
 				content: '';
 				display: block;
@@ -614,7 +580,7 @@ export default {
 		background-color: var(--color-main-background);
 		position: relative;
 
-		&--top {
+		.stack--add-card-at-top & {
 			padding-top: $stack-gap;
 
 			&:after {
@@ -631,7 +597,7 @@ export default {
 			}
 		}
 
-		&--bottom {
+		.stack--add-card-at-bottom & {
 			padding-bottom: $stack-gap;
 		}
 
