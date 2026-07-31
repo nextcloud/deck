@@ -14,13 +14,13 @@ export const useOverviewStore = defineStore('overview', {
 		loading: false,
 	}),
 	actions: {
-		async loadUpcoming() {
+		async loadUpcoming(hideNoDueOnOverview) {
 			if (this.loading) {
 				return this.loading
 			}
 			const promise = (async () => {
 				this.$vuex.commit('setCurrentBoard', null)
-				const assignedCards = await overviewApi.get('upcoming')
+				const assignedCards = await overviewApi.get('upcoming', hideNoDueOnOverview)
 				const assignedCardsFlat = Object.values(assignedCards).flat()
 				for (const i in assignedCardsFlat) {
 					this.$vuex.commit('addCard', assignedCardsFlat[i])

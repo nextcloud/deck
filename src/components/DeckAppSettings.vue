@@ -12,6 +12,8 @@
 			<NcFormBox>
 				<NcFormBoxSwitch v-model="cardDetailsInModal"
 					:label="t('deck', 'Use bigger card view')" />
+				<NcFormBoxSwitch v-model="hideNoDueOnOverview"
+					:label="t('deck', 'Hide no-due column on upcoming cards')" />
 			</NcFormBox>
 		</NcAppSettingsSection>
 
@@ -117,6 +119,14 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
+		},
+		hideNoDueOnOverview: {
+			get() {
+				return this.$store.getters.config('hideNoDueOnOverview')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { hideNoDueOnOverview: newValue })
 			},
 		},
 		cardIdBadge: {

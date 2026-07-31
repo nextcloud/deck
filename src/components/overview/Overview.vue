@@ -47,6 +47,7 @@ import CardItem from '../cards/CardItem.vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { useOverviewStore } from '../../stores/overview.js'
 import { mapActions, mapState } from 'pinia'
+import { mapGetters } from 'vuex'
 
 const FILTER_UPCOMING = 'upcoming'
 
@@ -75,11 +76,6 @@ const COLUMN_PROPS_LIST = [
 		title: 'Later',
 		filter: 'later',
 	},
-	{
-		title: 'No due',
-		filter: 'nodue',
-		sort: false,
-	},
 ]
 
 export default {
@@ -96,9 +92,17 @@ export default {
 		},
 	},
 	data() {
+		const dynamicList = [...COLUMN_PROPS_LIST];
+		if(!this.$store.getters.config('hideNoDueOnOverview')) {
+			dynamicList.push({
+				title: 'No due',
+				filter: 'nodue',
+				sort: false,
+			});
+		}
 		return {
 			loading: true,
-			columnPropsList: COLUMN_PROPS_LIST,
+			columnPropsList: dynamicList,
 		}
 	},
 	computed: {
@@ -112,6 +116,14 @@ export default {
 			default:
 				return ''
 			}
+		},
+		hideNoDueOnOverview: {
+			get() {
+				return this.$store.getters.config('hideNoDueOnOverview')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { hideNoDueOnOverview: newValue })
+			},
 		},
 		...mapState(useOverviewStore, ['assignedCards']),
 	},
@@ -129,7 +141,7 @@ export default {
 			this.loading = true
 			try {
 				if (this.filter === FILTER_UPCOMING) {
-					await this.loadUpcoming()
+					await this.loadUpcoming(this.$store.getters.config('hideNoDueOnOverview'))
 				}
 			} catch (e) {
 				console.error(e)

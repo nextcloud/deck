@@ -328,9 +328,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	/**
 	 * @param int[] $boardIds
+	 * @param bool $filterNoDue
 	 * @return Card[]
 	 */
-	public function findToMeOrNotAssignedCards(array $boardIds, string $username): array {
+	public function findToMeOrNotAssignedCards(array $boardIds, string $username, bool $filterNoDue): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
@@ -349,6 +350,9 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->eq('s.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('b.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->eq('b.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		if($filterNoDue) {
+			$qb = $qb->andWhere($qb->expr()->isNotNull('duedate'));
+		}
 		return $this->findEntities($qb);
 	}
 
