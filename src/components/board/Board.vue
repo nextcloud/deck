@@ -5,7 +5,10 @@
 
 <template>
 	<div class="board-wrapper" :tabindex="-1" @touchend="fixActionRestriction">
-		<Controls :board="board" />
+		<Controls :board="board"
+			show-search
+			:search-label="t('deck', 'Search cards')"
+			:search-hint="searchHint" />
 
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
@@ -153,6 +156,12 @@ export default {
 		]),
 		stacks() {
 			return this.board?.id ? this.stacksByBoard(this.board.id) : []
+		},
+		searchHint() {
+			// Parameterised so translators never see the prefixes as translatable text
+			return t('deck', 'Supported prefixes: {prefixes}. Wrap phrases in double quotes.', {
+				prefixes: 'title:, description:, tag:, assigned:, list:, date:',
+			})
 		},
 		dragHandleSelector() {
 			return this.canEdit ? '.stack__title' : '.no-drag'
