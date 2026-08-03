@@ -5,6 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { OverviewApi } from '../services/OverviewApi.js'
+import { useCardStore } from './card.js'
 
 const overviewApi = new OverviewApi()
 
@@ -19,11 +20,12 @@ export const useOverviewStore = defineStore('overview', {
 				return this.loading
 			}
 			const promise = (async () => {
+				const cardStore = useCardStore()
 				this.$vuex.commit('setCurrentBoard', null)
 				const assignedCards = await overviewApi.get('upcoming')
 				const assignedCardsFlat = Object.values(assignedCards).flat()
 				for (const i in assignedCardsFlat) {
-					this.$vuex.commit('addCard', assignedCardsFlat[i])
+					cardStore.addCardToStore(assignedCardsFlat[i])
 				}
 				this.assignedCards = assignedCards
 				this.loading = false

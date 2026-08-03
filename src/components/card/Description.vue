@@ -76,6 +76,8 @@ import { generateUrl } from '@nextcloud/router'
 import { showWarning } from '@nextcloud/dialogs'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import { mapState } from 'vuex'
+import { mapActions } from 'pinia'
+import { useCardStore } from '../../stores/card.js'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -195,6 +197,9 @@ export default {
 		await this.destroyEditor()
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			updateCardDescInStore: 'updateCardDesc',
+		}),
 		async setupEditor() {
 			await this.destroyEditor()
 			this.descriptionLastEdit = 0
@@ -309,7 +314,7 @@ export default {
 			this.descriptionSaving = true
 			try {
 				if (this.card.id !== undefined) {
-					await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
+					await this.updateCardDescInStore({ ...this.card, description: this.description })
 				}
 				this.$emit('change', this.description)
 				this.descriptionLastEdit = 0

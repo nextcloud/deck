@@ -8,6 +8,7 @@ import { defineStore } from 'pinia'
 import { StackApi } from '../services/StackApi.js'
 import applyOrderToArray from '../helpers/applyOrderToArray.js'
 import { useTrashbinStore } from './trashbin.js'
+import { useCardStore } from './card.js'
 
 const apiClient = new StackApi()
 
@@ -50,6 +51,7 @@ export const useStackStore = defineStore('stack', {
 				})
 		},
 		async loadStacks(boardId) {
+			const cardStore = useCardStore()
 			let call = 'loadStacks'
 			if (this.$vuex.state.showArchived === true) {
 				call = 'loadArchivedStacks'
@@ -64,9 +66,10 @@ export const useStackStore = defineStore('stack', {
 				delete stack.cards
 				this.addStack(stack)
 			}
-			this.$vuex.commit('setCards', cards)
+			cardStore.setCards(cards)
 		},
 		async loadArchivedStacks(boardId) {
+			const cardStore = useCardStore()
 			const archivedStacks = await apiClient.loadArchivedStacks(boardId)
 			const cards = []
 			for (const i in archivedStacks) {
@@ -79,7 +82,7 @@ export const useStackStore = defineStore('stack', {
 					this.addStack(stack)
 				}
 			}
-			this.$vuex.commit('setCards', cards)
+			cardStore.setCards(cards)
 		},
 		createStack(stack) {
 			stack.boardId = this.$vuex.state.currentBoard.id
@@ -108,6 +111,7 @@ export const useStackStore = defineStore('stack', {
 				})
 		},
 		async setDoneStack({ stackId, boardId, isDone }) {
+			const cardStore = useCardStore()
 			await apiClient.setDoneStack(stackId, boardId, isDone)
 			// Mirror the backend bulk-clear: clear the flag on any other stack in this board
 			if (isDone) {
@@ -116,10 +120,10 @@ export const useStackStore = defineStore('stack', {
 					.forEach((s) => this.addStack({ ...s, isDoneColumn: false }))
 				// Mirror the backend bulk-done: mark all undone cards in this stack as done
 				const now = new Date().toISOString()
-				this.$vuex.state.card.cards
+				cardStore.cards
 					.filter((c) => c.stackId === stackId && c.done == null)
 					.forEach((c) =>
-						this.$vuex.commit('updateCardProperty', { property: 'done', card: { ...c, done: now } }),
+						cardStore.updateCardProperty({ property: 'done', card: { ...c, done: now } }),
 					)
 			}
 			const stack = this.stacks.find((s) => s.id === stackId)

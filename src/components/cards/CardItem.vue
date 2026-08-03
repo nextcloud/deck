@@ -87,8 +87,9 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -130,6 +131,7 @@ export default {
 	},
 	computed: {
 		...mapState(useStackStore, ['stackById']),
+		...mapState(useCardStore, ['cardById']),
 		...mapStateVuex({
 			compactMode: state => state.compactMode,
 			showArchived: state => state.showArchived,
@@ -155,7 +157,7 @@ export default {
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
 		card() {
-			return this.item ? this.item : this.$store.getters.cardById(this.id)
+			return this.item ? this.item : this.cardById(this.id)
 		},
 		displayTitle() {
 			const reference = this.card?.referenceData
@@ -217,6 +219,13 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			updateCardTitleInStore: 'updateCardTitle',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			assignCardToUserInStore: 'assignCardToUser',
+		}),
 		hasSelection() {
 			const selection = window.getSelection()
 			return selection.toString() !== ''
@@ -261,7 +270,7 @@ export default {
 			}
 			this.editingTitle = TITLE_EDITING_STATE.OFF
 			if (value !== this.card.title) {
-				this.$store.dispatch('updateCardTitle', {
+				this.updateCardTitleInStore({
 					...this.card,
 					title: value,
 				})
@@ -285,10 +294,10 @@ export default {
 				this.triggerEditTitle()
 				break
 			case 'KeyA':
-				this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+				this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
 				break
 			case 'KeyO':
-				this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+				this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
 				break
 			case 'KeyM':
 				this.$el.querySelector('button.action-item__menutoggle')?.click()
@@ -312,13 +321,18 @@ export default {
 			const isAssigned = this.card.assignedUsers.find(
 				(item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid,
 			)
-			this.$store.dispatch(isAssigned ? 'removeUserFromCard' : 'assignCardToUser', {
+			const assigneeData = {
 				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
 					type: 0,
 				},
-			})
+			}
+			if (isAssigned) {
+				this.removeUserFromCardInStore(assigneeData)
+				return
+			}
+			this.assignCardToUserInStore(assigneeData)
 		},
 		scrollIntoView() {
 			this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })

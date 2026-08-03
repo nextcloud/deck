@@ -48,6 +48,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { mapActions } from 'pinia'
 import moment from '@nextcloud/moment'
 import { loadState } from '@nextcloud/initial-state'
 
@@ -63,6 +64,7 @@ import DueDateSelector from './DueDateSelector.vue'
 import StartDateSelector from './StartDateSelector.vue'
 import { debounce } from 'lodash'
 import DependentCardsSelector from './DependentCardsSelector.vue'
+import { useCardStore } from '../../stores/card.js'
 
 export default {
 	name: 'CardSidebarTabDetails',
@@ -116,6 +118,16 @@ export default {
 		this.initialize()
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			assignCardToUserInStore: 'assignCardToUser',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			updateCardDueInStore: 'updateCardDue',
+			updateCardStartDateInStore: 'updateCardStartDate',
+			addLabelInStore: 'addLabel',
+			removeLabelInStore: 'removeLabel',
+			assignDependentCardInStore: 'assignDependentCard',
+			removeDependentCardInStore: 'removeDependentCard',
+		}),
 		async descriptionChanged(newDesc) {
 			if (newDesc === this.copiedCard.description) {
 				return
@@ -133,7 +145,7 @@ export default {
 		},
 
 		assignUserToCard(user) {
-			this.$store.dispatch('assignCardToUser', {
+			this.assignCardToUserInStore({
 				card: this.copiedCard,
 				assignee: {
 					userId: user.uid,
@@ -143,7 +155,7 @@ export default {
 		},
 
 		removeUserFromCard(user) {
-			this.$store.dispatch('removeUserFromCard', {
+			this.removeUserFromCardInStore({
 				card: this.copiedCard,
 				assignee: {
 					userId: user.uid,
@@ -153,7 +165,7 @@ export default {
 		},
 
 		updateCardDue(val) {
-			this.$store.dispatch('updateCardDue', {
+			this.updateCardDueInStore({
 				...this.copiedCard,
 				duedate: val ? (new Date(val)).toISOString() : null,
 			})
@@ -164,7 +176,7 @@ export default {
 		}, 500, { leading: true }),
 
 		updateCardStartDate(val) {
-			this.$store.dispatch('updateCardStartDate', {
+			this.updateCardStartDateInStore({
 				...this.copiedCard,
 				startdate: val ? (new Date(val)).toISOString() : null,
 			})
@@ -181,7 +193,7 @@ export default {
 				labelId: newLabel.id,
 				boardId: this.copiedCard.boardId,
 			}
-			this.$store.dispatch('addLabel', data)
+			this.addLabelInStore(data)
 		},
 
 		async addLabelToBoardAndCard(name) {
@@ -206,7 +218,7 @@ export default {
 				card: this.copiedCard,
 				labelId: removedLabel.id,
 			}
-			this.$store.dispatch('removeLabel', data)
+			this.removeLabelInStore(data)
 		},
 		assignDependentCard(dependentCard) {
 			if (!dependentCard?.id) {
@@ -221,7 +233,7 @@ export default {
 				this.copiedCard.dependentCards.push(dependentCard.id)
 			}
 
-			this.$store.dispatch('assignDependentCard', {
+			this.assignDependentCardInStore({
 				card: this.copiedCard,
 				dependentCard,
 			})
@@ -236,7 +248,7 @@ export default {
 				this.copiedCard.dependentCards = this.copiedCard.dependentCards.filter((id) => id !== dependentCardId)
 			}
 
-			this.$store.dispatch('removeDependentCard', {
+			this.removeDependentCardInStore({
 				card: this.copiedCard,
 				dependentCardId,
 			})
