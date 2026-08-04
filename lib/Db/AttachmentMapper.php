@@ -90,9 +90,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @param bool $withOffset
 	 * @return array
 	 */
-	public function findToDelete($cardId = null, $withOffset = true) {
-		// add buffer of 5 min
-		$timeLimit = time() - (60 * 5);
+	public function findToDelete(int $timeLimit, $cardId = null, $withOffset = true) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
