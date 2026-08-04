@@ -157,6 +157,7 @@ OC.L10N.register(
     "Archived cards" : "Arhivirane kartice",
     "Add list" : "Dodaj popis",
     "List name" : "Naziv popisa",
+    "Clear search" : "Izbriši pretragu",
     "Active filters" : "Aktivni filteri",
     "Apply filter" : "Primijeni filtar",
     "Filter by tag" : "Filtriraj prema oznaci",

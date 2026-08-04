@@ -158,6 +158,7 @@ OC.L10N.register(
     "Archived cards" : "Arhiveeritud kaardid",
     "Add list" : "Lisa loend",
     "List name" : "Nimekirja nimi",
+    "Clear search" : "Tühjenda otsing",
     "Active filters" : "Aktiivsed filtrid",
     "Apply filter" : "Rakenda filtrit",
     "Filter by tag" : "Filtreeri sildi alusel",

@@ -158,6 +158,7 @@ OC.L10N.register(
     "Archived cards" : "已封存的卡片",
     "Add list" : "新增列表",
     "List name" : "列表名稱",
+    "Clear search" : "清除搜尋",
     "Active filters" : "作用中的過濾條件",
     "Apply filter" : "套用過濾條件",
     "Filter by tag" : "按標籤過濾",

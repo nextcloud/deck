@@ -157,6 +157,7 @@ OC.L10N.register(
     "Archived cards" : "Archivované karty",
     "Add list" : "Přidat seznam",
     "List name" : "Název seznamu",
+    "Clear search" : "Vyčistit hledání",
     "Active filters" : "Zapnuté filtry",
     "Apply filter" : "Uplatnit filtr",
     "Filter by tag" : "Filtrovat podle štítku",

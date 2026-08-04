@@ -156,6 +156,7 @@ OC.L10N.register(
     "Archived cards" : "Kadi iliyohifadhiwa",
     "Add list" : "Ongeza orodha",
     "List name" : "Orodhesha majina",
+    "Clear search" : "Futa utafutaji",
     "Active filters" : "Vichujio vinavyotumika",
     "Apply filter" : "Tumia kichujio",
     "Filter by tag" : "Chuja kwa lebo ",

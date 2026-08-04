@@ -156,6 +156,7 @@ OC.L10N.register(
     "Archived cards" : "Arsip kartu",
     "Add list" : "Tambahkan daftar",
     "List name" : "Nama daftar",
+    "Clear search" : "Hapus pencarian",
     "Active filters" : "Filter aktif",
     "Apply filter" : "Terapkan filter",
     "Filter by tag" : "Filter dengan tag",
