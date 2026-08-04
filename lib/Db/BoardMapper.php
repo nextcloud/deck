@@ -455,9 +455,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findToDelete() {
-		// add buffer of 5 min
-		$timeLimit = time() - (60 * 5);
+	public function findToDelete(int $timeLimit) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			->from('deck_boards')
