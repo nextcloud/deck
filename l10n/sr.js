@@ -156,6 +156,7 @@ OC.L10N.register(
     "Archived cards" : "Архивиране картице",
     "Add list" : "Додај списак",
     "List name" : "Назив листе",
+    "Clear search" : "Обриши претрагу",
     "Active filters" : "Активни филтери",
     "Apply filter" : "Примени филтер",
     "Filter by tag" : "Филтрирај по ознаци",

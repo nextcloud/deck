@@ -33,6 +33,7 @@ OC.L10N.register(
     "File already exists" : "Datne jau pastāv",
     "Do you want to overwrite it?" : "Vai tu gribi pārrakstīt to?",
     "Add list" : "Pievienot sarakstu…",
+    "Clear search" : "Notīrīt meklēšanu",
     "Open" : "Atvērt",
     "Completed" : "Pabeigts",
     "Clear filter" : "Notīrīt atlasi",

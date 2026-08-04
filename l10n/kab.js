@@ -14,6 +14,7 @@ OC.L10N.register(
     "Attachments" : "Ticeqqufin",
     "File" : "Afaylu",
     "Cancel" : "Sefsex",
+    "Clear search" : "Sfeḍ anadi",
     "Active filters" : "Imzizdigen urmiden",
     "Open" : "Ldi",
     "Completed" : "Yemmed",

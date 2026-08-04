@@ -20,6 +20,7 @@ OC.L10N.register(
     "Cancel" : "ยกเลิก",
     "File already exists" : "ไฟล์นี้มีอยู่แล้ว",
     "Add list" : "เพิ่มรายการ",
+    "Clear search" : "ล้างการค้นหา",
     "Open" : "เปิด",
     "Completed" : "เสร็จแล้ว",
     "Overdue" : "เกินกำหนด",

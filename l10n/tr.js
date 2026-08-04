@@ -158,6 +158,7 @@ OC.L10N.register(
     "Archived cards" : "Arşivlenmiş kartlar",
     "Add list" : "Liste ekle",
     "List name" : "Liste adı",
+    "Clear search" : "Aramayı temizle",
     "Active filters" : "Etkin süzgeçler",
     "Apply filter" : "Süzgeci uygula",
     "Filter by tag" : "Etikete göre süz",
