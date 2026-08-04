@@ -7,6 +7,7 @@
 		<NcSelectUsers v-model="addAcl"
 			:options="formatedSharees"
 			:loading="isLoading"
+			:input-label="t('deck', 'Search for users, groups and teams')"
 			@search="(search) => asyncFind(search)" />
 
 		<ul id="shareWithList"
@@ -143,7 +144,7 @@ export default {
 					type: SOURCE_TO_SHARE_TYPE[item.source],
 				}
 				return res
-			}).slice(0, 10)
+			}).slice(0, 200)
 			return result
 		},
 		unallocatedSharees() {
