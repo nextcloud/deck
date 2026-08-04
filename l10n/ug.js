@@ -156,6 +156,7 @@ OC.L10N.register(
     "Archived cards" : "ئارخىپ كارتىلىرى",
     "Add list" : "تىزىملىك قوشۇڭ",
     "List name" : "تىزىملىك ئىسمى",
+    "Clear search" : "ئىزدەشنى تازىلاش",
     "Active filters" : "ئاكتىپ سۈزگۈچ",
     "Apply filter" : "سۈزگۈچ ئىشلىتىڭ",
     "Filter by tag" : "بەلگە بويىچە سۈزۈڭ",

@@ -158,6 +158,7 @@ OC.L10N.register(
     "Archived cards" : "Карточки в архиве",
     "Add list" : "Добавить колонку",
     "List name" : "Название колонки",
+    "Clear search" : "Очистить поиск",
     "Active filters" : "Активные фильтры",
     "Apply filter" : "Применить фильтр",
     "Filter by tag" : "Отбор по меткам:",

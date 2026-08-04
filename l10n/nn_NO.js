@@ -7,6 +7,7 @@ OC.L10N.register(
     "Done" : "Ferdig",
     "File" : "Fil",
     "Cancel" : "Avbryt",
+    "Clear search" : "Tøm søk",
     "Completed" : "Fullført",
     "Details" : "Detaljar",
     "General" : "Generelt",

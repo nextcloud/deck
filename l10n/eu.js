@@ -141,6 +141,7 @@ OC.L10N.register(
     "Archived cards" : "Artxibatutako txartelak",
     "Add list" : "Gehitu zerrenda",
     "List name" : "Zerrendaren izena",
+    "Clear search" : "Garbitu bilaketa",
     "Active filters" : "Iragazki aktiboak",
     "Apply filter" : "Ezarri iragazkia",
     "Filter by tag" : "Iragazi etiketaz",

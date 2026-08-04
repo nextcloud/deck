@@ -150,6 +150,7 @@ OC.L10N.register(
     "Archived cards" : "Spjöld í geymslu",
     "Add list" : "Bæta við lista",
     "List name" : "Heiti á lista",
+    "Clear search" : "Hreinsa leit",
     "Active filters" : "Virkar síur",
     "Apply filter" : "Beita síu",
     "Filter by tag" : "Sía eftir merki",
