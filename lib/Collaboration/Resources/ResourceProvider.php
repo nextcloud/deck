@@ -12,13 +12,13 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\AppFramework\QueryException;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProvider;
 use OCP\Collaboration\Resources\IResource;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
 
 class ResourceProvider implements IProvider {
 	public const RESOURCE_TYPE = 'deck';
@@ -106,7 +106,7 @@ class ResourceProvider implements IProvider {
 		try {
 			/** @var IManager $resourceManager */
 			$resourceManager = Server::get(IManager::class);
-		} catch (QueryException $e) {
+		} catch (ContainerExceptionInterface $e) {
 		}
 		if ($boardId !== null) {
 			$resource = $resourceManager->getResourceForUser(self::RESOURCE_TYPE, (string)$boardId, null);

@@ -39,10 +39,10 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Http\Response;
-use OCP\AppFramework\IAppContainer;
 use OCP\IL10N;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Container\ContainerInterface;
 use Test\TestCase;
 
 /** @internal Just for testing the service registration */
@@ -98,16 +98,13 @@ class AttachmentServiceTest extends TestCase {
 	 */
 	private $attachmentServiceValidator;
 
-	/**
-	 * @throws \OCP\AppFramework\QueryException
-	 */
 	public function setUp(): void {
 		parent::setUp();
 
 		$this->attachmentServiceImpl = $this->createMock(IAttachmentService::class);
 		$this->filesAppServiceImpl = $this->createMock(IAttachmentService::class);
 
-		$this->appContainer = $this->createMock(IAppContainer::class);
+		$this->appContainer = $this->createMock(ContainerInterface::class);
 
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
@@ -119,14 +116,10 @@ class AttachmentServiceTest extends TestCase {
 
 		$this->appContainer->expects($this->exactly(2))
 			->method('get')
-			->withConsecutive(
-				[FileService::class],
-				[FilesAppService::class]
-			)
-			->willReturnOnConsecutiveCalls(
-				$this->attachmentServiceImpl,
-				$this->filesAppServiceImpl
-			);
+			->willReturnMap([
+				[FileService::class, $this->attachmentServiceImpl],
+				[FilesAppService::class, $this->filesAppServiceImpl],
+			]);
 
 		$this->application->expects($this->any())
 			->method('getContainer')
@@ -153,7 +146,7 @@ class AttachmentServiceTest extends TestCase {
 
 	public function testRegisterAttachmentService() {
 		$application = $this->createMock(Application::class);
-		$appContainer = $this->createMock(IAppContainer::class);
+		$appContainer = $this->createMock(ContainerInterface::class);
 		$fileServiceMock = $this->createMock(FileService::class);
 		$fileAppServiceMock = $this->createMock(FilesAppService::class);
 
@@ -182,22 +175,17 @@ class AttachmentServiceTest extends TestCase {
 	public function testRegisterAttachmentServiceNotExisting() {
 		$this->expectException(InvalidAttachmentType::class);
 		$application = $this->createMock(Application::class);
-		$appContainer = $this->createMock(IAppContainer::class);
+		$appContainer = $this->createMock(ContainerInterface::class);
 		$fileServiceMock = $this->createMock(FileService::class);
 		$fileAppServiceMock = $this->createMock(FilesAppService::class);
 
 		$appContainer->expects($this->exactly(3))
 			->method('get')
-			->withConsecutive(
-				[FileService::class],
-				[FilesAppService::class],
-				[MyAttachmentService::class]
-			)
-			->willReturnOnConsecutiveCalls(
-				$fileServiceMock,
-				$fileAppServiceMock,
-				new MyAttachmentService()
-			);
+			->willReturnMap([
+				[FileService::class, $fileServiceMock],
+				[FilesAppService::class, $fileAppServiceMock],
+				[MyAttachmentService::class, new MyAttachmentService()],
+			]);
 
 		$application->expects($this->any())
 			->method('getContainer')
