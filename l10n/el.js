@@ -155,6 +155,7 @@ OC.L10N.register(
     "Archived cards" : "Αρχειοθετημένες καρτέλες",
     "Add list" : "Προσθήκη λίστας",
     "List name" : "Όνομα λίστας",
+    "Clear search" : "Εκκαθάριση αναζήτησης",
     "Active filters" : "Ενεργά φίλτρα",
     "Apply filter" : "Εφαρμογή φίλτρου",
     "Filter by tag" : "Φίλτρο ανά ετικέτα",

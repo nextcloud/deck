@@ -141,6 +141,7 @@ OC.L10N.register(
     "Archived cards" : "Arkiver tavle",
     "Add list" : "Legg til liste",
     "List name" : "Listenavn",
+    "Clear search" : "Tøm søk",
     "Active filters" : "Aktivt filter",
     "Apply filter" : "Aktiver filter",
     "Filter by tag" : "Filtrer på knagg",

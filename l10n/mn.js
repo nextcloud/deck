@@ -155,6 +155,7 @@ OC.L10N.register(
     "Archived cards" : "Архивлагдсан картууд",
     "Add list" : "Жагсаалт нэмэх",
     "List name" : "Жагсаалтын нэр",
+    "Clear search" : "Хайлт арилгах",
     "Active filters" : "Идэвхтэй шүүлтүүрүүд",
     "Apply filter" : "Шүүлтүүр хэрэгжүүлэх",
     "Filter by tag" : "Тагаар шүүх",

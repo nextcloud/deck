@@ -158,6 +158,7 @@ OC.L10N.register(
     "Archived cards" : "Arkiverade kort",
     "Add list" : "Lägg till lista",
     "List name" : "Namn på lista",
+    "Clear search" : "Rensa sökning",
     "Active filters" : "Aktiva filter",
     "Apply filter" : "Tillämpa filter",
     "Filter by tag" : "Filtrera efter tagg",

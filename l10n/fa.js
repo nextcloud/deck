@@ -158,6 +158,7 @@ OC.L10N.register(
     "Archived cards" : "کارت‌های بایگانی‌شده",
     "Add list" : "افزودن لیست",
     "List name" : "نام لیست",
+    "Clear search" : "پاک کردن جستجو",
     "Active filters" : "فیلترهای فعال",
     "Apply filter" : "اعمال فیلتر",
     "Filter by tag" : "فیلتر بر اساس برچسب",

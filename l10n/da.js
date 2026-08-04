@@ -102,6 +102,7 @@ OC.L10N.register(
     "Archived cards" : "Arkiverede kort",
     "Add list" : "Tilføj liste",
     "List name" : "Listenavn",
+    "Clear search" : "Ryd søgning",
     "Active filters" : "Aktive filtre",
     "Apply filter" : "Aktiver filter",
     "Filter by tag" : "Filtrer efter Tag",
