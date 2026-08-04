@@ -98,9 +98,6 @@ class AttachmentServiceTest extends TestCase {
 	 */
 	private $attachmentServiceValidator;
 
-	/**
-	 * @throws \OCP\AppFramework\QueryException
-	 */
 	public function setUp(): void {
 		parent::setUp();
 
