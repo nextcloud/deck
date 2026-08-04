@@ -37,10 +37,10 @@ import { NcDialog, NcSelect, NcButton } from '@nextcloud/vue'
 import { generateOcsUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapGetters } from 'vuex'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from './stores/stack.js'
 import { useCardStore } from './stores/card.js'
+import { useBoardStore } from './stores/board.js'
 
 export default {
 	name: 'CardMoveDialog',
@@ -55,10 +55,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['boardById']),
 		...mapState(useStackStore, ['stackById']),
+		...mapState(useBoardStore, ['boardById', 'boards']),
 		activeBoards() {
-			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
+			return this.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
 		},
 		isBoardAndStackChoosen() {
 			return !(this.selectedBoard === '' || this.selectedStack === '')

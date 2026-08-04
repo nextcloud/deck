@@ -81,7 +81,6 @@
 </template>
 <script>
 import { NcActionButton, NcColorPicker } from '@nextcloud/vue'
-import { mapGetters, mapState as mapStateVuex } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
@@ -102,6 +101,7 @@ import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { mapActions, mapState } from 'pinia'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'CardMenuEntries',
@@ -134,14 +134,13 @@ export default {
 	},
 	computed: {
 		...mapState(useStackStore, ['stackById']),
-		...mapGetters([
-			'isArchived',
-			'boards',
-			'boardById',
-		]),
-		...mapStateVuex({
-			showArchived: state => state.showArchived,
-			currentBoard: state => state.currentBoard,
+		...mapState(useBoardStore, {
+			showArchived: 'showArchived',
+			currentBoard: 'currentBoard',
+			canEditPermission: 'canEdit',
+			boards: 'boards',
+			boardById: 'boardById',
+			isArchived: 'isArchived',
 		}),
 		canEdit() {
 			return !this.card.archived
@@ -151,9 +150,9 @@ export default {
 		},
 		canEditBoard() {
 			if (this.currentBoard) {
-				return this.$store.getters.canEdit
+				return this.canEditPermission
 			}
-			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			const board = this.boards.find((item) => item.id === this.card.boardId)
 			return !!board?.permissions?.PERMISSION_EDIT
 		},
 		isCurrentUserAssigned() {

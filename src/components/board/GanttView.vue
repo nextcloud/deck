@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { mapActions, mapState } from 'pinia'
 import Gantt from 'frappe-gantt'
 import 'frappe-gantt/dist/frappe-gantt.css' // eslint-disable-line
@@ -68,6 +67,7 @@ import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
 import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 const STACK_COLORS = [
 	'#0082c9', '#4caf50', '#ff9800', '#e91e63',
@@ -200,7 +200,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['canEdit']),
+		...mapState(useBoardStore, ['canEdit']),
 		...mapState(useCardStore, ['cardsByStack']),
 		partitionedCards() {
 			const undatedCards = []

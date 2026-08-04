@@ -7,6 +7,7 @@ import { listen } from '@nextcloud/notify_push'
 import { sessionApi } from './services/SessionApi.js'
 import axios from '@nextcloud/axios'
 import { useStackStore } from './stores/stack.js'
+import { useBoardStore } from './stores/board.js'
 
 const SESSION_INTERVAL = 90 // in seconds
 
@@ -34,17 +35,17 @@ function isOurSessionToken(token) {
  *
  * @param storeInstance
  */
-export function initSessions(storeInstance) {
-	store = storeInstance
+export function initSessions() {
+	store = useBoardStore()
 	hasPush = listen('deck_board_update', (name, body) => {
 		// ignore update events which we have triggered ourselves
 		if (isOurSessionToken(body._causingSessionToken)) return
 
 		// only handle update events for the currently open board
-		const currentBoardId = store.state.currentBoard?.id
+		const currentBoardId = store.currentBoard?.id
 		if (body.id !== currentBoardId) return
 
-		store.dispatch('refreshBoard', currentBoardId)
+		store.refreshBoard(currentBoardId)
 	})
 
 	listen('deck_card_update', (name, body) => {
@@ -53,7 +54,7 @@ export function initSessions(storeInstance) {
 		if (isOurSessionToken(body._causingSessionToken)) return
 
 		// only handle update events for the currently open board
-		const currentBoardId = store.state.currentBoard?.id
+		const currentBoardId = store.currentBoard?.id
 		if (body.boardId !== currentBoardId) return
 
 		useStackStore().loadStacks(currentBoardId)
@@ -139,7 +140,7 @@ export function createSession(boardId) {
 
 			// we must assume that the websocket connection was
 			// paused and we have missed updates in the meantime.
-			store.dispatch('refreshBoard', store.state.currentBoard?.id)
+			store.refreshBoard(store.currentBoard?.id)
 
 			// restart session refresh interval
 			clearInterval(interval)

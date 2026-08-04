@@ -29,6 +29,7 @@
 
 import BoardItem from './BoardItem.vue'
 import Controls from '../Controls.vue'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'Boards',
@@ -48,14 +49,14 @@ export default {
 		},
 		filteredBoards() {
 			const query = this.$store.getters.getSearchQuery
-			return this.$store.getters.filteredBoards.filter((board) => {
+			return useBoardStore().filteredBoards.filter((board) => {
 				return board.deletedAt <= 0 && board.title.toLowerCase().includes(query.toLowerCase())
 			})
 		},
 	},
 	watch: {
 		navFilter(value) {
-			this.$store.commit('setBoardFilter', value)
+			useBoardStore().setBoardFilter(value)
 		},
 	},
 }

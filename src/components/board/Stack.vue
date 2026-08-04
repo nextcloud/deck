@@ -149,7 +149,6 @@
 
 <script>
 import ClickOutside from 'vue-click-outside'
-import { mapGetters, mapState as mapStateVuex } from 'vuex'
 import { mapState, mapActions } from 'pinia'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
@@ -164,6 +163,7 @@ import '@nextcloud/dialogs/style.css'
 import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'Stack',
@@ -208,14 +208,12 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
+		...mapState(useBoardStore, [
 			'canManage',
 			'canEdit',
 			'isArchived',
+			'showArchived',
 		]),
-		...mapStateVuex({
-			showArchived: state => state.showArchived,
-		}),
 		...mapState(useCardStore, {
 			cardsByStackGetter: 'cardsByStack',
 		}),

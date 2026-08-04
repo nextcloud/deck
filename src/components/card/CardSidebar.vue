@@ -84,7 +84,7 @@
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
 import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
-import { mapState as mapStateVuex, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
 import CardSidebarTabComments from './CardSidebarTabComments.vue'
@@ -103,6 +103,7 @@ import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/CardMenuEntries.vue'
 import { mapActions, mapState } from 'pinia'
 import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 const capabilities = getCapabilities()
 
@@ -154,12 +155,11 @@ export default {
 	},
 	computed: {
 		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, ['canEdit', 'assignables', 'currentBoard']),
 		...mapStateVuex({
 			isFullApp: (state) => state.isFullApp,
-			currentBoard: (state) => state.currentBoard,
 			hasCardSaveError: (state) => state.hasCardSaveError,
 		}),
-		...mapGetters(['canEdit', 'assignables']),
 		currentCard() {
 			return this.cardById(this.id)
 		},

@@ -80,11 +80,13 @@
 
 <script>
 import { NcCollectionList, NcAvatar, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel, NcSelectUsers } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import debounce from 'lodash/debounce.js'
+import { useBoardStore } from '../../stores/board.js'
 const SOURCE_TO_SHARE_TYPE = {
 	users: 0,
 	groups: 1,
@@ -122,10 +124,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
+		...mapStateVuex([
 			'sharees',
 		]),
-		...mapGetters([
+		...mapState(useBoardStore, [
 			'canEdit',
 			'canManage',
 			'canShare',
@@ -177,6 +179,12 @@ export default {
 		this.asyncFind('', () => {})
 	},
 	methods: {
+		...mapActions(useBoardStore, [
+			'addAclToCurrentBoard',
+			'updateAclFromCurrentBoard',
+			'deleteAclFromCurrentBoard',
+			'transferOwnership',
+		]),
 		debouncedFind: debounce(async function(query) {
 			this.isSearching = true
 			await this.$store.dispatch('loadSharees', query)
@@ -197,7 +205,7 @@ export default {
 			}
 			this.isLoading = true
 			try {
-				await this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI)
+				await this.addAclToCurrentBoard(this.addAclForAPI)
 			} catch (e) {
 				const errorMessage = t('deck', 'Failed to create share with {displayName}', { displayName: this.addAcl.displayName })
 				console.error(errorMessage, e)
@@ -209,20 +217,20 @@ export default {
 		clickEditAcl(acl) {
 			this.addAclForAPI = Object.assign({}, acl)
 			this.addAclForAPI.permissionEdit = !acl.permissionEdit
-			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+			this.updateAclFromCurrentBoard(this.addAclForAPI)
 		},
 		clickShareAcl(acl) {
 			this.addAclForAPI = Object.assign({}, acl)
 			this.addAclForAPI.permissionShare = !acl.permissionShare
-			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+			this.updateAclFromCurrentBoard(this.addAclForAPI)
 		},
 		clickManageAcl(acl) {
 			this.addAclForAPI = Object.assign({}, acl)
 			this.addAclForAPI.permissionManage = !acl.permissionManage
-			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+			this.updateAclFromCurrentBoard(this.addAclForAPI)
 		},
 		clickDeleteAcl(acl) {
-			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
+			this.deleteAclFromCurrentBoard(acl)
 		},
 		clickTransferOwner(newOwner) {
 			OC.dialogs.confirmDestructive(
@@ -238,7 +246,7 @@ export default {
 					if (result) {
 						try {
 							this.isLoading = true
-							await this.$store.dispatch('transferOwnership', {
+							await this.transferOwnership({
 								boardId: this.board.id,
 								newOwner,
 							})

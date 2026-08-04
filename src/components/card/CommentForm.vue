@@ -28,9 +28,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import { NcButton, NcRichContenteditable } from '@nextcloud/vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'CommentForm',
@@ -52,8 +53,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			currentBoard: state => state.currentBoard,
+		...mapState(useBoardStore, {
+			currentBoard: 'currentBoard',
 		}),
 		members() {
 			const obj = {}
