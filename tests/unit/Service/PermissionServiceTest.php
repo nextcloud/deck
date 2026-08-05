@@ -358,7 +358,7 @@ class PermissionServiceTest extends \Test\TestCase {
 		$this->userManager->expects($this->any())
 			->method('userExists')
 			->withConsecutive(['user1'], ['user2'])
-			->willReturnOnConsecutiveCalls($user1, $user2);
+			->willReturnOnConsecutiveCalls(true, true);
 
 		$group = $this->createMock(IGroup::class);
 		$group->expects($this->once())
