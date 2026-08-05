@@ -110,8 +110,9 @@ class AttachmentMapperTest extends TestCase {
 			$attachment->resetUpdatedFields();
 		}
 
-		$this->assertEquals([$attachmentsToDelete[0]], $this->attachmentMapper->findToDelete(1));
-		$this->assertEquals([$attachmentsToDelete[2]], $this->attachmentMapper->findToDelete(2));
+		$timeLimit = time() - (60 * 60 * 5);
+		$this->assertEquals([$attachmentsToDelete[0]], $this->attachmentMapper->findToDelete($timeLimit, 1));
+		$this->assertEquals([$attachmentsToDelete[2]], $this->attachmentMapper->findToDelete($timeLimit, 2));
 	}
 
 	public function testIsOwner() {
