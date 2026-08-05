@@ -165,9 +165,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $result !== false ? $result : null;
 	}
 
-	public function findToDelete(): array {
-		// add buffer of 5 min
-		$timeLimit = time() - (60 * 5);
+	public function findToDelete(int $timeLimit): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())

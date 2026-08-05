@@ -27,6 +27,7 @@ use OCP\IL10N;
 use OCP\IUserManager;
 
 class AttachmentService {
+	private $configService;
 	private $attachmentMapper;
 	private $cardMapper;
 	private $permissionService;
@@ -49,6 +50,7 @@ class AttachmentService {
 	private AttachmentServiceValidator $attachmentServiceValidator;
 
 	public function __construct(
+		ConfigService $configService,
 		AttachmentMapper $attachmentMapper,
 		CardMapper $cardMapper,
 		IUserManager $userManager,
@@ -61,6 +63,7 @@ class AttachmentService {
 		ActivityManager $activityManager,
 		AttachmentServiceValidator $attachmentServiceValidator,
 	) {
+		$this->configService = $configService;
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
@@ -115,7 +118,8 @@ class AttachmentService {
 
 		$attachments = $this->attachmentMapper->findAll($cardId);
 		if ($withDeleted) {
-			$attachments = array_merge($attachments, $this->attachmentMapper->findToDelete($cardId, false));
+			$timeLimit = time() - $this->configService->getTrashRetention();
+			$attachments = array_merge($attachments, $this->attachmentMapper->findToDelete($timeLimit, $cardId, false));
 		}
 
 		foreach (array_keys($this->services) as $attachmentType) {
