@@ -332,6 +332,7 @@ class BatchQueryPerformanceTest extends TestCase {
 		$application->method('getContainer')->willReturn($appContainer);
 
 		$this->attachmentService = new AttachmentService(
+			$this->createMock(ConfigService::class),
 			$this->attachmentMapper,
 			$this->createMock(CardMapper::class),
 			$this->createMock(IUserManager::class),

@@ -29,6 +29,7 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\AttachmentMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
@@ -155,6 +156,12 @@ class BoardImportServiceTest extends \Test\TestCase {
 	public function testImportSuccess() {
 		$this->userManager->method('userExists')
 			->willReturn(true);
+
+		$board = new Board();
+		$board->setOwner('admin');
+		$this->trelloJsonService
+			->method('getBoard')
+			->willReturn($board);
 
 		$this->boardMapper
 			->expects($this->once())
