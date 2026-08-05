@@ -23,6 +23,7 @@ OC.L10N.register(
     "Overwrite file" : "Перазапісаць файл",
     "Keep existing file" : "Пакінуць існуючы файл",
     "Add list" : "Дадаць спіс",
+    "Clear search" : "Ачысціць пошук",
     "Active filters" : "Актыўныя фільтры",
     "Apply filter" : "Прымяніць фільтр",
     "Open" : "Адкрыць",
