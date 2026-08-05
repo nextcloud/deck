@@ -76,6 +76,25 @@ const router = new Router({
 			},
 		},
 		{
+			// Opens a board directly in a given view, so a board can be linked
+			// to as e.g. a Gantt chart. The view is applied for this session
+			// only and does not overwrite the user's stored preference.
+			path: '/board/:id/:viewMode(kanban|gantt)',
+			name: 'board.view',
+			components: {
+				default: Board,
+				sidebar: Sidebar,
+			},
+			props: {
+				default: (route) => {
+					return {
+						id: parseInt(route.params.id, 10),
+						initialViewMode: route.params.viewMode,
+					}
+				},
+			},
+		},
+		{
 			path: '/board/:id',
 			name: 'board',
 			components: {

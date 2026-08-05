@@ -103,6 +103,12 @@ class PageController extends Controller {
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	public function indexBoardView(int $boardId, string $viewMode): TemplateResponse {
+		return $this->index();
+	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function indexCard(int $cardId): TemplateResponse {
 		return $this->index();
 	}
