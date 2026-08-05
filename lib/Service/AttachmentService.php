@@ -63,6 +63,7 @@ class AttachmentService {
 		ActivityManager $activityManager,
 		AttachmentServiceValidator $attachmentServiceValidator,
 	) {
+		$this->configService = $configService;
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
