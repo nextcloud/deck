@@ -32,6 +32,7 @@ class AttachmentService {
 	private array $services = [];
 
 	public function __construct(
+		private readonly ConfigService $configService,
 		private readonly AttachmentMapper $attachmentMapper,
 		private readonly CardMapper $cardMapper,
 		private readonly IUserManager $userManager,
@@ -77,7 +78,8 @@ class AttachmentService {
 
 		$attachments = $this->attachmentMapper->findAll($cardId);
 		if ($withDeleted) {
-			$attachments = array_merge($attachments, $this->attachmentMapper->findToDelete($cardId, false));
+			$timeLimit = time() - $this->configService->getTrashRetention();
+			$attachments = array_merge($attachments, $this->attachmentMapper->findToDelete($timeLimit, $cardId, false));
 		}
 
 		foreach (array_keys($this->services) as $attachmentType) {
