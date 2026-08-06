@@ -101,7 +101,8 @@
 			</div>
 		</NcModal>
 
-		<Container :get-child-payload="payloadForCard(stack.id)"
+		<Container ref="dndContainer"
+			:get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container"
 			group-name="stack"
 			data-click-closes-sidebar="true"
@@ -112,7 +113,7 @@
 			@drag-start="draggingCard = true"
 			@drag-end="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
-			<Draggable v-for="card in cardsByStack" :key="card.id">
+			<Draggable v-for="card in visibleCards" :key="card.id">
 				<transition :appear="animate && !card.animated && (card.animated=true)"
 					:appear-class="'zoom-appear-class'"
 					:appear-active-class="'zoom-appear-active-class'">
@@ -165,6 +166,27 @@ import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 
+// Rendering every card of every stack at once does not scale: boards with
+// many cards per list (50+) end up with thousands of DOM nodes, which makes
+// every layout-invalidating interaction (e.g. opening the card sidebar) slow.
+//
+// A full virtual-scroller/recycling approach was intentionally avoided here:
+// vue-smooth-dnd (see node_modules/vue-smooth-dnd) measures the *real* DOM
+// children of the drag container at runtime (via the underlying smooth-dnd
+// library) and maps drop positions back to array indices 1:1 with rendered
+// children. Recycling/windowing an arbitrary middle slice of the list would
+// desync those indices and break drag-and-drop.
+//
+// Instead we render a contiguous *prefix* of the card list (cards 0..N) and
+// grow that prefix as the user scrolls down within the stack, or when a new
+// card is added. Because it is always a prefix starting at index 0, the
+// existing index-based drag-and-drop math (payloadForCard/onDropCard) stays
+// correct without any offset adjustments. Lists at or below the threshold
+// are rendered in full, unchanged from previous behaviour.
+const CARD_RENDER_THRESHOLD = 30
+const CARD_RENDER_BATCH_SIZE = 30
+const CARD_RENDER_SCROLL_MARGIN = 400
+
 export default {
 	name: 'Stack',
 	components: {
@@ -205,6 +227,7 @@ export default {
 				total: 0,
 				current: null,
 			},
+			renderedCardCount: CARD_RENDER_THRESHOLD,
 		}
 	},
 	computed: {
@@ -229,6 +252,15 @@ export default {
 		},
 		isDoneColumn() {
 			return !!this.stack.isDoneColumn
+		},
+		// See the comment above CARD_RENDER_THRESHOLD for why this is a
+		// growing prefix of `cardsByStack` rather than a virtualized/
+		// recycled window.
+		visibleCards() {
+			if (this.cardsByStack.length <= CARD_RENDER_THRESHOLD) {
+				return this.cardsByStack
+			}
+			return this.cardsByStack.slice(0, this.renderedCardCount)
 		},
 		dragHandleSelector() {
 			return this.canEdit && !this.showArchived ? null : '.no-drag'
@@ -256,6 +288,11 @@ export default {
 
 	mounted() {
 		this.setupAutoscrollOnDrag()
+		this.setupCardWindowScrollListener()
+	},
+
+	beforeDestroy() {
+		this.teardownCardWindowScrollListener()
 	},
 
 	methods: {
@@ -346,6 +383,9 @@ export default {
 				})
 				this.newCardTitle = ''
 				this.showAddCard = true
+				// A newly created card must be visible immediately, even if it
+				// landed past the currently rendered prefix of a windowed list.
+				this.renderedCardCount = this.cardsByStack.length
 				this.$nextTick(() => {
 					this.$refs.newCardInput.focus()
 					this.animate = false
@@ -392,6 +432,33 @@ export default {
 				clearInterval(timer)
 				timer = window.setInterval(() => autoscroll(e), 25)
 			})
+		},
+		setupCardWindowScrollListener() {
+			const el = this.$refs.dndContainer?.$el
+			if (!el) {
+				return
+			}
+			this.cardWindowScrollEl = el
+			this.onCardWindowScroll = () => {
+				if (this.renderedCardCount >= this.cardsByStack.length) {
+					return
+				}
+				const { scrollTop, scrollHeight, clientHeight } = el
+				if (scrollHeight - (scrollTop + clientHeight) < CARD_RENDER_SCROLL_MARGIN) {
+					this.renderedCardCount = Math.min(
+						this.cardsByStack.length,
+						this.renderedCardCount + CARD_RENDER_BATCH_SIZE,
+					)
+				}
+			}
+			el.addEventListener('scroll', this.onCardWindowScroll, { passive: true })
+		},
+		teardownCardWindowScrollListener() {
+			if (this.cardWindowScrollEl && this.onCardWindowScroll) {
+				this.cardWindowScrollEl.removeEventListener('scroll', this.onCardWindowScroll)
+			}
+			this.cardWindowScrollEl = null
+			this.onCardWindowScroll = null
 		},
 	},
 }
