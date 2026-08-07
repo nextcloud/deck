@@ -208,7 +208,7 @@ export default {
 	},
 	watch: {
 		currentCard(newCard, oldCard) {
-			if (newCard.id === oldCard?.id) return
+			if (newCard?.id === oldCard?.id) return
 			this.focusHeader()
 		},
 		'currentCard.title': {
