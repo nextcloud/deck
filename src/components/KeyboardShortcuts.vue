@@ -19,10 +19,11 @@
 <script>
 import DueDateSelector from './card/DueDateSelector.vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import TagSelector from './card/TagSelector.vue'
 import AssignmentSelector from './card/AssignmentSelector.vue'
 import CardItem from './cards/CardItem.vue'
+import { useBoardStore } from '../stores/board.js'
 
 export default {
 	name: 'KeyboardShortcuts',
@@ -41,8 +42,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			board: state => state.currentBoard,
+		...mapState(useBoardStore, {
+			board: 'currentBoard',
 		}),
 	},
 	created() {

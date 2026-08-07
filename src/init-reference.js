@@ -9,9 +9,10 @@ import storeFactory from './store/main.js'
 
 import './shared-init.js'
 
-const prepareVue = async (Component = null) => {
+const prepareVue = async (Component = null, store = null) => {
 	const { default: Vue } = await import('vue')
 	const { default: ClickOutside } = await import('vue-click-outside')
+	const { createPinia, PiniaVuePlugin } = await import('pinia')
 
 	Vue.prototype.t = translate
 	Vue.prototype.n = translatePlural
@@ -23,22 +24,33 @@ const prepareVue = async (Component = null) => {
 			el.focus()
 		},
 	})
-	if (!Component) {
-		return Vue
+	Vue.use(PiniaVuePlugin)
+
+	const pinia = createPinia()
+	if (store) {
+		pinia.use(() => ({ $vuex: store }))
 	}
 
-	return Vue.extend(Component)
+	if (!Component) {
+		return { Vue, pinia }
+	}
+
+	return {
+		Widget: Vue.extend(Component),
+		pinia,
+	}
 }
 
 registerWidget('deck-card', async (el, { richObjectType, richObject, accessible }) => {
 	const { default: CardReferenceWidget } = await import('./views/CardReferenceWidget.vue')
-	const Widget = await prepareVue(CardReferenceWidget)
+	const { Widget, pinia } = await prepareVue(CardReferenceWidget)
 	// trick to change the wrapper element size, otherwise it always is 100%
 	// which is not very nice with a simple card
 	el.parentNode.style['max-width'] = '400px'
 	el.parentNode.style['margin-left'] = '0'
 	el.parentNode.style['margin-right'] = '0'
 	new Widget({
+		pinia,
 		propsData: {
 			richObjectType,
 			richObject,
@@ -50,9 +62,11 @@ registerWidget('deck-card', async (el, { richObjectType, richObject, accessible 
 const boardWidgets = {}
 registerWidget('deck-board', async (el, { richObjectType, richObject, accessible, interactive }) => {
 	const { default: BoardReferenceWidget } = await import('./views/BoardReferenceWidget.vue')
-	const Widget = await prepareVue(BoardReferenceWidget)
+	const store = storeFactory()
+	const { Widget, pinia } = await prepareVue(BoardReferenceWidget, store)
 	boardWidgets[el] = new Widget({
-		store: storeFactory(),
+		store,
+		pinia,
 		propsData: {
 			richObjectType,
 			richObject,
@@ -67,13 +81,14 @@ registerWidget('deck-board', async (el, { richObjectType, richObject, accessible
 
 registerWidget('deck-comment', async (el, { richObjectType, richObject, accessible }) => {
 	const { default: CommentReferenceWidget } = await import('./views/CommentReferenceWidget.vue')
-	const Widget = await prepareVue(CommentReferenceWidget)
+	const { Widget, pinia } = await prepareVue(CommentReferenceWidget)
 
 	el.parentNode.style['max-width'] = '400px'
 	el.parentNode.style['margin-left'] = '0'
 	el.parentNode.style['margin-right'] = '0'
 
 	new Widget({
+		pinia,
 		propsData: {
 			richObjectType,
 			richObject,
@@ -84,8 +99,9 @@ registerWidget('deck-comment', async (el, { richObjectType, richObject, accessib
 
 registerCustomPickerElement('create-new-deck-card', async (el, { providerId, accessible }) => {
 	const { default: CreateNewCardCustomPicker } = await import('./views/CreateNewCardCustomPicker.vue')
-	const Element = await prepareVue(CreateNewCardCustomPicker)
+	const { Widget: Element, pinia } = await prepareVue(CreateNewCardCustomPicker)
 	const vueElement = new Element({
+		pinia,
 		propsData: {
 			providerId,
 			accessible,

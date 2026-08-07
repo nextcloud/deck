@@ -219,6 +219,8 @@ import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
 import { showLoading, showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapActions } from 'pinia'
+import { useBoardStore } from '../../stores/board.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -334,6 +336,7 @@ export default {
 		this.popupItem = this.$el
 	},
 	methods: {
+		...mapActions(useBoardStore, ['cloneBoard', 'archiveBoard', 'unarchiveBoard', 'removeBoard', 'updateBoard']),
 		toggleDefaultBoard() {
 			if (this.isDefaultBoard) {
 				localStorage.removeItem('deck.defaultBoardId')
@@ -358,27 +361,13 @@ export default {
 				this.$refs?.inputField.focus()
 			})
 		},
-		async actionClone() {
-			this.loading = true
-			try {
-				const newBoard = await this.$store.dispatch('cloneBoard', this.board)
-				this.loading = false
-				if (newBoard instanceof Error) {
-					throw newBoard
-				}
-				this.$router.push({ name: 'board', params: { id: newBoard.id } })
-			} catch (e) {
-				OC.Notification.showTemporary(t('deck', 'An error occurred'))
-				console.error(e)
-			}
-		},
 		actionArchive() {
 			this.loading = true
-			this.$store.dispatch('archiveBoard', this.board)
+			this.archiveBoard(this.board)
 		},
 		actionUnarchive() {
 			this.loading = true
-			this.$store.dispatch('unarchiveBoard', this.board)
+			this.unarchiveBoard(this.board)
 		},
 		actionDelete() {
 			OC.dialogs.confirmDestructive(
@@ -399,7 +388,7 @@ export default {
 								this.deleted = true
 								this.redirectToOverviewIfCurrentBoard()
 								this.undoTimeoutHandle = setTimeout(() => {
-									this.$store.dispatch('removeBoard', this.board)
+									this.removeBoard(this.board)
 								}, 7000)
 							})
 					}
@@ -424,7 +413,7 @@ export default {
 							.then(() => {
 								this.loading = false
 								this.redirectToOverviewIfCurrentBoard()
-								this.$store.dispatch('removeBoard', this.board)
+								this.removeBoard(this.board)
 							})
 							.catch(() => {
 								showError(t('deck', 'Failed to leave the board'))
@@ -445,7 +434,7 @@ export default {
 				const copy = JSON.parse(JSON.stringify(this.board))
 				copy.title = this.editTitle
 				copy.color = (typeof this.editColor.hex !== 'undefined' ? this.editColor.hex : this.editColor).substring(1)
-				this.$store.dispatch('updateBoard', copy)
+				this.updateBoard(copy)
 					.then(() => {
 						this.loading = false
 					})
@@ -489,13 +478,14 @@ export default {
 			if (data) {
 				this.loading = true
 				try {
-					const newBoard = await this.$store.dispatch('cloneBoard', {
+					const newBoard = await this.cloneBoard({
 						boardData: this.board,
 						settings: data,
 					})
 					this.loading = false
 					this.$router.push({ name: 'board', params: { id: newBoard.id } })
 				} catch (e) {
+					console.error(e)
 					OC.Notification.showTemporary(t('deck', 'An error occurred'))
 					console.error(e)
 				}

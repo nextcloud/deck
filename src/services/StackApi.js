@@ -29,9 +29,6 @@ export class StackApi {
 					return Promise.reject(err)
 				},
 			)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
 	}
 
 	deletedStacks(boardId) {

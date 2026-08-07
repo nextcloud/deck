@@ -249,7 +249,7 @@
 						{{ t('deck', 'Gantt view') }}
 					</NcActionButton>
 					<NcActionSeparator />
-					<NcActionButton @click="toggleShowArchived">
+					<NcActionButton @click="() => toggleShowArchived()">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
 						</template>
@@ -285,7 +285,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal, NcTextField } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
@@ -302,8 +302,9 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { mapActions } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../stores/stack.js'
+import { useBoardStore } from '../stores/board.js'
 
 export default {
 	name: 'Controls',
@@ -368,17 +369,18 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
+		...mapState(useBoardStore, [
 			'canEdit',
 			'canManage',
 			'viewMode',
+			'showArchived',
 		]),
-		...mapState({
+		...mapStateVuex({
 			isFullApp: state => state.isFullApp,
+			navShown: state => state.navShown,
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 			searchQuery: state => state.searchQuery,
-			showArchived: state => state.showArchived,
 		}),
 		detailsRoute() {
 			return {
@@ -422,26 +424,27 @@ export default {
 		this.setPageTitle('')
 	},
 	methods: {
+		...mapActions(useBoardStore, { setViewMode: 'setViewMode', toggleShowArchived: 'toggleShowArchived', setFilterInStore: 'setFilterInStore' }),
 		...mapActions(useStackStore, ['createStack']),
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
 				this.filter.due = ''
-				this.$store.dispatch('setFilter', { ...this.filter })
+				this.setFilterInStore({ ...this.filter })
 			}
 			if (e.target.value === 'unassigned') {
 				this.filter.users = []
-				this.$store.dispatch('setFilter', { ...this.filter })
+				this.setFilterInStore({ ...this.filter })
 			} else {
 				this.filter.completed = 'both'
-				this.$store.dispatch('setFilter', { ...this.filter })
+				this.setFilterInStore({ ...this.filter })
 			}
-			this.$store.dispatch('setFilter', { ...this.filter })
+			this.setFilterInStore({ ...this.filter })
 		},
 		setFilter() {
 			if (this.filter.users.length > 0) {
 				this.filter.unassigned = false
 			}
-			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
+			this.$nextTick(() => this.setFilterInStore({ ...this.filter }))
 		},
 		setSearchQuery(value) {
 			this.$store.commit('setSearchQuery', value)
@@ -450,19 +453,13 @@ export default {
 			this.$store.commit('setSearchQuery', '')
 		},
 		toggleNav() {
-			this.$store.dispatch('toggleNav')
+			this.$store.dispatch('toggleNav', !this.navShown)
 		},
 		toggleCompactMode() {
 			this.$store.dispatch('toggleCompactMode')
 		},
 		toggleShowCardCover() {
 			this.$store.dispatch('toggleShowCardCover')
-		},
-		setViewMode(mode) {
-			this.$store.dispatch('setViewMode', mode)
-		},
-		toggleShowArchived() {
-			this.$store.dispatch('toggleShowArchived')
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }
@@ -486,7 +483,7 @@ export default {
 		},
 		clearFilter() {
 			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
-			this.$store.dispatch('setFilter', { ...filterReset })
+			this.setFilterInStore({ ...filterReset })
 			this.filter = filterReset
 		},
 		clickShowAddCardModel() {

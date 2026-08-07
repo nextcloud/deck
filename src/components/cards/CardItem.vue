@@ -78,7 +78,7 @@
 
 <script>
 import ClickOutside from 'vue-click-outside'
-import { mapState as mapStateVuex, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
@@ -90,6 +90,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -132,28 +133,30 @@ export default {
 	computed: {
 		...mapState(useStackStore, ['stackById']),
 		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, {
+			showArchived: 'showArchived',
+			currentBoard: 'currentBoard',
+			canEditPermission: 'canEdit',
+			boards: 'boards',
+			boardById: 'boardById',
+		}),
 		...mapStateVuex({
 			compactMode: state => state.compactMode,
-			showArchived: state => state.showArchived,
-			currentBoard: state => state.currentBoard,
 			showCardCover: state => state.showCardCover,
 			shortcutLock: state => state.shortcutLock,
 		}),
-		...mapGetters([
-			'isArchived',
-		]),
 
 		board() {
-			return this.$store.getters.boardById(this?.stack?.boardId)
+			return this.boardById(this?.stack?.boardId)
 		},
 		stack() {
 			return this.stackById(this?.card?.stackId)
 		},
 		canEdit() {
 			if (this.currentBoard) {
-				return !this.currentBoard.archived && this.$store.getters.canEdit
+				return !this.currentBoard.archived && this.canEditPermission
 			}
-			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			const board = this.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
 		card() {
@@ -226,6 +229,7 @@ export default {
 			removeUserFromCardInStore: 'removeUserFromCard',
 			assignCardToUserInStore: 'assignCardToUser',
 		}),
+		...mapActions(useBoardStore, ['toggleFilter']),
 		hasSelection() {
 			const selection = window.getSelection()
 			return selection.toString() !== ''
@@ -315,7 +319,7 @@ export default {
 			if (this.dragging) {
 				return
 			}
-			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
+			this.$nextTick(() => this.toggleFilter({ tags: [label.id] }))
 		},
 		toggleSelfAsignment() {
 			const isAssigned = this.card.assignedUsers.find(

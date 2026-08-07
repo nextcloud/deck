@@ -90,7 +90,7 @@
 
 <script>
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState as mapStateVuex, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -104,6 +104,7 @@ import CardSidebar from '../card/CardSidebar.vue'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 export default {
 	name: 'Board',
 	components: {
@@ -144,16 +145,16 @@ export default {
 	computed: {
 		...mapState(useStackStore, ['stacksByBoard']),
 		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, {
+			board: 'currentBoard',
+			showArchived: 'showArchived',
+			canEdit: 'canEdit',
+			canManage: 'canManage',
+			viewMode: 'viewMode',
+		}),
 		...mapStateVuex({
 			isFullApp: state => state.isFullApp,
-			board: state => state.currentBoard,
-			showArchived: state => state.showArchived,
 		}),
-		...mapGetters([
-			'canEdit',
-			'canManage',
-			'viewMode',
-		]),
 		stacks() {
 			return this.board?.id ? this.stacksByBoard(this.board.id) : []
 		},
@@ -194,11 +195,12 @@ export default {
 		this.session?.close()
 	},
 	methods: {
+		...mapActions(useBoardStore, ['loadBoardById', 'toggleShowArchived']),
 		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
 		async fetchData() {
 			this.loading = true
 			try {
-				await this.$store.dispatch('loadBoardById', this.id)
+				await this.loadBoardById(this.id)
 				await this.loadStacks(this.id)
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
@@ -207,7 +209,7 @@ export default {
 					await this.loadArchivedStacks(this.id)
 
 					if (this.cardById(routeCardId)) {
-						this.$store.commit('toggleShowArchived', true)
+						this.toggleShowArchived(true)
 					}
 				}
 
