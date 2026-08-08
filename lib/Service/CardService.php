@@ -189,7 +189,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, $startdate = null, ?string $color = null): Card {
+	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, $startdate = null, ?string $color = null, bool $insertAtPosition = false): Card {
 		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
@@ -207,8 +207,7 @@ class CardService {
 		$card->setStartdate($startdate);
 		$card->setColor($color);
 
-		if ($order === 999) {
-			// Append to the end of the stack
+		if (!$insertAtPosition) {
 			$card = $this->cardMapper->insert($card);
 		} else {
 			// Insert at the requested position and shift the surrounding cards
