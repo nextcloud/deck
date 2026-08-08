@@ -91,8 +91,6 @@ class ConfigService {
 					return false;
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', false);
-			case 'stackAddCardAtTop':
-				return $this->isStackAddCardAtTopEnabled();
 		}
 		return false;
 	}

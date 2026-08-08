@@ -21,6 +21,12 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class CardOcsController extends OCSController {
+	/**
+	 * Sentinel order used when the client does not request a specific position.
+	 * Cards created with this order are appended to the end of the stack.
+	 */
+	private const DEFAULT_ORDER = 999;
+
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -36,7 +42,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = 999, ?string $description = '', $duedate = null, $startdate = null, ?array $labels = [], ?array $users = [], ?string $color = null) {
+	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = self::DEFAULT_ORDER, ?string $description = '', $duedate = null, $startdate = null, ?array $labels = [], ?array $users = [], ?string $color = null) {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
 			if ($board->getExternalId()) {
@@ -48,7 +54,8 @@ class CardOcsController extends OCSController {
 		if (!$owner) {
 			$owner = $this->userId;
 		}
-		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color, insertAtPosition: $order !== 999);
+		// An explicit order means the client wants the card at that position, so shift the surrounding cards
+		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color, insertAtPosition: $order !== self::DEFAULT_ORDER);
 
 		// foreach ($labels as $label) {
 		// 	$this->assignLabel($card->getId(), $label);

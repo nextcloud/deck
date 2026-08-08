@@ -395,7 +395,7 @@ describe('Card', function () {
 			cy.get(`.card:contains("${newCardTitle}")`)
 				.scrollIntoView({ block: 'center' })
 				.find('.labels li:contains("Later")')
-				.should('exist')
+				.should('be.visible')
 			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Action needed")')
 				.should('not.exist')
 		})
