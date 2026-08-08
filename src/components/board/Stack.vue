@@ -8,6 +8,7 @@
 		:class="{
 			'stack--done-column': isDoneColumn,
 			'stack--add-card-at-top': canAddCard && stackAddCardAtTop,
+			'stack--add-card-at-bottom': canAddCard && !stackAddCardAtTop,
 		}"
 		:data-cy-stack="stack.title">
 		<div class="stack__header"
