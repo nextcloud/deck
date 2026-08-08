@@ -108,6 +108,7 @@ export default {
 					...(this.addAtTop ? { order: 0 } : {}),
 				})
 				this.title = ''
+				this.visible = false
 				this.$emit('created', newCard)
 				if (!this.cardDetailsInModal) {
 					this.$router.push({ name: 'card', params: { cardId: newCard.id } })

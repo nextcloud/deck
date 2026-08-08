@@ -48,7 +48,7 @@ class CardOcsController extends OCSController {
 		if (!$owner) {
 			$owner = $this->userId;
 		}
-		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color, insertAtPosition: $order !== 999);
+		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color);
 
 		// foreach ($labels as $label) {
 		// 	$this->assignLabel($card->getId(), $label);

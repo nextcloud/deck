@@ -110,7 +110,6 @@ describe('Card', function () {
 					cy.get('.stack__card-add input[type="text"]').type(title)
 					cy.get('.stack__card-add input[type="submit"]').click()
 					cy.wait('@createCard')
-					cy.get('.stack__card-add input[type="text"]').type('{esc}')
 				})
 			}
 
@@ -380,13 +379,6 @@ describe('Card', function () {
 			cy.get('.stack__card-add form input[type=submit]')
 				.first().click()
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
-			cy.get('body').then(($body) => {
-				const addCardInput = $body.find('.stack__card-add form input#new-stack-input-main')
-				if (addCardInput.length) {
-					cy.wrap(addCardInput.first()).type('{esc}')
-				}
-			})
-			cy.get('.stack__card-add form').should('not.exist')
 
 			// Add delay to ensure the events are bound
 			cy.wait(1000)
