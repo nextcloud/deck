@@ -12,6 +12,8 @@
 			<NcFormBox>
 				<NcFormBoxSwitch v-model="cardDetailsInModal"
 					:label="t('deck', 'Use bigger card view')" />
+				<NcFormBoxSwitch v-model="stackAddCardAtTop"
+					:label="t('deck', 'Add new cards at the top of a list')" />
 			</NcFormBox>
 		</NcAppSettingsSection>
 
@@ -117,6 +119,14 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
+		},
+		stackAddCardAtTop: {
+			get() {
+				return this.$store.getters.config('stackAddCardAtTop') === true
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { stackAddCardAtTop: newValue })
 			},
 		},
 		cardIdBadge: {

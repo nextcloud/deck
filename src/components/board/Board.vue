@@ -332,14 +332,21 @@ export default {
 				position: relative;
 
 				.smooth-dnd-container.vertical {
-					$margin-x: calc($stack-gap * -1);
 					display: flex;
 					flex-direction: column;
 					gap: $stack-gap;
 					padding: $stack-gap;
-					margin: 0 $margin-x;
+					margin: 0 calc(#{$stack-gap} * -1);
 					overflow-y: auto;
 					scrollbar-gutter: stable;
+				}
+
+				// Keep room for the 'Add card' control that the card list reaches
+				// into, so that the last card can be scrolled above it
+				&.stack--add-card-at-bottom .smooth-dnd-container.vertical {
+					margin-bottom: calc(-1 * var(--stack-card-add-box-height));
+					padding-bottom: calc(var(--stack-card-add-box-height) + #{$stack-gap});
+					scroll-padding-bottom: calc(var(--stack-card-add-box-height) + #{$stack-gap});
 				}
 
 				.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
