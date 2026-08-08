@@ -30,6 +30,7 @@ use OCA\Deck\Validators\CardServiceValidator;
 use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
@@ -58,6 +59,7 @@ class CardService {
 		private CardServiceValidator $cardServiceValidator,
 		private AssignmentService $assignmentService,
 		private IReferenceManager $referenceManager,
+		private IDBConnection $connection,
 		private ?string $userId,
 	) {
 	}
@@ -187,7 +189,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, $startdate = null, ?string $color = null): Card {
+	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, $startdate = null, ?string $color = null, bool $insertAtPosition = false): Card {
 		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
@@ -204,7 +206,20 @@ class CardService {
 		$card->setDuedate($duedate);
 		$card->setStartdate($startdate);
 		$card->setColor($color);
-		$card = $this->cardMapper->insert($card);
+
+		if (!$insertAtPosition) {
+			$card = $this->cardMapper->insert($card);
+		} else {
+			$this->connection->beginTransaction();
+			try {
+				$card = $this->cardMapper->insert($card);
+				$this->reorderCards($card->getId(), $stackId, $order);
+				$this->connection->commit();
+			} catch (\Throwable $e) {
+				$this->connection->rollBack();
+				throw $e;
+			}
+		}
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE, [], $card->getOwner());
 		$this->changeHelper->cardChanged($card->getId(), false);
@@ -467,6 +482,17 @@ class CardService {
 		$changes->setAfter($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
 
+		$result = $this->reorderCards($id, $stackId, $order);
+		$this->changeHelper->cardChanged($id, false);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+
+		return $result;
+	}
+
+	/**
+	 * @return list<Card>
+	 */
+	private function reorderCards(int $id, int $stackId, int $order): array {
 		$cardsToReorder = $this->cardMapper->findAll($stackId);
 		$result = [];
 		$i = 0;
@@ -489,8 +515,6 @@ class CardService {
 			$this->cardMapper->update($cardToReorder);
 			$result[$cardToReorder->getOrder()] = $cardToReorder;
 		}
-		$this->changeHelper->cardChanged($id, false);
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return array_values($result);
 	}

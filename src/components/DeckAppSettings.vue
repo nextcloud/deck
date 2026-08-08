@@ -13,6 +13,7 @@
 				<NcFormBoxSwitch v-model="cardDetailsInModal"
 					:label="t('deck', 'Use bigger card view')" />
 				<NcFormBoxSwitch v-model="stackAddCardAtTop"
+					data-cy="setting:add-card-at-top"
 					:label="t('deck', 'Add new cards at the top of a list')" />
 			</NcFormBox>
 		</NcAppSettingsSection>

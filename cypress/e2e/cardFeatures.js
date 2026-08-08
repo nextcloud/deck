@@ -25,6 +25,17 @@ const useModal = (useModal) => {
 	})
 }
 
+const addCardsAtTop = (enabled) => {
+	return cy.request({
+		method: 'POST',
+		url: `${Cypress.env('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/stackAddCardAtTop?format=json`,
+		auth,
+		body: { value: enabled },
+	}).then((response) => {
+		expect(response.status).to.eq(200)
+	})
+}
+
 describe('Card', function () {
 	let boardId
 	before(function () {
@@ -60,6 +71,72 @@ describe('Card', function () {
 			cy.get('.stack__card-add form input[type=submit]')
 				.first().click()
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
+		})
+	})
+
+	describe('New card position', function() {
+		afterEach(function() {
+			addCardsAtTop(false)
+		})
+
+		it('Adds new cards to the configured side of the list', function() {
+			const bottomCardTitle = 'Card added at bottom'
+			const firstTopCardTitle = 'First card added at top'
+			const secondTopCardTitle = 'Second card added at top'
+			const finalBottomCardTitle = 'Card added at bottom again'
+
+			addCardsAtTop(false)
+			cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('createCard')
+			cy.intercept({ method: 'PUT', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards/*/reorder' }).as('reorderCard')
+			cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/config/stackAddCardAtTop' }).as('setCardPosition')
+			cy.visit(`/apps/deck/#/board/${boardId}`)
+
+			cy.get('.board .stack').eq(0).within(() => {
+				cy.get('[data-cy="action:add-card"]').click()
+				cy.get('.stack__card-add input[type="text"]').type(bottomCardTitle)
+				cy.get('.stack__card-add input[type="submit"]').click()
+				cy.wait('@createCard')
+				cy.get('.card').last().should('contain', bottomCardTitle)
+			})
+
+			cy.get('[data-cy="navigation:settings"]').click()
+			cy.get('[data-cy="setting:add-card-at-top"] input[role="switch"]').check({ force: true })
+			cy.wait('@setCardPosition')
+			cy.visit(`/apps/deck/#/board/${boardId}`)
+
+			for (const title of [firstTopCardTitle, secondTopCardTitle]) {
+				cy.get('.board .stack').eq(0).within(() => {
+					cy.get('[data-cy="action:add-card"]').click()
+					cy.get('.stack__card-add input[type="text"]').type(title)
+					cy.get('.stack__card-add input[type="submit"]').click()
+					cy.wait('@createCard')
+					cy.get('.stack__card-add input[type="text"]').type('{esc}')
+				})
+			}
+
+			cy.get('.board .stack').eq(0).within(() => {
+				cy.get('.card').eq(0).should('contain', secondTopCardTitle)
+				cy.get('.card').eq(1).should('contain', firstTopCardTitle)
+			})
+			cy.get('@reorderCard.all').should('have.length', 0)
+
+			cy.reload()
+			cy.get('.board .stack').eq(0).within(() => {
+				cy.get('.card').eq(0).should('contain', secondTopCardTitle)
+				cy.get('.card').eq(1).should('contain', firstTopCardTitle)
+			})
+
+			cy.get('[data-cy="navigation:settings"]').click()
+			cy.get('[data-cy="setting:add-card-at-top"] input[role="switch"]').uncheck({ force: true })
+			cy.wait('@setCardPosition')
+			cy.visit(`/apps/deck/#/board/${boardId}`)
+			cy.get('.board .stack').eq(0).within(() => {
+				cy.get('[data-cy="action:add-card"]').click()
+				cy.get('.stack__card-add input[type="text"]').type(finalBottomCardTitle)
+				cy.get('.stack__card-add input[type="submit"]').click()
+				cy.wait('@createCard')
+				cy.get('.card').last().should('contain', finalBottomCardTitle)
+			})
 		})
 	})
 

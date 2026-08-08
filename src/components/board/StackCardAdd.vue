@@ -44,6 +44,9 @@ import ClickOutside from 'vue-click-outside'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcButton } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
+import { mapActions } from 'pinia'
+
+import { useCardStore } from '../../stores/card.js'
 
 export default {
 	name: 'StackCardAdd',
@@ -87,6 +90,9 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			addCardInStore: 'addCard',
+		}),
 		close() {
 			this.visible = false
 		},
@@ -94,17 +100,13 @@ export default {
 			this.creating = true
 			this.$emit('creating')
 			try {
-				const newCard = await this.$store.dispatch('addCard', {
+				const newCard = await this.addCardInStore({
 					title: this.title,
 					stackId: this.stack.id,
 					boardId: this.stack.boardId,
 					// Without an order the API appends the card to the end of the stack
 					...(this.addAtTop ? { order: 0 } : {}),
 				})
-				if (this.addAtTop) {
-					// Creating a card does not move the existing cards down, so reorder
-					await this.$store.dispatch('reorderCard', { ...newCard, order: 0 })
-				}
 				this.title = ''
 				this.$emit('created', newCard)
 				if (!this.cardDetailsInModal) {
