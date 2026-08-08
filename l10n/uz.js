@@ -24,6 +24,7 @@ OC.L10N.register(
     "Add card" : "Karta qo'shing",
     "Archived cards" : "Arxivlangan kartalar",
     "Add list" : "Roʻyxat qoʻshish",
+    "Clear search" : "Qidiruvni tozalash",
     "Unassigned" : "Tayinlanmagan",
     "Open" : "Ochish",
     "Overdue" : "Muddati o'tgan",

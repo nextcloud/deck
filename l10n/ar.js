@@ -151,6 +151,7 @@ OC.L10N.register(
     "Archived cards" : "البطاقات المؤرشفة",
     "Add list" : "إضافة قائمة",
     "List name" : "قامة اسماء",
+    "Clear search" : "مَحوُ البحث",
     "Active filters" : "فلاتر نشطة",
     "Apply filter" : "تطبيق التصفية",
     "Filter by tag" : "تصفية بواسطة الوسم",

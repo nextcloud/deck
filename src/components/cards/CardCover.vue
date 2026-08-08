@@ -12,9 +12,10 @@
 	</div>
 </template>
 <script>
-import { mapActions } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { generateUrl } from '@nextcloud/router'
 import { useAttachmentStore } from '../../stores/attachment.js'
+import { useCardStore } from '../../stores/card.js'
 export default {
 	name: 'CardCover',
 	props: {
@@ -24,6 +25,7 @@ export default {
 		},
 	},
 	computed: {
+		...mapState(useCardStore, ['cardById']),
 		attachments() {
 			return [...this.$store.getters.attachmentsByCard(this.cardId)]
 				// Filter deleted and hasPreview
@@ -45,7 +47,7 @@ export default {
 			)
 		},
 		card() {
-			return this.$store.getters.cardById(this.cardId)
+			return this.cardById(this.cardId)
 		},
 		referencePreview() {
 			return this.card?.referenceData?.richObject?.thumb
@@ -55,7 +57,7 @@ export default {
 		cardId: {
 			immediate: true,
 			handler() {
-				if (this.$store.getters.cardById(this.cardId)?.attachmentCount > 0) {
+				if (this.card?.attachmentCount > 0) {
 					this.fetchAttachments(this.cardId)
 				}
 			},

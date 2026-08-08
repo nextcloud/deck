@@ -125,6 +125,7 @@ OC.L10N.register(
     "Archived cards" : "Arhivirane naloge",
     "Add list" : "Dodaj seznam",
     "List name" : "Ime seznama",
+    "Clear search" : "Počisti iskanje",
     "Active filters" : "Dejavni filtri",
     "Apply filter" : "Uveljavi filter",
     "Filter by tag" : "Filtriraj po oznaki",

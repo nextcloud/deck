@@ -156,6 +156,7 @@ OC.L10N.register(
     "Archived cards" : "Schede archiviate",
     "Add list" : "Aggiungi elenco",
     "List name" : "Nome elenco",
+    "Clear search" : "Svuota ricerca",
     "Active filters" : "Filtri attivi",
     "Apply filter" : "Applica filtro",
     "Filter by tag" : "Filtra per etichette",

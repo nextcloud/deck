@@ -5,7 +5,10 @@
 
 <template>
 	<div class="board-wrapper" :tabindex="-1" @touchend="fixActionRestriction">
-		<Controls :board="board" />
+		<Controls :board="board"
+			show-search
+			:search-label="t('deck', 'Search cards')"
+			:search-hint="searchHint" />
 
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
@@ -100,6 +103,7 @@ import { createSession } from '../../sessions.js'
 import CardSidebar from '../card/CardSidebar.vue'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
 export default {
 	name: 'Board',
 	components: {
@@ -139,6 +143,7 @@ export default {
 	},
 	computed: {
 		...mapState(useStackStore, ['stacksByBoard']),
+		...mapState(useCardStore, ['cardById']),
 		...mapStateVuex({
 			isFullApp: state => state.isFullApp,
 			board: state => state.currentBoard,
@@ -151,6 +156,12 @@ export default {
 		]),
 		stacks() {
 			return this.board?.id ? this.stacksByBoard(this.board.id) : []
+		},
+		searchHint() {
+			// Parameterised so translators never see the prefixes as translatable text
+			return t('deck', 'Supported prefixes: {prefixes}. Wrap phrases in double quotes.', {
+				prefixes: 'title:, description:, tag:, assigned:, list:, date:',
+			})
 		},
 		dragHandleSelector() {
 			return this.canEdit ? '.stack__title' : '.no-drag'
@@ -192,10 +203,10 @@ export default {
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
-				if (routeCardId && !this.$store.getters.cardById(routeCardId)) {
+				if (routeCardId && !this.cardById(routeCardId)) {
 					await this.loadArchivedStacks(this.id)
 
-					if (this.$store.getters.cardById(routeCardId)) {
+					if (this.cardById(routeCardId)) {
 						this.$store.commit('toggleShowArchived', true)
 					}
 				}

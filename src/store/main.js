@@ -11,7 +11,6 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi.js'
-import cardModuleFactory from './card.js'
 import { useStackStore } from '../stores/stack.js'
 Vue.use(Vuex)
 
@@ -29,9 +28,6 @@ export const BOARD_FILTERS = {
  */
 export default function storeFactory() {
 	return new Vuex.Store({
-		modules: {
-			card: cardModuleFactory(),
-		},
 		strict: debug,
 		state: {
 			isFullApp: true,

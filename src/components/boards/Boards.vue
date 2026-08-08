@@ -5,7 +5,8 @@
 
 <template>
 	<div>
-		<Controls />
+		<!-- No hint: this matches plain titles, the card prefixes do not apply here -->
+		<Controls show-search :search-label="t('deck', 'Search boards')" />
 		<div class="board-list">
 			<div class="board-list-row board-list-header-row">
 				<div class="board-list-bullet-cell">

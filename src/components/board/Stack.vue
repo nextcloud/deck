@@ -134,7 +134,8 @@
 
 <script>
 import ClickOutside from 'vue-click-outside'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState as mapStateVuex } from 'vuex'
+import { mapState, mapActions } from 'pinia'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
@@ -145,9 +146,9 @@ import CardItem from '../cards/CardItem.vue'
 import StackCardAdd from './StackCardAdd.vue'
 
 import '@nextcloud/dialogs/style.css'
-import { mapActions } from 'pinia'
 import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
 
 export default {
 	name: 'Stack',
@@ -194,11 +195,14 @@ export default {
 			'canEdit',
 			'isArchived',
 		]),
-		...mapState({
+		...mapStateVuex({
 			showArchived: state => state.showArchived,
 		}),
+		...mapState(useCardStore, {
+			cardsByStackGetter: 'cardsByStack',
+		}),
 		cardsByStack() {
-			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
+			return this.cardsByStackGetter(this.stack.id).filter((card) => {
 				if (this.showArchived) {
 					return card.archived
 				}
@@ -225,6 +229,10 @@ export default {
 	methods: {
 		...mapActions(useTrashbinStore, ['stackUndoDelete']),
 		...mapActions(useStackStore, ['setDoneStack', 'deleteStack', 'updateStack']),
+		...mapActions(useCardStore, {
+			reorderCardInStore: 'reorderCard',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+		}),
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
 			const card = Object.assign({}, payload)
@@ -234,12 +242,12 @@ export default {
 					card.stackId = stackId
 					card.order = addedIndex
 					console.debug('move card to stack', card.stackId, card.order)
-					await this.$store.dispatch('reorderCard', card)
+					await this.reorderCardInStore(card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
 					card.order = addedIndex
 					console.debug('move card in stack', card.stackId, card.order)
-					await this.$store.dispatch('reorderCard', card)
+					await this.reorderCardInStore(card)
 				}
 			}
 		},
@@ -260,11 +268,10 @@ export default {
 			showUndo(t('deck', 'List deleted'), () => this.stackUndoDelete(stack))
 		},
 		setArchivedToAllCardsFromStack(stack, isArchived) {
-
 			this.stackTransfer.total = this.cardsByStack.length
 			this.cardsByStack.forEach((card, index) => {
 				this.stackTransfer.current = index
-				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: isArchived })
+				this.archiveUnarchiveCardInStore({ ...card, archived: isArchived })
 			})
 			this.modalArchivAllCardsShow = false
 		},

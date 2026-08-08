@@ -70,11 +70,15 @@ export default {
 			// Global shortcuts (not board specific)
 			if ((key.metaKey || key.ctrlKey) && key.code === 'KeyF') {
 				const searchInput = document.getElementById('deck-search-input')
+				// Overviews have no search field, so leave Ctrl+F to the browser there
+				if (!searchInput) {
+					return
+				}
 				if (searchInput === document.activeElement) {
 					return false
 				}
 
-				document.getElementById('deck-search-input').focus()
+				searchInput.focus()
 				key.preventDefault()
 				return true
 			}

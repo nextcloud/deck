@@ -158,6 +158,7 @@ OC.L10N.register(
     "Archived cards" : "Cártaí cartlainne",
     "Add list" : "Cuir liosta leis",
     "List name" : "Ainm an liosta",
+    "Clear search" : "Glan cuardach",
     "Active filters" : "Scagairí gníomhacha",
     "Apply filter" : "Cuir scagaire i bhfeidhm",
     "Filter by tag" : "Scag le clib",

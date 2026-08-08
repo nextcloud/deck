@@ -267,4 +267,10 @@ class ConfigService {
 
 		$this->config->setUserValue($userId ?? $this->getUserId(), 'deck', 'attachment_folder', $path);
 	}
+
+	public function getTrashRetention(): int {
+		$value = $this->config->getAppValue(Application::APP_ID, 'trashRetentionHours', '5');
+		$hours = (int)$value > 0 ? (int)$value : 5;
+		return 60 * 60 * $hours;
+	}
 }
