@@ -8,8 +8,6 @@
 		:class="{
 			'stack--done-column': isDoneColumn,
 			'stack--add-card-at-top': canAddCard && stackAddCardAtTop,
-			'stack--add-card-at-bottom': canAddCard && !stackAddCardAtTop,
-			'stack--dragging-card': draggingCard,
 		}"
 		:data-cy-stack="stack.title">
 		<div class="stack__header"
@@ -341,18 +339,10 @@ export default {
 
 	.stack {
 		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));
-		--stack-card-add-box-height: calc(var(--stack-card-add-control-height) + #{$stack-gap});
 		width: 100%;
 		.dnd-container {
 			flex: 1 1 auto;
 			min-height: 0;
-		}
-
-		&.stack--add-card-at-bottom.stack--dragging-card .stack__card-add {
-			// The card list reaches underneath the control (see Board.vue) and
-			// smooth-dnd resolves the hovered container with elementFromPoint(),
-			// so the control must not swallow the drag.
-			pointer-events: none;
 		}
 
 		&.stack--add-card-at-top {
