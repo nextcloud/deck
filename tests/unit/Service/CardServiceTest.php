@@ -284,7 +284,7 @@ class CardServiceTest extends TestCase {
 			->with(123)
 			->willReturn($stack);
 
-		$createdCard = $this->cardService->create('New card', 123, 'plain', 0, 'admin');
+		$createdCard = $this->cardService->create('New card', 123, 'plain', 0, 'admin', insertAtPosition: true);
 
 		$this->assertSame(0, $createdCard->getOrder());
 		$this->assertSame(1, $firstCard->getOrder());
@@ -313,7 +313,7 @@ class CardServiceTest extends TestCase {
 			->willThrowException(new \RuntimeException('Could not reorder cards'));
 
 		$this->expectException(\RuntimeException::class);
-		$this->cardService->create('New card', 123, 'plain', 0, 'admin');
+		$this->cardService->create('New card', 123, 'plain', 0, 'admin', insertAtPosition: true);
 	}
 
 	public function testClone() {
