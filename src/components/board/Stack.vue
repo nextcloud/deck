@@ -106,7 +106,7 @@
 			@created="handleCardCreated" />
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
-			class="dnd-container stack__cards-list"
+			class="dnd-container"
 			group-name="stack"
 			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
