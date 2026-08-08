@@ -53,6 +53,7 @@
 		<template #footer>
 			<ul class="app-navigation-entry__settings">
 				<NcAppNavigationItem :name="t('deck', 'Deck settings')"
+					data-cy="navigation:settings"
 					@click.prevent.stop="openSettings">
 					<template #icon>
 						<IconCog :size="20" />

@@ -42,6 +42,7 @@ use OCA\Deck\Validators\CardServiceValidator;
 use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -380,6 +381,7 @@ class BatchQueryPerformanceTest extends TestCase {
 			$this->createMock(CardServiceValidator::class),
 			$this->createMock(AssignmentService::class),
 			$this->referenceManager,
+			$this->createMock(IDBConnection::class),
 			'user1',
 		);
 	}

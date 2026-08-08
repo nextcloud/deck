@@ -280,6 +280,13 @@ export const useCardStore = defineStore('card', {
 		},
 		async addCard(card) {
 			const createdCard = await apiClient.addCard(card)
+			if (card.order !== undefined) {
+				for (const existingCard of this.cards) {
+					if (existingCard.stackId === createdCard.stackId && existingCard.order >= card.order) {
+						Vue.set(existingCard, 'order', existingCard.order + 1)
+					}
+				}
+			}
 			this.addCardToStore(createdCard)
 			return createdCard
 		},
@@ -302,9 +309,6 @@ export const useCardStore = defineStore('card', {
 			let i = 0
 			const newCards = []
 			for (const c of this.cardsByStack(card.stackId)) {
-				if (c.id === card.id) {
-					newCards.push(card)
-				}
 				if (i === card.order) {
 					i++
 				}
@@ -316,9 +320,9 @@ export const useCardStore = defineStore('card', {
 			this.updateCardsReorder(newCards)
 
 			const stack = useStackStore().stackById(card.stackId)
-			apiClient.reorderCard(card, stack.boardId).then((cards) => {
-				this.updateCardsReorder(Object.values(cards))
-			})
+			const cards = await apiClient.reorderCard(card, stack.boardId)
+			this.updateCardsReorder(Object.values(cards))
+			return cards
 		},
 		async archiveUnarchiveCard(card) {
 			let call = 'archiveCard'

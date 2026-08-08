@@ -15,6 +15,8 @@ Feature: OCS API - Config
     And the response should contain the key "ocs.data.calendar"
     And the response should contain the key "ocs.data.cardDetailsInModal"
     And the response should contain the key "ocs.data.cardIdBadge"
+    And the response should contain the key "ocs.data.stackAddCardAtTop"
+    And the response value "ocs.data.stackAddCardAtTop" should be "false"
 
   Scenario: GET /api/v1.0/config - The group limit is only exposed to administrators
     When sending "GET" to the OCS API endpoint "/config"
@@ -38,6 +40,20 @@ Feature: OCS API - Config
     And the response value "ocs.data" should be "true"
     When sending "GET" to the OCS API endpoint "/config"
     Then the response value "ocs.data.calendar" should be "true"
+
+  Scenario: POST /api/v1.0/config/{key} - Set the new card position
+    When sending "POST" to the OCS API endpoint "/config/stackAddCardAtTop" with body:
+      | value | true |
+    Then the response should have a status code "200"
+    And the response value "ocs.data" should be "true"
+    When sending "GET" to the OCS API endpoint "/config"
+    Then the response value "ocs.data.stackAddCardAtTop" should be "true"
+    When sending "POST" to the OCS API endpoint "/config/stackAddCardAtTop" with body:
+      | value | false |
+    Then the response should have a status code "200"
+    And the response value "ocs.data" should be "false"
+    When sending "GET" to the OCS API endpoint "/config"
+    Then the response value "ocs.data.stackAddCardAtTop" should be "false"
 
   Scenario: POST /api/v1.0/config/{key} - Set a board config value
     Given sending "POST" to the API endpoint "/boards" with body:
