@@ -322,7 +322,6 @@ export const useCardStore = defineStore('card', {
 			const stack = useStackStore().stackById(card.stackId)
 			const cards = await apiClient.reorderCard(card, stack.boardId)
 			this.updateCardsReorder(Object.values(cards))
-			return cards
 		},
 		async archiveUnarchiveCard(card) {
 			let call = 'archiveCard'
