@@ -130,14 +130,15 @@ export default {
 
 	.stack__card-add {
 		flex-shrink: 0;
-		z-index: 100;
 		display: flex;
 		background-color: var(--color-main-background);
-		position: relative;
 
 		.stack--add-card-at-top & {
+			position: relative;
+			z-index: 100;
 			padding-top: $stack-gap;
 
+			// Smooth fade out of the cards below the control
 			&:after {
 				content: '';
 				display: block;
@@ -154,19 +155,6 @@ export default {
 
 		.stack--add-card-at-bottom & {
 			padding-bottom: $stack-gap;
-		}
-
-		// Smooth fade out of the cards next to the control
-		&:before {
-			content: '';
-			display: block;
-			position: absolute;
-			width: 100%;
-			height: $stack-gap;
-			z-index: 99;
-			transition: bottom var(--animation-slow);
-			background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
-			transform: translateY(-100%);
 		}
 
 		:deep(.stack__card-add-button.button-vue) {
