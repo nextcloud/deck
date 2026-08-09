@@ -154,7 +154,23 @@ export default {
 		}
 
 		.stack--add-card-at-bottom & {
+			position: relative;
+			z-index: 100;
 			padding-bottom: $stack-gap;
+
+			// Smooth fade out of the cards above the control
+			&:before {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 100%;
+				height: $stack-gap;
+				top: 0;
+				z-index: 99;
+				pointer-events: none;
+				background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
+				transform: translateY(-100%);
+			}
 		}
 
 		:deep(.stack__card-add-button.button-vue) {
