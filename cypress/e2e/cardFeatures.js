@@ -314,7 +314,9 @@ describe('Card', function () {
 			cy.visit(`/apps/deck/board/${boardId}`)
 			cy.reload()
 			cy.get('.board .stack').eq(0).within(() => {
-				cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
+				cy.get(`.card:contains("${newCardTitle}")`)
+					.scrollIntoView({ block: 'center' })
+					.should('be.visible')
 			})
 		})
 	})
