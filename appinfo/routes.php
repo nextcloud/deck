@@ -13,6 +13,8 @@ return [
 		['name' => 'page#indexBoard', 'url' => '/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'page#indexBoardDetails', 'url' => '/board/{boardId}/details', 'verb' => 'GET'],
 		['name' => 'page#indexCard', 'url' => '/board/{boardId}/card/{cardId}', 'verb' => 'GET'],
+		// Declared after the more specific board routes so those keep priority.
+		['name' => 'page#indexBoardView', 'url' => '/board/{boardId}/{viewMode}', 'verb' => 'GET', 'requirements' => ['viewMode' => 'kanban|gantt']],
 
 		['name' => 'page#redirectToCard', 'url' => '/card/{cardId}', 'verb' => 'GET'],
 

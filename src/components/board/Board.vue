@@ -130,6 +130,15 @@ export default {
 			type: Number,
 			default: null,
 		},
+		/**
+		 * View to open the board in, coming from the /board/:id/:viewMode
+		 * route. Applied for this session only, so linking to a view does not
+		 * change the user's stored preference for the board.
+		 */
+		initialViewMode: {
+			type: String,
+			default: null,
+		},
 	},
 	data() {
 		return {
@@ -200,6 +209,11 @@ export default {
 			try {
 				await this.$store.dispatch('loadBoardById', this.id)
 				await this.loadStacks(this.id)
+
+				// Only after loadBoardById, as the mutation needs currentBoard
+				if (this.initialViewMode) {
+					this.$store.commit('setViewModeForSession', this.initialViewMode)
+				}
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
