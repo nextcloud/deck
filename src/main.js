@@ -5,8 +5,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router.js'
-import storeFactory from './store/main.js'
-import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import ClickOutside from 'vue-click-outside'
@@ -19,12 +17,8 @@ import { createPinia, PiniaVuePlugin } from 'pinia'
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
 
-const store = storeFactory()
 const pinia = createPinia()
 Vue.use(PiniaVuePlugin)
-pinia.use(() => ({ $vuex: store }))
-
-sync(store, router)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
@@ -51,7 +45,6 @@ new Vue({
 	// eslint-disable-next-line vue/match-component-file-name
 	name: 'Deck',
 	router,
-	store,
 	pinia,
 	data() {
 		return {

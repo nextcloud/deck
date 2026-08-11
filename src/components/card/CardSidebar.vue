@@ -84,7 +84,6 @@
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
 import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
-import { mapState as mapStateVuex } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
 import CardSidebarTabComments from './CardSidebarTabComments.vue'
@@ -104,6 +103,7 @@ import CardMenuEntries from '../cards/CardMenuEntries.vue'
 import { mapActions, mapState } from 'pinia'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const capabilities = getCapabilities()
 
@@ -156,7 +156,7 @@ export default {
 	computed: {
 		...mapState(useCardStore, ['cardById']),
 		...mapState(useBoardStore, ['canEdit', 'assignables', 'currentBoard']),
-		...mapStateVuex({
+		...mapState(useSettingsStore, {
 			isFullApp: (state) => state.isFullApp,
 			hasCardSaveError: (state) => state.hasCardSaveError,
 		}),
@@ -190,10 +190,10 @@ export default {
 		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 		displayTitle: {
@@ -249,10 +249,10 @@ export default {
 		},
 
 		showModal() {
-			this.$store.dispatch('setConfig', { cardDetailsInModal: true })
+			useSettingsStore().setConfig({ cardDetailsInModal: true })
 		},
 		closeModal() {
-			this.$store.dispatch('setConfig', { cardDetailsInModal: false })
+			useSettingsStore().setConfig({ cardDetailsInModal: false })
 		},
 		formatDate(timestamp) {
 			return moment.unix(timestamp).locale(this.locale).format('LLLL')

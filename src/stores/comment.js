@@ -43,7 +43,7 @@ export const useCommentStore = defineStore('comment', {
 				const newComments = comments.filter((comment) => {
 					return this.comments[cardId].comments.findIndex((item) => item.id === comment.id) === -1
 				})
-				this.comments[cardId].comments.push(...newComments)
+				Vue.set(this.comments[cardId], 'comments', [...this.comments[cardId].comments, ...newComments])
 			}
 		},
 		async updateComment({ cardId, comment }) {

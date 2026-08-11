@@ -65,9 +65,7 @@
     "vue-loader": "^15.11.1",
     "vue-material-design-icons": "^5.3.1",
     "vue-router": "^3.6.5",
-    "vue-smooth-dnd": "^0.8.1",
-    "vuex": "^3.6.2",
-    "vuex-router-sync": "^5.0.0"
+    "vue-smooth-dnd": "^0.8.1"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"

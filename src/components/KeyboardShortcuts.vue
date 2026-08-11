@@ -24,6 +24,7 @@ import TagSelector from './card/TagSelector.vue'
 import AssignmentSelector from './card/AssignmentSelector.vue'
 import CardItem from './cards/CardItem.vue'
 import { useBoardStore } from '../stores/board.js'
+import { useSettingsStore } from '../stores/settings.js'
 
 export default {
 	name: 'KeyboardShortcuts',
@@ -45,6 +46,7 @@ export default {
 		...mapState(useBoardStore, {
 			board: 'currentBoard',
 		}),
+		...mapState(useSettingsStore, ['shortcutLock']),
 	},
 	created() {
 		document.addEventListener('keydown', this.onKeydown)
@@ -88,7 +90,7 @@ export default {
 				return
 			}
 
-			if (this.$store.state.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
+			if (this.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
 				return
 			}
 

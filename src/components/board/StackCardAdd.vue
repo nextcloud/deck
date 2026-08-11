@@ -29,7 +29,7 @@
 				:placeholder="t('deck', 'Card name')"
 				required
 				pattern=".*\S+.*"
-				@focus="$store.dispatch('toggleShortcutLock', true)"
+				@focus="toggleShortcutLock(true)"
 				@keydown.esc.stop="visible = false">
 			<input v-show="!creating"
 				class="icon-confirm"
@@ -47,6 +47,7 @@ import { showError } from '@nextcloud/dialogs'
 import { mapActions } from 'pinia'
 
 import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'StackCardAdd',
@@ -76,13 +77,13 @@ export default {
 	},
 	computed: {
 		cardDetailsInModal() {
-			return this.$store.getters.config('cardDetailsInModal')
+			useSettingsStore().configByKey('cardDetailsInModal')
 		},
 	},
 	watch: {
 		visible(newValue) {
 			if (!newValue) {
-				this.$store.dispatch('toggleShortcutLock', false)
+				this.toggleShortcutLock(false)
 				return
 			}
 
@@ -92,6 +93,9 @@ export default {
 	methods: {
 		...mapActions(useCardStore, {
 			addCardInStore: 'addCard',
+		}),
+		...mapActions(useSettingsStore, {
+			toggleShortcutLock: 'toggleShortcutLock',
 		}),
 		close() {
 			this.visible = false
@@ -132,6 +136,8 @@ export default {
 		flex-shrink: 0;
 		display: flex;
 		background-color: var(--color-main-background);
+		width: 100%;
+		padding-inline-end: $stack-gap;
 
 		.stack--add-card-at-top & {
 			position: relative;

@@ -52,6 +52,7 @@ import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import CommentIcon from 'vue-material-design-icons/CommentOutline.vue'
 import CommentUnreadIcon from 'vue-material-design-icons/CommentAccountOutline.vue'
 import DueDate from './badges/DueDate.vue'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'CardBadges',
@@ -88,7 +89,7 @@ export default {
 			return null
 		},
 		idBadge() {
-			return this.$store.getters.config('cardIdBadge')
+			return useSettingsStore().configByKey('cardIdBadge')
 		},
 	},
 	methods: {

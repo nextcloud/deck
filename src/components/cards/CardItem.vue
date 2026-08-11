@@ -78,7 +78,6 @@
 
 <script>
 import ClickOutside from 'vue-click-outside'
-import { mapState as mapStateVuex } from 'vuex'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
@@ -91,6 +90,7 @@ import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -140,7 +140,7 @@ export default {
 			boards: 'boards',
 			boardById: 'boardById',
 		}),
-		...mapStateVuex({
+		...mapState(useSettingsStore, {
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 			shortcutLock: state => state.shortcutLock,
@@ -182,7 +182,7 @@ export default {
 				|| this.card.assignedUsers.length > 0
 		},
 		idBadge() {
-			return this.$store.getters.config('cardIdBadge')
+			return useSettingsStore().configByKey('cardIdBadge')
 		},
 		showMenuAtTitle() {
 			return this.compactMode || (!this.compactMode && !this.hasBadges && !this.hasLabels)
@@ -230,6 +230,7 @@ export default {
 			assignCardToUserInStore: 'assignCardToUser',
 		}),
 		...mapActions(useBoardStore, ['toggleFilter']),
+		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		hasSelection() {
 			const selection = window.getSelection()
 			return selection.toString() !== ''
@@ -259,7 +260,7 @@ export default {
 		},
 		triggerEditTitle() {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 			setTimeout(() => {
 				const sel = window.getSelection()
 				sel.selectAllChildren(this.$refs.titleContentEditable)
@@ -279,17 +280,17 @@ export default {
 					title: value,
 				})
 			}
-			this.$store.dispatch('toggleShortcutLock', false)
+			this.toggleShortcutLock(false)
 		},
 		onTitleFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 		},
 		handleCardKeyboardShortcut(key) {
 			if (OCP.Accessibility.disableKeyboardShortcuts()) {
 				return
 			}
 
-			if (!this.canEdit || this.$store.state.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
+			if (!this.canEdit || this.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
 				return
 			}
 

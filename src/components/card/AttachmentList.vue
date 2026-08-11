@@ -100,6 +100,7 @@ import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { useAttachmentStore } from '../../stores/attachment.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
@@ -201,7 +202,7 @@ export default {
 				?? (attachment?.name ?? attachment.data).split('.').pop()
 		},
 		cardDetailsInModal() {
-			return this.$store.getters.config('cardDetailsInModal')
+			return useSettingsStore().configByKey('cardDetailsInModal')
 		},
 	},
 	watch: {
