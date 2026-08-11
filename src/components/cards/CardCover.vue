@@ -27,7 +27,7 @@ export default {
 	computed: {
 		...mapState(useCardStore, ['cardById']),
 		attachments() {
-			return [...this.$store.getters.attachmentsByCard(this.cardId)]
+			return [...useAttachmentStore().attachmentsByCard(this.cardId)]
 				// Filter deleted and hasPreview
 				.filter(attachment => attachment.deletedAt >= 0 && attachment.extendedData.hasPreview)
 				// sort by id (same as in AttachmentList) to get Newest

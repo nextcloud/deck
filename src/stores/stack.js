@@ -9,6 +9,7 @@ import { StackApi } from '../services/StackApi.js'
 import applyOrderToArray from '../helpers/applyOrderToArray.js'
 import { useTrashbinStore } from './trashbin.js'
 import { useCardStore } from './card.js'
+import { useBoardStore } from './board.js'
 
 const apiClient = new StackApi()
 
@@ -53,7 +54,7 @@ export const useStackStore = defineStore('stack', {
 		async loadStacks(boardId) {
 			const cardStore = useCardStore()
 			let call = 'loadStacks'
-			if (this.$vuex.state.showArchived === true) {
+			if (useBoardStore().showArchived === true) {
 				call = 'loadArchivedStacks'
 			}
 			const stacks = await apiClient[call](boardId)
@@ -85,7 +86,7 @@ export const useStackStore = defineStore('stack', {
 			cardStore.setCards(cards)
 		},
 		createStack(stack) {
-			stack.boardId = this.$vuex.state.currentBoard.id
+			stack.boardId = useBoardStore().currentBoard.id
 			apiClient.createStack(stack)
 				.then((createdStack) => {
 					this.addStack(createdStack)

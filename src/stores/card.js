@@ -9,6 +9,7 @@ import moment from 'moment'
 import Vue from 'vue'
 import { useStackStore } from './stack.js'
 import { useTrashbinStore } from './trashbin.js'
+import { useBoardStore } from './board.js'
 
 const apiClient = new CardApi()
 
@@ -19,8 +20,7 @@ export const useCardStore = defineStore('card', {
 	getters: {
 		cardsByStack(state) {
 			return (id) => state.cards.filter((card) => {
-				const { tags, users, due, unassigned, completed } = this.$vuex.state.filter
-
+				const { tags, users, due, unassigned, completed } = useBoardStore().filter
 				if (completed === 'open' && card.done !== null) {
 					return false
 				}
@@ -350,32 +350,32 @@ export const useCardStore = defineStore('card', {
 			}
 		},
 		async assignCardToUser({ card, assignee }) {
-			const boardId = this.$vuex.state.currentBoard.id
+			const boardId = useBoardStore().currentBoard.id
 			const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type, boardId)
 			this.assignCardToUserInStore(user)
 		},
 		async removeUserFromCard({ card, assignee }) {
-			const boardId = this.$vuex.state.currentBoard.id
+			const boardId = useBoardStore().currentBoard.id
 			const user = await apiClient.removeUser(card.id, assignee.userId, assignee.type, boardId)
 			this.removeUserFromCardInStore(user)
 		},
 		async addLabel(data) {
-			data.boardId = this.$vuex.state.currentBoard.id
+			data.boardId = useBoardStore().currentBoard.id
 			await apiClient.assignLabelToCard(data)
 			this.updateCardProperty({ property: 'labels', card: data.card })
 		},
 		async removeLabel(data) {
-			data.boardId = this.$vuex.state.currentBoard.id
+			data.boardId = useBoardStore().currentBoard.id
 			await apiClient.removeLabelFromCard(data)
 			this.updateCardProperty({ property: 'labels', card: data.card })
 		},
 		async assignDependentCard({ card, dependentCard }) {
-			const boardId = this.$vuex.state.currentBoard.id
+			const boardId = useBoardStore().currentBoard.id
 			const updatedCard = await apiClient.assignDependentCard(card.id, dependentCard.id, boardId)
 			this.updateCardProperty({ property: 'dependentCards', card: updatedCard })
 		},
 		async removeDependentCard({ card, dependentCardId }) {
-			const boardId = this.$vuex.state.currentBoard.id
+			const boardId = useBoardStore().currentBoard.id
 			const updatedCard = await apiClient.removeDependentCard(card.id, dependentCardId, boardId)
 			this.updateCardProperty({ property: 'dependentCards', card: updatedCard })
 		},
@@ -408,7 +408,7 @@ export const useCardStore = defineStore('card', {
 		addCardData(cardData) {
 			const card = { ...cardData }
 			useStackStore().addStack(card.relatedStack)
-			this.$vuex.commit('addBoard', card.relatedBoard)
+			useBoardStore().addBoard(card.relatedBoard)
 			delete card.relatedStack
 			delete card.relatedBoard
 			this.addCardToStore(card)

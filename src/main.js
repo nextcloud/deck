@@ -25,7 +25,6 @@ Vue.use(PiniaVuePlugin)
 pinia.use(() => ({ $vuex: store }))
 
 sync(store, router)
-initSessions(store)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
@@ -61,6 +60,8 @@ new Vue({
 		}
 	},
 	created() {
+		initSessions()
+
 		this.interval = setInterval(() => {
 			this.time = Date.now()
 		}, 1000)

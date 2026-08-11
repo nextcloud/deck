@@ -47,8 +47,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { mapActions } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import moment from '@nextcloud/moment'
 import { loadState } from '@nextcloud/initial-state'
 
@@ -65,6 +64,7 @@ import StartDateSelector from './StartDateSelector.vue'
 import { debounce } from 'lodash'
 import DependentCardsSelector from './DependentCardsSelector.vue'
 import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'CardSidebarTabDetails',
@@ -93,10 +93,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			currentBoard: state => state.currentBoard,
-		}),
-		...mapGetters(['canEdit', 'assignables']),
+		...mapState(useBoardStore, ['currentBoard', 'canEdit', 'assignables']),
 		cardDetailsInModal: {
 			get() {
 				return this.$store.getters.config('cardDetailsInModal')
@@ -118,6 +115,7 @@ export default {
 		this.initialize()
 	},
 	methods: {
+		...mapActions(useBoardStore, ['addLabelToCurrentBoardAndCard']),
 		...mapActions(useCardStore, {
 			assignCardToUserInStore: 'assignCardToUser',
 			removeUserFromCardInStore: 'removeUserFromCard',
@@ -197,7 +195,7 @@ export default {
 		},
 
 		async addLabelToBoardAndCard(name) {
-			await this.$store.dispatch('addLabelToCurrentBoardAndCard', {
+			await this.addLabelToCurrentBoardAndCard({
 				card: this.copiedCard,
 				newLabel: {
 					title: name,

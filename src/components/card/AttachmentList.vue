@@ -94,12 +94,12 @@ import relativeDate from '../../mixins/relativeDate.js'
 import { formatFileSize } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl, generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
-import { mapState as mapStateVuex } from 'vuex'
 import { mapState, mapActions } from 'pinia'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { useAttachmentStore } from '../../stores/attachment.js'
+import { useBoardStore } from '../../stores/board.js'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
@@ -178,14 +178,12 @@ export default {
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
 		},
-		...mapStateVuex({
-			currentBoard: state => state.currentBoard,
-		}),
+		...mapState(useBoardStore, ['currentBoard', 'canEdit']),
 		...mapState(useAttachmentStore, [
 			'attachmentsByCard',
 		]),
 		isReadOnly() {
-			return !this.$store.getters.canEdit
+			return !this.canEdit
 		},
 		dropHintText() {
 			if (this.isReadOnly) {

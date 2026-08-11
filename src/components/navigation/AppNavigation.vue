@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
 import { NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
@@ -81,6 +80,8 @@ import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
 import DeckAppSettings from '../DeckAppSettings.vue'
 import IconCog from 'vue-material-design-icons/CogOutline.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapState } from 'pinia'
+import { useBoardStore } from '../../stores/board.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -122,7 +123,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
+		...mapState(useBoardStore, [
 			'noneArchivedBoards',
 			'archivedBoards',
 			'sharedBoards',
