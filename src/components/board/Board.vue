@@ -90,7 +90,6 @@
 
 <script>
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState as mapStateVuex } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -105,6 +104,7 @@ import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 export default {
 	name: 'Board',
 	components: {
@@ -152,9 +152,7 @@ export default {
 			canManage: 'canManage',
 			viewMode: 'viewMode',
 		}),
-		...mapStateVuex({
-			isFullApp: state => state.isFullApp,
-		}),
+		...mapState(useSettingsStore, ['isFullApp']),
 		stacks() {
 			return this.board?.id ? this.stacksByBoard(this.board.id) : []
 		},

@@ -6,7 +6,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { generateUrl, getRootUrl } from '@nextcloud/router'
-import { BOARD_FILTERS } from './store/main.js'
+import { BOARD_FILTERS } from './stores/board.js'
 import Boards from './components/boards/Boards.vue'
 import Board from './components/board/Board.vue'
 import Sidebar from './components/Sidebar.vue'

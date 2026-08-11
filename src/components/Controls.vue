@@ -51,8 +51,8 @@
 						class="no-close"
 						:placeholder="t('deck', 'List name')"
 						required
-						@focus="$store.dispatch('toggleShortcutLock', true)"
-						@blur="$store.dispatch('toggleShortcutLock', false)">
+						@focus="toggleShortcutLock(true)"
+						@blur="toggleShortcutLock(false)">
 					<input :title="t('deck', 'Add list')"
 						class="icon-confirm"
 						type="submit"
@@ -73,8 +73,8 @@
 					:aria-describedby="searchHint ? 'deck-search-hint' : null"
 					@update:value="setSearchQuery"
 					@trailing-button-click="clearSearchQuery"
-					@focus="$store.dispatch('toggleShortcutLock', true)"
-					@blur="$store.dispatch('toggleShortcutLock', false)" />
+					@focus="toggleShortcutLock(true)"
+					@blur="toggleShortcutLock(false)" />
 				<!-- title is for pointer users, aria-describedby for assistive tech. No double
 					announcement: title is only the fallback description per HTML-AAM. -->
 				<span v-if="searchHint" id="deck-search-hint" class="hidden-visually">{{ searchHint }}</span>
@@ -285,7 +285,6 @@
 </template>
 
 <script>
-import { mapState as mapStateVuex } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal, NcTextField } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
@@ -305,6 +304,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../stores/stack.js'
 import { useBoardStore } from '../stores/board.js'
+import { useSettingsStore } from '../stores/settings.js'
 
 export default {
 	name: 'Controls',
@@ -375,7 +375,7 @@ export default {
 			'viewMode',
 			'showArchived',
 		]),
-		...mapStateVuex({
+		...mapState(useSettingsStore, {
 			isFullApp: state => state.isFullApp,
 			navShown: state => state.navShown,
 			compactMode: state => state.compactMode,
@@ -426,6 +426,13 @@ export default {
 	methods: {
 		...mapActions(useBoardStore, { setViewMode: 'setViewMode', toggleShowArchived: 'toggleShowArchived', setFilterInStore: 'setFilterInStore' }),
 		...mapActions(useStackStore, ['createStack']),
+		...mapActions(useSettingsStore, {
+			setSearchQuery: 'setSearchQuery',
+			setShortcutLock: 'toggleShortcutLock',
+			setNavShown: 'toggleNav',
+			toggleCompact: 'toggleCompactMode',
+			toggleCardCover: 'toggleShowCardCover',
+		}),
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
 				this.filter.due = ''
@@ -446,20 +453,20 @@ export default {
 			}
 			this.$nextTick(() => this.setFilterInStore({ ...this.filter }))
 		},
-		setSearchQuery(value) {
-			this.$store.commit('setSearchQuery', value)
-		},
 		clearSearchQuery() {
-			this.$store.commit('setSearchQuery', '')
+			this.setSearchQuery('')
+		},
+		toggleShortcutLock(lock) {
+			this.setShortcutLock(lock)
 		},
 		toggleNav() {
-			this.$store.dispatch('toggleNav', !this.navShown)
+			this.setNavShown(!this.navShown)
 		},
 		toggleCompactMode() {
-			this.$store.dispatch('toggleCompactMode')
+			this.toggleCompact()
 		},
 		toggleShowCardCover() {
-			this.$store.dispatch('toggleShowCardCover')
+			this.toggleCardCover()
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }

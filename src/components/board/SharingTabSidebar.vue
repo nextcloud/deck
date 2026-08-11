@@ -80,13 +80,13 @@
 
 <script>
 import { NcCollectionList, NcAvatar, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel, NcSelectUsers } from '@nextcloud/vue'
-import { mapState as mapStateVuex } from 'vuex'
 import { mapActions, mapState } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import debounce from 'lodash/debounce.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 const SOURCE_TO_SHARE_TYPE = {
 	users: 0,
 	groups: 1,
@@ -124,7 +124,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapStateVuex([
+		...mapState(useSettingsStore, [
 			'sharees',
 		]),
 		...mapState(useBoardStore, [
@@ -185,9 +185,13 @@ export default {
 			'deleteAclFromCurrentBoard',
 			'transferOwnership',
 		]),
+		...mapActions(useSettingsStore, [
+			'loadSharees',
+		]),
 		debouncedFind: debounce(async function(query) {
 			this.isSearching = true
-			await this.$store.dispatch('loadSharees', query)
+
+			await this.loadSharees(query)
 			this.isSearching = false
 		}, 300),
 		async asyncFind(query) {
