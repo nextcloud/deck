@@ -10,6 +10,7 @@ import Vue from 'vue'
 import { useStackStore } from './stack.js'
 import { useTrashbinStore } from './trashbin.js'
 import { useBoardStore } from './board.js'
+import { useSettingsStore } from './settings.js'
 
 const apiClient = new CardApi()
 
@@ -73,12 +74,12 @@ export const useCardStore = defineStore('card', {
 			})
 				.filter((card) => card.stackId === id)
 				.filter((card) => {
-					if (this.$vuex.getters.getSearchQuery === '') {
+					if (useSettingsStore().searchQuery === '') {
 						return true
 					}
 
 					let hasMatch = true
-					const matches = this.$vuex.getters.getSearchQuery.match(/(?:[^\s"]+|"[^"]*")+/g)
+					const matches = useSettingsStore().searchQuery.match(/(?:[^\s"]+|"[^"]*")+/g)
 
 					const filterOutQuotes = (q) => {
 						if (q[0] === '"' && q[q.length - 1] === '"') {

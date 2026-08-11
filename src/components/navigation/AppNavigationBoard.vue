@@ -221,6 +221,7 @@ import { showLoading, showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions } from 'pinia'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -447,7 +448,7 @@ export default {
 			this.updateDueSetting = value
 			const setting = {}
 			setting['board:' + this.board.id + ':' + key] = value
-			await this.$store.dispatch('setConfig', setting)
+			await useSettingsStore().setConfig(setting)
 			this.isDueSubmenuActive = false
 			this.updateDueSetting = null
 		},
