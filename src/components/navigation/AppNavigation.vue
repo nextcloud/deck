@@ -82,6 +82,7 @@ import IconCog from 'vue-material-design-icons/CogOutline.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'pinia'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -133,26 +134,26 @@ export default {
 		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 		cardIdBadge: {
 			get() {
-				return this.$store.getters.config('cardIdBadge')
+				return useSettingsStore().configByKey('cardIdBadge')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
+				useSettingsStore().setConfig({ cardIdBadge: newValue })
 			},
 		},
 		configCalendar: {
 			get() {
-				return this.$store.getters.config('calendar')
+				return useSettingsStore().configByKey('calendar')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { calendar: newValue })
+				useSettingsStore().setConfig({ calendar: newValue })
 			},
 		},
 	},

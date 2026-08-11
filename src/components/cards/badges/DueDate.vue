@@ -17,11 +17,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
 import { useFormatTime, useFormatRelativeTime } from '@nextcloud/vue'
+import { useSettingsStore } from '../../../stores/settings.js'
 
 const DueState = {
 	Done: 'Done',
@@ -44,9 +45,7 @@ export default {
 		},
 	},
 	computed: {
-		...mapState({
-			compactMode: state => state.compactMode,
-		}),
+		...mapState(useSettingsStore, ['compactMode']),
 		dueState() {
 			if (this.card.done) {
 				return DueState.Done
