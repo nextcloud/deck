@@ -98,7 +98,7 @@ class Version10200Date20201111150114 extends SimpleMigrationStep {
 
 		$table = $schema->getTable('deck_cards');
 		if ($table->getColumn('title')->getLength() !== 255) {
-			$table->changeColumn('title', [
+			$table->modifyColumn('title', [
 				'length' => 255
 			]);
 		}
