@@ -145,6 +145,22 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * Used by ISignedCloudFederationProvider to resolve a board from a share token.
+	 *
+	 * @param string $shareToken
+	 * @return Board
+	 * @throws DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function findByShareToken(string $shareToken): Board {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('share_token', $qb->createNamedParameter($shareToken, IQueryBuilder::PARAM_STR)));
+		return $this->findEntity($qb);
+	}
+
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
 		?string $term = null): array {
 		$useCache = ($since === -1 && $includeArchived === true && $before === null && $term === null);

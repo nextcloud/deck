@@ -14,13 +14,15 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Service\ConfigService;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Common\Exception\NotFoundException;
-use OCP\Federation\ICloudFederationProvider;
 use OCP\Federation\ICloudFederationShare;
 use OCP\Federation\ICloudIdManager;
+use OCP\Federation\ISignedCloudFederationProvider;
 use OCP\Notification\IManager as INotificationManager;
 
-class DeckFederationProvider implements ICloudFederationProvider {
+class DeckFederationProvider implements ISignedCloudFederationProvider {
 	public const PROVIDER_ID = 'deck';
 
 	public function __construct(
@@ -105,5 +107,14 @@ class DeckFederationProvider implements ICloudFederationProvider {
 
 	public function getSupportedShareTypes(): array {
 		return ['user'];
+	}
+
+	#[\Override]
+	public function getFederationIdFromSharedSecret(#[\SensitiveParameter] string $sharedSecret, array $payload): string {
+		try {
+			return $this->boardMapper->findByShareToken($sharedSecret)->getOwner();
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
+			return '';
+		}
 	}
 }
