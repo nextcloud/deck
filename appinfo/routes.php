@@ -162,7 +162,7 @@ return [
 		['name' => 'attachment_ocs#getAll', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment_ocs#create', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachment', 'verb' => 'POST'],
 		['name' => 'attachment_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'PUT'],
-		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
+		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{type}:{attachmentId}', 'verb' => 'DELETE'],
 		['name' => 'attachment_ocs#restore', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
 
 		['name' => 'Config#get', 'url' => '/api/v{apiVersion}/config', 'verb' => 'GET'],
