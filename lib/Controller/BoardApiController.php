@@ -87,6 +87,17 @@ class BoardApiController extends ApiController {
 	}
 
 	/**
+	 * Create a board attached to a team (circle).
+	 */
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[CORS]
+	public function createForTeam(string $title, string $teamId, ?string $color = null): DataResponse {
+		$board = $this->boardService->createForTeam($title, $this->userId, $color, $teamId);
+		return new DataResponse($board, HTTP::STATUS_OK);
+	}
+
+	/**
 	 * Update a board with the specified boardId, title and color, and archived state.
 	 */
 	#[NoAdminRequired]

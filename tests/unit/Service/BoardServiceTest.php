@@ -151,6 +151,7 @@ class BoardServiceTest extends TestCase {
 			$this->userManager,
 			$this->createMock(SecureRandom::class),
 			$this->createMock(ConfigService::class),
+			$this->createMock(CirclesService::class),
 			$this->userId
 		);
 
