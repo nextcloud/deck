@@ -105,4 +105,46 @@ class CirclesService {
 		}
 		return [];
 	}
+
+	/**
+	 * Replace with the next team member to own the board, with higher circles level
+	 */
+	public function findNextMemberUserId(string $circleId, ?string $excludeUserId = null): ?string {
+		if (!$this->circlesEnabled) {
+			return null;
+		}
+
+		try {
+			$circlesManager = Server::get(CirclesManager::class);
+			$circlesManager->startSuperSession();
+			$circle = $circlesManager->getCircle($circleId);
+			$circleMembers = [];
+			foreach ($circle->getMembers() as $member) {
+				if ($member->getUserType() !== Member::TYPE_USER) {
+					continue;
+				}
+				if ($member->getLevel() < Member::LEVEL_MEMBER) {
+					continue;
+				}
+				if ($excludeUserId !== null && $member->getUserId() === $excludeUserId) {
+					continue;
+				}
+				$circleMembers[] = $member;
+			}
+
+			if ($circleMembers === []) {
+				return null;
+			}
+
+			usort(
+				$circleMembers,
+				static fn (Member $a, Member $b): int => $b->getLevel() <=> $a->getLevel()
+			);
+
+			return $circleMembers[0]->getUserId();
+		} catch (Throwable $e) {
+		}
+
+		return null;
+	}
 }
