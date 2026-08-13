@@ -308,7 +308,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 	/**
 	 * Find all board with the team_id set to the given teamId
-	 * 
+	 *
 	 * @return Board[]
 	 */
 	public function findAllAttachedToTeam(string $teamId): array {
