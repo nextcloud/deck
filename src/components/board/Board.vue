@@ -189,7 +189,7 @@ export default {
 			this.localModal = cardId
 		})
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.session?.close()
 	},
 	methods: {

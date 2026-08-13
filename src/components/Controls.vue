@@ -420,7 +420,7 @@ export default {
 		subscribe('deck:board:toggle-filter-by-me', this.triggerFilterByMe)
 
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		unsubscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
 		unsubscribe('deck:board:clear-filter', this.triggerClearFilter)
