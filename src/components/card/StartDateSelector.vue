@@ -4,7 +4,9 @@
 -->
 <template>
 	<CardDetailEntry :label="t('deck', 'Assign a start date to this card…')">
-		<CalendarStart slot="icon" :size="20" />
+		<template #icon>
+			<CalendarStart :size="20" />
+		</template>
 		<template v-if="!card.done && !card.archived">
 			<NcDateTimePickerNative v-if="startdate"
 				id="card-startdate-picker"
