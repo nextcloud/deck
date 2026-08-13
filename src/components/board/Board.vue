@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'

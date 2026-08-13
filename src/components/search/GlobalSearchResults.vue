@@ -17,20 +17,13 @@
 		</header>
 		<div class="search-wrapper">
 			<template v-if="loading || filteredResults.length > 0">
-				<CardItem v-for="card in filteredResults"
-					:id="card.id"
-					:key="card.id"
-					:standalone="true" />
-				<Placeholder v-if="loading" />
-				<InfiniteLoading :identifier="searchQuery" @infinite="infiniteHandler">
-					<template #spinner>
-						<div class="icon-loading" />
-					</template>
-					<template #no-more />
-					<template #no-results>
-						{{ t('deck', 'No results found') }}
-					</template>
-				</InfiniteLoading>
+				<div v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
+					<CardItem v-for="card in filteredResults"
+						:id="card.id"
+						:key="card.id"
+						:standalone="true" />
+					<Placeholder v-if="loading" />
+				</div>
 			</template>
 			<template v-else>
 				<p>{{ t('deck', 'No results found') }}</p>
@@ -43,7 +36,7 @@
 import CardItem from '../cards/CardItem.vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import InfiniteLoading from 'vue-infinite-loading'
+import { vInfiniteScroll } from '@vueuse/components'
 import Placeholder from './Placeholder.vue'
 import { NcActions, NcActionButton, NcRichText } from '@nextcloud/vue'
 import { useCardStore } from '../../stores/card.js'
@@ -77,7 +70,10 @@ function search({ query, cursor }) {
 
 export default {
 	name: 'GlobalSearchResults',
-	components: { CardItem, InfiniteLoading, NcRichText, Placeholder, NcActions, NcActionButton },
+	components: { CardItem, NcRichText, Placeholder, NcActions, NcActionButton },
+	directives: {
+		vInfiniteScroll,
+	},
 	data() {
 		return {
 			results: [],
