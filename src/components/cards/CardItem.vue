@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
+import { vOnClickOutside } from "@vueuse/components"
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
@@ -102,7 +102,7 @@ export default {
 	name: 'CardItem',
 	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	mixins: [Color, labelStyle],
 	props: {

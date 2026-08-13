@@ -2,12 +2,11 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
+import Vue, { createApp } from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
-import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
 import { initSessions } from './sessions.js'
@@ -17,21 +16,23 @@ import { createPinia, PiniaVuePlugin } from 'pinia'
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
 
+
+const app = createApp(App)
+
 const pinia = createPinia()
-Vue.use(PiniaVuePlugin)
+app.use(router)
+app.use(pinia)
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
+app.config.globalProperties.t = translate
+app.config.globalProperties.n = translatePlural
 
-Vue.directive('click-outside', ClickOutside)
-
-Vue.directive('focus', {
+app.directive('focus', {
 	inserted(el) {
 		el.focus()
 	},
 })
 
-Vue.config.errorHandler = (err, vm, info) => {
+app.config.errorHandler = (err, vm, info) => {
 	if (err.response && err.response.data.message) {
 		const errorMessage = t('deck', 'Something went wrong')
 		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
@@ -39,31 +40,33 @@ Vue.config.errorHandler = (err, vm, info) => {
 	console.error(err)
 }
 
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
-	// eslint-disable-next-line vue/match-component-file-name
-	name: 'Deck',
-	router,
-	pinia,
-	data() {
-		return {
-			time: Date.now(),
-			interval: null,
-		}
-	},
-	created() {
-		initSessions()
+app.mount('#content')
 
-		this.interval = setInterval(() => {
-			this.time = Date.now()
-		}, 1000)
-	},
-	beforeDestroy() {
-		clearInterval(this.interval)
-	},
-	render: h => h(App),
-})
+// /* eslint-disable-next-line no-new */
+// new Vue({
+// 	el: '#content',
+// 	// eslint-disable-next-line vue/match-component-file-name
+// 	name: 'Deck',
+// 	router,
+// 	pinia,
+// 	data() {
+// 		return {
+// 			time: Date.now(),
+// 			interval: null,
+// 		}
+// 	},
+// 	created() {
+// 		initSessions()
+
+// 		this.interval = setInterval(() => {
+// 			this.time = Date.now()
+// 		}, 1000)
+// 	},
+// 	beforeDestroy() {
+// 		clearInterval(this.interval)
+// 	},
+// 	render: h => h(App),
+// })
 
 if (!window.OCA.Deck) {
 	window.OCA.Deck = {}
