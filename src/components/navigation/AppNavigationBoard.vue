@@ -26,7 +26,7 @@
 				<AccountIcon v-if="board.acl?.length > 0" />
 			</template>
 
-			<template v-if="!deleted" slot="actions">
+			<template v-if="!deleted" #actions>
 				<template v-if="!isDueSubmenuActive">
 					<NcActionButton :close-after-click="true"
 						@click="actionDetails">
@@ -534,11 +534,5 @@ export default {
 
 	.forced-active {
 		box-shadow: inset 4px 0 var(--color-primary-element);
-	}
-
-	:deep(.active) {
-		.material-design-icon svg {
-			fill: var(--color-primary-element-text);
-		}
 	}
 </style>
