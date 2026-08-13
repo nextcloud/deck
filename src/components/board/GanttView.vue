@@ -292,7 +292,7 @@ export default {
 		document.addEventListener('mouseup', this._onMouseUp)
 		this.$nextTick(() => this.renderGantt())
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		document.removeEventListener('mouseup', this._onMouseUp)
 		this.ganttInstance = null
 	},
