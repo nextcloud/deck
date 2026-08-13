@@ -31,7 +31,54 @@ if (isDevServer) {
 	}
 }
 // Workaround for https://github.com/nextcloud/webpack-vue-config/pull/432 causing problems with nextcloud-vue-collections
-webpackConfig.resolve.alias = {}
+webpackConfig.resolve.alias = {
+	...(webpackConfig.resolve.alias || {}),
+	vue$: '@vue/compat',
+}
+
+webpackConfig.plugins.push(
+	new webpack.DefinePlugin({
+		__VUE_OPTIONS_API__: true,
+		__VUE_PROD_DEVTOOLS__: false,
+		__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: buildMode !== 'production',
+	})
+)
+
+const vueRule = webpackConfig.module?.rules?.find((rule) => {
+	if (!Array.isArray(rule.use)) {
+		return false
+	}
+
+	return rule.use.some((use) => {
+		if (typeof use === 'string') {
+			return use.includes('vue-loader')
+		}
+
+		return use?.loader?.includes('vue-loader')
+	})
+})
+
+if (vueRule?.use) {
+	const vueLoaderUse = vueRule.use.find((use) => {
+		if (typeof use === 'string') {
+			return use.includes('vue-loader')
+		}
+
+		return use?.loader?.includes('vue-loader')
+	})
+
+	if (vueLoaderUse && typeof vueLoaderUse === 'object') {
+		vueLoaderUse.options = {
+			...(vueLoaderUse.options || {}),
+			compilerOptions: {
+				...(vueLoaderUse.options?.compilerOptions || {}),
+				compatConfig: {
+					MODE: 2,
+				},
+			},
+		}
+	}
+}
 
 // Allow importing frappe-gantt CSS (not exposed via package.json exports field)
 webpackConfig.resolve.alias['frappe-gantt/dist/frappe-gantt.css'] = path.resolve(__dirname, 'node_modules/frappe-gantt/dist/frappe-gantt.css')
