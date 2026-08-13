@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
+import { vOnClickOutside } from "@vueuse/components"
 import { NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'
@@ -104,7 +104,7 @@ export default {
 		IconCog,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	props: {
 		loading: {

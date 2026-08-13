@@ -82,7 +82,7 @@
 
 <script>
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
-import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
+import { NcReferenceList } from '@nextcloud/vue/components/NcRichText'
 import { getCapabilities } from '@nextcloud/capabilities'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'

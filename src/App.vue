@@ -32,7 +32,7 @@
 <script>
 import AppNavigation from './components/navigation/AppNavigation.vue'
 import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
-import { NcModal, NcContent, NcAppContent, isMobile } from '@nextcloud/vue'
+import { NcModal, NcContent, NcAppContent, useIsMobile } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
@@ -40,7 +40,6 @@ import CardMoveDialog from './CardMoveDialog.vue'
 import { useBoardStore } from './stores/board.js'
 import { useSettingsStore } from './stores/settings.js'
 import { mapState } from 'pinia'
-
 const boardApi = new BoardApi()
 
 export default {
@@ -53,7 +52,12 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
-	mixins: [isMobile],
+	setup() {
+		const isMobile = useIsMobile()
+		return {
+			isMobile,
+		}
+	},
 	provide() {
 		return {
 			boardApi,

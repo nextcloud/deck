@@ -194,7 +194,7 @@
 
 <script>
 import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
-import ClickOutside from 'vue-click-outside'
+import { vOnClickOutside } from "@vueuse/components"
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
@@ -254,7 +254,7 @@ export default {
 		BoardExportModal,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	mixins: [isTouchDevice],
 	inject: [

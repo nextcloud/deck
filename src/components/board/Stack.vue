@@ -148,9 +148,9 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
 import { mapState, mapActions } from 'pinia'
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { vOnClickOutside } from "@vueuse/components"
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
@@ -180,7 +180,7 @@ export default {
 		CheckCircleOutline,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	props: {
 		dragging: {
