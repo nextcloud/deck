@@ -66,12 +66,11 @@
 					class="board-search"
 					type="text"
 					:label="searchLabel"
-					:value="searchQuery"
+					v-model:model-value="searchQuery"
 					:title="searchHint || null"
 					:show-trailing-button="searchQuery !== ''"
 					:trailing-button-label="t('deck', 'Clear search')"
 					:aria-describedby="searchHint ? 'deck-search-hint' : null"
-					@update:value="setSearchQuery"
 					@trailing-button-click="clearSearchQuery"
 					@focus="toggleShortcutLock(true)"
 					@blur="toggleShortcutLock(false)" />
@@ -311,6 +310,9 @@ import { useBoardStore } from '../stores/board.js'
 import { useSettingsStore } from '../stores/settings.js'
 
 export default {
+	compatConfig: {
+		COMPONENT_V_MODEL: false,
+	},
 	name: 'Controls',
 	components: {
 		CreateNewCardCustomPicker,
