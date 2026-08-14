@@ -7,7 +7,8 @@ import { configureCompat } from 'vue'
 
 configureCompat({
 	MODE: 2,
-  	RENDER_FUNCTION: false
+	RENDER_FUNCTION: false,
+	COMPONENT_V_MODEL: false
 })
 
 // eslint-disable-next-line

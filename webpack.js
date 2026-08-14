@@ -74,6 +74,7 @@ if (vueRule?.use) {
 				...(vueLoaderUse.options?.compilerOptions || {}),
 				compatConfig: {
 					MODE: 2,
+					COMPONENT_V_MODEL: false,
 				},
 			},
 		}
