@@ -20,6 +20,7 @@
 				:boards="noneArchivedBoards"
 				:open-on-add-boards="true"
 				:default-open="true"
+				:sortable="true"
 				icon="icon-deck">
 				<template #icon>
 					<DeckIcon :size="16" />
