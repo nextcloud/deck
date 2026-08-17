@@ -6,7 +6,7 @@
 <template>
 	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
-		<NcAppContent :allow-swipe-navigation="false">
+		<NcAppContent :disable-swipe="true">
 			<router-view />
 		</NcAppContent>
 

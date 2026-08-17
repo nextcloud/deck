@@ -21,7 +21,7 @@
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
 				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
-					<span contenteditable="false">{{ displayTitle }}</span>
+					<span>{{ displayTitle }}</span>
 				</h4>
 				<h4 v-if="editingTitle >= 1"
 					key="title-edit"
