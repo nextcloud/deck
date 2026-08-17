@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
 import axios from '@nextcloud/axios'
 import { defineStore } from 'pinia'
 import { generateOcsUrl } from '@nextcloud/router'
@@ -67,14 +66,14 @@ export const useSettingsStore = defineStore('settings', {
 
 				if (indexExisting > -1) {
 					if (!boardStore.boards[indexExisting].settings) {
-						Vue.set(boardStore.boards[indexExisting], 'settings', {})
+						boardStore.boards[indexExisting].settings = {}
 					}
-					Vue.set(boardStore.boards[indexExisting].settings, configKey, value)
+					boardStore.boards[indexExisting].settings[configKey] = value
 				}
 				break
 			}
 			default:
-				Vue.set(this.config, key, value)
+				this.config[key] = value
 			}
 		},
 		async setConfig(config) {

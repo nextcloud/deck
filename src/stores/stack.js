@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
 import { defineStore } from 'pinia'
 import { StackApi } from '../services/StackApi.js'
 import applyOrderToArray from '../helpers/applyOrderToArray.js'
@@ -29,7 +28,7 @@ export const useStackStore = defineStore('stack', {
 		addStack(stack) {
 			const existingIndex = this.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
-				Vue.set(this.stacks, existingIndex, Object.assign({}, this.stacks[existingIndex], stack))
+				this.stacks[existingIndex] = Object.assign({}, this.stacks[existingIndex], stack)
 			} else {
 				this.stacks.push(stack)
 			}
