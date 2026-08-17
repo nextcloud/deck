@@ -150,25 +150,22 @@ const router = createRouter({
 	],
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
 	// Redirect if fullPath begins with a hash (ignore hashes later in path)
 	if (to.hash.substring(0, 2) === '#/') {
 		const path = to.fullPath.replace('/#/', '/').trimEnd('/')
-		next(path)
-		return
+		return path
 	}
 	// Redirect to the pinned default board if set and navigating to the main route
 	if (to.name === 'main') {
 		const defaultBoardId = localStorage.getItem('deck.defaultBoardId')
 		if (defaultBoardId) {
-			next({ name: 'board', params: { id: parseInt(defaultBoardId, 10) } })
-			return
+			return { name: 'board', params: { id: parseInt(defaultBoardId, 10) } }
 		} else {
-			next({ name: 'upcoming' })
-			return
+			return { name: 'upcoming' }
 		}
 	}
-	next()
+	return
 })
 
 export default router
