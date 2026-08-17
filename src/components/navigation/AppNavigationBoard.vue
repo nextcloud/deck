@@ -165,21 +165,21 @@
 			<form @submit.prevent.stop="applyEdit">
 				<NcTextField ref="inputField"
 					:disable="loading"
-					:value.sync="editTitle"
+					v-model="editTitle"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:disabled="loading"
-					native-type="button"
+					type="button"
 					:title="t('deck', 'Cancel edit')"
 					@click.stop.prevent="cancelEdit">
 					<template #icon>
 						<CloseIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton type="tertiary"
-					native-type="submit"
+				<NcButton variant="tertiary"
+					type="submit"
 					:disabled="loading"
 					:title="t('deck', 'Save board')">
 					<template #icon>
@@ -331,7 +331,6 @@ export default {
 			return this.defaultBoardId === String(this.board.id)
 		},
 	},
-	watch: {},
 	mounted() {
 		// prevent click outside event with popupItem.
 		this.popupItem = this.$el

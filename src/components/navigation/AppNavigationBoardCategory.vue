@@ -70,10 +70,13 @@ export default {
 		},
 	},
 	watch: {
-		boards(newVal, prevVal) {
-			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
-				this.opened = true
-			}
+		boards: {
+			handler(newVal, prevVal) {
+				if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
+					this.opened = true
+				}
+			},
+			deep: true,
 		},
 	},
 	mounted() {
