@@ -6,7 +6,6 @@
 import { defineStore } from 'pinia'
 import { CardApi } from '../services/CardApi.js'
 import moment from 'moment'
-import Vue from 'vue'
 import { useStackStore } from './stack.js'
 import { useTrashbinStore } from './trashbin.js'
 import { useBoardStore } from './board.js'
@@ -195,7 +194,7 @@ export const useCardStore = defineStore('card', {
 			const existingIndex = this.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				const existingCard = this.cards[existingIndex]
-				Vue.set(this.cards, existingIndex, Object.assign({}, existingCard, card))
+				this.cards[existingIndex] = Object.assign({}, existingCard, card)
 			} else {
 				this.cards.push(card)
 			}
@@ -203,7 +202,7 @@ export const useCardStore = defineStore('card', {
 		updateCard(card) {
 			const existingIndex = this.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
-				Vue.set(this.cards, existingIndex, Object.assign({}, this.cards[existingIndex], card))
+				this.cards[existingIndex] = Object.assign({}, this.cards[existingIndex], card)
 			}
 		},
 		deleteCardFromStore(card) {
@@ -230,26 +229,26 @@ export const useCardStore = defineStore('card', {
 		updateCardProperty({ card, property }) {
 			const existingIndex = this.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
-				Vue.set(this.cards[existingIndex], property, card[property])
-				Vue.set(this.cards[existingIndex], 'lastModified', Date.now() / 1000)
+				this.cards[existingIndex][property] = card[property]
+				this.cards[existingIndex].lastModified = Date.now() / 1000
 			}
 		},
 		cardSetAttachmentCount({ cardId, count }) {
 			const existingIndex = this.cards.findIndex(_card => _card.id === cardId)
 			if (existingIndex !== -1) {
-				Vue.set(this.cards[existingIndex], 'attachmentCount', count)
+				this.cards[existingIndex].attachmentCount = count
 			}
 		},
 		cardIncreaseAttachmentCount(cardId) {
 			const existingIndex = this.cards.findIndex(_card => _card.id === cardId)
 			if (existingIndex !== -1) {
-				Vue.set(this.cards[existingIndex], 'attachmentCount', this.cards[existingIndex].attachmentCount + 1)
+				this.cards[existingIndex].attachmentCount = this.cards[existingIndex].attachmentCount + 1
 			}
 		},
 		cardDecreaseAttachmentCount(cardId) {
 			const existingIndex = this.cards.findIndex(_card => _card.id === cardId)
 			if (existingIndex !== -1) {
-				Vue.set(this.cards[existingIndex], 'attachmentCount', this.cards[existingIndex].attachmentCount - 1)
+				this.cards[existingIndex].attachmentCount = this.cards[existingIndex].attachmentCount - 1
 			}
 		},
 		addNewCard(card) {
@@ -268,9 +267,9 @@ export const useCardStore = defineStore('card', {
 			for (const newCard of cards) {
 				const existingIndex = this.cards.findIndex(_card => _card.id === newCard.id)
 				if (existingIndex !== -1) {
-					Vue.set(this.cards[existingIndex], 'order', newCard.order)
-					Vue.set(this.cards[existingIndex], 'stackId', newCard.stackId)
-					Vue.set(this.cards[existingIndex], 'done', newCard.done)
+					this.cards[existingIndex].order = newCard.order
+					this.cards[existingIndex].stackId = newCard.stackId
+					this.cards[existingIndex].done = newCard.done
 				}
 			}
 		},
