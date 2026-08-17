@@ -14,12 +14,12 @@
 			</NcColorPicker>
 			<form @submit.prevent.stop="createBoard">
 				<NcTextField ref="inputField"
-					:disable="loading"
-					:value.sync="value"
+					:disabled="loading"
+					v-model="value"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:disabled="loading"
 					:title="t('deck', 'Cancel edit')"
 					@click.stop.prevent="cancelEdit">
@@ -27,8 +27,8 @@
 						<CloseIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton type="tertiary"
-					native-type="submit"
+				<NcButton variant="tertiary"
+					type="submit"
 					:disabled="loading"
 					:title="t('deck', 'Save board')">
 					<template #icon>
@@ -84,6 +84,7 @@ export default {
 			})
 		},
 		async createBoard(e) {
+			console.log(this.value)
 			this.loading = true
 			const title = this.value.trim()
 			await this.createBoardInStore({ title, color: this.color.substring(1) })
