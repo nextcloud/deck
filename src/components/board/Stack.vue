@@ -36,7 +36,7 @@
 					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
 				<form v-else-if="editing"
-					v-click-outside="cancelEdit"
+					v-v-on-click-outside="cancelEdit"
 					data-cy="editStackTitleForm"
 					@submit.prevent="finishedEdit(stack)"
 					@keyup.esc="cancelEdit">
@@ -247,9 +247,6 @@ export default {
 		}),
 		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		stopCardCreation(e) {
-			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
-			// so we have to ignore it
-			e.stopPropagation()
 			if (this.$refs.newCardInput && this.$refs.newCardInput.parentElement === e.target.parentElement) {
 				return false
 			}

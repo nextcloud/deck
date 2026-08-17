@@ -33,7 +33,7 @@
 				:sessions="presentUsers" />
 			<div v-if="board && canManage && !showArchived && !board.archived"
 				id="stack-add"
-				v-click-outside="hideAddStack">
+				v-v-on-click-outside="hideAddStack">
 				<NcActions v-if="!isAddStackVisible">
 					<NcActionButton @click.stop="showAddStack">
 						{{ t('deck', 'Add list') }}
@@ -66,7 +66,7 @@
 					class="board-search"
 					type="text"
 					:label="searchLabel"
-					v-model:model-value="searchQuery"
+					v-model="searchQuery"
 					:title="searchHint || null"
 					:show-trailing-button="searchQuery !== ''"
 					:trailing-button-label="t('deck', 'Clear search')"
@@ -289,6 +289,7 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { vOnClickOutside } from "@vueuse/components"
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal, NcTextField } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
@@ -304,7 +305,7 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { mapActions, mapState } from 'pinia'
+import { mapActions, mapState, mapWritableState } from 'pinia'
 import { useStackStore } from '../stores/stack.js'
 import { useBoardStore } from '../stores/board.js'
 import { useSettingsStore } from '../stores/settings.js'
@@ -334,6 +335,9 @@ export default {
 		NcActionSeparator,
 		TableColumnPlusAfter,
 		SessionList,
+	},
+	directives: {
+		vOnClickOutside,
 	},
 	mixins: [labelStyle],
 	props: {
@@ -386,8 +390,8 @@ export default {
 			navShown: state => state.navShown,
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
-			searchQuery: state => state.searchQuery,
 		}),
+		...mapWritableState(useSettingsStore, ['searchQuery']),
 		detailsRoute() {
 			return {
 				name: 'board.details',
@@ -406,14 +410,17 @@ export default {
 		},
 	},
 	watch: {
-		board(current, previous) {
-			if (current?.id !== previous?.id) {
-				this.clearFilter()
-			}
-			if (current) {
-				this.setPageTitle(current.title)
-			}
-		},
+		board: {
+			handler(current, previous) {
+				if (current?.id !== previous?.id) {
+					this.clearFilter()
+				}
+				if (current) {
+					this.setPageTitle(current.title)
+				}
+			},
+			deep: 1,
+		}
 	},
 	beforeMount() {
 		subscribe('deck:board:show-new-card', this.clickShowAddCardModel)

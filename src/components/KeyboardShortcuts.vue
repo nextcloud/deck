@@ -6,7 +6,7 @@
 	<!--  :style="{top:cardTop, left:cardLeft}" -->
 	<div v-if="card && selector"
 		ref="shortcutModal"
-		v-click-outside="close"
+		v-v-on-click-outside="close"
 		class="keyboard-shortcuts__modal"
 		tabindex="0"
 		@keydown.esc="close">
@@ -18,6 +18,7 @@
 </template>
 <script>
 import DueDateSelector from './card/DueDateSelector.vue'
+import { vOnClickOutside } from '@vueuse/components'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState } from 'pinia'
 import TagSelector from './card/TagSelector.vue'
@@ -33,6 +34,9 @@ export default {
 		TagSelector,
 		AssignmentSelector,
 		CardItem,
+	},
+	directives: {
+		vOnClickOutside,
 	},
 	data() {
 		return {
@@ -54,7 +58,7 @@ export default {
 		subscribe('deck:card:show-due-date-selector', this.handleShowDueDate)
 		subscribe('deck:card:show-label-selector', this.handleShowLabel)
 	},
-	destroyed() {
+	unmounted() {
 		document.removeEventListener('keydown', this.onKeydown)
 		unsubscribe('deck:card:show-assignment-selector', this.handleShowAssignemnt)
 		unsubscribe('deck:card:show-due-date-selector', this.handleShowDueDate)

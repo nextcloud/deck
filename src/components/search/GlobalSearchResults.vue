@@ -17,7 +17,7 @@
 		</header>
 		<div class="search-wrapper">
 			<template v-if="loading || filteredResults.length > 0">
-				<div v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
+				<div v-v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
 					<CardItem v-for="card in filteredResults"
 						:id="card.id"
 						:key="card.id"

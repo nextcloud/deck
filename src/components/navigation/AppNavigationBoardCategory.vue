@@ -21,6 +21,9 @@ import AppNavigationBoard from './AppNavigationBoard.vue'
 import { NcAppNavigationItem } from '@nextcloud/vue'
 
 export default {
+	compatConfig: {
+		WATCH_ARRAY: false,
+	},
 	name: 'AppNavigationBoardCategory',
 	components: {
 		NcAppNavigationItem,
@@ -76,7 +79,7 @@ export default {
 					this.opened = true
 				}
 			},
-			deep: true,
+			deep: 1,
 		},
 	},
 	mounted() {
