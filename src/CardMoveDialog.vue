@@ -76,7 +76,7 @@ export default {
 	mounted() {
 		subscribe('deck:card:show-move-dialog', this.openModal)
 	},
-	destroyed() {
+	unmounted() {
 		unsubscribe('deck:card:show-move-dialog', this.openModal)
 	},
 	methods: {
