@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcAppSidebar v-if="currentBoard && currentCard"
+	<NcAppSidebar v-if="boardStore.currentBoard && currentCard"
 		ref="cardSidebar"
 		:active="tabId"
 		:name="displayTitle"
@@ -24,10 +24,10 @@
 			</template>
 		</template>
 		<template #secondary-actions>
-			<NcActionButton v-if="cardDetailsInModal && isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
+			<NcActionButton v-if="cardDetailsInModal && settingsStore.isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
 				{{ t('deck', 'Open in sidebar view') }}
 			</NcActionButton>
-			<NcActionButton v-else-if="isFullApp" icon="icon-external" @click.stop="showModal()">
+			<NcActionButton v-else-if="settingsStore.isFullApp" icon="icon-external" @click.stop="showModal()">
 				{{ t('deck', 'Open in bigger view') }}
 			</NcActionButton>
 
@@ -80,8 +80,8 @@
 	</NcAppSidebar>
 </template>
 
-<script>
-import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
+<script setup>
+import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble, useFormatRelativeTime, useFormatTime } from '@nextcloud/vue'
 import { NcReferenceList } from '@nextcloud/vue/components/NcRichText'
 import { getCapabilities } from '@nextcloud/capabilities'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
@@ -104,160 +104,147 @@ import { mapActions, mapState } from 'pinia'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const capabilities = getCapabilities()
 
-export default {
-	name: 'CardSidebar',
-	components: {
-		NcAppSidebar,
-		NcAppSidebarTab,
-		NcActionButton,
-		NcReferenceList,
-		CardSidebarTabAttachments,
-		CardSidebarTabComments,
-		CardSidebarTabActivity,
-		CardSidebarTabDetails,
-		ActivityIcon,
-		AttachmentIcon,
-		CommentIcon,
-		CommentOutlineIcon,
-		HomeIcon,
-		HomeOutlineIcon,
-		CardMenuEntries,
-		NcUserBubble,
+const router = useRouter()
+
+const { id, tabId, tabQuery } = defineProps({
+	id: {
+		type: Number,
+		required: true,
 	},
-	mixins: [relativeDate],
-	props: {
-		id: {
-			type: Number,
-			required: true,
-		},
-		tabId: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		tabQuery: {
-			type: String,
-			required: false,
-			default: null,
-		},
+	tabId: {
+		type: String,
+		required: false,
+		default: null,
 	},
-	data() {
-		return {
-			isEditingTitle: false,
-			titleEditing: '',
-			hasActivity: capabilities && capabilities.activity,
-			locale: getLocale(),
-			activeTabId: this.tabId || 'details',
+	tabQuery: {
+		type: String,
+		required: false,
+		default: null,
+	},
+})
+
+const emit = defineEmits(['close'])
+
+const settingsStore = useSettingsStore()
+const cardStore = useCardStore()
+const boardStore = useBoardStore()
+
+const isEditingTitle = ref(false)
+const titleEditing = ref('')
+const hasActivity = ref(capabilities && capabilities.activity)
+const locale = ref(getLocale())
+const activeTabId = ref(tabId || 'details')
+
+const cardSidebar = useTemplateRef('cardSidebar')
+
+const currentCard = computed(() => cardStore.cardById(id))
+
+const cardOwnerDisplayName = computed(() => {
+	return currentCard.value.owner?.displayname ?? currentCard.value.owner?.uid ?? currentCard.value.owner ?? null
+})
+const cardOwner = computed(() => {
+	const owner = currentCard.value.owner
+	if (!owner) return null
+	return {
+		uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
+		displayName: cardOwnerDisplayName.value,
+	}
+})
+const modifiedTimestamp = computed(() => currentCard.value?.lastModified ? currentCard.value.lastModified * 1000 : null)
+const createdTimestamp = computed(() => currentCard.value?.createdAt ? currentCard.value.createdAt * 1000 : null)
+
+const modifiedDate = useFormatRelativeTime(modifiedTimestamp)
+const createdDate = useFormatRelativeTime(createdTimestamp)
+const modifiedDateAbsolute = useFormatTime(modifiedTimestamp)
+const createdDateAbsolute = useFormatTime(createdTimestamp)
+
+const subtitle = computed(() => t('deck', 'Modified: {modifiedDate} ⸱ Created: {createdDate}', {
+	modifiedDate: modifiedDate.value,
+	createdDate: createdDate.value,
+}))
+
+const subtitleTooltip = computed(() => {
+	const owner = cardOwnerDisplayName.value
+	if (owner) {
+		return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}\nCreated by: {owner}', {
+			modifiedDate: modifiedDateAbsolute.value,
+			createdDate: createdDateAbsolute.value,
+			owner,
+		})
+	}
+
+	return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}', {
+		modifiedDate: modifiedDate.value,
+		createdDate: createdDate.value,
+	})
+})
+
+const cardDetailsInModal = computed({
+	get() {
+		return settingsStore.configByKey('cardDetailsInModal')
+	},
+	set(newValue) {
+		settingsStore.setConfig({ cardDetailsInModal: newValue })
+	},
+})
+
+const displayTitle = computed(() => {
+	if (isEditingTitle.value) {
+		return titleEditing.value
+	}
+	const reference = currentCard.value.referenceData
+	return reference ? reference.openGraphObject.name : currentCard.value.title
+})
+
+watch(() => currentCard.value?.title, (newTitle) => {
+	titleEditing.value = newTitle
+})
+
+watch(() => currentCard.value, (newCard, oldCard) => {
+	if (newCard?.id === oldCard?.id) return
+	focusHeader()
+})
+
+function focusHeader() {
+	nextTick(() => {
+		const header = cardSidebar.value?.$el.querySelector('.app-sidebar-header__mainname')
+		if (header) {
+			header.focus()
 		}
-	},
-	computed: {
-		...mapState(useCardStore, ['cardById']),
-		...mapState(useBoardStore, ['canEdit', 'assignables', 'currentBoard']),
-		...mapState(useSettingsStore, {
-			isFullApp: (state) => state.isFullApp,
-			hasCardSaveError: (state) => state.hasCardSaveError,
-		}),
-		currentCard() {
-			return this.cardById(this.id)
-		},
-		cardOwnerDisplayName() {
-			return this.currentCard.owner?.displayname ?? this.currentCard.owner?.uid ?? this.currentCard.owner ?? null
-		},
-		cardOwner() {
-			const owner = this.currentCard.owner
-			if (!owner) return null
-			return {
-				uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
-				displayName: this.cardOwnerDisplayName,
-			}
-		},
-		subtitle() {
-			const modifiedDate = this.relativeDate(this.currentCard.lastModified * 1000)
-			const createdDate = this.relativeDate(this.currentCard.createdAt * 1000)
-			return t('deck', 'Modified: {modifiedDate} ⸱ Created: {createdDate}', { modifiedDate, createdDate })
-		},
-		subtitleTooltip() {
-			const modifiedDate = this.formatDate(this.currentCard.lastModified)
-			const createdDate = this.formatDate(this.currentCard.createdAt)
-			const owner = this.cardOwnerDisplayName
-			if (owner) {
-				return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}\nCreated by: {owner}', { modifiedDate, createdDate, owner })
-			}
-			return t('deck', 'Modified: {modifiedDate}\nCreated: {createdDate}', { modifiedDate, createdDate })
-		},
-		cardDetailsInModal: {
-			get() {
-				return useSettingsStore().configByKey('cardDetailsInModal')
-			},
-			set(newValue) {
-				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
-			},
-		},
-		displayTitle: {
-			get() {
-				if (this.isEditingTitle) {
-					return this.titleEditing
-				}
-				const reference = this.currentCard.referenceData
-				return reference ? reference.openGraphObject.name : this.currentCard.title
-			},
-		},
-	},
-	watch: {
-		currentCard(newCard, oldCard) {
-			if (newCard?.id === oldCard?.id) return
-			this.focusHeader()
-		},
-		'currentCard.title': {
-			immediate: true,
-			handler(newTitle) {
-				this.titleEditing = newTitle
-			},
-		},
-	},
-	methods: {
-		...mapActions(useCardStore, {
-			updateCardTitleInStore: 'updateCardTitle',
-		}),
-		focusHeader() {
-			this.$nextTick(() => {
-				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
-			})
-		},
-		handleSubmitTitle() {
-			if (this.titleEditing.trim() === '') {
-				showError(t('deck', 'The title cannot be empty.'))
-				return
-			}
-			this.isEditingTitle = false
-			this.updateCardTitleInStore({
-				...this.currentCard,
-				title: this.titleEditing,
-			})
-		},
+	})
+}
 
-		closeSidebar() {
-			if (this.hasCardSaveError) {
-				showWarning(t('deck', 'Cannot close unsaved card!'))
-				return
-			}
-			this.$router?.push({ name: 'board' })
-			this.$emit('close')
-		},
+function handleSubmitTitle() {
+	if (titleEditing.value.trim() === '') {
+		showError(t('deck', 'The title cannot be empty.'))
+		return
+	}
+	isEditingTitle.value = false
+	cardStore.updateCardTitleInStore({
+		...currentCard.value,
+		title: titleEditing.value,
+	})
+}
 
-		showModal() {
-			useSettingsStore().setConfig({ cardDetailsInModal: true })
-		},
-		closeModal() {
-			useSettingsStore().setConfig({ cardDetailsInModal: false })
-		},
-		formatDate(timestamp) {
-			return moment.unix(timestamp).locale(this.locale).format('LLLL')
-		},
-	},
+function closeSidebar() {
+	if (cardStore.hasCardSaveError) {
+		showWarning(t('deck', 'Cannot close unsaved card!'))
+		return
+	}
+	router.push({ name: 'board' })
+	emit('close')
+}
+
+function showModal() {
+	settingsStore.setConfig({ cardDetailsInModal: true })
+}
+function closeModal() {
+	settingsStore.setConfig({ cardDetailsInModal: false })
 }
 </script>
 
