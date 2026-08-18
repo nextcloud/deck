@@ -419,7 +419,7 @@ export default {
 					this.setPageTitle(current.title)
 				}
 			},
-			deep: 1,
+			deep: true,
 		}
 	},
 	beforeMount() {
