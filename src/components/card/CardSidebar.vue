@@ -208,7 +208,7 @@ watch(() => currentCard.value?.title, (newTitle) => {
 watch(() => currentCard.value, (newCard, oldCard) => {
 	if (newCard?.id === oldCard?.id) return
 	focusHeader()
-})
+}, {deep: true})
 
 function focusHeader() {
 	nextTick(() => {
