@@ -4,7 +4,6 @@
  */
 
 import { addCommands } from '@nextcloud/cypress'
-import axios from '@nextcloud/axios'
 
 addCommands()
 
@@ -116,9 +115,16 @@ Cypress.Commands.add('shareBoardWithUi', (query, userId=query) => {
 })
 
 Cypress.Commands.add('setUserEmail', (user, value) => {
-	Cypress.log()
-	return axios.put(
-		`${url}/ocs/v2.php/cloud/users/${user.userId}`,
-		{ key: 'email', value },
-	)
+	return cy.request({
+		method: 'PUT',
+		url: `${url}/ocs/v2.php/cloud/users/${user.userId}`,
+		auth: {
+			user: user.userId,
+			password: user.password,
+		},
+		headers: {
+			'OCS-APIRequest': 'true',
+		},
+		body: { key: 'email', value },
+	})
 })
