@@ -33,7 +33,6 @@ if (isDevServer) {
 // Workaround for https://github.com/nextcloud/webpack-vue-config/pull/432 causing problems with nextcloud-vue-collections
 webpackConfig.resolve.alias = {
 	...(webpackConfig.resolve.alias || {}),
-	vue$: '@vue/compat',
 }
 
 webpackConfig.plugins.push(
@@ -72,10 +71,6 @@ if (vueRule?.use) {
 			...(vueLoaderUse.options || {}),
 			compilerOptions: {
 				...(vueLoaderUse.options?.compilerOptions || {}),
-				compatConfig: {
-					MODE: 2,
-					COMPONENT_V_MODEL: false,
-				},
 			},
 		}
 	}

@@ -3,14 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { generateFilePath } from '@nextcloud/router'
-import { configureCompat } from 'vue'
-
-configureCompat({
-	MODE: 2,
-	RENDER_FUNCTION: false,
-	COMPONENT_V_MODEL: false,
-	WATCH_ARRAY: false,
-})
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
