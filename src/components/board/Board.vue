@@ -96,6 +96,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import Stack from './Stack.vue'
 import GanttView from './GanttView.vue'
 import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
@@ -185,16 +186,18 @@ export default {
 	created() {
 		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
-		this.$root.$on('open-card', (cardId) => {
-			this.localModal = cardId
-		})
+		subscribe('deck:card:open-modal', this.openCardModal)
 	},
 	beforeUnmount() {
 		this.session?.close()
+		unsubscribe('deck:card:open-modal', this.openCardModal)
 	},
 	methods: {
 		...mapActions(useBoardStore, ['loadBoardById', 'toggleShowArchived']),
 		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
+		openCardModal(cardId) {
+			this.localModal = cardId
+		},
 		async fetchData() {
 			this.loading = true
 			try {
