@@ -312,9 +312,6 @@ import { useBoardStore } from '../stores/board.js'
 import { useSettingsStore } from '../stores/settings.js'
 
 export default {
-	compatConfig: {
-		COMPONENT_V_MODEL: false,
-	},
 	name: 'Controls',
 	components: {
 		CreateNewCardCustomPicker,
