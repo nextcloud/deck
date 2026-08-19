@@ -164,8 +164,8 @@
 			</NcColorPicker>
 			<form @submit.prevent.stop="applyEdit">
 				<NcTextField ref="inputField"
-					:disable="loading"
 					v-model="editTitle"
+					:disable="loading"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
@@ -194,7 +194,7 @@
 
 <script>
 import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
-import { vOnClickOutside } from "@vueuse/components"
+import { vOnClickOutside } from '@vueuse/components'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'

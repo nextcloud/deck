@@ -50,7 +50,6 @@ import axios from '@nextcloud/axios'
 
 export default {
 	name: 'CardSelector',
-	emits: ['close', 'select'],
 	components: {
 		NcModal,
 		NcSelect,
@@ -65,6 +64,7 @@ export default {
 			default: t('deck', 'Link to card'),
 		},
 	},
+	emits: ['close', 'select'],
 	data() {
 		return {
 			boards: [],

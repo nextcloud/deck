@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { vOnClickOutside } from "@vueuse/components"
+import { vOnClickOutside } from '@vueuse/components'
 import { NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'

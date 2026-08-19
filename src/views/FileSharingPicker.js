@@ -17,7 +17,6 @@ export default {
 			const body = document.getElementById('body-user')
 			body.append(container)
 			const CardSelector = () => import('./../CardSelector.vue')
-			let app
 
 			const cleanup = () => {
 				if (app) {
@@ -46,7 +45,7 @@ export default {
 				}
 			}
 
-			app = createApp({
+			const app = createApp({
 				render() {
 					return h(CardSelector, {
 						title: t('deck', 'Share {file} with a Deck card', { file: decodeURIComponent(self.fileInfo.name) }),

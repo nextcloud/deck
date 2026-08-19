@@ -88,8 +88,6 @@ import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
 import CardSidebarTabComments from './CardSidebarTabComments.vue'
 import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
-import relativeDate from '../../mixins/relativeDate.js'
-import moment from '@nextcloud/moment'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import HomeIcon from 'vue-material-design-icons/Home.vue'
 import HomeOutlineIcon from 'vue-material-design-icons/HomeOutline.vue'
@@ -98,9 +96,7 @@ import CommentOutlineIcon from 'vue-material-design-icons/CommentOutline.vue'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import { showError, showWarning } from '@nextcloud/dialogs'
-import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/NcActionsCardMenuEntries.vue'
-import { mapActions, mapState } from 'pinia'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
@@ -137,7 +133,6 @@ const boardStore = useBoardStore()
 const isEditingTitle = ref(false)
 const titleEditing = ref('')
 const hasActivity = ref(capabilities && capabilities.activity)
-const locale = ref(getLocale())
 const activeTabId = ref(tabId || 'details')
 
 const cardSidebar = useTemplateRef('cardSidebar')
@@ -208,8 +203,11 @@ watch(() => currentCard.value?.title, (newTitle) => {
 watch(() => currentCard.value, (newCard, oldCard) => {
 	if (newCard?.id === oldCard?.id) return
 	focusHeader()
-}, {deep: true})
+}, { deep: true })
 
+/**
+ *
+ */
 function focusHeader() {
 	nextTick(() => {
 		const header = cardSidebar.value?.$el.querySelector('.app-sidebar-header__mainname')
@@ -219,6 +217,9 @@ function focusHeader() {
 	})
 }
 
+/**
+ *
+ */
 function handleSubmitTitle() {
 	if (titleEditing.value.trim() === '') {
 		showError(t('deck', 'The title cannot be empty.'))
@@ -231,6 +232,9 @@ function handleSubmitTitle() {
 	})
 }
 
+/**
+ *
+ */
 function closeSidebar() {
 	if (cardStore.hasCardSaveError) {
 		showWarning(t('deck', 'Cannot close unsaved card!'))
@@ -240,9 +244,15 @@ function closeSidebar() {
 	emit('close')
 }
 
+/**
+ *
+ */
 function showModal() {
 	settingsStore.setConfig({ cardDetailsInModal: true })
 }
+/**
+ *
+ */
 function closeModal() {
 	settingsStore.setConfig({ cardDetailsInModal: false })
 }

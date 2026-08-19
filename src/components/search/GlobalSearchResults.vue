@@ -16,9 +16,12 @@
 			</NcActions>
 		</header>
 		<template v-if="loading || filteredResults.length > 0">
-			<div class="search-wrapper"
-				v-v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
-				<CardItem v-for="card in filteredResults" :id="card.id" :key="card.id" :standalone="true" />
+			<div v-v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]"
+				class="search-wrapper">
+				<CardItem v-for="card in filteredResults"
+					:id="card.id"
+					:key="card.id"
+					:standalone="true" />
 				<Placeholder v-if="loading" />
 			</div>
 		</template>

@@ -17,7 +17,6 @@
 </template>
 
 <script setup>
-import { mapState } from 'pinia'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'

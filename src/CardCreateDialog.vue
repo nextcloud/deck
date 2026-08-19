@@ -20,7 +20,6 @@ import CreateNewCardCustomPicker from './views/CreateNewCardCustomPicker.vue'
 
 export default {
 	name: 'CardCreateDialog',
-	emits: ['close', 'select'],
 	components: {
 		NcModal,
 		CreateNewCardCustomPicker,
@@ -35,6 +34,7 @@ export default {
 			default: '',
 		},
 	},
+	emits: ['close', 'select'],
 	methods: {
 		close() {
 			this.$emit('close')

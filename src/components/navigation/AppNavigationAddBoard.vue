@@ -14,8 +14,8 @@
 			</NcColorPicker>
 			<form @submit.prevent.stop="createBoard">
 				<NcTextField ref="inputField"
-					:disabled="loading"
 					v-model="value"
+					:disabled="loading"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
@@ -84,7 +84,6 @@ export default {
 			})
 		},
 		async createBoard(e) {
-			console.log(this.value)
 			this.loading = true
 			const title = this.value.trim()
 			await this.createBoardInStore({ title, color: this.color.substring(1) })
