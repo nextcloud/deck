@@ -81,17 +81,16 @@
 			<div v-if="board" class="board-action-buttons">
 				<div class="board-action-buttons__filter">
 					<NcPopover :placement="'bottom-end'"
+						no-focus-trap
 						:aria-label="t('deck', 'Active filters')"
-						:name="t('deck', 'Active filters')"
-						@show="filterVisible=true"
-						@hide="filterVisible=false">
-						<!-- We cannot use NcActions here are the popover trigger does not update on reactive icons -->
+						:name="t('deck', 'Active filters')">
+						<!-- We cannot use NcActions here as we can't style NcActionCheckbox labels dynamically -->
 						<template #trigger>
 							<NcButton ref="filterPopover"
 								:title="t('deck', 'Apply filter')"
 								:aria-label="t('deck', 'Apply filter')"
 								class="filter-button"
-								:type="isFilterActive ? 'primary' : 'tertiary'">
+								:variant="isFilterActive ? 'primary' : 'tertiary'">
 								<template #icon>
 									<FilterIcon v-if="isFilterActive" :size="20" decorative />
 									<FilterOffIcon v-else :size="20" decorative />
@@ -99,135 +98,137 @@
 							</NcButton>
 						</template>
 
-						<div v-if="filterVisible" class="filter">
-							<h3>{{ t('deck', 'Filter by tag') }}</h3>
-							<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
-								<input :id="label.id"
-									v-model="filter.tags"
-									type="checkbox"
-									class="checkbox"
-									:value="label.id"
-									@change="setFilter">
-								<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
-							</div>
+						<template #default>
+							<div class="filter">
+								<h3>{{ t('deck', 'Filter by tag') }}</h3>
+								<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
+									<input :id="label.id"
+										v-model="filter.tags"
+										type="checkbox"
+										class="checkbox"
+										:value="label.id"
+										@change="setFilter">
+									<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
+								</div>
 
-							<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
-							<div class="filter--item">
-								<input id="unassigned"
-									v-model="filter.unassigned"
-									type="checkbox"
-									class="checkbox"
-									value="unassigned"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
-							</div>
-							<div v-for="user in board.users" :key="user.uid" class="filter--item">
-								<input :id="user.uid"
-									v-model="filter.users"
-									type="checkbox"
-									class="checkbox"
-									:value="user.uid"
-									@change="setFilter">
-								<label :for="user.uid"><NcAvatar :user="user.uid"
-									:size="24"
-									:disable-menu="true"
-									:hide-status="true" /> {{ user.displayname }}</label>
-							</div>
+								<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+								<div class="filter--item">
+									<input id="unassigned"
+										v-model="filter.unassigned"
+										type="checkbox"
+										class="checkbox"
+										value="unassigned"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
+								</div>
+								<div v-for="user in board.users" :key="user.uid" class="filter--item">
+									<input :id="user.uid"
+										v-model="filter.users"
+										type="checkbox"
+										class="checkbox"
+										:value="user.uid"
+										@change="setFilter">
+									<label :for="user.uid"><NcAvatar :user="user.uid"
+										:size="24"
+										:disable-menu="true"
+										:hide-status="true" /> {{ user.displayname }}</label>
+								</div>
 
-							<h3>{{ t('deck', 'Filter by status') }}</h3>
-							<div class="filter--item">
-								<input id="filter-option-both"
-									v-model="filter.completed"
-									type="radio"
-									class="radio"
-									value="both"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="filter-option-both">{{ t('deck', 'Open and completed') }}</label>
-							</div>
-							<div class="filter--item">
-								<input id="filter-option-open"
-									v-model="filter.completed"
-									type="radio"
-									class="radio"
-									value="open"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="filter-option-open">{{ t('deck', 'Open') }}</label>
-							</div>
+								<h3>{{ t('deck', 'Filter by status') }}</h3>
+								<div class="filter--item">
+									<input id="filter-option-both"
+										v-model="filter.completed"
+										type="radio"
+										class="radio"
+										value="both"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="filter-option-both">{{ t('deck', 'Open and completed') }}</label>
+								</div>
+								<div class="filter--item">
+									<input id="filter-option-open"
+										v-model="filter.completed"
+										type="radio"
+										class="radio"
+										value="open"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="filter-option-open">{{ t('deck', 'Open') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="filter-option-completed"
-									v-model="filter.completed"
-									type="radio"
-									class="radio"
-									value="completed"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="filter-option-completed">{{ t('deck', 'Completed') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="filter-option-completed"
+										v-model="filter.completed"
+										type="radio"
+										class="radio"
+										value="completed"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="filter-option-completed">{{ t('deck', 'Completed') }}</label>
+								</div>
 
-							<h3>{{ t('deck', 'Filter by due date') }}</h3>
-							<div class="filter--item">
-								<input id="overdue"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="overdue"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="overdue">{{ t('deck', 'Overdue') }}</label>
-							</div>
+								<h3>{{ t('deck', 'Filter by due date') }}</h3>
+								<div class="filter--item">
+									<input id="overdue"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="overdue"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="overdue">{{ t('deck', 'Overdue') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="dueToday"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="dueToday"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="dueToday">{{ t('deck', 'Next 24 hours') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="dueToday"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="dueToday"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="dueToday">{{ t('deck', 'Next 24 hours') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="dueWeek"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="dueWeek"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="dueWeek"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="dueWeek"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="dueMonth"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="dueMonth"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="dueMonth"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="dueMonth"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="noDue"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="noDue"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="noDue">{{ t('deck', 'No due date') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="noDue"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="noDue"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="noDue">{{ t('deck', 'No due date') }}</label>
+								</div>
 
-							<NcButton :disabled="!isFilterActive" :wide="true" @click="clearFilter">
-								{{ t('deck', 'Clear filter') }}
-							</NcButton>
-						</div>
+								<NcButton :disabled="!isFilterActive" :wide="true" @click="clearFilter">
+									{{ t('deck', 'Clear filter') }}
+								</NcButton>
+							</div>
+						</template>
 					</NcPopover>
 				</div>
 
@@ -369,7 +370,6 @@ export default {
 		return {
 			newStackTitle: '',
 			stack: '',
-			filterVisible: false,
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
@@ -680,13 +680,6 @@ export default {
 		border-radius: 50%;
 		width: var(--default-clickable-area);
 		height: var(--default-clickable-area);
-
-		&[data-popper-shown] {
-			background-color: var(--color-background-hover);
-			&.button-vue--vue-primary {
-				background-color: var(--color-primary-element);
-			}
-		}
 	}
 </style>
 <style lang="scss">
