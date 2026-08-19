@@ -86,6 +86,7 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { emit } from '@nextcloud/event-bus'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
@@ -256,7 +257,7 @@ export default {
 				return
 			}
 
-			this.$root.$emit('open-card', this.card.id)
+			emit('deck:card:open-modal', this.card.id)
 		},
 		triggerEditTitle() {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING

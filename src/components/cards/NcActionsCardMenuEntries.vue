@@ -193,7 +193,7 @@ export default {
 				return
 			}
 
-			this.$root.$emit('open-card', this.card.id)
+			emit('deck:card:open-modal', this.card.id)
 		},
 		editTitle() {
 			this.$emit('edit-title', this.card.id)
