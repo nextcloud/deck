@@ -21,7 +21,7 @@
 <script>
 import { NcActions, NcButton } from '@nextcloud/vue'
 import LinkIcon from 'vue-material-design-icons/Link.vue'
-import CardMenuEntries from './CardMenuEntries.vue'
+import CardMenuEntries from './NcActionsCardMenuEntries.vue'
 
 export default {
 	name: 'CardMenu',
