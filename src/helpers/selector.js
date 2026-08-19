@@ -2,25 +2,58 @@
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
+import { createApp, defineAsyncComponent, h } from 'vue'
 
 const buildSelector = (selector, propsData = {}) => {
 	return new Promise((resolve, reject) => {
 		const container = document.createElement('div')
 		document.getElementById('body-user').append(container)
-		const ComponentVM = new Vue({
-			render: (h) => h(selector, propsData),
-		}).$mount(container)
-		ComponentVM.$root.$on('close', () => {
-			ComponentVM.$el.remove()
-			ComponentVM.$destroy()
+
+		const component = typeof selector === 'function' ? defineAsyncComponent(selector) : selector
+		const selectorProps = propsData?.props ?? propsData
+		let settled = false
+		let app
+
+		const cleanup = () => {
+			if (app) {
+				app.unmount()
+			}
+			container.remove()
+		}
+
+		const onClose = () => {
+			if (settled) {
+				return
+			}
+			settled = true
+			cleanup()
 			reject(new Error('Selection canceled'))
-		})
-		ComponentVM.$root.$on('select', (id) => {
-			ComponentVM.$el.remove()
-			ComponentVM.$destroy()
+		}
+
+		const onSelect = (id) => {
+			if (settled) {
+				return
+			}
+			settled = true
+			cleanup()
 			resolve(id)
+		}
+
+		app = createApp({
+			render() {
+				return h(component, {
+					...selectorProps,
+					onClose,
+					onSelect,
+				})
+			},
 		})
+		// app.config.globalProperties.t = t
+		// app.config.globalProperties.n = n
+		// app.config.globalProperties.OC = OC
+		// app.config.globalProperties.OCA = OCA
+
+		app.mount(container)
 	})
 }
 

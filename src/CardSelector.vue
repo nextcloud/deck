@@ -50,6 +50,7 @@ import axios from '@nextcloud/axios'
 
 export default {
 	name: 'CardSelector',
+	emits: ['close', 'select'],
 	components: {
 		NcModal,
 		NcSelect,
@@ -102,10 +103,10 @@ export default {
 
 		},
 		close() {
-			this.$root.$emit('close')
+			this.$emit('close')
 		},
 		select() {
-			this.$root.$emit('select', this.selectedCard.id)
+			this.$emit('select', this.selectedCard.id)
 
 		},
 	},
