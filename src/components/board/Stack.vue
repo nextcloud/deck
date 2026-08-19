@@ -356,7 +356,7 @@ export default {
 
 	@use 'sass:math';
 
-	@import './../../css/variables.scss';
+	@use './../../css/variables.scss' as *;
 
 	.stack {
 		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));

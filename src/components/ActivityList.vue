@@ -6,7 +6,7 @@
 <template>
 	<div class="activity-list">
 		<div v-if="isLoading" class="icon icon-loading" />
-		<div v-infinite-scroll="[loadMore, { canLoadMore: canLoadMore }]">
+		<div v-v-infinite-scroll="[loadMore, { canLoadMore: canLoadMore }]">
 			<ActivityEntry v-for="activity in activities"
 				:key="activity.activity_id"
 				:activity="activity" />

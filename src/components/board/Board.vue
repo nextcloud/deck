@@ -278,8 +278,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import '../../css/animations.scss';
-	@import '../../css/variables.scss';
+	@use '../../css/animations.scss';
+	@use '../../css/variables.scss' as *;
 
 	form {
 		text-align: center;

@@ -214,7 +214,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import '../../css/comments.scss';
+	@use '../../css/comments.scss';
 
 	.reply {
 		margin: 0 0 0 var(--default-clickable-area);

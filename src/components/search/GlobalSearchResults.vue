@@ -17,7 +17,7 @@
 		</header>
 		<template v-if="loading || filteredResults.length > 0">
 			<div class="search-wrapper"
-				v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
+				v-v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
 				<CardItem v-for="card in filteredResults" :id="card.id" :key="card.id" :standalone="true" />
 				<Placeholder v-if="loading" />
 			</div>
@@ -158,7 +158,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables.scss';
+@use '../../css/variables.scss' as *;
 
 .global-search {
 	width: 100%;

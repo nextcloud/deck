@@ -337,7 +337,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../css/selector.scss';
+@use '../css/selector.scss';
 
 .modal-scroller {
 	overflow: scroll;
