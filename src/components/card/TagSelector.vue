@@ -92,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/selector.scss';
+@use '../../css/selector.scss';
 
 .v-select:deep(.vs__selected) {
 	padding-inline-start: 0 !important;

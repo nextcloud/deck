@@ -157,7 +157,7 @@ export default {
 </style>
 
 <style lang="scss">
-	@import '../css/print.scss';
+	@use '../css/print.scss';
 
 	.icon-activity {
 		background-image: url(../img/activity-dark.svg);

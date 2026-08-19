@@ -353,8 +353,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/animations.scss';
-	@import './../../css/variables.scss';
+	@use './../../css/animations.scss';
+	@use './../../css/variables.scss' as *;
+	@use './../../css/labels.scss' as labels;
 
 	@mixin dark-card {
 		border: 2px solid var(--color-border-dark);
@@ -428,8 +429,7 @@ export default {
 			}
 		}
 
-		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/labels.scss';
+		@include labels.render-labels;
 
 		.card-controls {
 			display: flex;
