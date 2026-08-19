@@ -45,6 +45,8 @@
     "@nextcloud/password-confirmation": "^6.1.0",
     "@nextcloud/router": "^3.0.1",
     "@nextcloud/vue": "^9.9.0",
+    "@vueuse/components": "^14.4.0",
+    "@vueuse/core": "^14.4.0",
     "blueimp-md5": "^2.19.0",
     "chroma-js": "^3.2.0",
     "dompurify": "^3.4.13",

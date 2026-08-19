@@ -30,10 +30,10 @@ import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'BoardSelector',
-	emits: ['close', 'select'],
 	components: {
 		NcModal,
 	},
+	emits: ['close', 'select'],
 	data() {
 		return {
 			filter: '',

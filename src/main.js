@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue, { createApp } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
@@ -11,11 +11,10 @@ import './shared-init.js'
 import './models/index.js'
 import { initSessions } from './sessions.js'
 import { useActionsStore } from './stores/actions.js'
-import { createPinia, PiniaVuePlugin } from 'pinia'
+import { createPinia } from 'pinia'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
-
 
 const app = createApp(App)
 
@@ -40,33 +39,9 @@ app.config.errorHandler = (err, vm, info) => {
 	console.error(err)
 }
 
+initSessions()
+
 app.mount('#content')
-
-// /* eslint-disable-next-line no-new */
-// new Vue({
-// 	el: '#content',
-// 	// eslint-disable-next-line vue/match-component-file-name
-// 	name: 'Deck',
-// 	router,
-// 	pinia,
-// 	data() {
-// 		return {
-// 			time: Date.now(),
-// 			interval: null,
-// 		}
-// 	},
-// 	created() {
-// 		initSessions()
-
-// 		this.interval = setInterval(() => {
-// 			this.time = Date.now()
-// 		}, 1000)
-// 	},
-// 	beforeDestroy() {
-// 		clearInterval(this.interval)
-// 	},
-// 	render: h => h(App),
-// })
 
 if (!window.OCA.Deck) {
 	window.OCA.Deck = {}

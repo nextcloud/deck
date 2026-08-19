@@ -133,7 +133,7 @@
 
 <script>
 import { mapState, mapActions } from 'pinia'
-import { vOnClickOutside } from "@vueuse/components"
+import { vOnClickOutside } from '@vueuse/components'
 import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
