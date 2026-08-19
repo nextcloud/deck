@@ -296,7 +296,7 @@ export const useBoardStore = defineStore('board', {
 			const removeIndex = this.currentBoard?.acl?.findIndex((attr) => deletedAcl.id === attr.id)
 
 			if (removeIndex > -1) {
-				Vue.delete(this.currentBoard.acl, removeIndex)
+				this.currentBoard.acl.splice(removeIndex, 1)
 			}
 			this.loadBoardById(deletedAcl.boardId)
 		},
