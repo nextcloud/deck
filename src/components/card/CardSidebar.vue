@@ -99,7 +99,7 @@ import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import { showError, showWarning } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
-import CardMenuEntries from '../cards/CardMenuEntries.vue'
+import CardMenuEntries from '../cards/NcActionsCardMenuEntries.vue'
 import { mapActions, mapState } from 'pinia'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
