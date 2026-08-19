@@ -32,8 +32,7 @@ import Board from '../components/board/Board.vue'
 import DeckIcon from '../components/icons/DeckIcon.vue'
 import { BoardApi } from './../services/BoardApi.js'
 import { useSettingsStore } from '../stores/settings.js'
-
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
+import { NcUserBubble } from '@nextcloud/vue'
 
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'

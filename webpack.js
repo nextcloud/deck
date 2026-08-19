@@ -7,11 +7,11 @@ const isDevServer = process.env.WEBPACK_SERVE
 
 webpackConfig.entry = {
 	...webpackConfig.entry,
-	// collections: path.join(__dirname, 'src', 'init-collections.js'),
-	// dashboard: path.join(__dirname, 'src', 'init-dashboard.js'),
-	// calendar: path.join(__dirname, 'src', 'init-calendar.js'),
-	// talk: path.join(__dirname, 'src', 'init-talk.js'),
-	// reference: path.join(__dirname, 'src', 'init-reference.js'),
+	collections: path.join(__dirname, 'src', 'init-collections.js'),
+	dashboard: path.join(__dirname, 'src', 'init-dashboard.js'),
+	calendar: path.join(__dirname, 'src', 'init-calendar.js'),
+	talk: path.join(__dirname, 'src', 'init-talk.js'),
+	reference: path.join(__dirname, 'src', 'init-reference.js'),
 }
 
 if (isDevServer) {
