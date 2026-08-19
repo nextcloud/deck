@@ -106,7 +106,7 @@ import { mapActions, mapState } from 'pinia'
 import { useBoardStore } from '../../stores/board.js'
 
 export default {
-	name: 'CardMenuEntries',
+	name: 'NcActionsCardMenuEntries',
 	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor, AccountPlusIcon, AccountMinusIcon, CheckIcon, OpenInNewIcon, DeleteIcon },
 	props: {
 		card: {
