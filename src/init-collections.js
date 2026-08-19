@@ -11,10 +11,6 @@ import { buildSelector } from './helpers/selector.js'
 
 import './shared-init.js'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-
 window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Sharing && OCA.Sharing.ShareSearch) {
 		OCA.Sharing.ShareSearch.addNewResult(FileSharingPicker)
