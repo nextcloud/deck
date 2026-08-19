@@ -9,7 +9,8 @@
 			:description="description"
 			show-created-notice
 			@cancel="close"
-			@close="close" />
+			@close="close"
+			@submit="onSubmit" />
 	</NcModal>
 </template>
 
@@ -19,6 +20,7 @@ import CreateNewCardCustomPicker from './views/CreateNewCardCustomPicker.vue'
 
 export default {
 	name: 'CardCreateDialog',
+	emits: ['close', 'select'],
 	components: {
 		NcModal,
 		CreateNewCardCustomPicker,
@@ -31,6 +33,14 @@ export default {
 		description: {
 			type: String,
 			default: '',
+		},
+	},
+	methods: {
+		close() {
+			this.$emit('close')
+		},
+		onSubmit(link) {
+			this.$emit('select', link)
 		},
 	},
 }
