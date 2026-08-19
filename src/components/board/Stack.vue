@@ -403,7 +403,7 @@ export default {
 
 	@use 'sass:math';
 
-	@import './../../css/variables.scss';
+	@use './../../css/variables.scss' as *;
 
 	.stack {
 		width: 100%;

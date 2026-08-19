@@ -19,7 +19,7 @@
 		<CommentForm v-model="newComment" @submit="createComment" />
 
 		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
-			<div v-infinite-scroll="[infiniteHandler, {canLoadMore: () => commentStore.hasMoreComments(card.id)}]">
+			<div v-v-infinite-scroll="[infiniteHandler, {canLoadMore: () => commentStore.hasMoreComments(card.id)}]">
 				<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
 					:key="comment.id"
 					:comment="comment"
@@ -155,5 +155,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import '../../css/comments.scss';
+	@use '../../css/comments.scss';
 </style>

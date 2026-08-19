@@ -346,6 +346,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+	@use './../../css/markdown.scss' as markdown;
 
 .modal__content {
 	width: 25vw;
@@ -372,8 +373,7 @@ export default {
 	overflow-x: auto;
 
 	&:deep {
-		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/markdown.scss';
+		@include markdown.render-markdown;
 	}
 
 	&:deep(input) {

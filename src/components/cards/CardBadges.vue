@@ -102,7 +102,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/variables.scss';
+	@use './../../css/variables.scss' as *;
 
 	.badges {
 		display: flex;

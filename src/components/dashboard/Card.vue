@@ -44,7 +44,9 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
-	@import '../../css/labels.scss';
+	@use '../../css/labels.scss' as labels;
+
+	@include labels.render-labels;
 
 	.card {
 		display: block;
