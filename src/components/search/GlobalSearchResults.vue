@@ -15,20 +15,16 @@
 				<NcActionButton icon="icon-close" @click="clearSearchQuery" />
 			</NcActions>
 		</header>
-		<div class="search-wrapper">
-			<template v-if="loading || filteredResults.length > 0">
-				<div v-v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
-					<CardItem v-for="card in filteredResults"
-						:id="card.id"
-						:key="card.id"
-						:standalone="true" />
-					<Placeholder v-if="loading" />
-				</div>
-			</template>
-			<template v-else>
-				<p>{{ t('deck', 'No results found') }}</p>
-			</template>
-		</div>
+		<template v-if="loading || filteredResults.length > 0">
+			<div class="search-wrapper"
+				v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]">
+				<CardItem v-for="card in filteredResults" :id="card.id" :key="card.id" :standalone="true" />
+				<Placeholder v-if="loading" />
+			</div>
+		</template>
+		<template v-else>
+			<p>{{ t('deck', 'No results found') }}</p>
+		</template>
 	</section>
 </template>
 
