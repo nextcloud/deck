@@ -32,8 +32,8 @@
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
 						<NcTextField ref="newStackInput"
-							:disable="loading"
 							v-model="newStackTitle"
+							:disable="loading"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
 						<NcButton variant="secondary"

@@ -63,10 +63,10 @@
 				<!-- Not type="search": NcTextField only fills the trailing button's icon
 					slot when type !== 'search', which leaves the clear button iconless. -->
 				<NcTextField id="deck-search-input"
+					v-model="searchQuery"
 					class="board-search"
 					type="text"
 					:label="searchLabel"
-					v-model="searchQuery"
 					:title="searchHint || null"
 					:show-trailing-button="searchQuery !== ''"
 					:trailing-button-label="t('deck', 'Clear search')"
@@ -290,7 +290,7 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { vOnClickOutside } from "@vueuse/components"
+import { vOnClickOutside } from '@vueuse/components'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal, NcTextField } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
@@ -417,7 +417,7 @@ export default {
 				}
 			},
 			deep: true,
-		}
+		},
 	},
 	beforeMount() {
 		subscribe('deck:board:show-new-card', this.clickShowAddCardModel)

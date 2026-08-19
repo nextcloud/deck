@@ -52,15 +52,15 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
+	provide() {
+		return {
+			boardApi,
+		}
+	},
 	setup() {
 		const isMobile = useIsMobile()
 		return {
 			isMobile,
-		}
-	},
-	provide() {
-		return {
-			boardApi,
 		}
 	},
 	data() {

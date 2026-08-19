@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { vOnClickOutside } from "@vueuse/components"
+import { vOnClickOutside } from '@vueuse/components'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'

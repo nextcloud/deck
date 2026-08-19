@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { generateUrl, getRootUrl } from '@nextcloud/router'
 import { BOARD_FILTERS } from './stores/board.js'
 import Boards from './components/boards/Boards.vue'
@@ -165,7 +164,7 @@ router.beforeEach((to, from) => {
 			return { name: 'upcoming' }
 		}
 	}
-	return
+
 })
 
 export default router
