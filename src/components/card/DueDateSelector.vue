@@ -17,7 +17,7 @@
 				type="datetime-local" />
 			<NcActions v-if="canEdit"
 				:menu-name="!duedate ? t('deck', 'Add due date') : null"
-				type="tertiary"
+				variant="tertiary"
 				data-cy-due-date-actions>
 				<template v-if="!duedate" #icon>
 					<Plus :size="20" />
@@ -50,7 +50,7 @@
 			</NcActions>
 
 			<NcButton v-if="!card.done && canEdit"
-				type="secondary"
+				variant="secondary"
 				class="completed-button"
 				@click="changeCardDoneStatus()">
 				<template #icon>
@@ -71,14 +71,14 @@
 			</div>
 			<div v-if="canEdit" class="due-actions">
 				<NcButton v-if="!card.archived"
-					type="tertiary"
+					variant="tertiary"
 					:name="t('deck', 'Not done')"
 					@click="changeCardDoneStatus()">
 					<template #icon>
 						<ClearIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton type="secondary" @click="archiveUnarchiveCard()">
+				<NcButton variant="secondary" @click="archiveUnarchiveCard()">
 					<template #icon>
 						<ArchiveIcon :size="20" />
 					</template>

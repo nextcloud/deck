@@ -27,7 +27,7 @@
 			<NcButton @click="close">
 				{{ t('deck', 'Cancel') }}
 			</NcButton>
-			<NcButton type="primary" @click="exportBoard">
+			<NcButton variant="primary" @click="exportBoard">
 				{{ t('deck', 'Export') }}
 			</NcButton>
 		</template>
