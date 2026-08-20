@@ -79,6 +79,7 @@ import { confirmPassword } from '@nextcloud/password-confirmation'
 import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
+import { useSettingsStore } from '../stores/settings.js'
 
 export default {
 	name: 'DeckAppSettings',
@@ -113,44 +114,44 @@ export default {
 		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 		cardIdBadge: {
 			get() {
-				return this.$store.getters.config('cardIdBadge')
+				return useSettingsStore().configByKey('cardIdBadge')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
+				useSettingsStore().setConfig({ cardIdBadge: newValue })
 			},
 		},
 		federationEnabled: {
 			get() {
-				const value = this.$store.getters.config('federationEnabled')
+				const value = useSettingsStore().configByKey('federationEnabled')
 				return value
 			},
 			set(newValue) {
 				confirmPassword().then(() => {
-					this.$store.dispatch('setConfig', { federationEnabled: newValue ? 'yes' : 'no' })
+					useSettingsStore().setConfig({ federationEnabled: newValue ? 'yes' : 'no' })
 				})
 			},
 		},
 		configCalendar: {
 			get() {
-				return this.$store.getters.config('calendar')
+				return useSettingsStore().configByKey('calendar')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { calendar: newValue })
+				useSettingsStore().setConfig({ calendar: newValue })
 			},
 		},
 	},
 
 	beforeMount() {
 		if (this.isAdmin) {
-			this.groupLimit = this.$store.getters.config('groupLimit')
+			this.groupLimit = useSettingsStore().configByKey('groupLimit')
 			axios.get(generateOcsUrl('cloud/groups')).then((response) => {
 				this.groups = response.data.ocs.data.groups.reduce((obj, item) => {
 					obj.push({
@@ -179,7 +180,7 @@ export default {
 		},
 
 		async updateConfig() {
-			await this.$store.dispatch('setConfig', { groupLimit: this.groupLimit })
+			await useSettingsStore().setConfig({ groupLimit: this.groupLimit })
 		},
 
 		async showKeyboardShortcuts() {

@@ -12,7 +12,7 @@
 			:user-data="members"
 			@submit="submit" />
 		<NcButton v-show="hasContent"
-			type="tertiary"
+			variant="tertiary"
 			:aria-label="t('deck', 'Submit')"
 			:title="t('deck', 'Submit')"
 			class="comment-form__submit"
@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../../css/comments.scss';
+	@use '../../css/comments.scss';
 
 	[class^="_tribute-container-autocomplete_"],
 	[class*=" _tribute-container-autocomplete_"],

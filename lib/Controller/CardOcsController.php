@@ -113,7 +113,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, ?int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
 			: null;
@@ -128,22 +128,24 @@ class CardOcsController extends OCSController {
 			}
 		}
 
-		$localBoard = $this->boardService->find($boardId, false);
-		if ($localBoard->getExternalId()) {
-			return new DataResponse($this->externalBoardService->updateCardOnRemote(
-				$localBoard,
-				$id,
-				$title,
-				$stackId,
-				$type,
-				$owner,
-				$description,
-				$order,
-				$duedate,
-				$deletedAt,
-				$archived,
-				$done
-			));
+		if ($boardId) {
+			$localBoard = $this->boardService->find($boardId, false);
+			if ($localBoard->getExternalId()) {
+				return new DataResponse($this->externalBoardService->updateCardOnRemote(
+					$localBoard,
+					$id,
+					$title,
+					$stackId,
+					$type,
+					$owner,
+					$description,
+					$order,
+					$duedate,
+					$deletedAt,
+					$archived,
+					$done
+				));
+			}
 		}
 
 		return new DataResponse($this->cardService->update($id,

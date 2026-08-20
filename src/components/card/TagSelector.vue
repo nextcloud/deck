@@ -7,7 +7,7 @@
 		<div class="selector-wrapper--icon">
 			<TagMultiple :size="20" />
 		</div>
-		<NcSelect :value="assignedLabels"
+		<NcSelect :model-value="assignedLabels"
 			class="selector-wrapper--selector"
 			:multiple="true"
 			:disabled="disabled"
@@ -92,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/selector.scss';
+@use '../../css/selector.scss';
 
 .v-select:deep(.vs__selected) {
 	padding-inline-start: 0 !important;

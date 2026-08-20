@@ -19,8 +19,7 @@
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
 				:open-on-add-boards="true"
-				:default-open="true"
-				icon="icon-deck">
+				:default-open="true">
 				<template #icon>
 					<DeckIcon :size="16" />
 				</template>
@@ -47,7 +46,7 @@
 			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
 		<template #default>
-			<DeckAppSettings :open.sync="settingsOpened"
+			<DeckAppSettings v-model:open="settingsOpened"
 				@close="onSettingsClose" />
 		</template>
 		<template #footer>
@@ -64,7 +63,7 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
+import { vOnClickOutside } from '@vueuse/components'
 import { NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'
@@ -82,6 +81,7 @@ import IconCog from 'vue-material-design-icons/CogOutline.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'pinia'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -103,7 +103,7 @@ export default {
 		IconCog,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	props: {
 		loading: {
@@ -133,26 +133,26 @@ export default {
 		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 		cardIdBadge: {
 			get() {
-				return this.$store.getters.config('cardIdBadge')
+				return useSettingsStore().configByKey('cardIdBadge')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
+				useSettingsStore().setConfig({ cardIdBadge: newValue })
 			},
 		},
 		configCalendar: {
 			get() {
-				return this.$store.getters.config('calendar')
+				return useSettingsStore().configByKey('calendar')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { calendar: newValue })
+				useSettingsStore().setConfig({ calendar: newValue })
 			},
 		},
 	},

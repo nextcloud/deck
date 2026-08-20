@@ -26,7 +26,7 @@
 				<AccountIcon v-if="board.acl?.length > 0" />
 			</template>
 
-			<template v-if="!deleted" slot="actions">
+			<template v-if="!deleted" #actions>
 				<template v-if="!isDueSubmenuActive">
 					<NcActionButton :close-after-click="true"
 						@click="actionDetails">
@@ -164,22 +164,22 @@
 			</NcColorPicker>
 			<form @submit.prevent.stop="applyEdit">
 				<NcTextField ref="inputField"
+					v-model="editTitle"
 					:disable="loading"
-					:value.sync="editTitle"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:disabled="loading"
-					native-type="button"
+					type="button"
 					:title="t('deck', 'Cancel edit')"
 					@click.stop.prevent="cancelEdit">
 					<template #icon>
 						<CloseIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton type="tertiary"
-					native-type="submit"
+				<NcButton variant="tertiary"
+					type="submit"
 					:disabled="loading"
 					:title="t('deck', 'Save board')">
 					<template #icon>
@@ -194,7 +194,7 @@
 
 <script>
 import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
-import ClickOutside from 'vue-click-outside'
+import { vOnClickOutside } from '@vueuse/components'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
@@ -221,6 +221,7 @@ import { showLoading, showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions } from 'pinia'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -253,7 +254,7 @@ export default {
 		BoardExportModal,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	mixins: [isTouchDevice],
 	inject: [
@@ -330,7 +331,6 @@ export default {
 			return this.defaultBoardId === String(this.board.id)
 		},
 	},
-	watch: {},
 	mounted() {
 		// prevent click outside event with popupItem.
 		this.popupItem = this.$el
@@ -447,7 +447,7 @@ export default {
 			this.updateDueSetting = value
 			const setting = {}
 			setting['board:' + this.board.id + ':' + key] = value
-			await this.$store.dispatch('setConfig', setting)
+			await useSettingsStore().setConfig(setting)
 			this.isDueSubmenuActive = false
 			this.updateDueSetting = null
 		},

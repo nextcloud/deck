@@ -21,7 +21,7 @@
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
 				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
-					<span contenteditable="false">{{ displayTitle }}</span>
+					<span>{{ displayTitle }}</span>
 				</h4>
 				<h4 v-if="editingTitle >= 1"
 					key="title-edit"
@@ -77,8 +77,7 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
-import { mapState as mapStateVuex } from 'vuex'
+import { vOnClickOutside } from '@vueuse/components'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
@@ -87,10 +86,12 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { emit } from '@nextcloud/event-bus'
 import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -102,7 +103,7 @@ export default {
 	name: 'CardItem',
 	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	mixins: [Color, labelStyle],
 	props: {
@@ -140,7 +141,7 @@ export default {
 			boards: 'boards',
 			boardById: 'boardById',
 		}),
-		...mapStateVuex({
+		...mapState(useSettingsStore, {
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 			shortcutLock: state => state.shortcutLock,
@@ -182,7 +183,7 @@ export default {
 				|| this.card.assignedUsers.length > 0
 		},
 		idBadge() {
-			return this.$store.getters.config('cardIdBadge')
+			return useSettingsStore().configByKey('cardIdBadge')
 		},
 		showMenuAtTitle() {
 			return this.compactMode || (!this.compactMode && !this.hasBadges && !this.hasLabels)
@@ -230,6 +231,7 @@ export default {
 			assignCardToUserInStore: 'assignCardToUser',
 		}),
 		...mapActions(useBoardStore, ['toggleFilter']),
+		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		hasSelection() {
 			const selection = window.getSelection()
 			return selection.toString() !== ''
@@ -255,11 +257,11 @@ export default {
 				return
 			}
 
-			this.$root.$emit('open-card', this.card.id)
+			emit('deck:card:open-modal', this.card.id)
 		},
 		triggerEditTitle() {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 			setTimeout(() => {
 				const sel = window.getSelection()
 				sel.selectAllChildren(this.$refs.titleContentEditable)
@@ -279,17 +281,17 @@ export default {
 					title: value,
 				})
 			}
-			this.$store.dispatch('toggleShortcutLock', false)
+			this.toggleShortcutLock(false)
 		},
 		onTitleFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 		},
 		handleCardKeyboardShortcut(key) {
 			if (OCP.Accessibility.disableKeyboardShortcuts()) {
 				return
 			}
 
-			if (!this.canEdit || this.$store.state.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
+			if (!this.canEdit || this.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
 				return
 			}
 
@@ -351,8 +353,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/animations.scss';
-	@import './../../css/variables.scss';
+	@use './../../css/animations.scss';
+	@use './../../css/variables.scss' as *;
+	@use './../../css/labels.scss' as labels;
 
 	@mixin dark-card {
 		border: 2px solid var(--color-border-dark);
@@ -426,8 +429,7 @@ export default {
 			}
 		}
 
-		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/labels.scss';
+		@include labels.render-labels;
 
 		.card-controls {
 			display: flex;

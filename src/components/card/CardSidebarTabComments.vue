@@ -19,15 +19,19 @@
 		<CommentForm v-model="newComment" @submit="createComment" />
 
 		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
-			<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
-				:key="comment.id"
-				:comment="comment"
-				@doReload="loadComments" />
-			<InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
-				<div slot="spinner" class="icon-loading" />
-				<div slot="no-more" />
-				<div slot="no-results" />
-			</InfiniteLoading>
+			<div v-v-infinite-scroll="[infiniteHandler, {canLoadMore: () => commentStore.hasMoreComments(card.id)}]">
+				<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
+					:key="comment.id"
+					:comment="comment"
+					@doReload="loadComments" />
+			</div>
+			<!-- <InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
+				<template #spinner>
+					<div class="icon-loading" />
+				</template>
+				<template #no-more />
+				<template #no-results />
+			</InfiniteLoading> -->
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
@@ -42,7 +46,7 @@ import { mapState } from 'pinia'
 import { NcAvatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem.vue'
 import CommentForm from './CommentForm.vue'
-import InfiniteLoading from 'vue-infinite-loading'
+import { vInfiniteScroll } from '@vueuse/components'
 import { getCurrentUser } from '@nextcloud/auth'
 import { useCommentStore } from '../../stores/comment.js'
 import { useBoardStore } from '../../stores/board.js'
@@ -53,7 +57,9 @@ export default {
 		NcAvatar,
 		CommentItem,
 		CommentForm,
-		InfiniteLoading,
+	},
+	directives: {
+		vInfiniteScroll,
 	},
 	props: {
 		card: {
@@ -149,5 +155,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import '../../css/comments.scss';
+	@use '../../css/comments.scss';
 </style>

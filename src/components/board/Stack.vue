@@ -5,7 +5,7 @@
 
 <template>
 	<div class="stack" :class="{'stack--done-column': isDoneColumn}" :data-cy-stack="stack.title">
-		<div v-click-outside="stopCardCreation"
+		<div v-v-on-click-outside="stopCardCreation"
 			class="stack__header"
 			:class="{'stack__header--add': showAddCard, 'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
@@ -31,7 +31,7 @@
 					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
 				<form v-else-if="editing"
-					v-click-outside="cancelEdit"
+					v-v-on-click-outside="cancelEdit"
 					data-cy="editStackTitleForm"
 					@submit.prevent="finishedEdit(stack)"
 					@keyup.esc="cancelEdit">
@@ -148,9 +148,9 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
 import { mapState, mapActions } from 'pinia'
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { vOnClickOutside } from '@vueuse/components'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
@@ -164,6 +164,7 @@ import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'Stack',
@@ -179,7 +180,7 @@ export default {
 		CheckCircleOutline,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	props: {
 		dragging: {
@@ -217,6 +218,11 @@ export default {
 		...mapState(useCardStore, {
 			cardsByStackGetter: 'cardsByStack',
 		}),
+		...mapState(useSettingsStore, [
+			'compactMode',
+			'showCardCover',
+			'shortcutLock',
+		]),
 		cardsByStack() {
 			return this.cardsByStackGetter(this.stack.id).filter((card) => {
 				if (this.showArchived) {
@@ -233,17 +239,17 @@ export default {
 		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 	},
 	watch: {
 		showAddCard(newValue) {
 			if (!newValue) {
-				this.$store.dispatch('toggleShortcutLock', false)
+				this.toggleShortcutLock(false)
 			} else {
 				this.$nextTick(() => {
 					this.$refs.newCardInput.focus()
@@ -264,10 +270,8 @@ export default {
 			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
 			addCardInStore: 'addCard',
 		}),
+		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		stopCardCreation(e) {
-			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
-			// so we have to ignore it
-			e.stopPropagation()
 			if (this.$refs.newCardInput && this.$refs.newCardInput.parentElement === e.target.parentElement) {
 				return false
 			}
@@ -359,7 +363,7 @@ export default {
 			}
 		},
 		onCreateCardFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 		},
 		setupAutoscrollOnDrag() {
 			let timer
@@ -399,7 +403,7 @@ export default {
 
 	@use 'sass:math';
 
-	@import './../../css/variables.scss';
+	@use './../../css/variables.scss' as *;
 
 	.stack {
 		width: 100%;

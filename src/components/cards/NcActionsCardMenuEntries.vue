@@ -14,7 +14,9 @@
 			</NcActionButton>
 		</NcColorPicker>
 		<NcActionButton v-if="!hideDetailsEntry" :close-after-click="true" @click="openCard">
-			<CardBulletedIcon slot="icon" :size="20" decorative />
+			<template #icon>
+				<CardBulletedIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Card details') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit" :close-after-click="true" @click="editTitle">
@@ -104,7 +106,7 @@ import { mapActions, mapState } from 'pinia'
 import { useBoardStore } from '../../stores/board.js'
 
 export default {
-	name: 'CardMenuEntries',
+	name: 'NcActionsCardMenuEntries',
 	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor, AccountPlusIcon, AccountMinusIcon, CheckIcon, OpenInNewIcon, DeleteIcon },
 	props: {
 		card: {
@@ -191,7 +193,7 @@ export default {
 				return
 			}
 
-			this.$root.$emit('open-card', this.card.id)
+			emit('deck:card:open-modal', this.card.id)
 		},
 		editTitle() {
 			this.$emit('edit-title', this.card.id)

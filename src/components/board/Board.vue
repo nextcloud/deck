@@ -32,12 +32,12 @@
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
 						<NcTextField ref="newStackInput"
+							v-model="newStackTitle"
 							:disable="loading"
-							:value.sync="newStackTitle"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
-						<NcButton type="secondary"
-							native-type="submit"
+						<NcButton variant="secondary"
+							type="submit"
 							:disabled="loading"
 							:title="t('deck', 'Add list')">
 							<template #icon>
@@ -89,14 +89,14 @@
 </template>
 
 <script>
-import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState as mapStateVuex } from 'vuex'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import Stack from './Stack.vue'
 import GanttView from './GanttView.vue'
 import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
@@ -105,6 +105,7 @@ import { mapActions, mapState } from 'pinia'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 export default {
 	name: 'Board',
 	components: {
@@ -152,9 +153,7 @@ export default {
 			canManage: 'canManage',
 			viewMode: 'viewMode',
 		}),
-		...mapStateVuex({
-			isFullApp: state => state.isFullApp,
-		}),
+		...mapState(useSettingsStore, ['isFullApp']),
 		stacks() {
 			return this.board?.id ? this.stacksByBoard(this.board.id) : []
 		},
@@ -187,16 +186,18 @@ export default {
 	created() {
 		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
-		this.$root.$on('open-card', (cardId) => {
-			this.localModal = cardId
-		})
+		subscribe('deck:card:open-modal', this.openCardModal)
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.session?.close()
+		unsubscribe('deck:card:open-modal', this.openCardModal)
 	},
 	methods: {
 		...mapActions(useBoardStore, ['loadBoardById', 'toggleShowArchived']),
 		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
+		openCardModal(cardId) {
+			this.localModal = cardId
+		},
 		async fetchData() {
 			this.loading = true
 			try {
@@ -277,8 +278,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import '../../css/animations.scss';
-	@import '../../css/variables.scss';
+	@use '../../css/animations.scss';
+	@use '../../css/variables.scss' as *;
 
 	form {
 		text-align: center;

@@ -33,7 +33,7 @@
 				:sessions="presentUsers" />
 			<div v-if="board && canManage && !showArchived && !board.archived"
 				id="stack-add"
-				v-click-outside="hideAddStack">
+				v-v-on-click-outside="hideAddStack">
 				<NcActions v-if="!isAddStackVisible">
 					<NcActionButton @click.stop="showAddStack">
 						{{ t('deck', 'Add list') }}
@@ -51,8 +51,8 @@
 						class="no-close"
 						:placeholder="t('deck', 'List name')"
 						required
-						@focus="$store.dispatch('toggleShortcutLock', true)"
-						@blur="$store.dispatch('toggleShortcutLock', false)">
+						@focus="toggleShortcutLock(true)"
+						@blur="toggleShortcutLock(false)">
 					<input :title="t('deck', 'Add list')"
 						class="icon-confirm"
 						type="submit"
@@ -63,18 +63,17 @@
 				<!-- Not type="search": NcTextField only fills the trailing button's icon
 					slot when type !== 'search', which leaves the clear button iconless. -->
 				<NcTextField id="deck-search-input"
+					v-model="searchQuery"
 					class="board-search"
 					type="text"
 					:label="searchLabel"
-					:value="searchQuery"
 					:title="searchHint || null"
 					:show-trailing-button="searchQuery !== ''"
 					:trailing-button-label="t('deck', 'Clear search')"
 					:aria-describedby="searchHint ? 'deck-search-hint' : null"
-					@update:value="setSearchQuery"
 					@trailing-button-click="clearSearchQuery"
-					@focus="$store.dispatch('toggleShortcutLock', true)"
-					@blur="$store.dispatch('toggleShortcutLock', false)" />
+					@focus="toggleShortcutLock(true)"
+					@blur="toggleShortcutLock(false)" />
 				<!-- title is for pointer users, aria-describedby for assistive tech. No double
 					announcement: title is only the fallback description per HTML-AAM. -->
 				<span v-if="searchHint" id="deck-search-hint" class="hidden-visually">{{ searchHint }}</span>
@@ -82,17 +81,16 @@
 			<div v-if="board" class="board-action-buttons">
 				<div class="board-action-buttons__filter">
 					<NcPopover :placement="'bottom-end'"
+						no-focus-trap
 						:aria-label="t('deck', 'Active filters')"
-						:name="t('deck', 'Active filters')"
-						@show="filterVisible=true"
-						@hide="filterVisible=false">
-						<!-- We cannot use NcActions here are the popover trigger does not update on reactive icons -->
+						:name="t('deck', 'Active filters')">
+						<!-- We cannot use NcActions here as we can't style NcActionCheckbox labels dynamically -->
 						<template #trigger>
 							<NcButton ref="filterPopover"
 								:title="t('deck', 'Apply filter')"
 								:aria-label="t('deck', 'Apply filter')"
 								class="filter-button"
-								:type="isFilterActive ? 'primary' : 'tertiary'">
+								:variant="isFilterActive ? 'primary' : 'tertiary'">
 								<template #icon>
 									<FilterIcon v-if="isFilterActive" :size="20" decorative />
 									<FilterOffIcon v-else :size="20" decorative />
@@ -100,135 +98,137 @@
 							</NcButton>
 						</template>
 
-						<div v-if="filterVisible" class="filter">
-							<h3>{{ t('deck', 'Filter by tag') }}</h3>
-							<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
-								<input :id="label.id"
-									v-model="filter.tags"
-									type="checkbox"
-									class="checkbox"
-									:value="label.id"
-									@change="setFilter">
-								<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
-							</div>
+						<template #default>
+							<div class="filter">
+								<h3>{{ t('deck', 'Filter by tag') }}</h3>
+								<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
+									<input :id="label.id"
+										v-model="filter.tags"
+										type="checkbox"
+										class="checkbox"
+										:value="label.id"
+										@change="setFilter">
+									<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
+								</div>
 
-							<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
-							<div class="filter--item">
-								<input id="unassigned"
-									v-model="filter.unassigned"
-									type="checkbox"
-									class="checkbox"
-									value="unassigned"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
-							</div>
-							<div v-for="user in board.users" :key="user.uid" class="filter--item">
-								<input :id="user.uid"
-									v-model="filter.users"
-									type="checkbox"
-									class="checkbox"
-									:value="user.uid"
-									@change="setFilter">
-								<label :for="user.uid"><NcAvatar :user="user.uid"
-									:size="24"
-									:disable-menu="true"
-									:hide-status="true" /> {{ user.displayname }}</label>
-							</div>
+								<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+								<div class="filter--item">
+									<input id="unassigned"
+										v-model="filter.unassigned"
+										type="checkbox"
+										class="checkbox"
+										value="unassigned"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
+								</div>
+								<div v-for="user in board.users" :key="user.uid" class="filter--item">
+									<input :id="user.uid"
+										v-model="filter.users"
+										type="checkbox"
+										class="checkbox"
+										:value="user.uid"
+										@change="setFilter">
+									<label :for="user.uid"><NcAvatar :user="user.uid"
+										:size="24"
+										:disable-menu="true"
+										:hide-status="true" /> {{ user.displayname }}</label>
+								</div>
 
-							<h3>{{ t('deck', 'Filter by status') }}</h3>
-							<div class="filter--item">
-								<input id="filter-option-both"
-									v-model="filter.completed"
-									type="radio"
-									class="radio"
-									value="both"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="filter-option-both">{{ t('deck', 'Open and completed') }}</label>
-							</div>
-							<div class="filter--item">
-								<input id="filter-option-open"
-									v-model="filter.completed"
-									type="radio"
-									class="radio"
-									value="open"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="filter-option-open">{{ t('deck', 'Open') }}</label>
-							</div>
+								<h3>{{ t('deck', 'Filter by status') }}</h3>
+								<div class="filter--item">
+									<input id="filter-option-both"
+										v-model="filter.completed"
+										type="radio"
+										class="radio"
+										value="both"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="filter-option-both">{{ t('deck', 'Open and completed') }}</label>
+								</div>
+								<div class="filter--item">
+									<input id="filter-option-open"
+										v-model="filter.completed"
+										type="radio"
+										class="radio"
+										value="open"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="filter-option-open">{{ t('deck', 'Open') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="filter-option-completed"
-									v-model="filter.completed"
-									type="radio"
-									class="radio"
-									value="completed"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="filter-option-completed">{{ t('deck', 'Completed') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="filter-option-completed"
+										v-model="filter.completed"
+										type="radio"
+										class="radio"
+										value="completed"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="filter-option-completed">{{ t('deck', 'Completed') }}</label>
+								</div>
 
-							<h3>{{ t('deck', 'Filter by due date') }}</h3>
-							<div class="filter--item">
-								<input id="overdue"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="overdue"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="overdue">{{ t('deck', 'Overdue') }}</label>
-							</div>
+								<h3>{{ t('deck', 'Filter by due date') }}</h3>
+								<div class="filter--item">
+									<input id="overdue"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="overdue"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="overdue">{{ t('deck', 'Overdue') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="dueToday"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="dueToday"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="dueToday">{{ t('deck', 'Next 24 hours') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="dueToday"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="dueToday"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="dueToday">{{ t('deck', 'Next 24 hours') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="dueWeek"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="dueWeek"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="dueWeek"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="dueWeek"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="dueMonth"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="dueMonth"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="dueMonth"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="dueMonth"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
+								</div>
 
-							<div class="filter--item">
-								<input id="noDue"
-									v-model="filter.due"
-									type="radio"
-									class="radio"
-									value="noDue"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="noDue">{{ t('deck', 'No due date') }}</label>
-							</div>
+								<div class="filter--item">
+									<input id="noDue"
+										v-model="filter.due"
+										type="radio"
+										class="radio"
+										value="noDue"
+										@change="setFilter"
+										@click="beforeSetFilter">
+									<label for="noDue">{{ t('deck', 'No due date') }}</label>
+								</div>
 
-							<NcButton :disabled="!isFilterActive" :wide="true" @click="clearFilter">
-								{{ t('deck', 'Clear filter') }}
-							</NcButton>
-						</div>
+								<NcButton :disabled="!isFilterActive" :wide="true" @click="clearFilter">
+									{{ t('deck', 'Clear filter') }}
+								</NcButton>
+							</div>
+						</template>
 					</NcPopover>
 				</div>
 
@@ -257,12 +257,16 @@
 					</NcActionButton>
 					<NcActionButton v-if="compactMode"
 						@click="toggleCompactMode">
-						<ArrowExpandVerticalIcon slot="icon" :size="20" decorative />
+						<template #icon>
+							<ArrowExpandVerticalIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Toggle compact mode') }}
 					</NcActionButton>
 					<NcActionButton v-else
 						@click="toggleCompactMode">
-						<ArrowCollapseVerticalIcon slot="icon" :size="20" decorative />
+						<template #icon>
+							<ArrowCollapseVerticalIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Toggle compact mode') }}
 					</NcActionButton>
 					<NcActionButton @click="toggleShowCardCover">
@@ -285,8 +289,8 @@
 </template>
 
 <script>
-import { mapState as mapStateVuex } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { vOnClickOutside } from '@vueuse/components'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal, NcTextField } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
@@ -302,9 +306,10 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { mapActions, mapState } from 'pinia'
+import { mapActions, mapState, mapWritableState } from 'pinia'
 import { useStackStore } from '../stores/stack.js'
 import { useBoardStore } from '../stores/board.js'
+import { useSettingsStore } from '../stores/settings.js'
 
 export default {
 	name: 'Controls',
@@ -328,6 +333,9 @@ export default {
 		NcActionSeparator,
 		TableColumnPlusAfter,
 		SessionList,
+	},
+	directives: {
+		vOnClickOutside,
 	},
 	mixins: [labelStyle],
 	props: {
@@ -359,7 +367,6 @@ export default {
 		return {
 			newStackTitle: '',
 			stack: '',
-			filterVisible: false,
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
@@ -375,13 +382,13 @@ export default {
 			'viewMode',
 			'showArchived',
 		]),
-		...mapStateVuex({
+		...mapState(useSettingsStore, {
 			isFullApp: state => state.isFullApp,
 			navShown: state => state.navShown,
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
-			searchQuery: state => state.searchQuery,
 		}),
+		...mapWritableState(useSettingsStore, ['searchQuery']),
 		detailsRoute() {
 			return {
 				name: 'board.details',
@@ -400,13 +407,16 @@ export default {
 		},
 	},
 	watch: {
-		board(current, previous) {
-			if (current?.id !== previous?.id) {
-				this.clearFilter()
-			}
-			if (current) {
-				this.setPageTitle(current.title)
-			}
+		board: {
+			handler(current, previous) {
+				if (current?.id !== previous?.id) {
+					this.clearFilter()
+				}
+				if (current) {
+					this.setPageTitle(current.title)
+				}
+			},
+			deep: true,
 		},
 	},
 	beforeMount() {
@@ -416,7 +426,7 @@ export default {
 		subscribe('deck:board:toggle-filter-by-me', this.triggerFilterByMe)
 
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		unsubscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
 		unsubscribe('deck:board:clear-filter', this.triggerClearFilter)
@@ -426,6 +436,13 @@ export default {
 	methods: {
 		...mapActions(useBoardStore, { setViewMode: 'setViewMode', toggleShowArchived: 'toggleShowArchived', setFilterInStore: 'setFilterInStore' }),
 		...mapActions(useStackStore, ['createStack']),
+		...mapActions(useSettingsStore, {
+			setSearchQuery: 'setSearchQuery',
+			setShortcutLock: 'toggleShortcutLock',
+			setNavShown: 'toggleNav',
+			toggleCompact: 'toggleCompactMode',
+			toggleCardCover: 'toggleShowCardCover',
+		}),
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
 				this.filter.due = ''
@@ -446,20 +463,20 @@ export default {
 			}
 			this.$nextTick(() => this.setFilterInStore({ ...this.filter }))
 		},
-		setSearchQuery(value) {
-			this.$store.commit('setSearchQuery', value)
-		},
 		clearSearchQuery() {
-			this.$store.commit('setSearchQuery', '')
+			this.setSearchQuery('')
+		},
+		toggleShortcutLock(lock) {
+			this.setShortcutLock(lock)
 		},
 		toggleNav() {
-			this.$store.dispatch('toggleNav', !this.navShown)
+			this.setNavShown(!this.navShown)
 		},
 		toggleCompactMode() {
-			this.$store.dispatch('toggleCompactMode')
+			this.toggleCompact()
 		},
 		toggleShowCardCover() {
-			this.$store.dispatch('toggleShowCardCover')
+			this.toggleCardCover()
 		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }
@@ -530,7 +547,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import '../css/variables.scss';
+	@use '../css/variables.scss' as *;
 
 	.controls {
 		display: flex;
@@ -660,13 +677,6 @@ export default {
 		border-radius: 50%;
 		width: var(--default-clickable-area);
 		height: var(--default-clickable-area);
-
-		&[data-popper-shown] {
-			background-color: var(--color-background-hover);
-			&.button-vue--vue-primary {
-				background-color: var(--color-primary-element);
-			}
-		}
 	}
 </style>
 <style lang="scss">

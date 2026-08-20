@@ -184,8 +184,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-@import '../css/labels.scss';
+@use '../css/labels.scss' as labels;
+
+@include labels.render-labels;
 
 .deck-comment-reference {
 	width: 100%;
