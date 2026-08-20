@@ -92,6 +92,7 @@ describe('Card actions', function () {
 
 			cy.get('.app-sidebar-header .action-item__menutoggle').click()
 			cy.get('.v-popper__popper button:contains("Move/copy card")').click()
+			cy.get('.vs__dropdown-toggle span[title="MyTestBoard"]').should('be.visible').click()
 			cy.get('.vs__dropdown-menu span[title="MyTestBoard"]').should('be.visible').click()
 			cy.wait(3000) // wait for select component to load stacks
 			cy.get('[data-cy="select-stack"] .vs__dropdown-toggle').should('be.visible').click()
