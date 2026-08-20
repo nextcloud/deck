@@ -19,8 +19,7 @@
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
 				:open-on-add-boards="true"
-				:default-open="true"
-				icon="icon-deck">
+				:default-open="true">
 				<template #icon>
 					<DeckIcon :size="16" />
 				</template>
