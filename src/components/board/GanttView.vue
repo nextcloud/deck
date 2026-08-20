@@ -7,7 +7,7 @@
 		<div v-if="ganttTasks.length" class="gantt-toolbar">
 			<NcButton v-for="mode in viewModes"
 				:key="mode.value"
-				:type="currentViewMode === mode.value ? 'primary' : 'secondary'"
+				:variant="currentViewMode === mode.value ? 'primary' : 'secondary'"
 				@click="changeViewMode(mode.value)">
 				{{ mode.label }}
 			</NcButton>
@@ -28,7 +28,7 @@
 		</NcEmptyContent>
 
 		<div v-if="undatedCards.length" class="gantt-undated">
-			<NcButton type="tertiary" @click="showUndated = !showUndated">
+			<NcButton variant="tertiary" @click="showUndated = !showUndated">
 				<template #icon>
 					<ChevronDown v-if="showUndated" :size="20" />
 					<ChevronRight v-else :size="20" />

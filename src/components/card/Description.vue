@@ -226,7 +226,12 @@ export default {
 		},
 		async destroyEditor() {
 			await this.saveDescription()
-			this?.editor?.destroy()
+			try {
+				this?.editor?.destroy()
+			} catch (e) {
+				// Ignore errors during editor destruction
+				console.debug('Error destroying text editor:', e)
+			}
 		},
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {

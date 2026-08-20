@@ -16,7 +16,7 @@
 				type="datetime-local" />
 			<NcActions v-if="canEdit"
 				:force-name="!startdate"
-				type="tertiary">
+				variant="tertiary">
 				<template v-if="!startdate" #icon>
 					<Plus :size="20" />
 				</template>

@@ -84,7 +84,7 @@ describe('Card', function () {
 		cy.get('.modal-mask.card-selector .multiselect-list').should('be.visible').click()
 		cy.get('.vs__dropdown-menu span[title="TestList"]').should('be.visible').click()
 
-		cy.get('.modal-mask.card-selector button.button-vue--vue-primary').should('be.visible').click()
+		cy.get('.modal-mask.card-selector button.button-vue--primary').should('be.visible').click()
 		cy.wait('@save', { timeout: 7000 })
 
 		cy.reload()
@@ -187,7 +187,7 @@ describe('Card', function () {
 			cy.get('.file-picker__main').should('be.visible')
 			cy.get('.file-picker__main [data-filename="welcome.txt"]', { timeout: 30000 }).should('be.visible')
 				.click()
-			cy.get('.dialog__actions button.button-vue--vue-primary').click()
+			cy.get('.dialog__actions button.button-vue--primary').click()
 			cy.get('.attachment-list .filename').contains('welcome')
 			cy.get('.attachment-list .filename .extension').contains('txt')
 		})
@@ -231,7 +231,7 @@ describe('Card', function () {
 			cy.get('.reference-picker-modal--content .reference-picker .card-title').should('be.visible').click().type(newCardTitle)
 			cy.get('.reference-picker-modal--content .reference-picker .multiselect-board').should('be.visible').contains(boardData.title)
 			cy.get('.reference-picker-modal--content .reference-picker .multiselect-list').should('be.visible').contains(boardData.stacks[0].title)
-			cy.get('.reference-picker-modal--content .reference-picker button.button-vue--vue-primary').should('be.visible').click()
+			cy.get('.reference-picker-modal--content .reference-picker button.button-vue--primary').should('be.visible').click()
 			cy.wait('@save', { timeout: 7000 })
 			cy.get('.modal__card .ProseMirror').contains('/index.php/apps/deck/card/').should('have.length', 1)
 
