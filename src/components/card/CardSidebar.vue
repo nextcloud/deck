@@ -9,7 +9,7 @@
 		:active="tabId"
 		:name="displayTitle"
 		:subtitle="subtitleTooltip"
-		:name-editable.sync="isEditingTitle"
+		v-model:name-editable="isEditingTitle"
 		@update:name="(value) => titleEditing = value"
 		@update:active="(value) => activeTabId = value"
 		@dismiss-editing="titleEditing = currentCard.title"

@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcDialog :open.sync="modalShow" :name="t('deck', 'Move/copy card')">
+	<NcDialog v-model:open="modalShow" :name="t('deck', 'Move/copy card')">
 		<div class="modal__content">
 			<NcSelect v-model="selectedBoard"
 				:input-label="t('deck', 'Select a board')"
