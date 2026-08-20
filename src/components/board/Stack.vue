@@ -241,7 +241,44 @@ export default {
 					card.order = addedIndex
 					console.debug('move card to stack', card.stackId, card.order)
 					await this.reorderCardInStore(card)
-				handleCardCreated(newCard) {
+				}
+				if (addedIndex !== null && removedIndex !== null) {
+					card.order = addedIndex
+					console.debug('move card in stack', card.stackId, card.order)
+					await this.reorderCardInStore(card)
+				}
+			}
+		},
+		payloadForCard(stackId) {
+			return index => {
+				return this.cardsByStack[index]
+			}
+		},
+		toggleDoneColumn() {
+			this.setDoneStack({
+				stackId: this.stack.id,
+				boardId: this.stack.boardId,
+				isDone: !this.isDoneColumn,
+			})
+		},
+		deleteStackShowUndo(stack) {
+			this.deleteStack(stack)
+			showUndo(t('deck', 'List deleted'), () => this.stackUndoDelete(stack))
+		},
+		setArchivedToAllCardsFromStack(stack, isArchived) {
+			this.stackTransfer.total = this.cardsByStack.length
+			this.cardsByStack.forEach((card, index) => {
+				this.stackTransfer.current = index
+				this.archiveUnarchiveCardInStore({ ...card, archived: isArchived })
+			})
+			this.modalArchivAllCardsShow = false
+		},
+		startEditing(stack) {
+			if (this.dragging) {
+				return
+			}
+
+			this.copiedStack = Object.assign({}, stack)
 			this.editing = true
 		},
 		finishedEdit(stack) {
@@ -253,50 +290,12 @@ export default {
 		cancelEdit() {
 			this.editing = false
 		},
-<<<<<<< HEAD
-		async clickAddCard() {
-			this.stateCardCreating = true
-			try {
-				const addCardAtTop = this.stackAddCardAtTop
-				this.animate = true
-				const newCard = await this.addCardInStore({
-					title: this.newCardTitle,
-					stackId: this.stack.id,
-					boardId: this.stack.boardId,
-					// Without an order the API appends the card to the end of the stack
-					...(addCardAtTop ? { order: 0 } : {}),
-				})
-				if (addCardAtTop) {
-					// Creating a card does not move the existing cards down, so reorder
-					await this.$store.dispatch('reorderCard', { ...newCard, order: 0 })
-				}
-				this.newCardTitle = ''
-				this.showAddCard = true
-				this.$nextTick(() => {
-					this.$refs.newCardInput.focus()
-					this.animate = false
-					// Refs of a v-for are registered in creation order, not in list order
-					this.$refs.card?.find((card) => card.id === newCard.id)?.scrollIntoView()
-				})
-				if (!this.cardDetailsInModal) {
-					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
-				}
-			} catch (e) {
-				showError('Could not create card: ' + e.response.data.message)
-			} finally {
-				this.stateCardCreating = false
-			}
-		},
-		onCreateCardFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
-=======
 		handleCardCreated(newCard) {
 			this.$nextTick(() => {
 				this.animate = false
 				// Refs of a v-for are registered in creation order, not in list order
 				this.$refs.card?.find((card) => card.id === newCard.id)?.scrollIntoView()
 			})
->>>>>>> d09e436d7 (Extract add card form to keep tab order intact)
 		},
 		setupAutoscrollOnDrag() {
 			let timer
