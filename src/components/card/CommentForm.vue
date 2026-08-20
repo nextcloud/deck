@@ -12,7 +12,7 @@
 			:user-data="members"
 			@submit="submit" />
 		<NcButton v-show="hasContent"
-			type="tertiary"
+			variant="tertiary"
 			:aria-label="t('deck', 'Submit')"
 			:title="t('deck', 'Submit')"
 			class="comment-form__submit"
