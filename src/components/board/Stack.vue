@@ -164,6 +164,7 @@ import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'Stack',
@@ -217,6 +218,11 @@ export default {
 		...mapState(useCardStore, {
 			cardsByStackGetter: 'cardsByStack',
 		}),
+		...mapState(useSettingsStore, [
+			'compactMode',
+			'showCardCover',
+			'shortcutLock',
+		]),
 		cardsByStack() {
 			return this.cardsByStackGetter(this.stack.id).filter((card) => {
 				if (this.showArchived) {
@@ -233,17 +239,17 @@ export default {
 		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 	},
 	watch: {
 		showAddCard(newValue) {
 			if (!newValue) {
-				this.$store.dispatch('toggleShortcutLock', false)
+				this.toggleShortcutLock(false)
 			} else {
 				this.$nextTick(() => {
 					this.$refs.newCardInput.focus()
@@ -264,6 +270,7 @@ export default {
 			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
 			addCardInStore: 'addCard',
 		}),
+		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		stopCardCreation(e) {
 			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
 			// so we have to ignore it
@@ -359,7 +366,7 @@ export default {
 			}
 		},
 		onCreateCardFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 		},
 		setupAutoscrollOnDrag() {
 			let timer

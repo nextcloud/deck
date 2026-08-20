@@ -12,7 +12,7 @@
 				<span v-if="loading" class="icon-loading-small" />
 			</h2>
 			<NcActions>
-				<NcActionButton icon="icon-close" @click="$store.commit('setSearchQuery', '')" />
+				<NcActionButton icon="icon-close" @click="clearSearchQuery" />
 			</NcActions>
 		</header>
 		<div class="search-wrapper">
@@ -39,13 +39,14 @@
 
 <script>
 import CardItem from '../cards/CardItem.vue'
-import { mapState } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import InfiniteLoading from 'vue-infinite-loading'
 import Placeholder from './Placeholder.vue'
 import { NcActions, NcActionButton, NcRichText } from '@nextcloud/vue'
 import { useCardStore } from '../../stores/card.js'
+import { mapActions, mapState } from 'pinia'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const createCancelToken = () => axios.CancelToken.source()
 
@@ -84,7 +85,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useSettingsStore, {
 			searchQuery: state => state.searchQuery,
 		}),
 		filteredResults() {
@@ -116,6 +117,10 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions(useSettingsStore, ['setSearchQuery']),
+		clearSearchQuery() {
+			this.setSearchQuery('')
+		},
 		async infiniteHandler($state) {
 			this.loading = true
 			try {

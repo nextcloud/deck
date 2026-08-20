@@ -75,9 +75,9 @@ import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { showWarning } from '@nextcloud/dialogs'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
-import { mapState } from 'vuex'
-import { mapActions } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -140,9 +140,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			hasCardSaveError: (state) => state.hasCardSaveError,
-		}),
+		...mapState(useSettingsStore, ['hasCardSaveError']),
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -200,6 +198,7 @@ export default {
 		...mapActions(useCardStore, {
 			updateCardDescInStore: 'updateCardDesc',
 		}),
+		...mapActions(useSettingsStore, ['setHasCardSaveError']),
 		async setupEditor() {
 			await this.destroyEditor()
 			this.descriptionLastEdit = 0
@@ -319,9 +318,9 @@ export default {
 				this.$emit('change', this.description)
 				this.descriptionLastEdit = 0
 				this.descriptionOld = this.description
-				this.$store.commit('setHasCardSaveError', false)
+				this.setHasCardSaveError(false)
 			} catch (e) {
-				this.$store.commit('setHasCardSaveError', true)
+				this.setHasCardSaveError(true)
 				showWarning(t('deck', 'Could not save description'), { timeout: 2500 })
 				console.error(e)
 

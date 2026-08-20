@@ -31,7 +31,7 @@
 import Board from '../components/board/Board.vue'
 import DeckIcon from '../components/icons/DeckIcon.vue'
 import { BoardApi } from './../services/BoardApi.js'
-import storeFactory from './../store/main.js'
+import { useSettingsStore } from '../stores/settings.js'
 
 import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 
@@ -42,8 +42,6 @@ const boardApi = new BoardApi()
 
 export default {
 	name: 'BoardReferenceWidget',
-
-	store: storeFactory(),
 
 	components: {
 		DeckIcon,
@@ -98,7 +96,7 @@ export default {
 	},
 
 	created() {
-		this.$store.commit('setFullApp', false)
+		useSettingsStore().setFullApp(false)
 	},
 
 }
