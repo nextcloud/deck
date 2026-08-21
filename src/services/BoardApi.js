@@ -368,4 +368,66 @@ export class BoardApi {
 			})
 	}
 
+	// Board view API calls
+
+	loadBoardViews(boardId) {
+		return axios.get(this.ocsUrl(`/boards/${boardId}/views`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	createBoardView(boardId, name, filters) {
+		return axios.post(this.ocsUrl(`/boards/${boardId}/views`), { name, filters })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	updateBoardView(boardId, view) {
+		return axios.put(this.ocsUrl(`/boards/${boardId}/views/${view.id}`), view)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	deleteBoardView(boardId, viewId) {
+		return axios.delete(this.ocsUrl(`/boards/${boardId}/views/${viewId}`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }

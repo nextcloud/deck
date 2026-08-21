@@ -28,6 +28,7 @@ export const useBoardStore = defineStore('board', {
 		assignableUsers: [],
 		filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 		boardFilter: BOARD_FILTERS.ALL,
+		boardViews: [],
 		boards: loadState('deck', 'initialBoards', {}),
 	}),
 	getters: {
@@ -143,10 +144,40 @@ export const useBoardStore = defineStore('board', {
 		},
 		async loadBoardById(boardId) {
 			this.filter = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
+			this.boardViews = []
 			this.setCurrentBoard(null)
 			const board = await apiClient.loadById(boardId)
 			this.setCurrentBoard(board)
 			this.setAssignableUsers(board.users)
+			await this.loadBoardViews(boardId)
+		},
+		async loadBoardViews(boardId) {
+			this.boardViews = await apiClient.loadBoardViews(boardId)
+			return this.boardViews
+		},
+		async createBoardView(boardId, name) {
+			const view = await apiClient.createBoardView(boardId, name, this.filter)
+			this.boardViews.push(view)
+			return view
+		},
+		async updateBoardView(view) {
+			const updated = await apiClient.updateBoardView(view.boardId, view)
+			const index = this.boardViews.findIndex((v) => v.id === updated.id)
+			if (index > -1) {
+				Vue.set(this.boardViews, index, updated)
+			}
+			return updated
+		},
+		async deleteBoardView(boardId, viewId) {
+			await apiClient.deleteBoardView(boardId, viewId)
+			this.boardViews = this.boardViews.filter((v) => v.id !== viewId)
+		},
+		applyBoardView(view) {
+			this.setFilterInStore(this.normalizeFilter(view.filters))
+		},
+		normalizeFilter(filter) {
+			const defaults = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
+			return { ...defaults, ...(filter || {}) }
 		},
 		async refreshBoard(boardId) {
 			const board = await apiClient.loadById(boardId)
