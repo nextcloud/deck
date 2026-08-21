@@ -334,12 +334,11 @@ export default {
 				position: relative;
 
 				.smooth-dnd-container.vertical {
-					$margin-x: calc($stack-gap * -1);
 					display: flex;
 					flex-direction: column;
 					gap: $stack-gap;
 					padding: $stack-gap;
-					margin: 0 $margin-x;
+					margin: 0 calc(#{$stack-gap} * -1);
 					overflow-y: auto;
 					scrollbar-gutter: stable;
 				}
