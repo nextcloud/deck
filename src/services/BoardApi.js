@@ -6,6 +6,7 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import '../models/index.js'
+import { buildBoardCsv, downloadBlob, toCsvBlob } from '../helpers/boardExport.js'
 
 /**
  * This class handles all the api communication with the Deck backend.
@@ -159,104 +160,54 @@ export class BoardApi {
 		}
 	}
 
-	exportBoard(board, format) {
-		return axios.get(this.url(`/boards/${board.id}/export`))
-			.then(
-				(response) => {
-					if (format === 'json') {
-						const exportData = {
-							boards: [response.data],
-						}
-						const stacks = {}
-						for (const stack of response.data.stacks) {
-							stacks[stack.id] = stack
-						}
-						exportData.boards[0].stacks = stacks
-						const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
-						const blobUrl = URL.createObjectURL(blob)
-						const a = document.createElement('a')
-						a.href = blobUrl
-						a.download = response.data.title + '.json'
-						a.click()
-						a.remove()
-						return Promise.resolve()
-					}
+	/**
+	 * Export a board as a downloadable file.
+	 *
+	 * The backend returns the complete board, including archived cards,
+	 * completion state, comments and attachments, so both formats are built
+	 * from the same payload.
+	 *
+	 * @param {Board} board the board to export
+	 * @param {string} format either `json` or `csv`
+	 * @param {object} options which parts of the board to include
+	 * @return {Promise}
+	 */
+	async exportBoard(board, format, options = {}) {
+		const { archivedCards = true, comments = true, attachments = true } = options
+		const response = await axios.get(this.url(`/boards/${board.id}/export`), {
+			params: {
+				archivedCards,
+				comments,
+				// A CSV only lists cards, so never pay for the attachment payload
+				attachments: format === 'csv' ? false : attachments,
+			},
+		})
+		const exportedBoard = response.data
 
-					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), assignedUsers: t('deck', 'Assigned users'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
-					let row = ''
-					Object.keys(fields).forEach(field => {
-						row += '"' + fields[field] + '"' + '\t'
-					})
-
-					row = row.slice(0, -1)
-					let CSV = row + '\r\n'
-
-					response.data.stacks.forEach(stack => {
-						stack?.cards?.forEach(card => {
-							row = ''
-							Object.keys(fields).forEach(field => {
-								if (field === 'createdAt' || field === 'lastModified') {
-									const date = new Date(Number(card[field]) * 1000)
-									row += '"' + date.toLocaleDateString() + '"' + '\t'
-								} else if (field === 'stackId') {
-									row += '"' + stack.title.replaceAll('"', '""') + '"' + '\t'
-								} else if (field === 'labels') {
-									row += '"'
-									card[field].forEach(label => {
-										row += label.title.replaceAll('"', '""') + ', '
-									})
-									if (card[field].length > 0) {
-										row = row.slice(0, -1)
-									}
-									row += '"' + '\t'
-								} else if (field === 'assignedUsers') {
-									row += '"'
-									card[field].forEach(assignedUsers => {
-										row += assignedUsers.participant.displayname.replaceAll('"', '""') + ', '
-									})
-									if (card[field].length > 0) {
-										row = row.slice(0, -1)
-									}
-									row += '"' + '\t'
-								} else if (field === 'description' || field === 'title') {
-									row += '"' + card[field].replaceAll('"', '""') + '"' + '\t'
-								} else {
-									row += '"' + card[field] + '"' + '\t'
-								}
-							})
-							row = row.slice(0, -1)
-							CSV += row + '\r\n'
-						})
-					})
-					let charCode = []
-					const byteArray = []
-					byteArray.push(255, 254)
-					for (let i = 0; i < CSV.length; ++i) {
-						charCode = CSV.charCodeAt(i)
-						byteArray.push(charCode & 0xff)
-						byteArray.push(charCode / 256 >>> 0)
-					}
-					const blob = new Blob([new Uint8Array(byteArray)], { type: 'text/csv;charset=UTF-16LE;' })
-					const blobUrl = URL.createObjectURL(blob)
-					const a = document.createElement('a')
-					a.href = blobUrl // 'data:' + data
-					a.download = response.data.title + '.csv'
-					a.click()
-					a.remove()
-					return Promise.resolve()
-				},
-				(err) => {
-					return Promise.reject(err)
-				},
+		if (format === 'json') {
+			const stacks = {}
+			for (const stack of exportedBoard.stacks ?? []) {
+				stacks[stack.id] = stack
+			}
+			const exportData = {
+				boards: [{ ...exportedBoard, stacks }],
+			}
+			downloadBlob(
+				new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' }),
+				exportedBoard.title + '.json',
 			)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
+			return
+		}
+
+		downloadBlob(toCsvBlob(buildBoardCsv(exportedBoard)), exportedBoard.title + '.csv')
 	}
 
-	importBoard(file) {
+	importBoard(file, options = {}) {
 		const formData = new FormData()
 		formData.append('file', file)
+		for (const [key, value] of Object.entries(options)) {
+			formData.append(key, value ? '1' : '0')
+		}
 		return axios.post(this.url('/boards/import'), formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',

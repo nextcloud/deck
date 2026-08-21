@@ -10,9 +10,12 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\NoPermissionException;
+use OCA\Deck\Service\BoardExportOptions;
+use OCA\Deck\Service\BoardExportService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
+use OCA\Deck\Service\Importer\ImportOptions;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
@@ -26,6 +29,7 @@ class BoardController extends ApiController {
 		$appName,
 		IRequest $request,
 		private BoardService $boardService,
+		private BoardExportService $boardExportService,
 		private ExternalBoardService $externalBoardService,
 		private PermissionService $permissionService,
 		private BoardImportService $boardImportService,
@@ -131,14 +135,21 @@ class BoardController extends ApiController {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return Board
+	 * Export a board with everything needed to restore it: archived cards,
+	 * completion state, all date fields, comments and attachment contents.
+	 *
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	public function export($boardId) {
-		return $this->boardService->export($boardId);
+	#[NoAdminRequired]
+	public function export(int $boardId, bool $archivedCards = true, bool $comments = true, bool $attachments = true): DataResponse {
+		$options = new BoardExportOptions(
+			includeArchivedCards: $archivedCards,
+			includeComments: $comments,
+			includeAttachments: $attachments,
+		);
+
+		return new DataResponse($this->boardExportService->exportBoard($boardId, $options));
 	}
 
 	/**
@@ -184,6 +195,7 @@ class BoardController extends ApiController {
 			$config = new \stdClass();
 			$config->owner = $this->userId;
 			$this->boardImportService->setConfigInstance($config);
+			$this->boardImportService->setOptions(ImportOptions::fromArray($this->request->getParams()));
 			$this->boardImportService->setData(json_decode($fileContent));
 			$this->boardImportService->import();
 			$importedBoard = $this->boardImportService->getBoard();

@@ -204,22 +204,41 @@ class BoardImportCommandService extends BoardImportService {
 			try {
 				$this->reset();
 				$this->setData($board);
+				$options = $this->getOptions();
 				$this->getOutput()->writeln('Importing board "' . $board->title . '".');
 				$this->importBoard();
-				$this->getOutput()->writeln('Assign users to board...');
-				$this->importAcl();
-				$this->getOutput()->writeln('Importing labels...');
-				$this->importLabels();
+				if ($options->importSharing) {
+					$this->getOutput()->writeln('Assign users to board...');
+					$this->importAcl();
+				}
+				if ($options->importLabels) {
+					$this->getOutput()->writeln('Importing labels...');
+					$this->importLabels();
+				}
 				$this->getOutput()->writeln('Importing stacks...');
 				$this->importStacks();
-				$this->getOutput()->writeln('Importing cards...');
-				$this->importCards();
-				$this->getOutput()->writeln('Assign cards to labels...');
-				$this->assignCardsToLabels();
-				$this->getOutput()->writeln('Importing comments...');
-				$this->importComments();
-				$this->getOutput()->writeln('Importing participants...');
-				$this->importCardAssignments();
+				if ($options->importCards) {
+					$this->getOutput()->writeln('Importing cards...');
+					$this->importCards();
+					if ($options->importAttachments) {
+						$this->getOutput()->writeln('Importing attachments...');
+						$this->getImportSystem()->importAttachments();
+					}
+					if ($options->importLabels) {
+						$this->getOutput()->writeln('Assign cards to labels...');
+						$this->assignCardsToLabels();
+					}
+					if ($options->importComments) {
+						$this->getOutput()->writeln('Importing comments...');
+						$this->importComments();
+					}
+					if ($options->importAssignments) {
+						$this->getOutput()->writeln('Importing participants...');
+						$this->importCardAssignments();
+					}
+					$this->getOutput()->writeln('Importing card dependencies...');
+					$this->importCardDependencies();
+				}
 				$this->getOutput()->writeln('<info>Finished board import of "' . $this->getBoard()->getTitle() . '"</info>');
 			} catch (\Exception $e) {
 				$this->output->writeln('<error>Import failed for board ' . $board->title . ': ' . $e->getMessage() . '</error>');

@@ -100,10 +100,24 @@ class DeckJsonService extends ABoardImportService {
 				continue;
 			}
 			foreach ($sourceCard->assignedUsers as $idMember) {
+				// `participant` is an object when the export could resolve the
+				// user/group/circle and a plain uid string when it could not
+				$participant = $idMember->participant ?? null;
+				if (is_object($participant)) {
+					$participantId = $participant->uid ?? $participant->primaryKey ?? null;
+					$type = $participant->type ?? $idMember->type ?? Assignment::TYPE_USER;
+				} else {
+					$participantId = $participant;
+					$type = $idMember->type ?? Assignment::TYPE_USER;
+				}
+				if ($participantId === null) {
+					continue;
+				}
+
 				$assignment = new Assignment();
 				$assignment->setCardId($this->cards[$sourceCard->id]->getId());
-				$assignment->setParticipant($this->mapMember($idMember->participant->uid ?? $idMember->participant));
-				$assignment->setType($idMember->participant->type);
+				$assignment->setParticipant($this->mapMember($participantId));
+				$assignment->setType((int)$type);
 				$assignments[$sourceCard->id][] = $assignment;
 			}
 		}
@@ -257,19 +271,30 @@ class DeckJsonService extends ABoardImportService {
 	 * @return Stack[]
 	 */
 	public function getStacks(): array {
+		$options = $this->getImportService()->getOptions();
 		$return = [];
+		$doneColumnTaken = false;
 		foreach ($this->getImportService()->getData()->stacks as $index => $source) {
 			if ($source->title) {
+				// A board can only have a single done column, ignore any further
+				// ones a hand-crafted import file might contain
+				$isDoneColumn = !$doneColumnTaken && !empty($source->isDoneColumn);
+				$doneColumnTaken = $doneColumnTaken || $isDoneColumn;
+
 				$stack = new Stack();
 				$stack->setTitle($source->title);
 				$stack->setBoardId($this->getImportService()->getBoard()->getId());
 				$stack->setOrder($source->order);
 				$stack->setLastModified($source->lastModified);
+				$stack->setIsDoneColumn($isDoneColumn);
 				$return[$source->id] = $stack;
 			}
 
 			if (isset($source->cards)) {
 				foreach ($source->cards as $card) {
+					if (!$options->importArchivedCards && !empty($card->archived)) {
+						continue;
+					}
 					$card->stackId = $source->id;
 					$this->tmpCards[] = $card;
 				}
@@ -282,6 +307,7 @@ class DeckJsonService extends ABoardImportService {
 	 * @return Card[]
 	 */
 	public function getCards(): array {
+		$options = $this->getImportService()->getOptions();
 		$cards = [];
 		foreach ($this->tmpCards as $cardSource) {
 			$card = new Card();
@@ -289,19 +315,66 @@ class DeckJsonService extends ABoardImportService {
 			$card->setLastModified($cardSource->lastModified);
 			$card->setLastEditor($cardSource->lastEditor);
 			$card->setCreatedAt($cardSource->createdAt);
-			$card->setArchived($cardSource->archived);
+			$card->setArchived($options->importArchivedCards && !empty($cardSource->archived));
 			$card->setDescription($cardSource->description);
+			$card->setColor($cardSource->color ?? null);
 			$card->setStackId($this->stacks[$cardSource->stackId]->getId());
-			$card->setType('plain');
+			$card->setType($cardSource->type ?? 'plain');
 			$card->setOrder($cardSource->order);
 			$boardOwner = $this->getBoard()->getOwner();
 			$card->setOwner($this->mapOwner(is_string($boardOwner) ? $boardOwner : $boardOwner->getUID()));
-			$card->setDuedate($cardSource->duedate ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->duedate) : null);
-			$card->setStartdate(isset($cardSource->startdate) && $cardSource->startdate !== null ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->startdate) : null);
-			$card->setDone(isset($cardSource->done) && $cardSource->done !== null ? \DateTime::createFromFormat(\DateTime::ATOM, $cardSource->done) : null);
+			$card->setDuedate($options->importDueDates ? $this->parseDate($cardSource->duedate ?? null) : null);
+			$card->setStartdate($options->importDueDates ? $this->parseDate($cardSource->startdate ?? null) : null);
+			$card->setDone($options->importDoneState ? $this->parseDate($cardSource->done ?? null) : null);
 			$cards[$cardSource->id] = $card;
 		}
 		return $cards;
+	}
+
+	/**
+	 * Card dependencies reference other cards by their id in the export, so they
+	 * can only be resolved once every card of the board has been created.
+	 *
+	 * A dependency pointing at a card that is not part of this import - one on
+	 * another board, or one skipped because archived cards were deselected - is
+	 * dropped rather than guessed at.
+	 *
+	 * @return array<int, int[]> new dependent card ids, by new card id
+	 */
+	public function getCardDependencies(): array {
+		$dependencies = [];
+		foreach ($this->tmpCards as $sourceCard) {
+			if (!property_exists($sourceCard, 'dependentCards') || !is_iterable($sourceCard->dependentCards ?? null)) {
+				continue;
+			}
+			if (!isset($this->cards[$sourceCard->id])) {
+				continue;
+			}
+
+			$cardId = $this->cards[$sourceCard->id]->getId();
+			foreach ($sourceCard->dependentCards as $sourceDependentId) {
+				if (!isset($this->cards[$sourceDependentId])) {
+					continue;
+				}
+				$dependencies[$cardId][] = $this->cards[$sourceDependentId]->getId();
+			}
+		}
+
+		return $dependencies;
+	}
+
+	/**
+	 * Dates are exported as ISO 8601 including the offset, so the value keeps
+	 * pointing at the same instant no matter which timezone imports it.
+	 */
+	private function parseDate(?string $value): ?\DateTime {
+		if ($value === null || $value === '') {
+			return null;
+		}
+
+		$date = \DateTime::createFromFormat(\DateTime::ATOM, $value);
+
+		return $date === false ? null : $date;
 	}
 
 	/**

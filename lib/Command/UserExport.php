@@ -7,29 +7,22 @@
 
 namespace OCA\Deck\Command;
 
-use OCA\Deck\Db\AssignmentMapper;
-use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Model\CardDetails;
+use OCA\Deck\Service\BoardExportOptions;
+use OCA\Deck\Service\BoardExportService;
 use OCA\Deck\Service\BoardService;
-use OCA\Deck\Service\CommentService;
 use OCP\App\IAppManager;
 use OCP\DB\Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UserExport extends Command {
 	public function __construct(
 		private IAppManager $appManager,
-		private BoardMapper $boardMapper,
 		private BoardService $boardService,
-		private StackMapper $stackMapper,
-		private CardMapper $cardMapper,
-		private AssignmentMapper $assignedUsersMapper,
-		private CommentService $commentService,
+		private BoardExportService $boardExportService,
 	) {
 		parent::__construct();
 	}
@@ -44,6 +37,12 @@ class UserExport extends Command {
 				'User ID of the user'
 			)
 			->addOption('legacy-format', 'l')
+			->addOption(
+				'no-attachments',
+				null,
+				InputOption::VALUE_NONE,
+				'Skip attachment contents, which keeps the export small but makes it incomplete'
+			)
 		;
 	}
 
@@ -55,39 +54,16 @@ class UserExport extends Command {
 		$legacyFormat = $input->getOption('legacy-format');
 
 		$this->boardService->setUserId($userId);
-		$boards = $this->boardService->findAll(fullDetails: false);
+		$this->boardExportService->setUserId($userId);
 
-		$data = [];
-		foreach ($boards as $board) {
-			if ($board->getDeletedAt() > 0) {
-				continue;
-			}
+		$options = new BoardExportOptions(
+			includeAttachments: !$input->getOption('no-attachments'),
+		);
+		$data = $this->boardExportService->exportBoards(
+			$this->boardService->findAll(fullDetails: false),
+			$options,
+		);
 
-			$fullBoard = $this->boardMapper->find($board->getId(), true, true);
-			$data[$board->getId()] = $fullBoard->jsonSerialize();
-			$stacks = $this->stackMapper->findAll($board->getId());
-			foreach ($stacks as $stack) {
-				$data[$board->getId()]['stacks'][$stack->getId()] = $stack->jsonSerialize();
-				$cards = $this->cardMapper->findAllByStack($stack->getId());
-				foreach ($cards as $card) {
-					if ($card->getDeletedAt() > 0) {
-						continue;
-					}
-					$fullCard = $this->cardMapper->find($card->getId());
-
-					$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
-					$fullCard->setAssignedUsers($assignedUsers);
-
-					$cardDetails = new CardDetails($fullCard, $fullBoard);
-					$comments = $this->commentService->list($card->getId());
-					$cardDetails->setCommentsCount(count($comments->getData()));
-
-					$cardJson = $cardDetails->jsonSerialize();
-					$cardJson['comments'] = $comments->getData();
-					$data[$board->getId()]['stacks'][$stack->getId()]['cards'][] = $cardJson;
-				}
-			}
-		}
 		$output->writeln(json_encode(
 			$legacyFormat ? $data : [
 				'version' => $this->appManager->getAppVersion('deck'),

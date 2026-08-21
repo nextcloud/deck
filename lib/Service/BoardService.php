@@ -658,20 +658,6 @@ class BoardService {
 	}
 
 	/**
-	 * @throws DoesNotExistException
-	 * @throws NoPermissionException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 */
-	public function export(int $id): Board {
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
-		$board = $this->boardMapper->find($id);
-		$this->enrichWithCards($board);
-		$this->enrichWithLabels($board);
-
-		return $board;
-	}
-
-	/**
 	 * @param Board[] $boards
 	 * @return Board[]
 	 */
@@ -829,40 +815,4 @@ class BoardService {
 		unset($this->boardsCachePartial[$boardId]);
 	}
 
-	private function enrichWithCards(Board $board): void {
-		$stacks = $this->stackMapper->findAll($board->getId());
-		if (\count($stacks) === 0) {
-			return;
-		}
-
-		$stackIds = array_map(fn (Stack $stack) => $stack->getId(), $stacks);
-
-		// Fetch all active cards for all stacks in one query
-		$cardsByStack = $this->cardMapper->findAllForStacks($stackIds);
-
-		$allCards = array_merge(...array_values(array_filter($cardsByStack)));
-		$allCardIds = array_map(fn (Card $card) => $card->getId(), $allCards);
-
-		// Batch-fetch labels and assigned users for all cards
-		$labelsByCard = [];
-		foreach ($this->labelMapper->findAssignedLabelsForCards($allCardIds) as $label) {
-			$labelsByCard[$label->getCardId()][] = $label;
-		}
-		$usersByCard = [];
-		foreach ($this->assignedUsersMapper->findIn($allCardIds) as $assignment) {
-			$usersByCard[$assignment->getCardId()][] = $assignment;
-		}
-
-		foreach ($stacks as $stack) {
-			$fullCards = [];
-			foreach ($cardsByStack[$stack->getId()] ?? [] as $card) {
-				$card->setLabels($labelsByCard[$card->getId()] ?? []);
-				$card->setAssignedUsers($usersByCard[$card->getId()] ?? []);
-				$fullCards[] = $card;
-			}
-			$stack->setCards($fullCards);
-		}
-
-		$board->setStacks($stacks);
-	}
 }

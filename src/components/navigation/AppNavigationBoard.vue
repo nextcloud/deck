@@ -454,11 +454,17 @@ export default {
 		actionExport() {
 			this.exportModalOpen = true
 		},
-		async onExportBoard(format) {
+		async onExportBoard(format, options) {
 			this.exportModalOpen = false
 			const loadingToast = showLoading(t('deck', 'Exporting board...'))
-			await this.boardApi.exportBoard(this.board, format)
-			loadingToast.hideToast()
+			try {
+				await this.boardApi.exportBoard(this.board, format, options)
+			} catch (err) {
+				showError(t('deck', 'Could not export board'))
+				console.error(err)
+			} finally {
+				loadingToast.hideToast()
+			}
 		},
 		onCloseExportBoard() {
 			this.exportModalOpen = false

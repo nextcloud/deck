@@ -21,6 +21,25 @@
 			<p class="note">
 				{{ t('deck', 'Note: Only the JSON format is supported for importing back into the Deck app.') }}
 			</p>
+
+			<fieldset class="options">
+				<legend>{{ t('deck', 'Content to export') }}</legend>
+				<NcCheckboxRadioSwitch :checked.sync="includeArchivedCards">
+					{{ t('deck', 'Archived cards') }}
+				</NcCheckboxRadioSwitch>
+				<!-- Comments and attachments have no place in a flat list of cards -->
+				<template v-if="exportFormat === 'json'">
+					<NcCheckboxRadioSwitch :checked.sync="includeComments">
+						{{ t('deck', 'Comments') }}
+					</NcCheckboxRadioSwitch>
+					<NcCheckboxRadioSwitch :checked.sync="includeAttachments">
+						{{ t('deck', 'Attachments') }}
+					</NcCheckboxRadioSwitch>
+					<p class="note">
+						{{ t('deck', 'Attachments are embedded in the export file. Leaving them out keeps the file small, but the export will no longer restore the board completely.') }}
+					</p>
+				</template>
+			</fieldset>
 		</div>
 
 		<template #actions>
@@ -53,11 +72,18 @@ export default {
 	data() {
 		return {
 			exportFormat: 'json',
+			includeArchivedCards: true,
+			includeComments: true,
+			includeAttachments: true,
 		}
 	},
 	methods: {
 		exportBoard() {
-			this.$emit('export', this.exportFormat)
+			this.$emit('export', this.exportFormat, {
+				archivedCards: this.includeArchivedCards,
+				comments: this.includeComments,
+				attachments: this.includeAttachments,
+			})
 			this.close()
 		},
 		close() {
@@ -74,5 +100,17 @@ export default {
 
 p.note {
 	margin-top: 10px;
+	color: var(--color-text-maxcontrast);
+}
+
+fieldset.options {
+	margin-top: 20px;
+	border-top: 1px solid var(--color-border);
+	padding-top: 10px;
+}
+
+fieldset.options legend {
+	font-weight: bold;
+	margin-bottom: 5px;
 }
 </style>

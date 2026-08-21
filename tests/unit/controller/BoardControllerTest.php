@@ -28,10 +28,16 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use OCA\Deck\NoPermissionException;
+use OCA\Deck\Service\BoardExportOptions;
+use OCA\Deck\Service\BoardExportService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
+use OCA\Deck\Service\Importer\ImportOptions;
 use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -46,11 +52,16 @@ class BoardControllerTest extends \Test\TestCase {
 	private IUserManager&MockObject $userManager;
 	private IGroupManager&MockObject $groupManager;
 	private BoardService&MockObject $boardService;
+	private BoardExportService&MockObject $boardExportService;
 	private PermissionService&MockObject $permissionService;
 	private BoardImportService&MockObject $boardImportService;
 	private $userId = 'user';
+	/** @var string[] */
+	private array $uploadedFiles = [];
 
 	public function setUp(): void {
+		parent::setUp();
+
 		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -80,10 +91,15 @@ class BoardControllerTest extends \Test\TestCase {
 			->with($this->userId)
 			->willReturn($user);
 
+		$this->boardExportService = $this->getMockBuilder(BoardExportService::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->controller = new BoardController(
 			'deck',
 			$this->request,
 			$this->boardService,
+			$this->boardExportService,
 			$this->createMock(ExternalBoardService::class),
 			$this->permissionService,
 			$this->boardImportService,
@@ -146,6 +162,172 @@ class BoardControllerTest extends \Test\TestCase {
 		$this->assertEquals($board, $this->controller->deleteUndo(123));
 	}
 
+	public function testExportUsesTheCompleteBoardByDefault() {
+		$this->boardExportService->expects($this->once())
+			->method('exportBoard')
+			->with(123, $this->callback(static function (BoardExportOptions $options): bool {
+				return $options->includeArchivedCards === true
+					&& $options->includeComments === true
+					&& $options->includeAttachments === true;
+			}))
+			->willReturn(['id' => 123, 'title' => 'Board', 'stacks' => []]);
+
+		$response = $this->controller->export(123);
+
+		$this->assertInstanceOf(DataResponse::class, $response);
+		$this->assertEquals(['id' => 123, 'title' => 'Board', 'stacks' => []], $response->getData());
+	}
+
+	public function testExportForwardsTheRequestedParts() {
+		$this->boardExportService->expects($this->once())
+			->method('exportBoard')
+			->with(123, $this->callback(static function (BoardExportOptions $options): bool {
+				return $options->includeArchivedCards === false
+					&& $options->includeComments === false
+					&& $options->includeAttachments === false;
+			}))
+			->willReturn([]);
+
+		$this->controller->export(123, false, false, false);
+	}
+
+	public function testImportAppliesTheSelectedOptions() {
+		$board = new Board();
+		$board->setId(5);
+		$this->preparePermittedImport();
+
+		$this->request->method('getParams')->willReturn([
+			'importComments' => '0',
+			'importAttachments' => 'false',
+		]);
+		$this->boardImportService->expects($this->once())->method('setSystem')->with('DeckJson');
+		$this->boardImportService->expects($this->once())
+			->method('setOptions')
+			->with($this->callback(static function (ImportOptions $options): bool {
+				return $options->importComments === false
+					&& $options->importAttachments === false
+					&& $options->importCards === true
+					&& $options->importSharing === true;
+			}));
+		$this->boardImportService->expects($this->once())->method('import');
+		$this->boardImportService->method('getBoard')->willReturn($board);
+		$this->boardService->expects($this->once())->method('find')->with(5)->willReturn($board);
+
+		$response = $this->controller->import();
+
+		$this->assertEquals(Http::STATUS_OK, $response->getStatus());
+		$this->assertEquals($board, $response->getData());
+	}
+
+	public function testImportWithoutOptionsImportsEverything() {
+		$board = new Board();
+		$board->setId(5);
+		$this->preparePermittedImport();
+
+		$this->request->method('getParams')->willReturn([]);
+		$this->boardImportService->expects($this->once())
+			->method('setOptions')
+			->with($this->equalTo(new ImportOptions()));
+		$this->boardImportService->method('getBoard')->willReturn($board);
+		$this->boardService->method('find')->willReturn($board);
+
+		$this->controller->import();
+	}
+
+	public function testImportWithoutPermissionToCreateBoards() {
+		$this->permissionService->expects($this->once())->method('canCreate')->willReturn(false);
+		$this->boardImportService->expects($this->never())->method('import');
+
+		$this->expectException(NoPermissionException::class);
+		$this->controller->import();
+	}
+
+	public function testImportWithoutAFile() {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->request->method('getUploadedFile')->with('file')->willReturn(null);
+		$this->boardImportService->expects($this->never())->method('import');
+
+		$response = $this->controller->import();
+
+		$this->assertEquals(Http::STATUS_BAD_REQUEST, $response->getStatus());
+		$this->assertEquals('error', $response->getData()['status']);
+	}
+
+	public function testImportOfANonJsonFile() {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->request->method('getUploadedFile')->willReturn([
+			'error' => UPLOAD_ERR_OK,
+			'type' => 'image/png',
+			'tmp_name' => '/dev/null',
+		]);
+		$this->boardImportService->expects($this->never())->method('import');
+
+		$response = $this->controller->import();
+
+		$this->assertEquals(Http::STATUS_BAD_REQUEST, $response->getStatus());
+		$this->assertEquals('Invalid file type. Only JSON files are allowed.', $response->getData()['message']);
+	}
+
+	public function testImportOfAFileThatWasNotFullyUploaded() {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->request->method('getUploadedFile')->willReturn([
+			'error' => UPLOAD_ERR_PARTIAL,
+			'type' => 'application/json',
+			'tmp_name' => '/dev/null',
+		]);
+		$this->boardImportService->expects($this->never())->method('import');
+
+		$response = $this->controller->import();
+
+		$this->assertEquals(Http::STATUS_BAD_REQUEST, $response->getStatus());
+		$this->assertEquals('The file was only partially uploaded', $response->getData()['message']);
+	}
+
+	public function testImportOfAFailingBoard() {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->preparePermittedImport();
+		$this->request->method('getParams')->willReturn([]);
+		$this->boardImportService->method('import')->willThrowException(new \RuntimeException('boom'));
+
+		$response = $this->controller->import();
+
+		$this->assertEquals(Http::STATUS_BAD_REQUEST, $response->getStatus());
+		$this->assertEquals('Failed to import board', $response->getData()['message']);
+	}
+
+	public function testImportOfInvalidJson() {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->preparePermittedImport('this is not json');
+		$this->request->method('getParams')->willReturn([]);
+		// json_decode() returns null, which the import service rejects with a TypeError
+		$this->boardImportService->method('setData')->willThrowException(new \TypeError('null given'));
+
+		$response = $this->controller->import();
+
+		$this->assertEquals(Http::STATUS_BAD_REQUEST, $response->getStatus());
+		$this->assertEquals('Invalid JSON data', $response->getData()['message']);
+	}
+
+	/**
+	 * Let the controller see a valid upload of $content.
+	 */
+	private function preparePermittedImport(string $content = '{"boards":[]}'): void {
+		$this->permissionService->method('canCreate')->willReturn(true);
+
+		$path = tempnam(sys_get_temp_dir(), 'deck-import');
+		file_put_contents($path, $content);
+		$this->uploadedFiles[] = $path;
+
+		$this->request->method('getUploadedFile')->with('file')->willReturn([
+			'error' => UPLOAD_ERR_OK,
+			'type' => 'application/json',
+			'tmp_name' => $path,
+		]);
+	}
+
 	public function testGetUserPermissions() {
 		$acl = [
 			Acl::PERMISSION_READ => true,
@@ -194,5 +376,13 @@ class BoardControllerTest extends \Test\TestCase {
 			->with(1)
 			->willReturn($acl);
 		$this->assertEquals($acl, $this->controller->deleteAcl(1));
+	}
+
+	public function tearDown(): void {
+		foreach ($this->uploadedFiles as $path) {
+			@unlink($path);
+		}
+		$this->uploadedFiles = [];
+		parent::tearDown();
 	}
 }
