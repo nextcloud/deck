@@ -385,6 +385,21 @@ export class BoardApi {
 			})
 	}
 
+	loadAllBoardViews() {
+		return axios.get(this.ocsUrl('/views'))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	createBoardView(boardId, name, filters) {
 		return axios.post(this.ocsUrl(`/boards/${boardId}/views`), { name, filters })
 			.then(

@@ -101,19 +101,32 @@
 						</template>
 
 						<div v-if="filterVisible" class="filter">
-							<div v-if="boardViews.length" class="filter--saved-views">
+							<div v-if="displayViews.length" class="filter--saved-views">
 								<h3>{{ t('deck', 'Saved views') }}</h3>
-								<div v-for="view in boardViews" :key="view.id" class="filter--saved-view">
+								<div v-for="view in displayViews" :key="view.id" class="filter--saved-view">
 									<NcButton type="tertiary"
 										class="filter--saved-view-name"
-										:title="t('deck', 'Apply view {name}', { name: view.name })"
-										@click="applyView(view)">
+										:title="view.isDefault
+											? t('deck', 'Apply default view {name}', { name: view.name })
+											: t('deck', 'Apply view {name}', { name: view.name })"
+										@click="view.isDefault ? applyDefaultView() : applyView(view)">
 										<template #icon>
-											<BookmarkOutline :size="18" decorative />
+											<StarIcon v-if="view.isDefault" :size="18" decorative />
+											<BookmarkOutline v-else :size="18" decorative />
 										</template>
 										{{ view.name }}
 									</NcButton>
-									<NcButton type="tertiary"
+									<NcButton v-if="view.isDefault"
+										type="tertiary"
+										:aria-label="t('deck', 'Remove default view')"
+										:title="t('deck', 'Remove default view')"
+										@click="removeDefaultView">
+										<template #icon>
+											<BookmarkOffOutline :size="18" decorative />
+										</template>
+									</NcButton>
+									<NcButton v-if="!view.isDefault || view.isLocal"
+										type="tertiary"
 										:aria-label="t('deck', 'Delete view {name}', { name: view.name })"
 										@click="removeView(view)">
 										<template #icon>
@@ -331,7 +344,9 @@ import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import FilterIcon from 'vue-material-design-icons/FilterOutline.vue'
 import FilterOffIcon from 'vue-material-design-icons/FilterOffOutline.vue'
 import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue'
+import BookmarkOffOutline from 'vue-material-design-icons/BookmarkOffOutline.vue'
 import ContentSave from 'vue-material-design-icons/ContentSave.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
@@ -362,7 +377,9 @@ export default {
 		FilterIcon,
 		FilterOffIcon,
 		BookmarkOutline,
+		BookmarkOffOutline,
 		ContentSave,
+		StarIcon,
 		TrashCanOutline,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
@@ -419,6 +436,7 @@ export default {
 			'viewMode',
 			'showArchived',
 			'boardViews',
+			'allBoardViews',
 		]),
 		...mapStateVuex({
 			isFullApp: state => state.isFullApp,
@@ -438,6 +456,19 @@ export default {
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
+		displayViews() {
+			const defaultId = this.$store.getters.config('defaultBoardView')
+			const defaultView = defaultId ? this.allBoardViews.find((view) => view.id === defaultId) : null
+			const isLocalDefault = defaultView && this.boardViews.some((view) => view.id === defaultView.id)
+			const localViews = this.boardViews.filter((view) => !defaultView || view.id !== defaultView.id)
+			if (!defaultView) {
+				return localViews.map((view) => ({ ...view, isDefault: false, isLocal: true }))
+			}
+			return [
+				{ ...defaultView, isDefault: true, isLocal: isLocalDefault },
+				...localViews.map((view) => ({ ...view, isDefault: false, isLocal: true })),
+			]
+		},
 		presentUsers() {
 			if (!this.board) return []
 			// get user object including displayname from the list of all users with acces
@@ -451,6 +482,7 @@ export default {
 				this.newViewName = ''
 				if (current?.id) {
 					this.loadBoardViews(current.id)
+					this.loadAllBoardViews().then(() => this.applyDefaultView())
 				}
 			}
 			if (current) {
@@ -478,6 +510,7 @@ export default {
 			toggleShowArchived: 'toggleShowArchived',
 			setFilterInStore: 'setFilterInStore',
 			loadBoardViews: 'loadBoardViews',
+			loadAllBoardViews: 'loadAllBoardViews',
 			createBoardView: 'createBoardView',
 			deleteBoardView: 'deleteBoardView',
 			applyBoardView: 'applyBoardView',
@@ -553,8 +586,38 @@ export default {
 				completed: view.filters?.completed || 'both',
 			}
 		},
+		applyDefaultView() {
+			if (!this.board) {
+				return
+			}
+			const viewId = this.$store.getters.config('defaultBoardView')
+			if (!viewId) {
+				return
+			}
+			const view = this.allBoardViews.find((v) => v.id === viewId)
+			if (!view) {
+				return
+			}
+			const filters = view.filters || {}
+			const boardLabelIds = this.board.labels?.map((label) => label.id) || []
+			const matchingTags = (filters.tags || []).filter((tag) => boardLabelIds.includes(tag))
+			this.filter = {
+				tags: matchingTags,
+				users: [...(filters.users || [])],
+				due: filters.due || '',
+				unassigned: filters.unassigned || false,
+				completed: filters.completed || 'both',
+			}
+			this.setFilterInStore({ ...this.filter })
+		},
+		removeDefaultView() {
+			this.$store.dispatch('setConfig', { defaultBoardView: null })
+		},
 		async removeView(view) {
 			await this.deleteBoardView(view.boardId, view.id)
+			if (this.$store.getters.config('defaultBoardView') === view.id) {
+				this.$store.dispatch('setConfig', { defaultBoardView: null })
+			}
 		},
 		async saveView() {
 			if (!this.isFilterActive || this.newViewName.trim() === '' || !this.board) {

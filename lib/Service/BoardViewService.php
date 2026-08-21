@@ -30,6 +30,13 @@ class BoardViewService {
 		return $this->boardViewMapper->findAll($boardId, $this->userId ?? '');
 	}
 
+	/**
+	 * @return BoardView[]
+	 */
+	public function findAllForUser(): array {
+		return $this->boardViewMapper->findAllForUser($this->userId ?? '');
+	}
+
 	public function create(int $boardId, string $name, array $filters): BoardView {
 		$this->boardService->find($boardId);
 		if ($name === '') {

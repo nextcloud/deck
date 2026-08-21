@@ -32,6 +32,18 @@ class BoardViewMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * @return BoardView[]
+	 */
+	public function findAllForUser(string $userId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId)))
+			->orderBy('name', 'ASC');
+		return $this->findEntities($qb);
+	}
+
 	public function find(int $id, string $userId): BoardView {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')

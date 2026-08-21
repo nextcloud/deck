@@ -29,6 +29,7 @@ export const useBoardStore = defineStore('board', {
 		filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 		boardFilter: BOARD_FILTERS.ALL,
 		boardViews: [],
+		allBoardViews: [],
 		boards: loadState('deck', 'initialBoards', {}),
 	}),
 	getters: {
@@ -155,9 +156,14 @@ export const useBoardStore = defineStore('board', {
 			this.boardViews = await apiClient.loadBoardViews(boardId)
 			return this.boardViews
 		},
+		async loadAllBoardViews() {
+			this.allBoardViews = await apiClient.loadAllBoardViews()
+			return this.allBoardViews
+		},
 		async createBoardView(boardId, name) {
 			const view = await apiClient.createBoardView(boardId, name, this.filter)
 			this.boardViews.push(view)
+			this.allBoardViews.push(view)
 			return view
 		},
 		async updateBoardView(view) {
@@ -171,6 +177,7 @@ export const useBoardStore = defineStore('board', {
 		async deleteBoardView(boardId, viewId) {
 			await apiClient.deleteBoardView(boardId, viewId)
 			this.boardViews = this.boardViews.filter((v) => v.id !== viewId)
+			this.allBoardViews = this.allBoardViews.filter((v) => v.id !== viewId)
 		},
 		applyBoardView(view) {
 			this.setFilterInStore(this.normalizeFilter(view.filters))

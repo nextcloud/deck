@@ -144,6 +144,7 @@ return [
 		['name' => 'board_ocs#createForTeam', 'url' => '/api/v{apiVersion}/boards/team', 'verb' => 'POST'],
 		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 
+		['name' => 'board_view_api#all', 'url' => '/api/v{apiVersion}/views', 'verb' => 'GET'],
 		['name' => 'board_view_api#index', 'url' => '/api/v{apiVersion}/boards/{boardId}/views', 'verb' => 'GET'],
 		['name' => 'board_view_api#create', 'url' => '/api/v{apiVersion}/boards/{boardId}/views', 'verb' => 'POST'],
 		['name' => 'board_view_api#update', 'url' => '/api/v{apiVersion}/boards/{boardId}/views/{viewId}', 'verb' => 'PUT'],
