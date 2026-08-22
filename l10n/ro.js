@@ -172,6 +172,7 @@ OC.L10N.register(
     "Limit board creation to some groups" : "Permite crearea panourilor doar anumitor grupuri",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Utilizatorii din afara acestor grupuri nu vor putea să-și creeze propriile panouri, dar vor putea să acceseze panourile care le-au fost partajate",
     "Search" : "Căutare",
+    "Show those shortcuts" : "Afișează aceste scurtături",
     "Currently present people" : "Persoane prezenta acum",
     "Loading board" : "Se încarcă panoul",
     "Board not found" : "Panou inexistent",
