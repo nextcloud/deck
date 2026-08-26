@@ -119,6 +119,12 @@ export default {
 		return {
 			textAppAvailable: !!window.OCA?.Text?.createEditor,
 			editor: null,
+			// Set in beforeDestroy() and checked by every async callback that
+			// touches `this.editor`/the component instance, so that work left
+			// over from a card switch (this component is remounted per
+			// card.id, see CardSidebarTabDetails.vue) never reaches into a
+			// torn-down editor/ProseMirror view.
+			isDestroyed: false,
 			keyExitState: 0,
 			descriptionOld: '',
 			description: '',
@@ -183,7 +189,7 @@ export default {
 
 				this.descriptionOld = newCard.description
 				this.description = newCard.description
-				if (this.editor) {
+				if (this.editor && !this.isDestroyed) {
 					this.editor.setContent(this.description)
 				}
 				showWarning(t('deck', 'The description has been changed by another user.'), { timeout: 3000 })
@@ -194,6 +200,7 @@ export default {
 		this.setupEditor()
 	},
 	async beforeDestroy() {
+		this.isDestroyed = true
 		await this.destroyEditor()
 	},
 	methods: {
@@ -202,17 +209,37 @@ export default {
 		}),
 		async setupEditor() {
 			await this.destroyEditor()
+			if (this.isDestroyed) {
+				return
+			}
 			this.descriptionLastEdit = 0
 			this.descriptionOld = this.card.description
 			this.description = this.card.description
-			this.editor = await window.OCA.Text.createEditor({
+
+			// Defer the (potentially expensive) editor mount until after the
+			// current render cycle - e.g. the card sidebar/modal opening
+			// transition - has settled, so it does not compete with it and
+			// so a fast card switch has a chance to flip `isDestroyed`
+			// before we ever touch window.OCA.Text.
+			await this.$nextTick()
+			if (this.isDestroyed || !this.$refs.editor) {
+				return
+			}
+
+			const editor = await window.OCA.Text.createEditor({
 				el: this.$refs.editor,
 				content: this.card.description,
 				readOnly: !this.canEdit,
 				onLoaded: () => {
+					if (this.isDestroyed) {
+						return
+					}
 					this.descriptionLastEdit = 0
 				},
 				onUpdate: ({ markdown }) => {
+					if (this.isDestroyed) {
+						return
+					}
 					if (this.description === markdown) {
 						return
 					}
@@ -220,14 +247,32 @@ export default {
 					this.updateDescription()
 				},
 				onFileInsert: () => {
+					if (this.isDestroyed) {
+						return
+					}
 					this.showAttachmentModal()
 				},
 			})
 
+			if (this.isDestroyed) {
+				// The component (and its DOM node passed as `el` above) was
+				// torn down while OCA.Text.createEditor() was still
+				// resolving - e.g. the user clicked another card before the
+				// editor finished mounting. Leaving this editor assigned to
+				// `this.editor` (or just dropped) is exactly what produces
+				// the "[tiptap error]: The editor view is not available"
+				// console error later, since it is bound to a detached
+				// element and nothing else will ever call destroy() on it.
+				editor?.destroy?.()
+				return
+			}
+
+			this.editor = editor
 		},
 		async destroyEditor() {
 			await this.saveDescription()
 			this?.editor?.destroy()
+			this.editor = null
 		},
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
@@ -269,7 +314,7 @@ export default {
 			// We need to strip those as text does not support rtl yet, so we cannot insert them separately
 			const stripRTLO = (text) => text.replaceAll('\u202e', '')
 			const fileName = stripRTLO(attachment.extendedData.info.filename) + '.' + stripRTLO(attachment.extendedData.info.extension)
-			if (this.editor) {
+			if (this.editor && !this.isDestroyed) {
 				this.editor.insertAtCursor(
 					asImage
 						? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
