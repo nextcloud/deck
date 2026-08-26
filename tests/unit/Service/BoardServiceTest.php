@@ -26,6 +26,10 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
+if (!class_exists(\OCA\Circles\Model\Circle::class)) {
+	require_once __DIR__ . '/../stubs/CirclesCircle.php';
+}
+
 use OC\Federation\CloudFederationFactory;
 use OC\Federation\CloudFederationProviderManager;
 use OC\Federation\CloudIdManager;

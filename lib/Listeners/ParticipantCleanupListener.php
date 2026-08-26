@@ -52,7 +52,7 @@ class ParticipantCleanupListener implements IEventListener {
 
 		if ($event instanceof RemovingCircleMemberEvent) {
 			$member = $event->getMember();
-			if ($member !== null && $member->getUserType() === Member::TYPE_USER) {
+			if ($member->getUserType() === Member::TYPE_USER) {
 				$this->teamBoardService->handleMemberLeftTeam(
 					$event->getCircle()->getSingleId(),
 					$member->getUserId()
