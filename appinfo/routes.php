@@ -19,7 +19,6 @@ return [
 		// boards
 		['name' => 'board#index', 'url' => '/boards', 'verb' => 'GET'],
 		['name' => 'board#create', 'url' => '/boards', 'verb' => 'POST'],
-		['name' => 'board#createForTeam', 'url' => '/boards/team', 'verb' => 'POST'],
 		['name' => 'board#read', 'url' => '/boards/{boardId}', 'verb' => 'GET'],
 		['name' => 'board#update', 'url' => '/boards/{boardId}', 'verb' => 'PUT'],
 		['name' => 'board#delete', 'url' => '/boards/{boardId}', 'verb' => 'DELETE'],
@@ -80,7 +79,6 @@ return [
 		// api
 		['name' => 'board_api#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
 		['name' => 'board_api#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
-		['name' => 'board_api#createForTeam', 'url' => '/api/v{apiVersion}/boards/team', 'verb' => 'POST'],
 		['name' => 'board_api#get', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_api#delete', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'DELETE'],
 		['name' => 'board_api#update', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'PUT'],
@@ -143,6 +141,7 @@ return [
 		['name' => 'board_ocs#read', 'url' => '/api/v{apiVersion}/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'stack_ocs#index', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_ocs#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
+		['name' => 'board_ocs#createForTeam', 'url' => '/api/v{apiVersion}/boards/team', 'verb' => 'POST'],
 		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 
 		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],

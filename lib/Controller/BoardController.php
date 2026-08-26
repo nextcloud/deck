@@ -51,11 +51,6 @@ class BoardController extends ApiController {
 	}
 
 	#[NoAdminRequired]
-	public function createForTeam(string $title, string $teamId, ?string $color = null): Board {
-		return $this->boardService->createForTeam($title, $this->userId, $color, $teamId);
-	}
-
-	#[NoAdminRequired]
 	public function update(int $id, string $title, string $color, bool $archived): Board {
 		return $this->boardService->update($id, $title, $color, $archived);
 	}
