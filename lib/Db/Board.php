@@ -30,6 +30,12 @@ namespace OCA\Deck\Db;
  * @method string getShareToken()
  * @method void setExternalId(int $externalId)
  * @method int | null getExternalId()
+ * @method string|null getSwimlaneMode()
+ * @method void setSwimlaneMode(?string $swimlaneMode)
+ * @method string|null getSwimlaneLabelOrder()
+ * @method void setSwimlaneLabelOrder(?string $swimlaneLabelOrder)
+ * @method string|null getSwimlaneUserOrder()
+ * @method void setSwimlaneUserOrder(?string $swimlaneUserOrder)
  */
 class Board extends RelationalEntity {
 	protected $title;
@@ -50,6 +56,9 @@ class Board extends RelationalEntity {
 	protected $lastModified = 0;
 	protected $shareToken = null;
 	protected $externalId = null;
+	protected $swimlaneMode = null;
+	protected $swimlaneLabelOrder = null;
+	protected $swimlaneUserOrder = null;
 
 	protected $settings = [];
 
@@ -62,6 +71,9 @@ class Board extends RelationalEntity {
 		$this->addType('shareToken', 'string');
 		$this->addType('externalId', 'integer');
 		$this->addType('teamId', 'string');
+		$this->addType('swimlaneMode', 'string');
+		$this->addType('swimlaneLabelOrder', 'string');
+		$this->addType('swimlaneUserOrder', 'string');
 		$this->addRelation('labels');
 		$this->addRelation('acl');
 		$this->addRelation('shared');
@@ -84,6 +96,8 @@ class Board extends RelationalEntity {
 		// however this would be a breaking change for consumers of the API
 		$json['acl'] = $this->acl ?? [];
 		$json['labels'] = $this->labels ?? [];
+		// Served under 'settings' by BoardService::enrichWithBoardSettings, not top level.
+		unset($json['swimlaneMode'], $json['swimlaneLabelOrder'], $json['swimlaneUserOrder']);
 		return $json;
 	}
 

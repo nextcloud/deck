@@ -5,6 +5,7 @@
 
 import moment from 'moment'
 import { defineStore } from 'pinia'
+import laneKeysForCard from '../helpers/laneKeysForCard.js'
 import { CardApi } from '../services/CardApi.js'
 import { useBoardStore } from './board.js'
 import { useSettingsStore } from './settings.js'
@@ -182,6 +183,54 @@ export const useCardStore = defineStore('card', {
 					return true
 				})
 				.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
+		},
+		// map[stackId][laneKey], sorted and filtered like cardsByStack, archived removed.
+		// No parameters on purpose, Pinia does not cache a getter that returns a function.
+		cardsByStackAndLaneMap(state) {
+			const boardStore = useBoardStore()
+			const mode = boardStore.swimlaneMode
+			const buckets = {}
+			if (mode !== 'labels' && mode !== 'assignees') {
+				return buckets
+			}
+			const showArchived = boardStore.showArchived
+			const stackIds = new Set()
+			for (const card of state.cards) {
+				stackIds.add(card.stackId)
+			}
+			for (const stackId of stackIds) {
+				const lanes = {}
+				for (const card of this.cardsByStack(stackId)) {
+					if (showArchived ? !card.archived : card.archived) {
+						continue
+					}
+					for (const key of laneKeysForCard(card, mode)) {
+						if (!lanes[key]) {
+							lanes[key] = []
+						}
+						lanes[key].push(card)
+					}
+				}
+				buckets[stackId] = lanes
+			}
+			return buckets
+		},
+		// Lane count for the "in N lanes" badge, 0 when the card is in one lane.
+		cardLaneCount() {
+			return (card) => {
+				const mode = useBoardStore().swimlaneMode
+				if (mode !== 'labels' && mode !== 'assignees') {
+					return 0
+				}
+				// Search results from other boards are in no lane here.
+				const stack = useStackStore().stackById(card.stackId)
+				if (stack?.boardId !== useBoardStore().currentBoard?.id) {
+					return 0
+				}
+				// Same keys that place the card, so badge and lanes agree.
+				const lanes = laneKeysForCard(card, mode).length
+				return lanes > 1 ? lanes : 0
+			}
 		},
 		cardById: (state) => (id) => {
 			return state.cards.find((card) => card.id === id)

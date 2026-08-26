@@ -56,6 +56,15 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 class BoardService {
+	/** Settings stored as columns on the board, shared by every member. */
+	public const SWIMLANE_SETTINGS = ['swimlaneMode', 'swimlaneLabelOrder', 'swimlaneUserOrder'];
+
+	// Every member is served the stored order, so cap it.
+	private const MAX_SWIMLANE_ORDER_BYTES = 8192;
+	private const MAX_SWIMLANE_ORDER_ENTRIES = 1000;
+	// Federated user ids are full cloud ids (user@host), so allow 255.
+	private const MAX_SWIMLANE_LANE_ID_LENGTH = 255;
+
 	private ?array $boardsCacheFull = null;
 	private ?array $boardsCachePartial = null;
 
@@ -426,11 +435,72 @@ class BoardService {
 		return [$edit, $share, $manage];
 	}
 
+	/**
+	 * Write one of the three swimlane settings onto the board.
+	 *
+	 * boardMapper->update writes only this field and fires no board events.
+	 * boardChanged still moves the ETag.
+	 *
+	 * @throws BadRequestException if the key is not a swimlane setting or the value is malformed
+	 * @throws DoesNotExistException if the board is gone
+	 */
+	public function setSwimlaneSetting(int $boardId, string $key, mixed $value): mixed {
+		if (!in_array($key, self::SWIMLANE_SETTINGS, true)) {
+			throw new BadRequestException('Not a swimlane setting: ' . $key);
+		}
+		$this->validateSwimlaneValue($key, $value);
+
+		$board = $this->boardMapper->find($boardId);
+		match ($key) {
+			'swimlaneMode' => $board->setSwimlaneMode((string)$value),
+			'swimlaneLabelOrder' => $board->setSwimlaneLabelOrder((string)$value),
+			'swimlaneUserOrder' => $board->setSwimlaneUserOrder((string)$value),
+		};
+		$this->boardMapper->update($board);
+		$this->changeHelper->boardChanged($boardId);
+
+		return $value;
+	}
+
+	/**
+	 * Every member is served these values, so reject malformed ones.
+	 */
+	private function validateSwimlaneValue(string $key, mixed $value): void {
+		if ($key === 'swimlaneMode') {
+			if (!in_array($value, ['none', 'labels', 'assignees'], true)) {
+				throw new BadRequestException('Swimlane mode must be one of: none, labels, assignees');
+			}
+			return;
+		}
+
+		// swimlaneLabelOrder / swimlaneUserOrder: JSON array of lane ids
+		// (label ids, user ids or the '__none__' catch-all lane).
+		if (!is_string($value) || strlen($value) > self::MAX_SWIMLANE_ORDER_BYTES) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
+		$order = json_decode($value, true);
+		if (!is_array($order) || !array_is_list($order) || count($order) > self::MAX_SWIMLANE_ORDER_ENTRIES) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
+		foreach ($order as $laneId) {
+			$isIntId = is_int($laneId);
+			$isStringId = is_string($laneId) && $laneId !== '' && strlen($laneId) <= self::MAX_SWIMLANE_LANE_ID_LENGTH;
+			if (!$isIntId && !$isStringId) {
+				throw new BadRequestException('Swimlane order entries must be label ids, user ids or "__none__"');
+			}
+		}
+	}
+
 	public function enrichWithBoardSettings(Board $board): void {
 		$globalCalendarConfig = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
+		$boardId = $board->getId();
 		$settings = [
-			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
-			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':calendar', $globalCalendarConfig),
+			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
+			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $globalCalendarConfig),
+			// Shared by every member. Null until someone changes them.
+			'swimlaneMode' => $board->getSwimlaneMode() ?? 'none',
+			'swimlaneLabelOrder' => $board->getSwimlaneLabelOrder() ?? '[]',
+			'swimlaneUserOrder' => $board->getSwimlaneUserOrder() ?? '[]',
 		];
 		$board->setSettings($settings);
 	}

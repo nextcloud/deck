@@ -170,7 +170,10 @@ Returns an array of board items
         "lastModified": 1586269585,
         "settings": {
             "notify-due": "off",
-            "calendar": true
+            "calendar": true,
+            "swimlaneMode": "none",
+            "swimlaneLabelOrder": "[]",
+            "swimlaneUserOrder": "[]"
         }
     }
 ]
@@ -1174,6 +1177,9 @@ Deck stores user and app configuration values globally and per board. The GET en
 | calendar | Boolean |
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
+| swimlaneMode | `none`, `labels` or `assignees`. Shared by everyone with access to the board, needs edit permission |
+| swimlaneLabelOrder | JSON string holding an array of label ids in lane order. Shared, needs edit permission. May contain `"__none__"` for the lane of cards without a label. At most 8192 bytes, 1000 entries, 255 bytes per id |
+| swimlaneUserOrder | JSON string holding an array of participant uids (without type) in lane order. Shared, needs edit permission. May contain `"__none__"` for the lane of unassigned cards. At most 8192 bytes, 1000 entries, 255 bytes per id |
 
 #### Example request
 

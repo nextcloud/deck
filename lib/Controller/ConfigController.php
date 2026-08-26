@@ -9,6 +9,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -25,6 +26,7 @@ class ConfigController extends OCSController {
 		private ConfigService $configService,
 		private PermissionService $permissionService,
 		private BoardMapper $boardMapper,
+		private BoardService $boardService,
 	) {
 		parent::__construct($AppName, $request);
 	}
@@ -38,12 +40,21 @@ class ConfigController extends OCSController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function setValue(string $key, mixed $value): DataResponse|NotFoundResponse {
+		$boardId = null;
 		if (preg_match('/^board:(\d+):/', $key, $matches) === 1) {
+			$boardId = (int)$matches[1];
 			$this->permissionService->checkPermission(
 				$this->boardMapper,
-				(int)$matches[1],
+				$boardId,
 				Acl::PERMISSION_EDIT,
 			);
+		}
+
+		// Swimlane settings are board columns. Only a key that passed the
+		// numeric EDIT check above may reach BoardService.
+		$setting = $boardId === null ? null : substr($key, strlen($matches[0]));
+		if ($setting !== null && in_array($setting, BoardService::SWIMLANE_SETTINGS, true)) {
+			return new DataResponse($this->boardService->setSwimlaneSetting($boardId, $setting, $value));
 		}
 
 		$result = $this->configService->set($key, $value);
