@@ -1126,6 +1126,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 | Config key | Description |
 | --- | --- |
+| boardOrder | Per-user ordered list of board ids used to persist the manual drag and drop order of boards in the web navigation (array of integers) |
 | calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) |
 | cardDetailsInModal | Determines if the bigger view is used (boolean) |
 | cardIdBadge | Determines if the ID badges are displayed on cards (boolean) |

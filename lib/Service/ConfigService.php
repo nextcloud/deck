@@ -52,7 +52,8 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
-			'cardIdBadge' => $this->isCardIdBadgeEnabled()
+			'cardIdBadge' => $this->isCardIdBadgeEnabled(),
+			'boardOrder' => $this->getBoardOrder()
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -62,7 +63,7 @@ class ConfigService {
 	}
 
 	/**
-	 * @return bool|array{id: string, displayname: string}[]
+	 * @return bool|array{id: string, displayname: string}[]|int[]
 	 * @throws NoPermissionException
 	 */
 	public function get(string $key) {
@@ -90,6 +91,8 @@ class ConfigService {
 					return false;
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', false);
+			case 'boardOrder':
+				return $this->getBoardOrder();
 		}
 		return false;
 	}
@@ -181,6 +184,14 @@ class ConfigService {
 				$this->config->setUserValue($userId, Application::APP_ID, 'cardIdBadge', (string)$value);
 				$result = $value;
 				break;
+			case 'boardOrder':
+				if (!is_array($value)) {
+					throw new BadRequestException('boardOrder must be a list of board ids');
+				}
+				$ids = array_values(array_map('intval', array_filter($value, 'is_numeric')));
+				$this->config->setUserValue($userId, Application::APP_ID, 'boardOrder', json_encode($ids));
+				$result = $ids;
+				break;
 			case 'board':
 				// extra check that user only send one of the allowed board settings and not something random
 				$parts = explode(':', $key, 3);
@@ -234,6 +245,20 @@ class ConfigService {
 			];
 		}, $groups);
 		return array_filter($groups);
+	}
+
+	/** @return int[] */
+	private function getBoardOrder(): array {
+		$userId = $this->getUserId();
+		if ($userId === null) {
+			return [];
+		}
+		$value = $this->config->getUserValue($userId, Application::APP_ID, 'boardOrder', '[]');
+		$decoded = json_decode($value, true);
+		if (!is_array($decoded)) {
+			return [];
+		}
+		return array_values(array_map('intval', array_filter($decoded, 'is_numeric')));
 	}
 
 	public function getAttachmentFolder(?string $userId = null): string {
