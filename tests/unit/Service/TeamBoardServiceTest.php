@@ -33,7 +33,7 @@ class TeamBoardServiceTest extends TestCase {
 		);
 	}
 
-	public function testTransferTeamBoardsFromDeletedUser(): void {
+	public function testHandleBoardsOwnedByDeletedUser(): void {
 		$personalBoard = new Board();
 		$personalBoard->setId(1);
 		$personalBoard->setOwner($this->userId1);
@@ -65,7 +65,11 @@ class TeamBoardServiceTest extends TestCase {
 			->method('transferOwnership')
 			->with($this->userId1, $this->userId2, 3);
 
-		$this->assertSame([3], $this->service->transferTeamBoardsFromDeletedUser($this->userId1));
+		$this->boardMapper->expects($this->exactly(2))
+			->method('delete')
+			->withConsecutive([$personalBoard], [$orphanedTeamBoard]);
+
+		$this->service->handleBoardsOwnedByDeletedUser($this->userId1);
 	}
 
 	public function testHandleMemberLeftTeamTransfersOwnership(): void {
