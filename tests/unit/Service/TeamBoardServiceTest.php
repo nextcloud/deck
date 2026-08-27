@@ -33,45 +33,6 @@ class TeamBoardServiceTest extends TestCase {
 		);
 	}
 
-	public function testHandleBoardsOwnedByDeletedUser(): void {
-		$personalBoard = new Board();
-		$personalBoard->setId(1);
-		$personalBoard->setOwner($this->userId1);
-		$personalBoard->setTeamId(null);
-
-		$orphanedTeamBoard = new Board();
-		$orphanedTeamBoard->setId(2);
-		$orphanedTeamBoard->setOwner($this->userId1);
-		$orphanedTeamBoard->setTeamId('team-a');
-
-		$transferableBoard = new Board();
-		$transferableBoard->setId(3);
-		$transferableBoard->setOwner($this->userId1);
-		$transferableBoard->setTeamId('team-b');
-
-		$this->boardMapper->expects($this->once())
-			->method('findAllByOwner')
-			->with($this->userId1)
-			->willReturn([$personalBoard, $orphanedTeamBoard, $transferableBoard]);
-
-		$this->circlesService->expects($this->exactly(2))
-			->method('findNextMemberUserId')
-			->willReturnMap([
-				['team-a', $this->userId1, null],
-				['team-b', $this->userId1, $this->userId2],
-			]);
-
-		$this->boardMapper->expects($this->once())
-			->method('transferOwnership')
-			->with($this->userId1, $this->userId2, 3);
-
-		$this->boardMapper->expects($this->exactly(2))
-			->method('delete')
-			->withConsecutive([$personalBoard], [$orphanedTeamBoard]);
-
-		$this->service->handleBoardsOwnedByDeletedUser($this->userId1);
-	}
-
 	public function testHandleMemberLeftTeamTransfersOwnership(): void {
 		$board = new Board();
 		$board->setId(10);

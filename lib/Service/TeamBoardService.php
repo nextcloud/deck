@@ -19,24 +19,6 @@ class TeamBoardService {
 	}
 
 	/**
-	 * When user is deleted transfer team boards to another owner/admin when possible,otherwise delete them.
-	 */
-	public function handleBoardsOwnedByDeletedUser(string $userId): void {
-		foreach ($this->boardMapper->findAllByOwner($userId) as $board) {
-			$teamId = $board->getTeamId();
-			if ($teamId !== null && $teamId !== '') {s
-				$nextOwner = $this->circlesService->findNextMemberUserId($teamId, $userId);
-				if ($nextOwner !== null) {
-					$this->boardMapper->transferOwnership($userId, $nextOwner, $board->getId());
-					continue;
-				}
-			}
-
-			$this->boardMapper->delete($board);
-		}
-	}
-
-	/**
 	 * When a user leaves the team,transfer ownership, or delete board
 	 */
 	public function handleMemberLeftTeam(string $teamId, string $userId): void {
