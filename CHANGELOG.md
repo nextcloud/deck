@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.4
+### What's Changed
+* [stable34] fix(trash): allow to configure the trash retention in hours by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8241
+* fix(attachment-deletion): add attachment type to delete endpoint by @silverkszlo in https://github.com/nextcloud/deck/pull/8260
+
 ## 1.18.3
 ### Fixed
 * fix: Replace icon attributes with template slots by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8095
