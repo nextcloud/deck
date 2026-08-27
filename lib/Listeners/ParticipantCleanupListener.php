@@ -13,6 +13,8 @@ use OCA\Circles\Model\Member;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Service\CirclesService;
 use OCA\Deck\Service\TeamBoardService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
@@ -24,6 +26,8 @@ class ParticipantCleanupListener implements IEventListener {
 	public function __construct(
 		private AclMapper $aclMapper,
 		private AssignmentMapper $assignmentMapper,
+		private BoardMapper $boardMapper,
+		private CirclesService $circlesService,
 		private TeamBoardService $teamBoardService,
 	) {
 	}
@@ -31,7 +35,19 @@ class ParticipantCleanupListener implements IEventListener {
 	public function handle(Event $event): void {
 		if ($event instanceof UserDeletedEvent) {
 			$userId = $event->getUser()->getUID();
-			$this->teamBoardService->handleBoardsOwnedByDeletedUser($userId);
+			$boards = $this->boardMapper->findAllByOwner($userId);
+			foreach ($boards as $board) {
+				$teamId = $board->getTeamId();
+				if ($teamId !== null && $teamId !== '') {
+					$nextOwner = $this->circlesService->findNextMemberUserId($teamId, $userId);
+					if ($nextOwner !== null) {
+						$this->boardMapper->transferOwnership($userId, $nextOwner, $board->getId());
+						continue;
+					}
+				}
+				$this->boardMapper->delete($board);
+			}
+
 			$this->cleanupByParticipant(Acl::PERMISSION_TYPE_USER, $userId);
 		}
 

@@ -107,7 +107,7 @@ class CirclesService {
 	}
 
 	/**
-	 * Find a remaining team owner or admin to take over board ownership.
+	 * Find a remaining team member with the highest level to take over board ownership.
 	 */
 	public function findNextMemberUserId(string $circleId, ?string $excludeUserId = null): ?string {
 		if (!$this->circlesEnabled) {
@@ -118,7 +118,8 @@ class CirclesService {
 			$circlesManager = Server::get(CirclesManager::class);
 			$circlesManager->startSuperSession();
 			$circle = $circlesManager->getCircle($circleId);
-			$adminUserId = null;
+			$maxUserId = null;
+			$maxLevel = -1;
 			foreach ($circle->getMembers() as $member) {
 				if ($member->getUserType() !== Member::TYPE_USER) {
 					continue;
@@ -129,12 +130,13 @@ class CirclesService {
 				if ($member->getLevel() === Member::LEVEL_OWNER) {
 					return $member->getUserId();
 				}
-				if ($adminUserId === null && $member->getLevel() >= Member::LEVEL_ADMIN) {
-					$adminUserId = $member->getUserId();
+				if ($member->getLevel() > $maxLevel) {
+					$maxLevel = $member->getLevel();
+					$maxUserId = $member->getUserId();
 				}
 			}
 
-			return $adminUserId;
+			return $maxUserId;
 		} catch (Throwable $e) {
 		}
 
