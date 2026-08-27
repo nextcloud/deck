@@ -9,6 +9,7 @@ namespace OCA\Deck\AppInfo;
 
 use Exception;
 use OCA\Circles\Events\CircleDestroyedEvent;
+use OCA\Circles\Events\RemovingCircleMemberEvent;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
@@ -170,6 +171,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerEventListener(UserDeletedEvent::class, ParticipantCleanupListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, ParticipantCleanupListener::class);
+		$context->registerEventListener(RemovingCircleMemberEvent::class, ParticipantCleanupListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, ParticipantCleanupListener::class);
 
 		// Event listening for realtime updates via notify_push
