@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.8
+### Fixed
+* [stable32] fix(trash): allow to configure the trash retention in hours by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8243
+* [stable32] fix(teams): use lighter probeCircles() by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7920
 
 ## 1.16.7
 
