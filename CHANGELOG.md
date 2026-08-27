@@ -6,6 +6,14 @@
 All notable changes to this project will be documented in this file.
 
 
+## 1.17.5
+
+### Fixed
+* [stable33] fix: loading notifications by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8159
+* [stable33] fix: Replace icon attributes with template slots by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8094
+* [stable33] fix(trash): allow to configure the trash retention in hours by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8242
+* [stable33] fix(teams): use lighter probeCircles() by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7919
+
 ## 1.17.4
 
 ### Fixed
