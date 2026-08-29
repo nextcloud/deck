@@ -198,7 +198,7 @@ export default {
 		},
 		deleteCard() {
 			this.deleteCardInStore(this.card)
-			const undoCard = { ...this.card, deletedAt: 0 }
+			const undoCard = { ...this.card, deletedAt: 0, boardId: this.boardId }
 			showUndo(t('deck', 'Card deleted'), () => useTrashbinStore().cardUndoDelete(undoCard))
 			if (this.$router.currentRoute.name === 'card') {
 				this.$router.push({ name: 'board' })
