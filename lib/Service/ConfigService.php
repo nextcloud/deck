@@ -52,7 +52,8 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
-			'cardIdBadge' => $this->isCardIdBadgeEnabled()
+			'cardIdBadge' => $this->isCardIdBadgeEnabled(),
+			'stackAddCardAtTop' => $this->isStackAddCardAtTopEnabled()
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -134,6 +135,15 @@ class ConfigService {
 		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
 	}
 
+	public function isStackAddCardAtTopEnabled(): bool {
+		$userId = $this->getUserId();
+		if ($userId === null) {
+			return false;
+		}
+
+		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'stackAddCardAtTop', false);
+	}
+
 	public function ensureFederationEnabled() {
 		if (!$this->get('federationEnabled')) {
 			throw new FederationDisabledException();
@@ -179,6 +189,10 @@ class ConfigService {
 				break;
 			case 'cardIdBadge':
 				$this->config->setUserValue($userId, Application::APP_ID, 'cardIdBadge', (string)$value);
+				$result = $value;
+				break;
+			case 'stackAddCardAtTop':
+				$this->config->setUserValue($userId, Application::APP_ID, 'stackAddCardAtTop', (string)$value);
 				$result = $value;
 				break;
 			case 'board':

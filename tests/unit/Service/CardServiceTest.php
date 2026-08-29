@@ -45,6 +45,7 @@ use OCP\Activity\IEvent;
 use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -97,6 +98,8 @@ class CardServiceTest extends TestCase {
 	private $cardServiceValidator;
 	/** @var IReferenceManager|MockObject */
 	private $referenceManager;
+	/** @var IDBConnection|MockObject */
+	private $connection;
 
 	/** @var AssignmentService|MockObject */
 	private $assignmentService;
@@ -124,6 +127,7 @@ class CardServiceTest extends TestCase {
 		$this->cardServiceValidator = $this->createMock(CardServiceValidator::class);
 		$this->assignmentService = $this->createMock(AssignmentService::class);
 		$this->referenceManager = $this->createMock(IReferenceManager::class);
+		$this->connection = $this->createMock(IDBConnection::class);
 
 		$this->logger->expects($this->any())->method('error');
 
@@ -149,6 +153,7 @@ class CardServiceTest extends TestCase {
 			$this->cardServiceValidator,
 			$this->assignmentService,
 			$this->referenceManager,
+			$this->connection,
 			'user1'
 		);
 	}
@@ -232,6 +237,8 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('insert')
 			->willReturn($card);
+		$this->connection->expects($this->never())
+			->method('beginTransaction');
 		$this->stackMapper->expects($this->once())
 			->method('find')
 			->with(123)
@@ -244,6 +251,69 @@ class CardServiceTest extends TestCase {
 		$this->assertEquals($b->getOrder(), 999);
 		$this->assertEquals($b->getStackId(), 123);
 		$this->assertEquals($b->getColor(), '00ff00');
+	}
+
+	public function testCreateAtTopReordersCardsInTransaction(): void {
+		$newCard = Card::fromParams([
+			'id' => 3,
+			'title' => 'New card',
+			'owner' => 'admin',
+			'stackId' => 123,
+			'order' => 0,
+			'type' => 'plain',
+		]);
+		$firstCard = Card::fromParams(['id' => 1, 'stackId' => 123, 'order' => 0]);
+		$secondCard = Card::fromParams(['id' => 2, 'stackId' => 123, 'order' => 1]);
+		$stack = Stack::fromParams(['id' => 123, 'boardId' => 1337]);
+
+		$this->connection->expects($this->once())->method('beginTransaction');
+		$this->connection->expects($this->once())->method('commit');
+		$this->connection->expects($this->never())->method('rollBack');
+		$this->cardMapper->expects($this->once())
+			->method('insert')
+			->willReturn($newCard);
+		$this->cardMapper->expects($this->once())
+			->method('findAll')
+			->with(123)
+			->willReturn([$firstCard, $secondCard, $newCard]);
+		$this->cardMapper->expects($this->exactly(3))
+			->method('update')
+			->willReturnArgument(0);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($stack);
+
+		$createdCard = $this->cardService->create('New card', 123, 'plain', 0, 'admin', insertAtPosition: true);
+
+		$this->assertSame(0, $createdCard->getOrder());
+		$this->assertSame(1, $firstCard->getOrder());
+		$this->assertSame(2, $secondCard->getOrder());
+	}
+
+	public function testCreateAtTopRollsBackWhenReorderingFails(): void {
+		$newCard = Card::fromParams([
+			'id' => 3,
+			'title' => 'New card',
+			'owner' => 'admin',
+			'stackId' => 123,
+			'order' => 0,
+			'type' => 'plain',
+		]);
+
+		$this->connection->expects($this->once())->method('beginTransaction');
+		$this->connection->expects($this->never())->method('commit');
+		$this->connection->expects($this->once())->method('rollBack');
+		$this->cardMapper->expects($this->once())
+			->method('insert')
+			->willReturn($newCard);
+		$this->cardMapper->expects($this->once())
+			->method('findAll')
+			->with(123)
+			->willThrowException(new \RuntimeException('Could not reorder cards'));
+
+		$this->expectException(\RuntimeException::class);
+		$this->cardService->create('New card', 123, 'plain', 0, 'admin', insertAtPosition: true);
 	}
 
 	public function testClone() {
