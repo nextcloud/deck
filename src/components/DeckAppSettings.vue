@@ -13,6 +13,18 @@
 				<NcFormBoxSwitch v-model="cardDetailsInModal"
 					:label="t('deck', 'Use bigger card view')" />
 			</NcFormBox>
+			<NcFormBox>
+				<NcSelect v-model="defaultBoardView"
+					open-direction="bottom"
+					:options="boardViewOptions"
+					:input-label="t('deck', 'Default view for all boards')"
+					label="label"
+					track-by="id"
+					clearable />
+				<p class="settings-hint">
+					{{ t('deck', 'The selected view is applied automatically when you open any board.') }}
+				</p>
+			</NcFormBox>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="appearance-settings" :name="t('deck', 'Appearance')">
@@ -79,6 +91,8 @@ import { confirmPassword } from '@nextcloud/password-confirmation'
 import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
+import { mapActions, mapState } from 'pinia'
+import { useBoardStore } from '../stores/board.js'
 
 export default {
 	name: 'DeckAppSettings',
@@ -108,8 +122,20 @@ export default {
 	},
 
 	computed: {
+		...mapState(useBoardStore, ['allBoardViews']),
 		isAdmin() {
 			return !!getCurrentUser()?.isAdmin
+		},
+		boardViewOptions() {
+			const boards = useBoardStore().boards
+			return this.allBoardViews.map((view) => {
+				const board = boards.find((b) => b.id === view.boardId)
+				const boardTitle = board?.title || `#${view.boardId}`
+				return {
+					id: view.id,
+					label: `${view.name} (${boardTitle})`,
+				}
+			})
 		},
 		cardDetailsInModal: {
 			get() {
@@ -125,6 +151,18 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
+			},
+		},
+		defaultBoardView: {
+			get() {
+				const id = this.$store.getters.config('defaultBoardView')
+				if (!id) {
+					return null
+				}
+				return this.boardViewOptions.find((view) => view.id === id) || null
+			},
+			set(view) {
+				this.$store.dispatch('setConfig', { defaultBoardView: view ? view.id : null })
 			},
 		},
 		federationEnabled: {
@@ -149,6 +187,7 @@ export default {
 	},
 
 	beforeMount() {
+		this.loadAllBoardViews()
 		if (this.isAdmin) {
 			this.groupLimit = this.$store.getters.config('groupLimit')
 			axios.get(generateOcsUrl('cloud/groups')).then((response) => {
@@ -174,6 +213,7 @@ export default {
 	},
 
 	methods: {
+		...mapActions(useBoardStore, ['loadAllBoardViews']),
 		onClose() {
 			this.$emit('close')
 		},
@@ -199,6 +239,12 @@ export default {
 .app-settings-section {
 	&#settings-section_admin-settings p {
 		margin-bottom: 20px;
+	}
+
+	.settings-hint {
+		margin: 0;
+		padding-inline-start: calc(var(--default-clickable-area) * 0.5);
+		color: var(--color-text-maxcontrast);
 	}
 }
 </style>
