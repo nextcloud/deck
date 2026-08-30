@@ -103,14 +103,19 @@ p.note {
 	color: var(--color-text-maxcontrast);
 }
 
+/* the element is only there to group the controls for assistive tech, the
+   browser's default border would otherwise render as a stray rule */
 fieldset.options {
-	margin-top: 20px;
-	border-top: 1px solid var(--color-border);
-	padding-top: 10px;
+	margin-top: 16px;
+	border: none;
+	padding: 0;
 }
 
 fieldset.options legend {
 	font-weight: bold;
-	margin-bottom: 5px;
+	margin-bottom: 4px;
+	padding: 0;
+	float: none;
+	width: auto;
 }
 </style>
