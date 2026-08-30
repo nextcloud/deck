@@ -35,7 +35,8 @@ class BoardTest extends TestCase {
 			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 			'shareToken' => null,
-			'externalId' => null
+			'externalId' => null,
+			'teamId' => null,
 		], $board->jsonSerialize());
 	}
 
@@ -61,7 +62,8 @@ class BoardTest extends TestCase {
 			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 			'shareToken' => null,
-			'externalId' => null
+			'externalId' => null,
+			'teamId' => null,
 		], $board->jsonSerialize());
 	}
 
@@ -85,7 +87,8 @@ class BoardTest extends TestCase {
 			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 			'shareToken' => null,
-			'externalId' => null
+			'externalId' => null,
+			'teamId' => null,
 		], $board->jsonSerialize());
 	}
 	public function testSetAcl() {
@@ -117,7 +120,8 @@ class BoardTest extends TestCase {
 			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 			'shareToken' => null,
-			'externalId' => null
+			'externalId' => null,
+			'teamId' => null,
 		], $board->jsonSerialize());
 	}
 }

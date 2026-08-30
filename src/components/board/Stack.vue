@@ -4,10 +4,15 @@
 -->
 
 <template>
-	<div class="stack" :class="{'stack--done-column': isDoneColumn}" :data-cy-stack="stack.title">
-		<div v-click-outside="stopCardCreation"
-			class="stack__header"
-			:class="{'stack__header--add': showAddCard, 'stack__header--done-column': isDoneColumn}"
+	<div class="stack"
+		:class="{
+			'stack--done-column': isDoneColumn,
+			'stack--add-card-at-top': canAddCard && stackAddCardAtTop,
+			'stack--add-card-at-bottom': canAddCard && !stackAddCardAtTop,
+		}"
+		:data-cy-stack="stack.title">
+		<div class="stack__header"
+			:class="{'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived" tabindex="0">
@@ -69,14 +74,6 @@
 					{{ t('deck', 'Delete list') }}
 				</NcActionButton>
 			</NcActions>
-			<NcActions v-if="canEdit && !showArchived && !isArchived">
-				<NcActionButton data-cy="action:add-card" @click.stop="showAddCard=true">
-					{{ t('deck', 'Add card') }}
-					<template #icon>
-						<CardPlusOutline :size="20" />
-					</template>
-				</NcActionButton>
-			</NcActions>
 		</div>
 
 		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
@@ -101,6 +98,12 @@
 			</div>
 		</NcModal>
 
+		<StackCardAdd v-if="canAddCard && stackAddCardAtTop"
+			:stack="stack"
+			:add-at-top="true"
+			@creating="animate = true"
+			@created="handleCardCreated" />
+
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			class="dnd-container"
 			group-name="stack"
@@ -121,29 +124,10 @@
 			</Draggable>
 		</Container>
 
-		<transition name="slide-bottom" appear>
-			<div v-if="showAddCard" class="stack__card-add">
-				<form :class="{ 'icon-loading-small': stateCardCreating }"
-					@submit.prevent.stop="clickAddCard()">
-					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-					<input id="new-stack-input-main"
-						ref="newCardInput"
-						v-model="newCardTitle"
-						type="text"
-						class="no-close"
-						:disabled="stateCardCreating"
-						:placeholder="t('deck', 'Card name')"
-						required
-						pattern=".*\S+.*"
-						@focus="onCreateCardFocus"
-						@keydown.esc="stopCardCreation">
-					<input v-show="!stateCardCreating"
-						class="icon-confirm"
-						type="submit"
-						value="">
-				</form>
-			</div>
-		</transition>
+		<StackCardAdd v-if="canAddCard && !stackAddCardAtTop"
+			:stack="stack"
+			@creating="animate = true"
+			@created="handleCardCreated" />
 	</div>
 </template>
 
@@ -152,12 +136,12 @@ import ClickOutside from 'vue-click-outside'
 import { mapState, mapActions } from 'pinia'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
-import { showError, showUndo } from '@nextcloud/dialogs'
+import { showUndo } from '@nextcloud/dialogs'
 
 import CardItem from '../cards/CardItem.vue'
+import StackCardAdd from './StackCardAdd.vue'
 
 import '@nextcloud/dialogs/style.css'
 import { useTrashbinStore } from '../../stores/trashbin.js'
@@ -171,11 +155,11 @@ export default {
 		NcActions,
 		NcActionButton,
 		CardItem,
+		StackCardAdd,
 		Container,
 		Draggable,
 		NcModal,
 		ArchiveIcon,
-		CardPlusOutline,
 		CheckCircleOutline,
 	},
 	directives: {
@@ -196,9 +180,6 @@ export default {
 			editing: false,
 			draggingCard: false,
 			copiedStack: '',
-			newCardTitle: '',
-			showAddCard: false,
-			stateCardCreating: false,
 			animate: false,
 			modalArchivAllCardsShow: false,
 			stackTransfer: {
@@ -231,27 +212,13 @@ export default {
 		dragHandleSelector() {
 			return this.canEdit && !this.showArchived ? null : '.no-drag'
 		},
-		cardDetailsInModal: {
-			get() {
-				return this.$store.getters.config('cardDetailsInModal')
-			},
-			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
-			},
+		stackAddCardAtTop() {
+			return this.$store.getters.config('stackAddCardAtTop') === true
+		},
+		canAddCard() {
+			return this.canEdit && !this.showArchived && !this.isArchived
 		},
 	},
-	watch: {
-		showAddCard(newValue) {
-			if (!newValue) {
-				this.$store.dispatch('toggleShortcutLock', false)
-			} else {
-				this.$nextTick(() => {
-					this.$refs.newCardInput.focus()
-				})
-			}
-		},
-	},
-
 	mounted() {
 		this.setupAutoscrollOnDrag()
 	},
@@ -264,16 +231,6 @@ export default {
 			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
 			addCardInStore: 'addCard',
 		}),
-		stopCardCreation(e) {
-			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
-			// so we have to ignore it
-			e.stopPropagation()
-			if (this.$refs.newCardInput && this.$refs.newCardInput.parentElement === e.target.parentElement) {
-				return false
-			}
-			this.showAddCard = false
-			return false
-		},
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
 			const card = Object.assign({}, payload)
@@ -333,33 +290,12 @@ export default {
 		cancelEdit() {
 			this.editing = false
 		},
-		async clickAddCard() {
-			this.stateCardCreating = true
-			try {
-				this.animate = true
-				const newCard = await this.addCardInStore({
-					title: this.newCardTitle,
-					stackId: this.stack.id,
-					boardId: this.stack.boardId,
-				})
-				this.newCardTitle = ''
-				this.showAddCard = true
-				this.$nextTick(() => {
-					this.$refs.newCardInput.focus()
-					this.animate = false
-					this.$refs.card[(this.$refs.card.length - 1)].scrollIntoView()
-				})
-				if (!this.cardDetailsInModal) {
-					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
-				}
-			} catch (e) {
-				showError('Could not create card: ' + e.response.data.message)
-			} finally {
-				this.stateCardCreating = false
-			}
-		},
-		onCreateCardFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
+		handleCardCreated(newCard) {
+			this.$nextTick(() => {
+				this.animate = false
+				// Refs of a v-for are registered in creation order, not in list order
+				this.$refs.card?.find((card) => card.id === newCard.id)?.scrollIntoView()
+			})
 		},
 		setupAutoscrollOnDrag() {
 			let timer
@@ -402,9 +338,25 @@ export default {
 	@import './../../css/variables.scss';
 
 	.stack {
+		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));
 		width: 100%;
 		.dnd-container {
-			flex-grow: 1;
+			flex: 1 1 auto;
+			min-height: 0;
+		}
+
+		&.stack--add-card-at-top {
+			&:after {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 100%;
+				height: $stack-gap;
+				bottom: 0;
+				z-index: 99;
+				pointer-events: none;
+				background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
+			}
 		}
 
 		&.stack--done-column {
@@ -517,76 +469,6 @@ export default {
 				display: flex;
 			}
 		}
-	}
-
-	.stack__card-add {
-		flex-shrink: 0;
-		z-index: 100;
-		display: flex;
-		padding-bottom: $stack-gap;
-		background-color: var(--color-main-background);
-		position: relative;
-
-		// Smooth fade out of the cards at the top
-		&:before {
-			content: '';
-			display: block;
-			position: absolute;
-			width: 100%;
-			height: $stack-gap;
-			z-index: 99;
-			transition: bottom var(--animation-slow);
-			background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
-			transform: translateY(-100%);
-		}
-
-		form {
-			display: flex;
-			width: 100%;
-			border: 2px solid var(--color-border-maxcontrast);
-			border-radius: var(--border-radius-large);
-			overflow: hidden;
-			padding: 2px;
-		}
-
-		&.icon-loading-small:after,
-		&.icon-loading-small-dark:after {
-			margin-inline-start: calc(50% - 25px);
-		}
-
-		input[type=text] {
-			flex-grow: 1;
-			padding-inline-end: 16px;
-		}
-
-		input {
-			border: none;
-			margin: 0;
-		}
-	}
-
-	/**
-	 * Rules to handle scrolling behaviour are inherited from Board.vue
-	 */
-
-	.slide-top-enter-active,
-	.slide-top-leave-active {
-		transition: all 100ms ease;
-	}
-
-	.slide-top-enter, .slide-top-leave-to {
-		transform: translateY(-10px);
-		opacity: 0;
-	}
-
-	.slide-bottom-enter-active,
-	.slide-bottom-leave-active {
-		transition: all 100ms ease;
-	}
-
-	.slide-bottom-enter, .slide-bottom-leave-to {
-		transform: translateY(20px);
-		opacity: 0;
 	}
 
 	.modal__content {

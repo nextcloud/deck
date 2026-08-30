@@ -26,12 +26,18 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
+if (!class_exists(\OCA\Circles\Model\Circle::class)) {
+	require_once __DIR__ . '/../stubs/CirclesCircle.php';
+}
+
 use OC\Federation\CloudFederationFactory;
 use OC\Federation\CloudFederationProviderManager;
 use OC\Federation\CloudIdManager;
 use OC\L10N\L10N;
 use OC\Security\SecureRandom;
+use OCA\Circles\Model\Circle;
 use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
@@ -104,6 +110,9 @@ class BoardServiceTest extends TestCase {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var CirclesService|MockObject */
+	private $circlesService;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
@@ -125,6 +134,7 @@ class BoardServiceTest extends TestCase {
 		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 		$this->sessionMapper = $this->createMock(SessionMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->circlesService = $this->createMock(CirclesService::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -151,6 +161,7 @@ class BoardServiceTest extends TestCase {
 			$this->userManager,
 			$this->createMock(SecureRandom::class),
 			$this->createMock(ConfigService::class),
+			$this->circlesService,
 			$this->userId
 		);
 
@@ -224,6 +235,129 @@ class BoardServiceTest extends TestCase {
 			->method('canCreate')
 			->willReturn(false);
 		$b = $this->service->create('MyBoard', 'admin', '00ff00');
+	}
+
+	public function testCreateForTeamEmptyTeamId(): void {
+		$this->expectException(BadRequestException::class);
+		$this->service->createForTeam('Team board', $this->userId, '00ff00', '');
+	}
+
+	public function testCreateForTeamCirclesDisabled(): void {
+		$this->circlesService->expects($this->once())
+			->method('isCirclesEnabled')
+			->willReturn(false);
+		$this->expectException(BadRequestException::class);
+		$this->service->createForTeam('Team board', $this->userId, '00ff00', 'team-a');
+	}
+
+	public function testCreateForTeamNotFound(): void {
+		$this->circlesService->expects($this->once())
+			->method('isCirclesEnabled')
+			->willReturn(true);
+		$this->circlesService->expects($this->once())
+			->method('getCircle')
+			->with('team-a')
+			->willReturn(null);
+		$this->expectException(BadRequestException::class);
+		$this->service->createForTeam('Team board', $this->userId, '00ff00', 'team-a');
+	}
+
+	public function testCreateForTeamNotMember(): void {
+		$this->circlesService->expects($this->once())
+			->method('isCirclesEnabled')
+			->willReturn(true);
+		$this->circlesService->expects($this->once())
+			->method('getCircle')
+			->with('team-a')
+			->willReturn($this->createMock(Circle::class));
+		$this->circlesService->expects($this->once())
+			->method('isUserInCircle')
+			->with('team-a', $this->userId)
+			->willReturn(false);
+		$this->expectException(NoPermissionException::class);
+		$this->service->createForTeam('Team board', $this->userId, '00ff00', 'team-a');
+	}
+
+	public function testCreateForTeamSuccess(): void {
+		$createdBoard = new Board();
+		$createdBoard->setId(42);
+		$createdBoard->setTitle('Team board');
+		$createdBoard->setOwner($this->userId);
+		$createdBoard->setColor('00ff00');
+
+		$updatedBoard = new Board();
+		$updatedBoard->setId(42);
+		$updatedBoard->setTitle('Team board');
+		$updatedBoard->setOwner($this->userId);
+		$updatedBoard->setColor('00ff00');
+		$updatedBoard->setTeamId('team-a');
+
+		$this->circlesService->expects($this->once())
+			->method('isCirclesEnabled')
+			->willReturn(true);
+		$this->circlesService->expects($this->once())
+			->method('getCircle')
+			->with('team-a')
+			->willReturn($this->createMock(Circle::class));
+		$this->circlesService->expects($this->once())
+			->method('isUserInCircle')
+			->with('team-a', $this->userId)
+			->willReturn(true);
+
+		/** @var BoardService|MockObject $service */
+		$service = $this->getMockBuilder(BoardService::class)
+			->setConstructorArgs([
+				$this->boardMapper,
+				$this->stackMapper,
+				$this->cardMapper,
+				$this->config,
+				$this->l10n,
+				$this->labelMapper,
+				$this->aclMapper,
+				$this->permissionService,
+				$this->assignmentService,
+				$this->notificationHelper,
+				$this->assignedUsersMapper,
+				$this->activityManager,
+				$this->createMock(CloudFederationProviderManager::class),
+				$this->createMock(CloudIdManager::class),
+				$this->createMock(CloudFederationFactory::class),
+				$this->eventDispatcher,
+				$this->changeHelper,
+				$this->urlGenerator,
+				$this->connection,
+				$this->boardServiceValidator,
+				$this->sessionMapper,
+				$this->userManager,
+				$this->createMock(SecureRandom::class),
+				$this->createMock(ConfigService::class),
+				$this->circlesService,
+				$this->userId,
+			])
+			->onlyMethods(['create', 'addAcl', 'find'])
+			->getMock();
+
+		$service->expects($this->once())
+			->method('create')
+			->with('Team board', $this->userId, '00ff00')
+			->willReturn($createdBoard);
+		$this->boardMapper->expects($this->once())
+			->method('update')
+			->with($this->callback(function (Board $board) {
+				return $board->getId() === 42 && $board->getTeamId() === 'team-a';
+			}))
+			->willReturn($updatedBoard);
+		$service->expects($this->once())
+			->method('addAcl')
+			->with(42, Acl::PERMISSION_TYPE_CIRCLE, 'team-a', true, false, false);
+		$service->expects($this->once())
+			->method('find')
+			->with(42)
+			->willReturn($updatedBoard);
+
+		$result = $service->createForTeam('Team board', $this->userId, '00ff00', 'team-a');
+		$this->assertSame($updatedBoard, $result);
+		$this->assertEquals('team-a', $result->getTeamId());
 	}
 
 	public function testUpdate() {

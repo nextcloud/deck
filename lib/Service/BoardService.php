@@ -82,6 +82,7 @@ class BoardService {
 		private IUserManager $userManager,
 		private ISecureRandom $random,
 		private ConfigService $configService,
+		private CirclesService $circlesService,
 		private ?string $userId,
 	) {
 	}
@@ -226,6 +227,56 @@ class BoardService {
 		$this->changeHelper->boardChanged($board->getId());
 
 		return $board;
+	}
+
+	/**
+	 * Create a board with the current user as owner and attach it to a team
+	 *
+	 * @throws BadRequestException
+	 * @throws NoPermissionException
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 */
+	public function createForTeam(string $title, string $userId, ?string $color, string $teamId): Board {
+		if ($color === null || $color === '') {
+			$color = sprintf('%06x', random_int(0, 0xffffff));
+		} elseif (str_starts_with($color, '#')) {
+			$color = substr($color, 1);
+		}
+
+		$this->boardServiceValidator->check(compact('title', 'userId', 'color'));
+
+		if ($teamId === '') {
+			throw new BadRequestException('teamId must not be empty');
+		}
+
+		if (!$this->circlesService->isCirclesEnabled()) {
+			throw new BadRequestException('Circles/Teams app is not enabled');
+		}
+
+		if ($this->circlesService->getCircle($teamId) === null) {
+			throw new BadRequestException('Team not found');
+		}
+
+		if (!$this->circlesService->isUserInCircle($teamId, $userId)) {
+			throw new NoPermissionException('You must be a member of the team to create a team board');
+		}
+
+		$board = $this->create($title, $userId, $color);
+		$board->setTeamId($teamId);
+		$board = $this->boardMapper->update($board);
+
+		// give edit access to the team members
+		$this->addAcl(
+			$board->getId(),
+			Acl::PERMISSION_TYPE_CIRCLE,
+			$teamId,
+			true,
+			false,
+			false,
+		);
+
+		return $this->find($board->getId());
 	}
 
 	/**

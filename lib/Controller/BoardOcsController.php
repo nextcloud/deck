@@ -49,6 +49,14 @@ class BoardOcsController extends OCSController {
 		return new DataResponse($this->boardService->create($title, $this->userId, $color));
 	}
 
+	/**
+	 * Create a board attached to a team (circle).
+	 */
+	#[NoAdminRequired]
+	public function createForTeam(string $title, string $teamId, ?string $color = null): DataResponse {
+		return new DataResponse($this->boardService->createForTeam($title, $this->userId, $color, $teamId));
+	}
+
 	#[NoAdminRequired]
 	public function addAcl(int $boardId, int $type, string $participant, bool $permissionEdit, bool $permissionShare, bool $permissionManage, ?string $remote = null): DataResponse {
 		return new DataResponse($this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage));

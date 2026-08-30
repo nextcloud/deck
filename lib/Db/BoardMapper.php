@@ -307,6 +307,20 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * Find all board with the team_id set to the given teamId
+	 *
+	 * @return Board[]
+	 */
+	public function findAllAttachedToTeam(string $teamId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('team_id', $qb->createNamedParameter($teamId, IQueryBuilder::PARAM_STR)))
+			->orderBy('id');
+		return $this->findEntities($qb);
+	}
+
+	/**
 	 * Find all boards for a given user
 	 */
 	public function findAllByGroups(string $userId, array $groups, ?int $limit = null, ?int $offset = null, ?int $since = null,
