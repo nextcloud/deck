@@ -189,6 +189,7 @@ OC.L10N.register(
     "Deck settings" : "Deste ayarları",
     "General" : "Genel",
     "Use bigger card view" : "Daha büyük kart görünümü kullanılsın",
+    "Add new cards at the top of a list" : "Yeni kartlar bir listenin en üstüne eklensin",
     "Appearance" : "Görünüm",
     "Show card ID badge" : "Kart kimliği etiketi görüntülensin",
     "Show boards in calendar/tasks" : "Takvimler ve görevlerde panolar görüntülensin",
