@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.11
+### Fixed## What's Changed
+* [stable30] fix: board notify-due by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7994
+* [stable30] fix: exclude deleted cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8046
+
 ## 1.14.10
 ### Fixed
 * [stable30] fix: Handle share attributes in the share provider by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7732
