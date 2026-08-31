@@ -5,8 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.10
+### Fixed
+* [stable31] fix: board notify-due by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7993
+* [stable31] fix: exclude deleted cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8047
+
 ## 1.15.9
-### Fixed## What's Changed
+### Fixed
 * fix: set max comment retrieval limit to 200 by @grnd-alt in https://github.com/nextcloud/deck/pull/7966
 * fix(notifciations) by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7984
 
