@@ -189,6 +189,7 @@ OC.L10N.register(
     "Deck settings" : "Configurações do Deck",
     "General" : "Geral",
     "Use bigger card view" : "Use uma exibição de cartão maior",
+    "Add new cards at the top of a list" : "Adicionar novos cartões no topo de uma lista",
     "Appearance" : "Aparência",
     "Show card ID badge" : "Exibir o distintivo de identificação do cartão",
     "Show boards in calendar/tasks" : "Exibir os painéis em calendários/tarefas",
