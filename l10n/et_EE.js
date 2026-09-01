@@ -189,6 +189,7 @@ OC.L10N.register(
     "Deck settings" : "Kanbani rakenduse seadistused",
     "General" : "Üldine",
     "Use bigger card view" : "Kasuta suuremat kaardivaadet",
+    "Add new cards at the top of a list" : "Lisa uued kaardid loendi ülaossa",
     "Appearance" : "Välimus",
     "Show card ID badge" : "Näita silti kaardi tunnusega",
     "Show boards in calendar/tasks" : "Näita tahvleid kalendrite ja ülesannete vaates",
