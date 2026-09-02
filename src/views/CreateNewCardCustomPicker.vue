@@ -269,11 +269,15 @@ export default {
 				this.newCard = response
 				this.creating = false
 				this.created = true
-				this.$emit('submit', window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck') + `/card/${this.newCard.id}`)
+				this.emitSubmit(window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck') + `/card/${this.newCard.id}`)
 			} catch (e) {
 				this.creating = false
 				showError(e)
 			}
+		},
+		emitSubmit(link) {
+			this.$emit('submit', link)
+			this.$el.dispatchEvent(new CustomEvent('submit', { bubbles: true, detail: link }))
 		},
 		onSelectLabel(label) {
 			if (!label.id) return
