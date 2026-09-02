@@ -9,6 +9,7 @@
 		</div>
 		<NcSelect :model-value="assignedLabels"
 			class="selector-wrapper--selector"
+			:keep-open="true"
 			:multiple="true"
 			:disabled="disabled"
 			:options="labelsSorted"
