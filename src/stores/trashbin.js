@@ -63,7 +63,7 @@ export const useTrashbinStore = defineStore('trashbin', {
 			})
 		},
 		cardUndoDelete(card) {
-			cardApi.updateCard(card).then((restoredCard) => {
+			cardApi.updateCard(card, card.boardId).then((restoredCard) => {
 				this.removeCardFromTrash(restoredCard)
 				useCardStore().addCardToStore(restoredCard)
 			})
