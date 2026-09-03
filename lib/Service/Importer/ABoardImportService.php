@@ -70,6 +70,16 @@ abstract class ABoardImportService {
 	abstract public function getCardLabelAssignment(): array;
 
 	/**
+	 * Dependencies between cards, keyed by card id. Sources that have no such
+	 * concept simply import none.
+	 *
+	 * @return array<int, int[]>
+	 */
+	public function getCardDependencies(): array {
+		return [];
+	}
+
+	/**
 	 * @return array<int, array<string, IComment>>
 	 */
 	abstract public function getComments(): array;
