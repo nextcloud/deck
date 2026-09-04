@@ -255,10 +255,20 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$fileName = $attachment->getData();
 		$this->validateFilename($fileName);
 
-		$ownerId = $attachment->getCreatedBy() ?: $this->userId;
-		if (!is_string($ownerId) || $ownerId === '') {
-			throw new StatusException('Could not resolve owner for imported attachment');
-		}
+		$cardId = $attachment->getCardId();
+		// Use the session user or the card owner for imports without a request user.
+		$ownerId = $this->resolveImportStorageOwner($attachment);
+		$this->permissionService->checkPermission(
+			$this->cardMapper,
+			$cardId,
+			Acl::PERMISSION_EDIT,
+			$ownerId,
+			true,
+			true
+		);
+		// Import may run without request user context.
+		// Set the actor explicitly so DeckShareProvider permission checks evaluate correctly.
+		$this->permissionService->setUserId($ownerId);
 
 		$userFolder = $this->rootFolder->getUserFolder($ownerId);
 		$attachmentFolderName = $this->configService->getAttachmentFolder($ownerId);
@@ -282,7 +292,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			$target->putContent($content);
 		}
 
-		$cardId = $attachment->getCardId();
 		foreach ($this->shareProvider->getSharesByPath($target) as $share) {
 			if ((int)$share->getSharedWith() === $cardId) {
 				$attachment->setId((int)$share->getId());
@@ -290,18 +299,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 				return $attachment;
 			}
 		}
-
-		$this->permissionService->checkPermission(
-			$this->cardMapper,
-			$cardId,
-			Acl::PERMISSION_EDIT,
-			$ownerId,
-			true,
-			true
-		);
-		// Import usually runs in background jobs without request user context.
-		// Set the actor explicitly so DeckShareProvider permission checks evaluate correctly.
-		$this->permissionService->setUserId($ownerId);
 
 		$share = $this->shareManager->newShare();
 		$share->setNode($target);
@@ -329,6 +326,28 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$attachment->setId((int)$share->getId());
 		$attachment->setData($target->getName());
 		return $attachment;
+	}
+
+	/**
+	 * Resolve which user Files storage may receive an imported attachment.
+	 *
+	 * @throws StatusException
+	 */
+	private function resolveImportStorageOwner(Attachment $attachment): string {
+		if (is_string($this->userId) && $this->userId !== '') {
+			return $this->userId;
+		}
+
+		try {
+			$ownerId = $this->cardMapper->find($attachment->getCardId())->getOwner();
+		} catch (\Throwable) {
+			$ownerId = null;
+		}
+		if (!is_string($ownerId) || $ownerId === '') {
+			throw new StatusException('Could not resolve owner for imported attachment');
+		}
+
+		return $ownerId;
 	}
 
 	/**
