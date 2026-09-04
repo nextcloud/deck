@@ -25,6 +25,7 @@ use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\Event\RegisterTextContextEventListener;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Federation\DeckFederationProvider;
@@ -53,6 +54,7 @@ use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
 use OCA\Deck\UserMigration\DeckMigrator;
 use OCA\Text\Event\LoadEditor;
+use OCA\Text\Event\RegisterContextEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -191,6 +193,8 @@ class Application extends App implements IBootstrap {
 		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
 
 		$context->registerUserMigrator(DeckMigrator::class);
+
+		$context->registerEventListener(RegisterContextEvent::class, RegisterTextContextEventListener::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
