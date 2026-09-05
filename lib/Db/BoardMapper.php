@@ -485,6 +485,20 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	public function insert(Entity $entity): Entity {
+		if (!isset($entity->getUpdatedFields()['lastModified'])) {
+			$entity->setLastModified(time());
+		}
+		return parent::insert($entity);
+	}
+
+	public function update(Entity $entity): Entity {
+		$entity->setLastModified(time());
+		$result = parent::update($entity);
+		$this->boardCache[(string)$entity->getId()] = $result;
+		return $result;
+	}
+
 	public function findToDelete(int $timeLimit) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
