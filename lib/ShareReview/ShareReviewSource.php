@@ -16,6 +16,8 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
+use OCP\IUserSession;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Share\IShare;
 use OCP\Share\ShareReview\Events\ShareReviewAccessCheckEvent;
 use OCP\Share\ShareReview\IPaginatedShareReviewSource;
@@ -62,6 +64,7 @@ class ShareReviewSource implements IPaginatedShareReviewSource {
 		private readonly BoardService $boardService,
 		private readonly IEventDispatcher $eventDispatcher,
 		private readonly IL10N $l,
+		private readonly IUserSession $userSession,
 	) {
 	}
 
@@ -202,15 +205,38 @@ class ShareReviewSource implements IPaginatedShareReviewSource {
 		$this->eventDispatcher->dispatchTyped($event);
 
 		if (!$event->isHandled() || !$event->isGranted()) {
+			$this->audit('Deck share deletion through share review denied: ACL "%1$s", user "%2$s"', [
+				$shareId,
+				$this->actingUser($context),
+			]);
 			return false;
 		}
 
+		// described before the deletion, so the audit entry names what was removed
+		$entry = $this->getShare($shareId);
 		try {
 			$this->boardService->deleteAclForShareReview((int)$shareId);
-			return true;
 		} catch (DoesNotExistException) {
 			return false;
 		}
+		$this->audit('Deck share deleted through share review: ACL "%1$s", board "%2$s", share type "%3$s", participant "%4$s", user "%5$s"', [
+			$shareId,
+			$entry?->object ?? '',
+			$entry === null ? '' : (string)$entry->type,
+			$entry?->recipient ?? '',
+			$this->actingUser($context),
+		]);
+		return true;
+	}
+
+	/** @param list<string> $parameters */
+	private function audit(string $message, array $parameters): void {
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($message, $parameters));
+	}
+
+	/** The user the deletion is performed for, as named in the audit log */
+	private function actingUser(?ShareReviewActionContext $context): string {
+		return $context?->actingUserId ?? $this->userSession->getUser()?->getUID() ?? '';
 	}
 
 	/** @param array<string, mixed> $share */
