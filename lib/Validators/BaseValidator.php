@@ -27,6 +27,12 @@ abstract class BaseValidator {
 	];
 
 	/**
+	 * Years that fit into the DATETIME columns the dates are stored in.
+	 */
+	private const MIN_YEAR = 1000;
+	private const MAX_YEAR = 9999;
+
+	/**
 	 * @return array
 	 */
 	abstract public function rules();
@@ -130,11 +136,12 @@ abstract class BaseValidator {
 	/**
 	 * Check that a value is a date that can be stored and read back again.
 	 *
-	 * The value is matched against an explicit list of accepted formats,
-	 * because \DateTime silently misreads out of range input instead of
-	 * rejecting it: '12345-01-01' for example is parsed as 2005-01-01 12:34.
-	 * Such a value is written to the database but can no longer be parsed
-	 * when it is read again, which leaves the card permanently broken.
+	 * \DateTime accepts far more than the DATETIME column can hold, and
+	 * silently misreads the rest instead of rejecting it: '12345-01-01' is
+	 * parsed as 2005-01-01 12:34. Such a value is written to the database but
+	 * can no longer be parsed when it is read again, which leaves the card
+	 * permanently broken. The value is therefore matched against an explicit
+	 * list of accepted formats and its year checked against the column range.
 	 *
 	 * An empty value is considered valid so that optional dates can be unset.
 	 *
@@ -151,16 +158,22 @@ abstract class BaseValidator {
 		}
 
 		foreach (self::DATE_FORMATS as $format) {
-			if (\DateTimeImmutable::createFromFormat($format, $value) === false) {
+			$date = \DateTimeImmutable::createFromFormat($format, $value);
+			if ($date === false) {
 				continue;
 			}
 
 			// createFromFormat() accepts overflowing values such as month 13
 			// and only reports them through the warnings.
 			$errors = \DateTimeImmutable::getLastErrors();
-			if ($errors === false || ($errors['warning_count'] === 0 && $errors['error_count'] === 0)) {
-				return true;
+			if ($errors !== false && ($errors['warning_count'] > 0 || $errors['error_count'] > 0)) {
+				continue;
 			}
+
+			// 'Y' consumes any number of digits, so a year like 20250 parses
+			// without a complaint even though it no longer fits the column.
+			$year = (int)$date->format('Y');
+			return $year >= self::MIN_YEAR && $year <= self::MAX_YEAR;
 		}
 
 		return false;

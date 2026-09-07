@@ -60,6 +60,13 @@ class CardServiceValidatorTest extends ValidatorTestBase {
 		$this->assertFail([ 'duedate' => '12345-01-01' ]);
 	}
 
+	public function testDuedateYearBounds() {
+		$this->assertPass([ 'duedate' => '1000-01-01' ]);
+		$this->assertPass([ 'duedate' => '9999-12-31T23:59:59' ]);
+		$this->assertFail([ 'duedate' => '0999-12-31' ]);
+		$this->assertFail([ 'duedate' => '10000-01-01' ]);
+	}
+
 	public function testDuedateRejectsInvalidDates() {
 		$this->assertFail([ 'duedate' => '2025-13-45T99:99:99.000Z' ]);
 		$this->assertFail([ 'duedate' => '2025-02-30T00:00:00.000Z' ]);
