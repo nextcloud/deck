@@ -120,6 +120,34 @@ class AclMapperTest extends TestCase {
 		$this->assertEquals($this->boards[0]->getId(), $this->aclMapper->findBoardId($this->acls[1]->getId()));
 	}
 
+	public function testInsertSetsCreatedAtAndLastModifiedAt(): void {
+		$before = time();
+		$acl = $this->getAcl('user', 'timestamps_user', false, false, false, $this->boards[0]->getId());
+		$inserted = $this->aclMapper->insert($acl);
+		$after = time();
+
+		$this->assertGreaterThanOrEqual($before, $inserted->getCreatedAt());
+		$this->assertLessThanOrEqual($after, $inserted->getCreatedAt());
+		$this->assertGreaterThanOrEqual($before, $inserted->getLastModifiedAt());
+		$this->assertLessThanOrEqual($after, $inserted->getLastModifiedAt());
+
+		$this->aclMapper->delete($inserted);
+	}
+
+	public function testUpdateChangesLastModifiedAtButNotCreatedAt(): void {
+		$acl = $this->getAcl('user', 'timestamps_user2', false, false, false, $this->boards[0]->getId());
+		$inserted = $this->aclMapper->insert($acl);
+		$originalCreatedAt = $inserted->getCreatedAt();
+
+		$inserted->setPermissionEdit(true);
+		$updated = $this->aclMapper->update($inserted);
+
+		$this->assertSame($originalCreatedAt, $updated->getCreatedAt());
+		$this->assertGreaterThan(0, $updated->getLastModifiedAt());
+
+		$this->aclMapper->delete($updated);
+	}
+
 	public function tearDown(): void {
 		parent::tearDown();
 		foreach ($this->acls as $acl) {

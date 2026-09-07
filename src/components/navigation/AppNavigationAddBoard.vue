@@ -45,6 +45,8 @@
 import { NcButton, NcColorPicker, NcAppNavigationItem, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
+import { useBoardStore } from '../../stores/board.js'
+import { mapActions } from 'pinia'
 
 /**
  *
@@ -72,6 +74,9 @@ export default {
 		}
 	},
 	methods: {
+		...mapActions(useBoardStore, {
+			createBoardInStore: 'createBoard',
+		}),
 		startCreateBoard(e) {
 			this.editing = true
 			this.$nextTick(() => {
@@ -81,10 +86,7 @@ export default {
 		async createBoard(e) {
 			this.loading = true
 			const title = this.value.trim()
-			await this.$store.dispatch('createBoard', {
-				title,
-				color: this.color.substring(1),
-			})
+			await this.createBoardInStore({ title, color: this.color.substring(1) })
 			this.loading = false
 			this.editing = false
 			this.color = randomColor()

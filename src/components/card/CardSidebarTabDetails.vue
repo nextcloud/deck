@@ -20,12 +20,10 @@
 
 		<StartDateSelector :card="card"
 			:can-edit="canEdit"
-			@change="updateCardStartDate"
 			@input="debouncedUpdateCardStartDate" />
 
 		<DueDateSelector :card="card"
 			:can-edit="canEdit"
-			@change="updateCardDue"
 			@input="debouncedUpdateCardDue" />
 
 		<DependentCardsSelector :card="card"
@@ -49,7 +47,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 import moment from '@nextcloud/moment'
 import { loadState } from '@nextcloud/initial-state'
 
@@ -65,6 +63,8 @@ import DueDateSelector from './DueDateSelector.vue'
 import StartDateSelector from './StartDateSelector.vue'
 import { debounce } from 'lodash'
 import DependentCardsSelector from './DependentCardsSelector.vue'
+import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'CardSidebarTabDetails',
@@ -93,10 +93,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			currentBoard: state => state.currentBoard,
-		}),
-		...mapGetters(['canEdit', 'assignables']),
+		...mapState(useBoardStore, ['currentBoard', 'canEdit', 'assignables']),
 		cardDetailsInModal: {
 			get() {
 				return this.$store.getters.config('cardDetailsInModal')
@@ -118,6 +115,17 @@ export default {
 		this.initialize()
 	},
 	methods: {
+		...mapActions(useBoardStore, ['addLabelToCurrentBoardAndCard']),
+		...mapActions(useCardStore, {
+			assignCardToUserInStore: 'assignCardToUser',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			updateCardDueInStore: 'updateCardDue',
+			updateCardStartDateInStore: 'updateCardStartDate',
+			addLabelInStore: 'addLabel',
+			removeLabelInStore: 'removeLabel',
+			assignDependentCardInStore: 'assignDependentCard',
+			removeDependentCardInStore: 'removeDependentCard',
+		}),
 		async descriptionChanged(newDesc) {
 			if (newDesc === this.copiedCard.description) {
 				return
@@ -135,7 +143,7 @@ export default {
 		},
 
 		assignUserToCard(user) {
-			this.$store.dispatch('assignCardToUser', {
+			this.assignCardToUserInStore({
 				card: this.copiedCard,
 				assignee: {
 					userId: user.uid,
@@ -145,7 +153,7 @@ export default {
 		},
 
 		removeUserFromCard(user) {
-			this.$store.dispatch('removeUserFromCard', {
+			this.removeUserFromCardInStore({
 				card: this.copiedCard,
 				assignee: {
 					userId: user.uid,
@@ -155,7 +163,7 @@ export default {
 		},
 
 		updateCardDue(val) {
-			this.$store.dispatch('updateCardDue', {
+			this.updateCardDueInStore({
 				...this.copiedCard,
 				duedate: val ? (new Date(val)).toISOString() : null,
 			})
@@ -163,10 +171,10 @@ export default {
 
 		debouncedUpdateCardDue: debounce(function(val) {
 			this.updateCardDue(val)
-		}, 500),
+		}, 500, { leading: true }),
 
 		updateCardStartDate(val) {
-			this.$store.dispatch('updateCardStartDate', {
+			this.updateCardStartDateInStore({
 				...this.copiedCard,
 				startdate: val ? (new Date(val)).toISOString() : null,
 			})
@@ -174,7 +182,7 @@ export default {
 
 		debouncedUpdateCardStartDate: debounce(function(val) {
 			this.updateCardStartDate(val)
-		}, 500),
+		}, 500, { leading: true }),
 
 		addLabelToCard(newLabel) {
 			this.copiedCard.labels.push(newLabel)
@@ -183,11 +191,11 @@ export default {
 				labelId: newLabel.id,
 				boardId: this.copiedCard.boardId,
 			}
-			this.$store.dispatch('addLabel', data)
+			this.addLabelInStore(data)
 		},
 
 		async addLabelToBoardAndCard(name) {
-			await this.$store.dispatch('addLabelToCurrentBoardAndCard', {
+			await this.addLabelToCurrentBoardAndCard({
 				card: this.copiedCard,
 				newLabel: {
 					title: name,
@@ -208,7 +216,7 @@ export default {
 				card: this.copiedCard,
 				labelId: removedLabel.id,
 			}
-			this.$store.dispatch('removeLabel', data)
+			this.removeLabelInStore(data)
 		},
 		assignDependentCard(dependentCard) {
 			if (!dependentCard?.id) {
@@ -223,7 +231,7 @@ export default {
 				this.copiedCard.dependentCards.push(dependentCard.id)
 			}
 
-			this.$store.dispatch('assignDependentCard', {
+			this.assignDependentCardInStore({
 				card: this.copiedCard,
 				dependentCard,
 			})
@@ -238,7 +246,7 @@ export default {
 				this.copiedCard.dependentCards = this.copiedCard.dependentCards.filter((id) => id !== dependentCardId)
 			}
 
-			this.$store.dispatch('removeDependentCard', {
+			this.removeDependentCardInStore({
 				card: this.copiedCard,
 				dependentCardId,
 			})

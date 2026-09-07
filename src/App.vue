@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation.vue'
 import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
 import { NcModal, NcContent, NcAppContent, isMobile } from '@nextcloud/vue'
@@ -38,6 +38,8 @@ import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import CardMoveDialog from './CardMoveDialog.vue'
+import { useBoardStore } from './stores/board.js'
+import { mapState } from 'pinia'
 
 const boardApi = new BoardApi()
 
@@ -77,10 +79,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useBoardStore, ['currentBoard']),
+		...mapStateVuex({
 			navShown: state => state.navShown,
 			sidebarShownState: state => state.sidebarShown,
-			currentBoard: state => state.currentBoard,
 		}),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
@@ -102,7 +104,7 @@ export default {
 	created() {
 		const initialState = loadState('deck', 'initialBoards', null)
 		if (initialState !== null) {
-			this.$store.dispatch('loadBoards')
+			useBoardStore().loadBoards()
 		}
 		this.$store.dispatch('loadSharees')
 	},

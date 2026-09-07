@@ -9,7 +9,6 @@ import storeFactory from './store/main.js'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
-import { subscribe } from '@nextcloud/event-bus'
 import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
@@ -21,8 +20,11 @@ import { createPinia, PiniaVuePlugin } from 'pinia'
 document.body.setAttribute('data-snap-ignore', 'true')
 
 const store = storeFactory()
+const pinia = createPinia()
+Vue.use(PiniaVuePlugin)
+pinia.use(() => ({ $vuex: store }))
+
 sync(store, router)
-initSessions(store)
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
@@ -43,9 +45,6 @@ Vue.config.errorHandler = (err, vm, info) => {
 	console.error(err)
 }
 
-const pinia = createPinia()
-Vue.use(PiniaVuePlugin)
-
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#content',
@@ -61,12 +60,7 @@ new Vue({
 		}
 	},
 	created() {
-		subscribe('nextcloud:unified-search.search', ({ query }) => {
-			this.$store.commit('setSearchQuery', query)
-		})
-		subscribe('nextcloud:unified-search.reset', () => {
-			this.$store.commit('setSearchQuery', '')
-		})
+		initSessions()
 
 		this.interval = setInterval(() => {
 			this.time = Date.now()
@@ -74,14 +68,6 @@ new Vue({
 	},
 	beforeDestroy() {
 		clearInterval(this.interval)
-	},
-	methods: {
-		filter(query) {
-			this.$store.commit('setSearchQuery', query)
-		},
-		cleanSearch() {
-			this.$store.commit('setSearchQuery', '')
-		},
 	},
 	render: h => h(App),
 })

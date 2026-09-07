@@ -38,13 +38,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import { NcAvatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem.vue'
 import CommentForm from './CommentForm.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import { getCurrentUser } from '@nextcloud/auth'
 import { useCommentStore } from '../../stores/comment.js'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'CardSidebarTabComments',
@@ -78,8 +79,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			currentBoard: state => state.currentBoard,
+		...mapState(useBoardStore, {
+			currentBoard: 'currentBoard',
 		}),
 		members() {
 			return this.currentBoard.users

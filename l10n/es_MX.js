@@ -110,6 +110,7 @@ OC.L10N.register(
     "Archived cards" : "Tarjetas archivadas",
     "Add list" : "Añadir lista",
     "List name" : "Nombre de lista",
+    "Clear search" : "Limpiar búsqueda",
     "Active filters" : "Filtros activos",
     "Filter by tag" : "Filtrar por etiqueta",
     "Unassigned" : "No asignado",
@@ -167,7 +168,6 @@ OC.L10N.register(
     "Archive card" : "Archivar tarjeta",
     "(group)" : "(grupo)",
     "Delete card" : "Eliminar tarjeta",
-    "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido con usted",
     "Cancel edit" : "Cancelar edición",
@@ -193,6 +193,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "No participants found" : "No se encontraron participantes",
     "Save" : "Guardar",
+    "seconds ago" : "hace segundos",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana"
 },

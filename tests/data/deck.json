@@ -10,6 +10,7 @@
 				"displayname": "admin",
 				"type": 0
 			},
+			"teamId": null,
 			"color": "e0ed31",
 			"archived": false,
 			"labels": [
@@ -401,6 +402,7 @@
 				"displayname": "admin",
 				"type": 0
 			},
+			"teamId": null,
 			"color": "30b6d8",
 			"archived": false,
 			"labels": [

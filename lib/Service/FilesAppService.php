@@ -332,7 +332,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	/**
-	 * @return array
+	 * @return array|null
 	 * @throws StatusException
 	 */
 	private function getUploadedFile() {

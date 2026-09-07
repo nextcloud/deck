@@ -84,7 +84,7 @@
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble } from '@nextcloud/vue'
 import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
 import CardSidebarTabComments from './CardSidebarTabComments.vue'
@@ -101,6 +101,9 @@ import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import { showError, showWarning } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/CardMenuEntries.vue'
+import { mapActions, mapState } from 'pinia'
+import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 const capabilities = getCapabilities()
 
@@ -151,14 +154,14 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, ['canEdit', 'assignables', 'currentBoard']),
+		...mapStateVuex({
 			isFullApp: (state) => state.isFullApp,
-			currentBoard: (state) => state.currentBoard,
 			hasCardSaveError: (state) => state.hasCardSaveError,
 		}),
-		...mapGetters(['canEdit', 'assignables', 'stackById']),
 		currentCard() {
-			return this.$store.getters.cardById(this.id)
+			return this.cardById(this.id)
 		},
 		cardOwnerDisplayName() {
 			return this.currentCard.owner?.displayname ?? this.currentCard.owner?.uid ?? this.currentCard.owner ?? null
@@ -205,7 +208,7 @@ export default {
 	},
 	watch: {
 		currentCard(newCard, oldCard) {
-			if (newCard.id === oldCard.id) return
+			if (newCard?.id === oldCard?.id) return
 			this.focusHeader()
 		},
 		'currentCard.title': {
@@ -216,6 +219,9 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			updateCardTitleInStore: 'updateCardTitle',
+		}),
 		focusHeader() {
 			this.$nextTick(() => {
 				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
@@ -227,7 +233,7 @@ export default {
 				return
 			}
 			this.isEditingTitle = false
-			this.$store.dispatch('updateCardTitle', {
+			this.updateCardTitleInStore({
 				...this.currentCard,
 				title: this.titleEditing,
 			})

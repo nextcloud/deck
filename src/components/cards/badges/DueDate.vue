@@ -18,10 +18,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import moment from '@nextcloud/moment'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
+import { useFormatTime, useFormatRelativeTime } from '@nextcloud/vue'
 
 const DueState = {
 	Done: 'Done',
@@ -51,7 +51,7 @@ export default {
 			if (this.card.done) {
 				return DueState.Done
 			}
-			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
+			const days = Math.floor((new Date(this.card.duedate).getTime() - new Date(this.$root.time).getTime()) / 60 / 60 / 24 / 1000)
 			if (days < 0) {
 				return DueState.Overdue
 			}
@@ -68,16 +68,11 @@ export default {
 			return this.dueState === DueState.Overdue
 		},
 		relativeDate() {
-			const date = this.card.done ? this.card.done : this.card.duedate
-			const diff = moment(this.$root.time).diff(date, 'seconds')
-			if (diff >= 0 && diff < 45) {
-				return t('core', 'seconds ago')
-			}
-			return moment(date).fromNow()
+			return useFormatRelativeTime(this.card.done ? this.card.done : this.card.duedate).value
 		},
 		absoluteDate() {
-			const date = this.card.done ? this.card.done : this.card.duedate
-			return moment(date).format('LLLL')
+			const date = new Date(this.card.done ? this.card.done : this.card.duedate)
+			return useFormatTime(date, { format: { dateStyle: 'full', timeStyle: 'short' } }).value
 		},
 	},
 }

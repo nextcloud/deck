@@ -17,6 +17,7 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
+use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -552,8 +553,9 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 					return (mb_strtolower($user->getDisplayName()) === mb_strtolower($assignedQueryValue) || $user->getUID() === $assignedQueryValue);
 				});
 				$groups = $this->groupManager->search($assignment->getValue());
+				$groups = array_map(fn (IGroup $g): string => $g->getGID(), $groups);
 				foreach ($searchUsers as $user) {
-					$groups = array_merge($groups, $this->groupManager->getUserGroups($user));
+					$groups = array_merge($groups, $this->groupManager->getUserGroupIds($user));
 				}
 
 				$assignmentSearches = [];
@@ -565,10 +567,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 						$qb->expr()->eq('au' . $index . '.type', $qb->createNamedParameter(Assignment::TYPE_USER, IQueryBuilder::PARAM_INT))
 					);
 				}
-				foreach ($groups as $group) {
+				foreach ($groups as $groupId) {
 					$hasAssignedMatches = true;
 					$assignmentSearches[] = $qb->expr()->andX(
-						$qb->expr()->eq('au' . $index . '.participant', $qb->createNamedParameter($group->getGID(), IQueryBuilder::PARAM_STR)),
+						$qb->expr()->eq('au' . $index . '.participant', $qb->createNamedParameter($groupId, IQueryBuilder::PARAM_STR)),
 						$qb->expr()->eq('au' . $index . '.type', $qb->createNamedParameter(Assignment::TYPE_GROUP, IQueryBuilder::PARAM_INT))
 					);
 				}

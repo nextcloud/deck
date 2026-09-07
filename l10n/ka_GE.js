@@ -47,7 +47,6 @@ OC.L10N.register(
     "Formatting help" : "დახმარება ფორმატირებაზე",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
     "(group)" : "(ჯგუფი)",
-    "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
     "Shared with you" : "გაზიარებული თქვენთან",
     "Board details" : "დაფის დეტალები",
@@ -65,6 +64,7 @@ OC.L10N.register(
     "Share" : "გაზიარება",
     "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "Save" : "შენახვა",
+    "seconds ago" : "წამის წინ",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ"
 },

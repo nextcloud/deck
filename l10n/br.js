@@ -40,7 +40,6 @@ OC.L10N.register(
     "Update" : "Adnevesaat",
     "Description" : "Diskrivadur",
     "(group)" : "(strollad)",
-    "seconds ago" : "eilenn zo",
     "Shared with you" : "Rannet ganeoc'h",
     "No notifications" : "Kemennadenn ebet",
     "Close" : "Serriñ",
@@ -48,6 +47,7 @@ OC.L10N.register(
     "Modified" : "Cheñchet",
     "Share" : "Rannan",
     "Save" : "Enrollañ",
+    "seconds ago" : "eilenn zo",
     "Today" : "Hiziv",
     "Tomorrow" : "Warc'hoaz"
 },

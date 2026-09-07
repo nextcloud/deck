@@ -14,6 +14,7 @@ OC.L10N.register(
     "Attachments" : "Ticeqqufin",
     "File" : "Afaylu",
     "Cancel" : "Sefsex",
+    "Clear search" : "Sfeḍ anadi",
     "Active filters" : "Imzizdigen urmiden",
     "Open" : "Ldi",
     "Completed" : "Yemmed",
@@ -41,7 +42,6 @@ OC.L10N.register(
     "Update" : "Leqqem",
     "Description" : "Aglam",
     "Open link" : "Nɣel aseɣwen",
-    "seconds ago" : "Tasinin aya",
     "Cancel edit" : "Sefsex aseẓreg",
     "An error occurred" : "Teḍra-d tuccḍa",
     "No notifications" : "Ulac tisezmal",
@@ -53,6 +53,7 @@ OC.L10N.register(
     "Modified" : "Yettwabeddel",
     "Share" : "Bḍu",
     "Save" : "Sekles",
+    "seconds ago" : "Tasinin aya",
     "Today" : "Ass-a"
 },
 "nplurals=2; plural=(n != 1);");

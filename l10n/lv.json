@@ -31,6 +31,7 @@
     "File already exists" : "Datne jau pastāv",
     "Do you want to overwrite it?" : "Vai tu gribi pārrakstīt to?",
     "Add list" : "Pievienot sarakstu…",
+    "Clear search" : "Notīrīt meklēšanu",
     "Open" : "Atvērt",
     "Completed" : "Pabeigts",
     "Clear filter" : "Notīrīt atlasi",
@@ -72,7 +73,6 @@
     "Set due date for later today" : "Iestatīt beigu datumu vēlāk šodienā",
     "(group)" : "(grupa)",
     "Open link" : "Atvērt saiti",
-    "seconds ago" : "pirms vairākām sekundēm",
     "Shared with you" : "Koplietots ar tevi",
     "No reminder" : "Nav atgādinājuma",
     "An error occurred" : "Gadījās kļūda",
@@ -88,6 +88,7 @@
     "Share" : "Koplietot",
     "Searching for users, groups and teams …" : "Meklē lietotājus, kopas un komandas …",
     "Save" : "Saglabāt",
+    "seconds ago" : "pirms vairākām sekundēm",
     "Today" : "Šodien",
     "Tomorrow" : "Rīt"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"

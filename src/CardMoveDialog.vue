@@ -37,7 +37,10 @@ import { NcDialog, NcSelect, NcButton } from '@nextcloud/vue'
 import { generateOcsUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapGetters } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useStackStore } from './stores/stack.js'
+import { useCardStore } from './stores/card.js'
+import { useBoardStore } from './stores/board.js'
 
 export default {
 	name: 'CardMoveDialog',
@@ -52,9 +55,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['stackById', 'boardById']),
+		...mapState(useStackStore, ['stackById']),
+		...mapState(useBoardStore, ['boardById', 'boards']),
 		activeBoards() {
-			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
+			return this.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
 		},
 		isBoardAndStackChoosen() {
 			return !(this.selectedBoard === '' || this.selectedStack === '')
@@ -76,6 +80,11 @@ export default {
 		unsubscribe('deck:card:show-move-dialog', this.openModal)
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			moveCardInStore: 'moveCard',
+			addNewCardInStore: 'addNewCard',
+			cloneCardInStore: 'cloneCard',
+		}),
 		openModal(card) {
 			this.card = card
 			this.selectedStack = this.stackById(this.card.stackId)
@@ -95,14 +104,14 @@ export default {
 		async moveCard() {
 			this.copiedCard = Object.assign({}, this.card)
 			this.copiedCard.stackId = this.selectedStack.id
-			this.$store.dispatch('moveCard', { card: this.copiedCard, oldBoardId: this.selectedBoard.id })
+			await this.moveCardInStore({ card: this.copiedCard, oldBoardId: this.selectedBoard.id })
 			if (parseInt(this.selectedBoard.id) === parseInt(this.selectedStack.boardId)) {
-				await this.$store.commit('addNewCard', { ...this.copiedCard })
+				this.addNewCardInStore({ ...this.copiedCard })
 			}
 			this.modalShow = false
 		},
 		async cloneCard() {
-			this.$store.dispatch('cloneCard', { cardId: this.card.id, targetStackId: this.selectedStack.id })
+			await this.cloneCardInStore({ cardId: this.card.id, targetStackId: this.selectedStack.id })
 			this.modalShow = false
 		},
 	},

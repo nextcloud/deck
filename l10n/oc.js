@@ -50,7 +50,6 @@ OC.L10N.register(
     "Description" : "Descripcion",
     "Tomorrow – {timeLocale}" : "Deman – {timeLocale}",
     "Edit title" : "Modificar lo títol",
-    "seconds ago" : "fa qualques segondas",
     "Shared with you" : "Shared with you",
     "Cancel edit" : "Anullar la modificacion",
     "An error occurred" : "Una error s’es producha",
@@ -65,6 +64,7 @@ OC.L10N.register(
     "Modified" : "Modificat",
     "Share" : "Partejar",
     "Save" : "Salvar",
+    "seconds ago" : "fa qualques segondas",
     "Today" : "Uèi",
     "Tomorrow" : "Deman"
 },

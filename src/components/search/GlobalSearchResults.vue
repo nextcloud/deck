@@ -45,6 +45,7 @@ import { generateOcsUrl } from '@nextcloud/router'
 import InfiniteLoading from 'vue-infinite-loading'
 import Placeholder from './Placeholder.vue'
 import { NcActions, NcActionButton, NcRichText } from '@nextcloud/vue'
+import { useCardStore } from '../../stores/card.js'
 
 const createCancelToken = () => axios.CancelToken.source()
 
@@ -146,7 +147,7 @@ export default {
 			}
 			if (data.ocs.data.length > 0) {
 				data.ocs.data.forEach((card) => {
-					this.$store.dispatch('addCardData', card)
+					useCardStore().addCardData(card)
 				})
 				this.results = [...this.results, ...data.ocs.data]
 				this.cursor = data.ocs.data[data.ocs.data.length - 1].lastModified

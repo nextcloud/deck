@@ -86,9 +86,10 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 import Color from '../../mixins/color.js'
 import { NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'TagsTabSidebar',
@@ -111,7 +112,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters({
+		...mapState(useBoardStore, {
 			labels: 'currentBoardLabels',
 			canManage: 'canManage',
 			isArchived: 'isArchived',
@@ -144,6 +145,11 @@ export default {
 
 	},
 	methods: {
+		...mapActions(useBoardStore, [
+			'removeLabelFromCurrentBoard',
+			'updateLabelFromCurrentBoard',
+			'addLabelToCurrentBoard',
+		]),
 		updateColor(c) {
 			if (this.editingLabel === null) {
 				this.addLabelObj.color = c.substring(1, 7)
@@ -157,10 +163,10 @@ export default {
 			this.editingLabelColor = '#' + label.color
 		},
 		deleteLabel(id) {
-			this.$store.dispatch('removeLabelFromCurrentBoard', id)
+			this.removeLabelFromCurrentBoard(id)
 		},
 		updateLabel(label) {
-			this.$store.dispatch('updateLabelFromCurrentBoard', this.editingLabel)
+			this.updateLabelFromCurrentBoard(this.editingLabel)
 			this.editingLabelId = null
 		},
 		clickShowAddLabel() {
@@ -169,7 +175,7 @@ export default {
 			this.addLabel = true
 		},
 		clickAddLabel() {
-			this.$store.dispatch('addLabelToCurrentBoard', this.addLabelObj)
+			this.addLabelToCurrentBoard(this.addLabelObj)
 			this.addLabel = false
 			this.addLabelObj = null
 			this.addLabelColor = null

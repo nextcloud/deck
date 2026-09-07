@@ -78,14 +78,15 @@ return [
 
 		// api
 		['name' => 'board_api#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
-		['name' => 'board_api#get', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_api#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
+		['name' => 'board_api#get', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_api#delete', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'DELETE'],
 		['name' => 'board_api#update', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'PUT'],
 		['name' => 'board_api#undo_delete', 'url' => '/api/v{apiVersion}/boards/{boardId}/undo_delete', 'verb' => 'POST'],
 		['name' => 'board_api#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 		['name' => 'board_api#deleteAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
 		['name' => 'board_api#updateAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl/{aclId}', 'verb' => 'PUT'],
+		['name' => 'board_api#clone', 'url' => '/api/v{apiVersion}/boards/{boardId}/clone', 'verb' => 'POST'],
 
 		['name' => 'board_import_api#getAllowedSystems', 'url' => '/api/v{apiVersion}/boards/import/getSystems','verb' => 'GET'],
 		['name' => 'board_import_api#getConfigSchema', 'url' => '/api/v{apiVersion}/boards/import/config/schema/{name}','verb' => 'GET'],
@@ -140,6 +141,7 @@ return [
 		['name' => 'board_ocs#read', 'url' => '/api/v{apiVersion}/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'stack_ocs#index', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_ocs#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],
+		['name' => 'board_ocs#createForTeam', 'url' => '/api/v{apiVersion}/boards/team', 'verb' => 'POST'],
 		['name' => 'board_ocs#addAcl', 'url' => '/api/v{apiVersion}/boards/{boardId}/acl', 'verb' => 'POST'],
 
 		['name' => 'card_ocs#create', 'url' => '/api/v{apiVersion}/cards', 'verb' => 'POST'],
@@ -160,7 +162,7 @@ return [
 		['name' => 'attachment_ocs#getAll', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment_ocs#create', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachment', 'verb' => 'POST'],
 		['name' => 'attachment_ocs#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'PUT'],
-		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
+		['name' => 'attachment_ocs#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{type}:{attachmentId}', 'verb' => 'DELETE'],
 		['name' => 'attachment_ocs#restore', 'url' => '/api/v{apiVersion}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
 
 		['name' => 'Config#get', 'url' => '/api/v{apiVersion}/config', 'verb' => 'GET'],

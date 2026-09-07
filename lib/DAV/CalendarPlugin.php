@@ -15,6 +15,8 @@ use Sabre\DAV\Exception\NotFound;
 
 class CalendarPlugin implements ICalendarProvider {
 
+	private const USER_PRINCIPAL_PREFIX = 'principals/users/';
+
 	/** @var DeckCalendarBackend */
 	private $backend;
 	/** @var ConfigService */
@@ -33,7 +35,7 @@ class CalendarPlugin implements ICalendarProvider {
 	}
 
 	public function fetchAllForCalendarHome(string $principalUri): array {
-		if (!$this->calendarIntegrationEnabled) {
+		if (!$this->calendarIntegrationEnabled || !$this->isOwnCalendarHome($principalUri)) {
 			return [];
 		}
 
@@ -46,7 +48,7 @@ class CalendarPlugin implements ICalendarProvider {
 	}
 
 	public function hasCalendarInCalendarHome(string $principalUri, string $calendarUri): bool {
-		if (!$this->calendarIntegrationEnabled) {
+		if (!$this->calendarIntegrationEnabled || !$this->isOwnCalendarHome($principalUri)) {
 			return false;
 		}
 
@@ -70,5 +72,11 @@ class CalendarPlugin implements ICalendarProvider {
 			}
 		}
 		return null;
+	}
+
+	private function isOwnCalendarHome(string $principalUri): bool {
+		$userId = $this->configService->getUserId();
+
+		return $userId !== null && $principalUri === self::USER_PRINCIPAL_PREFIX . $userId;
 	}
 }

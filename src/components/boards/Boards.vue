@@ -5,7 +5,8 @@
 
 <template>
 	<div>
-		<Controls />
+		<!-- No hint: this matches plain titles, the card prefixes do not apply here -->
+		<Controls show-search :search-label="t('deck', 'Search boards')" />
 		<div class="board-list">
 			<div class="board-list-row board-list-header-row">
 				<div class="board-list-bullet-cell">
@@ -28,6 +29,7 @@
 
 import BoardItem from './BoardItem.vue'
 import Controls from '../Controls.vue'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'Boards',
@@ -47,14 +49,14 @@ export default {
 		},
 		filteredBoards() {
 			const query = this.$store.getters.getSearchQuery
-			return this.$store.getters.filteredBoards.filter((board) => {
+			return useBoardStore().filteredBoards.filter((board) => {
 				return board.deletedAt <= 0 && board.title.toLowerCase().includes(query.toLowerCase())
 			})
 		},
 	},
 	watch: {
 		navFilter(value) {
-			this.$store.commit('setBoardFilter', value)
+			useBoardStore().setBoardFilter(value)
 		},
 	},
 }

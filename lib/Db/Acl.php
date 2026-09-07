@@ -21,6 +21,10 @@ namespace OCA\Deck\Db;
  * @method void setOwner(int $owner)
  * @method void setToken(string $token)
  * @method string getToken()
+ * @method int getCreatedAt()
+ * @method void setCreatedAt(int $createdAt)
+ * @method int getLastModifiedAt()
+ * @method void setLastModifiedAt(int $lastModifiedAt)
  *
  */
 class Acl extends RelationalEntity {
@@ -42,6 +46,8 @@ class Acl extends RelationalEntity {
 	protected $permissionManage = false;
 	protected $owner = false;
 	protected $token = null;
+	protected $createdAt = 0;
+	protected $lastModifiedAt = 0;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
@@ -52,6 +58,8 @@ class Acl extends RelationalEntity {
 		$this->addType('type', 'integer');
 		$this->addType('owner', 'boolean');
 		$this->addType('token', 'string');
+		$this->addType('createdAt', 'integer');
+		$this->addType('lastModifiedAt', 'integer');
 		$this->addRelation('owner');
 		$this->addResolvable('participant');
 	}

@@ -20,6 +20,7 @@ OC.L10N.register(
     "Cancel" : "ยกเลิก",
     "File already exists" : "ไฟล์นี้มีอยู่แล้ว",
     "Add list" : "เพิ่มรายการ",
+    "Clear search" : "ล้างการค้นหา",
     "Open" : "เปิด",
     "Completed" : "เสร็จแล้ว",
     "Overdue" : "เกินกำหนด",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Update" : "อัปเดต",
     "Description" : "รายละเอียด",
     "(group)" : "(กลุ่ม)",
-    "seconds ago" : "วินาทีที่ผ่านมา",
     "Shared with you" : "แชร์กับคุณ",
     "An error occurred" : "เกิดข้อผิดพลาด",
     "Edit board" : "แก้ไขกระดาน",
@@ -61,6 +61,7 @@ OC.L10N.register(
     "Modified" : "แก้ไขเมื่อ",
     "Share" : "แชร์",
     "Save" : "บันทึก",
+    "seconds ago" : "วินาทีที่ผ่านมา",
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้"
 },

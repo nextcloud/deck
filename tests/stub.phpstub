@@ -73,6 +73,7 @@ namespace OCA\Circles\Model {
 
 		public function getLevel(): int {}
 		public function getUserType(): int{}
+		public function getUserId(): string {}
 	}
 
 	class Circle {
@@ -80,6 +81,8 @@ namespace OCA\Circles\Model {
 		public function getDisplayName(): string {}
 		public function getOwner(): string {}
 		public function getSingleId(): string {}
+		/** @return Member[] */
+		public function getMembers(int $limit = 0): array {}
 		public function getInheritedMembers(): array {}
 		public function getInitiator(): Member {}
 	}
@@ -92,6 +95,11 @@ namespace OCA\Circles\Events {
 	class CircleDestroyedEvent extends \OCP\EventDispatcher\Event {
 		public function __construct(FederatedEvent $federatedEvent, array $results) {}
 		abstract public function getCircle(): \OCA\Circles\Model\Circle {}
+	}
+
+	class RemovingCircleMemberEvent extends \OCP\EventDispatcher\Event {
+		public function getCircle(): \OCA\Circles\Model\Circle {}
+		public function getMember(): \OCA\Circles\Model\Member {}
 	}
 }
 namespace OCA\Circles\Model\Probes {

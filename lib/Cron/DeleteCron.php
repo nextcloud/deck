@@ -13,6 +13,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
+use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJob;
@@ -35,6 +36,7 @@ class DeleteCron extends TimedJob {
 
 	public function __construct(
 		ITimeFactory $time,
+		private readonly ConfigService $configService,
 		BoardMapper $boardMapper,
 		CardMapper $cardMapper,
 		AttachmentService $attachmentService,
@@ -50,7 +52,7 @@ class DeleteCron extends TimedJob {
 		$this->stackMapper = $stackMapper;
 		$this->deckShareProvider = $deckShareProvider;
 
-		$this->setInterval(60 * 60 * 24);
+		$this->setInterval(60 * 60); // Run once every hour
 		$this->setTimeSensitivity(IJob::TIME_INSENSITIVE);
 	}
 
@@ -59,18 +61,19 @@ class DeleteCron extends TimedJob {
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	protected function run($argument) {
-		$boards = $this->boardMapper->findToDelete();
+		$timeLimit = time() - $this->configService->getTrashRetention();
+
+		$boards = $this->boardMapper->findToDelete($timeLimit);
 		foreach ($boards as $board) {
 			$this->boardMapper->delete($board);
 		}
 
-		$timeLimit = time() - (60 * 5); // 5 min buffer
 		$cards = $this->cardMapper->findToDelete($timeLimit, 500);
 		foreach ($cards as $card) {
 			$this->cardMapper->delete($card);
 		}
 
-		$attachments = $this->attachmentMapper->findToDelete();
+		$attachments = $this->attachmentMapper->findToDelete($timeLimit);
 		foreach ($attachments as $attachment) {
 			try {
 				$service = $this->attachmentService->getService($attachment->getType());
@@ -87,7 +90,7 @@ class DeleteCron extends TimedJob {
 			$this->deckShareProvider->delete($share);
 		}
 
-		$stacks = $this->stackMapper->findToDelete();
+		$stacks = $this->stackMapper->findToDelete($timeLimit);
 		foreach ($stacks as $stack) {
 			$this->stackMapper->delete($stack);
 		}

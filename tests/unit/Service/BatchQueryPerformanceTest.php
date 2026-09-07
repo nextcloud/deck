@@ -39,16 +39,17 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCA\Deck\Validators\CardServiceValidator;
-use OCP\AppFramework\IAppContainer;
 use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
@@ -321,7 +322,7 @@ class BatchQueryPerformanceTest extends TestCase {
 		// FilesAppService implements ICustomAttachmentService, so mock the full class
 		$this->filesAppServiceImpl = $this->createMock(FilesAppService::class);
 
-		$appContainer = $this->createMock(IAppContainer::class);
+		$appContainer = $this->createMock(ContainerInterface::class);
 		$appContainer->method('get')
 			->willReturnMap([
 				[FileService::class, $this->fileServiceImpl],
@@ -332,6 +333,7 @@ class BatchQueryPerformanceTest extends TestCase {
 		$application->method('getContainer')->willReturn($appContainer);
 
 		$this->attachmentService = new AttachmentService(
+			$this->createMock(ConfigService::class),
 			$this->attachmentMapper,
 			$this->createMock(CardMapper::class),
 			$this->createMock(IUserManager::class),
@@ -379,6 +381,7 @@ class BatchQueryPerformanceTest extends TestCase {
 			$this->createMock(CardServiceValidator::class),
 			$this->createMock(AssignmentService::class),
 			$this->referenceManager,
+			$this->createMock(IDBConnection::class),
 			'user1',
 		);
 	}

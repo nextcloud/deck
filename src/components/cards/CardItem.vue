@@ -6,7 +6,7 @@
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': currentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+			:class="{'compact': compactMode, 'current-card': isCurrentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
 			:style="{backgroundColor: color}"
 			tag="div"
 			:tabindex="0"
@@ -48,15 +48,13 @@
 			</div>
 
 			<div v-if="hasLabels" class="card-labels">
-				<transition-group v-if="card.labels && card.labels.length"
-					name="zoom"
-					tag="ul"
+				<ul v-if="card.labels && card.labels.length"
 					class="labels"
 					@click.stop="openCard">
 					<li v-for="label in labelsSorted" :key="label?.id ?? label?.title" :style="labelStyle(label)">
 						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 					</li>
-				</transition-group>
+				</ul>
 				<CardMenu v-if="showMenuAtLabels"
 					:card="card"
 					class="right"
@@ -80,7 +78,7 @@
 
 <script>
 import ClickOutside from 'vue-click-outside'
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import CardBadges from './CardBadges.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
@@ -89,6 +87,10 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapActions, mapState } from 'pinia'
+import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -125,41 +127,44 @@ export default {
 		return {
 			highlight: false,
 			editingTitle: TITLE_EDITING_STATE.OFF,
+			isCurrentCard: false,
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useStackStore, ['stackById']),
+		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, {
+			showArchived: 'showArchived',
+			currentBoard: 'currentBoard',
+			canEditPermission: 'canEdit',
+			boards: 'boards',
+			boardById: 'boardById',
+		}),
+		...mapStateVuex({
 			compactMode: state => state.compactMode,
-			showArchived: state => state.showArchived,
-			currentBoard: state => state.currentBoard,
 			showCardCover: state => state.showCardCover,
 			shortcutLock: state => state.shortcutLock,
 		}),
-		...mapGetters([
-			'isArchived',
-		]),
+
 		board() {
-			return this.$store.getters.boardById(this?.stack?.boardId)
+			return this.boardById(this?.stack?.boardId)
 		},
 		stack() {
-			return this.$store.getters.stackById(this?.card?.stackId)
+			return this.stackById(this?.card?.stackId)
 		},
 		canEdit() {
 			if (this.currentBoard) {
-				return !this.currentBoard.archived && this.$store.getters.canEdit
+				return !this.currentBoard.archived && this.canEditPermission
 			}
-			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			const board = this.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
 		card() {
-			return this.item ? this.item : this.$store.getters.cardById(this.id)
+			return this.item ? this.item : this.cardById(this.id)
 		},
 		displayTitle() {
 			const reference = this.card?.referenceData
 			return reference ? reference.openGraphObject.name : this.card.title
-		},
-		currentCard() {
-			return this.card && this.$route && this.$route.params.cardId === this.card.id
 		},
 		labelsSorted() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -199,13 +204,32 @@ export default {
 		},
 	},
 	watch: {
-		currentCard(newValue) {
-			if (newValue) {
-				this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
-			}
+		'$route.params.cardId': {
+			immediate: true,
+			handler(cardId) {
+				if (!this.card) {
+					return
+				}
+				const newValue = cardId && parseInt(cardId, 10) === this.card.id
+				if (newValue === this.isCurrentCard) {
+					return
+				}
+				this.isCurrentCard = newValue
+				if (newValue) {
+					this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
+				}
+			},
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			updateCardTitleInStore: 'updateCardTitle',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			assignCardToUserInStore: 'assignCardToUser',
+		}),
+		...mapActions(useBoardStore, ['toggleFilter']),
 		hasSelection() {
 			const selection = window.getSelection()
 			return selection.toString() !== ''
@@ -250,7 +274,7 @@ export default {
 			}
 			this.editingTitle = TITLE_EDITING_STATE.OFF
 			if (value !== this.card.title) {
-				this.$store.dispatch('updateCardTitle', {
+				this.updateCardTitleInStore({
 					...this.card,
 					title: value,
 				})
@@ -274,10 +298,10 @@ export default {
 				this.triggerEditTitle()
 				break
 			case 'KeyA':
-				this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+				this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
 				break
 			case 'KeyO':
-				this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+				this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
 				break
 			case 'KeyM':
 				this.$el.querySelector('button.action-item__menutoggle')?.click()
@@ -295,19 +319,24 @@ export default {
 			if (this.dragging) {
 				return
 			}
-			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
+			this.$nextTick(() => this.toggleFilter({ tags: [label.id] }))
 		},
 		toggleSelfAsignment() {
 			const isAssigned = this.card.assignedUsers.find(
 				(item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid,
 			)
-			this.$store.dispatch(isAssigned ? 'removeUserFromCard' : 'assignCardToUser', {
+			const assigneeData = {
 				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
 					type: 0,
 				},
-			})
+			}
+			if (isAssigned) {
+				this.removeUserFromCardInStore(assigneeData)
+				return
+			}
+			this.assignCardToUserInStore(assigneeData)
 		},
 		scrollIntoView() {
 			this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })

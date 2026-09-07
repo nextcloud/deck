@@ -48,6 +48,8 @@
 import { NcModal } from '@nextcloud/vue'
 import attachmentUpload from '../mixins/attachmentUpload.js'
 import { loadState } from '@nextcloud/initial-state'
+import { mapState } from 'pinia'
+import { useBoardStore } from '../stores/board.js'
 
 const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
 
@@ -71,8 +73,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState(useBoardStore, ['canEdit']),
 		isReadOnly() {
-			return !this.$store.getters.canEdit
+			return !this.canEdit
 		},
 		dropHintText() {
 			if (this.isReadOnly) {

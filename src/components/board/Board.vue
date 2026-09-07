@@ -5,7 +5,10 @@
 
 <template>
 	<div class="board-wrapper" :tabindex="-1" @touchend="fixActionRestriction">
-		<Controls :board="board" />
+		<Controls :board="board"
+			show-search
+			:search-label="t('deck', 'Search cards')"
+			:search-hint="searchHint" />
 
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
@@ -49,7 +52,7 @@
 			<GanttView v-else-if="!isEmpty && !loading && viewMode === 'gantt'"
 				key="gantt"
 				:board="board"
-				:stacks="stacksByBoard" />
+				:stacks="stacks" />
 			<div v-else-if="!isEmpty && !loading"
 				key="board"
 				ref="board"
@@ -62,7 +65,7 @@
 					@drag-start="draggingStack = true"
 					@drag-end="draggingStack = false"
 					@drop="onDropStack">
-					<Draggable v-for="stack in stacksByBoard"
+					<Draggable v-for="stack in stacks"
 						:key="stack.id"
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
@@ -87,7 +90,7 @@
 
 <script>
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -98,6 +101,10 @@ import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
 import CardSidebar from '../card/CardSidebar.vue'
+import { mapActions, mapState } from 'pinia'
+import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
+import { useBoardStore } from '../../stores/board.js'
 export default {
 	name: 'Board',
 	components: {
@@ -136,24 +143,32 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			isFullApp: state => state.isFullApp,
-			board: state => state.currentBoard,
-			showArchived: state => state.showArchived,
+		...mapState(useStackStore, ['stacksByBoard']),
+		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, {
+			board: 'currentBoard',
+			showArchived: 'showArchived',
+			canEdit: 'canEdit',
+			canManage: 'canManage',
+			viewMode: 'viewMode',
 		}),
-		...mapGetters([
-			'canEdit',
-			'canManage',
-			'viewMode',
-		]),
-		stacksByBoard() {
-			return this.board?.id ? this.$store.getters.stacksByBoard(this.board.id) : []
+		...mapStateVuex({
+			isFullApp: state => state.isFullApp,
+		}),
+		stacks() {
+			return this.board?.id ? this.stacksByBoard(this.board.id) : []
+		},
+		searchHint() {
+			// Parameterised so translators never see the prefixes as translatable text
+			return t('deck', 'Supported prefixes: {prefixes}. Wrap phrases in double quotes.', {
+				prefixes: 'title:, description:, tag:, assigned:, list:, date:',
+			})
 		},
 		dragHandleSelector() {
 			return this.canEdit ? '.stack__title' : '.no-drag'
 		},
 		isEmpty() {
-			return this.stacksByBoard.length === 0
+			return this.stacks.length === 0
 		},
 	},
 	watch: {
@@ -180,19 +195,21 @@ export default {
 		this.session?.close()
 	},
 	methods: {
+		...mapActions(useBoardStore, ['loadBoardById', 'toggleShowArchived']),
+		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
 		async fetchData() {
 			this.loading = true
 			try {
-				await this.$store.dispatch('loadBoardById', this.id)
-				await this.$store.dispatch('loadStacks', this.id)
+				await this.loadBoardById(this.id)
+				await this.loadStacks(this.id)
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
-				if (routeCardId && !this.$store.getters.cardById(routeCardId)) {
-					await this.$store.dispatch('loadArchivedStacks', this.id)
+				if (routeCardId && !this.cardById(routeCardId)) {
+					await this.loadArchivedStacks(this.id)
 
-					if (this.$store.getters.cardById(routeCardId)) {
-						this.$store.commit('toggleShowArchived', true)
+					if (this.cardById(routeCardId)) {
+						this.toggleShowArchived(true)
 					}
 				}
 
@@ -208,7 +225,7 @@ export default {
 		},
 
 		onDropStack({ removedIndex, addedIndex }) {
-			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
+			this.orderStack({ stack: this.stacks[removedIndex], removedIndex, addedIndex })
 		},
 
 		addNewStack() {
@@ -216,7 +233,7 @@ export default {
 				title: this.newStackTitle,
 				boardId: this.id,
 			}
-			this.$store.dispatch('createStack', newStack)
+			this.createStack(newStack)
 			this.newStackTitle = ''
 		},
 
@@ -317,12 +334,11 @@ export default {
 				position: relative;
 
 				.smooth-dnd-container.vertical {
-					$margin-x: calc($stack-gap * -1);
 					display: flex;
 					flex-direction: column;
 					gap: $stack-gap;
 					padding: $stack-gap;
-					margin: 0 $margin-x;
+					margin: 0 calc(#{$stack-gap} * -1);
 					overflow-y: auto;
 					scrollbar-gutter: stable;
 				}

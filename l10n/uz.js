@@ -24,6 +24,7 @@ OC.L10N.register(
     "Add card" : "Karta qo'shing",
     "Archived cards" : "Arxivlangan kartalar",
     "Add list" : "Roʻyxat qoʻshish",
+    "Clear search" : "Qidiruvni tozalash",
     "Unassigned" : "Tayinlanmagan",
     "Open" : "Ochish",
     "Overdue" : "Muddati o'tgan",
@@ -60,7 +61,6 @@ OC.L10N.register(
     "Archive card" : "Arxiv kartasi",
     "Edit title" : "Sarlavhani tahrirlash",
     "Delete card" : "Kartani o'chirish",
-    "seconds ago" : "seconds ago",
     "Archived boards" : "Arxivlangan taxtalar",
     "Shared with you" : "Shared with you",
     "Cancel edit" : "Tahrirni bekor qilish",
@@ -79,6 +79,7 @@ OC.L10N.register(
     "Modified" : "Modified",
     "Share" : "Ulashish",
     "Save" : "Saqlash",
+    "seconds ago" : "seconds ago",
     "Today" : "Today",
     "Tomorrow" : "Ertaga"
 },

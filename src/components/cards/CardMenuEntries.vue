@@ -24,28 +24,36 @@
 			{{ t('deck', 'Edit title') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit && !isCurrentUserAssigned"
-			icon="icon-user"
 			:close-after-click="true"
 			@click="assignCardToMe()">
+			<template #icon>
+				<AccountPlusIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Assign to me') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit && isCurrentUserAssigned"
-			icon="icon-user"
 			:close-after-click="true"
 			@click="unassignCardFromMe()">
+			<template #icon>
+				<AccountMinusIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Unassign myself') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-checkmark"
 			:close-after-click="true"
 			:disabled="isInDoneColumn && !!card.done"
 			@click="changeCardDoneStatus()">
+			<template #icon>
+				<CheckIcon :size="20" decorative />
+			</template>
 			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-external"
 			:close-after-click="true"
 			@click="openCardMoveDialog">
+			<template #icon>
+				<OpenInNewIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Move/copy card') }}
 		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
@@ -62,20 +70,26 @@
 			{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit"
-			icon="icon-delete"
 			:close-after-click="true"
 			@click="deleteCard()">
+			<template #icon>
+				<DeleteIcon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Delete card') }}
 		</NcActionButton>
 	</div>
 </template>
 <script>
 import { NcActionButton, NcColorPicker } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import SelectColor from 'vue-material-design-icons/Circle.vue'
+import AccountPlusIcon from 'vue-material-design-icons/AccountPlusOutline.vue'
+import AccountMinusIcon from 'vue-material-design-icons/AccountMinusOutline.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
@@ -83,10 +97,15 @@ import { showUndo } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/style.css'
 import { emit } from '@nextcloud/event-bus'
 import { useActionsStore } from '../../stores/actions.js'
+import { useTrashbinStore } from '../../stores/trashbin.js'
+import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
+import { mapActions, mapState } from 'pinia'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'CardMenuEntries',
-	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor },
+	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor, AccountPlusIcon, AccountMinusIcon, CheckIcon, OpenInNewIcon, DeleteIcon },
 	props: {
 		card: {
 			type: Object,
@@ -114,15 +133,14 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
-			'isArchived',
-			'boards',
-			'stackById',
-			'boardById',
-		]),
-		...mapState({
-			showArchived: state => state.showArchived,
-			currentBoard: state => state.currentBoard,
+		...mapState(useStackStore, ['stackById']),
+		...mapState(useBoardStore, {
+			showArchived: 'showArchived',
+			currentBoard: 'currentBoard',
+			canEditPermission: 'canEdit',
+			boards: 'boards',
+			boardById: 'boardById',
+			isArchived: 'isArchived',
 		}),
 		canEdit() {
 			return !this.card.archived
@@ -132,9 +150,9 @@ export default {
 		},
 		canEditBoard() {
 			if (this.currentBoard) {
-				return this.$store.getters.canEdit
+				return this.canEditPermission
 			}
-			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			const board = this.boards.find((item) => item.id === this.card.boardId)
 			return !!board?.permissions?.PERMISSION_EDIT
 		},
 		isCurrentUserAssigned() {
@@ -157,6 +175,14 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			deleteCardInStore: 'deleteCard',
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+			assignCardToUserInStore: 'assignCardToUser',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			updateCardColorInStore: 'updateCardColor',
+		}),
 		openCard() {
 			const boardId = this.card?.boardId ? this.card.boardId : this.$route?.params.id ?? this.currentBoard.id
 
@@ -171,21 +197,21 @@ export default {
 			this.$emit('edit-title', this.card.id)
 		},
 		deleteCard() {
-			this.$store.dispatch('deleteCard', this.card)
-			const undoCard = { ...this.card, deletedAt: 0 }
-			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
+			this.deleteCardInStore(this.card)
+			const undoCard = { ...this.card, deletedAt: 0, boardId: this.boardId }
+			showUndo(t('deck', 'Card deleted'), () => useTrashbinStore().cardUndoDelete(undoCard))
 			if (this.$router.currentRoute.name === 'card') {
 				this.$router.push({ name: 'board' })
 			}
 		},
 		changeCardDoneStatus() {
-			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+			this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
 		},
 		archiveUnarchiveCard() {
-			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+			this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
 		},
 		assignCardToMe() {
-			this.$store.dispatch('assignCardToUser', {
+			this.assignCardToUserInStore({
 				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
@@ -194,7 +220,7 @@ export default {
 			})
 		},
 		unassignCardFromMe() {
-			this.$store.dispatch('removeUserFromCard', {
+			this.removeUserFromCardInStore({
 				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
@@ -209,7 +235,7 @@ export default {
 			this.editingCardColor = this.card.color ? '#' + this.card.color : ''
 		},
 		updateCardColor(val) {
-			this.$store.dispatch('updateCardColor', {
+			this.updateCardColorInStore({
 				...this.card,
 				color: val ? val.substring(1) : null,
 			})

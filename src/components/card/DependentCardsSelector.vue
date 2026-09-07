@@ -88,7 +88,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapGetters, mapState } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { NcSelect, NcButton } from '@nextcloud/vue'
 import ListBoxOutline from 'vue-material-design-icons/ListBoxOutline.vue'
@@ -97,6 +96,9 @@ import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
+import { mapActions, mapState } from 'pinia'
+import { useStackStore } from '../../stores/stack.js'
+import { useCardStore } from '../../stores/card.js'
 
 export default defineComponent({
 	name: 'DependentCardsSelector',
@@ -126,10 +128,8 @@ export default defineComponent({
 		}
 	},
 	computed: {
-		...mapState({
-			cards: state => state.card.cards,
-		}),
-		...mapGetters(['cardById', 'stackById']),
+		...mapState(useStackStore, ['stackById']),
+		...mapState(useCardStore, ['cards', 'cardById']),
 		isEditable() {
 			return this.canEdit && !this.card?.done && !this.card?.archived
 		},
@@ -156,6 +156,9 @@ export default defineComponent({
 		},
 	},
 	methods: {
+		...mapActions(useCardStore, {
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+		}),
 		openSelector() {
 			this.showSelector = true
 			this.$nextTick(() => {
@@ -205,7 +208,7 @@ export default defineComponent({
 			window.location = generateUrl('/apps/deck') + `#/board/${boardId}/card/${dependentCard.id}`
 		},
 		changeCardDoneStatus(card) {
-			this.$store.dispatch('changeCardDoneStatus', { ...card, done: !card.done })
+			this.changeCardDoneStatusInStore({ ...card, done: !card.done })
 		},
 	},
 })

@@ -108,6 +108,7 @@
     "Archived cards" : "Tarjetas archivadas",
     "Add list" : "Añadir lista",
     "List name" : "Nombre de lista",
+    "Clear search" : "Limpiar búsqueda",
     "Active filters" : "Filtros activos",
     "Filter by tag" : "Filtrar por etiqueta",
     "Unassigned" : "No asignado",
@@ -165,7 +166,6 @@
     "Archive card" : "Archivar tarjeta",
     "(group)" : "(grupo)",
     "Delete card" : "Eliminar tarjeta",
-    "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido con usted",
     "Cancel edit" : "Cancelar edición",
@@ -191,6 +191,7 @@
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "No participants found" : "No se encontraron participantes",
     "Save" : "Guardar",
+    "seconds ago" : "hace segundos",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

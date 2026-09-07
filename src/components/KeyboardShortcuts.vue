@@ -19,10 +19,11 @@
 <script>
 import DueDateSelector from './card/DueDateSelector.vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import TagSelector from './card/TagSelector.vue'
 import AssignmentSelector from './card/AssignmentSelector.vue'
 import CardItem from './cards/CardItem.vue'
+import { useBoardStore } from '../stores/board.js'
 
 export default {
 	name: 'KeyboardShortcuts',
@@ -41,8 +42,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			board: state => state.currentBoard,
+		...mapState(useBoardStore, {
+			board: 'currentBoard',
 		}),
 	},
 	created() {
@@ -70,11 +71,15 @@ export default {
 			// Global shortcuts (not board specific)
 			if ((key.metaKey || key.ctrlKey) && key.code === 'KeyF') {
 				const searchInput = document.getElementById('deck-search-input')
+				// Overviews have no search field, so leave Ctrl+F to the browser there
+				if (!searchInput) {
+					return
+				}
 				if (searchInput === document.activeElement) {
 					return false
 				}
 
-				document.getElementById('deck-search-input').focus()
+				searchInput.focus()
 				key.preventDefault()
 				return true
 			}

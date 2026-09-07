@@ -17,6 +17,7 @@
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import { showError } from '../../helpers/errors.js'
 import { showSuccess, showLoading } from '@nextcloud/dialogs'
+import { useBoardStore } from '../../stores/board.js'
 
 export default {
 	name: 'AppNavigationImportBoard',
@@ -41,7 +42,7 @@ export default {
 			const file = event.target.files[0]
 			if (file) {
 				const loadingToast = showLoading(t('deck', 'Importing board...'))
-				const result = await this.$store.dispatch('importBoard', file)
+				const result = await useBoardStore().importBoard(file)
 				loadingToast.hideToast()
 				if (result?.message) {
 					showError(result)

@@ -44,8 +44,9 @@
 <script>
 import Controls from '../Controls.vue'
 import CardItem from '../cards/CardItem.vue'
-import { mapGetters } from 'vuex'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
+import { useOverviewStore } from '../../stores/overview.js'
+import { mapActions, mapState } from 'pinia'
 
 const FILTER_UPCOMING = 'upcoming'
 
@@ -112,7 +113,7 @@ export default {
 				return ''
 			}
 		},
-		...mapGetters(['assignedCardsDashboard']),
+		...mapState(useOverviewStore, ['assignedCards']),
 	},
 	watch: {
 		'$route.params.filter'() {
@@ -123,11 +124,12 @@ export default {
 		this.getData()
 	},
 	methods: {
+		...mapActions(useOverviewStore, ['loadUpcoming']),
 		async getData() {
 			this.loading = true
 			try {
 				if (this.filter === FILTER_UPCOMING) {
-					await this.$store.dispatch('loadUpcoming')
+					await this.loadUpcoming()
 				}
 			} catch (e) {
 				console.error(e)
@@ -135,7 +137,7 @@ export default {
 			this.loading = false
 		},
 		filterCards(when) {
-			return this.assignedCardsDashboard[when]
+			return this.assignedCards[when]
 		},
 		sortCards(cards) {
 			if (!cards) {

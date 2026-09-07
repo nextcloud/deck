@@ -19,6 +19,28 @@ updates:
   - luka-nextcloud
 
 - package-ecosystem: npm
+  target-branch: stable35
+  versioning-strategy: lockfile-only
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:15"
+    timezone: Europe/Paris
+  cooldown:
+    default-days: 10
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]
+  open-pull-requests-limit: 30
+  labels:
+  - 3. to review
+  - dependencies
+  reviewers:
+  - juliushaertl
+  - luka-nextcloud
+
+- package-ecosystem: npm
   target-branch: stable34
   versioning-strategy: lockfile-only
   directory: "/"

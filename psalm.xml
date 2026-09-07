@@ -8,7 +8,7 @@
 		errorBaseline="tests/psalm-baseline.xml"
 		findUnusedBaselineEntry="true"
 		findUnusedCode="false"
-    	phpVersion="8.2"
+    	phpVersion="8.3"
 >
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true"/>
@@ -42,16 +42,5 @@
 				<referencedClass name="GuzzleHttp\Exception\ServerException" />
 			</errorLevel>
 		</UndefinedClass>
-		<UndefinedDocblockClass>
-			<errorLevel type="suppress">
-				<referencedClass name="OC\*" />
-				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
-				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
-				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
-				<referencedClass name="Doctrine\DBAL\Schema\Table" />
-				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
-				<referencedClass name="Symfony\Component\Console\Command\Command" />
-			</errorLevel>
-		</UndefinedDocblockClass>
 	</issueHandlers>
 </psalm>

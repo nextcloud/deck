@@ -145,6 +145,22 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * Used by ISignedCloudFederationProvider to resolve a board from a share token.
+	 *
+	 * @param string $shareToken
+	 * @return Board
+	 * @throws DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function findByShareToken(string $shareToken): Board {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('share_token', $qb->createNamedParameter($shareToken, IQueryBuilder::PARAM_STR)));
+		return $this->findEntity($qb);
+	}
+
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
 		?string $term = null): array {
 		$useCache = ($since === -1 && $includeArchived === true && $before === null && $term === null);
@@ -287,6 +303,20 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		if ($offset !== null) {
 			$qb->setFirstResult($offset);
 		}
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * Find all board with the team_id set to the given teamId
+	 *
+	 * @return Board[]
+	 */
+	public function findAllAttachedToTeam(string $teamId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('team_id', $qb->createNamedParameter($teamId, IQueryBuilder::PARAM_STR)))
+			->orderBy('id');
 		return $this->findEntities($qb);
 	}
 
@@ -455,9 +485,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findToDelete() {
-		// add buffer of 5 min
-		$timeLimit = time() - (60 * 5);
+	public function findToDelete(int $timeLimit) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
 			->from('deck_boards')

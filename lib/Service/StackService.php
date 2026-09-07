@@ -306,6 +306,11 @@ class StackService {
 	 */
 	public function setDoneStack(int $stackId, int $boardId, bool $isDone): void {
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_MANAGE);
+		$stack = $this->stackMapper->find($stackId);
+
+		if ($stack->getBoardId() !== $boardId) {
+			throw new BadRequestException('Stack does not belong to the specified board.');
+		}
 
 		if ($this->boardService->isArchived($this->stackMapper, $stackId)) {
 			throw new NoPermissionException('Operation not allowed. This board is archived.');

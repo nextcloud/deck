@@ -14,7 +14,7 @@
 				{{ overviewName }}
 			</h2>
 			<NcActions>
-				<NcActionButton icon="icon-add" @click="clickShowAddCardModel">
+				<NcActionButton data-cy="action:add-card" icon="icon-add" @click="clickShowAddCardModel">
 					{{ t('deck', 'Add card') }}
 				</NcActionButton>
 			</NcActions>
@@ -31,18 +31,6 @@
 		<div class="board-actions">
 			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
 				:sessions="presentUsers" />
-			<!-- Hide but not remove for now as search might change in the future -->
-			<div v-if="false" class="deck-search">
-				<input id="deck-search-input"
-					ref="search"
-					:tabindex="0"
-					type="search"
-					class="icon-search"
-					:value="searchQuery"
-					@focus="$store.dispatch('toggleShortcutLock', true)"
-					@blur="$store.dispatch('toggleShortcutLock', false)"
-					@input="$store.commit('setSearchQuery', $event.target.value)">
-			</div>
 			<div v-if="board && canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
@@ -71,6 +59,26 @@
 						value="">
 				</form>
 			</div>
+			<template v-if="showSearch">
+				<!-- Not type="search": NcTextField only fills the trailing button's icon
+					slot when type !== 'search', which leaves the clear button iconless. -->
+				<NcTextField id="deck-search-input"
+					class="board-search"
+					type="text"
+					:label="searchLabel"
+					:value="searchQuery"
+					:title="searchHint || null"
+					:show-trailing-button="searchQuery !== ''"
+					:trailing-button-label="t('deck', 'Clear search')"
+					:aria-describedby="searchHint ? 'deck-search-hint' : null"
+					@update:value="setSearchQuery"
+					@trailing-button-click="clearSearchQuery"
+					@focus="$store.dispatch('toggleShortcutLock', true)"
+					@blur="$store.dispatch('toggleShortcutLock', false)" />
+				<!-- title is for pointer users, aria-describedby for assistive tech. No double
+					announcement: title is only the fallback description per HTML-AAM. -->
+				<span v-if="searchHint" id="deck-search-hint" class="hidden-visually">{{ searchHint }}</span>
+			</template>
 			<div v-if="board" class="board-action-buttons">
 				<div class="board-action-buttons__filter">
 					<NcPopover :placement="'bottom-end'"
@@ -241,7 +249,7 @@
 						{{ t('deck', 'Gantt view') }}
 					</NcActionButton>
 					<NcActionSeparator />
-					<NcActionButton @click="toggleShowArchived">
+					<NcActionButton @click="() => toggleShowArchived()">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
 						</template>
@@ -277,9 +285,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState as mapStateVuex } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcButton, NcPopover, NcModal, NcTextField } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
@@ -294,6 +302,9 @@ import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapActions, mapState } from 'pinia'
+import { useStackStore } from '../stores/stack.js'
+import { useBoardStore } from '../stores/board.js'
 
 export default {
 	name: 'Controls',
@@ -304,6 +315,7 @@ export default {
 		NcActionButton,
 		NcButton,
 		NcPopover,
+		NcTextField,
 		NcAvatar,
 		ArchiveIcon,
 		ImageIcon,
@@ -329,6 +341,19 @@ export default {
 			required: false,
 			default: null,
 		},
+		showSearch: {
+			type: Boolean,
+			default: false,
+		},
+		searchLabel: {
+			type: String,
+			default: '',
+		},
+		// Only pass this where the card prefixes actually apply
+		searchHint: {
+			type: String,
+			default: '',
+		},
 	},
 	data() {
 		return {
@@ -344,17 +369,18 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
+		...mapState(useBoardStore, [
 			'canEdit',
 			'canManage',
 			'viewMode',
+			'showArchived',
 		]),
-		...mapState({
+		...mapStateVuex({
 			isFullApp: state => state.isFullApp,
+			navShown: state => state.navShown,
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 			searchQuery: state => state.searchQuery,
-			showArchived: state => state.showArchived,
 		}),
 		detailsRoute() {
 			return {
@@ -398,28 +424,36 @@ export default {
 		this.setPageTitle('')
 	},
 	methods: {
+		...mapActions(useBoardStore, { setViewMode: 'setViewMode', toggleShowArchived: 'toggleShowArchived', setFilterInStore: 'setFilterInStore' }),
+		...mapActions(useStackStore, ['createStack']),
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
 				this.filter.due = ''
-				this.$store.dispatch('setFilter', { ...this.filter })
+				this.setFilterInStore({ ...this.filter })
 			}
 			if (e.target.value === 'unassigned') {
 				this.filter.users = []
-				this.$store.dispatch('setFilter', { ...this.filter })
+				this.setFilterInStore({ ...this.filter })
 			} else {
 				this.filter.completed = 'both'
-				this.$store.dispatch('setFilter', { ...this.filter })
+				this.setFilterInStore({ ...this.filter })
 			}
-			this.$store.dispatch('setFilter', { ...this.filter })
+			this.setFilterInStore({ ...this.filter })
 		},
 		setFilter() {
 			if (this.filter.users.length > 0) {
 				this.filter.unassigned = false
 			}
-			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
+			this.$nextTick(() => this.setFilterInStore({ ...this.filter }))
+		},
+		setSearchQuery(value) {
+			this.$store.commit('setSearchQuery', value)
+		},
+		clearSearchQuery() {
+			this.$store.commit('setSearchQuery', '')
 		},
 		toggleNav() {
-			this.$store.dispatch('toggleNav')
+			this.$store.dispatch('toggleNav', !this.navShown)
 		},
 		toggleCompactMode() {
 			this.$store.dispatch('toggleCompactMode')
@@ -427,15 +461,9 @@ export default {
 		toggleShowCardCover() {
 			this.$store.dispatch('toggleShowCardCover')
 		},
-		setViewMode(mode) {
-			this.$store.dispatch('setViewMode', mode)
-		},
-		toggleShowArchived() {
-			this.$store.dispatch('toggleShowArchived')
-		},
 		addNewStack() {
 			this.stack = { title: this.newStackTitle }
-			this.$store.dispatch('createStack', this.stack)
+			this.createStack(this.stack)
 			this.newStackTitle = ''
 			this.stack = null
 			this.isAddStackVisible = false
@@ -455,7 +483,7 @@ export default {
 		},
 		clearFilter() {
 			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
-			this.$store.dispatch('setFilter', { ...filterReset })
+			this.setFilterInStore({ ...filterReset })
 			this.filter = filterReset
 		},
 		clickShowAddCardModel() {
@@ -486,9 +514,6 @@ export default {
 		triggerOpenFilters() {
 			this.$refs.filterPopover.$el.click()
 		},
-		triggerOpenSearch() {
-			this.$refs.search.focus()
-		},
 		triggerClearFilter() {
 			this.clearFilter()
 		},
@@ -505,20 +530,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	@import '../css/variables.scss';
+
 	.controls {
 		display: flex;
+		// min-height, not height: the search wraps to a second row on narrow screens
+		flex-wrap: wrap;
+		row-gap: var(--default-grid-baseline);
 		margin: calc(var(--default-grid-baseline) * 2);
-		height: var(--default-clickable-area);
+		min-height: var(--default-clickable-area);
 		padding-inline-start: var(--default-clickable-area);
 
 		.board-title {
 			display: flex;
 			align-items: center;
+			// lets the h2 below actually truncate
+			min-width: 0;
 
 			h2 {
 				margin: 0;
 				margin-inline-end: 10px;
 				font-size: 18px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 
 			.board-bullet {
@@ -564,6 +599,9 @@ export default {
 		flex-grow: 1;
 		order: 100;
 		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		row-gap: var(--default-grid-baseline);
 		justify-content: flex-end;
 	}
 
@@ -571,13 +609,20 @@ export default {
 		display: flex;
 	}
 
-	.deck-search {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		input[type=search] {
-			background-position: 5px;
-			padding-inline-start: 24px !important;
+	.board-search {
+		flex: 0 1 15rem;
+		min-width: 0;
+		margin-inline-end: var(--default-grid-baseline);
+	}
+
+	@media (max-width: $breakpoint-small-mobile) {
+		// Own row below the buttons, spanning the full header. The negative margin cancels
+		// the padding .controls reserves for the navigation toggle, which only occupies the
+		// first row; the oversized basis keeps the search alone on its line, so it is safe.
+		.board-search {
+			order: 1;
+			flex-basis: calc(100% + var(--default-clickable-area));
+			margin-inline: calc(-1 * var(--default-clickable-area)) 0;
 		}
 	}
 

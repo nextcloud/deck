@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'pinia'
 import SharingTabSidebar from './SharingTabSidebar.vue'
 import TagsTabSidebar from './TagsTabSidebar.vue'
 import DeletedTabSidebar from './DeletedTabSidebar.vue'
@@ -59,6 +59,7 @@ import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import SharingIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import TagsIcon from 'vue-material-design-icons/TagMultipleOutline.vue'
 import TrashIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import { useBoardStore } from '../../stores/board.js'
 const capabilities = window.OC.getCapabilities()
 
 export default {
@@ -87,11 +88,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			board: state => state.currentBoard,
-			labels: state => state.labels,
+		...mapState(useBoardStore, {
+			board: 'currentBoard',
+			canEdit: 'canEdit',
 		}),
-		...mapGetters(['canEdit']),
 	},
 	methods: {
 		closeSidebar() {

@@ -49,7 +49,6 @@ OC.L10N.register(
     "Select Date" : "Zgjidhni Datën",
     "Remove due date" : "Hiq datën e mbarimit",
     "(group)" : "(grup)",
-    "seconds ago" : "sekonda më parë",
     "Archived boards" : "Borde të arkivuara",
     "Shared with you" : "E ndarë me ju",
     "Board details" : "Detajet e Tabeles ",
@@ -66,6 +65,7 @@ OC.L10N.register(
     "Modified" : "Modifikuar ",
     "Share" : "Shpërndaje",
     "Save" : "Ruaj",
+    "seconds ago" : "sekonda më parë",
     "Today" : "Sot",
     "Tomorrow" : "Nesër"
 },
