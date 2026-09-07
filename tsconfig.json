@@ -1,0 +1,12 @@
+{
+	"extends": "@vue/tsconfig/tsconfig.json",
+	"include": ["src/**/*.ts", "src/**/*.vue", "cypress/**/*.ts"],
+	"compilerOptions": {
+		"allowJs": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"lib": ["ESNext", "DOM"],
+		"allowImportingTsExtensions": true
+	}
+}
