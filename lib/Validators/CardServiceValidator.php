@@ -22,6 +22,7 @@ class CardServiceValidator extends BaseValidator {
 			'order' => ['numeric'],
 			'owner' => ['not_empty', 'not_null', 'not_false', 'max:64'],
 			'duedate' => ['date'],
+			'startdate' => ['date'],
 		];
 	}
 }

@@ -13,6 +13,18 @@ use Exception;
 use OCA\Deck\BadRequestException;
 
 abstract class BaseValidator {
+	/**
+	 * Date formats accepted by the 'date' rule, covering the ISO-8601 output of
+	 * the web frontend as well as the formats documented in docs/API.md.
+	 */
+	private const DATE_FORMATS = [
+		'Y-m-d\TH:i:s.v\Z',
+		'Y-m-d\TH:i:s.u\Z',
+		\DateTimeInterface::ATOM,
+		'Y-m-d\TH:i:s',
+		'Y-m-d H:i:s',
+		'Y-m-d',
+	];
 
 	/**
 	 * @return array
@@ -116,13 +128,42 @@ abstract class BaseValidator {
 	}
 
 	/**
+	 * Check that a value is a date that can be stored and read back again.
+	 *
+	 * The value is matched against an explicit list of accepted formats,
+	 * because \DateTime silently misreads out of range input instead of
+	 * rejecting it: '12345-01-01' for example is parsed as 2005-01-01 12:34.
+	 * Such a value is written to the database but can no longer be parsed
+	 * when it is read again, which leaves the card permanently broken.
+	 *
+	 * An empty value is considered valid so that optional dates can be unset.
+	 *
 	 * @param $value
 	 * @return bool
 	 */
-	private function date(string $value): bool {
-		$date = \DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $value)
-			?: \DateTime::createFromFormat(\DateTime::ATOM, $value);
-		return $date !== false;
+	private function date($value): bool {
+		if ($value === null || $value === '') {
+			return true;
+		}
+
+		if (!is_string($value)) {
+			return false;
+		}
+
+		foreach (self::DATE_FORMATS as $format) {
+			if (\DateTimeImmutable::createFromFormat($format, $value) === false) {
+				continue;
+			}
+
+			// createFromFormat() accepts overflowing values such as month 13
+			// and only reports them through the warnings.
+			$errors = \DateTimeImmutable::getLastErrors();
+			if ($errors === false || ($errors['warning_count'] === 0 && $errors['error_count'] === 0)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

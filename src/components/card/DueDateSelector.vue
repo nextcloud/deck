@@ -13,7 +13,8 @@
 				:placeholder="t('deck', 'Set a due date')"
 				:hide-label="true"
 				type="datetime-local"
-				:max="new Date('9999-12-31T23:59:59')" />
+				:min="minDate"
+				:max="maxDate" />
 			<NcActions v-if="canEdit"
 				:menu-title="!duedate ? t('deck', 'Add due date') : null"
 				type="tertiary"
@@ -108,6 +109,12 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import ClearIcon from 'vue-material-design-icons/Close.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
 
+// The database stores dates as DATETIME, so anything outside of this range
+// cannot be read back again. Typing a year like 20250 into the native input
+// would otherwise leave the card unreadable.
+const MIN_DATE = new Date('1000-01-01T00:00:00')
+const MAX_DATE = new Date('9999-12-31T23:59:59')
+
 export default defineComponent({
 	name: 'DueDateSelector',
 	components: {
@@ -156,6 +163,14 @@ export default defineComponent({
 		}
 	},
 	computed: {
+		minDate() {
+			return MIN_DATE
+		},
+
+		maxDate() {
+			return MAX_DATE
+		},
+
 		duedate: {
 			get() {
 				return this.card?.duedate ? new Date(this.card.duedate) : null
