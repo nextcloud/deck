@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { addCommands } from '@nextcloud/cypress'
+import { addCommands } from '@nextcloud/e2e-test-server/cypress'
 
 addCommands()
 
@@ -56,7 +56,7 @@ Cypress.Commands.add('deckCreateList', ({ user, password }, title) => {
 
 Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 	const auth = {
-		user: user.userId,
+		username: user.userId,
 		password: user.password,
 	}
 	cy.request({
@@ -119,7 +119,7 @@ Cypress.Commands.add('setUserEmail', (user, value) => {
 		method: 'PUT',
 		url: `${url}/ocs/v2.php/cloud/users/${user.userId}`,
 		auth: {
-			user: user.userId,
+			username: user.userId,
 			password: user.password,
 		},
 		headers: {

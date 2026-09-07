@@ -10,7 +10,7 @@ const user = randUser()
 const boardData = sampleBoard()
 
 const auth = {
-	user: user.userId,
+	username: user.userId,
 	password: user.password,
 }
 
@@ -100,7 +100,7 @@ describe('Card', function () {
 			})
 
 			cy.get('[data-cy="navigation:settings"]').click()
-			cy.get('[data-cy="setting:add-card-at-top"] input[role="switch"]').check({ force: true })
+			cy.get('[data-cy="setting:add-card-at-top"]').click({ force: true })
 			cy.wait('@setCardPosition')
 			cy.visit(`/apps/deck/#/board/${boardId}`)
 
@@ -126,7 +126,7 @@ describe('Card', function () {
 			})
 
 			cy.get('[data-cy="navigation:settings"]').click()
-			cy.get('[data-cy="setting:add-card-at-top"] input[role="switch"]').uncheck({ force: true })
+			cy.get('[data-cy="setting:add-card-at-top"]').click({ force: true })
 			cy.wait('@setCardPosition')
 			cy.visit(`/apps/deck/#/board/${boardId}`)
 			cy.get('.board .stack').eq(0).within(() => {

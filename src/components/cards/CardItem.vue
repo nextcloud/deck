@@ -240,7 +240,7 @@ export default {
 			if (this.shortcutLock || this.hasSelection()) {
 				return
 			}
-			card = this.$refs[`card${card}`]
+			card = this.$refs[`card${card || this.card.id}`]
 			card.focus()
 		},
 		openCard(event) {
