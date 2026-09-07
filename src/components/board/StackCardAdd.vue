@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div v-click-outside="close" class="stack__card-add">
+	<div v-v-on-click-outside="close" class="stack__card-add">
 		<NcButton v-if="!visible"
 			data-cy="action:add-card"
 			class="stack__card-add-button"
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
+import { vOnClickOutside } from '@vueuse/components'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcButton } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
@@ -48,15 +48,20 @@ import { mapActions } from 'pinia'
 
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
+import { useRouter } from 'vue-router'
 
 export default {
 	name: 'StackCardAdd',
+	setup() {
+		const router = useRouter()
+		return { router }
+	},
 	components: {
 		NcButton,
 		PlusIcon,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	props: {
 		stack: {
@@ -77,7 +82,7 @@ export default {
 	},
 	computed: {
 		cardDetailsInModal() {
-			useSettingsStore().configByKey('cardDetailsInModal')
+			return useSettingsStore().configByKey('cardDetailsInModal')
 		},
 	},
 	watch: {
@@ -115,7 +120,7 @@ export default {
 				this.visible = false
 				this.$emit('created', newCard)
 				if (!this.cardDetailsInModal) {
-					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
+					this.router.push({ name: 'card', params: { cardId: newCard.id } })
 				}
 			} catch (error) {
 				showError('Could not create card: ' + error.response.data.message)

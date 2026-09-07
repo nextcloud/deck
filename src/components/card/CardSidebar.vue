@@ -226,7 +226,7 @@ function handleSubmitTitle() {
 		return
 	}
 	isEditingTitle.value = false
-	cardStore.updateCardTitleInStore({
+	cardStore.updateCardTitle({
 		...currentCard.value,
 		title: titleEditing.value,
 	})

@@ -9,7 +9,7 @@ const user = randUser()
 const boardData = sampleBoard()
 
 const auth = {
-	user: user.userId,
+	username: user.userId,
 	password: user.password,
 }
 

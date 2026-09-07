@@ -283,7 +283,7 @@ export const useCardStore = defineStore('card', {
 			if (card.order !== undefined) {
 				for (const existingCard of this.cards) {
 					if (existingCard.stackId === createdCard.stackId && existingCard.order >= card.order) {
-						Vue.set(existingCard, 'order', existingCard.order + 1)
+						existingCard['order'] = existingCard.order + 1
 					}
 				}
 			}
