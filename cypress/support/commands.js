@@ -8,7 +8,7 @@ import { addCommands } from '@nextcloud/e2e-test-server/cypress'
 addCommands()
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
-Cypress.env('baseUrl', url)
+Cypress.expose('baseUrl', url)
 
 // prepare main cypress window so we can use axios there
 // and it will successfully fetch csrf tokens when needed.
@@ -61,7 +61,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 	}
 	cy.request({
 		method: 'POST',
-		url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards`,
+		url: `${Cypress.expose('baseUrl')}/index.php/apps/deck/api/v1.0/boards`,
 		auth,
 		body: { title: board.title, color: board.color ?? 'ff0000' },
 	}).then((boardResponse) => {
@@ -71,7 +71,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 			const stack = board.stacks[stackIndex]
 			cy.request({
 				method: 'POST',
-				url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks`,
+				url: `${Cypress.expose('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks`,
 				auth,
 				body: { title: stack.title, order: 0 },
 			}).then((stackResponse) => {
@@ -80,7 +80,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 					const card = stack.cards[cardIndex]
 					cy.request({
 						method: 'POST',
-						url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks/${stackData.id}/cards`,
+						url: `${Cypress.expose('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks/${stackData.id}/cards`,
 						auth,
 						body: { title: card.title, description: card.description ?? '' },
 					})
