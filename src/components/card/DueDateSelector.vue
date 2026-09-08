@@ -154,7 +154,17 @@ export default defineComponent({
 				stringify: this.stringify,
 				parse: this.parse,
 			},
+			// Set while waiting for the due date to be persisted so the picker can be opened once it appears
+			openPickerOnceSet: false,
 		}
+	},
+	watch: {
+		duedate(newVal) {
+			if (newVal && this.openPickerOnceSet) {
+				this.openPickerOnceSet = false
+				this.$nextTick(() => this.openDatePicker())
+			}
+		},
 	},
 	computed: {
 		duedate: {
@@ -221,7 +231,18 @@ export default defineComponent({
 				now.setHours(8)
 				now.setMinutes(0)
 				now.setMilliseconds(0)
+				// The picker is only rendered once the due date has been persisted and passed back down via props
+				this.openPickerOnceSet = true
 				this.duedate = now
+			}
+		},
+		openDatePicker() {
+			const input = document.getElementById('card-duedate-picker')
+			// showPicker is not supported by all browsers, fall back to focusing the input
+			if (input?.showPicker) {
+				input.showPicker()
+			} else {
+				input?.focus()
 			}
 		},
 		removeDue() {
