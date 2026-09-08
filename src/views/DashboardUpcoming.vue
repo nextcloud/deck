@@ -11,7 +11,7 @@
 			:show-more-text="t('deck', 'upcoming cards')"
 			:loading="loading"
 			@hide="() => {}"
-			@markDone="() => {}">
+			@mark-done="() => {}">
 			<template #default="{ item }">
 				<Card :card="item" />
 			</template>

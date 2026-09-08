@@ -6,10 +6,10 @@
 <template>
 	<NcAppSidebar v-if="boardStore.currentBoard && currentCard"
 		ref="cardSidebar"
+		v-model:name-editable="isEditingTitle"
 		:active="tabId"
 		:name="displayTitle"
 		:subtitle="subtitleTooltip"
-		v-model:name-editable="isEditingTitle"
 		@update:name="(value) => titleEditing = value"
 		@update:active="(value) => activeTabId = value"
 		@dismiss-editing="titleEditing = currentCard.title"

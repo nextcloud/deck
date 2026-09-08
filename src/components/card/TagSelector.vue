@@ -65,6 +65,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['select', 'remove', 'newtag'],
 	computed: {
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)

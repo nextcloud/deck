@@ -52,10 +52,6 @@ import { useRouter } from 'vue-router'
 
 export default {
 	name: 'StackCardAdd',
-	setup() {
-		const router = useRouter()
-		return { router }
-	},
 	components: {
 		NcButton,
 		PlusIcon,
@@ -72,6 +68,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+	emits: ['creating', 'created'],
+	setup() {
+		const router = useRouter()
+		return { router }
 	},
 	data() {
 		return {

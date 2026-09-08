@@ -175,6 +175,7 @@ export default {
 			default: t('deck', 'Create card'),
 		},
 	},
+	emits: ['submit', 'cancel'],
 	data() {
 		return {
 			card: {
