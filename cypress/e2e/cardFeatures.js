@@ -17,7 +17,7 @@ const auth = {
 const useModal = (useModal) => {
 	return cy.request({
 		method: 'POST',
-		url: `${Cypress.env('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/cardDetailsInModal?format=json`,
+		url: `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/cardDetailsInModal?format=json`,
 		auth,
 		body: { value: useModal },
 	}).then((response) => {
@@ -28,7 +28,7 @@ const useModal = (useModal) => {
 const addCardsAtTop = (enabled) => {
 	return cy.request({
 		method: 'POST',
-		url: `${Cypress.env('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/stackAddCardAtTop?format=json`,
+		url: `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/stackAddCardAtTop?format=json`,
 		auth,
 		body: { value: enabled },
 	}).then((response) => {
