@@ -117,7 +117,7 @@ export default {
 	},
 	data() {
 		return {
-			textAppAvailable: !!window.OCA?.Text?.createEditor,
+			textAppAvailable: !!window.OCA?.Text?.createCollaborativeEditor,
 			editor: null,
 			keyExitState: 0,
 			descriptionOld: '',
@@ -205,9 +205,9 @@ export default {
 			this.descriptionLastEdit = 0
 			this.descriptionOld = this.card.description
 			this.description = this.card.description
-			this.editor = await window.OCA.Text.createEditor({
+			this.editor = await window.OCA.Text.createCollaborativeEditor({
+				context: { type: 'deck_card', id: this.card.id },
 				el: this.$refs.editor,
-				content: this.card.description,
 				readOnly: !this.canEdit,
 				onLoaded: () => {
 					this.descriptionLastEdit = 0
