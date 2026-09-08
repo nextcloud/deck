@@ -12,18 +12,17 @@ use OCP\IUserManager;
 
 class User extends RelationalObject {
 	private IUserManager $userManager;
-	public function __construct($uid, IUserManager $userManager) {
+
+	public function __construct(string $uid, IUserManager $userManager) {
 		$this->userManager = $userManager;
-		parent::__construct($uid, function ($object) {
-			return $this->userManager->get($object->getPrimaryKey());
-		});
+		parent::__construct($uid, fn () => $this->userManager->get($uid));
 	}
 
 	public function getObjectSerialization(): array {
 		return [
-			'uid' => $this->getObject()->getUID(),
+			'uid' => $this->getUID(),
 			'displayname' => $this->getDisplayName(),
-			'type' => Acl::PERMISSION_TYPE_USER
+			'type' => Acl::PERMISSION_TYPE_USER,
 		];
 	}
 
@@ -32,10 +31,11 @@ class User extends RelationalObject {
 	}
 
 	public function getDisplayName(): ?string {
-		return $this->userManager->getDisplayName($this->getPrimaryKey());
+		$user = $this->getObject();
+		return $user ? $user->getDisplayName() : $this->getPrimaryKey();
 	}
 
-	public function getUserObject(): IUser {
+	public function getUserObject(): ?IUser {
 		return $this->getObject();
 	}
 }

@@ -1209,7 +1209,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			}
 
 			foreach ($this->permissionService->findUsers($boardId) as $user) {
-				yield $user->getUserObject();
+				$userObject = $user->getUserObject();
+				if ($userObject !== null) {
+					yield $userObject;
+				}
 			}
 		}
 
