@@ -26,7 +26,7 @@ app.config.globalProperties.t = translate
 app.config.globalProperties.n = translatePlural
 
 app.directive('focus', {
-	inserted(el) {
+	mounted(el) {
 		el.focus()
 	},
 })
