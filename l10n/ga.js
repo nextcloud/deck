@@ -189,6 +189,7 @@ OC.L10N.register(
     "Deck settings" : "Socruithe deic",
     "General" : "Ginearálta",
     "Use bigger card view" : "Úsáid radharc cárta níos mó",
+    "Add new cards at the top of a list" : "Cuir cártaí nua ag barr liosta",
     "Appearance" : "Dealramh",
     "Show card ID badge" : "Taispeáin suaitheantas aitheantais an chárta",
     "Show boards in calendar/tasks" : "Taispeáin cláir san fhéilire/tascanna",

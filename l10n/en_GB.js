@@ -189,6 +189,7 @@ OC.L10N.register(
     "Deck settings" : "Deck settings",
     "General" : "General",
     "Use bigger card view" : "Use bigger card view",
+    "Add new cards at the top of a list" : "Add new cards at the top of a list",
     "Appearance" : "Appearance",
     "Show card ID badge" : "Show card ID badge",
     "Show boards in calendar/tasks" : "Show boards in calendar/tasks",

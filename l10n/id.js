@@ -191,6 +191,7 @@ OC.L10N.register(
     "Admin settings" : "Pengaturan admin",
     "Limit board creation to some groups" : "Batasi pembuatan papan untuk beberapa grup",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Pengguna di luar grup tersebut tidak akan dapat membuat papan mereka sendiri, tetapi masih dapat bekerja di papan yang telah dibagikan dengan mereka.",
+    "Enable federation" : "Aktifkan federasi",
     "Board actions" : "Aksi papan",
     "Scroll sideways" : "Gulir ke samping",
     "Navigate between cards" : "Navigasi antar kartu",

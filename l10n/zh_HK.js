@@ -189,6 +189,7 @@ OC.L10N.register(
     "Deck settings" : "看板設定",
     "General" : "一般",
     "Use bigger card view" : "使用較大的卡片視圖",
+    "Add new cards at the top of a list" : "將新卡片新增至清單頂部",
     "Appearance" : "外觀",
     "Show card ID badge" : "顯示卡片 ID 徽章",
     "Show boards in calendar/tasks" : "在日曆/任務中顯示面板",
