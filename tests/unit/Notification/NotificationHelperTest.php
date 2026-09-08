@@ -50,7 +50,7 @@ class DummyUser extends \OC\User\User {
 		$this->uid = $uid;
 	}
 
-	public function getUID() {
+	public function getUID():string {
 		return $this->uid;
 	}
 }
