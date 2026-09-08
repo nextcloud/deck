@@ -25,6 +25,7 @@
 namespace OCA\Deck\Service\Importer;
 
 use OC\Comments\Comment;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
@@ -219,5 +220,140 @@ class BoardImportServiceTest extends \Test\TestCase {
 
 		$this->boardImportService->import();
 		self::assertTrue(true);
+	}
+
+	/**
+	 * Stub every step of the import so that a test only has to state which of
+	 * them it expects to be skipped.
+	 */
+	private function stubFullImport(): void {
+		$this->userManager->method('userExists')->willReturn(true);
+
+		$board = new Board();
+		$board->setOwner('admin');
+		$this->trelloJsonService->method('getBoard')->willReturn($board);
+		$this->trelloJsonService->method('getAclList')->willReturn([new Acl()]);
+		$this->trelloJsonService->method('getLabels')->willReturn([new Label()]);
+		$this->trelloJsonService->method('getStacks')->willReturn([new Stack()]);
+		$this->trelloJsonService->method('getCards')->willReturn([new Card()]);
+		$this->trelloJsonService->method('getCardLabelAssignment')->willReturn([1 => [2]]);
+		$this->trelloJsonService->method('getComments')->willReturn(['fakecardid' => [new Comment()]]);
+
+		$assignment = new Assignment();
+		$assignment->setId(1);
+		$this->trelloJsonService->method('getCardAssignments')->willReturn(['fakecardid' => [$assignment]]);
+		$this->assignmentMapper->method('insert')->willReturn($assignment);
+	}
+
+	public function testEverythingIsImportedByDefault() {
+		self::assertEquals(new ImportOptions(), $this->boardImportService->getOptions());
+	}
+
+	public function testSetOptionsIsFluent() {
+		$options = new ImportOptions(importCards: false);
+
+		self::assertSame($this->boardImportService, $this->boardImportService->setOptions($options));
+		self::assertSame($options, $this->boardImportService->getOptions());
+	}
+
+	public function testImportWithoutCardsStillImportsTheBoardStructure() {
+		$this->stubFullImport();
+		$this->boardImportService->setOptions(new ImportOptions(importCards: false));
+
+		$this->boardMapper->expects($this->once())->method('insert');
+		$this->aclMapper->expects($this->once())->method('insert');
+		$this->labelMapper->expects($this->once())->method('insert');
+		$this->stackMapper->expects($this->once())->method('insert');
+		// nothing below the card level may be touched without cards
+		$this->cardMapper->expects($this->never())->method('insert');
+		$this->cardMapper->expects($this->never())->method('assignLabel');
+		$this->trelloJsonService->expects($this->never())->method('importAttachments');
+		$this->commentsManager->expects($this->never())->method('save');
+		$this->assignmentMapper->expects($this->never())->method('insert');
+
+		$this->boardImportService->import();
+	}
+
+	public function testImportWithoutAttachments() {
+		$this->stubFullImport();
+		$this->boardImportService->setOptions(new ImportOptions(importAttachments: false));
+
+		$this->trelloJsonService->expects($this->never())->method('importAttachments');
+		$this->cardMapper->expects($this->atLeastOnce())->method('insert');
+		$this->commentsManager->expects($this->once())->method('save');
+
+		$this->boardImportService->import();
+	}
+
+	public function testImportWithoutComments() {
+		$this->stubFullImport();
+		$this->boardImportService->setOptions(new ImportOptions(importComments: false));
+
+		$this->commentsManager->expects($this->never())->method('save');
+		$this->trelloJsonService->expects($this->never())->method('getComments');
+		$this->cardMapper->expects($this->atLeastOnce())->method('insert');
+
+		$this->boardImportService->import();
+	}
+
+	public function testImportWithoutAssignments() {
+		$this->stubFullImport();
+		$this->boardImportService->setOptions(new ImportOptions(importAssignments: false));
+
+		$this->assignmentMapper->expects($this->never())->method('insert');
+		$this->trelloJsonService->expects($this->never())->method('getCardAssignments');
+		$this->cardMapper->expects($this->atLeastOnce())->method('insert');
+
+		$this->boardImportService->import();
+	}
+
+	public function testImportWithoutLabelsAlsoSkipsTheirCardAssignment() {
+		$this->stubFullImport();
+		$this->boardImportService->setOptions(new ImportOptions(importLabels: false));
+
+		$this->labelMapper->expects($this->never())->method('insert');
+		$this->cardMapper->expects($this->never())->method('assignLabel');
+		$this->trelloJsonService->expects($this->never())->method('getCardLabelAssignment');
+		$this->cardMapper->expects($this->atLeastOnce())->method('insert');
+
+		$this->boardImportService->import();
+	}
+
+	public function testImportWithoutSharing() {
+		$this->stubFullImport();
+		$this->boardImportService->setOptions(new ImportOptions(importSharing: false));
+
+		$this->aclMapper->expects($this->never())->method('insert');
+		$this->trelloJsonService->expects($this->never())->method('getAclList');
+		$this->boardMapper->expects($this->once())->method('insert');
+
+		$this->boardImportService->import();
+	}
+
+	public function testImportOfNothingButTheBoardItself() {
+		$this->stubFullImport();
+		$this->boardImportService->setOptions(new ImportOptions(
+			importCards: false,
+			importLabels: false,
+			importSharing: false,
+		));
+
+		$this->boardMapper->expects($this->once())->method('insert');
+		$this->stackMapper->expects($this->once())->method('insert');
+		$this->aclMapper->expects($this->never())->method('insert');
+		$this->labelMapper->expects($this->never())->method('insert');
+		$this->cardMapper->expects($this->never())->method('insert');
+
+		$this->boardImportService->import();
+	}
+
+	public function testImportWrapsFailuresIntoABadRequest() {
+		$this->stubFullImport();
+		$this->boardMapper->method('insert')->willThrowException(new \RuntimeException('database is gone'));
+
+		$this->expectException(BadRequestException::class);
+		$this->expectExceptionMessage('database is gone');
+
+		$this->boardImportService->import();
 	}
 }

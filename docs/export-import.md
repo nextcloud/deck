@@ -4,21 +4,76 @@
 -->
 ## Export
 
-Deck currently supports exporting all boards a user owns in a single JSON file. The format is based on the database schema that Deck uses. It can be used to re-import boards on the same or other instances.
+Deck supports exporting boards to a single JSON file. The format is based on the database schema that Deck uses. It can be used to re-import boards on the same or other instances.
 
-The export currently has some known limitations in terms of specific data not included:
+The export is a complete representation of a board and contains:
+- lists, including which one is configured as the done column
+- cards, including archived ones, with their card ID and list ID
+- the completion state and the date a card was completed
+- due date, start date, creation date and last modification date
+- card colour and card type
+- dependencies between cards
+- labels, assigned users, comments and file attachments
+
+On import, card dependencies are remapped to the newly created cards. A
+dependency that points at a card outside the import - one on another board, or
+one skipped because archived cards were deselected - is dropped instead of
+leaving a dangling reference behind.
+
+Dates are exported as ISO 8601 including the UTC offset, so they keep pointing at
+the same point in time no matter which timezone imports or reads them.
+
+Known limitations, this data is not part of an export:
 - Activity information
-- File attachments to Deck cards
-- Comments
+- Cards in the trash bin
+
+### From the web interface
+
+Open the board menu, choose *Export board* and pick a format:
+
+- **JSON** – the complete board, suited for importing back into Deck.
+- **CSV** – one row per card with the card ID, list ID, list name, tags, assigned
+  users, archived and completion state, all date fields and the comment and
+  attachment counts. Suited for reporting and for external tools such as
+  spreadsheets or BI tools. A CSV cannot be imported back into Deck.
+
+The CSV follows RFC 4180: comma separated, every field quoted, inner quotes
+doubled, and UTF-8 with a byte order mark. A separator, a semicolon or the line
+breaks of a markdown description can therefore appear inside a cell without
+breaking the file.
+
+Exports are machine readable output, so nothing in them is translated. The column
+headers are always English and archived and completed are written as `1` and `0`,
+which means a report keeps working no matter which interface language the
+exporting user has. The JSON export behaves the same way, its keys being the
+English property names.
+
+Attachment contents are never part of a CSV, but the attachment count is, so the
+column stays meaningful.
+
+Attachment contents are embedded in the JSON export, which can make the file
+large. They can be left out in the export dialog, at the cost of an export that
+no longer restores the board completely.
+
+### From the command line
 
 ```
 occ deck:export userid > userid-deck-export.json
 ```
 *(`userid` = username as seen in the admin user accounts page)*
 
+Pass `--no-attachments` to leave the attachment contents out of the export.
+
 ## Import Boards
 
-Importing can be done using the API or the `occ` `deck:import` command.
+Importing can be done from the web interface, using the API or the `occ`
+`deck:import` command.
+
+When importing a board through the web interface, a dialog offers to select which
+parts of the file to restore: cards, archived cards, completion state, due and
+start dates, tags, assigned users, comments, attachments and sharing. Lists and
+labels are always created, so deselecting cards results in an empty copy of the
+board that can be used as a template.
 
 It is possible to import from the following sources:
 

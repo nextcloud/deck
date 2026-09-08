@@ -168,9 +168,9 @@ export const useBoardStore = defineStore('board', {
 			}
 		},
 
-		async importBoard(file) {
+		async importBoard(file, options = {}) {
 			try {
-				const board = await apiClient.importBoard(file)
+				const board = await apiClient.importBoard(file, options)
 				this.addBoard(board)
 			} catch (err) {
 				return err

@@ -92,6 +92,36 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * Fetch the attachments of many cards at once, keyed by card id.
+	 *
+	 * @param int[] $cardIds
+	 * @return array<int, list<Attachment>>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAllForCards(array $cardIds): array {
+		if (empty($cardIds)) {
+			return [];
+		}
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->in('card_id', $qb->createParameter('cardIds')))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+
+		$attachmentsByCard = [];
+		$attachments = $this->chunkQuery($cardIds, function (array $ids) use ($qb) {
+			$qb->setParameter('cardIds', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			return $this->findEntities($qb);
+		});
+		foreach ($attachments as $attachment) {
+			$attachmentsByCard[$attachment->getCardId()][] = $attachment;
+		}
+
+		return $attachmentsByCard;
+	}
+
+	/**
 	 * @return Entity[]
 	 * @throws \OCP\DB\Exception
 	 */

@@ -9,20 +9,12 @@ declare(strict_types=1);
 
 namespace OCA\Deck\UserMigration;
 
-use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignmentMapper;
-use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\LabelMapper;
-use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Service\BoardExportService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
-use OCA\Deck\Service\ShareFileAttachmentExportService;
-use OCP\Comments\ICommentsManager;
-use OCP\Files\IAppData;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\UserMigration\IExportDestination;
@@ -34,24 +26,8 @@ use Test\TestCase;
 class DeckMigratorTest extends TestCase {
 	/** @var BoardMapper|MockObject */
 	private $boardMapper;
-	/** @var StackMapper|MockObject */
-	private $stackMapper;
-	/** @var CardMapper|MockObject */
-	private $cardMapper;
-	/** @var LabelMapper|MockObject */
-	private $labelMapper;
-	/** @var AclMapper|MockObject */
-	private $aclMapper;
-	/** @var AssignmentMapper|MockObject */
-	private $assignmentMapper;
-	/** @var AttachmentMapper|MockObject */
-	private $attachmentMapper;
-	/** @var ICommentsManager|MockObject */
-	private $commentsManager;
-	/** @var IAppData|MockObject */
-	private $appData;
-	/** @var ShareFileAttachmentExportService|MockObject */
-	private $shareFileAttachmentExportService;
+	/** @var BoardExportService|MockObject */
+	private $boardExportService;
 	/** @var BoardService|MockObject */
 	private $boardService;
 	/** @var BoardImportService|MockObject */
@@ -61,16 +37,10 @@ class DeckMigratorTest extends TestCase {
 	private DeckMigrator $migrator;
 
 	public function setUp(): void {
+		parent::setUp();
+
 		$this->boardMapper = $this->createMock(BoardMapper::class);
-		$this->stackMapper = $this->createMock(StackMapper::class);
-		$this->cardMapper = $this->createMock(CardMapper::class);
-		$this->labelMapper = $this->createMock(LabelMapper::class);
-		$this->aclMapper = $this->createMock(AclMapper::class);
-		$this->assignmentMapper = $this->createMock(AssignmentMapper::class);
-		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
-		$this->commentsManager = $this->createMock(ICommentsManager::class);
-		$this->appData = $this->createMock(IAppData::class);
-		$this->shareFileAttachmentExportService = $this->createMock(ShareFileAttachmentExportService::class);
+		$this->boardExportService = $this->createMock(BoardExportService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->boardImportService = $this->createMock(BoardImportService::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
@@ -78,15 +48,7 @@ class DeckMigratorTest extends TestCase {
 		$this->migrator = new DeckMigrator(
 			$this->createMock(IL10N::class),
 			$this->boardMapper,
-			$this->stackMapper,
-			$this->cardMapper,
-			$this->labelMapper,
-			$this->aclMapper,
-			$this->assignmentMapper,
-			$this->attachmentMapper,
-			$this->commentsManager,
-			$this->appData,
-			$this->shareFileAttachmentExportService,
+			$this->boardExportService,
 			$this->boardService,
 			$this->boardImportService,
 			$this->permissionService,
@@ -111,10 +73,10 @@ class DeckMigratorTest extends TestCase {
 		$this->permissionService->expects($this->once())
 			->method('setUserId')
 			->with('admin');
-		$this->boardService->expects($this->once())
-			->method('export')
-			->with(42)
-			->willReturn($board);
+		$this->boardExportService->expects($this->once())
+			->method('exportBoards')
+			->with([$board])
+			->willReturn([42 => ['id' => 42, 'title' => 'Board A', 'stacks' => []]]);
 
 		$destination = $this->createMock(IExportDestination::class);
 		$destination->expects($this->once())
@@ -123,34 +85,28 @@ class DeckMigratorTest extends TestCase {
 				'boards.json',
 				$this->callback(static function (string $json): bool {
 					$decoded = json_decode($json, true);
-					return is_array($decoded) && isset($decoded['boards']) && count($decoded['boards']) === 1;
+					// the board list has to be a JSON array, not an object keyed by id
+					return is_array($decoded)
+						&& isset($decoded['boards'])
+						&& array_keys($decoded['boards']) === [0]
+						&& $decoded['boards'][0]['title'] === 'Board A';
 				})
 			);
 
 		$this->migrator->export($user, $destination, $this->createMock(OutputInterface::class));
 	}
 
-	public function testExportSkipsDeletedBoards(): void {
+	public function testExportWritesEmptyBoardListWhenNothingToExport(): void {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('admin');
-
-		$deletedBoard = new Board();
-		$deletedBoard->setId(5202);
-		$deletedBoard->setTitle('Deleted board');
-		$deletedBoard->setDeletedAt(time());
 
 		$this->boardMapper->expects($this->once())
 			->method('findAllByUser')
 			->with('admin')
-			->willReturn([$deletedBoard]);
-		$this->boardService->expects($this->once())
-			->method('setUserId')
-			->with('admin');
-		$this->permissionService->expects($this->once())
-			->method('setUserId')
-			->with('admin');
-		$this->boardService->expects($this->never())
-			->method('export');
+			->willReturn([]);
+		$this->boardExportService->expects($this->once())
+			->method('exportBoards')
+			->willReturn([]);
 
 		$destination = $this->createMock(IExportDestination::class);
 		$destination->expects($this->once())
@@ -159,9 +115,65 @@ class DeckMigratorTest extends TestCase {
 				'boards.json',
 				$this->callback(static function (string $json): bool {
 					$decoded = json_decode($json, true);
-					return is_array($decoded) && isset($decoded['boards']) && count($decoded['boards']) === 0;
+					return is_array($decoded) && $decoded['boards'] === [];
 				})
 			);
+
+		$this->migrator->export($user, $destination, $this->createMock(OutputInterface::class));
+	}
+
+	public function testExportWrapsFailuresIntoAMigratorException(): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('admin');
+
+		$this->boardMapper->method('findAllByUser')->willReturn([]);
+		$this->boardExportService->method('exportBoards')
+			->willThrowException(new \RuntimeException('database is gone'));
+
+		$destination = $this->createMock(IExportDestination::class);
+		$destination->expects($this->never())->method('addFileContents');
+
+		$this->expectException(DeckMigratorException::class);
+		$this->expectExceptionMessage('database is gone');
+
+		$this->migrator->export($user, $destination, $this->createMock(OutputInterface::class));
+	}
+
+	public function testExportKeepsTheCompleteBoardPayload(): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('admin');
+
+		$board = new Board();
+		$board->setId(42);
+
+		$this->boardMapper->method('findAllByUser')->willReturn([$board]);
+		$this->boardExportService->method('exportBoards')->willReturn([
+			42 => [
+				'id' => 42,
+				'title' => 'Board A',
+				'stacks' => [[
+					'id' => 1,
+					'cards' => [[
+						'id' => 7,
+						'archived' => true,
+						'done' => '2023-07-18T10:00:00+00:00',
+						'comments' => [['id' => '1', 'message' => 'Hi']],
+						'attachments' => [['type' => 'file', 'data' => 'a.txt', 'contentBase64' => 'eA==']],
+					]],
+				]],
+			],
+		]);
+
+		$destination = $this->createMock(IExportDestination::class);
+		$destination->expects($this->once())
+			->method('addFileContents')
+			->with('boards.json', $this->callback(static function (string $json): bool {
+				$card = json_decode($json, true)['boards'][0]['stacks'][0]['cards'][0];
+				return $card['archived'] === true
+					&& $card['done'] === '2023-07-18T10:00:00+00:00'
+					&& $card['comments'][0]['message'] === 'Hi'
+					&& $card['attachments'][0]['contentBase64'] === 'eA==';
+			}));
 
 		$this->migrator->export($user, $destination, $this->createMock(OutputInterface::class));
 	}
@@ -177,6 +189,72 @@ class DeckMigratorTest extends TestCase {
 			$source,
 			$this->createMock(OutputInterface::class),
 		);
+	}
+
+	public function testImportSkipsWhenCreatingBoardsIsNotAllowed(): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$source = $this->createMock(IImportSource::class);
+		$source->method('getMigratorVersion')->willReturn(1);
+
+		$this->permissionService->method('canCreate')->willReturn(false);
+		$this->boardImportService->expects($this->never())->method('import');
+
+		$output = $this->createMock(OutputInterface::class);
+		$output->expects($this->once())
+			->method('writeln')
+			->with('Deck import failed: user is not allowed to create boards.');
+
+		$this->migrator->import($user, $source, $output);
+	}
+
+	public function testImportOfAnEmptyBoardList(): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$source = $this->createMock(IImportSource::class);
+		$source->method('getMigratorVersion')->willReturn(1);
+		$source->method('getFileContents')->willReturn('{"boards":[]}');
+
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->boardImportService->expects($this->never())->method('setData');
+		$this->boardImportService->expects($this->never())->method('import');
+
+		$this->migrator->import($user, $source, $this->createMock(OutputInterface::class));
+	}
+
+	public function testImportOfBrokenJson(): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$source = $this->createMock(IImportSource::class);
+		$source->method('getMigratorVersion')->willReturn(1);
+		$source->method('getFileContents')->willReturn('this is not json');
+
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->boardImportService->expects($this->never())->method('import');
+
+		$this->expectException(DeckMigratorException::class);
+
+		$this->migrator->import($user, $source, $this->createMock(OutputInterface::class));
+	}
+
+	public function testImportWrapsFailuresIntoAMigratorException(): void {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('alice');
+
+		$source = $this->createMock(IImportSource::class);
+		$source->method('getMigratorVersion')->willReturn(1);
+		$source->method('getFileContents')->willReturn('{"boards":[{"id":1,"title":"Board A","stacks":[]}]}');
+
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->boardImportService->method('import')->willThrowException(new \RuntimeException('import failed'));
+
+		$this->expectException(DeckMigratorException::class);
+		$this->expectExceptionMessage('import failed');
+
+		$this->migrator->import($user, $source, $this->createMock(OutputInterface::class));
 	}
 
 	public function testImportConfiguresServiceAndImports(): void {

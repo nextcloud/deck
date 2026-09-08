@@ -9,20 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Deck\UserMigration;
 
-use OCA\Deck\AppInfo\Application;
-use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignmentMapper;
-use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\LabelMapper;
-use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Service\BoardExportService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
-use OCA\Deck\Service\ShareFileAttachmentExportService;
-use OCP\Comments\ICommentsManager;
-use OCP\Files\IAppData;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\UserMigration\IExportDestination;
@@ -43,15 +34,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	public function __construct(
 		protected IL10N $l10n,
 		protected BoardMapper $boardMapper,
-		protected StackMapper $stackMapper,
-		protected CardMapper $cardMapper,
-		protected LabelMapper $labelMapper,
-		protected AclMapper $aclMapper,
-		protected AssignmentMapper $assignmentMapper,
-		protected AttachmentMapper $attachmentMapper,
-		protected ICommentsManager $commentsManager,
-		protected IAppData $appData,
-		protected ShareFileAttachmentExportService $shareFileAttachmentExportService,
+		protected BoardExportService $boardExportService,
 		protected BoardService $boardService,
 		protected BoardImportService $boardImportService,
 		protected PermissionService $permissionService,
@@ -121,97 +104,11 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	}
 
 	private function buildExportData(string $uid): array {
-		$boards = $this->boardMapper->findAllByUser($uid);
-		$exportData = ['boards' => []];
-
-		foreach ($boards as $board) {
-			// skip if the board is deleted (to align with the export service)
-			if ($board->getDeletedAt() > 0) {
-				continue;
-			}
-			$boardWithStacksAndCards = $this->boardService->export($board->getId());
-			$this->appendArchivedCards($boardWithStacksAndCards);
-			$exportData['boards'][] = $this->serializeBoard($boardWithStacksAndCards, $uid);
-		}
-
-		return $exportData;
-	}
-
-	private function serializeBoard(object $board, string $uid): array {
-		$boardData = $board->jsonSerialize();
-		$serializedStacks = [];
-		foreach ($board->getStacks() ?? [] as $stack) {
-			$stackData = $stack->jsonSerialize();
-			$serializedCards = [];
-			foreach ($stack->getCards() ?? [] as $card) {
-				$serializedCards[] = $this->serializeCard($card, $uid);
-			}
-			$stackData['cards'] = $serializedCards;
-			$serializedStacks[] = $stackData;
-		}
-		$boardData['stacks'] = $serializedStacks;
-
-		return $boardData;
-	}
-
-	private function appendArchivedCards(object $board): void {
-		$stacks = $board->getStacks() ?? [];
-		if (count($stacks) === 0) {
-			return;
-		}
-
-		$stackIds = array_map(static fn ($stack) => $stack->getId(), $stacks);
-		$archivedCardsByStack = $this->cardMapper->findAllArchivedForStacks($stackIds);
-
-		foreach ($stacks as $stack) {
-			$activeCards = $stack->getCards() ?? [];
-			$archivedCards = $archivedCardsByStack[$stack->getId()] ?? [];
-			if (count($archivedCards) === 0) {
-				continue;
-			}
-			$stack->setCards(array_merge($activeCards, $archivedCards));
-		}
-	}
-
-	private function serializeCard(object $card, string $uid): array {
-		$cardId = $card->getId();
-
-		$cardData = $card->jsonSerialize();
-		$cardData['comments'] = (isset($cardData['comments']) && is_array($cardData['comments']) && $cardData['comments'] !== [])
-			? $cardData['comments']
-			: $this->serializeCardComments($cardId);
-		$cardData['attachments'] = (isset($cardData['attachments']) && is_array($cardData['attachments']) && $cardData['attachments'] !== [])
-			? $cardData['attachments']
-			: $this->shareFileAttachmentExportService->exportCardAttachments($cardId, $uid);
-
-		return $cardData;
-	}
-
-	private function serializeCardComments(int $cardId): array {
-		$comments = iterator_to_array($this->commentsManager->getForObject(
-			Application::COMMENT_ENTITY_TYPE,
-			(string)$cardId
-		));
-		usort($comments, static function ($firstComment, $secondComment): int {
-			return ((int)$firstComment->getId()) <=> ((int)$secondComment->getId());
-		});
-
-		$formattedComments = [];
-		foreach ($comments as $comment) {
-			$formattedComments[] = [
-				'id' => $comment->getId(),
-				'parentId' => $comment->getParentId(),
-				'actorType' => $comment->getActorType(),
-				'actorId' => $comment->getActorId(),
-				'message' => $comment->getMessage(),
-				'creationDateTime' => $comment->getCreationDateTime()->format(\DateTime::ATOM),
-				'objectType' => $comment->getObjectType(),
-				'objectId' => $comment->getObjectId(),
-				'verb' => $comment->getVerb(),
-			];
-		}
-
-		return $formattedComments;
+		return [
+			'boards' => array_values($this->boardExportService->exportBoards(
+				$this->boardMapper->findAllByUser($uid),
+			)),
+		];
 	}
 
 	private function shouldImport(IImportSource $importSource): bool {

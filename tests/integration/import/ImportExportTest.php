@@ -26,9 +26,9 @@ namespace OCA\Deck\Db;
 
 use OCA\Deck\Command\BoardImport;
 use OCA\Deck\Command\UserExport;
+use OCA\Deck\Service\BoardExportService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
-use OCA\Deck\Service\CommentService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\PermissionService;
@@ -134,6 +134,68 @@ class ImportExportTest extends \Test\TestCase {
 		);
 	}
 
+	/**
+	 * A board is only fully restorable if the state that is not part of the card
+	 * text survives the round trip as well: archived cards, the done column, the
+	 * completion date and the date fields.
+	 */
+	public function testReimportOccKeepsArchivedAndDoneState() {
+		$this->importFromFile(__DIR__ . '/../../data/deck-complete.json');
+
+		$permissionService = self::getFreshService(PermissionService::class);
+		$permissionService->setUserId('admin');
+		$boardMapper = self::getFreshService(BoardMapper::class);
+		$stackMapper = self::getFreshService(StackMapper::class);
+		$cardMapper = self::getFreshService(CardMapper::class);
+
+		$boards = $boardMapper->findAllByOwner('admin');
+		self::assertCount(1, $boards);
+		self::assertEquals('Complete board', $boards[0]->getTitle());
+
+		$stacks = [];
+		foreach ($stackMapper->findAll($boards[0]->getId()) as $stack) {
+			$stacks[$stack->getTitle()] = $stack;
+		}
+		self::assertEqualsCanonicalizing(['Doing', 'Done'], array_keys($stacks));
+		self::assertFalse($stacks['Doing']->getIsDoneColumn());
+		self::assertTrue($stacks['Done']->getIsDoneColumn());
+
+		$active = $cardMapper->findAllByStack($stacks['Doing']->getId());
+		$archived = $cardMapper->findAllArchived($stacks['Doing']->getId());
+		self::assertEquals(['Open card'], array_map(fn (Card $card) => $card->getTitle(), $active));
+		self::assertEquals(['Archived card'], array_map(fn (Card $card) => $card->getTitle(), $archived));
+		self::assertEquals('2050-07-24T22:00:00+00:00', $active[0]->getDuedate()->format(\DateTime::ATOM));
+		self::assertEquals('2023-07-10T08:00:00+00:00', $active[0]->getStartdate()->format(\DateTime::ATOM));
+
+		$done = $cardMapper->findAllByStack($stacks['Done']->getId());
+		self::assertEquals('Finished card', $done[0]->getTitle());
+		self::assertEquals('2023-07-18T10:00:00+00:00', $done[0]->getDone()->format(\DateTime::ATOM));
+
+		// the same state has to come back out of the export again
+		$exported = json_decode(file_get_contents($this->exportToTemp()), true);
+		$exportedBoard = array_values($exported['boards'])[0];
+
+		$exportedStacks = [];
+		foreach ($exportedBoard['stacks'] as $stack) {
+			$exportedStacks[$stack['title']] = $stack;
+		}
+		self::assertFalse($exportedStacks['Doing']['isDoneColumn']);
+		self::assertTrue($exportedStacks['Done']['isDoneColumn']);
+
+		$exportedCards = [];
+		foreach ($exportedStacks as $stack) {
+			foreach ($stack['cards'] as $card) {
+				$exportedCards[$card['title']] = $card;
+			}
+		}
+		self::assertEqualsCanonicalizing(['Open card', 'Archived card', 'Finished card'], array_keys($exportedCards));
+		self::assertFalse($exportedCards['Open card']['archived']);
+		self::assertTrue($exportedCards['Archived card']['archived']);
+		self::assertEquals('2023-07-18T10:00:00+00:00', $exportedCards['Finished card']['done']);
+		self::assertEquals('2050-07-24T22:00:00+00:00', $exportedCards['Open card']['duedate']);
+		self::assertEquals('2023-07-10T08:00:00+00:00', $exportedCards['Open card']['startdate']);
+	}
+
 	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared', 'version', 'done', 'referenceData', 'token', 'createdAt', 'lastModifiedAt']): string {
 		$output = '';
 		$arrayIsList = array_keys($array) === range(0, count($array) - 1);
@@ -190,12 +252,8 @@ class ImportExportTest extends \Test\TestCase {
 		$output = new BufferedOutput();
 		$exporter = new UserExport(
 			\OCP\Server::get(IAppManager::class),
-			self::getFreshService(BoardMapper::class),
 			self::getFreshService(BoardService::class),
-			self::getFreshService(StackMapper::class),
-			self::getFreshService(CardMapper::class),
-			self::getFreshService(AssignmentMapper::class),
-			self::getFreshService(CommentService::class)
+			self::getFreshService(BoardExportService::class)
 		);
 		$exporter->setApplication($application);
 		$exporter->run($input, $output);

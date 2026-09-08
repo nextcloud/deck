@@ -21,7 +21,7 @@ Overall, Deck is easy to use. You can create boards, add users, share the Deck, 
 5. [Archive old tasks](#5-archive-old-tasks)
 6. [Manage your board](#6-manage-your-board)
 7. [Sharing boards](#7-sharing-boards)
-8. [Import boards](#8-import-boards)
+8. [Export and import boards](#8-export-and-import-boards)
 9. [Trello interoperability](#9-trello-interoperability)
 10. [Search](#10-search)
 11. [New owner for the deck entities](#11-new-owner-for-the-deck-entities)
@@ -95,11 +95,43 @@ If a user is member of one or several group(s) or circle(s) a board is shared wi
 1. If a user is namely specified in a board's acl, (s)he gets the permission assigned to her/him;
 2. Else, if a user is member of one or several circle(s) or group(s), (s)he gets the permission when at least one circle/group (s)he is member of has the permission.
 
-### 8. Import boards
+### 8. Export and import boards
 
-Importing can be done using the API or the `occ` `deck:import` command.
+#### Exporting a board
 
-Comments with more than 1000 characters are placed as attached files to the card.
+Open the board menu (**...**) and choose **Export board**. Two formats are offered:
+
+* **JSON** — a complete copy of the board. It contains the lists, all cards
+  including archived ones, their completion state and dates, tags, assigned
+  users, comments and the contents of file attachments. This is the format to
+  pick if you want to be able to import the board again later.
+* **CSV** — one row per card, for opening in a spreadsheet or feeding into a
+  reporting tool. It cannot be imported back into Deck.
+
+Attachments are embedded in the JSON file, which can make it large. If you do not
+need them, untick **Attachments** in the dialog — the export will then be smaller,
+but it will no longer restore the board completely. **Archived cards** and
+**Comments** can be left out in the same way.
+
+#### Importing a board
+
+Choose **Import board** in the left sidebar and select a JSON file that was
+exported from Deck. Before the import runs, a dialog lets you pick what to
+restore: cards, archived cards, completion state, due and start dates, tags,
+assigned users, comments, attachments and sharing.
+
+The lists and the tags of a board are always created. If you untick **Cards**,
+you therefore end up with an empty copy of the board, which is a convenient way
+to turn an existing board into a template.
+
+Two things are worth knowing about an import:
+
+* The board is created new and belongs to you, and its cards get new IDs.
+  References between cards, such as dependencies, are adjusted to the new cards.
+  A reference to a card that was not imported is dropped.
+* Attachments are placed in your own **Deck** folder in Files.
+
+Importing can also be done using the API or the `occ` `deck:import` command.
 
 It is possible to import from the following sources:
 
