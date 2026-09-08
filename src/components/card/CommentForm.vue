@@ -46,6 +46,7 @@ export default {
 			default: '',
 		},
 	},
+	emits: ['input', 'submit'],
 	data() {
 		return {
 			commentText: this.value,

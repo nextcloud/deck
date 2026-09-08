@@ -50,6 +50,7 @@ export default {
 			default: 'Board',
 		},
 	},
+	emits: ['export', 'close'],
 	data() {
 		return {
 			exportFormat: 'json',

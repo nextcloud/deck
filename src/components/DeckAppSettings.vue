@@ -104,6 +104,8 @@ export default {
 		},
 	},
 
+	emits: ['update:open', 'close'],
+
 	data() {
 		return {
 			groups: [],

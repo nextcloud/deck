@@ -54,7 +54,7 @@
 				<NcRichText :title="shortDescription ? t('deck', 'Click to expand description') : undefined"
 					:text="card.description"
 					:use-markdown="true"
-					@click.native="shortDescription = !shortDescription" />
+					@click="shortDescription = !shortDescription" />
 			</div>
 			<div v-if="card.assignedUsers .length > 0"
 				class="spacer" />

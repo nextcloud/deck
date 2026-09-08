@@ -57,6 +57,7 @@ export default defineComponent({
 			default: () => [],
 		},
 	},
+	emits: ['select', 'remove'],
 	data() {
 		return {
 			assignedUsers: [],

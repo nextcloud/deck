@@ -50,7 +50,7 @@
 				v-model="description"
 				:configs="mdeConfig"
 				@initialized="addKeyListeners"
-				@update:modelValue="updateDescription"
+				@update:model-value="updateDescription"
 				@blur="saveDescription" />
 		</template>
 
@@ -115,6 +115,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['change'],
 	data() {
 		return {
 			textAppAvailable: !!window.OCA?.Text?.createEditor,

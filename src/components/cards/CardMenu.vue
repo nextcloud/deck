@@ -32,14 +32,14 @@ export default {
 			default: null,
 		},
 	},
-	emits: ['edit-title'],
+	emits: ['editTitle'],
 	methods: {
 		openLink() {
 			window.open(this.card?.referenceData?.openGraphObject?.link)
 			return false
 		},
 		editTitle(id) {
-			this.$emit('edit-title', id)
+			this.$emit('editTitle', id)
 		},
 	},
 }

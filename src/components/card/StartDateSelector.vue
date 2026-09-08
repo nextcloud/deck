@@ -79,6 +79,7 @@ export default defineComponent({
 			default: false,
 		},
 	},
+	emits: ['input'],
 	computed: {
 		startdate: {
 			get() {

@@ -23,7 +23,7 @@
 				<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
 					:key="comment.id"
 					:comment="comment"
-					@doReload="loadComments" />
+					@do-reload="loadComments" />
 			</div>
 			<!-- <InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
 				<template #spinner>

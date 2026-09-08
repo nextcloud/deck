@@ -118,7 +118,7 @@ export default {
 			default: false,
 		},
 	},
-	emits: ['edit-title'],
+	emits: ['editTitle'],
 	setup() {
 		const actionsStore = useActionsStore()
 		return {
@@ -196,7 +196,7 @@ export default {
 			emit('deck:card:open-modal', this.card.id)
 		},
 		editTitle() {
-			this.$emit('edit-title', this.card.id)
+			this.$emit('editTitle', this.card.id)
 		},
 		deleteCard() {
 			this.deleteCardInStore(this.card)

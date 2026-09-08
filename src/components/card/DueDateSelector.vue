@@ -140,6 +140,7 @@ export default defineComponent({
 			default: false,
 		},
 	},
+	emits: ['input'],
 	data() {
 		return {
 			lang: {

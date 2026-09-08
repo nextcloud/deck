@@ -125,6 +125,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['cancel'],
 	setup() {
 		const commentStore = useCommentStore()
 		return { commentStore }

@@ -56,7 +56,7 @@
 					</a>
 				</div>
 				<NcActions v-if="selectable">
-					<NcActionButton icon="icon-confirm" @click="$emit('select-attachment', attachment)">
+					<NcActionButton icon="icon-confirm" @click="$emit('selectAttachment', attachment)">
 						{{ t('deck', 'Add this attachment') }}
 					</NcActionButton>
 				</NcActions>
@@ -74,10 +74,10 @@
 						{{ t('deck', 'Remove attachment') }}
 					</NcActionButton>
 
-					<NcActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('delete-attachment', attachment)">
+					<NcActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
 					</NcActionButton>
-					<NcActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restore-attachment', attachment)">
+					<NcActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restoreAttachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
 					</NcActionButton>
 				</NcActions>
@@ -134,6 +134,7 @@ export default {
 			required: false,
 		},
 	},
+	emits: ['selectAttachment', 'deleteAttachment', 'restoreAttachment'],
 	data() {
 		return {
 			modalShow: false,
