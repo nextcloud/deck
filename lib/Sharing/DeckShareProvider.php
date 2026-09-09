@@ -271,25 +271,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	}
 
 	/**
-	 * @throws DoesNotExistException
-	 */
-	private function applyBoardPermission($share, $permissions, $userId) {
-		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT, $userId, true);
-		} catch (NoPermissionException $e) {
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE;
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_CREATE;
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE;
-		}
-
-		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_SHARE, $userId, true);
-		} catch (NoPermissionException $e) {
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE;
-		}
-		$share->setPermissions($permissions);
-	}
-	/**
 	 * @inheritDoc
 	 */
 	public function update(IShare $share) {
@@ -660,11 +641,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 			/** @var int[] $ids */
 			$ids = [];
+			$cardIds = [];
 			/** @var IShare[] $shareMap */
 			$shareMap = [];
 
 			foreach ($shareSlice as $share) {
 				$ids[] = (int)$share->getId();
+				$cardIds[] = (int)$share->getSharedWith();
 				$shareMap[$share->getId()] = $share;
 			}
 
@@ -681,17 +664,23 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 			$stmt = $query->executeQuery();
 
-			while ($data = $stmt->fetch()) {
-				if (!isset($shareMap[$data['parent']])) {
-					continue;
-				}
+			$permissions = $this->permissionService->getPermissionsForCards($cardIds, $userId);
 
-				try {
-					$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId);
-					$shareMap[$data['parent']]->setTarget($data['file_target']);
-				} catch (DoesNotExistException $e) {
-					unset($shareMap[$data['parent']]);
+			while ($data = $stmt->fetch()) {
+				$parent = $shareMap[$data['parent']];
+				$sharePermissions = (int)$data['permissions'];
+				if (isset($permissions[(int)$parent->getSharedWith()])) {
+					if ($permissions[(int)$parent->getSharedWith()][Acl::PERMISSION_EDIT] === false) {
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE;
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_CREATE;
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE;
+					}
+					if ($permissions[(int)$parent->getSharedWith()][Acl::PERMISSION_SHARE] === false) {
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE;
+					}
 				}
+				$shareMap[$data['parent']]->setPermissions($sharePermissions);
+				$shareMap[$data['parent']]->setTarget($data['file_target']);
 			}
 
 			$stmt->closeCursor();
