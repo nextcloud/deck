@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<div>
+	<div class="comments" v-v-infinite-scroll="[infiniteHandler, {distance: 10, canLoadMore: () => commentStore.hasMoreComments(card.id)}]">
 		<div class="comment--header">
 			<NcAvatar :user="currentUser.uid" />
 			<span class="username">
@@ -16,15 +16,13 @@
 			:reply="true"
 			:preview="true"
 			@cancel="cancelReply" />
-		<CommentForm v-model="newComment" @submit="createComment" />
+		<CommentForm v-model="newComment" @submit="createComment($event)" />
 
 		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
-			<div v-v-infinite-scroll="[infiniteHandler, {canLoadMore: () => commentStore.hasMoreComments(card.id)}]">
-				<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
-					:key="comment.id"
-					:comment="comment"
-					@do-reload="loadComments" />
-			</div>
+			<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
+				:key="comment.id"
+				:comment="comment"
+				@do-reload="loadComments" />
 			<!-- <InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
 				<template #spinner>
 					<div class="icon-loading" />
@@ -101,19 +99,13 @@ export default {
 		},
 	},
 	methods: {
-		async infiniteHandler($state) {
+		async infiniteHandler() {
 			this.error = null
 			try {
 				await this.loadMore()
-				if (this.commentStore.hasMoreComments(this.card.id)) {
-					$state.loaded()
-				} else {
-					$state.complete()
-				}
 			} catch (e) {
 				console.error('Failed to fetch more comments during infinite loading', e)
 				this.error = t('deck', 'Failed to load comments')
-				$state.complete()
 			}
 		},
 		async loadComments() {
@@ -132,14 +124,13 @@ export default {
 				this.error = t('deck', 'Failed to load comments')
 			}
 		},
-		async createComment(content) {
+		async createComment(comment) {
 			const commentObj = {
 				cardId: this.card.id,
-				comment: content,
+				comment,
 			}
 			await this.commentStore.createComment(commentObj)
 			this.commentStore.setReplyTo(null)
-			this.newComment = ''
 			await this.loadComments()
 		},
 		async loadMore() {
