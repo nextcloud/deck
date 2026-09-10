@@ -34,6 +34,16 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+// The OCP\Share\ShareReview API ships with the server, not with
+// nextcloud/ocp, so a server that predates it needs the local stubs. They are
+// required here rather than from tests/bootstrap.php: making that file the
+// phpunit bootstrap would also register the app's composer autoloader, and the
+// nextcloud/ocp dev-master package it pulls in then shadows the OCP classes of
+// the server under test.
+if (!interface_exists(IPaginatedShareReviewSource::class)) {
+	require_once __DIR__ . '/Stubs.php';
+}
+
 final class ShareReviewSourceTest extends TestCase {
 	private MockObject $aclMapper;
 	private MockObject $logger;
