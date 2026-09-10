@@ -98,7 +98,7 @@ class FilesAppServiceTest extends TestCase {
 			->method('validateFilename')
 			->with('valid-file.txt');
 
-		$userFolder = $this->createMock(\OCP\Files\Folder::class);
+		$userFolder = $this->createMock(\OCP\Files\IUserFolder::class);
 		$this->rootFolder->expects($this->any())
 			->method('getUserFolder')
 			->willReturn($userFolder);
