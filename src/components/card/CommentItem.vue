@@ -72,7 +72,7 @@
 		<CommentForm v-if="edit"
 			v-model="commentMsg"
 			dir="auto"
-			@submit="updateComment" />
+			@submit="updateComment($event)" />
 	</li>
 </template>
 
@@ -84,17 +84,28 @@ import md5 from 'blueimp-md5'
 import relativeDate from '../../mixins/relativeDate.js'
 import ReplyIcon from 'vue-material-design-icons/ReplyOutline.vue'
 import moment from 'moment'
+import { h } from 'vue'
 import { useCommentStore } from '../../stores/comment.js'
 
+// Vue 2's `{ functional: true, render(createElement, context) }` signature no
+// longer exists in Vue 3, so this is a regular component instead.
 const AtMention = {
 	name: 'AtMention',
-	functional: true,
-	render(createElement, context) {
-		const { user, displayName } = context.props
-		return createElement(
+	props: {
+		user: {
+			type: String,
+			required: true,
+		},
+		displayName: {
+			type: String,
+			default: '',
+		},
+	},
+	render() {
+		return h(
 			'span',
-			{ attrs: { 'data-at-embedded': true, contenteditable: false } },
-			[createElement(NcUserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })],
+			{ 'data-at-embedded': true, 'data-mention-id': this.user, contenteditable: false },
+			[h(NcUserBubble, { user: this.user, displayName: this.displayName })],
 		)
 	},
 }
@@ -195,9 +206,9 @@ export default {
 			this.commentMsg = ''
 			this.edit = false
 		},
-		async updateComment() {
+		async updateComment(message) {
 			const data = {
-				comment: { id: this.comment.id, message: this.commentMsg },
+				comment: { id: this.comment.id, message },
 				cardId: this.comment.objectId,
 			}
 			await this.commentStore.updateComment(data)
