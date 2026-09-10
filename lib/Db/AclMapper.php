@@ -10,13 +10,16 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /** @template-extends DeckMapper<Acl> */
 class AclMapper extends DeckMapper implements IPermissionMapper {
+	public const TABLE_NAME = 'deck_board_acl';
+
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'deck_board_acl', Acl::class);
+		parent::__construct($db, self::TABLE_NAME, Acl::class);
 	}
 
 	public function findByAccessToken(string $accessToken) {
@@ -127,6 +130,29 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 			->from('deck_board_acl')
 			->where($qb->expr()->eq('type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
+	}
+
+	/**
+	 * Fetch all ACL rows with their board title and owner for ShareReview.
+	 *
+	 * @return list<array<string, mixed>>
+	 * @throws Exception
+	 */
+	public function findAllForShareReview(): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select(
+			'a.id', 'a.board_id', 'a.type', 'a.participant',
+			'a.permission_edit', 'a.permission_share', 'a.permission_manage', 'a.created_at', 'a.last_modified_at'
+		)
+			->selectAlias('b.title', 'board_title')
+			->selectAlias('b.owner', 'board_owner')
+			->from(self::TABLE_NAME, 'a')
+			->leftJoin('a', 'deck_boards', 'b', $qb->expr()->eq('a.board_id', 'b.id'))
+			->orderBy('a.id', 'ASC');
+		$result = $qb->executeQuery();
+		$rows = $result->fetchAll();
+		$result->closeCursor();
+		return $rows;
 	}
 
 	public function insert(Entity $entity): Entity {
