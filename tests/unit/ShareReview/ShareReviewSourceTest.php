@@ -40,7 +40,7 @@ use Psr\Log\LoggerInterface;
 // phpunit bootstrap would also register the app's composer autoloader, and the
 // nextcloud/ocp dev-master package it pulls in then shadows the OCP classes of
 // the server under test.
-if (!interface_exists(IShareReviewSource::class)) {
+if (!interface_exists(IPaginatedShareReviewSource::class)) {
 	require_once __DIR__ . '/Stubs.php';
 }
 
