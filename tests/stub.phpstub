@@ -788,6 +788,18 @@ namespace OCP\Share\ShareReview {
 		}
 	}
 
+	interface IShareReviewSourceRemediation extends IShareReviewSource {
+		public function canSetPassword(): bool;
+		public function canSetExpiration(): bool;
+		public function setPassword(string $shareId, ?string $password, ?ShareReviewActionContext $context = null): bool;
+		public function setExpiration(string $shareId, ?int $expirationTimestamp, ?ShareReviewActionContext $context = null): bool;
+	}
+
+	interface IShareReviewSourceSnapshot extends IShareReviewSource {
+		public function serializeShare(string $shareId): ?string;
+		public function restoreShare(string $snapshot, ?ShareReviewActionContext $context = null): bool;
+	}
+
 	final class ShareReviewQuery {
 		public const SORT_TIME = 'time';
 		public const SORT_OBJECT = 'object';
