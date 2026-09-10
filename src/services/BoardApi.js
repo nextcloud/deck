@@ -7,6 +7,10 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import '../models/index.js'
 
+export const formatCsvList = (items, getValue) => items
+	.map(item => getValue(item).replaceAll('"', '""'))
+	.join(', ')
+
 /**
  * This class handles all the api communication with the Deck backend.
  */
@@ -201,23 +205,9 @@ export class BoardApi {
 								} else if (field === 'stackId') {
 									row += '"' + stack.title.replaceAll('"', '""') + '"' + '\t'
 								} else if (field === 'labels') {
-									row += '"'
-									card[field].forEach(label => {
-										row += label.title.replaceAll('"', '""') + ', '
-									})
-									if (card[field].length > 0) {
-										row = row.slice(0, -1)
-									}
-									row += '"' + '\t'
+									row += '"' + formatCsvList(card[field], label => label.title) + '"' + '\t'
 								} else if (field === 'assignedUsers') {
-									row += '"'
-									card[field].forEach(assignedUsers => {
-										row += assignedUsers.participant.displayname.replaceAll('"', '""') + ', '
-									})
-									if (card[field].length > 0) {
-										row = row.slice(0, -1)
-									}
-									row += '"' + '\t'
+									row += '"' + formatCsvList(card[field], assignment => assignment.participant.displayname) + '"' + '\t'
 								} else if (field === 'description' || field === 'title') {
 									row += '"' + card[field].replaceAll('"', '""') + '"' + '\t'
 								} else {
