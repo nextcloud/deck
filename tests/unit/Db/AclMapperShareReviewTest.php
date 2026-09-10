@@ -15,6 +15,13 @@ use OCP\Server;
 use OCP\Share\ShareReview\ShareReviewQuery;
 use Test\TestCase;
 
+// The v2 OCP\Share\ShareReview classes ship with the server; a server that
+// only has the v1 API needs the local stubs (see the note in
+// tests/unit/ShareReview/ShareReviewSourceTest.php).
+if (!class_exists(ShareReviewQuery::class)) {
+	require_once __DIR__ . '/../ShareReview/Stubs.php';
+}
+
 /**
  * Runs the share-review page/count queries against the real database, so the
  * SQL translation of the ShareReviewQuery contract (sorting, search, filters,
