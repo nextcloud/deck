@@ -144,19 +144,15 @@ export class BoardApi {
 	}
 
 	async cloneBoard(board, withCards = false, withAssignments = false, withLabels = false, withDueDate = false, moveCardsToLeftStack = false, restoreArchivedCards = false) {
-		try {
-			const response = await axios.post(this.url(`/boards/${board.id}/clone`), {
-				withCards,
-				withAssignments,
-				withLabels,
-				withDueDate,
-				moveCardsToLeftStack,
-				restoreArchivedCards,
-			})
-			return response.data
-		} catch (err) {
-			return err
-		}
+		const response = await axios.post(this.url(`/boards/${board.id}/clone`), {
+			withCards,
+			withAssignments,
+			withLabels,
+			withDueDate,
+			moveCardsToLeftStack,
+			restoreArchivedCards,
+		})
+		return response.data
 	}
 
 	exportBoard(board, format) {
