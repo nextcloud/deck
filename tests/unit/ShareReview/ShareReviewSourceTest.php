@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Tests\Unit\ShareReview;
 
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Service\BoardService;
@@ -23,6 +24,7 @@ use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Share\IShare;
 use OCP\Share\ShareReview\Events\ShareReviewAccessCheckEvent;
 use OCP\Share\ShareReview\IPaginatedShareReviewSource;
+use OCP\Share\ShareReview\IShareReviewSourceSnapshot;
 use OCP\Share\ShareReview\ShareReviewActionContext;
 use OCP\Share\ShareReview\ShareReviewCounts;
 use OCP\Share\ShareReview\ShareReviewEntry;
@@ -191,6 +193,83 @@ final class ShareReviewSourceTest extends TestCase {
 		// unknown native types are excluded from the shareTypes filter, so
 		// the counts must exclude them too
 		$this->assertSame([IShare::TYPE_GROUP => 2, IShare::TYPE_USER => 3], $this->source->countSharesByType(new ShareReviewQuery()));
+	}
+
+	public function testSerializeAndRestoreRoundTripAnAcl(): void {
+		$this->assertInstanceOf(IShareReviewSourceSnapshot::class, $this->source);
+		$this->aclMapper->method('findForShareReview')->with(7)->willReturn([
+			'id' => 7, 'board_id' => 2, 'type' => Acl::PERMISSION_TYPE_USER, 'participant' => 'bob',
+			'permission_edit' => true, 'permission_share' => false, 'permission_manage' => false,
+		]);
+
+		$snapshot = $this->source->serializeShare('7');
+
+		$this->assertIsString($snapshot);
+		$data = json_decode($snapshot, true);
+		$this->assertSame(1, $data['v']);
+		$this->assertSame(2, $data['boardId']);
+		$this->assertSame('bob', $data['participant']);
+		$this->assertSame(['edit' => true, 'share' => false, 'manage' => false], $data['permissions']);
+
+		// getId() comes from Entity's magic __call, so a real entity is needed
+		$restored = new Acl();
+		$restored->setId(9);
+		$this->decideAccessCheck(static fn (ShareReviewAccessCheckEvent $event) => $event->grantAccess());
+		$this->boardService->expects($this->once())->method('restoreAclForShareReview')
+			->with(2, Acl::PERMISSION_TYPE_USER, 'bob', true, false, false)
+			->willReturn($restored);
+
+		$this->assertTrue($this->source->restoreShare($snapshot));
+		[$message, $parameters] = $this->auditEntries()[0];
+		$this->assertStringContainsString('restored', $message);
+		$this->assertSame('9', $parameters[0]);
+	}
+
+	public function testSerializeOfAMissingOrNonCanonicalIdIsNull(): void {
+		$this->aclMapper->method('findForShareReview')->willReturn(null);
+
+		$this->assertNull($this->source->serializeShare('7'));
+		$this->assertNull($this->source->serializeShare('12.9'));
+	}
+
+	public function testRestoreRejectsAForeignSnapshot(): void {
+		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
+
+		$this->assertFalse($this->source->restoreShare('not json'));
+		$this->assertFalse($this->source->restoreShare('{"v":99,"boardId":2,"type":0,"participant":"bob","permissions":[]}'));
+		$this->assertFalse($this->source->restoreShare('{"v":1,"boardId":2}'), 'an incomplete snapshot is refused');
+	}
+
+	public function testRestoreDeniedByTheAccessCheckIsAudited(): void {
+		$this->decideAccessCheck(static fn (ShareReviewAccessCheckEvent $event) => $event->denyAccess('not an operator'));
+		$this->boardService->expects($this->never())->method('restoreAclForShareReview');
+
+		$this->assertFalse($this->source->restoreShare('{"v":1,"boardId":2,"type":0,"participant":"bob","permissions":{"edit":true}}'));
+		$this->assertStringContainsString('denied', $this->auditEntries()[0][0]);
+	}
+
+	public function testRestoreOfAFederatedAclIsReportedAsFailure(): void {
+		$this->decideAccessCheck(static fn (ShareReviewAccessCheckEvent $event) => $event->grantAccess());
+		$this->boardService->method('restoreAclForShareReview')->willThrowException(new BadRequestException('federated'));
+		$this->logger->expects($this->once())->method('error');
+
+		$this->assertFalse($this->source->restoreShare('{"v":1,"boardId":2,"type":6,"participant":"bob@remote","permissions":{"edit":true}}'));
+	}
+
+	public function testRestoreForwardsTheActionContext(): void {
+		$captured = null;
+		$this->eventDispatcher->method('dispatchTyped')->willReturnCallback(function (object $event) use (&$captured): void {
+			if ($event instanceof ShareReviewAccessCheckEvent) {
+				$captured = $event;
+				$event->denyAccess('no');
+			}
+		});
+
+		$this->source->restoreShare('{"v":1,"boardId":2,"type":0,"participant":"bob","permissions":{"edit":true}}', new ShareReviewActionContext('alice', ShareReviewAccessCheckEvent::SCOPE_SELF));
+
+		$this->assertSame(ShareReviewAccessCheckEvent::ACTION_RESTORE, $captured->getAction());
+		$this->assertSame('alice', $captured->getActingUserId());
+		$this->assertSame(ShareReviewAccessCheckEvent::SCOPE_SELF, $captured->getScope());
 	}
 
 	public function testCountSharesByInitiatorDelegatesWithTheLimit(): void {

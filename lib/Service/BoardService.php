@@ -602,6 +602,56 @@ class BoardService {
 		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
 	}
 
+	/**
+	 * Re-create an ACL on behalf of a trusted share-review operation, from the
+	 * values its snapshot carries.
+	 *
+	 * PERMISSION_SHARE is intentionally not checked. The caller must verify
+	 * access via ShareReviewAccessCheckEvent first. All side effects of
+	 * addAcl() are mirrored so the restored share is indistinguishable from an
+	 * in-app share: the share activity is recorded, the recipient is notified,
+	 * the board cache and the resource access cache are invalidated and
+	 * AclCreatedEvent is dispatched. Federated ACLs are not restorable — their
+	 * token belongs to a cloud handshake a snapshot cannot repeat.
+	 *
+	 * @throws BadRequestException on a federated ACL
+	 */
+	public function restoreAclForShareReview(int $boardId, int $type, string $participant, bool $edit, bool $share, bool $manage): Acl {
+		if ($type === Acl::PERMISSION_TYPE_REMOTE) {
+			throw new BadRequestException('A federated share cannot be restored');
+		}
+		$acl = new Acl();
+		$acl->setBoardId($boardId);
+		$acl->setType($type);
+		$acl->setParticipant($participant);
+		$acl->setPermissionEdit($edit);
+		$acl->setPermissionShare($share);
+		$acl->setPermissionManage($manage);
+		$now = time();
+		$acl->setCreatedAt($now);
+		$acl->setLastModifiedAt($now);
+		/** @var Acl $newAcl */
+		$newAcl = $this->aclMapper->insert($acl);
+
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
+		$this->notificationHelper->sendBoardShared($boardId, $newAcl);
+		$this->boardMapper->mapAcl($newAcl);
+		$this->changeHelper->boardChanged($boardId);
+		$this->clearBoardFromCache($this->boardMapper->find($boardId));
+
+		$version = \OCP\Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($boardId);
+			} catch (\Exception $e) {
+			}
+		}
+		$this->eventDispatcher->dispatchTyped(new AclCreatedEvent($newAcl));
+
+		return $newAcl;
+	}
+
 	public function leave(int $boardId): ?Acl {
 		if ($this->permissionService->userIsBoardOwner($boardId)) {
 			throw new BadRequestException('Board owner cannot leave board');
