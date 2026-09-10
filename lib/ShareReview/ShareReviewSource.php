@@ -21,6 +21,7 @@ use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Share\IShare;
 use OCP\Share\ShareReview\Events\ShareReviewAccessCheckEvent;
 use OCP\Share\ShareReview\IPaginatedShareReviewSource;
+use OCP\Share\ShareReview\IShareReviewSourceSnapshot;
 use OCP\Share\ShareReview\ShareReviewActionContext;
 use OCP\Share\ShareReview\ShareReviewCounts;
 use OCP\Share\ShareReview\ShareReviewEntry;
@@ -33,7 +34,7 @@ use Psr\Log\LoggerInterface;
  * Deck's board ACLs as share-review shares, with the paginated query contract
  * evaluated in SQL on the ACL/board join.
  */
-class ShareReviewSource implements IPaginatedShareReviewSource {
+class ShareReviewSource implements IPaginatedShareReviewSource, IShareReviewSourceSnapshot {
 
 	public const PERMISSION_READ = 'deck:read';
 	public const PERMISSION_EDIT = 'deck:edit';
@@ -41,6 +42,9 @@ class ShareReviewSource implements IPaginatedShareReviewSource {
 	public const PERMISSION_MANAGE = 'deck:manage';
 
 	/** Native ACL participant type to IShare type — identical values by design. */
+	/** Format version of the opaque snapshot this source writes and reads */
+	private const SNAPSHOT_VERSION = 1;
+
 	private const PARTICIPANT_TYPES = [
 		Acl::PERMISSION_TYPE_USER => IShare::TYPE_USER,
 		Acl::PERMISSION_TYPE_GROUP => IShare::TYPE_GROUP,
@@ -224,6 +228,79 @@ class ShareReviewSource implements IPaginatedShareReviewSource {
 			$entry?->object ?? '',
 			$entry === null ? '' : (string)$entry->type,
 			$entry?->recipient ?? '',
+			$this->actingUser($context),
+		]);
+		return true;
+	}
+
+	public function serializeShare(string $shareId): ?string {
+		if (!ctype_digit($shareId)) {
+			return null;
+		}
+		try {
+			$acl = $this->aclMapper->findForShareReview((int)$shareId);
+		} catch (Exception $e) {
+			$this->logger->error('Deck ShareReview: failed to fetch share {id}: {message}', ['id' => $shareId, 'message' => $e->getMessage()]);
+			return null;
+		}
+		if ($acl === null) {
+			return null;
+		}
+		$snapshot = json_encode([
+			'v' => self::SNAPSHOT_VERSION,
+			'boardId' => (int)$acl['board_id'],
+			'type' => (int)$acl['type'],
+			'participant' => (string)$acl['participant'],
+			'permissions' => [
+				'edit' => (bool)$acl['permission_edit'],
+				'share' => (bool)$acl['permission_share'],
+				'manage' => (bool)$acl['permission_manage'],
+			],
+		]);
+		return $snapshot === false ? null : $snapshot;
+	}
+
+	public function restoreShare(string $snapshot, ?ShareReviewActionContext $context = null): bool {
+		$data = json_decode($snapshot, true);
+		if (!is_array($data)
+			|| ($data['v'] ?? null) !== self::SNAPSHOT_VERSION
+			|| !isset($data['boardId'], $data['type'], $data['participant'], $data['permissions'])) {
+			return false;
+		}
+		$event = new ShareReviewAccessCheckEvent(
+			'Deck',
+			'',
+			ShareReviewAccessCheckEvent::ACTION_RESTORE,
+			$context?->actingUserId,
+			$context?->scope ?? ShareReviewAccessCheckEvent::SCOPE_OPERATOR,
+		);
+		$this->eventDispatcher->dispatchTyped($event);
+		if (!$event->isHandled() || !$event->isGranted()) {
+			$this->audit('Deck share restore through share review denied: board "%1$s", participant "%2$s", user "%3$s"', [
+				(string)$data['boardId'],
+				(string)$data['participant'],
+				$this->actingUser($context),
+			]);
+			return false;
+		}
+		try {
+			$acl = $this->boardService->restoreAclForShareReview(
+				(int)$data['boardId'],
+				(int)$data['type'],
+				(string)$data['participant'],
+				(bool)($data['permissions']['edit'] ?? false),
+				(bool)($data['permissions']['share'] ?? false),
+				(bool)($data['permissions']['manage'] ?? false),
+			);
+		} catch (\Exception $e) {
+			$this->logger->error('Deck ShareReview: failed to restore a share: {message}', ['message' => $e->getMessage()]);
+			return false;
+		}
+		$this->audit('Deck share restored through share review: ACL "%1$s", board "%2$s", share type "%3$s", participant "%4$s", user "%5$s"', [
+			(string)$acl->getId(),
+			(string)$data['boardId'],
+			(string)$data['type'],
+			(string)$data['participant'],
 			$this->actingUser($context),
 		]);
 		return true;
