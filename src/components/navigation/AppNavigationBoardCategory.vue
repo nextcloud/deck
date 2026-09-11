@@ -8,7 +8,8 @@
 		:to="to"
 		:exact="true"
 		:allow-collapse="collapsible"
-		:open="opened">
+		:open="opened"
+		:data-cy-navigation-category="id">
 		<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
 		<template #icon>
 			<slot name="icon" />
@@ -70,10 +71,13 @@ export default {
 		},
 	},
 	watch: {
-		boards(newVal, prevVal) {
-			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
-				this.opened = true
-			}
+		boards: {
+			handler(newVal, prevVal) {
+				if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
+					this.opened = true
+				}
+			},
+			deep: true,
 		},
 	},
 	mounted() {

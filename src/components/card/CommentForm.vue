@@ -12,7 +12,7 @@
 			:user-data="members"
 			@submit="submit" />
 		<NcButton v-show="hasContent"
-			type="tertiary"
+			variant="tertiary"
 			:aria-label="t('deck', 'Submit')"
 			:title="t('deck', 'Submit')"
 			class="comment-form__submit"
@@ -41,14 +41,14 @@ export default {
 		NcRichContenteditable,
 	},
 	props: {
-		value: {
+		modelValue: {
 			type: String,
 			default: '',
 		},
 	},
+	emits: ['update:modelValue', 'submit'],
 	data() {
 		return {
-			commentText: this.value,
 			error: null,
 		}
 	},
@@ -56,6 +56,14 @@ export default {
 		...mapState(useBoardStore, {
 			currentBoard: 'currentBoard',
 		}),
+		commentText: {
+			get() {
+				return this.modelValue
+			},
+			set(value) {
+				this.$emit('update:modelValue', value)
+			},
+		},
 		members() {
 			const obj = {}
 			this.currentBoard.users.forEach(user => {
@@ -69,12 +77,7 @@ export default {
 			return obj
 		},
 		hasContent() {
-			return this.commentText.trim().length > 0
-		},
-	},
-	watch: {
-		value(val) {
-			this.commentText = val
+			return this.modelValue.trim().length > 0
 		},
 	},
 	methods: {
@@ -83,7 +86,7 @@ export default {
 		},
 		validate(submit) {
 			this.error = null
-			const content = this.commentText
+			const content = this.modelValue
 			if (submit && content.length === 0) {
 				this.error = t('deck', 'The comment cannot be empty.')
 			}
@@ -100,7 +103,7 @@ export default {
 				const temp = document.createElement('div')
 				temp.innerHTML = content
 				const text = temp.textContent || temp.innerText || ''
-				this.$emit('input', text)
+				this.$emit('update:modelValue', '')
 				this.$emit('submit', text)
 			}
 		},
@@ -109,7 +112,7 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../../css/comments.scss';
+	@use '../../css/comments.scss';
 
 	[class^="_tribute-container-autocomplete_"],
 	[class*=" _tribute-container-autocomplete_"],

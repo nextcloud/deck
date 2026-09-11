@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<div>
+	<div class="comments" v-v-infinite-scroll="[infiniteHandler, {distance: 10, canLoadMore: () => commentStore.hasMoreComments(card.id)}]">
 		<div class="comment--header">
 			<NcAvatar :user="currentUser.uid" />
 			<span class="username">
@@ -16,18 +16,20 @@
 			:reply="true"
 			:preview="true"
 			@cancel="cancelReply" />
-		<CommentForm v-model="newComment" @submit="createComment" />
+		<CommentForm v-model="newComment" @submit="createComment($event)" />
 
 		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
 			<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
 				:key="comment.id"
 				:comment="comment"
-				@doReload="loadComments" />
-			<InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
-				<div slot="spinner" class="icon-loading" />
-				<div slot="no-more" />
-				<div slot="no-results" />
-			</InfiniteLoading>
+				@do-reload="loadComments" />
+			<!-- <InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
+				<template #spinner>
+					<div class="icon-loading" />
+				</template>
+				<template #no-more />
+				<template #no-results />
+			</InfiniteLoading> -->
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
@@ -42,7 +44,7 @@ import { mapState } from 'pinia'
 import { NcAvatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem.vue'
 import CommentForm from './CommentForm.vue'
-import InfiniteLoading from 'vue-infinite-loading'
+import { vInfiniteScroll } from '@vueuse/components'
 import { getCurrentUser } from '@nextcloud/auth'
 import { useCommentStore } from '../../stores/comment.js'
 import { useBoardStore } from '../../stores/board.js'
@@ -53,7 +55,9 @@ export default {
 		NcAvatar,
 		CommentItem,
 		CommentForm,
-		InfiniteLoading,
+	},
+	directives: {
+		vInfiniteScroll,
 	},
 	props: {
 		card: {
@@ -95,19 +99,13 @@ export default {
 		},
 	},
 	methods: {
-		async infiniteHandler($state) {
+		async infiniteHandler() {
 			this.error = null
 			try {
 				await this.loadMore()
-				if (this.commentStore.hasMoreComments(this.card.id)) {
-					$state.loaded()
-				} else {
-					$state.complete()
-				}
 			} catch (e) {
 				console.error('Failed to fetch more comments during infinite loading', e)
 				this.error = t('deck', 'Failed to load comments')
-				$state.complete()
 			}
 		},
 		async loadComments() {
@@ -126,14 +124,13 @@ export default {
 				this.error = t('deck', 'Failed to load comments')
 			}
 		},
-		async createComment(content) {
+		async createComment(comment) {
 			const commentObj = {
 				cardId: this.card.id,
-				comment: content,
+				comment,
 			}
 			await this.commentStore.createComment(commentObj)
 			this.commentStore.setReplyTo(null)
-			this.newComment = ''
 			await this.loadComments()
 		},
 		async loadMore() {
@@ -149,5 +146,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import '../../css/comments.scss';
+	@use '../../css/comments.scss';
 </style>

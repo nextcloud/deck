@@ -7,8 +7,6 @@ import './css/dashboard.scss'
 
 import './shared-init.js'
 
-const debug = process.env.NODE_ENV !== 'production'
-
 let _imports = null
 
 const getAsyncImports = async () => {
@@ -16,62 +14,42 @@ const getAsyncImports = async () => {
 		return _imports
 	}
 
-	const { default: Vue } = await import('vue')
-	const { createPinia, PiniaVuePlugin } = await import('pinia')
-	const { default: Vuex } = await import('vuex')
+	const { createApp } = await import('vue')
+	const { createPinia } = await import('pinia')
 
-	Vue.prototype.t = t
-	Vue.prototype.n = n
-	Vue.prototype.OC = OC
 	const pinia = createPinia()
-	Vue.use(PiniaVuePlugin)
-	Vue.use(Vuex)
-	const store = new Vuex.Store({
-		strict: debug,
-	})
 
 	_imports = {
-		pinia, Vue, store,
+		createApp,
+		pinia,
 	}
 
 	return _imports
 }
 
+const mountDashboardWidget = async (el, componentImport) => {
+	const { createApp, pinia } = await getAsyncImports()
+	const { default: Component } = await componentImport()
+
+	const app = createApp(Component)
+	app.use(pinia)
+	app.config.globalProperties.t = t
+	app.config.globalProperties.n = n
+	app.config.globalProperties.OC = OC
+	app.config.globalProperties.OCA = OCA
+
+	const vm = app.mount(el)
+	if (vm && typeof vm === 'object') {
+		vm.$destroy = () => app.unmount()
+	}
+
+	return vm
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-	OCA.Dashboard.register('deck', async (el) => {
-		const { Vue, pinia, store } = await getAsyncImports()
-		const { default: DashboardUpcoming } = await import('./views/DashboardUpcoming.vue')
+	OCA.Dashboard.register('deck', (el) => mountDashboardWidget(el, () => import('./views/DashboardUpcoming.vue')))
 
-		const View = Vue.extend(DashboardUpcoming)
-		const vm = new View({
-			propsData: {},
-			pinia,
-			store,
-		}).$mount(el)
-		return vm
-	})
+	OCA.Dashboard.register('deckToday', (el) => mountDashboardWidget(el, () => import('./views/DashboardToday.vue')))
 
-	OCA.Dashboard.register('deckToday', async (el) => {
-		const { Vue, pinia, store } = await getAsyncImports()
-		const { default: DashboardToday } = await import('./views/DashboardToday.vue')
-		const View = Vue.extend(DashboardToday)
-		const vm = new View({
-			propsData: {},
-			pinia,
-			store,
-		}).$mount(el)
-		return vm
-	})
-
-	OCA.Dashboard.register('deckTomorrow', async (el) => {
-		const { Vue, pinia, store } = await getAsyncImports()
-		const { default: DashboardTomorrow } = await import('./views/DashboardTomorrow.vue')
-		const View = Vue.extend(DashboardTomorrow)
-		const vm = new View({
-			propsData: {},
-			pinia,
-			store,
-		}).$mount(el)
-		return vm
-	})
+	OCA.Dashboard.register('deckTomorrow', (el) => mountDashboardWidget(el, () => import('./views/DashboardTomorrow.vue')))
 })

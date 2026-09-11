@@ -6,7 +6,7 @@
 <template>
 	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
-		<NcAppContent :allow-swipe-navigation="false">
+		<NcAppContent :disable-swipe="true">
 			<router-view />
 		</NcAppContent>
 
@@ -30,17 +30,16 @@
 </template>
 
 <script>
-import { mapState as mapStateVuex } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation.vue'
 import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
-import { NcModal, NcContent, NcAppContent, isMobile } from '@nextcloud/vue'
+import { NcModal, NcContent, NcAppContent, useIsMobile } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import CardMoveDialog from './CardMoveDialog.vue'
 import { useBoardStore } from './stores/board.js'
+import { useSettingsStore } from './stores/settings.js'
 import { mapState } from 'pinia'
-
 const boardApi = new BoardApi()
 
 export default {
@@ -53,10 +52,15 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
-	mixins: [isMobile],
 	provide() {
 		return {
 			boardApi,
+		}
+	},
+	setup() {
+		const isMobile = useIsMobile()
+		return {
+			isMobile,
 		}
 	},
 	data() {
@@ -80,24 +84,18 @@ export default {
 	},
 	computed: {
 		...mapState(useBoardStore, ['currentBoard']),
-		...mapStateVuex({
-			navShown: state => state.navShown,
-			sidebarShownState: state => state.sidebarShown,
-		}),
+		...mapState(useSettingsStore, ['navShown']),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
 			// console.log(this.$route)
 			return this.$route.name === 'card' || this.$route.name === 'board.details'
 		},
-		sidebarShown() {
-			return this.sidebarRouterView || this.sidebarShownState
-		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 	},
@@ -106,7 +104,7 @@ export default {
 		if (initialState !== null) {
 			useBoardStore().loadBoards()
 		}
-		this.$store.dispatch('loadSharees')
+		useSettingsStore().loadSharees()
 	},
 	mounted() {
 		// Redirect to cleaner URL (without /index.php) if RewriteBase is enabled
@@ -117,7 +115,7 @@ export default {
 		emit('toggle-navigation', { open: !this.isMobile && this.navShown, _initial: true })
 		this.$nextTick(() => {
 			subscribe('navigation-toggled', (navState) => {
-				this.$store.dispatch('toggleNav', navState.open)
+				useSettingsStore().toggleNav(navState.open)
 			})
 		})
 	},
@@ -159,7 +157,7 @@ export default {
 </style>
 
 <style lang="scss">
-	@import '../css/print.scss';
+	@use '../css/print.scss';
 
 	.icon-activity {
 		background-image: url(../img/activity-dark.svg);

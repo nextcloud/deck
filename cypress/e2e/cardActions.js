@@ -9,14 +9,14 @@ const user = randUser()
 const boardData = sampleBoard()
 
 const auth = {
-	user: user.userId,
+	username: user.userId,
 	password: user.password,
 }
 
 const useModal = (useModal) => {
 	return cy.request({
 		method: 'POST',
-		url: `${Cypress.env('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/cardDetailsInModal?format=json`,
+		url: `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/cardDetailsInModal?format=json`,
 		auth,
 		body: { value: useModal },
 	}).then((response) => {
@@ -92,6 +92,7 @@ describe('Card actions', function () {
 
 			cy.get('.app-sidebar-header .action-item__menutoggle').click()
 			cy.get('.v-popper__popper button:contains("Move/copy card")').click()
+			cy.get('.vs__dropdown-toggle span[title="MyTestBoard"]').should('be.visible').click()
 			cy.get('.vs__dropdown-menu span[title="MyTestBoard"]').should('be.visible').click()
 			cy.wait(3000) // wait for select component to load stacks
 			cy.get('[data-cy="select-stack"] .vs__dropdown-toggle').should('be.visible').click()
