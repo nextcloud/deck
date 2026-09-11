@@ -176,6 +176,8 @@ OC.L10N.register(
     "Clear filter" : "Vyčistit filtr",
     "View Modes" : "Zobrazit režimy",
     "Toggle View Modes" : "Přepnout mezi režimy zobrazení",
+    "Kanban view" : "Zobrazení jako kanban",
+    "Gantt view" : "Zobrazení jako Ganttovy grafy",
     "Hide archived cards" : "Skrýt archivované karty",
     "Show archived cards" : "Zobrazit archivované karty",
     "Toggle compact mode" : "Vyp/zap. kompaktní režim",
