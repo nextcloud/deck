@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Service\LabelService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
@@ -29,6 +30,7 @@ class LabelApiController extends ApiController {
 		$appName,
 		IRequest $request,
 		private LabelService $labelService,
+		private ChangeHelper $changeHelper,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -40,8 +42,15 @@ class LabelApiController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function get(): DataResponse {
-		$label = $this->labelService->find($this->request->getParam('labelId'));
-		return new DataResponse($label, HTTP::STATUS_OK);
+		$labelId = (int)$this->request->getParam('labelId');
+		$label = $this->labelService->find($labelId);
+		$response = new DataResponse($label, HTTP::STATUS_OK);
+		$etag = $this->changeHelper->getEtag(ChangeHelper::TYPE_LABEL, $labelId);
+		if ($etag === '') {
+			$etag = $label->getETag();
+		}
+		$response->setETag($etag);
+		return $response;
 	}
 
 	/**
@@ -62,7 +71,10 @@ class LabelApiController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function update(string $title, string $color): DataResponse {
-		$label = $this->labelService->update($this->request->getParam('labelId'), $title, $color);
+		$labelId = (int)$this->request->getParam('labelId');
+		$label = $this->labelService->find($labelId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_LABEL, $labelId, $label->getETag());
+		$label = $this->labelService->update($labelId, $title, $color);
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
@@ -73,7 +85,10 @@ class LabelApiController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function delete(): DataResponse {
-		$label = $this->labelService->delete($this->request->getParam('labelId'));
+		$labelId = (int)$this->request->getParam('labelId');
+		$label = $this->labelService->find($labelId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_LABEL, $labelId, $label->getETag());
+		$label = $this->labelService->delete($labelId);
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 }
