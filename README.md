@@ -32,6 +32,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 - [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution
 - [A-deck](https://github.com/leoossa/A-deck) - Chrome Extension that allows to create new card in selected stack based on current tab
 - [QOwnNotes](https://github.com/pbek/QOwnNotes) - Quickly creates cards and links to them in Markdown notes
+- [Nextcloud Deck macOS](https://github.com/unicornops/nextcloud-deck-macos) - Native macOS application for Nextcloud Deck
 
 ## Installation/Update
 
