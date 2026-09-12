@@ -15,7 +15,7 @@
 			:class="{'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!canManage || isArchived" tabindex="0">
+				<h3 v-if="!canManage || isArchived" tabindex="0" class="stack__title">
 					{{ stack.title }}
 					<CheckCircleOutline v-if="isDoneColumn"
 						class="stack__done-icon"
