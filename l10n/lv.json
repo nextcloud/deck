@@ -7,6 +7,8 @@
     "{user} has renamed the card {before} to {card}" : "{user} pārdēvēja kartīti {before} par {card}",
     "You have added a description to card {card} in list {stack} on board {board}" : "Tu pievienoji kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
     "{user} has added a description to card {card} in list {stack} on board {board}" : "{user} pievienoja kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
+    "You have added the tag {label} to card {card} in list {stack} on board {board}" : "Tu pievienoji birku {label} kartītei {card} dēļa {board} sarakstā {stack}",
+    "You have added the attachment {attachment} to card {card}" : "Tu pievienoji pielikumu {attachment} kartītei {card}",
     "The file was uploaded" : "Datne tika augšupielādēta",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Augšupielādētā datne pārsniedz php.ini norādīto upload_max_filesize vērtību",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Augšupielādētā datne pārsniedz MAX_FILE_SIZE norādi, kas ir norādīta HTML formā",
