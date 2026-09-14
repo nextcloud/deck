@@ -407,16 +407,19 @@ export default {
 		},
 	},
 	watch: {
-		board: {
-			handler(current, previous) {
-				if (current?.id !== previous?.id) {
-					this.clearFilter()
-				}
-				if (current) {
-					this.setPageTitle(current.title)
+		// The board object is replaced wholesale by the store, so watching the
+		// two properties we actually care about is enough - and avoids
+		// traversing labels, acl and users on every unrelated board mutation.
+		'board.id'() {
+			this.clearFilter()
+		},
+		'board.title': {
+			immediate: true,
+			handler(title) {
+				if (title) {
+					this.setPageTitle(title)
 				}
 			},
-			deep: true,
 		},
 	},
 	beforeMount() {
