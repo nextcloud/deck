@@ -431,7 +431,7 @@ class CardServiceTest extends TestCase {
 			'boardId' => 1337,
 		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+		$this->cardMapper->expects($this->exactly(2))->method('update')->willReturnCallback(function ($c) {
 			$c->setId(1);
 			return $c;
 		});
@@ -462,7 +462,7 @@ class CardServiceTest extends TestCase {
 			'boardId' => 1337,
 		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+		$this->cardMapper->expects($this->exactly(2))->method('update')->willReturnCallback(function ($c) {
 			$c->setId(1);
 			return $c;
 		});
@@ -487,7 +487,7 @@ class CardServiceTest extends TestCase {
 			'boardId' => 1337,
 		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+		$this->cardMapper->expects($this->exactly(2))->method('update')->willReturnCallback(function ($c) {
 			$c->setId(1);
 			return $c;
 		});
@@ -512,7 +512,7 @@ class CardServiceTest extends TestCase {
 			'boardId' => 1337,
 		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+		$this->cardMapper->expects($this->exactly(2))->method('update')->willReturnCallback(function ($c) {
 			$c->setId(1);
 			return $c;
 		});
@@ -535,7 +535,7 @@ class CardServiceTest extends TestCase {
 			'boardId' => 1337,
 		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+		$this->cardMapper->expects($this->exactly(2))->method('update')->willReturnCallback(function ($c) {
 			$c->setId(1);
 			return $c;
 		});
@@ -558,7 +558,7 @@ class CardServiceTest extends TestCase {
 			'boardId' => 1337,
 		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
+		$this->cardMapper->expects($this->exactly(2))->method('update')->willReturnCallback(function ($c) {
 			$c->setId(1);
 			return $c;
 		});

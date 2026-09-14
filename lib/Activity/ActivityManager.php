@@ -79,6 +79,7 @@ class ActivityManager {
 	public const SUBJECT_CARD_UPDATE_STACKID = 'card_update_stackId';
 	public const SUBJECT_CARD_USER_ASSIGN = 'card_user_assign';
 	public const SUBJECT_CARD_USER_UNASSIGN = 'card_user_unassign';
+	public const SUBJECT_CARD_MOVE_BOARD = 'card_move_board';
 
 	public const SUBJECT_ATTACHMENT_CREATE = 'attachment_create';
 	public const SUBJECT_ATTACHMENT_UPDATE = 'attachment_update';
@@ -229,6 +230,9 @@ class ActivityManager {
 			case self::SUBJECT_CARD_COMMENT_CREATE:
 				$subject = $ownActivity ? $l->t('You have commented on card {card}') : $l->t('{user} has commented on card {card}');
 				break;
+			case self::SUBJECT_CARD_MOVE_BOARD:
+				$subject = $ownActivity ? $l->t('You have moved the card {card} from board {oldBoard} to board {board}') : $l->t('{user} has moved the card {card} from board {oldBoard} to board {board}');
+				break;
 			default:
 				break;
 		}
@@ -373,6 +377,14 @@ class ActivityManager {
 				}
 
 				break;
+			case self::SUBJECT_CARD_MOVE_BOARD:
+				$subjectParams = $this->findDetailsForCard($entity->getId(), $subject);
+				$subjectParams['oldBoard'] = [
+					'id' => $additionalParams['oldBoard']->getId(),
+					'title' => $additionalParams['oldBoard']->getTitle()
+				];
+				unset($additionalParams['oldBoard']);
+				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
 			case self::SUBJECT_ATTACHMENT_UPDATE:
 			case self::SUBJECT_ATTACHMENT_DELETE:
@@ -455,12 +467,30 @@ class ActivityManager {
 				break;
 		}
 		$boardId = $mapper->findBoardId($event->getObjectId());
+		$deduplicatedUserIds = [];
 		/** @var IUser $user */
 		foreach ($this->permissionService->findUsers($boardId) as $user) {
 			$event->setAffectedUser($user->getUID());
 			/** @noinspection DisconnectedForeachInstructionInspection */
 			$this->manager->publish($event);
+			$deduplicatedUserIds[$user->getUID()] = true;
 		}
+
+		// Also sent to affected users of oldBoard for SUBJECT_CARD_MOVE_BOARD
+		if ($event->getSubject() === self::SUBJECT_CARD_MOVE_BOARD) {
+			$subjectParams = $event->getSubjectParameters();
+			$oldBoardId = $subjectParams['oldBoard']['id'];
+			/** @var IUser $user */
+			foreach ($this->permissionService->findUsers($oldBoardId) as $user) {
+				if (isset($deduplicatedUserIds[$user->getUID()])) {
+					continue;
+				}
+				$event->setAffectedUser($user->getUID());
+				/** @noinspection DisconnectedForeachInstructionInspection */
+				$this->manager->publish($event);
+			}
+		}
+
 	}
 
 	/**

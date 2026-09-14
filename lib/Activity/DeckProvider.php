@@ -124,7 +124,15 @@ class DeckProvider implements IProvider {
 		}
 
 		if (isset($subjectParams['card']) && $event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
-			if (!$this->activityManager->canSeeCardActivity($event->getObjectId(), $event->getAffectedUser())) {
+			$canSeeOldBoard = false;
+			if (isset($subjectParams['oldBoard'])) {
+				$canSeeOldBoard = $this->activityManager->canSeeBoardActivity($subjectParams['oldBoard']['id'], $event->getAffectedUser());
+			}
+			$canSeeBoard = false;
+			if (isset($subjectParams['board'])) {
+				$canSeeBoard = $this->activityManager->canSeeBoardActivity($subjectParams['board']['id'], $event->getAffectedUser());
+			}
+			if (!$this->activityManager->canSeeCardActivity($event->getObjectId(), $event->getAffectedUser()) && !$canSeeOldBoard && !$canSeeBoard) {
 				throw new UnknownActivityException();
 			}
 			if ($event->getObjectName() === '') {
@@ -136,7 +144,7 @@ class DeckProvider implements IProvider {
 				'name' => $event->getObjectName(),
 			];
 
-			if (array_key_exists('board', $subjectParams)) {
+			if (array_key_exists('board', $subjectParams) && $canSeeBoard) {
 				$card['link'] = $this->cardService->getCardUrl($event->getObjectId());
 				$event->setLink($card['link']);
 			}
@@ -144,6 +152,7 @@ class DeckProvider implements IProvider {
 		}
 
 		$params = $this->parseParamForBoard('board', $subjectParams, $params);
+		$params = $this->parseParamForBoard('oldBoard', $subjectParams, $params);
 		$params = $this->parseParamForStack('stack', $subjectParams, $params);
 		$params = $this->parseParamForStack('stackBefore', $subjectParams, $params);
 		$params = $this->parseParamForAttachment('attachment', $subjectParams, $params);

@@ -332,7 +332,17 @@ class CardService {
 
 		// Trigger update events before setting description as it is handled separately
 		$changes->setAfter($card);
-		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
+		$card = $this->cardMapper->update($card);
+		$oldBoardId = $this->stackMapper->findBoardId($changes->getBefore()->getStackId());
+		$boardId = $this->cardMapper->findBoardId($card->getId());
+
+		if ($boardId !== $oldBoardId) {
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_MOVE_BOARD, [
+				'oldBoard' => $this->boardService->find($oldBoardId),
+			]);
+		} else {
+			$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
+		}
 
 		if ($card->getDescriptionPrev() === null) {
 			$card->setDescriptionPrev($card->getDescription());
@@ -341,8 +351,6 @@ class CardService {
 
 		// @var Card $card
 		$card = $this->cardMapper->update($card);
-		$oldBoardId = $this->stackMapper->findBoardId($changes->getBefore()->getStackId());
-		$boardId = $this->cardMapper->findBoardId($card->getId());
 		if ($boardId !== $oldBoardId) {
 			$stack = $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($this->cardMapper->findBoardId($card->getId()));
@@ -466,9 +474,10 @@ class CardService {
 		$changes = new ChangeSet($card);
 		$oldStackId = $card->getStackId();
 		$card->setStackId($stackId);
+		$newStack = $this->stackMapper->find($stackId);
+		$oldStack = $this->stackMapper->find($oldStackId);
 
 		if ($stackId !== $oldStackId) {
-			$newStack = $this->stackMapper->find($stackId);
 			if ($newStack->getIsDoneColumn()) {
 				$card->setDone(new \DateTime());
 			} else {
@@ -481,7 +490,15 @@ class CardService {
 
 		$this->cardMapper->update($card);
 		$changes->setAfter($card);
-		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
+
+		if ($newStack->getBoardId() !== $oldStack->getBoardId()) {
+			$oldBoard = $this->boardService->find($oldStack->getBoardId());
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_MOVE_BOARD, [
+				'oldBoard' => $oldBoard,
+			]);
+		} else {
+			$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
+		}
 
 		$result = $this->reorderCards($id, $stackId, $order);
 		$this->changeHelper->cardChanged($id, false);
