@@ -22,7 +22,7 @@ import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
 import { useFormatTime, useFormatRelativeTime } from '@nextcloud/vue'
 import { useSettingsStore } from '../../../stores/settings.js'
-import { defineProps, computed } from 'vue'
+import { computed } from 'vue'
 
 const DueState = {
 	Done: 'Done',
@@ -31,7 +31,8 @@ const DueState = {
 	Now: 'Now',
 	Overdue: 'Overdue',
 }
-const compactMode = useSettingsStore().compactMode
+const settingsStore = useSettingsStore()
+const compactMode = computed(() => settingsStore.compactMode)
 const { card } = defineProps({
 	card: {
 		type: Object,
@@ -60,8 +61,13 @@ const overdue = computed(() => {
 	return dueState.value === DueState.Overdue
 })
 
-const relativeDate = useFormatRelativeTime(computed(() => card.done ? card.done : card.duedate))
-const absoluteDate = useFormatTime(computed(() => new Date(card.done ? card.done : card.duedate), { format: { dateStyle: 'full', timeStyle: 'short' } }))
+const dueTimestamp = computed(() => card.done ? card.done : card.duedate)
+
+const relativeDate = useFormatRelativeTime(dueTimestamp)
+const absoluteDate = useFormatTime(
+	computed(() => new Date(dueTimestamp.value)),
+	{ format: { dateStyle: 'full', timeStyle: 'short' } },
+)
 </script>
 
 <style lang="scss" scoped>
