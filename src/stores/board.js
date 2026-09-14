@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
 import { defineStore } from 'pinia'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
@@ -138,7 +137,7 @@ export const useBoardStore = defineStore('board', {
 		},
 		setViewMode(mode) {
 			if (!this.currentBoard) return
-			Vue.set(this.viewModeByBoard, this.currentBoard.id, mode)
+			this.viewModeByBoard[this.currentBoard.id] = mode
 			localStorage.setItem(`deck.viewMode.${this.currentBoard.id}`, mode)
 		},
 		async loadBoardById(boardId) {
@@ -186,7 +185,7 @@ export const useBoardStore = defineStore('board', {
 				})
 
 				if (indexExisting > -1) {
-					Vue.set(this.boards, indexExisting, newBoard)
+					this.boards[indexExisting] = newBoard
 				} else {
 					this.boards.push(newBoard)
 				}
@@ -223,7 +222,7 @@ export const useBoardStore = defineStore('board', {
 			})
 
 			if (indexExisting > -1) {
-				Vue.set(this.boards, indexExisting, board)
+				this.boards[indexExisting] = board
 			} else {
 				this.boards.push(board)
 			}
@@ -287,7 +286,7 @@ export const useBoardStore = defineStore('board', {
 				return currentAcl.participant.uid === updatedAcl.participant.uid
 			})
 			if (updateIndex > -1) {
-				Vue.set(this.currentBoard.acl, updateIndex, updatedAcl)
+				this.currentBoard.acl[updateIndex] = updatedAcl
 			}
 		},
 		async deleteAclFromCurrentBoard(acl) {
@@ -296,7 +295,7 @@ export const useBoardStore = defineStore('board', {
 			const removeIndex = this.currentBoard?.acl?.findIndex((attr) => deletedAcl.id === attr.id)
 
 			if (removeIndex > -1) {
-				Vue.delete(this.currentBoard.acl, removeIndex)
+				this.currentBoard.acl.splice(removeIndex, 1)
 			}
 			this.loadBoardById(deletedAcl.boardId)
 		},

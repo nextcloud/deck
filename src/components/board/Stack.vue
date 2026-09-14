@@ -36,7 +36,7 @@
 					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
 				<form v-else-if="editing"
-					v-click-outside="cancelEdit"
+					v-v-on-click-outside="cancelEdit"
 					data-cy="editStackTitleForm"
 					@submit.prevent="finishedEdit(stack)"
 					@keyup.esc="cancelEdit">
@@ -132,9 +132,9 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
 import { mapState, mapActions } from 'pinia'
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { vOnClickOutside } from '@vueuse/components'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
@@ -148,6 +148,7 @@ import { useTrashbinStore } from '../../stores/trashbin.js'
 import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'Stack',
@@ -163,7 +164,7 @@ export default {
 		CheckCircleOutline,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	props: {
 		dragging: {
@@ -198,6 +199,11 @@ export default {
 		...mapState(useCardStore, {
 			cardsByStackGetter: 'cardsByStack',
 		}),
+		...mapState(useSettingsStore, [
+			'compactMode',
+			'showCardCover',
+			'shortcutLock',
+		]),
 		cardsByStack() {
 			return this.cardsByStackGetter(this.stack.id).filter((card) => {
 				if (this.showArchived) {
@@ -212,8 +218,16 @@ export default {
 		dragHandleSelector() {
 			return this.canEdit && !this.showArchived ? null : '.no-drag'
 		},
+		cardDetailsInModal: {
+			get() {
+				return useSettingsStore().configByKey('cardDetailsInModal')
+			},
+			set(newValue) {
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
+			},
+		},
 		stackAddCardAtTop() {
-			return this.$store.getters.config('stackAddCardAtTop') === true
+			return useSettingsStore().configByKey('stackAddCardAtTop') === true
 		},
 		canAddCard() {
 			return this.canEdit && !this.showArchived && !this.isArchived
@@ -231,6 +245,13 @@ export default {
 			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
 			addCardInStore: 'addCard',
 		}),
+		...mapActions(useSettingsStore, ['toggleShortcutLock']),
+		stopCardCreation(e) {
+			if (this.$refs.newCardInput && this.$refs.newCardInput.parentElement === e.target.parentElement) {
+				return false
+			}
+			return false
+		},
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
 			const card = Object.assign({}, payload)
@@ -335,7 +356,7 @@ export default {
 
 	@use 'sass:math';
 
-	@import './../../css/variables.scss';
+	@use './../../css/variables.scss' as *;
 
 	.stack {
 		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));

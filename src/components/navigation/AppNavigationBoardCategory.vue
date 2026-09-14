@@ -8,7 +8,8 @@
 		:to="to"
 		:exact="true"
 		:allow-collapse="collapsible"
-		:open="opened">
+		:open="opened"
+		:data-cy-navigation-category="id">
 		<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
 		<template #icon>
 			<slot name="icon" />
@@ -70,6 +71,10 @@ export default {
 		},
 	},
 	watch: {
+		// `boards` comes from a store getter that returns a fresh array, so a
+		// shallow watcher already sees every addition. With `deep` a nested
+		// change would hand out the very same array as old and new value, and
+		// the length comparison below could never be true anyway.
 		boards(newVal, prevVal) {
 			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
 				this.opened = true

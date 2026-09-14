@@ -5,35 +5,37 @@
 $card-spacing: 10px;
 $card-padding: 10px;
 
-.labels {
-	flex-grow: 1;
-	flex-shrink: 1;
-	min-width: 0;
-	display: flex;
-	flex-direction: row;
-	gap: 3px;
-
-	li {
-		flex-grow: 0;
+@mixin render-labels {
+	.labels {
+		flex-grow: 1;
 		flex-shrink: 1;
+		min-width: 0;
 		display: flex;
 		flex-direction: row;
-		overflow: hidden;
-		padding: 1px 8px;
-		border-radius: 15px;
-		font-size: 13px;
+		gap: 3px;
 
-		&:hover {
-			overflow: unset;
-		}
-
-		span {
+		li {
 			flex-grow: 0;
 			flex-shrink: 1;
-			min-width: 0;
+			display: flex;
+			flex-direction: row;
 			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
+			padding: 1px 8px;
+			border-radius: 15px;
+			font-size: 13px;
+
+			&:hover {
+				overflow: unset;
+			}
+
+			span {
+				flex-grow: 0;
+				flex-shrink: 1;
+				min-width: 0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
 		}
 	}
 }

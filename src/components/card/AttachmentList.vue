@@ -56,7 +56,7 @@
 					</a>
 				</div>
 				<NcActions v-if="selectable">
-					<NcActionButton icon="icon-confirm" @click="$emit('select-attachment', attachment)">
+					<NcActionButton icon="icon-confirm" @click="$emit('selectAttachment', attachment)">
 						{{ t('deck', 'Add this attachment') }}
 					</NcActionButton>
 				</NcActions>
@@ -74,10 +74,10 @@
 						{{ t('deck', 'Remove attachment') }}
 					</NcActionButton>
 
-					<NcActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('delete-attachment', attachment)">
+					<NcActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
 					</NcActionButton>
-					<NcActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restore-attachment', attachment)">
+					<NcActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restoreAttachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
 					</NcActionButton>
 				</NcActions>
@@ -100,6 +100,7 @@ import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { useAttachmentStore } from '../../stores/attachment.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
@@ -133,6 +134,7 @@ export default {
 			required: false,
 		},
 	},
+	emits: ['selectAttachment', 'deleteAttachment', 'restoreAttachment'],
 	data() {
 		return {
 			modalShow: false,
@@ -201,7 +203,7 @@ export default {
 				?? (attachment?.name ?? attachment.data).split('.').pop()
 		},
 		cardDetailsInModal() {
-			return this.$store.getters.config('cardDetailsInModal')
+			return useSettingsStore().configByKey('cardDetailsInModal')
 		},
 	},
 	watch: {
