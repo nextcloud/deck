@@ -71,13 +71,14 @@ export default {
 		},
 	},
 	watch: {
-		boards: {
-			handler(newVal, prevVal) {
-				if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
-					this.opened = true
-				}
-			},
-			deep: true,
+		// `boards` comes from a store getter that returns a fresh array, so a
+		// shallow watcher already sees every addition. With `deep` a nested
+		// change would hand out the very same array as old and new value, and
+		// the length comparison below could never be true anyway.
+		boards(newVal, prevVal) {
+			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
+				this.opened = true
+			}
 		},
 	},
 	mounted() {

@@ -200,10 +200,12 @@ watch(() => currentCard.value?.title, (newTitle) => {
 	titleEditing.value = newTitle ?? ''
 }, { immediate: true })
 
-watch(() => currentCard.value, (newCard, oldCard) => {
-	if (newCard?.id === oldCard?.id) return
+// Only a different card should move the focus. Watching the object deeply
+// would fire on every property update of the very same card, where old and
+// new value are identical anyway.
+watch(() => currentCard.value?.id, () => {
 	focusHeader()
-}, { deep: true })
+})
 
 /**
  *
