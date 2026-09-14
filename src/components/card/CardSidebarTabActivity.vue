@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<ActivityList v-if="$parent.isActive"
+	<ActivityList v-if="isActive"
 		:key="card.id"
 		filter="filter"
 		:object-id="card.id"
@@ -24,6 +24,10 @@ export default {
 		card: {
 			type: Object,
 			default: null,
+		},
+		isActive: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data() {

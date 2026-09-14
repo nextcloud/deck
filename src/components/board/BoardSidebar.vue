@@ -7,6 +7,7 @@
 	<NcAppSidebar v-if="board != null"
 		:actions="[]"
 		:name="board.title"
+		@update:active="(value) => activeTabId = value"
 		@close="closeSidebar">
 		<NcAppSidebarTab id="sharing"
 			:order="0"
@@ -43,7 +44,7 @@
 			<template #icon>
 				<ActivityIcon :size="20" />
 			</template>
-			<TimelineTabSidebar :board="board" />
+			<TimelineTabSidebar :board="board" :is-active="activeTabId === 'activity'" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>
@@ -85,6 +86,9 @@ export default {
 	data() {
 		return {
 			hasActivity: capabilities && capabilities.activity,
+			// NcAppSidebar activates the first registered tab and only emits
+			// update:active on later changes
+			activeTabId: 'sharing',
 		}
 	},
 	computed: {

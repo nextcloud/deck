@@ -75,7 +75,7 @@
 			<template #icon>
 				<ActivityIcon :size="20" />
 			</template>
-			<CardSidebarTabActivity :card="currentCard" />
+			<CardSidebarTabActivity :card="currentCard" :is-active="activeTabId === 'timeline'" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>
