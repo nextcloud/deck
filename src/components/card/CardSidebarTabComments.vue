@@ -131,6 +131,7 @@ export default {
 			}
 			await this.commentStore.createComment(commentObj)
 			this.commentStore.setReplyTo(null)
+			this.newComment = ''
 			await this.loadComments()
 		},
 		async loadMore() {

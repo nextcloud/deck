@@ -103,7 +103,6 @@ export default {
 				const temp = document.createElement('div')
 				temp.innerHTML = content
 				const text = temp.textContent || temp.innerText || ''
-				this.$emit('update:modelValue', '')
 				this.$emit('submit', text)
 			}
 		},
