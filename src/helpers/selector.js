@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { createApp, defineAsyncComponent, h } from 'vue'
+import { translate, translatePlural } from '@nextcloud/l10n'
 
 const buildSelector = (selector, propsData = {}) => {
 	return new Promise((resolve, reject) => {
@@ -47,10 +48,19 @@ const buildSelector = (selector, propsData = {}) => {
 				})
 			},
 		})
-		// app.config.globalProperties.t = t
-		// app.config.globalProperties.n = n
-		// app.config.globalProperties.OC = OC
-		// app.config.globalProperties.OCA = OCA
+		// Unlike Vue 2, where these were set once on Vue.prototype, every Vue 3
+		// app needs its own global properties and directives - the selectors are
+		// mounted as standalone apps and would otherwise fail to render.
+		app.config.globalProperties.t = translate
+		app.config.globalProperties.n = translatePlural
+		app.config.globalProperties.OC = window.OC
+		app.config.globalProperties.OCA = window.OCA
+
+		app.directive('focus', {
+			mounted(el) {
+				el.focus()
+			},
+		})
 
 		app.mount(container)
 	})
