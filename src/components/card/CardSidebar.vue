@@ -236,7 +236,7 @@ function handleSubmitTitle() {
  *
  */
 function closeSidebar() {
-	if (cardStore.hasCardSaveError) {
+	if (settingsStore.hasCardSaveError) {
 		showWarning(t('deck', 'Cannot close unsaved card!'))
 		return
 	}
