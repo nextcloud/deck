@@ -56,6 +56,7 @@ class BoardImportService {
 	 */
 	private $data;
 	private Board $board;
+	private ImportOptions $options;
 
 	/** @var callable[] */
 	private array $errorCollectors = [];
@@ -80,6 +81,7 @@ class BoardImportService {
 		$this->disableCommentsEvents();
 
 		$this->config = new \stdClass();
+		$this->options = new ImportOptions();
 	}
 
 	public function registerErrorCollector(callable $errorCollector): void {
@@ -88,6 +90,15 @@ class BoardImportService {
 
 	public function registerOutputCollector(callable $outputCollector): void {
 		$this->outputCollectors[] = $outputCollector;
+	}
+
+	public function setOptions(ImportOptions $options): self {
+		$this->options = $options;
+		return $this;
+	}
+
+	public function getOptions(): ImportOptions {
+		return $this->options;
 	}
 
 	private function addError(string $message, $exception): void {
@@ -123,14 +134,29 @@ class BoardImportService {
 				$this->reset();
 				$this->setData($board);
 				$this->importBoard();
-				$this->importAcl();
-				$this->importLabels();
+				if ($this->options->importSharing) {
+					$this->importAcl();
+				}
+				if ($this->options->importLabels) {
+					$this->importLabels();
+				}
 				$this->importStacks();
-				$this->importCards();
-				$this->getImportSystem()->importAttachments();
-				$this->assignCardsToLabels();
-				$this->importComments();
-				$this->importCardAssignments();
+				if ($this->options->importCards) {
+					$this->importCards();
+					if ($this->options->importAttachments) {
+						$this->getImportSystem()->importAttachments();
+					}
+					if ($this->options->importLabels) {
+						$this->assignCardsToLabels();
+					}
+					if ($this->options->importComments) {
+						$this->importComments();
+					}
+					if ($this->options->importAssignments) {
+						$this->importCardAssignments();
+					}
+					$this->importCardDependencies();
+				}
 			} catch (\Throwable $th) {
 				$this->logger->error('Failed to import board', ['exception' => $th]);
 				throw new BadRequestException($th->getMessage());
@@ -293,6 +319,22 @@ class BoardImportService {
 				$this->getImportSystem()->updateCard($code, $card);
 			} catch (\Exception $e) {
 				$this->addError('Failed to import card ' . $card->getTitle(), $e);
+			}
+		}
+	}
+
+	/**
+	 * Recreate the dependencies between cards. Runs after every card of the
+	 * board exists, because a card can depend on one in a later list.
+	 */
+	public function importCardDependencies(): void {
+		foreach ($this->getImportSystem()->getCardDependencies() as $cardId => $dependentCardIds) {
+			foreach ($dependentCardIds as $dependentCardId) {
+				try {
+					$this->cardMapper->addDependency($cardId, $dependentCardId);
+				} catch (\Exception $e) {
+					$this->addError('Failed to import card dependency ' . $cardId . ' -> ' . $dependentCardId, $e);
+				}
 			}
 		}
 	}
