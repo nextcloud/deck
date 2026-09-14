@@ -21,7 +21,9 @@
 		</div>
 		<div class="line">
 			{{ t('deck', 'Owner') + ': ' }}
-			<NcUserBubble :user="boardOwnerUserId"
+			<span v-if="isTeamOwnedBoard">{{ boardOwnerDisplayName }}</span>
+			<NcUserBubble v-else
+				:user="boardOwnerUserId"
 				:display-name="boardOwnerDisplayName" />
 		</div>
 	</div>
@@ -94,6 +96,9 @@ export default {
 		},
 		boardOwnerDisplayName() {
 			return this.board.owner?.displayname ?? this.boardOwnerUserId
+		},
+		isTeamOwnedBoard() {
+			return this.board?.owner?.type === 7 || !!this.board?.teamId
 		},
 	},
 

@@ -16,7 +16,9 @@
 			{{ board.title }}
 		</div>
 		<div class="board-list-avatars-cell" title="">
-			<NcAvatar :user="board.owner.uid"
+			<div v-if="isTeamOwnedBoard" class="avatardiv icon icon-circles board-list-avatar" />
+			<NcAvatar v-else
+				:user="board.owner.uid"
 				:display-name="board.owner.displayname"
 				class="board-list-avatar"
 				:hide-status="true" />
@@ -52,6 +54,9 @@ export default {
 				name: 'board',
 				params: { id: this.board.id },
 			}
+		},
+		isTeamOwnedBoard() {
+			return this.board?.owner?.type === 7 || !!this.board?.teamId
 		},
 		limitedAcl() {
 			return [...this.board.acl].splice(0, 5)
