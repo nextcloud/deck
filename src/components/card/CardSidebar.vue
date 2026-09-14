@@ -197,8 +197,8 @@ const displayTitle = computed(() => {
 })
 
 watch(() => currentCard.value?.title, (newTitle) => {
-	titleEditing.value = newTitle
-})
+	titleEditing.value = newTitle ?? ''
+}, { immediate: true })
 
 watch(() => currentCard.value, (newCard, oldCard) => {
 	if (newCard?.id === oldCard?.id) return
