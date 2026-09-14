@@ -16,13 +16,16 @@
 			</NcActions>
 		</header>
 		<template v-if="loading || filteredResults.length > 0">
-			<div v-v-infinite-scroll="[infiniteHandler, { canLoadMore: () => filteredResults.length > 0 }]"
-				class="search-wrapper">
+			<div class="search-wrapper">
 				<CardItem v-for="card in filteredResults"
 					:id="card.id"
 					:key="card.id"
 					:standalone="true" />
 				<Placeholder v-if="loading" />
+				<!-- Sentinel at the end of the list: the scroll container is the
+					horizontal .search-wrapper, so we let the directive observe the
+					visibility of this element instead of its own scroll position. -->
+				<div v-v-infinite-scroll="[infiniteHandler, { canLoadMore }]" class="search-wrapper__sentinel" />
 			</div>
 		</template>
 		<template v-else>
@@ -79,6 +82,7 @@ export default {
 			cancel: null,
 			loading: false,
 			cursor: null,
+			hasMore: true,
 		}
 	},
 	computed: {
@@ -101,6 +105,7 @@ export default {
 	watch: {
 		async searchQuery() {
 			this.cursor = null
+			this.hasMore = true
 			this.loading = true
 			try {
 				await this.search()
@@ -118,20 +123,19 @@ export default {
 		clearSearchQuery() {
 			this.setSearchQuery('')
 		},
-		async infiniteHandler($state) {
+		canLoadMore() {
+			return this.hasMore
+		},
+		async infiniteHandler() {
 			this.loading = true
 			try {
 				const data = await this.search()
-				if (data.length) {
-					$state.loaded()
-				} else {
-					$state.complete()
-				}
+				this.hasMore = data.length > 0
 				this.loading = false
 			} catch (e) {
 				if (!axios.isCancel(e)) {
 					console.error('Search request failed', e)
-					$state.complete()
+					this.hasMore = false
 					this.loading = false
 				}
 			}
@@ -219,6 +223,11 @@ export default {
 		& > .drop-upload--card {
 			flex: 0 1 $card-max-width;
 			min-width: $card-min-width;
+		}
+
+		.search-wrapper__sentinel {
+			flex: 0 0 1px;
+			align-self: stretch;
 		}
 	}
 }
