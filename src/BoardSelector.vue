@@ -54,7 +54,7 @@ export default {
 	beforeMount() {
 		this.fetchBoards()
 		const hash = window.location.hash.match(/\/boards\/([0-9]+)/)
-		this.currentBoard = hash.length > 0 ? hash[1] : null
+		this.currentBoard = hash ? hash[1] : null
 	},
 	methods: {
 		fetchBoards() {
