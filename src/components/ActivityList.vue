@@ -6,11 +6,13 @@
 <template>
 	<div class="activity-list">
 		<div v-if="isLoading" class="icon icon-loading" />
-		<div v-v-infinite-scroll="[loadMore, { canLoadMore: canLoadMore }]">
-			<ActivityEntry v-for="activity in activities"
-				:key="activity.activity_id"
-				:activity="activity" />
-		</div>
+		<ActivityEntry v-for="activity in activities"
+			:key="activity.activity_id"
+			:activity="activity" />
+		<!-- Sentinel at the end of the list: the surrounding sidebar tab is the
+			scroll container, so the directive has to observe this element's
+			visibility rather than its own scroll position. -->
+		<div v-v-infinite-scroll="[loadMore, { canLoadMore }]" class="activity-list__sentinel" />
 	</div>
 </template>
 
@@ -103,11 +105,6 @@ export default {
 		canLoadMore() {
 			return !this.endReached
 		},
-		changeObject() {
-			this.since = 0
-			this.activities = []
-			this.endReached = false
-		},
 	},
 }
 </script>
@@ -115,5 +112,9 @@ export default {
 <style scoped>
 	.activity-list {
 		margin-bottom: 100px;
+	}
+
+	.activity-list__sentinel {
+		height: 1px;
 	}
 </style>
