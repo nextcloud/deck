@@ -83,7 +83,12 @@ export default defineComponent({
 				return this.card?.startdate ? new Date(this.card.startdate) : null
 			},
 			set(val) {
-				this.$emit('input', val ? new Date(val) : null)
+				// Prevent setting a date with a year greater than 9999, as this can cause issues with some date libraries and databases.
+				const date = val ? new Date(val) : null
+				if (date && date.getFullYear() > 9999) {
+					return
+				}
+				this.$emit('input', date)
 			},
 		},
 	},
