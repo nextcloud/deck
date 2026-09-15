@@ -9,7 +9,6 @@ namespace OCA\Deck\Db;
 
 use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\QBMapper;
 use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Federation\ICloudIdManager;
@@ -18,8 +17,8 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
-/** @template-extends QBMapper<Board> */
-class BoardMapper extends QBMapper implements IPermissionMapper {
+/** @template-extends DeckMapper<Board> */
+class BoardMapper extends DeckMapper implements IPermissionMapper {
 	/** @var CappedMemoryCache<Board[]> */
 	private CappedMemoryCache $userBoardCache;
 	/** @var CappedMemoryCache<Board> */
@@ -92,16 +91,20 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		}, $result->fetchAll(\PDO::FETCH_COLUMN));
 		$result->closeCursor();
 
+		// Shared to the user
 		$qb = $this->db->getQueryBuilder();
 		$qb->selectDistinct('b.id')
 			->from($this->getTableName(), 'b')
-			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'));
-
-		// Shared to the user
-		$qb->where($qb->expr()->andX(
-			$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)),
-			$qb->expr()->eq('acl.participant', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
-		));
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+			->where($qb->expr()->andX(
+				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
+			));
+		$result = $qb->executeQuery();
+		$sharedBoards = array_map(function (string $id) {
+			return (int)$id;
+		}, $result->fetchAll(\PDO::FETCH_COLUMN));
+		$result->closeCursor();
 
 		// Shared to user groups of the user
 		$user = $this->userManager->get($userId);
@@ -110,26 +113,45 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$groupIds = $this->groupManager->getUserGroupIds($user);
 		}
 		if ($groupIds !== null && count($groupIds) !== 0) {
-			$qb->orWhere($qb->expr()->andX(
-				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
-				$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)),
-			));
+			$sharedBoards = array_merge($sharedBoards, iterator_to_array($this->chunkQuery($groupIds, function (array $groupIdsChunk): array {
+				$qb = $this->db->getQueryBuilder();
+				$qb->selectDistinct('b.id')
+					->from($this->getTableName(), 'b')
+					->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+					->where($qb->expr()->andX(
+						$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
+						$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIdsChunk, IQueryBuilder::PARAM_STR_ARRAY)),
+					));
+				$result = $qb->executeQuery();
+				$boardIds = array_map(function (string $id) {
+					return (int)$id;
+				}, $result->fetchAll(\PDO::FETCH_COLUMN));
+				$result->closeCursor();
+				return $boardIds;
+			}), false));
 		}
 
 		// Shared to circles of the user
 		$circles = $this->circlesService->getUserCircles($userId);
 		if (count($circles) !== 0) {
-			$qb->orWhere($qb->expr()->andX(
-				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)),
-				$qb->expr()->in('acl.participant', $qb->createNamedParameter($circles, IQueryBuilder::PARAM_STR_ARRAY)),
-			));
+			$sharedBoards = array_merge($sharedBoards, iterator_to_array($this->chunkQuery($circles, function (array $circlesChunk): array {
+				$qb = $this->db->getQueryBuilder();
+				$qb->selectDistinct('b.id')
+					->from($this->getTableName(), 'b')
+					->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+					->where($qb->expr()->andX(
+						$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)),
+						$qb->expr()->in('acl.participant', $qb->createNamedParameter($circlesChunk, IQueryBuilder::PARAM_STR_ARRAY)),
+					));
+				$result = $qb->executeQuery();
+				$boardIds = array_map(function (string $id) {
+					return (int)$id;
+				}, $result->fetchAll(\PDO::FETCH_COLUMN));
+				$result->closeCursor();
+				return $boardIds;
+			}), false));
 		}
 
-		$result = $qb->executeQuery();
-		$sharedBoards = array_map(function (string $id) {
-			return (int)$id;
-		}, $result->fetchAll(\PDO::FETCH_COLUMN));
-		$result->closeCursor();
 		return array_unique(array_merge($ownerBoards, $sharedBoards));
 	}
 	/**
