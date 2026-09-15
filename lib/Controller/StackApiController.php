@@ -7,6 +7,8 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
@@ -31,6 +33,7 @@ class StackApiController extends ApiController {
 		$appName,
 		IRequest $request,
 		private StackService $stackService,
+		private ChangeHelper $changeHelper,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -52,7 +55,15 @@ class StackApiController extends ApiController {
 			$since = $date->getTimestamp();
 		}
 		$stacks = $this->stackService->findAll($this->request->getParam('boardId'), $since);
-		return new DataResponse($stacks, HTTP::STATUS_OK);
+		$response = new DataResponse($stacks, HTTP::STATUS_OK);
+		$response->setETag(md5(json_encode(array_map(function (Stack $stack) {
+			$etag = $this->changeHelper->getEtag(ChangeHelper::TYPE_STACK, $stack->getId());
+			if ($etag === '') {
+				$etag = $stack->getETag();
+			}
+			return $stack->getId() . '-' . $etag;
+		}, $stacks))));
+		return $response;
 	}
 
 	/**
@@ -62,9 +73,14 @@ class StackApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function get(): DataResponse {
-		$stack = $this->stackService->find($this->request->getParam('stackId'));
+		$stackId = (int)$this->request->getParam('stackId');
+		$stack = $this->stackService->find($stackId);
 		$response = new DataResponse($stack, HTTP::STATUS_OK);
-		$response->setETag($stack->getETag());
+		$etag = $this->changeHelper->getEtag(ChangeHelper::TYPE_STACK, $stackId);
+		if ($etag === '') {
+			$etag = $stack->getETag();
+		}
+		$response->setETag($etag);
 		return $response;
 	}
 
@@ -86,7 +102,10 @@ class StackApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function update(string $title, int $order) {
-		$stack = $this->stackService->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order, 0);
+		$stackId = (int)$this->request->getParam('stackId');
+		$stack = $this->stackService->find($stackId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_STACK, $stackId, $stack->getETag());
+		$stack = $this->stackService->update($stackId, $title, $this->request->getParam('boardId'), $order, 0);
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
@@ -97,7 +116,10 @@ class StackApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function delete(): DataResponse {
-		$stack = $this->stackService->delete($this->request->getParam('stackId'));
+		$stackId = (int)$this->request->getParam('stackId');
+		$stack = $this->stackService->find($stackId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_STACK, $stackId, $stack->getETag());
+		$stack = $this->stackService->delete($stackId);
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 

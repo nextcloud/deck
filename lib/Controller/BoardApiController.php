@@ -8,6 +8,7 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Board;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
@@ -32,6 +33,7 @@ class BoardApiController extends ApiController {
 		$appName,
 		IRequest $request,
 		private BoardService $boardService,
+		private ChangeHelper $changeHelper,
 		private $userId,
 	) {
 		parent::__construct($appName, $request);
@@ -57,7 +59,11 @@ class BoardApiController extends ApiController {
 		}
 		$response = new DataResponse($boards, HTTP::STATUS_OK);
 		$response->setETag(md5(json_encode(array_map(function (Board $board) {
-			return $board->getId() . '-' . $board->getETag();
+			$etag = $this->changeHelper->getEtag(ChangeHelper::TYPE_BOARD, $board->getId());
+			if ($etag === '') {
+				$etag = $board->getETag();
+			}
+			return $board->getId() . '-' . $etag;
 		}, $boards))));
 		return $response;
 	}
@@ -69,9 +75,14 @@ class BoardApiController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function get(): DataResponse {
-		$board = $this->boardService->find($this->request->getParam('boardId'));
+		$boardId = (int)$this->request->getParam('boardId');
+		$board = $this->boardService->find($boardId);
 		$response = new DataResponse($board, HTTP::STATUS_OK);
-		$response->setETag($board->getEtag());
+		$etag = $this->changeHelper->getEtag(ChangeHelper::TYPE_BOARD, $boardId);
+		if ($etag === '') {
+			$etag = $board->getEtag();
+		}
+		$response->setETag($etag);
 		return $response;
 	}
 
@@ -93,7 +104,10 @@ class BoardApiController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function update(string $title, string $color, bool $archived = false): DataResponse {
-		$board = $this->boardService->update($this->request->getParam('boardId'), $title, $color, $archived);
+		$boardId = (int)$this->request->getParam('boardId');
+		$board = $this->boardService->find($boardId, false);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_BOARD, $boardId, $board->getETag());
+		$board = $this->boardService->update($boardId, $title, $color, $archived);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -104,7 +118,10 @@ class BoardApiController extends ApiController {
 	#[NoCSRFRequired]
 	#[CORS]
 	public function delete(): DataResponse {
-		$board = $this->boardService->delete($this->request->getParam('boardId'));
+		$boardId = (int)$this->request->getParam('boardId');
+		$board = $this->boardService->find($boardId, false);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_BOARD, $boardId, $board->getETag());
+		$board = $this->boardService->delete($boardId);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
