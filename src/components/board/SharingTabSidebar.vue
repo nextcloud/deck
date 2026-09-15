@@ -12,9 +12,11 @@
 		<ul id="shareWithList"
 			class="shareWithList">
 			<li>
-				<NcAvatar :user="board.owner.uid" />
+				<div v-if="isTeamOwnedBoard" class="avatardiv icon icon-circles" />
+				<NcAvatar v-else :user="board.owner.uid" />
 				<span class="username">
 					{{ board.owner.displayname }}
+					<span v-if="isTeamOwnedBoard">{{ t('deck', '(Team)') }}</span>
 					<span class="board-owner-label">
 						{{ t('deck', 'Board owner') }}
 					</span>
@@ -134,6 +136,9 @@ export default {
 		]),
 		isCurrentUser() {
 			return (uid) => uid === getCurrentUser().uid
+		},
+		isTeamOwnedBoard() {
+			return this.board?.owner?.type === 7 || !!this.board?.teamId
 		},
 		formatedSharees() {
 			const result = this.unallocatedSharees.map(item => {
