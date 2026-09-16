@@ -279,11 +279,10 @@ section.app-sidebar__tab--active {
 	box-sizing: unset;
 	$modal-padding: 14px;
 	border: 0;
-	min-width: calc(100% - #{$modal-padding * 2});
+	width: 100%;
 	position: relative;
 	top: 0;
 	inset-inline: 0;
-	max-width: calc(100% - #{$modal-padding * 2});
 	min-height: calc(100vh - var(--header-height) * 4);
 	padding: 0 14px;
 	height: 97%;
