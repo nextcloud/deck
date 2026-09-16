@@ -92,7 +92,7 @@ const GANTT_VIEW_MODES = [
 		name: 'Day',
 		padding: '14d',
 		step: '12h',
-		snap_at: '12h',
+		snap_at: '1h',
 		column_width: 38,
 		date_format: 'YYYY-MM-DD',
 		lower_text(date, last, lang) {
@@ -375,6 +375,8 @@ export default {
 
 			this._patchBarDuration()
 			this.fitColumnsToWidth()
+			this.ganttInstance.change_view_mode(this.ganttInstance.config.view_mode.name, true)
+			this.ganttInstance.scroll_current()
 		},
 		async updateTaskDate(task, start, end) {
 			await this.updateCardDatesInStore({

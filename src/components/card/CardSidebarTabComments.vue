@@ -23,13 +23,6 @@
 				:key="comment.id"
 				:comment="comment"
 				@do-reload="loadComments" />
-			<!-- <InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
-				<template #spinner>
-					<div class="icon-loading" />
-				</template>
-				<template #no-more />
-				<template #no-results />
-			</InfiniteLoading> -->
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
