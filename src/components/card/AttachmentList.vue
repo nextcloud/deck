@@ -46,9 +46,9 @@
 							<span class="extension">.{{ attachmentExtension(attachment) }}</span>
 						</div>
 						<div v-if="attachment.deletedAt === 0">
-							<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
+							<span class="filesize">{{ formattedFileSize(attachment.extendedData?.filesize) }}</span>
 							<span class="filedate">{{ relativeDate(attachment.createdAt*1000) }}</span>
-							<span class="filedate">{{ attachment.extendedData.attachmentCreator.displayName }}</span>
+							<span class="filedate">{{ attachment.extendedData?.attachmentCreator?.displayName }}</span>
 						</div>
 						<div v-else>
 							<span class="attachment--info">{{ t('deck', 'Pending share') }}</span>
@@ -156,7 +156,7 @@ export default {
 				if (!attachment) {
 					return {}
 				}
-				const url = attachment.extendedData.hasPreview ? this.attachmentPreview(attachment) : OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
+				const url = attachment?.extendedData?.hasPreview ? this.attachmentPreview(attachment) : OC.MimeType.getIconUrl(attachment?.extendedData?.mimetype)
 				const styles = {
 					'background-image': `url("${url}")`,
 				}
@@ -164,16 +164,16 @@ export default {
 			}
 		},
 		attachmentPreview() {
-			return (attachment) => (attachment.extendedData.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=64&y=64`) : null)
+			return (attachment) => (attachment?.extendedData?.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=64&y=64`) : null)
 		},
 		attachmentUrl() {
-			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+			return (attachment) => (attachment?.cardId && attachment?.id ? generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`) : '#')
 		},
 		internalLink() {
-			return (attachment) => generateUrl('/f/' + attachment.extendedData.fileid)
+			return (attachment) => (attachment?.extendedData?.fileid ? generateUrl('/f/' + attachment.extendedData.fileid) : '#')
 		},
 		downloadLink() {
-			return (attachment) => generateRemoteUrl(`dav/files/${getCurrentUser().uid}/${attachment.extendedData.path}`)
+			return (attachment) => (attachment?.extendedData?.path ? generateRemoteUrl(`dav/files/${getCurrentUser().uid}/${attachment.extendedData.path}`) : '#')
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
@@ -194,11 +194,11 @@ export default {
 		},
 		attachmentBasename() {
 			return (attachment) => attachment?.extendedData?.info?.filename
-				?? (attachment?.name ?? attachment.data).replace(/\.[^/.]+$/, '')
+				?? (attachment?.name ?? attachment?.data ?? '').replace(/\.[^/.]+$/, '')
 		},
 		attachmentExtension() {
 			return (attachment) => attachment?.extendedData?.info?.extension
-				?? (attachment?.name ?? attachment.data).split('.').pop()
+				?? (attachment?.name ?? attachment?.data ?? '').split('.').pop()
 		},
 		cardDetailsInModal() {
 			return this.$store.getters.config('cardDetailsInModal')
