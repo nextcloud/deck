@@ -65,6 +65,7 @@ import { debounce } from 'lodash'
 import DependentCardsSelector from './DependentCardsSelector.vue'
 import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'CardSidebarTabDetails',
@@ -96,10 +97,10 @@ export default {
 		...mapState(useBoardStore, ['currentBoard', 'canEdit', 'assignables']),
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 		labelsSorted() {

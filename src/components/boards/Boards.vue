@@ -30,6 +30,7 @@
 import BoardItem from './BoardItem.vue'
 import Controls from '../Controls.vue'
 import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'Boards',
@@ -48,7 +49,7 @@ export default {
 			return [...this.filteredBoards].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 		filteredBoards() {
-			const query = this.$store.getters.getSearchQuery
+			const query = useSettingsStore().searchQuery
 			return useBoardStore().filteredBoards.filter((board) => {
 				return board.deletedAt <= 0 && board.title.toLowerCase().includes(query.toLowerCase())
 			})
