@@ -9,18 +9,30 @@
 [note: Classes used on board import. Methods just to illustrate. {bg:cornsilk}]
 
 [ApiController]<-[BoardImportApiController|+import();+getAllowedSystems();+getConfigSchema()]
-[BoardImportApiController]uses-.->[BoardImportService|+import();+bootstrap();+validateSystem();#validateConfig();#validateData();]
+[BoardImportApiController]uses-.->[BoardImportService|+import();+bootstrap();+validateSystem();+setOptions(options);+getOptions();#validateConfig();#validateData();]
+
+[ApiController]<-[BoardController|+import();+export()]
+[BoardController]uses-.->[BoardImportService]
+[BoardController]-[note: The web UI import. Builds ImportOptions from the request so a user can restore only parts of a file. {bg:cornsilk}]
+
+[BoardImportService]uses-.->[ImportOptions|+importCards:bool;+importArchivedCards:bool;+importDoneState:bool;+importDueDates:bool;+importLabels:bool;+importAssignments:bool;+importComments:bool;+importAttachments:bool;+importSharing:bool|+fromArray(values)]
 
 [Command]<-[BoardImport|+boardImportCommandService|#configure();#execute(input,output)]
 [BoardImport]uses-.->[BoardImportCommandService|+bootstrap();+import();+validateSystem();#validateConfig();#validateData()]
 [BoardImportCommandService]->[BoardImportService]
+[BoardImportCommandService]-[note: Overrides import(), so changes to the import steps have to be made in both places. {bg:cornsilk}]
+
+[BoardImportService]uses-.->[DeckJsonService|+name:string]
+[DeckJsonService]uses-.->[BoardImportService]
+[DeckJsonService]implements-.-^[<<abstract>> ABoardImportService|#needValidateData:false|+needValidateData():bool;+getCardDependencies():array]
 
 [BoardImportService]uses-.->[TrelloApiService|+name:string]
 [TrelloApiService]uses-.->[BoardImportService]
-[TrelloApiService]implements-.-^[<<abstract>> ABoardImportService|#needValidateData:false|+needValidateData():bool]
+[TrelloApiService]implements-.-^[<<abstract>> ABoardImportService]
 
 [BoardImportService]uses-.->[TrelloJsonService|+name:string;#needValidateData:true]
 [TrelloJsonService]uses-.->[BoardImportService]
 [BoardImportService]-[note: validateSystem is public because is used on Api. {bg:cornsilk}]
 [TrelloJsonService]-[note: To create an import to another system, create another class similar to this. {bg:cornsilk}]
 [TrelloJsonService]implements-.-^[<<abstract>> ABoardImportService]
+[ABoardImportService]-[note: getCardDependencies has a default returning an empty list, so sources without that concept need not implement it. {bg:cornsilk}]

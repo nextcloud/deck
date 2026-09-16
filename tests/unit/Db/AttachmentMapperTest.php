@@ -100,6 +100,53 @@ class AttachmentMapperTest extends TestCase {
 		$this->assertEquals([], $this->attachmentMapper->findAll(5));
 	}
 
+	/**
+	 * @return string[] the `data` values of the attachments, sorted so that the
+	 *                  assertion does not depend on the order the DB returns
+	 */
+	private function attachmentData(array $attachments): array {
+		$data = array_map(static fn (Attachment $attachment) => $attachment->getData(), $attachments);
+		sort($data);
+		return $data;
+	}
+
+	public function testFindAllForCards() {
+		$attachmentsByCard = $this->attachmentMapper->findAllForCards([1, 2, 3]);
+
+		$keys = array_keys($attachmentsByCard);
+		sort($keys);
+		$this->assertEquals([1, 2, 3], $keys);
+		$this->assertEquals(['file1.pdf', 'file2.pdf'], $this->attachmentData($attachmentsByCard[1]));
+		$this->assertEquals(['file3.pdf'], $this->attachmentData($attachmentsByCard[2]));
+		$this->assertEquals(['file4.pdf'], $this->attachmentData($attachmentsByCard[3]));
+		$this->assertContainsOnlyInstancesOf(Attachment::class, $attachmentsByCard[1]);
+	}
+
+	public function testFindAllForCardsOnlyReturnsRequestedCards() {
+		$attachmentsByCard = $this->attachmentMapper->findAllForCards([2]);
+
+		$this->assertEquals([2], array_keys($attachmentsByCard));
+	}
+
+	public function testFindAllForCardsWithoutCards() {
+		$this->assertEquals([], $this->attachmentMapper->findAllForCards([]));
+	}
+
+	public function testFindAllForCardsSkipsCardsWithoutAttachments() {
+		$this->assertEquals([], $this->attachmentMapper->findAllForCards([5, 6]));
+	}
+
+	public function testFindAllForCardsSkipsDeletedAttachments() {
+		$deleted = $this->attachments[0];
+		$deleted->setDeletedAt(time());
+		$this->attachmentMapper->update($deleted);
+
+		$attachmentsByCard = $this->attachmentMapper->findAllForCards([1, 2]);
+
+		$this->assertEquals(['file2.pdf'], $this->attachmentData($attachmentsByCard[1]));
+		$this->assertEquals(['file3.pdf'], $this->attachmentData($attachmentsByCard[2]));
+	}
+
 	public function testFindToDelete() {
 		$attachmentsToDelete = $this->attachments;
 		$attachmentsToDelete[0]->setDeletedAt(1);
