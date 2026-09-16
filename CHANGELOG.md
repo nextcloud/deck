@@ -5,6 +5,50 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.19.0
+
+### Added
+* feat(board): show card count next to the list title by @SadeqRouhani in https://github.com/nextcloud/deck/pull/8038
+* 🧾Add share metadata by @AndyScherzinger in https://github.com/nextcloud/deck/pull/8069
+* feat(deck): add board filter input to the board header by @pringelmann in https://github.com/nextcloud/deck/pull/8215
+* feat(OCM): Implement ISignedCloudFederationProvider for deck by @mickenordin in https://github.com/nextcloud/deck/pull/8261
+* feat(board): show owner label next to owner name by @xhon-pelushi in https://github.com/nextcloud/deck/pull/8265
+* feature: Allow a team (circle) to own a board   by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8320
+* import on file by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8393
+
+### Fixed
+* fix: show avatars in selector by @grnd-alt in https://github.com/nextcloud/deck/pull/7921
+* fix: use automatic text direction for comment input by @grnd-alt in https://github.com/nextcloud/deck/pull/8044
+* fix(ui): remove moment usage from due date badge by @grnd-alt in https://github.com/nextcloud/deck/pull/8096
+* fix: improve card open performance on boards with many cards by @nemphys in https://github.com/nextcloud/deck/pull/8112
+* fix: do not clear card color when update omits the field by @Lightshadow02 in https://github.com/nextcloud/deck/pull/8151
+* fix: calendar delegation by @GVodyanov in https://github.com/nextcloud/deck/pull/8213
+* fix: broken upload of attachment via api by @Somebodyisnobody in https://github.com/nextcloud/deck/pull/8156
+* fix: expose the documented endpoint for cloning a board by @solracsf in https://github.com/nextcloud/deck/pull/8220
+* fix: avoid a TypeError when uploading an attachment via the API by @solracsf in https://github.com/nextcloud/deck/pull/8219
+* Deck cards attachment fix: Prevent TypeError crash on undefined attachment info by @aquananu in https://github.com/nextcloud/deck/pull/8224
+* Update Cardsidebar.vue fix: Prevent TypeError crash on undefined curr… by @aquananu in https://github.com/nextcloud/deck/pull/8225
+* fix: replace changeColumn with modifyColumn by @grnd-alt in https://github.com/nextcloud/deck/pull/8262
+* fix(navigation): drop active board icon fill override by @xhon-pelushi in https://github.com/nextcloud/deck/pull/8264
+* fix(migration): support the public OCP\DB\Schema API by @AndyScherzinger in https://github.com/nextcloud/deck/pull/8277
+* fix(db): chunk queries for shared boards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8386
+* enh(performance): get deck share permissions in one query by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8390
+
+### Other
+* Migrate `comment.js` Vuex store to Pinia by @theoholl in https://github.com/nextcloud/deck/pull/7827
+* chore(php): bump php to 8.3 by @grnd-alt in https://github.com/nextcloud/deck/pull/8067
+* perf: Avoid fetching full group information by @CarlSchwan in https://github.com/nextcloud/deck/pull/8143
+* refactor(pinia): move attachmentStore to pinia by @grnd-alt in https://github.com/nextcloud/deck/pull/8142
+* refactor(pinia): move stackStore to pinia by @grnd-alt in https://github.com/nextcloud/deck/pull/8163
+* Refactor/pinia migration card store by @grnd-alt in https://github.com/nextcloud/deck/pull/8218
+* refactor(pinia): move board logic to boardStore by @grnd-alt in https://github.com/nextcloud/deck/pull/8234
+* refactor(pinia): migrate dashboard store by @grnd-alt in https://github.com/nextcloud/deck/pull/8128
+* refactor(pinia): refactor trashbin store to pinia by @grnd-alt in https://github.com/nextcloud/deck/pull/8130
+* refactor(pinia): move overview store to pinia by @grnd-alt in https://github.com/nextcloud/deck/pull/8141
+* chore: Port away from QueryException by @CarlSchwan in https://github.com/nextcloud/deck/pull/8236
+
+**Full Changelog**: https://github.com/nextcloud/deck/compare/v1.18.4...v1.19.0
+
 ## 1.16.0-beta.1
 
 ### Added
