@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.5
+### Fixed
+* [stable34] fix(db): chunk queries for shared boards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8387
+
 ## 1.18.4
 ### What's Changed
 * [stable34] fix(trash): allow to configure the trash retention in hours by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8241
