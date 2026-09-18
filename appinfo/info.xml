@@ -63,6 +63,7 @@
         <command>OCA\Deck\Command\BoardImport</command>
         <command>OCA\Deck\Command\TransferOwnership</command>
         <command>OCA\Deck\Command\CalendarToggle</command>
+        <command>OCA\Deck\Command\FixCardDate</command>
     </commands>
     <activity>
         <settings>
