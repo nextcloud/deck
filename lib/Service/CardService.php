@@ -201,8 +201,8 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDescription($description);
-		$card->setDuedate($duedate);
-		$card->setStartdate($startdate);
+		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
+		$card->setStartdate($startdate ? new \DateTime($startdate) : null);
 		$card->setColor($color);
 		$card = $this->cardMapper->insert($card);
 
