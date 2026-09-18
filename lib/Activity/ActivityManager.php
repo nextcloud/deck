@@ -269,6 +269,9 @@ class ActivityManager {
 					'after' => $entity->$getter()
 				];
 				if ($changes['before'] !== $changes['after']) {
+					if ($field === 'duedate' && $changes['before']->format('c') === $changes['after']->format('c')) {
+						continue;
+					}
 					try {
 						$event = $this->createEvent($objectType, $entity, $subjectComplete, $changes);
 						if ($event !== null) {
