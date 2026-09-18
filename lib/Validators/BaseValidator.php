@@ -152,22 +152,30 @@ abstract class BaseValidator {
 	/**
 	 * @throws Exception
 	 */
-	private function datetime($value): bool {
-		if (!is_string($value)) {
+	private function datetime(mixed $value): bool {
+		if (!is_string($value) || $value === '') {
 			return false;
 		}
 
-		try {
-			$datetime = new \DateTime($value);
-		} catch (\Exception $e) {
-			return false;
+		$allowedFormats = [
+			'Y-m-d',
+			'Y-m-d H:i:s',
+			'Y-m-d\TH:i:sP',
+			'Y-m-d\TH:i:s.v\Z',
+		];
+
+		foreach ($allowedFormats as $format) {
+			$datetime = \DateTime::createFromFormat($format, $value);
+			if ($datetime && $datetime->format($format) === $value) {
+				// Check if the year is within the valid range
+				if ((int)$datetime->format('Y') > 9999) {
+					return false;
+				}
+				return true;
+			}
 		}
 
-		if ($datetime->format('Y') > 9999) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	/**
