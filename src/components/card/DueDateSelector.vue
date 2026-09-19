@@ -162,6 +162,9 @@ export default defineComponent({
 				return this.card?.duedate ? new Date(this.card.duedate) : null
 			},
 			set(val) {
+				if (!this.isValidDate(val)) {
+					return
+				}
 				this.$emit('input', val ? new Date(val) : null)
 			},
 		},

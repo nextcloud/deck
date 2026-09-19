@@ -11,6 +11,7 @@ namespace OCA\Deck\Validators;
 
 use Exception;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Model\OptionalNullableValue;
 
 abstract class BaseValidator {
 
@@ -31,9 +32,22 @@ abstract class BaseValidator {
 
 		foreach ($data as $field => $value) {
 			$field_rule = $rules[$field];
+			$isOptional = is_array($field_rule) && in_array('optional', $field_rule, true);
+
+			if ($isOptional) {
+				if ($value instanceof OptionalNullableValue) {
+					$value = $value->getValue();
+				}
+				if ($value === null) {
+					continue;
+				}
+			}
 
 			if (is_array($field_rule)) {
 				foreach ($field_rule as $rule) {
+					if ($rule === 'optional') {
+						continue;
+					}
 					// The format for specifying validation rules and parameters follows an
 					// easy {rule}:{parameters} formatting convention. For instance the
 					// rule "Max:3" states that the value may only be three letters.
@@ -41,12 +55,12 @@ abstract class BaseValidator {
 						[$rule, $parameter] = explode(':', $rule, 2);
 						if (!$this->{$rule}($value, $parameter)) {
 							throw new BadRequestException(
-								$this->getErrorMessage($rule, $field, $parameter));
+								$this->getErrorMessage($rule, $field, $parameter, $isOptional));
 						}
 					} else {
 						if (!$this->{$rule}($value)) {
 							throw new BadRequestException(
-								$field . ' must be provided and must be ' . str_replace('_', ' ', $rule));
+								$this->getErrorMessage($rule, $field, null, $isOptional));
 						}
 					}
 				}
@@ -136,6 +150,35 @@ abstract class BaseValidator {
 	}
 
 	/**
+	 * @throws Exception
+	 */
+	private function datetime(mixed $value): bool {
+		if (!is_string($value) || $value === '') {
+			return false;
+		}
+
+		$allowedFormats = [
+			'Y-m-d',
+			'Y-m-d H:i:s',
+			'Y-m-d\TH:i:sP',
+			'Y-m-d\TH:i:s.v\Z',
+		];
+
+		foreach ($allowedFormats as $format) {
+			$datetime = \DateTime::createFromFormat($format, $value);
+			if ($datetime && $datetime->format($format) === $value) {
+				// Check if the year is within the valid range
+				if ((int)$datetime->format('Y') > 9999) {
+					return false;
+				}
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the size of an attribute.
 	 *
 	 * @param mixed $value
@@ -159,11 +202,15 @@ abstract class BaseValidator {
 	 * @param $parameter
 	 * @return string
 	 */
-	protected function getErrorMessage(string $rule, $field, $parameter = null): string {
+	protected function getErrorMessage(string $rule, $field, $parameter = null, $isOptional = false): string {
 		if (in_array($rule, ['max', 'min'], true)) {
 			return $rule === 'max'
 			? $field . ' cannot be longer than ' . $parameter . ' characters '
 			: $field . ' must be at least ' . $parameter . ' characters long ';
+		}
+
+		if ($isOptional) {
+			return $field . ' must be ' . str_replace('_', ' ', $rule);
 		}
 
 		return $field . ' must be provided and must be ' . str_replace('_', ' ', $rule);
