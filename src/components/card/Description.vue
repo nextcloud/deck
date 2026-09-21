@@ -183,8 +183,12 @@ export default {
 
 				this.descriptionOld = newCard.description
 				this.description = newCard.description
-				if (this.editor) {
-					this.editor.setContent(this.description)
+				if (this.editor && typeof this.editor.setContent === 'function') {
+					try {
+						this.editor.setContent(this.description)
+					} catch (e) {
+						console.debug('Failed to set editor content', e)
+					}
 				}
 				showWarning(t('deck', 'The description has been changed by another user.'), { timeout: 3000 })
 			}
@@ -205,29 +209,56 @@ export default {
 			this.descriptionLastEdit = 0
 			this.descriptionOld = this.card.description
 			this.description = this.card.description
-			this.editor = await window.OCA.Text.createEditor({
-				el: this.$refs.editor,
-				content: this.card.description,
-				readOnly: !this.canEdit,
-				onLoaded: () => {
-					this.descriptionLastEdit = 0
-				},
-				onUpdate: ({ markdown }) => {
-					if (this.description === markdown) {
-						return
+			if (!window.OCA?.Text?.createEditor || !this.$refs.editor) {
+				return
+			}
+			try {
+				const editor = await window.OCA.Text.createEditor({
+					el: this.$refs.editor,
+					content: this.card.description,
+					readOnly: !this.canEdit,
+					onLoaded: () => {
+						this.descriptionLastEdit = 0
+					},
+					onUpdate: ({ markdown }) => {
+						if (this.description === markdown) {
+							return
+						}
+						this.description = markdown
+						this.updateDescription()
+					},
+					onFileInsert: () => {
+						this.showAttachmentModal()
+					},
+				})
+				if (this._isBeingDestroyed || this._isDestroyed) {
+					if (editor && typeof editor.destroy === 'function') {
+						try {
+							await editor.destroy()
+						} catch (e) {
+							// Ignore teardown error on already destroyed component
+						}
 					}
-					this.description = markdown
-					this.updateDescription()
-				},
-				onFileInsert: () => {
-					this.showAttachmentModal()
-				},
-			})
-
+					return
+				}
+				this.editor = editor
+			} catch (e) {
+				console.warn('Failed to initialize text editor', e)
+			}
 		},
 		async destroyEditor() {
 			await this.saveDescription()
-			this?.editor?.destroy()
+			if (this.editor) {
+				const editor = this.editor
+				this.editor = null
+				try {
+					if (typeof editor.destroy === 'function' && !editor.isDestroyed) {
+						await editor.destroy()
+					}
+				} catch (e) {
+					console.debug('Caught editor teardown error', e)
+				}
+			}
 		},
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
@@ -268,7 +299,9 @@ export default {
 			const asImage = (attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')
 			// We need to strip those as text does not support rtl yet, so we cannot insert them separately
 			const stripRTLO = (text) => text.replaceAll('\u202e', '')
-			const fileName = stripRTLO(attachment.extendedData.info.filename) + '.' + stripRTLO(attachment.extendedData.info.extension)
+			const base = attachment?.extendedData?.info?.filename ?? attachment?.data ?? ''
+			const ext = attachment?.extendedData?.info?.extension
+			const fileName = stripRTLO(base) + (ext ? '.' + stripRTLO(ext) : '')
 			if (this.editor) {
 				this.editor.insertAtCursor(
 					asImage
