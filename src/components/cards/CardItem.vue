@@ -234,7 +234,10 @@ export default {
 		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		hasSelection() {
 			const selection = window.getSelection()
-			return selection.toString() !== ''
+			// Ignore stray selections left over elsewhere in the host document
+			// (e.g. when embedded as a non-editable widget inside a
+			// contenteditable area, such as the Text app)
+			return selection.toString() !== '' && this.$el.contains(selection.anchorNode)
 		},
 		focus(card) {
 			if (this.shortcutLock || this.hasSelection()) {
@@ -248,7 +251,7 @@ export default {
 				return
 			}
 			if (this.dragging || this.hasSelection()) {
-			  return
+				return
 			}
 			const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
 

@@ -79,7 +79,7 @@
 		<NcModal v-if="localModal"
 			:clear-view-delay="0"
 			:close-button-contained="true"
-			no-close
+			:close-on-click-outside="true"
 			size="large"
 			@close="localModal = null">
 			<div class="modal__content modal__card">

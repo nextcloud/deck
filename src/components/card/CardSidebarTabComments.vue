@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<div class="comments" v-v-infinite-scroll="[infiniteHandler, {distance: 10, canLoadMore: () => commentStore.hasMoreComments(card.id)}]">
+	<div v-v-infinite-scroll="[infiniteHandler, {distance: 10, canLoadMore: () => commentStore.hasMoreComments(card.id)}]" class="comments">
 		<div class="comment--header">
 			<NcAvatar :user="currentUser.uid" />
 			<span class="username">

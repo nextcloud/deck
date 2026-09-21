@@ -242,7 +242,9 @@ function closeSidebar() {
 		showWarning(t('deck', 'Cannot close unsaved card!'))
 		return
 	}
-	router.push({ name: 'board' })
+	if (router) {
+		router.push({ name: 'board' })
+	}
 	emit('close')
 }
 
@@ -279,8 +281,8 @@ section.app-sidebar__tab--active {
 	box-sizing: unset;
 	$modal-padding: 14px;
 	border: 0;
-	width: 100%;
-	position: relative;
+	width: auto !important;
+	position: relative !important;
 	top: 0;
 	inset-inline: 0;
 	min-height: calc(100vh - var(--header-height) * 4);

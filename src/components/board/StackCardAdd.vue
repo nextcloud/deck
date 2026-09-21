@@ -48,7 +48,6 @@ import { mapActions } from 'pinia'
 
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
-import { useRouter } from 'vue-router'
 
 export default {
 	name: 'StackCardAdd',
@@ -70,10 +69,6 @@ export default {
 		},
 	},
 	emits: ['creating', 'created'],
-	setup() {
-		const router = useRouter()
-		return { router }
-	},
 	data() {
 		return {
 			title: '',
@@ -121,7 +116,7 @@ export default {
 				this.visible = false
 				this.$emit('created', newCard)
 				if (!this.cardDetailsInModal) {
-					this.router.push({ name: 'card', params: { cardId: newCard.id } })
+					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
 				}
 			} catch (error) {
 				showError('Could not create card: ' + error.response.data.message)

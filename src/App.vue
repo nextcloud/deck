@@ -14,7 +14,7 @@
 			<NcModal v-if="cardDetailsInModal && $route.params.cardId"
 				:name="t('deck', 'Card details')"
 				:clear-view-delay="0"
-				no-close
+				:close-on-click-outside="true"
 				size="large"
 				@close="hideModal()">
 				<div class="modal__content modal__card">
