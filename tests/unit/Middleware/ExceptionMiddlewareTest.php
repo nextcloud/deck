@@ -28,6 +28,7 @@ use OCA\Deck\Controller\BoardController;
 use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Service\BoardExportService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
@@ -86,11 +87,11 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 
 	public function testAfterExceptionFail() {
 		$this->request->expects($this->any())->method('getId')->willReturn('abc123');
-		// BoardService $boardService, PermissionService $permissionService, $userId
 		$boardController = new BoardController(
 			'deck',
 			$this->createMock(IRequest::class),
 			$this->createMock(BoardService::class),
+			$this->createMock(BoardExportService::class),
 			$this->createMock(ExternalBoardService::class),
 			$this->createMock(PermissionService::class),
 			$this->createMock(BoardImportService::class),
