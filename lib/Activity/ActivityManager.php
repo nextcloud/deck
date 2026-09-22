@@ -268,10 +268,9 @@ class ActivityManager {
 					'before' => $previousEntity->$getter(),
 					'after' => $entity->$getter()
 				];
-				if ($changes['before'] !== $changes['after']) {
-					if ($field === 'duedate' && $changes['before']->format('c') === $changes['after']->format('c')) {
-						continue;
-					}
+				$beforeValue = $changes['before'] instanceof \DateTimeInterface ? $changes['before']->format('c') : $changes['before'];
+				$afterValue = $changes['after'] instanceof \DateTimeInterface ? $changes['after']->format('c') : $changes['after'];
+				if ($beforeValue !== $afterValue) {
 					try {
 						$event = $this->createEvent($objectType, $entity, $subjectComplete, $changes);
 						if ($event !== null) {
