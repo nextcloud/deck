@@ -15,6 +15,7 @@ OC.L10N.register(
     "File" : "Lêer",
     "Cancel" : "Kanselleer",
     "File already exists" : "Lêer bestaan reeds",
+    "Clear search" : "Maak soektog skoon",
     "Open" : "Open",
     "Completed" : "Voltooid",
     "Open details" : "Open besonderhede",
