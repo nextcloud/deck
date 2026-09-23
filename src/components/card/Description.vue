@@ -471,7 +471,8 @@ h5 {
 
 .app-sidebar__tab .description__text .text-menubar {
 	top: -10px !important;
-	z-index: 1;
+	/* Above Text tables (3), below tag menus (50) and the sticky sidebar (100). */
+	z-index: 4;
 }
 
 .modal__card .description__text .text-menubar {
