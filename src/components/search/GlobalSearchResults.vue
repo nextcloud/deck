@@ -12,40 +12,38 @@
 				<span v-if="loading" class="icon-loading-small" />
 			</h2>
 			<NcActions>
-				<NcActionButton icon="icon-close" @click="$store.commit('setSearchQuery', '')" />
+				<NcActionButton icon="icon-close" @click="clearSearchQuery" />
 			</NcActions>
 		</header>
-		<div class="search-wrapper">
-			<template v-if="loading || filteredResults.length > 0">
+		<template v-if="loading || filteredResults.length > 0">
+			<div class="search-wrapper">
 				<CardItem v-for="card in filteredResults"
 					:id="card.id"
 					:key="card.id"
 					:standalone="true" />
 				<Placeholder v-if="loading" />
-				<InfiniteLoading :identifier="searchQuery" @infinite="infiniteHandler">
-					<div slot="spinner" />
-					<div slot="no-more" />
-					<div slot="no-results">
-						{{ t('deck', 'No results found') }}
-					</div>
-				</InfiniteLoading>
-			</template>
-			<template v-else>
-				<p>{{ t('deck', 'No results found') }}</p>
-			</template>
-		</div>
+				<!-- Sentinel at the end of the list: the scroll container is the
+					horizontal .search-wrapper, so we let the directive observe the
+					visibility of this element instead of its own scroll position. -->
+				<div v-v-infinite-scroll="[infiniteHandler, { canLoadMore }]" class="search-wrapper__sentinel" />
+			</div>
+		</template>
+		<template v-else>
+			<p>{{ t('deck', 'No results found') }}</p>
+		</template>
 	</section>
 </template>
 
 <script>
 import CardItem from '../cards/CardItem.vue'
-import { mapState } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import InfiniteLoading from 'vue-infinite-loading'
+import { vInfiniteScroll } from '@vueuse/components'
 import Placeholder from './Placeholder.vue'
 import { NcActions, NcActionButton, NcRichText } from '@nextcloud/vue'
 import { useCardStore } from '../../stores/card.js'
+import { mapActions, mapState } from 'pinia'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const createCancelToken = () => axios.CancelToken.source()
 
@@ -74,17 +72,21 @@ function search({ query, cursor }) {
 
 export default {
 	name: 'GlobalSearchResults',
-	components: { CardItem, InfiniteLoading, NcRichText, Placeholder, NcActions, NcActionButton },
+	components: { CardItem, NcRichText, Placeholder, NcActions, NcActionButton },
+	directives: {
+		vInfiniteScroll,
+	},
 	data() {
 		return {
 			results: [],
 			cancel: null,
 			loading: false,
 			cursor: null,
+			hasMore: true,
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState(useSettingsStore, {
 			searchQuery: state => state.searchQuery,
 		}),
 		filteredResults() {
@@ -103,6 +105,7 @@ export default {
 	watch: {
 		async searchQuery() {
 			this.cursor = null
+			this.hasMore = true
 			this.loading = true
 			try {
 				await this.search()
@@ -116,20 +119,23 @@ export default {
 		},
 	},
 	methods: {
-		async infiniteHandler($state) {
+		...mapActions(useSettingsStore, ['setSearchQuery']),
+		clearSearchQuery() {
+			this.setSearchQuery('')
+		},
+		canLoadMore() {
+			return this.hasMore
+		},
+		async infiniteHandler() {
 			this.loading = true
 			try {
 				const data = await this.search()
-				if (data.length) {
-					$state.loaded()
-				} else {
-					$state.complete()
-				}
+				this.hasMore = data.length > 0
 				this.loading = false
 			} catch (e) {
 				if (!axios.isCancel(e)) {
 					console.error('Search request failed', e)
-					$state.complete()
+					this.hasMore = false
 					this.loading = false
 				}
 			}
@@ -159,7 +165,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables.scss';
+@use '../../css/variables.scss' as *;
 
 .global-search {
 	width: 100%;
@@ -217,6 +223,11 @@ export default {
 		& > .drop-upload--card {
 			flex: 0 1 $card-max-width;
 			min-width: $card-min-width;
+		}
+
+		.search-wrapper__sentinel {
+			flex: 0 0 1px;
+			align-self: stretch;
 		}
 	}
 }

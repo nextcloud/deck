@@ -3,17 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
-
 import './../css/collections.css'
 import FileSharingPicker from './views/FileSharingPicker.js'
 import { buildSelector } from './helpers/selector.js'
 
 import './shared-init.js'
-
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
 
 window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Sharing && OCA.Sharing.ShareSearch) {

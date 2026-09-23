@@ -57,6 +57,7 @@ export default defineComponent({
 			default: () => [],
 		},
 	},
+	emits: ['select', 'remove'],
 	data() {
 		return {
 			assignedUsers: [],
@@ -124,5 +125,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/selector.scss';
+@use '../../css/selector.scss';
 </style>
