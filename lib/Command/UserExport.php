@@ -68,7 +68,7 @@ class UserExport extends Command {
 			$stacks = $this->stackMapper->findAll($board->getId());
 			foreach ($stacks as $stack) {
 				$data[$board->getId()]['stacks'][$stack->getId()] = $stack->jsonSerialize();
-				$cards = $this->cardMapper->findAllByStack($stack->getId());
+				$cards = $this->cardMapper->findAllByStack($stackId = $stack->getId(), null, null, $includeDeleted = true);
 				foreach ($cards as $card) {
 					if ($card->getDeletedAt() > 0) {
 						continue;
