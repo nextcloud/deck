@@ -6,6 +6,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "অস্থায়ী ফোল্ডারটি হারানো গিয়েছে",
     "Done" : "Done",
     "Cancel" : "বাতির",
+    "Clear search" : "Clear search",
     "Completed" : "সুসম্পন্ন",
     "Details" : "বিসতারিত",
     "General" : "সাধারণ",
