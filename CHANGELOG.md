@@ -5,6 +5,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.19.1-beta.1
+
+### Added
+* feature: Allow a team (circle) to own a board by @samin-z in https://github.com/nextcloud/deck/pull/8266
+
+### Fixed
+* fix: due date events in activity logging by @luka-nextcloud in https://github.com/nextcloud/deck/pull/8402
+* fix(db): chunk queries for shared boards by @grnd-alt in https://github.com/nextcloud/deck/pull/8385
+* import on file by @samin-z in https://github.com/nextcloud/deck/pull/8383
+
+### Other
+* refactor(vue3) by @grnd-alt in https://github.com/nextcloud/deck/pull/8276
+* enh(performance): get deck share permissions in one query by @grnd-alt in https://github.com/nextcloud/deck/pull/8359
+
+
 ## 1.16.0-beta.1
 
 ### Added
