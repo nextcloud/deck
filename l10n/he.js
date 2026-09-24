@@ -122,6 +122,7 @@ OC.L10N.register(
     "Archived cards" : "כרטיסים בארכיון",
     "Add list" : "הוספת רשימה",
     "List name" : "שם הרשימה",
+    "Clear search" : "נקה חיפוש",
     "Apply filter" : "החלת מסנן",
     "Filter by tag" : "סינון לפי תגית",
     "Filter by assigned user" : "סינון לפי משתמש מוקצה",
