@@ -60,9 +60,10 @@ class LabelService {
 		$label->setTitle($title);
 		$label->setColor($color);
 		$label->setBoardId($boardId);
-		$this->changeHelper->boardChanged($boardId);
+		$label = $this->labelMapper->insert($label);
+		$this->changeHelper->labelChanged($label->getId(), false);
 
-		return $this->labelMapper->insert($label);
+		return $label;
 	}
 
 	public function cloneLabelIfNotExists(int $labelId, int $targetBoardId): Label {
@@ -92,7 +93,7 @@ class LabelService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$label = $this->labelMapper->delete($this->find($id));
-		$this->changeHelper->boardChanged($label->getBoardId());
+		$this->changeHelper->labelChanged($label->getId(), false);
 
 		return $label;
 	}
@@ -121,8 +122,9 @@ class LabelService {
 
 		$label->setTitle($title);
 		$label->setColor($color);
-		$this->changeHelper->boardChanged($label->getBoardId());
+		$label = $this->labelMapper->update($label);
+		$this->changeHelper->labelChanged($label->getId(), false);
 
-		return $this->labelMapper->update($label);
+		return $label;
 	}
 }
