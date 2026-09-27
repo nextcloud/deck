@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3c4dd16a9d9702b12542dd5b6ada365",
+    "content-hash": "bc90c78d84e4d58456ff6fd07b86d78a",
     "packages": [
         {
             "name": "bamarni/composer-bin-plugin",
@@ -432,16 +432,16 @@
         },
         {
             "name": "nextcloud/ocp",
-            "version": "dev-master",
+            "version": "dev-stable35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "0c7d2e70911e5fd428efc92da54ac87e045617a6"
+                "reference": "f91de59aa53e1a31fb09ac2608feb214fcb4eeda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/0c7d2e70911e5fd428efc92da54ac87e045617a6",
-                "reference": "0c7d2e70911e5fd428efc92da54ac87e045617a6",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/f91de59aa53e1a31fb09ac2608feb214fcb4eeda",
+                "reference": "f91de59aa53e1a31fb09ac2608feb214fcb4eeda",
                 "shasum": ""
             },
             "require": {
@@ -456,11 +456,10 @@
                 "symfony/polyfill-php85": "^1.41",
                 "symfony/polyfill-php86": "^1.41"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "36.0.0-dev"
+                    "dev-stable35": "35.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -480,9 +479,9 @@
             "description": "Composer package containing Nextcloud's public OCP API and the unstable NCU API",
             "support": {
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
-                "source": "https://github.com/nextcloud-deps/ocp/tree/master"
+                "source": "https://github.com/nextcloud-deps/ocp/tree/stable35"
             },
-            "time": "2026-09-20T02:13:33+00:00"
+            "time": "2026-09-26T02:26:58+00:00"
         },
         {
             "name": "nikic/php-parser",
