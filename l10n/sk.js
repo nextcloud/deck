@@ -181,7 +181,7 @@ OC.L10N.register(
     "Gantt view" : "Ganttovo zobrazenie",
     "Hide archived cards" : "Skryť archivované karty",
     "Show archived cards" : "Zobraziť archivované karty",
-    "Toggle compact mode" : "Vyp/zap. kompaktný režim",
+    "Toggle compact mode" : "Prepnúť kompaktný režim",
     "Hide card cover images" : "Skryť obrázky obalu karty",
     "Show card cover images" : "Zobraziť obrázky obalu karty",
     "Open details" : "Otvoriť detaily",
