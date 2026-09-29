@@ -38,7 +38,7 @@ abstract class BaseValidator {
 				if ($value instanceof OptionalNullableValue) {
 					$value = $value->getValue();
 				}
-				if ($value === null) {
+				if ($value === null || $value === '') {
 					continue;
 				}
 			}
