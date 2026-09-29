@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { formatCsvList } from './BoardApi.js'
+import { formatCsvList } from '../BoardApi.js'
 
 jest.mock('@nextcloud/axios', () => ({}))
 
