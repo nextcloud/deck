@@ -301,7 +301,8 @@ export const useCardStore = defineStore('card', {
 			this.deleteCardFromStore(updatedCard)
 		},
 		async deleteCard(card) {
-			await apiClient.deleteCard(card.id)
+			const stack = useStackStore().stackById(card.stackId)
+			await apiClient.deleteCard(card, stack.boardId)
 			this.deleteCardFromStore(card)
 			useTrashbinStore().moveCardToTrash(card)
 		},
@@ -329,7 +330,8 @@ export const useCardStore = defineStore('card', {
 				call = 'unArchiveCard'
 			}
 
-			const updatedCard = await apiClient[call](card)
+			const stack = useStackStore().stackById(card.stackId)
+			const updatedCard = await apiClient[call](card, stack.boardId)
 			this.updateCard(updatedCard)
 		},
 		async changeCardDoneStatus(card) {
@@ -338,7 +340,8 @@ export const useCardStore = defineStore('card', {
 				call = 'markCardAsUndone'
 			}
 
-			const updatedCard = await apiClient[call](card)
+			const stack = useStackStore().stackById(card.stackId)
+			const updatedCard = await apiClient[call](card, stack.boardId)
 			this.updateCardProperty({ property: 'done', card: updatedCard })
 
 			if (card.done !== false) {
