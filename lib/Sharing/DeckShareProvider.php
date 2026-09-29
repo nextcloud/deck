@@ -18,6 +18,7 @@ use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
+use OCA\Files_Sharing\External\Manager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -27,9 +28,11 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\IDBConnection;
 use OCP\IL10N;
+use OCP\IPreview;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IAttributes;
@@ -63,6 +66,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		private IL10N $l,
 		private ITimeFactory $timeFactory,
 		private IMimeTypeLoader $mimeTypeLoader,
+		private Manager $externalShareManager,
+		private IRootFolder $rootFolder,
+		private IPreview $preview,
 		private ?string $userId = null,
 	) {
 	}
@@ -871,7 +877,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @param int $offset
 	 * @return IShare[]
 	 */
-	public function getSharedWithByType(int $cardId, int $shareType, $limit, $offset): array {
+	public function getSharedWithByType(int $cardId, int $shareType, $limit, $offset, ?string $userId = null): array {
 		/** @var IShare[] $shares */
 		$shares = [];
 
@@ -914,7 +920,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		}
 		$cursor->closeCursor();
 
-		return $this->resolveSharesForRecipient($shares, $this->userId);
+		return $this->resolveSharesForRecipient($shares, $userId ?? $this->userId);
 	}
 
 	public function isAccessibleResult(array $data): bool {
@@ -1218,5 +1224,60 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		}
 
 		return [];
+	}
+
+	public function ensureAcceptRemoteShare(string $shareToken, string $remote): array|null {
+		$qb = $this->dbConnection->getQueryBuilder();
+		$qb->select('id', 'accepted')
+			->from('share_external')
+			->where($qb->expr()->eq('refresh_token', $qb->createNamedParameter($shareToken)))
+			->andWhere($qb->expr()->eq('remote', $qb->createNamedParameter($remote . '/')))
+			->setMaxResults(1);
+
+		$cursor = $qb->executeQuery();
+		$data = $cursor->fetch();
+		$cursor->closeCursor();
+
+		if ($data === false) {
+			throw new ShareNotFound();
+		}
+
+		$externalShare = $this->externalShareManager->getShare((string)$data['id']);
+
+		if ($externalShare === false) {
+			throw new ShareNotFound();
+		}
+
+		if ((int)$data['accepted'] === 0 && !$this->externalShareManager->acceptShare($externalShare)) {
+			throw new ShareNotFound();
+		}
+
+		// Update mount point to be under /Deck if it is not already
+		if (strpos($externalShare->getMountpoint(), '/Deck') !== 0) {
+			$mount = $this->externalShareManager->getMount(['mountpoint' => $externalShare->getMountpoint()]);
+			$mount->moveMount('/' . $this->userId . '/files/Deck' . $externalShare->getMountpoint());
+			$externalShare->setMountpoint('/Deck' . $externalShare->getMountpoint());
+		}
+
+		// @TODO: reload the LazyFolder to reflect the new mount point
+
+		// Get the file info for the mount point
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+		$node = $userFolder->get($externalShare->getMountpoint());
+		$files = $userFolder->getById($node->getId());
+		if (count($files) === 0) {
+			return null;
+		}
+
+		$file = array_shift($files);
+
+		return [
+			'path' => $userFolder->getRelativePath($file->getPath()),
+			'fileid' => $file->getId(),
+			'filesize' => $file->getSize(),
+			'mimetype' => $file->getMimeType(),
+			'info' => pathinfo($file->getName()),
+			'hasPreview' => $this->preview->isAvailable($file),
+		];
 	}
 }
