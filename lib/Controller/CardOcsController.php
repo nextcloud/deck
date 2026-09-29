@@ -57,13 +57,13 @@ class CardOcsController extends OCSController {
 		// An explicit order means the client wants the card at that position, so shift the surrounding cards
 		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color, insertAtPosition: $order !== self::DEFAULT_ORDER);
 
-		// foreach ($labels as $label) {
-		// 	$this->assignLabel($card->getId(), $label);
-		// }
+		foreach ($labels ?? [] as $label) {
+			$this->assignLabel($boardId, $card->getId(), $label);
+		}
 
-		// foreach ($users as $user) {
-		// 	$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
-		// }
+		foreach ($users ?? [] as $user) {
+			$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
+		}
 
 		return new DataResponse($card);
 	}
