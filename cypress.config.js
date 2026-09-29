@@ -2,6 +2,7 @@ const { defineConfig } = require('cypress')
 const cypressSplit = require('cypress-split')
 
 module.exports = defineConfig({
+	allowCypressEnv: false,
 	projectId: '1s7wkc',
 	viewportWidth: 1280,
 	viewportHeight: 720,

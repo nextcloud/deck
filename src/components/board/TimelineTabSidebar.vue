@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<ActivityList v-if="$parent.isActive"
+	<ActivityList v-if="isActive"
 		filter="deck"
 		:object-id="board.id"
 		object-type="deck"
@@ -22,6 +22,10 @@ export default {
 		board: {
 			type: Object,
 			default: undefined,
+		},
+		isActive: {
+			type: Boolean,
+			default: false,
 		},
 	},
 }

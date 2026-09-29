@@ -33,6 +33,7 @@ export default {
 	components: {
 		NcModal,
 	},
+	emits: ['close', 'select'],
 	data() {
 		return {
 			filter: '',
@@ -53,7 +54,7 @@ export default {
 	beforeMount() {
 		this.fetchBoards()
 		const hash = window.location.hash.match(/\/boards\/([0-9]+)/)
-		this.currentBoard = hash.length > 0 ? hash[1] : null
+		this.currentBoard = hash ? hash[1] : null
 	},
 	methods: {
 		fetchBoards() {
@@ -63,10 +64,10 @@ export default {
 			})
 		},
 		close() {
-			this.$root.$emit('close')
+			this.$emit('close')
 		},
 		select() {
-			this.$root.$emit('select', this.selectedBoard)
+			this.$emit('select', this.selectedBoard)
 		},
 	},
 

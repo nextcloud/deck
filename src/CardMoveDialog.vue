@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcDialog :open.sync="modalShow" :name="t('deck', 'Move/copy card')">
+	<NcDialog v-model:open="modalShow" :name="t('deck', 'Move/copy card')">
 		<div class="modal__content">
 			<NcSelect v-model="selectedBoard"
 				:input-label="t('deck', 'Select a board')"
@@ -22,10 +22,10 @@
 				label="title" />
 		</div>
 		<template #actions>
-			<NcButton :disabled="!isBoardAndStackChoosen" type="secondary" @click="moveCard">
+			<NcButton :disabled="!isBoardAndStackChoosen" variant="secondary" @click="moveCard">
 				{{ t('deck', 'Move card') }}
 			</NcButton>
-			<NcButton :disabled="!isBoardAndStackChoosen" type="primary" @click="cloneCard">
+			<NcButton :disabled="!isBoardAndStackChoosen" variant="primary" @click="cloneCard">
 				{{ t('deck', 'Copy card') }}
 			</NcButton>
 		</template>
@@ -76,7 +76,7 @@ export default {
 	mounted() {
 		subscribe('deck:card:show-move-dialog', this.openModal)
 	},
-	destroyed() {
+	unmounted() {
 		unsubscribe('deck:card:show-move-dialog', this.openModal)
 	},
 	methods: {

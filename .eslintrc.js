@@ -1,7 +1,7 @@
 module.exports = {
 	root: true,
 	extends: [
-		'@nextcloud',
+		'@nextcloud/eslint-config/vue3',
 	],
 	rules: {
 		'jsdoc/require-param-description': ['off'],
@@ -10,5 +10,6 @@ module.exports = {
 		'jsdoc/no-undefined-types': ['off'],
 		'jsdoc/require-property-description': ['off'],
 		'import/no-named-as-default-member': ['off'],
+		'@typescript-eslint/no-unused-vars': ['off'],
 	},
 }

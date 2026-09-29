@@ -9,7 +9,8 @@
 			:description="description"
 			show-created-notice
 			@cancel="close"
-			@close="close" />
+			@close="close"
+			@submit="onSubmit" />
 	</NcModal>
 </template>
 
@@ -31,6 +32,15 @@ export default {
 		description: {
 			type: String,
 			default: '',
+		},
+	},
+	emits: ['close', 'select'],
+	methods: {
+		close() {
+			this.$emit('close')
+		},
+		onSubmit(link) {
+			this.$emit('select', link)
 		},
 	},
 }

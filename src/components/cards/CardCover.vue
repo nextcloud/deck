@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables.scss';
+@use '../../css/variables.scss' as *;
 
 .card-cover {
 	height: 90px;

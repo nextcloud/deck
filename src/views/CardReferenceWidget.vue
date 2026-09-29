@@ -54,7 +54,7 @@
 				<NcRichText :title="shortDescription ? t('deck', 'Click to expand description') : undefined"
 					:text="card.description"
 					:use-markdown="true"
-					@click.native="shortDescription = !shortDescription" />
+					@click="shortDescription = !shortDescription" />
 			</div>
 			<div v-if="card.assignedUsers .length > 0"
 				class="spacer" />
@@ -161,8 +161,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-@import '../css/labels.scss';
+@use '../css/labels.scss' as labels;
+
+@include labels.render-labels;
 
 .deck-card-reference {
 	width: 100%;

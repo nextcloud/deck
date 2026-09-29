@@ -7,7 +7,7 @@
 		<div v-if="ganttTasks.length" class="gantt-toolbar">
 			<NcButton v-for="mode in viewModes"
 				:key="mode.value"
-				:type="currentViewMode === mode.value ? 'primary' : 'secondary'"
+				:variant="currentViewMode === mode.value ? 'primary' : 'secondary'"
 				@click="changeViewMode(mode.value)">
 				{{ mode.label }}
 			</NcButton>
@@ -28,7 +28,7 @@
 		</NcEmptyContent>
 
 		<div v-if="undatedCards.length" class="gantt-undated">
-			<NcButton type="tertiary" @click="showUndated = !showUndated">
+			<NcButton variant="tertiary" @click="showUndated = !showUndated">
 				<template #icon>
 					<ChevronDown v-if="showUndated" :size="20" />
 					<ChevronRight v-else :size="20" />
@@ -92,7 +92,7 @@ const GANTT_VIEW_MODES = [
 		name: 'Day',
 		padding: '14d',
 		step: '12h',
-		snap_at: '12h',
+		snap_at: '1h',
 		column_width: 38,
 		date_format: 'YYYY-MM-DD',
 		lower_text(date, last, lang) {
@@ -292,7 +292,7 @@ export default {
 		document.addEventListener('mouseup', this._onMouseUp)
 		this.$nextTick(() => this.renderGantt())
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		document.removeEventListener('mouseup', this._onMouseUp)
 		this.ganttInstance = null
 	},
@@ -375,6 +375,8 @@ export default {
 
 			this._patchBarDuration()
 			this.fitColumnsToWidth()
+			this.ganttInstance.change_view_mode(this.ganttInstance.config.view_mode.name, true)
+			this.ganttInstance.scroll_current()
 		},
 		async updateTaskDate(task, start, end) {
 			await this.updateCardDatesInStore({

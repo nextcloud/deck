@@ -23,10 +23,12 @@ import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'
 import relativeDate from '../mixins/relativeDate.js'
 import formatReadableDate from '../mixins/readableDate.js'
+import { h } from 'vue'
 
+// Vue 2's `{ functional: true, render(createElement, context) }` signature no
+// longer exists in Vue 3, so this is a regular component instead.
 const InternalLink = {
 	name: 'InternalLink',
-	functional: true,
 	props: {
 		href: {
 			type: String,
@@ -37,8 +39,8 @@ const InternalLink = {
 			default: '',
 		},
 	},
-	render(createElement, context) {
-		return createElement('a', { attrs: { href: context.props.href }, style: { 'font-weight': 600 } }, context.props.name)
+	render() {
+		return h('a', { href: this.href, style: { 'font-weight': 600 } }, this.name)
 	},
 }
 export default {

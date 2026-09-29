@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { addCommands } from '@nextcloud/cypress'
-import axios from '@nextcloud/axios'
+import { addCommands } from '@nextcloud/e2e-test-server/cypress'
 
 addCommands()
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
-Cypress.env('baseUrl', url)
+Cypress.expose('baseUrl', url)
 
 // prepare main cypress window so we can use axios there
 // and it will successfully fetch csrf tokens when needed.
@@ -57,12 +56,12 @@ Cypress.Commands.add('deckCreateList', ({ user, password }, title) => {
 
 Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 	const auth = {
-		user: user.userId,
+		username: user.userId,
 		password: user.password,
 	}
 	cy.request({
 		method: 'POST',
-		url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards`,
+		url: `${Cypress.expose('baseUrl')}/index.php/apps/deck/api/v1.0/boards`,
 		auth,
 		body: { title: board.title, color: board.color ?? 'ff0000' },
 	}).then((boardResponse) => {
@@ -72,7 +71,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 			const stack = board.stacks[stackIndex]
 			cy.request({
 				method: 'POST',
-				url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks`,
+				url: `${Cypress.expose('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks`,
 				auth,
 				body: { title: stack.title, order: 0 },
 			}).then((stackResponse) => {
@@ -81,7 +80,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 					const card = stack.cards[cardIndex]
 					cy.request({
 						method: 'POST',
-						url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks/${stackData.id}/cards`,
+						url: `${Cypress.expose('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks/${stackData.id}/cards`,
 						auth,
 						body: { title: card.title, description: card.description ?? '' },
 					})
@@ -93,7 +92,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 })
 
 Cypress.Commands.add('getNavigationEntry', (boardTitle) => {
-	return cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
+	return cy.get('[data-cy-navigation-category="deck-navigation-all"]').parent()
 		.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + boardTitle + ')')
 		.find('a.app-navigation-entry-link')
 })
@@ -116,9 +115,16 @@ Cypress.Commands.add('shareBoardWithUi', (query, userId=query) => {
 })
 
 Cypress.Commands.add('setUserEmail', (user, value) => {
-	Cypress.log()
-	return axios.put(
-		`${url}/ocs/v2.php/cloud/users/${user.userId}`,
-		{ key: 'email', value },
-	)
+	return cy.request({
+		method: 'PUT',
+		url: `${url}/ocs/v2.php/cloud/users/${user.userId}`,
+		auth: {
+			username: user.userId,
+			password: user.password,
+		},
+		headers: {
+			'OCS-APIRequest': 'true',
+		},
+		body: { key: 'email', value },
+	})
 })

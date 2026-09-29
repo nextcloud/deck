@@ -50,7 +50,7 @@
 				v-model="description"
 				:configs="mdeConfig"
 				@initialized="addKeyListeners"
-				@update:modelValue="updateDescription"
+				@update:model-value="updateDescription"
 				@blur="saveDescription" />
 		</template>
 
@@ -75,9 +75,9 @@ import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { showWarning } from '@nextcloud/dialogs'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
-import { mapState } from 'vuex'
-import { mapActions } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -115,6 +115,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['change'],
 	data() {
 		return {
 			textAppAvailable: !!window.OCA?.Text?.createEditor,
@@ -140,9 +141,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			hasCardSaveError: (state) => state.hasCardSaveError,
-		}),
+		...mapState(useSettingsStore, ['hasCardSaveError']),
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -197,13 +196,14 @@ export default {
 	mounted() {
 		this.setupEditor()
 	},
-	async beforeDestroy() {
+	async beforeUnmount() {
 		await this.destroyEditor()
 	},
 	methods: {
 		...mapActions(useCardStore, {
 			updateCardDescInStore: 'updateCardDesc',
 		}),
+		...mapActions(useSettingsStore, ['setHasCardSaveError']),
 		async setupEditor() {
 			await this.destroyEditor()
 			this.descriptionLastEdit = 0
@@ -248,16 +248,11 @@ export default {
 		},
 		async destroyEditor() {
 			await this.saveDescription()
-			if (this.editor) {
-				const editor = this.editor
-				this.editor = null
-				try {
-					if (typeof editor.destroy === 'function' && !editor.isDestroyed) {
-						await editor.destroy()
-					}
-				} catch (e) {
-					console.debug('Caught editor teardown error', e)
-				}
+			try {
+				this?.editor?.destroy()
+			} catch (e) {
+				// Ignore errors during editor destruction
+				console.debug('Error destroying text editor:', e)
 			}
 		},
 		addKeyListeners() {
@@ -352,9 +347,9 @@ export default {
 				this.$emit('change', this.description)
 				this.descriptionLastEdit = 0
 				this.descriptionOld = this.description
-				this.$store.commit('setHasCardSaveError', false)
+				this.setHasCardSaveError(false)
 			} catch (e) {
-				this.$store.commit('setHasCardSaveError', true)
+				this.setHasCardSaveError(true)
 				showWarning(t('deck', 'Could not save description'), { timeout: 2500 })
 				console.error(e)
 
@@ -380,6 +375,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+	@use './../../css/markdown.scss' as markdown;
 
 .modal__content {
 	width: 25vw;
@@ -406,8 +402,7 @@ export default {
 	overflow-x: auto;
 
 	&:deep {
-		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/markdown.scss';
+		@include markdown.render-markdown;
 	}
 
 	&:deep(input) {

@@ -27,5 +27,5 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-@import '../../css/selector.scss';
+@use '../../css/selector.scss';
 </style>

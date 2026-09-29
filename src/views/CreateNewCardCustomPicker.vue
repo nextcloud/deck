@@ -82,7 +82,7 @@
 					{{ t('deck', 'Cancel') }}
 				</NcButton>
 				<NcButton :disabled="loading || !isBoardAndStackChoosen"
-					type="primary"
+					variant="primary"
 					@click="createCard">
 					{{ t('deck', 'Create card') }}
 				</NcButton>
@@ -175,6 +175,7 @@ export default {
 			default: t('deck', 'Create card'),
 		},
 	},
+	emits: ['submit', 'cancel'],
 	data() {
 		return {
 			card: {
@@ -212,8 +213,8 @@ export default {
 		},
 	},
 	beforeMount() {
-		this.$set(this.card, 'title', this.title)
-		this.$set(this.card, 'description', this.description)
+		this.card.title = this.title
+		this.card.description = this.description
 		this.fetchBoards()
 	},
 	mounted() {
@@ -269,11 +270,15 @@ export default {
 				this.newCard = response
 				this.creating = false
 				this.created = true
-				this.$emit('submit', window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck') + `/card/${this.newCard.id}`)
+				this.emitSubmit(window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck') + `/card/${this.newCard.id}`)
 			} catch (e) {
 				this.creating = false
 				showError(e)
 			}
+		},
+		emitSubmit(link) {
+			this.$emit('submit', link)
+			this.$el.dispatchEvent(new CustomEvent('submit', { bubbles: true, detail: link }))
 		},
 		onSelectLabel(label) {
 			if (!label.id) return
@@ -337,7 +342,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../css/selector.scss';
+@use '../css/selector.scss';
 
 .modal-scroller {
 	overflow: scroll;

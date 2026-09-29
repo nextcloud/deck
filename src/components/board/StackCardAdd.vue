@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div v-click-outside="close" class="stack__card-add">
+	<div v-v-on-click-outside="close" class="stack__card-add">
 		<NcButton v-if="!visible"
 			data-cy="action:add-card"
 			class="stack__card-add-button"
@@ -29,7 +29,7 @@
 				:placeholder="t('deck', 'Card name')"
 				required
 				pattern=".*\S+.*"
-				@focus="$store.dispatch('toggleShortcutLock', true)"
+				@focus="toggleShortcutLock(true)"
 				@keydown.esc.stop="visible = false">
 			<input v-show="!creating"
 				class="icon-confirm"
@@ -40,13 +40,14 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
+import { vOnClickOutside } from '@vueuse/components'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcButton } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions } from 'pinia'
 
 import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'StackCardAdd',
@@ -55,7 +56,7 @@ export default {
 		PlusIcon,
 	},
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
 	props: {
 		stack: {
@@ -67,6 +68,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['creating', 'created'],
 	data() {
 		return {
 			title: '',
@@ -76,13 +78,13 @@ export default {
 	},
 	computed: {
 		cardDetailsInModal() {
-			return this.$store.getters.config('cardDetailsInModal')
+			return useSettingsStore().configByKey('cardDetailsInModal')
 		},
 	},
 	watch: {
 		visible(newValue) {
 			if (!newValue) {
-				this.$store.dispatch('toggleShortcutLock', false)
+				this.toggleShortcutLock(false)
 				return
 			}
 
@@ -92,6 +94,9 @@ export default {
 	methods: {
 		...mapActions(useCardStore, {
 			addCardInStore: 'addCard',
+		}),
+		...mapActions(useSettingsStore, {
+			toggleShortcutLock: 'toggleShortcutLock',
 		}),
 		close() {
 			this.visible = false
@@ -132,6 +137,8 @@ export default {
 		flex-shrink: 0;
 		display: flex;
 		background-color: var(--color-main-background);
+		width: 100%;
+		padding-inline-end: $stack-gap;
 
 		.stack--add-card-at-top & {
 			position: relative;

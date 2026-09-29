@@ -7,8 +7,9 @@
 		<div class="selector-wrapper--icon">
 			<TagMultiple :size="20" />
 		</div>
-		<NcSelect :value="assignedLabels"
+		<NcSelect :model-value="assignedLabels"
 			class="selector-wrapper--selector"
+			:keep-open="true"
 			:multiple="true"
 			:disabled="disabled"
 			:options="labelsSorted"
@@ -64,6 +65,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['select', 'remove', 'newtag'],
 	computed: {
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -92,7 +94,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/selector.scss';
+@use '../../css/selector.scss';
 
 .v-select:deep(.vs__selected) {
 	padding-inline-start: 0 !important;

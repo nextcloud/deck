@@ -11,7 +11,7 @@
 		:show-more-url="showMoreUrl"
 		:loading="loading"
 		@hide="() => {}"
-		@markDone="() => {}">
+		@mark-done="() => {}">
 		<template #default="{ item }">
 			<Card :card="item" />
 		</template>
