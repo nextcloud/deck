@@ -50,13 +50,13 @@ class CardOcsController extends OCSController {
 		}
 		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color);
 
-		// foreach ($labels as $label) {
-		// 	$this->assignLabel($card->getId(), $label);
-		// }
+		foreach ($labels ?? [] as $label) {
+			$this->assignLabel($boardId, $card->getId(), $label);
+		}
 
-		// foreach ($users as $user) {
-		// 	$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
-		// }
+		foreach ($users ?? [] as $user) {
+			$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
+		}
 
 		return new DataResponse($card);
 	}
