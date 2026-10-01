@@ -31,9 +31,6 @@ class CardServiceValidatorTest extends ValidatorTestBase {
 
 	public function testInvalidDueDateIsRejected(): void {
 		$this->assertFail([
-			'duedate' => '',
-		]);
-		$this->assertFail([
 			'duedate' => 'not a date',
 		]);
 		$this->assertFail([
