@@ -16,6 +16,7 @@ use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\User;
 use OCA\Deck\Federation\DeckFederationProxy;
 use OCA\Deck\Model\OptionalNullableValue;
+use OCA\Deck\Sharing\DeckShareProvider;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Federation\ICloudIdManager;
 use OCP\IURLGenerator;
@@ -27,10 +28,10 @@ class ExternalBoardService {
 		private ICloudIdManager $cloudIdManager,
 		private DeckFederationProxy $proxy,
 		private ConfigService $configService,
-		private BoardService $boardService,
 		private PermissionService $permissionService,
 		private BoardMapper $boardMapper,
 		private IURLGenerator $urlGenerator,
+		private DeckShareProvider $deckShareProvider,
 		private ?string $userId,
 	) {
 	}
@@ -43,6 +44,15 @@ class ExternalBoardService {
 		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/board/' . $localBoard->getExternalId();
 		$resp = $this->proxy->get($participantCloudId->getId(), $shareToken, $url);
 		$ocs = $this->proxy->getOCSData($resp);
+
+		// Sync local board data with remote data
+		if ($ocs['title'] !== $localBoard->getTitle() || $ocs['color'] !== $localBoard->getColor() || $ocs['archived'] !== $localBoard->isArchived()) {
+			$localBoard->setTitle($ocs['title']);
+			$localBoard->setColor($ocs['color']);
+			$localBoard->setArchived($ocs['archived']);
+			$this->boardMapper->update($localBoard);
+		}
+
 		return new DataResponse($this->LocalizeRemoteBoard($ocs, $localBoard));
 	}
 	public function getExternalStacksFromRemote(Board $localBoard):DataResponse {
@@ -85,7 +95,8 @@ class ExternalBoardService {
 				$stack['cards'][$j]['assignedUsers'] = array_map(function ($assignment) use ($localBoard) {
 					$assignment['participant'] = $this->localizeRemoteUser($localBoard, $assignment['participant']);
 					return $assignment;
-				}, $card['assignedUsers']);
+				}, $card['assignedUsers'] ?? []);
+				$stack['cards'][$j]['owner'] = $this->localizeRemoteUser($localBoard, $card['owner']);
 			}
 			$stacks[$i] = $stack;
 		}
@@ -98,6 +109,7 @@ class ExternalBoardService {
 		$remoteBoard['acl'] = $localBoard->getAcl();
 		$remoteBoard['permissions'] = $localBoard->getPermissions();
 		$remoteBoard['users'] = $this->localizeRemoteUsers($remoteBoard['users'], $localBoard);
+		$remoteBoard['externalId'] = $localBoard->getExternalId();
 		return $remoteBoard;
 	}
 
@@ -108,6 +120,56 @@ class ExternalBoardService {
 		}
 
 		return $localizedUsers;
+	}
+
+	public function localizeRemoteComments(Board $localBoard, array $comments): array {
+		foreach ($comments as $i => $comment) {
+			// Localize actors
+			$localizedActor = $this->localizeRemoteUser($localBoard, ['uid' => $comment['actorId'], 'remote' => $comment['actorRemote']]);
+			if ($localizedActor instanceof FederatedUser) {
+				$comments[$i]['actorDisplayName'] = $localizedActor->getCloudId()->getId();
+				$comments[$i]['actorId'] = $localizedActor->getCloudId()->getId();
+				$comments[$i]['actorRemote'] = $localizedActor->getCloudId()->getRemote();
+			}
+			if ($localizedActor instanceof User) {
+				$comments[$i]['actorDisplayName'] = $localizedActor->getDisplayName();
+				$comments[$i]['actorId'] = $localizedActor->getUID();
+				$comments[$i]['actorRemote'] = null;
+			}
+			if ($comment['replyTo']) {
+				$localizedReplyActor = $this->localizeRemoteUser($localBoard, ['uid' => $comment['replyTo']['actorId'], 'remote' => $comment['replyTo']['actorRemote']]);
+				if ($localizedReplyActor instanceof FederatedUser) {
+					$comments[$i]['replyTo']['actorDisplayName'] = $localizedReplyActor->getCloudId()->getId();
+					$comments[$i]['replyTo']['actorId'] = $localizedReplyActor->getCloudId()->getId();
+					$comments[$i]['replyTo']['actorRemote'] = $localizedReplyActor->getCloudId()->getRemote();
+				}
+				if ($localizedReplyActor instanceof User) {
+					$comments[$i]['replyTo']['actorDisplayName'] = $localizedReplyActor->getDisplayName();
+					$comments[$i]['replyTo']['actorId'] = $localizedReplyActor->getUID();
+					$comments[$i]['replyTo']['actorRemote'] = null;
+				}
+			}
+
+			// Localize mentions
+			foreach ($comment['mentions'] as $j => $mention) {
+				$localizedMention = $this->localizeRemoteUser($localBoard, ['uid' => $mention['mentionId'], 'remote' => $mention['mentionRemote']]);
+				if ($localizedMention instanceof User) {
+					$comments[$i]['message'] = str_replace('@"federated_user/' . $mention['mentionId'], '@"' . $localizedMention->getUID(), $comment['message']);
+					$comments[$i]['mentions'][$j]['mentionDisplayName'] = $localizedMention->getDisplayName();
+					$comments[$i]['mentions'][$j]['mentionId'] = $localizedMention->getUID();
+					$comments[$i]['mentions'][$j]['mentionRemote'] = null;
+					$comments[$i]['mentions'][$j]['mentionType'] = 'user';
+				}
+				if ($localizedMention instanceof FederatedUser) {
+					$comments[$i]['message'] = str_replace('@' . $mention['mentionId'], '@federated_user/' . $localizedMention->getUID(), $comment['message']);
+					$comments[$i]['mentions'][$j]['mentionDisplayName'] = $localizedMention->getCloudId()->getId();
+					$comments[$i]['mentions'][$j]['mentionId'] = $localizedMention->getCloudId()->getId();
+					$comments[$i]['mentions'][$j]['mentionRemote'] = $localizedMention->getCloudId()->getRemote();
+					$comments[$i]['mentions'][$j]['mentionType'] = 'federated_user';
+				}
+			}
+		}
+		return $comments;
 	}
 
 	public function createCardOnRemote(
@@ -154,6 +216,8 @@ class ExternalBoardService {
 		?int $deletedAt = null,
 		?bool $archived = null,
 		?OptionalNullableValue $done = null,
+		?string $startdate = null,
+		?string $color = null,
 	): array {
 		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
@@ -173,9 +237,23 @@ class ExternalBoardService {
 			'deletedAt' => $deletedAt,
 			'archived' => $archived,
 			'done' => $done->getValue() ?? null,
+			'startdate' => $startdate,
+			'color' => $color,
 			'boardId' => $localBoard->getExternalId(),
 		];
 		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function deleteCardOnRemote(Board $localBoard, int $cardId): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId;
+		$resp = $this->proxy->delete($ownerCloudId->getId(), $shareToken, $url, [
+			'boardId' => $localBoard->getExternalId(),
+		]);
 		return $this->proxy->getOcsData($resp);
 	}
 
@@ -349,6 +427,315 @@ class ExternalBoardService {
 			'boardId' => $localBoard->getExternalId(),
 		];
 		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function getArchivedStacksFromRemote(Board $localBoard): array {
+		$this->configService->ensureFederationEnabled();
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/stacks/' . $localBoard->getExternalId() . '/archived';
+		$resp = $this->proxy->get($participantCloudId->getId(), $shareToken, $url);
+		$ocs = $this->proxy->getOCSData($resp);
+		return $this->LocalizeRemoteStacks($ocs, $localBoard);
+	}
+
+	public function archiveCardOnRemote(Board $localBoard, int $cardId): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/archive';
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function unarchiveCardOnRemote(Board $localBoard, int $cardId): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/unarchive';
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function setDoneCardOnRemote(Board $localBoard, int $cardId): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/done';
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function setUndoneCardOnRemote(Board $localBoard, int $cardId): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/undone';
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function getCardCommentsFromRemote(Board $localBoard, int $cardId, int $limit = 20, int $offset = 0): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_READ, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/comments';
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+			'limit' => $limit,
+			'offset' => $offset,
+		];
+		$resp = $this->proxy->get($participantCloudId->getId(), $shareToken, $url, $params);
+		$comments = $this->proxy->getOcsData($resp);
+		return $this->localizeRemoteComments($localBoard, $comments);
+	}
+
+	public function createCardCommentOnRemote(Board $localBoard, int $cardId, string $message, int $parentId = 0): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_READ, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/comments';
+
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+			'message' => $message,
+			'parentId' => $parentId,
+		];
+		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, $params);
+		$newComment = $this->proxy->getOcsData($resp);
+		return $this->localizeRemoteComments($localBoard, [$newComment])[0];
+	}
+
+	public function updateCardCommentOnRemote(Board $localBoard, int $cardId, int $commentId, string $message): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_READ, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/comments/' . $commentId;
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+			'message' => $message,
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		$updatedComment = $this->proxy->getOcsData($resp);
+		return $this->localizeRemoteComments($localBoard, [$updatedComment])[0];
+	}
+
+	public function deleteCardCommentOnRemote(Board $localBoard, int $cardId, int $commentId): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_READ, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/comments/' . $commentId;
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+		];
+		$resp = $this->proxy->delete($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function updateBoardOnRemote(Board $localBoard, string $title, string $color, bool $archived): DataResponse {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_MANAGE, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/boards/' . $localBoard->getExternalId();
+		$params = [
+			'title' => $title,
+			'color' => $color,
+			'archived' => $archived,
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		$updatedBoard = $this->proxy->getOcsData($resp);
+		return new DataResponse($this->LocalizeRemoteBoard($updatedBoard, $localBoard));
+	}
+
+	public function leaveBoardOnRemote(Board $localBoard): void {
+		$this->configService->ensureFederationEnabled();
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/boards/' . $localBoard->getExternalId() . '/leave';
+		$this->proxy->post($participantCloudId->getId(), $shareToken, $url);
+	}
+
+	public function localizeRemoteAttachments(Board $localBoard, array $attachments): array {
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		foreach ($attachments as $i => $attachment) {
+			$createdByUser = $this->localizeRemoteUser($localBoard, ['uid' => $attachment['createdBy']]);
+			if ($createdByUser instanceof FederatedUser) {
+				$attachments[$i]['createdBy'] = $createdByUser->getCloudId()->getId();
+				$attachments[$i]['createdByRemote'] = $createdByUser->getCloudId()->getRemote();
+				$attachments[$i]['extendedData']['attachmentCreator']['id'] = $createdByUser->getCloudId()->getId();
+				$attachments[$i]['extendedData']['attachmentCreator']['remote'] = $createdByUser->getCloudId()->getRemote();
+				$attachments[$i]['extendedData']['attachmentCreator']['displayName'] = $createdByUser->getCloudId()->getId();
+			}
+			if (!empty($attachment['extendedData']['shareToken'])) {
+				$file = $this->deckShareProvider->ensureAcceptRemoteShare($attachment['extendedData']['shareToken'], $ownerCloudId->getRemote());
+
+				if (empty($file)) {
+					unset($attachments[$i]);
+					continue;
+				}
+
+				$attachments[$i]['extendedData'] = array_merge($attachments[$i]['extendedData'], $file);
+				unset($attachments[$i]['extendedData']['shareToken']);
+			}
+		}
+		return $attachments;
+	}
+
+	public function getAttachmentsFromRemote(Board $localBoard, int $cardId): array {
+		$this->configService->ensureFederationEnabled();
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments';
+		$resp = $this->proxy->get($participantCloudId->getId(), $shareToken, $url, [
+			'boardId' => $localBoard->getExternalId(),
+		]);
+		$attachments = $this->proxy->getOcsData($resp);
+		return $this->localizeRemoteAttachments($localBoard, $attachments);
+	}
+
+	public function createAttachmentOnRemote(Board $localBoard, int $cardId, string $type, string $data = '', ?array $uploadedFile = null): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachment';
+		if ($uploadedFile !== null) {
+			$content = fopen($uploadedFile['tmp_name'], 'rb');
+			if ($content === false) {
+				throw new Exception('Could not read uploaded file');
+			}
+			$params = [
+				[
+					'name' => 'boardId',
+					'contents' => (string)$localBoard->getExternalId(),
+				],
+				[
+					'name' => 'file',
+					'contents' => $content,
+					'filename' => $uploadedFile['name'],
+				],
+				[
+					'name' => 'type',
+					'contents' => $type,
+				],
+				[
+					'name' => 'data',
+					'contents' => $data,
+				],
+			];
+			$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, ['multipart' => $params]);
+			return $this->proxy->getOcsData($resp);
+		}
+		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, [
+			'boardId' => $localBoard->getExternalId(),
+			'type' => $type,
+			'data' => $data,
+		]);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function updateAttachmentOnRemote(Board $localBoard, int $cardId, int $attachmentId, string $data, string $type = 'file', ?array $uploadedFile = null): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments/' . $attachmentId;
+		if ($uploadedFile !== null) {
+			$content = fopen($uploadedFile['tmp_name'], 'rb');
+			if ($content === false) {
+				throw new Exception('Could not read uploaded file');
+			}
+			$params = [
+				[
+					'name' => 'boardId',
+					'contents' => (string)$localBoard->getExternalId(),
+				],
+				[
+					'name' => 'file',
+					'contents' => $content,
+					'filename' => $uploadedFile['name'],
+				],
+				[
+					'name' => 'type',
+					'contents' => $type,
+				],
+				[
+					'name' => 'data',
+					'contents' => $data,
+				],
+			];
+			$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, ['multipart' => $params]);
+			return $this->proxy->getOcsData($resp);
+		}
+		$params = [
+			'boardId' => $localBoard->getExternalId(),
+			'data' => $data,
+			'type' => $type,
+		];
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function deleteAttachmentOnRemote(Board $localBoard, int $cardId, int $attachmentId, string $type = 'file'): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments/' . $attachmentId;
+		$resp = $this->proxy->delete($ownerCloudId->getId(), $shareToken, $url, [
+			'boardId' => $localBoard->getExternalId(),
+			'type' => $type,
+		]);
+		return $this->proxy->getOcsData($resp);
+	}
+
+	public function restoreAttachmentOnRemote(Board $localBoard, int $cardId, int $attachmentId, string $type = 'file'): array {
+		$this->configService->ensureFederationEnabled();
+		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
+		$shareToken = $localBoard->getShareToken();
+		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
+		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments/' . $attachmentId . '/restore';
+		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, [
+			'boardId' => $localBoard->getExternalId(),
+			'type' => $type,
+		]);
 		return $this->proxy->getOcsData($resp);
 	}
 }

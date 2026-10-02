@@ -13,18 +13,21 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Federation\ICloudIdManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IFilenameValidator;
 use OCP\Files\IMimeTypeDetector;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\IDBConnection;
 use OCP\IL10N;
@@ -43,6 +46,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	 * Reason is not having access to the original filename because of early sanitization in the request lifecycle.
 	 */
 	private const SANITIZED_CHAR_MAPPING = [':' => '/'];
+	private const FEDERATED_ATTACHMENT_TARGET_PREFIX = 'deck-card-attachment-';
 
 	private IRequest $request;
 	private IRootFolder $rootFolder;
@@ -58,6 +62,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	private LoggerInterface $logger;
 	private IDBConnection $connection;
 	private IFilenameValidator $filenameValidator;
+	private ICloudIdManager $cloudIdManager;
 
 	public function __construct(
 		IRequest $request,
@@ -73,6 +78,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		LoggerInterface $logger,
 		IDBConnection $connection,
 		IFilenameValidator $filenameValidator,
+		ICloudIdManager $cloudIdManager,
 		?string $userId,
 	) {
 		$this->request = $request;
@@ -89,10 +95,12 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$this->logger = $logger;
 		$this->connection = $connection;
 		$this->filenameValidator = $filenameValidator;
+		$this->cloudIdManager = $cloudIdManager;
 	}
 
 	public function listAttachments(int $cardId): array {
-		$shares = $this->shareProvider->getSharedWithByType($cardId, IShare::TYPE_DECK, -1, 0);
+		$userId = $this->userId ?? $this->permissionService->getUserId();
+		$shares = $this->shareProvider->getSharedWithByType($cardId, IShare::TYPE_DECK, -1, 0, $userId);
 		return array_filter(array_map(function (IShare $share) use ($cardId) {
 			try {
 				$file = $share->getNode();
@@ -147,24 +155,83 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function extendData(Attachment $attachment) {
-		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		$share = $this->getShareForAttachment($attachment);
-		$files = $userFolder->getById($share->getNode()->getId());
-		if (count($files) === 0) {
-			return $attachment;
+		$node = $share->getNode();
+
+		$requestUserId = $this->permissionService->getUserId();
+		if ($this->cloudIdManager->isValidCloudId($requestUserId)) {
+			$shareToken = $this->ensureFederatedAttachmentShare($share, $node, $requestUserId);
+			$attachment->setExtendedData([
+				'fileid' => $node->getId(),
+				'shareToken' => $shareToken,
+			]);
 		}
-		$file = array_shift($files);
-		$attachment->setExtendedData([
-			'path' => $userFolder->getRelativePath($file->getPath()),
-			'fileid' => $file->getId(),
-			'data' => $file->getName(),
-			'filesize' => $file->getSize(),
-			'mimetype' => $file->getMimeType(),
-			'info' => pathinfo($file->getName()),
-			'hasPreview' => $this->preview->isAvailable($file),
-			'permissions' => $share->getPermissions(),
-		]);
+
+		if ($this->userId !== null) {
+			$userFolder = $this->rootFolder->getUserFolder($this->userId);
+			$files = $userFolder->getById($node->getId());
+			if (count($files) === 0) {
+				return $attachment;
+			}
+			$file = array_shift($files);
+			$attachment->setExtendedData([
+				'path' => $userFolder->getRelativePath($file->getPath()),
+				'fileid' => $file->getId(),
+				'data' => $file->getName(),
+				'filesize' => $file->getSize(),
+				'mimetype' => $file->getMimeType(),
+				'info' => pathinfo($file->getName()),
+				'hasPreview' => $this->preview->isAvailable($file),
+				'permissions' => $share->getPermissions(),
+			]);
+		}
+
 		return $attachment;
+	}
+
+	private function ensureFederatedAttachmentShare(IShare $attachmentShare, Node $file, string $federatedCloudId): string {
+		if ($shareToken = $this->findFederatedAttachmentShareToken($file->getId(), $federatedCloudId)) {
+			return $shareToken;
+		}
+
+		$share = $this->shareManager->newShare();
+		$share->setNode($file);
+		$share->setShareType(IShare::TYPE_REMOTE);
+		$share->setSharedWith($federatedCloudId);
+		$share->setPermissions(Constants::PERMISSION_READ);
+		$share->setSharedBy($attachmentShare->getShareOwner());
+		$share->setShareOwner($attachmentShare->getShareOwner());
+
+		try {
+			$createdShare = $this->shareManager->createShare($share);
+			return $createdShare->getToken();
+		} catch (GenericShareException $e) {
+			// Ignore races where another request already created the same federated share.
+			if (!$this->findFederatedAttachmentShareToken($file->getId(), $federatedCloudId)) {
+				throw $e;
+			}
+			return $this->findFederatedAttachmentShareToken($file->getId(), $federatedCloudId);
+		}
+	}
+
+	private function findFederatedAttachmentShareToken(int $fileId, string $federatedCloudId): string|null {
+		$qb = $this->connection->getQueryBuilder();
+		$qb->select('id', 'token')
+			->from('share')
+			->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_REMOTE)))
+			->andWhere($qb->expr()->eq('share_with', $qb->createNamedParameter($federatedCloudId)))
+			->andWhere($qb->expr()->eq('file_source', $qb->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults(1);
+
+		$cursor = $qb->executeQuery();
+		$data = $cursor->fetch();
+		$cursor->closeCursor();
+
+		if ($data === false) {
+			return null;
+		}
+
+		return $data['token'] ?? null;
 	}
 
 	public function display(Attachment $attachment) {
@@ -234,6 +301,23 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$share->setPermissions(Constants::PERMISSION_READ);
 		$share->setSharedBy($this->userId);
 		$share = $this->shareManager->createShare($share);
+
+		// Create share for federated users
+		$boardId = $this->cardMapper->findBoardId($attachment->getCardId());
+		foreach ($this->permissionService->findUsers($boardId) as $user) {
+			if (!$user instanceof FederatedUser) {
+				continue;
+			}
+			$remoteShare = $this->shareManager->newShare();
+			$remoteShare->setParent((int)$share->getId());
+			$remoteShare->setNode($target);
+			$remoteShare->setShareType(ISHARE::TYPE_REMOTE);
+			$remoteShare->setSharedWith($user->getUID());
+			$remoteShare->setPermissions(Constants::PERMISSION_READ);
+			$remoteShare->setSharedBy($this->userId);
+			$this->shareManager->createShare($remoteShare);
+		}
+
 		$attachment->setId((int)$share->getId());
 		$attachment->setData($target->getName());
 		return $attachment;
