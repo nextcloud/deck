@@ -388,7 +388,7 @@ OC.L10N.register(
     "Clone {boardTitle}" : "Klonovať {boardTitle}",
     "Clone cards" : "Duplikovať karty",
     "Clone assignments" : "Klonovať úlohu",
-    "Clone labels" : "Klonovať štítok",
+    "Clone labels" : "Klonovať štítky",
     "Clone due dates" : "Klonovať termín dokončenia",
     "Advanced options" : "Pokročilé možnosti",
     "Move all cards to the first list" : "Presunúť všetky karty na prvý zoznam",
