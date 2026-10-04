@@ -333,6 +333,7 @@ import SessionList from './SessionList.vue'
 import labelStyle from '../mixins/labelStyle.js'
 import { isNotifyPushEnabled } from '../sessions.js'
 import { useBoardStore } from '../stores/board.js'
+import { useCardStore } from '../stores/card.js'
 import { useSettingsStore } from '../stores/settings.js'
 import { useStackStore } from '../stores/stack.js'
 
@@ -422,7 +423,16 @@ export default {
 			showCardCover: (state) => state.showCardCover,
 		}),
 
+		...mapState(useCardStore, ['cardById']),
 		...mapWritableState(useSettingsStore, ['searchQuery']),
+		pageTitle() {
+			if (!this.board?.title) {
+				return ''
+			}
+			const cardTitle = this.$route.params.cardId && this.cardById(Number(this.$route.params.cardId))?.title
+			return cardTitle ? `${cardTitle} - ${this.board.title}` : this.board.title
+		},
+
 		detailsRoute() {
 			return {
 				name: 'board.details',
@@ -454,7 +464,7 @@ export default {
 			this.clearFilter()
 		},
 
-		'board.title': {
+		pageTitle: {
 			immediate: true,
 			handler(title) {
 				if (title) {
