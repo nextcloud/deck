@@ -294,35 +294,6 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * Count the ACLs matching the query's search and filters per initiator
-	 * (the board owner), most shares first, in one grouped scan.
-	 *
-	 * @param int $limit at most this many initiators, ordered by count
-	 *                   descending, then owner id ascending
-	 * @param list<int>|null $participantTypes see findPageForShareReview()
-	 * @param list<string>|null $permissionColumns see findPageForShareReview()
-	 * @return array<string, int> board owner to count, zero counts omitted
-	 * @throws Exception
-	 */
-	public function countByInitiatorForShareReview(ShareReviewQuery $query, int $limit, ?array $participantTypes = null, ?array $permissionColumns = null): array {
-		$qb = $this->shareReviewQuery();
-		$qb->select('b.owner')
-			->selectAlias($qb->func()->count('a.id'), 'share_count')
-			->groupBy('b.owner')
-			->orderBy('share_count', 'DESC')
-			->addOrderBy('b.owner', 'ASC')
-			->setMaxResults($limit);
-		$this->applyShareReviewFilters($qb, $query, $participantTypes, $permissionColumns);
-		$result = $qb->executeQuery();
-		$counts = [];
-		while (($row = $result->fetch()) !== false) {
-			$counts[(string)$row['owner']] = (int)$row['share_count'];
-		}
-		$result->closeCursor();
-		return $counts;
-	}
-
-	/**
 	 * ACLs joined with their board, the base of every share-review query.
 	 */
 	private function shareReviewQuery(): IQueryBuilder {

@@ -141,18 +141,6 @@ class ShareReviewSource implements IPaginatedShareReviewSource, IShareReviewSour
 		return $counts;
 	}
 
-	public function countSharesByInitiator(ShareReviewQuery $query, int $limit): array {
-		if ($limit < 1 || $limit > ShareReviewQuery::MAX_LIMIT) {
-			throw new \InvalidArgumentException('limit must be between 1 and ' . ShareReviewQuery::MAX_LIMIT);
-		}
-		try {
-			return $this->aclMapper->countByInitiatorForShareReview($query, $limit, $this->participantTypes($query), $this->permissionColumns($query));
-		} catch (Exception $e) {
-			$this->logger->error('Deck ShareReview: failed to count shares by initiator: {message}', ['message' => $e->getMessage()]);
-			return [];
-		}
-	}
-
 	public function getShare(string $shareId): ?ShareReviewEntry {
 		if (!ctype_digit($shareId)) {
 			return null;

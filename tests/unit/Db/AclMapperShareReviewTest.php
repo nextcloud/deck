@@ -138,14 +138,6 @@ class AclMapperShareReviewTest extends TestCase {
 		$this->assertSame(1, $this->aclMapper->countForShareReview(new ShareReviewQuery(...$scope, modifiedSinceTimestamp: 200, modifiedBeforeTimestamp: 400))->filteredCount);
 	}
 
-	public function testCountByInitiatorOrdersByCountThenOwnerAndHonoursTheLimit(): void {
-		$scope = new ShareReviewQuery(initiatorIds: ['alice', 'bob']);
-
-		$this->assertSame(['bob' => 3, 'alice' => 2], $this->aclMapper->countByInitiatorForShareReview($scope, 5));
-		$this->assertSame(['bob' => 3], $this->aclMapper->countByInitiatorForShareReview($scope, 1));
-		$this->assertSame(['alice' => 1], $this->aclMapper->countByInitiatorForShareReview(new ShareReviewQuery(initiatorIds: ['alice'], recipientIds: ['bob']), 5));
-	}
-
 	public function testSortByObjectInitiatorRecipientAndType(): void {
 		$base = ['limit' => 500, 'initiatorIds' => ['alice', 'bob'], 'sortDescending' => false];
 		$this->assertSame(['bob', 'devs', 'alice', 'teamX', 'carol'], $this->participantsOf(new ShareReviewQuery(...$base, sortField: ShareReviewQuery::SORT_OBJECT)));

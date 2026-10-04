@@ -272,28 +272,6 @@ final class ShareReviewSourceTest extends TestCase {
 		$this->assertSame(ShareReviewAccessCheckEvent::SCOPE_SELF, $captured->getScope());
 	}
 
-	public function testCountSharesByInitiatorDelegatesWithTheLimit(): void {
-		$this->aclMapper->expects($this->once())->method('countByInitiatorForShareReview')
-			->with($this->isInstanceOf(ShareReviewQuery::class), 10, null, null)
-			->willReturn(['alice' => 3, 'bob' => 1]);
-
-		$this->assertSame(['alice' => 3, 'bob' => 1], $this->source->countSharesByInitiator(new ShareReviewQuery(), 10));
-	}
-
-	public function testCountSharesByInitiatorRejectsAnOutOfRangeLimit(): void {
-		$this->aclMapper->expects($this->never())->method('countByInitiatorForShareReview');
-
-		$this->expectException(\InvalidArgumentException::class);
-		$this->source->countSharesByInitiator(new ShareReviewQuery(), 0);
-	}
-
-	public function testCountSharesByInitiatorDbErrorIsEmpty(): void {
-		$this->aclMapper->method('countByInitiatorForShareReview')->willThrowException($this->createMock(Exception::class));
-		$this->logger->expects($this->once())->method('error');
-
-		$this->assertSame([], $this->source->countSharesByInitiator(new ShareReviewQuery(), 5));
-	}
-
 	public function testGetShareIsAKeyedLookup(): void {
 		$this->aclMapper->expects($this->never())->method('findPageForShareReview');
 		$this->aclMapper->expects($this->once())
