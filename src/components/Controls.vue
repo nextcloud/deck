@@ -309,6 +309,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import { useStackStore } from '../stores/stack.js'
 import { useBoardStore } from '../stores/board.js'
+import { useCardStore } from '../stores/card.js'
 import { useSettingsStore } from '../stores/settings.js'
 
 export default {
@@ -388,7 +389,15 @@ export default {
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 		}),
+		...mapState(useCardStore, ['cardById']),
 		...mapWritableState(useSettingsStore, ['searchQuery']),
+		pageTitle() {
+			if (!this.board?.title) {
+				return ''
+			}
+			const cardTitle = this.$route.params.cardId && this.cardById(Number(this.$route.params.cardId))?.title
+			return cardTitle ? `${cardTitle} - ${this.board.title}` : this.board.title
+		},
 		detailsRoute() {
 			return {
 				name: 'board.details',
@@ -413,7 +422,7 @@ export default {
 		'board.id'() {
 			this.clearFilter()
 		},
-		'board.title': {
+		pageTitle: {
 			immediate: true,
 			handler(title) {
 				if (title) {
