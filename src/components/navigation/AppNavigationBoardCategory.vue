@@ -64,7 +64,7 @@ export default {
 	},
 	computed: {
 		boardsSorted() {
-			return [...this.boards].sort((a, b) => a.title.localeCompare(b.title))
+			return this.boards.sort((a, b) => a.title.localeCompare(b.title))
 		},
 		collapsible() {
 			return this.boards.length > 0

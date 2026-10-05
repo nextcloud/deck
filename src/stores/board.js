@@ -142,15 +142,16 @@ export const useBoardStore = defineStore('board', {
 		},
 		async loadBoardById(boardId) {
 			this.filter = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
-			this.setCurrentBoard(null)
 			const board = await apiClient.loadById(boardId)
 			this.setCurrentBoard(board)
+			this.addBoard(board)
 			this.setAssignableUsers(board.users)
 		},
 		async refreshBoard(boardId) {
 			const board = await apiClient.loadById(boardId)
 			const etagHasChanged = board.ETag !== this.currentBoard?.ETag
 			this.setCurrentBoard(board)
+			this.addBoard(board)
 			this.setAssignableUsers(board.users)
 
 			if (etagHasChanged) {
