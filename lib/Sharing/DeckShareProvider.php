@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Sharing;
 
+use OC\Federation\CloudId;
 use OC\Files\Cache\Cache;
 use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
@@ -18,21 +19,29 @@ use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
-use OCA\Files_Sharing\External\Manager;
+use OCA\Files_Sharing\External\ExternalShare;
+use OCA\Files_Sharing\External\Manager as ExternalShareManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\Files\File;
+use OCP\Files\Config\IUserMountCache;
+use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
+use OCP\Http\Client\IClientService;
+use OCP\ICertificateManager;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IPreview;
+use OCP\IUserManager;
+use OCP\OCM\IOCMDiscoveryService;
+use OCP\Server;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IAttributes;
@@ -66,9 +75,14 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		private IL10N $l,
 		private ITimeFactory $timeFactory,
 		private IMimeTypeLoader $mimeTypeLoader,
-		private Manager $externalShareManager,
+		private ExternalShareManager $externalShareManager,
 		private IRootFolder $rootFolder,
 		private IPreview $preview,
+		private IConfig $config,
+		private \OC\Files\Mount\Manager $mountManager,
+		private IUserManager $userManager,
+		private IUserMountCache $userMountCache,
+		private IEventDispatcher $eventDispatcher,
 		private ?string $userId = null,
 	) {
 	}
@@ -1226,9 +1240,40 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		return [];
 	}
 
-	public function ensureAcceptRemoteShare(string $shareToken, string $remote): array|null {
+	public function getRemoteFile(string $shareToken, string $remote): array|null {
+		$externalShare = $this->ensureAcceptRemoteShare($shareToken, $remote);
+		$user = $this->userManager->get($externalShare->getUser());
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+		$node = $userFolder->get($externalShare->getMountpoint());
+		$files = $userFolder->getById($node->getId());
+
+		if (count($files) === 0) {
+			return [
+				'path' => $externalShare->getMountpoint(),
+				'fileid' => $node->getId(),
+				'filesize' => $node->getSize(),
+				'mimetype' => $node->getMimetype(),
+				'info' => pathinfo($node->getName()),
+				'hasPreview' => false,
+				'isReady' => false,
+			];
+		}
+
+		$file = array_shift($files);
+
+		return [
+			'path' => $userFolder->getRelativePath($file->getPath()),
+			'fileid' => $file->getId(),
+			'filesize' => $file->getSize(),
+			'mimetype' => $file->getMimeType(),
+			'info' => pathinfo($file->getName()),
+			'hasPreview' => $this->preview->isAvailable($file),
+		];
+	}
+
+	public function ensureAcceptRemoteShare(string $shareToken, string $remote): ExternalShare {
 		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->select('id', 'accepted')
+		$qb->select('id', 'accepted', 'user')
 			->from('share_external')
 			->where($qb->expr()->eq('refresh_token', $qb->createNamedParameter($shareToken)))
 			->andWhere($qb->expr()->eq('remote', $qb->createNamedParameter($remote . '/')))
@@ -1242,42 +1287,60 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			throw new ShareNotFound();
 		}
 
-		$externalShare = $this->externalShareManager->getShare((string)$data['id']);
+		$user = $this->userManager->get($data['user']);
+		$externalShare = $this->externalShareManager->getShare((string)$data['id'], $user);
 
 		if ($externalShare === false) {
 			throw new ShareNotFound();
 		}
 
-		if ((int)$data['accepted'] === 0 && !$this->externalShareManager->acceptShare($externalShare)) {
+		if ((int)$data['accepted'] === 0 && !$this->externalShareManager->acceptShare($externalShare, $user)) {
 			throw new ShareNotFound();
 		}
 
-		// Update mount point to be under /Deck if it is not already
+		$externalShare = $this->externalShareManager->getShare((string)$data['id'], $user);
+		$options = [
+			'remote' => $externalShare->getRemote(),
+			'token' => $externalShare->getRefreshToken(),
+			'password' => $externalShare->getPassword(),
+			'access_token' => $externalShare->getAccessToken(),
+			'access_token_expires' => $externalShare->getAccessTokenExpires(),
+			'mountpoint' => $externalShare->getMountpoint(),
+			'owner' => $externalShare->getOwner(),
+			'verify' => !$this->config->getSystemValueBool('sharing.federation.allowSelfSignedCertificates'),
+			'HttpClientService' => Server::get(IClientService::class),
+			'cloudId' => new CloudId($externalShare->getOwner() . '@' . $externalShare->getRemote(), $externalShare->getOwner(), $externalShare->getRemote()),
+			'manager' => $this->externalShareManager,
+			'certificateManager' => Server::get(ICertificateManager::class),
+			'discoveryService' => Server::get(IOCMDiscoveryService::class),
+		];
+		$mount = $this->externalShareManager->getMount($options, $user);
+
+		// Update mount point to be under /Deck
 		if (strpos($externalShare->getMountpoint(), '/Deck') !== 0) {
-			$mount = $this->externalShareManager->getMount(['mountpoint' => $externalShare->getMountpoint()]);
-			$mount->moveMount('/' . $this->userId . '/files/Deck' . $externalShare->getMountpoint());
-			$externalShare->setMountpoint('/Deck' . $externalShare->getMountpoint());
+			$target = '/Deck' . $externalShare->getName();
+			$targetHash = md5($target);
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share_external')
+				->set('mountpoint', $qb->createNamedParameter($target))
+				->set('mountpoint_hash', $qb->createNamedParameter($targetHash))
+				->where($qb->expr()->eq('id', $qb->createNamedParameter($externalShare->getId())))
+				->executeStatement();
+			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent($user));
+			$externalShare->setMountpoint('/Deck' . $externalShare->getName());
+			$options['mountpoint'] = $externalShare->getMountpoint();
+			$mount = $this->externalShareManager->getMount($options, $user);
 		}
 
-		// @TODO: reload the LazyFolder to reflect the new mount point
-
-		// Get the file info for the mount point
-		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+		$this->mountManager->addMount($mount);
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
 		$node = $userFolder->get($externalShare->getMountpoint());
 		$files = $userFolder->getById($node->getId());
+
 		if (count($files) === 0) {
-			return null;
+			$this->userMountCache->addMount($user, '/' . $user->getUID() . '/files' . $externalShare->getMountpoint() . '/', $node->getData(), $mount->getMountProvider(), $mount->getMountId());
 		}
 
-		$file = array_shift($files);
-
-		return [
-			'path' => $userFolder->getRelativePath($file->getPath()),
-			'fileid' => $file->getId(),
-			'filesize' => $file->getSize(),
-			'mimetype' => $file->getMimeType(),
-			'info' => pathinfo($file->getName()),
-			'hasPreview' => $this->preview->isAvailable($file),
-		];
+		return $externalShare;
 	}
 }
