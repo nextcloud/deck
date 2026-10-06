@@ -168,3 +168,17 @@ jobs:
                 body: comment
               })
             }
+
+  summary:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest-low
+    needs: [integration]
+
+    if: always()
+
+    name: integration-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.integration.result != 'success' }}; then exit 1; fi
