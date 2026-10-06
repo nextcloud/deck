@@ -32,6 +32,7 @@ class ExternalBoardService {
 		private BoardMapper $boardMapper,
 		private IURLGenerator $urlGenerator,
 		private DeckShareProvider $deckShareProvider,
+		private FilesAppService $filesAppService,
 		private ?string $userId,
 	) {
 	}
@@ -600,7 +601,7 @@ class ExternalBoardService {
 				$attachments[$i]['extendedData']['attachmentCreator']['displayName'] = $createdByUser->getCloudId()->getId();
 			}
 			if (!empty($attachment['extendedData']['shareToken'])) {
-				$file = $this->deckShareProvider->ensureAcceptRemoteShare($attachment['extendedData']['shareToken'], $ownerCloudId->getRemote());
+				$file = $this->deckShareProvider->getRemoteFile($attachment['extendedData']['shareToken'], $ownerCloudId->getRemote());
 
 				if (empty($file)) {
 					unset($attachments[$i]);
@@ -627,44 +628,22 @@ class ExternalBoardService {
 		return $this->localizeRemoteAttachments($localBoard, $attachments);
 	}
 
-	public function createAttachmentOnRemote(Board $localBoard, int $cardId, string $type, string $data = '', ?array $uploadedFile = null): array {
+	public function createAttachmentForRemote(Board $localBoard, int $cardId): array {
 		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
-		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachment';
-		if ($uploadedFile !== null) {
-			$content = fopen($uploadedFile['tmp_name'], 'rb');
-			if ($content === false) {
-				throw new Exception('Could not read uploaded file');
-			}
-			$params = [
-				[
-					'name' => 'boardId',
-					'contents' => (string)$localBoard->getExternalId(),
-				],
-				[
-					'name' => 'file',
-					'contents' => $content,
-					'filename' => $uploadedFile['name'],
-				],
-				[
-					'name' => 'type',
-					'contents' => $type,
-				],
-				[
-					'name' => 'data',
-					'contents' => $data,
-				],
-			];
-			$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, ['multipart' => $params]);
-			return $this->proxy->getOcsData($resp);
-		}
+
+		// Upload and create remote share
+		$shareWithFederatedId = $ownerCloudId->getId();
+		$fileShareToken = $this->filesAppService->createForRemote($shareWithFederatedId);
+
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/remote-attachment';
 		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, [
 			'boardId' => $localBoard->getExternalId(),
-			'type' => $type,
-			'data' => $data,
+			'cardId' => $cardId,
+			'token' => $fileShareToken,
 		]);
 		return $this->proxy->getOcsData($resp);
 	}

@@ -302,25 +302,51 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$share->setSharedBy($this->userId);
 		$share = $this->shareManager->createShare($share);
 
-		// Create share for federated users
-		$boardId = $this->cardMapper->findBoardId($attachment->getCardId());
-		foreach ($this->permissionService->findUsers($boardId) as $user) {
-			if (!$user instanceof FederatedUser) {
-				continue;
-			}
-			$remoteShare = $this->shareManager->newShare();
-			$remoteShare->setParent((int)$share->getId());
-			$remoteShare->setNode($target);
-			$remoteShare->setShareType(ISHARE::TYPE_REMOTE);
-			$remoteShare->setSharedWith($user->getUID());
-			$remoteShare->setPermissions(Constants::PERMISSION_READ);
-			$remoteShare->setSharedBy($this->userId);
-			$this->shareManager->createShare($remoteShare);
-		}
-
 		$attachment->setId((int)$share->getId());
 		$attachment->setData($target->getName());
 		return $attachment;
+	}
+
+	public function createForRemote(string $federatedCloudId) {
+		$file = $this->getUploadedFile();
+		$fileName = $file['name'];
+		$this->validateFilename($fileName);
+
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+		try {
+			$folder = $userFolder->get($this->configService->getAttachmentFolder());
+		} catch (NotFoundException) {
+			$folder = $userFolder->newFolder($this->configService->getAttachmentFolder());
+		}
+
+		if ($folder->isShared()) {
+			$folderName = $userFolder->getNonExistingName($this->configService->getAttachmentFolder());
+			$folder = $userFolder->newFolder($folderName);
+			$this->configService->setAttachmentFolder($this->userId, $folderName);
+		}
+
+		if (!$folder instanceof Folder || $folder->isShared()) {
+			throw new NotFoundException('No target folder found');
+		}
+
+		$fileName = $folder->getNonExistingName($fileName);
+		$target = $folder->newFile($fileName);
+		$content = fopen($file['tmp_name'], 'rb');
+		if ($content === false) {
+			throw new StatusException('Could not read file');
+		}
+		$target->putContent($content);
+
+		$share = $this->shareManager->newShare();
+		$share->setNode($target);
+		$share->setShareType(IShare::TYPE_REMOTE);
+		$share->setSharedWith($federatedCloudId);
+		$share->setPermissions(Constants::PERMISSION_READ);
+		$share->setSharedBy($this->userId);
+		$share->setShareOwner($this->userId);
+
+		$createdShare = $this->shareManager->createShare($share);
+		return $createdShare->getToken();
 	}
 
 	/**
