@@ -25,6 +25,7 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
@@ -251,6 +252,40 @@ class CardServiceTest extends TestCase {
 		$this->assertEquals($b->getOrder(), 999);
 		$this->assertEquals($b->getStackId(), 123);
 		$this->assertEquals($b->getColor(), '00ff00');
+	}
+
+	public static function dataInvalidDate(): array {
+		return [
+			'five digit year' => ['+020247-01-05T18:10:00.000Z'],
+			'unparsable' => ['not a date'],
+			'non string' => [['2026-01-01']],
+		];
+	}
+
+	/** @dataProvider dataInvalidDate */
+	public function testCreateRejectsInvalidDuedate(mixed $duedate): void {
+		$this->cardMapper->expects($this->never())->method('insert');
+		$this->expectException(BadRequestException::class);
+		$this->cardService->create('Card title', 123, 'text', 999, 'admin', '', $duedate);
+	}
+
+	public function testCreateRejectsInvalidStartdate(): void {
+		$this->cardMapper->expects($this->never())->method('insert');
+		$this->expectException(BadRequestException::class);
+		$this->cardService->create('Card title', 123, 'text', 999, 'admin', '', null, '+020247-01-05T18:10:00.000Z');
+	}
+
+	public function testCreateWithDates(): void {
+		$this->cardMapper->expects($this->once())
+			->method('insert')
+			->willReturnCallback(function (Card $card) {
+				$card->setId(1);
+				return $card;
+			});
+		$this->stackMapper->method('find')->willReturn(Stack::fromParams(['id' => 123, 'boardId' => 1337]));
+		$card = $this->cardService->create('Card title', 123, 'text', 999, 'admin', '', '2026-03-05T10:00:00.000Z', '2026-03-01T10:00:00.000Z');
+		$this->assertEquals(new \DateTime('2026-03-05T10:00:00+00:00'), $card->getDuedate());
+		$this->assertEquals(new \DateTime('2026-03-01T10:00:00+00:00'), $card->getStartdate());
 	}
 
 	public function testCreateAtTopReordersCardsInTransaction(): void {
@@ -570,6 +605,18 @@ class CardServiceTest extends TestCase {
 		$this->assertEquals('newtitle', $actual->getTitle());
 		$this->assertEquals(new \DateTime('2017-01-01T00:00:00+00:00'), $actual->getDuedate());
 		$this->assertEquals(new \DateTime('2016-12-15T00:00:00+00:00'), $actual->getStartdate());
+	}
+
+	public function testUpdateRejectsInvalidDuedate(): void {
+		$this->cardMapper->expects($this->never())->method('update');
+		$this->expectException(BadRequestException::class);
+		$this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, '+020247-01-05T18:10:00.000Z');
+	}
+
+	public function testUpdateRejectsInvalidStartdate(): void {
+		$this->cardMapper->expects($this->never())->method('update');
+		$this->expectException(BadRequestException::class);
+		$this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, null, null, null, null, 'not a date');
 	}
 
 	public function testUpdateArchived() {

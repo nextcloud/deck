@@ -75,6 +75,23 @@ class CardTest extends TestCase {
 		$this->assertNotNull($json['startdate']);
 	}
 
+	public function testFromRowWithUnparsableDates() {
+		$card = Card::fromRow([
+			'id' => 1,
+			'duedate' => '20247-01-05 19:10:00+01',
+			'startdate' => '20247-01-01 19:10:00+01',
+			'done' => '20247-01-02 19:10:00+01',
+		]);
+		$this->assertNull($card->getDuedate());
+		$this->assertNull($card->getStartdate());
+		$this->assertNull($card->getDone());
+	}
+
+	public function testFromRowWithValidDuedate() {
+		$card = Card::fromRow(['id' => 1, 'duedate' => '2026-03-05 10:00:00+00']);
+		$this->assertEquals(new DateTime('2026-03-05T10:00:00+00:00'), $card->getDuedate());
+	}
+
 	public function testJsonSerialize() {
 		$card = $this->createCard();
 		$this->assertEquals([

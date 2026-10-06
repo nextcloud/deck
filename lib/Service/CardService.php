@@ -191,6 +191,8 @@ class CardService {
 	 */
 	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, $startdate = null, ?string $color = null, bool $insertAtPosition = false): Card {
 		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
+		$parsedDuedate = $this->parseDate($duedate, 'duedate');
+		$parsedStartdate = $this->parseDate($startdate, 'startdate');
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->stackMapper, $stackId)) {
@@ -203,8 +205,8 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDescription($description);
-		$card->setDuedate($duedate);
-		$card->setStartdate($startdate);
+		$card->setDuedate($parsedDuedate);
+		$card->setStartdate($parsedStartdate);
 		$card->setColor($color);
 
 		if (!$insertAtPosition) {
@@ -229,6 +231,33 @@ class CardService {
 		[$card] = $this->enrichCards([$card]);
 
 		return $card;
+	}
+
+	/**
+	 * Parse a card date, rejecting values that cannot be stored and read back,
+	 * such as years with more than four digits
+	 *
+	 * @throws BadRequestException
+	 */
+	private function parseDate(mixed $date, string $field): ?\DateTime {
+		if ($date === null || $date === '') {
+			return null;
+		}
+		if (!$date instanceof \DateTime) {
+			if (!is_string($date)) {
+				throw new BadRequestException($field . ' must be a valid date');
+			}
+			try {
+				$date = new \DateTime($date);
+			} catch (\Exception) {
+				throw new BadRequestException($field . ' must be a valid date');
+			}
+		}
+		$year = (int)$date->format('Y');
+		if ($year < 1 || $year > 9999) {
+			throw new BadRequestException($field . ' must be a date between the years 1 and 9999');
+		}
+		return $date;
 	}
 
 	/**
@@ -264,6 +293,8 @@ class CardService {
 	 */
 	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null, ?string $startdate = null, ?OptionalNullableValue $color = null): Card {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
+		$parsedDuedate = $this->parseDate($duedate, 'duedate');
+		$parsedStartdate = $this->parseDate($startdate, 'startdate');
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
@@ -303,8 +334,8 @@ class CardService {
 		$card->setStackId($stackId);
 		$card->setType($type);
 		$card->setOrder($order);
-		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
-		$card->setStartdate($startdate ? new \DateTime($startdate) : null);
+		$card->setDuedate($parsedDuedate);
+		$card->setStartdate($parsedStartdate);
 		if ($color !== null) {
 			$colorValue = $color->getValue();
 			$card->setColor(is_string($colorValue) && $colorValue !== '' ? $colorValue : null);

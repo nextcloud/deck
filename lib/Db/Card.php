@@ -131,6 +131,21 @@ class Card extends RelationalEntity {
 		$this->addRelation('relatedBoard');
 	}
 
+	/**
+	 * Unparsable stored dates (e.g. years with more than four digits) are
+	 * treated as unset so that a single card cannot break loading a board
+	 */
+	protected function setter(string $name, array $args): void {
+		if (in_array($name, ['duedate', 'startdate', 'done'], true) && is_string($args[0])) {
+			try {
+				new DateTime($args[0]);
+			} catch (\Exception) {
+				$args[0] = null;
+			}
+		}
+		parent::setter($name, $args);
+	}
+
 	public function setDatabaseType($type) {
 		$this->databaseType = $type;
 	}
