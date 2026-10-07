@@ -62,7 +62,7 @@ class AttachmentOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function acceptRemote(int $cardId, string $token): DataResponse {
+	public function createRemote(int $cardId, string $token): DataResponse {
 		$this->attachmentService->acceptRemoteAttachment($cardId, $token);
 		return new DataResponse([]);
 	}
