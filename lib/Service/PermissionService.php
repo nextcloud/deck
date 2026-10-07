@@ -66,6 +66,7 @@ class PermissionService {
 	/**
 	 * Get current user permissions for a board by id
 	 *
+	 * @throws DoesNotExistException
 	 * @return array<Acl::PERMISSION_*, bool>
 	 */
 	public function getPermissions(int $boardId, ?string $userId = null, bool $allowDeleted = false): array {
@@ -143,6 +144,7 @@ class PermissionService {
 	 * check permissions for replacing dark magic middleware
 	 *
 	 * @throws NoPermissionException
+	 * @throws DoesNotExistException
 	 */
 	public function checkPermission(?IPermissionMapper $mapper, $id, int $permission, $userId = null, bool $allowDeletedCard = false, bool $allowDeletedBoard = false): bool {
 		$boardId = (int)$id;
