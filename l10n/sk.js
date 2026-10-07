@@ -69,7 +69,7 @@ OC.L10N.register(
     "{user} has commented on card {card}" : "{user} komentoval(a) kartu {card}",
     "Deck" : "Nástenka",
     "Changes in the <strong>Deck app</strong>" : "Zmeny v apke <strong>Nástenka</strong>",
-    "A <strong>board, list or card</strong> was changed" : "<strong>zoznam, alebo karta</strong> boli zmenené",
+    "A <strong>board, list or card</strong> was changed" : "Došlo k zmene <strong>boardu, zoznamu alebo karty</strong>",
     "A <strong>comment</strong> was created on a card" : "Na karte bol vytvorený <strong>komentár</strong>. ",
     "A <strong>card description</strong> has been changed" : "<strong>popis karty</strong> bol zmenený",
     "The file was uploaded" : "Súbor bol nahraný",
