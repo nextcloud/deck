@@ -21,6 +21,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
 use OCA\Files_Sharing\External\ExternalShare;
 use OCA\Files_Sharing\External\Manager as ExternalShareManager;
+use OCA\Files_Sharing\External\Mount;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -39,6 +40,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IPreview;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\OCM\IOCMDiscoveryService;
 use OCP\Server;
@@ -110,7 +112,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		}
 
 		try {
-			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_EDIT);
+			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_EDIT, $share->getSharedBy());
 		} catch (NoPermissionException $e) {
 			$valid = false;
 		}
@@ -1299,6 +1301,34 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		}
 
 		$externalShare = $this->externalShareManager->getShare((string)$data['id'], $user);
+
+		// Update mount point to be under /Deck
+		if (strpos($externalShare->getMountpoint(), '/Deck') !== 0) {
+			$target = '/Deck' . $externalShare->getName();
+			$targetHash = md5($target);
+			$qb = $this->dbConnection->getQueryBuilder();
+			$qb->update('share_external')
+				->set('mountpoint', $qb->createNamedParameter($target))
+				->set('mountpoint_hash', $qb->createNamedParameter($targetHash))
+				->where($qb->expr()->eq('id', $qb->createNamedParameter($externalShare->getId())))
+				->executeStatement();
+			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent($user));
+			$externalShare->setMountpoint('/Deck' . $externalShare->getName());
+		}
+
+		$mount = $this->mountExternalShare($externalShare, $user);
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+		$node = $userFolder->get($externalShare->getMountpoint());
+		$files = $userFolder->getById($node->getId());
+
+		if (count($files) === 0) {
+			$this->userMountCache->addMount($user, '/' . $user->getUID() . '/files' . $externalShare->getMountpoint() . '/', $node->getData(), $mount->getMountProvider(), $mount->getMountId());
+		}
+
+		return $externalShare;
+	}
+
+	public function mountExternalShare(ExternalShare $externalShare, IUser $user): Mount {
 		$options = [
 			'remote' => $externalShare->getRemote(),
 			'token' => $externalShare->getRefreshToken(),
@@ -1315,32 +1345,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			'discoveryService' => Server::get(IOCMDiscoveryService::class),
 		];
 		$mount = $this->externalShareManager->getMount($options, $user);
-
-		// Update mount point to be under /Deck
-		if (strpos($externalShare->getMountpoint(), '/Deck') !== 0) {
-			$target = '/Deck' . $externalShare->getName();
-			$targetHash = md5($target);
-			$qb = $this->dbConnection->getQueryBuilder();
-			$qb->update('share_external')
-				->set('mountpoint', $qb->createNamedParameter($target))
-				->set('mountpoint_hash', $qb->createNamedParameter($targetHash))
-				->where($qb->expr()->eq('id', $qb->createNamedParameter($externalShare->getId())))
-				->executeStatement();
-			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent($user));
-			$externalShare->setMountpoint('/Deck' . $externalShare->getName());
-			$options['mountpoint'] = $externalShare->getMountpoint();
-			$mount = $this->externalShareManager->getMount($options, $user);
-		}
-
 		$this->mountManager->addMount($mount);
-		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
-		$node = $userFolder->get($externalShare->getMountpoint());
-		$files = $userFolder->getById($node->getId());
 
-		if (count($files) === 0) {
-			$this->userMountCache->addMount($user, '/' . $user->getUID() . '/files' . $externalShare->getMountpoint() . '/', $node->getData(), $mount->getMountProvider(), $mount->getMountId());
-		}
-
-		return $externalShare;
+		return $mount;
 	}
 }
