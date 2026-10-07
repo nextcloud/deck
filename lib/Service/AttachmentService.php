@@ -224,6 +224,7 @@ class AttachmentService {
 		$this->jobList->add(ScanFederatedAttachment::class, [
 			'cardId' => $cardId,
 			'shareId' => $externalShare->getId(),
+			'userId' => $externalShare->getUser(),
 		]);
 	}
 
