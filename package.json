@@ -59,7 +59,7 @@
     "p-queue": "^9.3.0",
     "pinia": "^4.0.3",
     "url-search-params-polyfill": "^8.2.5",
-    "vue": "^3.5.41",
+    "vue": "^3.5.43",
     "vue-at": "^3.0.0-alpha.3",
     "vue-easymde": "^2.0.0",
     "vue-loader": "^17.4.2",
