@@ -3,16 +3,19 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcAppSettingsDialog :open="open"
+	<NcAppSettingsDialog
+		:open="open"
 		:name="t('deck', 'Deck settings')"
 		:legacy="false"
-		show-navigation
+		showNavigation
 		@update:open="onClose">
 		<NcAppSettingsSection id="general-settings" :name="t('deck', 'General')">
 			<NcFormBox>
-				<NcFormBoxSwitch v-model="cardDetailsInModal"
+				<NcFormBoxSwitch
+					v-model="cardDetailsInModal"
 					:label="t('deck', 'Use bigger card view')" />
-				<NcFormBoxSwitch v-model="stackAddCardAtTop"
+				<NcFormBoxSwitch
+					v-model="stackAddCardAtTop"
 					data-cy="setting:add-card-at-top"
 					:label="t('deck', 'Add new cards at the top of a list')" />
 			</NcFormBox>
@@ -20,27 +23,31 @@
 
 		<NcAppSettingsSection id="appearance-settings" :name="t('deck', 'Appearance')">
 			<NcFormBox>
-				<NcFormBoxSwitch v-model="cardIdBadge"
+				<NcFormBoxSwitch
+					v-model="cardIdBadge"
 					:label="t('deck', 'Show card ID badge')" />
-				<NcFormBoxSwitch v-model="configCalendar"
+				<NcFormBoxSwitch
+					v-model="configCalendar"
 					:label="t('deck', 'Show boards in calendar/tasks')" />
 			</NcFormBox>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection v-if="isAdmin" id="admin-settings" :name="t('deck', 'Admin settings')">
-			<NcSelect v-model="groupLimit"
-				open-direction="bottom"
+			<NcSelect
+				v-model="groupLimit"
+				openDirection="bottom"
 				:options="groups"
 				:multiple="true"
-				:input-label="t('deck', 'Limit board creation to some groups')"
+				:inputLabel="t('deck', 'Limit board creation to some groups')"
 				label="displayname"
-				track-by="id"
+				trackBy="id"
 				@input="updateConfig" />
 			<p>
 				{{ t('deck', 'Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them.') }}
 			</p>
 			<NcFormBox>
-				<NcFormBoxSwitch v-model="federationEnabled"
+				<NcFormBoxSwitch
+					v-model="federationEnabled"
 					:label="t('deck', 'Enable federation')" />
 			</NcFormBox>
 		</NcAppSettingsSection>
@@ -69,20 +76,21 @@
 
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
+import axios from '@nextcloud/axios'
+import { confirmPassword } from '@nextcloud/password-confirmation'
+import { generateOcsUrl } from '@nextcloud/router'
+import { NcSelect } from '@nextcloud/vue'
 import { useHotKey } from '@nextcloud/vue/composables/useHotKey'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import NcAppSettingsShortcutsSection from '@nextcloud/vue/components/NcAppSettingsShortcutsSection'
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
-import NcHotkeyList from '@nextcloud/vue/components/NcHotkeyList'
 import NcHotkey from '@nextcloud/vue/components/NcHotkey'
-import { NcSelect } from '@nextcloud/vue'
-import { confirmPassword } from '@nextcloud/password-confirmation'
-import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
-import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
+import NcHotkeyList from '@nextcloud/vue/components/NcHotkeyList'
 import { useSettingsStore } from '../stores/settings.js'
+
+import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
 
 export default {
 	name: 'DeckAppSettings',
@@ -117,45 +125,55 @@ export default {
 		isAdmin() {
 			return !!getCurrentUser()?.isAdmin
 		},
+
 		cardDetailsInModal: {
 			get() {
 				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
+
 		stackAddCardAtTop: {
 			get() {
 				return useSettingsStore().configByKey('stackAddCardAtTop') === true
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ stackAddCardAtTop: newValue })
 			},
 		},
+
 		cardIdBadge: {
 			get() {
 				return useSettingsStore().configByKey('cardIdBadge')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ cardIdBadge: newValue })
 			},
 		},
+
 		federationEnabled: {
 			get() {
 				const value = useSettingsStore().configByKey('federationEnabled')
 				return value
 			},
+
 			set(newValue) {
 				confirmPassword().then(() => {
 					useSettingsStore().setConfig({ federationEnabled: newValue ? 'yes' : 'no' })
 				})
 			},
 		},
+
 		configCalendar: {
 			get() {
 				return useSettingsStore().configByKey('calendar')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ calendar: newValue })
 			},

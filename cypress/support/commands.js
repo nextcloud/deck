@@ -97,7 +97,7 @@ Cypress.Commands.add('getNavigationEntry', (boardTitle) => {
 		.find('a.app-navigation-entry-link')
 })
 
-Cypress.Commands.add('shareBoardWithUi', (query, userId=query) => {
+Cypress.Commands.add('shareBoardWithUi', (query, userId = query) => {
 	cy.intercept({ method: 'GET', url: `**/ocs/v2.php/core/autocomplete/get?search=${query}*` }).as('fetchRecipients')
 	cy.get('[aria-label="Open details"]').click()
 	cy.get('.app-sidebar').should('be.visible')

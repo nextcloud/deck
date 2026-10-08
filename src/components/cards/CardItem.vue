@@ -4,9 +4,10 @@
 -->
 
 <template>
-	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
-		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': isCurrentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+	<AttachmentDragAndDrop v-if="card" :cardId="card.id" class="drop-upload--card">
+		<div
+			:ref="`card${card.id}`"
+			:class="{compact: compactMode, 'current-card': isCurrentCard, 'no-labels': !hasLabels, card__editable: canEdit, card__archived: card.archived, card__highlight: highlight}"
 			:style="{backgroundColor: color}"
 			tag="div"
 			:tabindex="0"
@@ -18,17 +19,19 @@
 				<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" dir="auto" />
 				{{ board.title }} » {{ stack.title }}
 			</div>
-			<CardCover v-if="showCardCover" :card-id="card.id" />
+			<CardCover v-if="showCardCover" :cardId="card.id" />
 			<div class="card-upper">
 				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
 					<span>{{ displayTitle }}</span>
 				</h4>
-				<h4 v-if="editingTitle >= 1"
+				<h4
+					v-if="editingTitle >= 1"
 					key="title-edit"
 					dir="auto"
 					class="editable dragDisabled"
 					:aria-label="t('deck', 'Edit card title')">
-					<span ref="titleContentEditable"
+					<span
+						ref="titleContentEditable"
 						tabindex="0"
 						contenteditable="true"
 						role="textbox"
@@ -41,35 +44,40 @@
 				</h4>
 
 				<DueDate v-if="compactMode" :card="card" />
-				<CardMenu v-if="showMenuAtTitle"
+				<CardMenu
+					v-if="showMenuAtTitle"
 					:card="card"
 					class="right card-menu"
-					@edit-title="triggerEditTitle" />
+					@editTitle="triggerEditTitle" />
 			</div>
 
 			<div v-if="hasLabels" class="card-labels">
-				<ul v-if="card.labels && card.labels.length"
+				<ul
+					v-if="card.labels && card.labels.length"
 					class="labels"
 					@click.stop="openCard">
 					<li v-for="label in labelsSorted" :key="label?.id ?? label?.title" :style="labelStyle(label)">
 						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 					</li>
 				</ul>
-				<CardMenu v-if="showMenuAtLabels"
+				<CardMenu
+					v-if="showMenuAtLabels"
 					:card="card"
 					class="right"
-					@edit-title="triggerEditTitle" />
+					@editTitle="triggerEditTitle" />
 			</div>
 
-			<div v-if="hasBadges"
+			<div
+				v-if="hasBadges"
 				v-show="!compactMode"
 				class="card-controls compact-item"
 				@click="openCard">
 				<CardBadges :card="card">
-					<CardMenu v-if="showMenuAtBadges"
+					<CardMenu
+						v-if="showMenuAtBadges"
 						:card="card"
 						class="right"
-						@edit-title="triggerEditTitle" />
+						@editTitle="triggerEditTitle" />
 				</CardBadges>
 			</div>
 		</div>
@@ -77,21 +85,21 @@
 </template>
 
 <script>
-import { vOnClickOutside } from '@vueuse/components'
-import CardBadges from './CardBadges.vue'
-import Color from '../../mixins/color.js'
-import labelStyle from '../../mixins/labelStyle.js'
-import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
-import CardMenu from './CardMenu.vue'
-import CardCover from './CardCover.vue'
-import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
+import { vOnClickOutside } from '@vueuse/components'
 import { mapActions, mapState } from 'pinia'
-import { useStackStore } from '../../stores/stack.js'
-import { useCardStore } from '../../stores/card.js'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import DueDate from './badges/DueDate.vue'
+import CardBadges from './CardBadges.vue'
+import CardCover from './CardCover.vue'
+import CardMenu from './CardMenu.vue'
+import Color from '../../mixins/color.js'
+import labelStyle from '../../mixins/labelStyle.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
+import { useStackStore } from '../../stores/stack.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -105,25 +113,30 @@ export default {
 	directives: {
 		vOnClickOutside,
 	},
+
 	mixins: [Color, labelStyle],
 	props: {
 		id: {
 			type: Number,
 			default: null,
 		},
+
 		item: {
 			type: Object,
 			default: null,
 		},
+
 		standalone: {
 			type: Boolean,
 			default: false,
 		},
+
 		dragging: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	data() {
 		return {
 			highlight: false,
@@ -131,6 +144,7 @@ export default {
 			isCurrentCard: false,
 		}
 	},
+
 	computed: {
 		...mapState(useStackStore, ['stackById']),
 		...mapState(useCardStore, ['cardById']),
@@ -141,18 +155,21 @@ export default {
 			boards: 'boards',
 			boardById: 'boardById',
 		}),
+
 		...mapState(useSettingsStore, {
-			compactMode: state => state.compactMode,
-			showCardCover: state => state.showCardCover,
-			shortcutLock: state => state.shortcutLock,
+			compactMode: (state) => state.compactMode,
+			showCardCover: (state) => state.showCardCover,
+			shortcutLock: (state) => state.shortcutLock,
 		}),
 
 		board() {
 			return this.boardById(this?.stack?.boardId)
 		},
+
 		stack() {
 			return this.stackById(this?.card?.stackId)
 		},
+
 		canEdit() {
 			if (this.currentBoard) {
 				return !this.currentBoard.archived && this.canEditPermission
@@ -160,19 +177,24 @@ export default {
 			const board = this.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
+
 		card() {
 			return this.item ? this.item : this.cardById(this.id)
 		},
+
 		displayTitle() {
 			const reference = this.card?.referenceData
 			return reference ? reference.openGraphObject.name : this.card.title
 		},
+
 		labelsSorted() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
+
 		hasLabels() {
 			return this.card.labels.length > 0
 		},
+
 		hasBadges() {
 			return this.card.done
 				|| this.card.duedate
@@ -182,28 +204,34 @@ export default {
 				|| this.card.attachmentCount > 0
 				|| this.card.assignedUsers.length > 0
 		},
+
 		idBadge() {
 			return useSettingsStore().configByKey('cardIdBadge')
 		},
+
 		showMenuAtTitle() {
 			return this.compactMode || (!this.compactMode && !this.hasBadges && !this.hasLabels)
 		},
+
 		showMenuAtLabels() {
 			if (this.compactMode) {
 				return false
 			}
 			return !this.hasBadges && this.hasLabels
 		},
+
 		showMenuAtBadges() {
 			if (this.compactMode) {
 				return false
 			}
 			return this.hasBadges
 		},
+
 		color() {
 			return this.card.color ? '#' + this.card.color : null
 		},
 	},
+
 	watch: {
 		'$route.params.cardId': {
 			immediate: true,
@@ -222,6 +250,7 @@ export default {
 			},
 		},
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			updateCardTitleInStore: 'updateCardTitle',
@@ -230,6 +259,7 @@ export default {
 			removeUserFromCardInStore: 'removeUserFromCard',
 			assignCardToUserInStore: 'assignCardToUser',
 		}),
+
 		...mapActions(useBoardStore, ['toggleFilter']),
 		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		hasSelection() {
@@ -239,6 +269,7 @@ export default {
 			// contenteditable area, such as the Text app)
 			return selection.toString() !== '' && this.$el.contains(selection.anchorNode)
 		},
+
 		focus(card) {
 			if (this.shortcutLock || this.hasSelection()) {
 				return
@@ -246,6 +277,7 @@ export default {
 			card = this.$refs[`card${card || this.card.id}`]
 			card.focus()
 		},
+
 		openCard(event) {
 			if (event.target.tagName.toLowerCase() === 'a') {
 				return
@@ -262,6 +294,7 @@ export default {
 
 			emit('deck:card:open-modal', this.card.id)
 		},
+
 		triggerEditTitle() {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING
 			this.toggleShortcutLock(true)
@@ -272,6 +305,7 @@ export default {
 				this.editingTitle = TITLE_EDITING_STATE.ON
 			}, 0)
 		},
+
 		onTitleBlur(e) {
 			const value = e.target.innerText.trim().replace(/\n$/, '')
 			if (this.editingTitle !== TITLE_EDITING_STATE.ON || value === '') {
@@ -286,9 +320,11 @@ export default {
 			}
 			this.toggleShortcutLock(false)
 		},
+
 		onTitleFocus() {
 			this.toggleShortcutLock(true)
 		},
+
 		handleCardKeyboardShortcut(key) {
 			if (OCP.Accessibility.disableKeyboardShortcuts()) {
 				return
@@ -299,37 +335,37 @@ export default {
 			}
 
 			switch (key.code) {
-			case 'KeyE':
-				this.triggerEditTitle()
-				break
-			case 'KeyA':
-				this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
-				break
-			case 'KeyO':
-				this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
-				break
-			case 'KeyM':
-				this.$el.querySelector('button.action-item__menutoggle')?.click()
-				break
-			case 'Enter':
-			case 'Space':
-				this.openCard().then(() => document.getElementById('app-sidebar-vue')?.focus())
-				break
-			case 'KeyS':
-				this.toggleSelfAsignment()
-				break
+				case 'KeyE':
+					this.triggerEditTitle()
+					break
+				case 'KeyA':
+					this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
+					break
+				case 'KeyO':
+					this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
+					break
+				case 'KeyM':
+					this.$el.querySelector('button.action-item__menutoggle')?.click()
+					break
+				case 'Enter':
+				case 'Space':
+					this.openCard().then(() => document.getElementById('app-sidebar-vue')?.focus())
+					break
+				case 'KeyS':
+					this.toggleSelfAsignment()
+					break
 			}
 		},
+
 		applyLabelFilter(label) {
 			if (this.dragging) {
 				return
 			}
 			this.$nextTick(() => this.toggleFilter({ tags: [label.id] }))
 		},
+
 		toggleSelfAsignment() {
-			const isAssigned = this.card.assignedUsers.find(
-				(item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid,
-			)
+			const isAssigned = this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
 			const assigneeData = {
 				card: this.card,
 				assignee: {
@@ -343,6 +379,7 @@ export default {
 			}
 			this.assignCardToUserInStore(assigneeData)
 		},
+
 		scrollIntoView() {
 			this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
 			this.focus()

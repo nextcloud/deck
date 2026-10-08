@@ -5,17 +5,19 @@
 <template>
 	<NcDialog v-model:open="modalShow" :name="t('deck', 'Move/copy card')">
 		<div class="modal__content">
-			<NcSelect v-model="selectedBoard"
-				:input-label="t('deck', 'Select a board')"
+			<NcSelect
+				v-model="selectedBoard"
+				:inputLabel="t('deck', 'Select a board')"
 				:placeholder="t('deck', 'Select a board')"
 				:options="activeBoards"
 				:max-height="100"
 				label="title"
 				@option:selected="loadStacksFromBoard" />
-			<NcSelect v-model="selectedStack"
+			<NcSelect
+				v-model="selectedStack"
 				:disabled="stacksFromBoard.length === 0"
 				:placeholder="stacksFromBoard.length === 0 ? t('deck', 'No lists available') : t('deck', 'Select a list')"
-				:input-label="t('deck', 'Select a list')"
+				:inputLabel="t('deck', 'Select a list')"
 				:options="stacksFromBoard"
 				:max-height="100"
 				data-cy="select-stack"
@@ -33,14 +35,14 @@
 </template>
 
 <script>
-import { NcDialog, NcSelect, NcButton } from '@nextcloud/vue'
-import { generateOcsUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { generateOcsUrl } from '@nextcloud/router'
+import { NcButton, NcDialog, NcSelect } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
-import { useStackStore } from './stores/stack.js'
-import { useCardStore } from './stores/card.js'
 import { useBoardStore } from './stores/board.js'
+import { useCardStore } from './stores/card.js'
+import { useStackStore } from './stores/stack.js'
 
 export default {
 	name: 'CardMoveDialog',
@@ -54,16 +56,19 @@ export default {
 			stacksFromBoard: [],
 		}
 	},
+
 	computed: {
 		...mapState(useStackStore, ['stackById']),
 		...mapState(useBoardStore, ['boardById', 'boards']),
 		activeBoards() {
 			return this.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
 		},
+
 		isBoardAndStackChoosen() {
 			return !(this.selectedBoard === '' || this.selectedStack === '')
 		},
 	},
+
 	watch: {
 		selectedBoard: {
 			immediate: true,
@@ -73,18 +78,22 @@ export default {
 			},
 		},
 	},
+
 	mounted() {
 		subscribe('deck:card:show-move-dialog', this.openModal)
 	},
+
 	unmounted() {
 		unsubscribe('deck:card:show-move-dialog', this.openModal)
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			moveCardInStore: 'moveCard',
 			addNewCardInStore: 'addNewCard',
 			cloneCardInStore: 'cloneCard',
 		}),
+
 		openModal(card) {
 			this.card = card
 			this.selectedStack = this.stackById(this.card.stackId)
@@ -92,6 +101,7 @@ export default {
 			this.loadStacksFromBoard(this.selectedBoard)
 			this.modalShow = true
 		},
+
 		async loadStacksFromBoard(board) {
 			try {
 				const url = generateOcsUrl(`/apps/deck/api/v1.0/stacks/${board.id}`)
@@ -101,8 +111,9 @@ export default {
 				return err
 			}
 		},
+
 		async moveCard() {
-			this.copiedCard = Object.assign({}, this.card)
+			this.copiedCard = { ...this.card }
 			this.copiedCard.stackId = this.selectedStack.id
 			await this.moveCardInStore({ card: this.copiedCard, oldBoardId: this.selectedBoard.id })
 			if (parseInt(this.selectedBoard.id) === parseInt(this.selectedStack.boardId)) {
@@ -110,6 +121,7 @@ export default {
 			}
 			this.modalShow = false
 		},
+
 		async cloneCard() {
 			await this.cloneCardInStore({ cardId: this.card.id, targetStackId: this.selectedStack.id })
 			this.modalShow = false

@@ -11,7 +11,8 @@
 			<div class="inline-badges">
 				<CardId v-if="idBadge" class="icon-badge" :card="card" />
 
-				<div v-if="card.commentsCount > 0"
+				<div
+					v-if="card.commentsCount > 0"
 					:title="commentsHint"
 					class="icon-badge"
 					@click.stop="openComments">
@@ -43,14 +44,15 @@
 		</div>
 	</div>
 </template>
+
 <script>
+import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
+import CommentUnreadIcon from 'vue-material-design-icons/CommentAccountOutline.vue'
+import CommentIcon from 'vue-material-design-icons/CommentOutline.vue'
+import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
+import TextIcon from 'vue-material-design-icons/Text.vue'
 import NcAvatarList from './AvatarList.vue'
 import CardId from './badges/CardId.vue'
-import TextIcon from 'vue-material-design-icons/Text.vue'
-import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
-import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
-import CommentIcon from 'vue-material-design-icons/CommentOutline.vue'
-import CommentUnreadIcon from 'vue-material-design-icons/CommentAccountOutline.vue'
 import DueDate from './badges/DueDate.vue'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -66,19 +68,23 @@ export default {
 		CommentUnreadIcon,
 		CardId,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
 	},
+
 	computed: {
 		checkListCount() {
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
 		},
+
 		checkListCheckedCount() {
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
 		},
+
 		commentsHint() {
 			if (this.card.commentsUnread > 0) {
 				return t('deck', '{count} comments, {unread} unread', {
@@ -88,10 +94,12 @@ export default {
 			}
 			return null
 		},
+
 		idBadge() {
 			return useSettingsStore().configByKey('cardIdBadge')
 		},
 	},
+
 	methods: {
 		openComments() {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id

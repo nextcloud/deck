@@ -4,25 +4,29 @@
 -->
 
 <template>
-	<div class="stack"
+	<div
+		class="stack"
 		:class="{
 			'stack--done-column': isDoneColumn,
 			'stack--add-card-at-top': canAddCard && stackAddCardAtTop,
 			'stack--add-card-at-bottom': canAddCard && !stackAddCardAtTop,
 		}"
 		:data-cy-stack="stack.title">
-		<div class="stack__header"
+		<div
+			class="stack__header"
 			:class="{'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived" tabindex="0">
 					{{ stack.title }}
-					<CheckCircleOutline v-if="isDoneColumn"
+					<CheckCircleOutline
+						v-if="isDoneColumn"
 						class="stack__done-icon"
 						decorative />
 					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
-				<h3 v-else-if="!editing"
+				<h3
+					v-else-if="!editing"
 					tabindex="0"
 					:aria-label="stack.title"
 					:title="stack.title"
@@ -30,41 +34,45 @@
 					@click="startEditing(stack)"
 					@keydown.enter="startEditing(stack)">
 					<span dir="auto">{{ stack.title }}</span>
-					<CheckCircleOutline v-if="isDoneColumn"
+					<CheckCircleOutline
+						v-if="isDoneColumn"
 						class="stack__done-icon"
 						decorative />
 					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
-				<form v-else-if="editing"
+				<form
+					v-else-if="editing"
 					v-v-on-click-outside="cancelEdit"
 					data-cy="editStackTitleForm"
 					@submit.prevent="finishedEdit(stack)"
 					@keyup.esc="cancelEdit">
-					<input v-model="copiedStack.title"
+					<input
+						v-model="copiedStack.title"
 						v-focus
 						dir="auto"
 						type="text"
 						required="required">
-					<input title="t('deck', 'Edit list title')"
+					<input
+						title="t('deck', 'Edit list title')"
 						class="icon-confirm"
 						type="submit"
 						value="">
 				</form>
 			</transition>
-			<NcActions v-if="canManage && !isArchived" :force-menu="true">
-				<NcActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+			<NcActions v-if="canManage && !isArchived" :forceMenu="true">
+				<NcActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow = true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Archive all cards') }}
 				</NcActionButton>
-				<NcActionButton v-if="showArchived" @click="modalArchivAllCardsShow=true">
+				<NcActionButton v-if="showArchived" @click="modalArchivAllCardsShow = true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Unarchive all cards') }}
 				</NcActionButton>
-				<NcActionButton close-after-click @click="toggleDoneColumn">
+				<NcActionButton closeAfterClick @click="toggleDoneColumn">
 					<template #icon>
 						<CheckCircleOutline decorative />
 					</template>
@@ -76,7 +84,7 @@
 			</NcActions>
 		</div>
 
-		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
+		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow = false">
 			<div class="modal__content">
 				<h3 v-if="!showArchived">
 					{{ t('deck', 'Archive all cards in this list') }}
@@ -92,39 +100,43 @@
 				<button v-else class="primary" @click="setArchivedToAllCardsFromStack(stack, !showArchived)">
 					{{ t('deck', 'Unarchive all cards') }}
 				</button>
-				<button @click="modalArchivAllCardsShow=false">
+				<button @click="modalArchivAllCardsShow = false">
 					{{ t('deck', 'Cancel') }}
 				</button>
 			</div>
 		</NcModal>
 
-		<StackCardAdd v-if="canAddCard && stackAddCardAtTop"
+		<StackCardAdd
+			v-if="canAddCard && stackAddCardAtTop"
 			:stack="stack"
-			:add-at-top="true"
+			:addAtTop="true"
 			@creating="animate = true"
 			@created="handleCardCreated" />
 
-		<Container :get-child-payload="payloadForCard(stack.id)"
+		<Container
+			:getChildPayload="payloadForCard(stack.id)"
 			class="dnd-container"
-			group-name="stack"
+			groupName="stack"
 			data-click-closes-sidebar="true"
-			non-drag-area-selector=".dragDisabled"
-			:drag-handle-selector="dragHandleSelector"
+			nonDragAreaSelector=".dragDisabled"
+			:dragHandleSelector="dragHandleSelector"
 			data-dragscroll-enabled
-			:should-accept-drop="() => canEdit"
-			@drag-start="draggingCard = true"
-			@drag-end="draggingCard = false"
+			:shouldAcceptDrop="() => canEdit"
+			@dragStart="draggingCard = true"
+			@dragEnd="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
-				<transition :appear="animate && !card.animated && (card.animated=true)"
-					:appear-class="'zoom-appear-class'"
-					:appear-active-class="'zoom-appear-active-class'">
+				<transition
+					:appear="animate && !card.animated && (card.animated = true)"
+					appearClass="zoom-appear-class"
+					appearActiveClass="zoom-appear-active-class">
 					<CardItem :id="card.id" ref="card" :dragging="draggingCard" />
 				</transition>
 			</Draggable>
 		</Container>
 
-		<StackCardAdd v-if="canAddCard && !stackAddCardAtTop"
+		<StackCardAdd
+			v-if="canAddCard && !stackAddCardAtTop"
 			:stack="stack"
 			@creating="animate = true"
 			@created="handleCardCreated" />
@@ -132,23 +144,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'pinia'
+import { showUndo } from '@nextcloud/dialogs'
+import { NcActionButton, NcActions, NcModal } from '@nextcloud/vue'
 import { vOnClickOutside } from '@vueuse/components'
+import { mapActions, mapState } from 'pinia'
 import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
-import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
-import { showUndo } from '@nextcloud/dialogs'
-
 import CardItem from '../cards/CardItem.vue'
 import StackCardAdd from './StackCardAdd.vue'
+import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
+import { useStackStore } from '../../stores/stack.js'
+import { useTrashbinStore } from '../../stores/trashbin.js'
 
 import '@nextcloud/dialogs/style.css'
-import { useTrashbinStore } from '../../stores/trashbin.js'
-import { useStackStore } from '../../stores/stack.js'
-import { useCardStore } from '../../stores/card.js'
-import { useBoardStore } from '../../stores/board.js'
-import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'Stack',
@@ -163,19 +174,23 @@ export default {
 		ArchiveIcon,
 		CheckCircleOutline,
 	},
+
 	directives: {
 		vOnClickOutside,
 	},
+
 	props: {
 		dragging: {
 			type: Boolean,
 			default: false,
 		},
+
 		stack: {
 			type: Object,
 			default: undefined,
 		},
 	},
+
 	data() {
 		return {
 			editing: false,
@@ -189,6 +204,7 @@ export default {
 			},
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, [
 			'canManage',
@@ -196,14 +212,17 @@ export default {
 			'isArchived',
 			'showArchived',
 		]),
+
 		...mapState(useCardStore, {
 			cardsByStackGetter: 'cardsByStack',
 		}),
+
 		...mapState(useSettingsStore, [
 			'compactMode',
 			'showCardCover',
 			'shortcutLock',
 		]),
+
 		cardsByStack() {
 			return this.cardsByStackGetter(this.stack.id).filter((card) => {
 				if (this.showArchived) {
@@ -212,27 +231,34 @@ export default {
 				return !card.archived
 			})
 		},
+
 		isDoneColumn() {
 			return !!this.stack.isDoneColumn
 		},
+
 		dragHandleSelector() {
 			return this.canEdit && !this.showArchived ? null : '.no-drag'
 		},
+
 		cardDetailsInModal: {
 			get() {
 				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
+
 		stackAddCardAtTop() {
 			return useSettingsStore().configByKey('stackAddCardAtTop') === true
 		},
+
 		canAddCard() {
 			return this.canEdit && !this.showArchived && !this.isArchived
 		},
 	},
+
 	mounted() {
 		this.setupAutoscrollOnDrag()
 	},
@@ -245,6 +271,7 @@ export default {
 			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
 			addCardInStore: 'addCard',
 		}),
+
 		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		stopCardCreation(e) {
 			if (this.$refs.newCardInput && this.$refs.newCardInput.parentElement === e.target.parentElement) {
@@ -252,9 +279,10 @@ export default {
 			}
 			return false
 		},
+
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
-			const card = Object.assign({}, payload)
+			const card = { ...payload }
 			if (this.stack.id === stackId) {
 				if (addedIndex !== null && removedIndex === null) {
 					// move card to new stack
@@ -270,11 +298,13 @@ export default {
 				}
 			}
 		},
+
 		payloadForCard(stackId) {
-			return index => {
+			return (index) => {
 				return this.cardsByStack[index]
 			}
 		},
+
 		toggleDoneColumn() {
 			this.setDoneStack({
 				stackId: this.stack.id,
@@ -282,10 +312,12 @@ export default {
 				isDone: !this.isDoneColumn,
 			})
 		},
+
 		deleteStackShowUndo(stack) {
 			this.deleteStack(stack)
 			showUndo(t('deck', 'List deleted'), () => this.stackUndoDelete(stack))
 		},
+
 		setArchivedToAllCardsFromStack(stack, isArchived) {
 			this.stackTransfer.total = this.cardsByStack.length
 			this.cardsByStack.forEach((card, index) => {
@@ -294,23 +326,27 @@ export default {
 			})
 			this.modalArchivAllCardsShow = false
 		},
+
 		startEditing(stack) {
 			if (this.dragging) {
 				return
 			}
 
-			this.copiedStack = Object.assign({}, stack)
+			this.copiedStack = { ...stack }
 			this.editing = true
 		},
+
 		finishedEdit(stack) {
 			if (this.copiedStack.title !== stack.title) {
 				this.updateStack(this.copiedStack)
 			}
 			this.editing = false
 		},
+
 		cancelEdit() {
 			this.editing = false
 		},
+
 		handleCardCreated(newCard) {
 			this.$nextTick(() => {
 				this.animate = false
@@ -318,6 +354,7 @@ export default {
 				this.$refs.card?.find((card) => card.id === newCard.id)?.scrollIntoView()
 			})
 		},
+
 		setupAutoscrollOnDrag() {
 			let timer
 			const autoscroll = (event) => {

@@ -5,7 +5,7 @@
 
 <template>
 	<div class="overview-wrapper">
-		<Controls :overview-name="filterDisplayName" />
+		<Controls :overviewName="filterDisplayName" />
 
 		<div v-if="loading" key="loading" class="emptycontent">
 			<div class="icon icon-loading" />
@@ -16,7 +16,8 @@
 		<div v-else-if="isValidFilter" class="overview">
 			<div v-for="columnProps in columnPropsList" :key="columnProps.title" class="dashboard-column">
 				<div class="dashboard-column__header">
-					<h3 class="dashboard-column__header-title"
+					<h3
+						class="dashboard-column__header-title"
 						:title="columnProps.title"
 						:aria-label="columnProps.title">
 						{{ t('deck', columnProps.title) }}
@@ -24,12 +25,14 @@
 				</div>
 				<div class="dashboard-column__list">
 					<template v-if="columnProps.sort === false">
-						<CardItem v-for="card in filterCards(columnProps.filter)"
+						<CardItem
+							v-for="card in filterCards(columnProps.filter)"
 							:id="card.id"
 							:key="card.id" />
 					</template>
 					<template v-else>
-						<CardItem v-for="card in sortCards(filterCards(columnProps.filter))"
+						<CardItem
+							v-for="card in sortCards(filterCards(columnProps.filter))"
 							:id="card.id"
 							:key="card.id" />
 					</template>
@@ -42,11 +45,11 @@
 </template>
 
 <script>
-import Controls from '../Controls.vue'
+import { mapActions, mapState } from 'pinia'
 import CardItem from '../cards/CardItem.vue'
+import Controls from '../Controls.vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { useOverviewStore } from '../../stores/overview.js'
-import { mapActions, mapState } from 'pinia'
 
 const FILTER_UPCOMING = 'upcoming'
 
@@ -89,40 +92,48 @@ export default {
 		Controls,
 		CardItem,
 	},
+
 	props: {
 		filter: {
 			type: String,
 			default: FILTER_UPCOMING,
 		},
 	},
+
 	data() {
 		return {
 			loading: true,
 			columnPropsList: COLUMN_PROPS_LIST,
 		}
 	},
+
 	computed: {
 		isValidFilter() {
 			return SUPPORTED_FILTERS.indexOf(this.filter) > -1
 		},
+
 		filterDisplayName() {
 			switch (this.filter) {
-			case FILTER_UPCOMING:
-				return t('deck', 'Upcoming cards')
-			default:
-				return ''
+				case FILTER_UPCOMING:
+					return t('deck', 'Upcoming cards')
+				default:
+					return ''
 			}
 		},
+
 		...mapState(useOverviewStore, ['assignedCards']),
 	},
+
 	watch: {
-		'$route.params.filter'() {
+		'$route.params.filter': function() {
 			this.getData()
 		},
 	},
+
 	created() {
 		this.getData()
 	},
+
 	methods: {
 		...mapActions(useOverviewStore, ['loadUpcoming']),
 		async getData() {
@@ -136,9 +147,11 @@ export default {
 			}
 			this.loading = false
 		},
+
 		filterCards(when) {
 			return this.assignedCards[when]
 		},
+
 		sortCards(cards) {
 			if (!cards) {
 				return null

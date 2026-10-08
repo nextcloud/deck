@@ -5,10 +5,11 @@
 
 <template>
 	<div class="board-wrapper" :tabindex="-1" @touchend="fixActionRestriction">
-		<Controls :board="board"
-			show-search
-			:search-label="t('deck', 'Search cards')"
-			:search-hint="searchHint" />
+		<Controls
+			:board="board"
+			showSearch
+			:searchLabel="t('deck', 'Search cards')"
+			:searchHint="searchHint" />
 
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
@@ -31,12 +32,14 @@
 				<template v-if="canManage" #action>
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
-						<NcTextField ref="newStackInput"
+						<NcTextField
+							ref="newStackInput"
 							v-model="newStackTitle"
 							:disable="loading"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
-						<NcButton variant="secondary"
+						<NcButton
+							variant="secondary"
 							type="submit"
 							:disabled="loading"
 							:title="t('deck', 'Add list')">
@@ -49,23 +52,27 @@
 					</form>
 				</template>
 			</NcEmptyContent>
-			<GanttView v-else-if="!isEmpty && !loading && viewMode === 'gantt'"
+			<GanttView
+				v-else-if="!isEmpty && !loading && viewMode === 'gantt'"
 				key="gantt"
 				:board="board"
 				:stacks="stacks" />
-			<div v-else-if="!isEmpty && !loading"
+			<div
+				v-else-if="!isEmpty && !loading"
 				key="board"
 				ref="board"
 				class="board"
 				@mousedown="onMouseDown">
-				<Container lock-axix="y"
+				<Container
+					lockAxix="y"
 					orientation="horizontal"
-					:drag-handle-selector="dragHandleSelector"
+					:dragHandleSelector="dragHandleSelector"
 					data-click-closes-sidebar="true"
-					@drag-start="draggingStack = true"
-					@drag-end="draggingStack = false"
+					@dragStart="draggingStack = true"
+					@dragEnd="draggingStack = false"
 					@drop="onDropStack">
-					<Draggable v-for="stack in stacks"
+					<Draggable
+						v-for="stack in stacks"
 						:key="stack.id"
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
@@ -76,10 +83,11 @@
 			</div>
 		</transition>
 		<GlobalSearchResults v-if="isFullApp" />
-		<NcModal v-if="localModal"
-			:clear-view-delay="0"
-			:close-button-contained="true"
-			:close-on-click-outside="true"
+		<NcModal
+			v-if="localModal"
+			:clearViewDelay="0"
+			:closeButtonContained="true"
+			:closeOnClickOutside="true"
 			size="large"
 			@close="localModal = null">
 			<div class="modal__content modal__card">
@@ -90,23 +98,23 @@
 </template>
 
 <script>
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { NcButton, NcEmptyContent, NcLoadingIcon, NcModal, NcTextField } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import { Container, Draggable } from 'vue3-smooth-dnd'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CardSidebar from '../card/CardSidebar.vue'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import Stack from './Stack.vue'
-import GanttView from './GanttView.vue'
-import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
+import GanttView from './GanttView.vue'
+import Stack from './Stack.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
-import CardSidebar from '../card/CardSidebar.vue'
-import { mapActions, mapState } from 'pinia'
-import { useStackStore } from '../../stores/stack.js'
-import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
+import { useStackStore } from '../../stores/stack.js'
 export default {
 	name: 'Board',
 	components: {
@@ -125,15 +133,18 @@ export default {
 		CheckIcon,
 		CardSidebar,
 	},
+
 	inject: [
 		'boardApi',
 	],
+
 	props: {
 		id: {
 			type: Number,
 			default: null,
 		},
 	},
+
 	data() {
 		return {
 			draggingStack: false,
@@ -144,6 +155,7 @@ export default {
 			localModal: null,
 		}
 	},
+
 	computed: {
 		...mapState(useStackStore, ['stacksByBoard']),
 		...mapState(useCardStore, ['cardById']),
@@ -154,51 +166,62 @@ export default {
 			canManage: 'canManage',
 			viewMode: 'viewMode',
 		}),
+
 		...mapState(useSettingsStore, ['isFullApp']),
 		stacks() {
 			return this.board?.id ? this.stacksByBoard(this.board.id) : []
 		},
+
 		searchHint() {
 			// Parameterised so translators never see the prefixes as translatable text
 			return t('deck', 'Supported prefixes: {prefixes}. Wrap phrases in double quotes.', {
 				prefixes: 'title:, description:, tag:, assigned:, list:, date:',
 			})
 		},
+
 		dragHandleSelector() {
 			return this.canEdit ? '.stack__title' : '.no-drag'
 		},
+
 		isEmpty() {
 			return this.stacks.length === 0
 		},
 	},
+
 	watch: {
 		id(newValue, oldValue) {
 			this.fetchData()
 		},
+
 		showArchived() {
 			this.fetchData()
 		},
+
 		isEmpty(newValue) {
 			newValue && this.$nextTick(() => {
 				this.$refs?.newStackInput?.focus()
 			})
 		},
 	},
+
 	created() {
 		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
 		subscribe('deck:card:open-modal', this.openCardModal)
 	},
+
 	beforeUnmount() {
 		this.session?.close()
 		unsubscribe('deck:card:open-modal', this.openCardModal)
 	},
+
 	methods: {
 		...mapActions(useBoardStore, ['loadBoardById', 'toggleShowArchived']),
 		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
 		openCardModal(cardId) {
 			this.localModal = cardId
 		},
+
 		async fetchData() {
 			this.loading = true
 			try {

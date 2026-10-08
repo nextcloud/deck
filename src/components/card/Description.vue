@@ -9,7 +9,8 @@
 			{{ t('deck', 'Description') }}
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
 			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
-			<a v-if="!textAppAvailable"
+			<a
+				v-if="!textAppAvailable"
 				:title="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
@@ -36,46 +37,49 @@
 			<div ref="editor" />
 		</div>
 		<template v-else>
-			<div v-if="!descriptionEditing && hasDescription"
+			<div
+				v-if="!descriptionEditing && hasDescription"
 				id="description-preview"
 				dir="auto"
 				@click="clickedPreview"
 				v-html="renderedDescription" />
 			<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
-				{{ t('deck', 'Write a description …') }}
+				{{ t('deck', 'Write a description …') }}
 			</p>
-			<VueEasymde v-else
+			<VueEasymde
+				v-else
 				:key="card.id"
 				ref="markdownEditor"
 				v-model="description"
 				:configs="mdeConfig"
 				@initialized="addKeyListeners"
-				@update:model-value="updateDescription"
+				@update:modelValue="updateDescription"
 				@blur="saveDescription" />
 		</template>
 
-		<NcModal v-if="modalShow && !!card.id" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
+		<NcModal v-if="modalShow && !!card.id" :title="t('deck', 'Choose attachment')" @close="modalShow = false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
-				<AttachmentList :card-id="card.id"
+				<AttachmentList
+					:cardId="card.id"
 					:selectable="true"
-					@select-attachment="addAttachment" />
+					@selectAttachment="addAttachment" />
 			</div>
 		</NcModal>
 	</div>
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it'
-import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
-import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
-import AttachmentList from './AttachmentList.vue'
-import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
+import { showWarning } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
-import { showWarning } from '@nextcloud/dialogs'
+import { NcActionButton, NcActions, NcModal } from '@nextcloud/vue'
+import MarkdownIt from 'markdown-it'
+import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
+import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
+import { mapActions, mapState } from 'pinia'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
-import { mapState, mapActions } from 'pinia'
+import AttachmentList from './AttachmentList.vue'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -101,20 +105,24 @@ export default {
 		AttachmentList,
 		PaperclipIcon,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: true,
 		},
+
 		showAttachments: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	emits: ['change'],
 	data() {
 		return {
@@ -131,15 +139,17 @@ export default {
 				autofocus: true,
 				autosave: { enabled: false, uniqueId: 'unique' },
 				toolbar: false,
-				placeholder: t('deck', 'Write a description …'),
+				placeholder: t('deck', 'Write a description …'),
 				previewImagesInEditor: false,
 			},
+
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
 			descriptionLastEdit: 0,
 			modalShow: false,
 		}
 	},
+
 	computed: {
 		...mapState(useSettingsStore, ['hasCardSaveError']),
 		mimetypeForAttachment() {
@@ -151,6 +161,7 @@ export default {
 				return styles
 			}
 		},
+
 		attachmentUrl() {
 			return (attachment) => {
 				if (attachment.extendedData.fileid) {
@@ -159,21 +170,26 @@ export default {
 				return generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 			}
 		},
+
 		attachmentPreview() {
 			return (attachment) => (attachment.extendedData.fileid
 				? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=600&y=600&a=true`)
 				: generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`))
 		},
+
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
 		},
+
 		renderedDescription() {
 			return markdownIt.render(this.card.description || '')
 		},
+
 		hasDescription() {
 			return this.card?.description?.trim?.() !== ''
 		},
 	},
+
 	watch: {
 		card(newCard) {
 			if (newCard.description !== this.descriptionOld) {
@@ -189,16 +205,20 @@ export default {
 			}
 		},
 	},
+
 	mounted() {
 		this.setupEditor()
 	},
+
 	async beforeUnmount() {
 		await this.destroyEditor()
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			updateCardDescInStore: 'updateCardDesc',
 		}),
+
 		...mapActions(useSettingsStore, ['setHasCardSaveError']),
 		async setupEditor() {
 			await this.destroyEditor()
@@ -223,8 +243,8 @@ export default {
 					this.showAttachmentModal()
 				},
 			})
-
 		},
+
 		async destroyEditor() {
 			await this.saveDescription()
 			try {
@@ -234,6 +254,7 @@ export default {
 				console.debug('Error destroying text editor:', e)
 			}
 		},
+
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
 				if (this.keyExitState === 0 && (b.key === 'Meta' || b.key === 'Alt')) {
@@ -250,36 +271,36 @@ export default {
 				if (b.key === 'Meta' || b.key === 'Control') {
 					this.keyExitState = 0
 				}
-
 			})
 		},
+
 		showEditor() {
 			if (!this.canEdit) {
 				return
 			}
 			this.descriptionEditing = true
 			this.description = this.card.description
-
 		},
+
 		hideEditor() {
 			this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
 			this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
 			this.descriptionEditing = false
 		},
+
 		showAttachmentModal() {
 			this.modalShow = true
 		},
+
 		addAttachment(attachment) {
 			const asImage = (attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')
 			// We need to strip those as text does not support rtl yet, so we cannot insert them separately
 			const stripRTLO = (text) => text.replaceAll('\u202e', '')
 			const fileName = stripRTLO(attachment.extendedData.info.filename) + '.' + stripRTLO(attachment.extendedData.info.extension)
 			if (this.editor) {
-				this.editor.insertAtCursor(
-					asImage
-						? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
-						: `<a href="${this.attachmentPreview(attachment)}">${fileName}</a>`,
-				)
+				this.editor.insertAtCursor(asImage
+					? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
+					: `<a href="${this.attachmentPreview(attachment)}">${fileName}</a>`)
 				return
 			} else {
 				const attachmentString = (asImage ? '!' : '') + '[📎 ' + fileName + '](' + this.attachmentPreview(attachment) + ')'
@@ -291,6 +312,7 @@ export default {
 			this.updateDescription()
 			this.modalShow = false
 		},
+
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {
 				const clickedIndex = [...document.querySelector('#description-preview').querySelectorAll('input')].findIndex((li) => li.id === e.target.id)
@@ -312,6 +334,7 @@ export default {
 				this.$emit('change', updatedDescription)
 			}
 		},
+
 		async saveDescription() {
 			if (this.descriptionLastEdit === 0 || this.descriptionSaving) {
 				return
@@ -338,10 +361,12 @@ export default {
 				this.descriptionSaving = false
 			}
 		},
+
 		updateDescription() {
 			this.descriptionLastEdit = Date.now()
 			this.setSaveTimeout()
 		},
+
 		setSaveTimeout() {
 			clearTimeout(this.descriptionSaveTimeout)
 			this.descriptionSaveTimeout = setTimeout(async () => {
@@ -351,6 +376,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 	@use './../../css/markdown.scss' as markdown;
 
@@ -423,6 +449,7 @@ h5 {
 }
 
 </style>
+
 <style>
 @import '~easymde/dist/easymde.min.css';
 

@@ -5,19 +5,21 @@
 
 <template>
 	<div v-if="card" class="card-menu" @click.stop.prevent>
-		<NcButton v-if="card.referenceData"
+		<NcButton
+			v-if="card.referenceData"
 			variant="tertiary"
-			:title="t('deck','Open link')"
+			:title="t('deck', 'Open link')"
 			@click="openLink">
 			<template #icon>
 				<LinkIcon :size="20" />
 			</template>
 		</NcButton>
 		<NcActions>
-			<CardMenuEntries :card="card" @edit-title="editTitle" />
+			<CardMenuEntries :card="card" @editTitle="editTitle" />
 		</NcActions>
 	</div>
 </template>
+
 <script>
 import { NcActions, NcButton } from '@nextcloud/vue'
 import LinkIcon from 'vue-material-design-icons/Link.vue'
@@ -32,12 +34,14 @@ export default {
 			default: null,
 		},
 	},
+
 	emits: ['editTitle'],
 	methods: {
 		openLink() {
 			window.open(this.card?.referenceData?.openGraphObject?.link)
 			return false
 		},
+
 		editTitle(id) {
 			this.$emit('editTitle', id)
 		},

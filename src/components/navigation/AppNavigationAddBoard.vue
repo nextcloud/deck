@@ -4,7 +4,8 @@
 -->
 <template>
 	<span>
-		<NcAppNavigationItem v-if="!editing"
+		<NcAppNavigationItem
+			v-if="!editing"
 			:name="t('deck', 'Add board')"
 			icon="icon-add"
 			@click.prevent.stop="startCreateBoard" />
@@ -13,13 +14,15 @@
 				<button :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 			</NcColorPicker>
 			<form @submit.prevent.stop="createBoard">
-				<NcTextField ref="inputField"
+				<NcTextField
+					ref="inputField"
 					v-model="value"
 					:disabled="loading"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					:disabled="loading"
 					:title="t('deck', 'Cancel edit')"
 					@click.stop.prevent="cancelEdit">
@@ -27,7 +30,8 @@
 						<CloseIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					type="submit"
 					:disabled="loading"
 					:title="t('deck', 'Save board')">
@@ -42,11 +46,11 @@
 </template>
 
 <script>
-import { NcButton, NcColorPicker, NcAppNavigationItem, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
+import { NcAppNavigationItem, NcButton, NcColorPicker, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
+import { mapActions } from 'pinia'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import { useBoardStore } from '../../stores/board.js'
-import { mapActions } from 'pinia'
 
 /**
  *
@@ -73,16 +77,19 @@ export default {
 			color: randomColor(),
 		}
 	},
+
 	methods: {
 		...mapActions(useBoardStore, {
 			createBoardInStore: 'createBoard',
 		}),
+
 		startCreateBoard(e) {
 			this.editing = true
 			this.$nextTick(() => {
 				this.$refs?.inputField.focus()
 			})
 		},
+
 		async createBoard(e) {
 			this.loading = true
 			const title = this.value.trim()
@@ -92,6 +99,7 @@ export default {
 			this.color = randomColor()
 			this.value = ''
 		},
+
 		cancelEdit(e) {
 			this.editing = false
 			this.color = randomColor()
@@ -100,6 +108,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 	.board-create {
 		order: 1;

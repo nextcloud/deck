@@ -9,19 +9,22 @@
 				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
 					<form class="label-form" @submit.prevent="updateLabel(label)">
-						<NcColorPicker v-model="editingLabelColor"
+						<NcColorPicker
+							v-model="editingLabelColor"
 							class="color-picker-wrapper"
-							:advanced-fields="true"
+							:advancedFields="true"
 							@submit="updateColor">
 							<div :style="{ backgroundColor: editingLabelColor }" class="color0 icon-colorpicker" />
 						</NcColorPicker>
 						<input v-model="editingLabel.title" type="text">
-						<input :disabled="!editLabelObjValidated"
+						<input
+							:disabled="!editLabelObjValidated"
 							type="submit"
 							value=""
 							class="icon-confirm">
 						<NcActions>
-							<NcActionButton :disabled="!editLabelObjValidated"
+							<NcActionButton
+								:disabled="!editLabelObjValidated"
 								icon="icon-close"
 								@click="editingLabelId = null">
 								{{ t('deck', 'Cancel') }}
@@ -56,19 +59,21 @@
 			<li v-if="addLabel" class="editing">
 				<!-- New Tag -->
 				<form class="label-form" @submit.prevent="clickAddLabel">
-					<NcColorPicker v-model="addLabelColor"
+					<NcColorPicker
+						v-model="addLabelColor"
 						class="color-picker-wrapper"
-						:advanced-fields="true"
+						:advancedFields="true"
 						@input="updateColor">
 						<div :style="{ backgroundColor: addLabelColor }" class="color0 icon-colorpicker" />
 					</NcColorPicker>
 					<input v-model="addLabelObj.title" type="text">
-					<input :disabled="!addLabelObjValidated"
+					<input
+						:disabled="!addLabelObjValidated"
 						type="submit"
 						value=""
 						class="icon-confirm">
 					<NcActions>
-						<NcActionButton icon="icon-close" @click="addLabel=false">
+						<NcActionButton icon="icon-close" @click="addLabel = false">
 							{{ t('deck', 'Cancel') }}
 						</NcActionButton>
 					</NcActions>
@@ -86,9 +91,9 @@
 
 <script>
 
+import { NcActionButton, NcActions, NcColorPicker } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import Color from '../../mixins/color.js'
-import { NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 import { useBoardStore } from '../../stores/board.js'
 
 export default {
@@ -98,6 +103,7 @@ export default {
 		NcActions,
 		NcActionButton,
 	},
+
 	mixins: [Color],
 	data() {
 		return {
@@ -111,12 +117,14 @@ export default {
 			defaultColors: ['31CC7C', '17CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'],
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, {
 			labels: 'currentBoardLabels',
 			canManage: 'canManage',
 			isArchived: 'isArchived',
 		}),
+
 		addLabelObjValidated() {
 			if (this.addLabelObj.title === '') {
 				return false
@@ -128,6 +136,7 @@ export default {
 
 			return true
 		},
+
 		editLabelObjValidated() {
 			if (this.editingLabel.title === '') {
 				return false
@@ -139,17 +148,20 @@ export default {
 
 			return true
 		},
+
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => a.title.localeCompare(b.title))
 		},
 
 	},
+
 	methods: {
 		...mapActions(useBoardStore, [
 			'removeLabelFromCurrentBoard',
 			'updateLabelFromCurrentBoard',
 			'addLabelToCurrentBoard',
 		]),
+
 		updateColor(c) {
 			if (this.editingLabel === null) {
 				this.addLabelObj.color = c.substring(1, 7)
@@ -157,23 +169,28 @@ export default {
 				this.editingLabel.color = c.substring(1, 7)
 			}
 		},
+
 		clickEdit(label) {
 			this.editingLabelId = label.id
-			this.editingLabel = Object.assign({}, label)
+			this.editingLabel = { ...label }
 			this.editingLabelColor = '#' + label.color
 		},
+
 		deleteLabel(id) {
 			this.removeLabelFromCurrentBoard(id)
 		},
+
 		updateLabel(label) {
 			this.updateLabelFromCurrentBoard(this.editingLabel)
 			this.editingLabelId = null
 		},
+
 		clickShowAddLabel() {
 			this.addLabelObj = { cardId: null, color: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)], title: '' }
 			this.addLabelColor = '#' + this.addLabelObj.color
 			this.addLabel = true
 		},
+
 		clickAddLabel() {
 			this.addLabelToCurrentBoard(this.addLabelObj)
 			this.addLabel = false
@@ -183,6 +200,7 @@ export default {
 	},
 }
 </script>
+
 <style scoped lang="scss">
 	$clickable-area: var(--default-clickable-area);
 

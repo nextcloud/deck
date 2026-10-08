@@ -8,7 +8,6 @@ const recipient = randUser()
 import { sampleBoard } from '../utils/sampleBoard'
 
 describe('Board', function() {
-
 	before(function() {
 		cy.createUser(user)
 		cy.createUser(recipient)
@@ -257,7 +256,7 @@ describe('Board title editing', function() {
 })
 
 describe('Board import', function() {
-	before(function () {
+	before(function() {
 		cy.createUser(user)
 	})
 	beforeEach(function() {

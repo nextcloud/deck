@@ -5,7 +5,8 @@
 <template>
 	<div class="gantt-wrapper">
 		<div v-if="ganttTasks.length" class="gantt-toolbar">
-			<NcButton v-for="mode in viewModes"
+			<NcButton
+				v-for="mode in viewModes"
 				:key="mode.value"
 				:variant="currentViewMode === mode.value ? 'primary' : 'secondary'"
 				@click="changeViewMode(mode.value)">
@@ -36,7 +37,8 @@
 				{{ t('deck', 'Cards without dates ({count})', { count: undatedCards.length }) }}
 			</NcButton>
 			<div v-if="showUndated" class="gantt-undated__list">
-				<div v-for="card in undatedCards"
+				<div
+					v-for="card in undatedCards"
 					:key="card.id"
 					class="gantt-undated__card"
 					@click="openCard(card)">
@@ -48,7 +50,8 @@
 		</div>
 
 		<div v-if="stacks.length" class="gantt-legend">
-			<span v-for="stack in stacks"
+			<span
+				v-for="stack in stacks"
 				:key="stack.id"
 				class="gantt-legend__item">
 				<span class="gantt-legend__dot" :style="{ backgroundColor: getStackColor(stack.id) }" />
@@ -59,20 +62,30 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import Gantt from 'frappe-gantt'
-import 'frappe-gantt/dist/frappe-gantt.css' // eslint-disable-line
 import { NcButton, NcEmptyContent } from '@nextcloud/vue'
+import Gantt from 'frappe-gantt'
+import { mapActions, mapState } from 'pinia'
 import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
-import { useCardStore } from '../../stores/card.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+
+import 'frappe-gantt/dist/frappe-gantt.css'
 
 const STACK_COLORS = [
-	'#0082c9', '#4caf50', '#ff9800', '#e91e63',
-	'#9c27b0', '#00bcd4', '#795548', '#607d8b',
-	'#3f51b5', '#8bc34a', '#ff5722', '#009688',
+	'#0082c9',
+	'#4caf50',
+	'#ff9800',
+	'#e91e63',
+	'#9c27b0',
+	'#00bcd4',
+	'#795548',
+	'#607d8b',
+	'#3f51b5',
+	'#8bc34a',
+	'#ff5722',
+	'#009688',
 ]
 
 // Mirrors frappe-gantt date_utils.convert_scales() constants.
@@ -96,13 +109,13 @@ const GANTT_VIEW_MODES = [
 		column_width: 38,
 		date_format: 'YYYY-MM-DD',
 		lower_text(date, last, lang) {
-			if (last && date.getDate() === last.getDate()) return ''
+			if (last && date.getDate() === last.getDate()) { return '' }
 			const day = date.getDate()
 			const weekday = new Intl.DateTimeFormat(lang || 'en', { weekday: 'short' }).format(date)
 			return day + '\n' + weekday
 		},
 		upper_text(date, last, lang) {
-			if (last && date.getMonth() === last.getMonth()) return ''
+			if (last && date.getMonth() === last.getMonth()) { return '' }
 			return new Intl.DateTimeFormat(lang || 'en', { month: 'long', year: 'numeric' }).format(date)
 		},
 		thick_line(date) {
@@ -116,10 +129,9 @@ const GANTT_VIEW_MODES = [
 		snap_at: '1h',
 		date_format: 'YYYY-MM-DD HH:',
 		lower_text: 'HH',
-		upper_text: (d, ld, lang) =>
-			!ld || d.getDate() !== ld.getDate()
-				? Intl.DateTimeFormat(lang || 'en', { month: 'short', day: 'numeric' }).format(d)
-				: '',
+		upper_text: (d, ld, lang) => !ld || d.getDate() !== ld.getDate()
+			? Intl.DateTimeFormat(lang || 'en', { month: 'short', day: 'numeric' }).format(d)
+			: '',
 		thick_line(date) {
 			return date.getDay() === 1
 		},
@@ -140,7 +152,7 @@ const GANTT_VIEW_MODES = [
 			return fmt.format(date) + ' – ' + (sameMonth ? fmtDay.format(end) : fmt.format(end))
 		},
 		upper_text(date, last, lang) {
-			if (last && date.getMonth() === last.getMonth()) return ''
+			if (last && date.getMonth() === last.getMonth()) { return '' }
 			return new Intl.DateTimeFormat(lang || 'en', { month: 'long', year: 'numeric' }).format(date)
 		},
 		thick_line(date) {
@@ -156,7 +168,7 @@ const GANTT_VIEW_MODES = [
 		date_format: 'YYYY-MM',
 		lower_text: 'MMMM',
 		upper_text(date, last, lang) {
-			if (last && date.getFullYear() === last.getFullYear()) return ''
+			if (last && date.getFullYear() === last.getFullYear()) { return '' }
 			return new Intl.DateTimeFormat(lang || 'en', { year: 'numeric' }).format(date)
 		},
 		thick_line(date) {
@@ -169,22 +181,25 @@ const GANTT_VIEW_MODES = [
 export default {
 	name: 'GanttView',
 	components: {
-	       NcButton,
-	       NcEmptyContent,
-	       ChartGanttIcon,
-	       ChevronDown,
-	       ChevronRight,
+		NcButton,
+		NcEmptyContent,
+		ChartGanttIcon,
+		ChevronDown,
+		ChevronRight,
 	},
+
 	props: {
 		board: {
 			type: Object,
 			required: true,
 		},
+
 		stacks: {
 			type: Array,
 			required: true,
 		},
 	},
+
 	data() {
 		return {
 			ganttInstance: null,
@@ -199,6 +214,7 @@ export default {
 			],
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, ['canEdit']),
 		...mapState(useCardStore, ['cardsByStack']),
@@ -214,26 +230,26 @@ export default {
 						// therefore we limit the timeframe of visible tasks
 						const duedate = new Date(card.duedate)
 						switch (this.currentViewMode) {
-						case 'Hour':
-							if (duedate < new Date() - 2 * 24 * 3600 * 1000) {
-								return
-							}
-							break
-						case 'Day':
-							if (duedate < new Date() - 30 * 24 * 3600 * 1000) {
-								return
-							}
-							break
-						case 'Week':
-							if (duedate < new Date() - 90 * 24 * 3600 * 1000) {
-								return
-							}
-							break
-						case 'Month':
-							if (duedate < new Date() - 365 * 24 * 3600 * 1000) {
-								return
-							}
-							break
+							case 'Hour':
+								if (duedate < new Date() - 2 * 24 * 3600 * 1000) {
+									return
+								}
+								break
+							case 'Day':
+								if (duedate < new Date() - 30 * 24 * 3600 * 1000) {
+									return
+								}
+								break
+							case 'Week':
+								if (duedate < new Date() - 90 * 24 * 3600 * 1000) {
+									return
+								}
+								break
+							case 'Month':
+								if (duedate < new Date() - 365 * 24 * 3600 * 1000) {
+									return
+								}
+								break
 						}
 						ganttTasks.push(this.cardToGanttTask(card, index))
 					}
@@ -241,13 +257,16 @@ export default {
 			})
 			return { undatedCards, ganttTasks }
 		},
+
 		ganttTasks() {
 			return this.partitionedCards.ganttTasks
 		},
+
 		undatedCards() {
 			return this.partitionedCards.undatedCards
 		},
 	},
+
 	watch: {
 		ganttTasks: {
 			deep: true,
@@ -259,11 +278,12 @@ export default {
 
 				// checking pendingChange to only refresh on updates not coming from the chart
 				if (!this.pendingChange && this.ganttInstance) {
-					const cloned = tasks.map(t => ({ ...t, start: new Date(t.start), end: new Date(t.end) }))
+					const cloned = tasks.map((t) => ({ ...t, start: new Date(t.start), end: new Date(t.end) }))
 					this.ganttInstance.refresh(cloned)
 				}
 			},
 		},
+
 		currentViewMode(mode) {
 			if (this.ganttInstance) {
 				this.ganttInstance.change_view_mode(mode)
@@ -271,6 +291,7 @@ export default {
 			}
 		},
 	},
+
 	mounted() {
 		this._onMouseUp = async (event) => {
 			if (this.pendingChange) {
@@ -283,7 +304,7 @@ export default {
 			const barWrapper = event.target.closest('.bar-wrapper')
 			if (barWrapper) {
 				const taskId = barWrapper.getAttribute('data-id')
-				const task = this.ganttTasks.find(t => t.id === taskId)
+				const task = this.ganttTasks.find((t) => t.id === taskId)
 				if (task) {
 					this.openCard(task._card)
 				}
@@ -292,14 +313,17 @@ export default {
 		document.addEventListener('mouseup', this._onMouseUp)
 		this.$nextTick(() => this.renderGantt())
 	},
+
 	beforeUnmount() {
 		document.removeEventListener('mouseup', this._onMouseUp)
 		this.ganttInstance = null
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			updateCardDatesInStore: 'updateCardDates',
 		}),
+
 		cardToGanttTask(card, stackIndex) {
 			let start = card.startdate ? new Date(card.startdate) : null
 			let end = card.duedate ? new Date(card.duedate) : null
@@ -330,17 +354,21 @@ export default {
 				_card: card,
 			}
 		},
+
 		getStackColor(stackId) {
-			const idx = this.stacks.findIndex(s => s.id === stackId)
+			const idx = this.stacks.findIndex((s) => s.id === stackId)
 			return STACK_COLORS[idx % STACK_COLORS.length] || STACK_COLORS[0]
 		},
+
 		getStackTitle(stackId) {
-			const stack = this.stacks.find(s => s.id === stackId)
+			const stack = this.stacks.find((s) => s.id === stackId)
 			return stack ? stack.title : ''
 		},
+
 		changeViewMode(mode) {
 			this.currentViewMode = mode
 		},
+
 		openCard(card) {
 			this.$router.push({
 				name: 'card',
@@ -350,6 +378,7 @@ export default {
 				},
 			})
 		},
+
 		renderGantt() {
 			if (!this.$refs.ganttContainer || this.ganttTasks.length === 0) {
 				return
@@ -378,6 +407,7 @@ export default {
 			this.ganttInstance.change_view_mode(this.ganttInstance.config.view_mode.name, true)
 			this.ganttInstance.scroll_current()
 		},
+
 		async updateTaskDate(task, start, end) {
 			await this.updateCardDatesInStore({
 				...task._card,
@@ -385,11 +415,12 @@ export default {
 				duedate: new Date(end).toISOString(),
 			})
 		},
+
 		_patchBarDuration() {
 			const bars = this.ganttInstance?.bars
-			if (!bars?.length) return
+			if (!bars?.length) { return }
 			const BarProto = Object.getPrototypeOf(bars[0])
-			if (BarProto._deckDurationPatched) return
+			if (BarProto._deckDurationPatched) { return }
 			BarProto._deckDurationPatched = true
 
 			// we overwrite the compute_duration function because it enforces a minimum of 1 day duration
@@ -413,9 +444,10 @@ export default {
 				this.ignored_duration_raw = 0
 			}
 		},
+
 		fitColumnsToWidth() {
 			const gantt = this.ganttInstance
-			if (!gantt?.dates?.length) return
+			if (!gantt?.dates?.length) { return }
 			const containerWidth = this.$refs.ganttContainer.clientWidth
 			const contentWidth = gantt.dates.length * gantt.config.column_width
 			if (contentWidth < containerWidth) {

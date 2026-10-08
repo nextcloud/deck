@@ -56,12 +56,14 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcButton,
 	},
+
 	props: {
 		boardTitle: {
 			type: String,
 			default: 'Board',
 		},
 	},
+
 	emits: ['close'],
 	data() {
 		return {
@@ -74,10 +76,12 @@ export default {
 			accordionOpen: false,
 		}
 	},
+
 	methods: {
 		close(data) {
 			this.$emit('close', data)
 		},
+
 		save() {
 			const data = {
 				withCards: this.withCards,
@@ -89,6 +93,7 @@ export default {
 			}
 			this.close(data)
 		},
+
 		cancel() {
 			this.close(false)
 		},

@@ -3,12 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from '@nextcloud/vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
+import { NcCustomPickerRenderResult, registerCustomPickerElement, registerWidget } from '@nextcloud/vue'
 
 import './shared-init.js'
 
-const createVueApp = async (Component, props) => {
+/**
+ *
+ * @param Component
+ * @param props
+ */
+async function createVueApp(Component, props) {
 	const { createApp } = await import('vue')
 	const { createPinia } = await import('pinia')
 

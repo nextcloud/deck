@@ -47,21 +47,21 @@ export const useCommentStore = defineStore('comment', {
 		},
 		async updateComment({ cardId, comment }) {
 			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message })
-			const existingIndex = this.comments[cardId].comments.findIndex(c => c.id === updatedComment.id)
+			const existingIndex = this.comments[cardId].comments.findIndex((c) => c.id === updatedComment.id)
 			if (existingIndex !== -1) {
 				Object.assign(this.comments[cardId].comments[existingIndex], updatedComment)
 			}
 		},
 		async deleteComment(comment) {
 			await apiClient.deleteComment(comment)
-			const existingIndex = this.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.id)
+			const existingIndex = this.comments[comment.cardId].comments.findIndex((_comment) => _comment.id === comment.id)
 			if (existingIndex !== -1) {
 				this.comments[comment.cardId].comments.splice(existingIndex, 1)
 			}
 		},
 		async markCommentsAsRead(cardId) {
 			await apiClient.markCommentsAsRead(cardId)
-			this.comments[cardId].comments.forEach(_comment => {
+			this.comments[cardId].comments.forEach((_comment) => {
 				_comment.isUnread = false
 			})
 		},

@@ -4,7 +4,11 @@
  */
 import { showError as errorDialog } from '@nextcloud/dialogs'
 
-const showAxiosError = err => {
+/**
+ *
+ * @param err
+ */
+function showAxiosError(err) {
 	const response = err?.response || {}
 	const message = response?.data.message
 
@@ -16,7 +20,11 @@ const showAxiosError = err => {
 	errorDialog(err.message)
 }
 
-const showError = err => {
+/**
+ *
+ * @param err
+ */
+function showError(err) {
 	// axios error
 	if (err.response) {
 		showAxiosError(err)

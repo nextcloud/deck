@@ -8,7 +8,8 @@
 		<div class="line">
 			<CardBulletedOutlineIcon :size="20" class="title-icon" />
 			<strong>
-				<a :href="cardLink"
+				<a
+					:href="cardLink"
 					:title="cardTooltip"
 					target="_blank"
 					class="link">
@@ -16,17 +17,20 @@
 				</a>
 			</strong>
 			<div v-if="dueDate" class="spacer" />
-			<span v-if="dueDate"
+			<span
+				v-if="dueDate"
 				:title="t('Due date') + ': ' + formattedDueDate"
 				class="due-date">
-				<CalendarBlankIcon :size="20"
+				<CalendarBlankIcon
+					:size="20"
 					class="icon" />
 				{{ dueDate }}
 			</span>
 		</div>
 		<div class="line">
 			<DeckIcon :size="20" class="title-icon" />
-			<a :title="stackTooltip"
+			<a
+				:title="stackTooltip"
 				:href="boardLink"
 				target="_blank"
 				class="link">
@@ -34,7 +38,8 @@
 			</a>
 		</div>
 		<div>
-			<transition-group v-if="card.labels && card.labels.length"
+			<transition-group
+				v-if="card.labels && card.labels.length"
 				name="zoom"
 				tag="ul"
 				class="labels"
@@ -46,19 +51,23 @@
 		</div>
 		<div class="line description-assignees">
 			<TextIcon v-if="card.description" :size="20" class="icon" />
-			<div v-if="card.description"
+			<div
+				v-if="card.description"
+				class="description"
 				:class="{
-					'description': true,
 					'short-description': shortDescription,
 				}">
-				<NcRichText :title="shortDescription ? t('deck', 'Click to expand description') : undefined"
+				<NcRichText
+					:title="shortDescription ? t('deck', 'Click to expand description') : undefined"
 					:text="card.description"
-					:use-markdown="true"
+					:useMarkdown="true"
 					@click="shortDescription = !shortDescription" />
 			</div>
-			<div v-if="card.assignedUsers .length > 0"
+			<div
+				v-if="card.assignedUsers .length > 0"
 				class="spacer" />
-			<AvatarList v-if="card.assignedUsers .length > 0"
+			<AvatarList
+				v-if="card.assignedUsers .length > 0"
 				:users="card.assignedUsers"
 				class="card-assignees" />
 		</div>
@@ -66,23 +75,21 @@
 </template>
 
 <script>
-import CalendarBlankIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-import TextIcon from 'vue-material-design-icons/Text.vue'
-import CardBulletedOutlineIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
-
-import DeckIcon from '../components/icons/DeckIcon.vue'
-import AvatarList from '../components/cards/AvatarList.vue'
-import labelStyle from '../mixins/labelStyle.js'
-
-import { NcRichText } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
+import { NcRichText } from '@nextcloud/vue'
+import CalendarBlankIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
+import CardBulletedOutlineIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
+import TextIcon from 'vue-material-design-icons/Text.vue'
+import AvatarList from '../components/cards/AvatarList.vue'
+import DeckIcon from '../components/icons/DeckIcon.vue'
+import labelStyle from '../mixins/labelStyle.js'
 
 export default {
 	name: 'CardReferenceWidget',
 
 	components: {
-	  AvatarList,
+		AvatarList,
 		DeckIcon,
 		CalendarBlankIcon,
 		CardBulletedOutlineIcon,
@@ -97,10 +104,12 @@ export default {
 			type: String,
 			default: '',
 		},
+
 		richObject: {
 			type: Object,
 			default: null,
 		},
+
 		accessible: {
 			type: Boolean,
 			default: true,
@@ -114,42 +123,51 @@ export default {
 	},
 
 	computed: {
-	  card() {
+		card() {
 			return this.richObject.card
 		},
+
 		board() {
 			return this.richObject.board
 		},
+
 		stack() {
 			return this.richObject.stack
 		},
+
 		cardLink() {
 			return generateUrl('/apps/deck/#/board/{boardId}/card/{cardId}', { boardId: this.board.id, cardId: this.card.id })
 		},
+
 		boardLink() {
 			return generateUrl('/apps/deck/#/board/{boardId}', { boardId: this.board.id })
 		},
+
 		cardTooltip() {
 			return t('deck', '* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments', {
-			  created: moment.unix(this.card.createdAt).format('LLL'),
+				created: moment.unix(this.card.createdAt).format('LLL'),
 				lastMod: moment.unix(this.card.lastModified).format('LLL'),
 				nbAttachments: this.card.attachments.length,
 				nbComments: this.card.commentsCount,
 			})
 		},
+
 		stackTooltip() {
 			return t('deck', '{nbCards} cards', { nbCards: this.stack.cards.length })
 		},
+
 		dueDate() {
 			return this.card.duedate
 				? moment(this.card.duedate).fromNow()
 				: null
 		},
+
 		formattedDueDate() {
 			return this.card.duedate
 				? t('deck', 'Due on {date}', { date: moment(this.card.duedate).format('LLL') })
 				: null
 		},
+
 		labelsSorted() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},

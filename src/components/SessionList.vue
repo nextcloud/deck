@@ -4,17 +4,20 @@
 -->
 
 <template>
-	<div :title="t('deck', 'Currently present people')"
+	<div
+		:title="t('deck', 'Currently present people')"
 		class="avatar-list">
-		<div v-for="session in sessionsVisible"
+		<div
+			v-for="session in sessionsVisible"
 			:key="session.uid"
 			class="avatar-wrapper"
 			:style="sessionAvatarStyle">
-			<NcAvatar :user="session.uid"
-				:display-name="session.displayname"
-				:disable-menu="true"
-				:hide-status="true"
-				:disable-tooltip="true"
+			<NcAvatar
+				:user="session.uid"
+				:displayName="session.displayname"
+				:disableMenu="true"
+				:hideStatus="true"
+				:disableTooltip="true"
 				:size="size" />
 		</div>
 	</div>
@@ -28,21 +31,25 @@ export default {
 	components: {
 		NcAvatar,
 	},
+
 	props: {
 		sessions: {
 			type: Array,
 			default: () => { return [] },
 		},
+
 		size: {
 			type: Number,
 			default: () => 32,
 		},
 	},
+
 	computed: {
 		sessionsVisible() {
-			if (!this.sessions) return []
+			if (!this.sessions) { return [] }
 			return this.sessions.slice(0, 5)
 		},
+
 		sessionAvatarStyle() {
 			return {
 				'--size': this.size + 'px',

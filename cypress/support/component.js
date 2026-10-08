@@ -17,13 +17,12 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
-import './commands'
+import { mount } from 'cypress/vue2'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
-import { mount } from 'cypress/vue2'
+// Import commands.js using ES2015 syntax:
+import './commands'
 
 Cypress.Commands.add('mount', mount)
 

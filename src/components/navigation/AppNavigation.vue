@@ -6,7 +6,8 @@
 <template>
 	<NcAppNavigation :class="{'icon-loading': loading}">
 		<template #list>
-			<NcAppNavigationItem :name="t('deck', 'Upcoming cards')"
+			<NcAppNavigationItem
+				:name="t('deck', 'Upcoming cards')"
 				:exact="true"
 				to="/upcoming">
 				<template #icon>
@@ -14,17 +15,19 @@
 					<CalendarOutlineIcon v-else :size="20" />
 				</template>
 			</NcAppNavigationItem>
-			<AppNavigationBoardCategory id="deck-navigation-all"
+			<AppNavigationBoardCategory
+				id="deck-navigation-all"
 				to="/board"
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
-				:open-on-add-boards="true"
-				:default-open="true">
+				:openOnAddBoards="true"
+				:defaultOpen="true">
 				<template #icon>
 					<DeckIcon :size="16" />
 				</template>
 			</AppNavigationBoardCategory>
-			<AppNavigationBoardCategory id="deck-navigation-archived"
+			<AppNavigationBoardCategory
+				id="deck-navigation-archived"
 				to="/board/archived"
 				:text="t('deck', 'Archived boards')"
 				:boards="archivedBoards">
@@ -33,7 +36,8 @@
 					<ArchiveOutlineIcon v-else :size="20" decorative />
 				</template>
 			</AppNavigationBoardCategory>
-			<AppNavigationBoardCategory id="deck-navigation-shared"
+			<AppNavigationBoardCategory
+				id="deck-navigation-shared"
 				to="/board/shared"
 				:text="t('deck', 'Shared with you')"
 				:boards="sharedBoards"
@@ -46,12 +50,14 @@
 			<AppNavigationImportBoard v-if="canCreate" />
 		</template>
 		<template #default>
-			<DeckAppSettings v-model:open="settingsOpened"
+			<DeckAppSettings
+				v-model:open="settingsOpened"
 				@close="onSettingsClose" />
 		</template>
 		<template #footer>
 			<ul class="app-navigation-entry__settings">
-				<NcAppNavigationItem :name="t('deck', 'Deck settings')"
+				<NcAppNavigationItem
+					:name="t('deck', 'Deck settings')"
 					data-cy="navigation:settings"
 					@click.prevent.stop="openSettings">
 					<template #icon>
@@ -64,23 +70,23 @@
 </template>
 
 <script>
-import { vOnClickOutside } from '@vueuse/components'
-import { NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
-import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
-import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'
+import { getCurrentUser } from '@nextcloud/auth'
+import { subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
+import { NcAppNavigation, NcAppNavigationItem } from '@nextcloud/vue'
+import { vOnClickOutside } from '@vueuse/components'
+import { mapState } from 'pinia'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import ArchiveOutlineIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
 import CalendarOutlineIcon from 'vue-material-design-icons/CalendarOutline.vue'
-import DeckIcon from './../icons/DeckIcon.vue'
-import ShareVariantIcon from 'vue-material-design-icons/ShareOutline.vue'
-import { subscribe } from '@nextcloud/event-bus'
-import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
-import DeckAppSettings from '../DeckAppSettings.vue'
 import IconCog from 'vue-material-design-icons/CogOutline.vue'
-import { getCurrentUser } from '@nextcloud/auth'
-import { mapState } from 'pinia'
+import ShareVariantIcon from 'vue-material-design-icons/ShareOutline.vue'
+import DeckAppSettings from '../DeckAppSettings.vue'
+import DeckIcon from './../icons/DeckIcon.vue'
+import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
+import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'
+import AppNavigationImportBoard from './AppNavigationImportBoard.vue'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -103,15 +109,18 @@ export default {
 		DeckAppSettings,
 		IconCog,
 	},
+
 	directives: {
 		vOnClickOutside,
 	},
+
 	props: {
 		loading: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	data() {
 		return {
 			opened: false,
@@ -123,55 +132,67 @@ export default {
 			settingsOpened: false,
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, [
 			'noneArchivedBoards',
 			'archivedBoards',
 			'sharedBoards',
 		]),
+
 		isAdmin() {
 			return !!getCurrentUser()?.isAdmin
 		},
+
 		cardDetailsInModal: {
 			get() {
 				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
+
 		cardIdBadge: {
 			get() {
 				return useSettingsStore().configByKey('cardIdBadge')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ cardIdBadge: newValue })
 			},
 		},
+
 		configCalendar: {
 			get() {
 				return useSettingsStore().configByKey('calendar')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ calendar: newValue })
 			},
 		},
 	},
+
 	mounted() {
 		subscribe('deck:global:toggle-help-dialog', () => {
 			this.showHelp = !this.showHelp
 		})
 	},
+
 	methods: {
 		openSettings() {
 			this.settingsOpened = true
 		},
+
 		onSettingsClose() {
 			this.settingsOpened = false
 		},
 	},
 }
 </script>
+
 <style scoped lang="scss">
 	#app-settings-content {
 		p {

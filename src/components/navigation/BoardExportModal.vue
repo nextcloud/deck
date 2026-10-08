@@ -5,13 +5,15 @@
 <template>
 	<NcDialog :name="t('deck', 'Export {boardTitle}', {boardTitle: boardTitle})" @update:open="close">
 		<div class="modal__content">
-			<NcCheckboxRadioSwitch v-model="exportFormat"
+			<NcCheckboxRadioSwitch
+				v-model="exportFormat"
 				value="json"
 				type="radio"
 				name="board_export_format">
 				{{ t('deck', 'Export as JSON') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-model="exportFormat"
+			<NcCheckboxRadioSwitch
+				v-model="exportFormat"
 				value="csv"
 				type="radio"
 				name="board_export_format">
@@ -44,23 +46,27 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcButton,
 	},
+
 	props: {
 		boardTitle: {
 			type: String,
 			default: 'Board',
 		},
 	},
+
 	emits: ['export', 'close'],
 	data() {
 		return {
 			exportFormat: 'json',
 		}
 	},
+
 	methods: {
 		exportBoard() {
 			this.$emit('export', this.exportFormat)
 			this.close()
 		},
+
 		close() {
 			this.$emit('close')
 		},

@@ -26,6 +26,7 @@ export default defineComponent({
 	},
 })
 </script>
+
 <style lang="scss">
 @use '../../css/selector.scss';
 </style>

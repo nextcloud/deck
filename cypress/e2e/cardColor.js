@@ -13,7 +13,11 @@ const auth = {
 	password: user.password,
 }
 
-const useModal = (useModal) => {
+/**
+ *
+ * @param useModal
+ */
+function useModal(useModal) {
 	return cy.request({
 		method: 'POST',
 		url: `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/cardDetailsInModal?format=json`,
@@ -24,9 +28,9 @@ const useModal = (useModal) => {
 	})
 }
 
-describe('Card color', function () {
+describe('Card color', function() {
 	let boardId
-	before(function () {
+	before(function() {
 		cy.createUser(user)
 		cy.login(user)
 		cy.createExampleBoard({
@@ -37,11 +41,11 @@ describe('Card color', function () {
 		})
 	})
 
-	beforeEach(function () {
+	beforeEach(function() {
 		cy.login(user)
 	})
 
-	it('Set a color', function () {
+	it('Set a color', function() {
 		cy.visit(`/apps/deck/#/board/${boardId}`)
 
 		const newCardTitle = 'Card with color'

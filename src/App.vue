@@ -4,17 +4,18 @@
 -->
 
 <template>
-	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
+	<NcContent appName="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
-		<NcAppContent :disable-swipe="true">
+		<NcAppContent :disableSwipe="true">
 			<router-view />
 		</NcAppContent>
 
 		<div v-if="$route.params.id || $route.params.cardId">
-			<NcModal v-if="cardDetailsInModal && $route.params.cardId"
+			<NcModal
+				v-if="cardDetailsInModal && $route.params.cardId"
 				:name="t('deck', 'Card details')"
-				:clear-view-delay="0"
-				:close-on-click-outside="true"
+				:clearViewDelay="0"
+				:closeOnClickOutside="true"
 				size="large"
 				@close="hideModal()">
 				<div class="modal__content modal__card">
@@ -30,16 +31,16 @@
 </template>
 
 <script>
-import AppNavigation from './components/navigation/AppNavigation.vue'
-import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
-import { NcModal, NcContent, NcAppContent, useIsMobile } from '@nextcloud/vue'
-import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
+import { NcAppContent, NcContent, NcModal, useIsMobile } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import CardMoveDialog from './CardMoveDialog.vue'
+import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
+import AppNavigation from './components/navigation/AppNavigation.vue'
+import { BoardApi } from './services/BoardApi.js'
 import { useBoardStore } from './stores/board.js'
 import { useSettingsStore } from './stores/settings.js'
-import { mapState } from 'pinia'
 const boardApi = new BoardApi()
 
 export default {
@@ -52,17 +53,20 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
+
 	provide() {
 		return {
 			boardApi,
 		}
 	},
+
 	setup() {
 		const isMobile = useIsMobile()
 		return {
 			isMobile,
 		}
 	},
+
 	data() {
 		return {
 			addButton: {
@@ -73,15 +77,18 @@ export default {
 					text: t('deck', 'Add board'),
 					action: () => {
 					},
+
 					reset: () => {
 					},
 				},
+
 				action: () => {
 					this.addButton.classes.push('editing')
 				},
 			},
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, ['currentBoard']),
 		...mapState(useSettingsStore, ['navShown']),
@@ -90,15 +97,18 @@ export default {
 			// console.log(this.$route)
 			return this.$route.name === 'card' || this.$route.name === 'board.details'
 		},
+
 		cardDetailsInModal: {
 			get() {
 				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 	},
+
 	created() {
 		const initialState = loadState('deck', 'initialBoards', null)
 		if (initialState !== null) {
@@ -106,6 +116,7 @@ export default {
 		}
 		useSettingsStore().loadSharees()
 	},
+
 	mounted() {
 		// Redirect to cleaner URL (without /index.php) if RewriteBase is enabled
 		if (this.$route.path.startsWith('/index.php')) {
@@ -119,6 +130,7 @@ export default {
 			})
 		})
 	},
+
 	methods: {
 		hideModal() {
 			this.$router.push({ name: 'board' })

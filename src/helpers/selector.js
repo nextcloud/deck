@@ -1,11 +1,16 @@
+import { translate, translatePlural } from '@nextcloud/l10n'
 /**
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { createApp, defineAsyncComponent, h } from 'vue'
-import { translate, translatePlural } from '@nextcloud/l10n'
 
-const buildSelector = (selector, propsData = {}) => {
+/**
+ *
+ * @param selector
+ * @param propsData
+ */
+function buildSelector(selector, propsData = {}) {
 	return new Promise((resolve, reject) => {
 		const container = document.createElement('div')
 		document.getElementById('body-user').append(container)

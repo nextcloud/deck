@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import moment from 'moment'
 import { defineStore } from 'pinia'
 import { CardApi } from '../services/CardApi.js'
-import moment from 'moment'
-import { useStackStore } from './stack.js'
-import { useTrashbinStore } from './trashbin.js'
 import { useBoardStore } from './board.js'
 import { useSettingsStore } from './settings.js'
+import { useStackStore } from './stack.js'
+import { useTrashbinStore } from './trashbin.js'
 
 const apiClient = new CardApi()
 
@@ -56,16 +56,16 @@ export const useCardStore = defineStore('card', {
 				if (due !== '') {
 					const datediffHour = ((new Date(card.duedate) - new Date()) / 3600 / 1000)
 					switch (due) {
-					case 'noDue':
-						return (card.duedate === null)
-					case 'overdue':
-						return (card.overdue === 3)
-					case 'dueToday':
-						return (card.overdue >= 2)
-					case 'dueWeek':
-						return (datediffHour <= 7 * 24 && card.duedate !== null)
-					case 'dueMonth':
-						return (datediffHour <= 30 * 24 && card.duedate !== null)
+						case 'noDue':
+							return (card.duedate === null)
+						case 'overdue':
+							return (card.overdue === 3)
+						case 'dueToday':
+							return (card.overdue >= 2)
+						case 'dueWeek':
+							return (datediffHour <= 7 * 24 && card.duedate !== null)
+						case 'dueMonth':
+							return (datediffHour <= 30 * 24 && card.duedate !== null)
 					}
 				}
 
@@ -120,21 +120,21 @@ export const useCardStore = defineStore('card', {
 							const datediffHour = ((new Date(card.duedate) - new Date()) / 3600 / 1000)
 							query = filterOutQuotes(query)
 							switch (query) {
-							case 'overdue':
-								hasMatch = hasMatch && (card.overdue === 3)
-								break
-							case 'today':
-								hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 24 && card.duedate !== null)
-								break
-							case 'week':
-								hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 7 * 24 && card.duedate !== null)
-								break
-							case 'month':
-								hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 30 * 24 && card.duedate !== null)
-								break
-							case 'none':
-								hasMatch = hasMatch && (card.duedate === null)
-								break
+								case 'overdue':
+									hasMatch = hasMatch && (card.overdue === 3)
+									break
+								case 'today':
+									hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 24 && card.duedate !== null)
+									break
+								case 'week':
+									hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 7 * 24 && card.duedate !== null)
+									break
+								case 'month':
+									hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 30 * 24 && card.duedate !== null)
+									break
+								case 'none':
+									hasMatch = hasMatch && (card.duedate === null)
+									break
 							}
 
 							if (card.duedate === null || !hasMatch) {
@@ -145,23 +145,22 @@ export const useCardStore = defineStore('card', {
 							const parsedCardDate = moment(card.duedate)
 							const parsedDate = moment(query.slice(isValidComparator ? comparator.length : 0))
 							switch (comparator) {
-							case '<':
-								hasMatch = hasMatch && parsedCardDate.isBefore(parsedDate)
-								break
-							case '<=':
-								hasMatch = hasMatch && parsedCardDate.isSameOrBefore(parsedDate)
-								break
-							case '>':
-								hasMatch = hasMatch && parsedCardDate.isAfter(parsedDate)
-								break
-							case '>=':
-								hasMatch = hasMatch && parsedCardDate.isSameOrAfter(parsedDate)
-								break
-							default:
-								hasMatch = hasMatch && parsedCardDate.isSame(parsedDate)
-								break
+								case '<':
+									hasMatch = hasMatch && parsedCardDate.isBefore(parsedDate)
+									break
+								case '<=':
+									hasMatch = hasMatch && parsedCardDate.isSameOrBefore(parsedDate)
+									break
+								case '>':
+									hasMatch = hasMatch && parsedCardDate.isAfter(parsedDate)
+									break
+								case '>=':
+									hasMatch = hasMatch && parsedCardDate.isSameOrAfter(parsedDate)
+									break
+								default:
+									hasMatch = hasMatch && parsedCardDate.isSame(parsedDate)
+									break
 							}
-
 						} else if (filter === 'assigned') {
 							if (isEmptyQuery) {
 								hasMatch = hasMatch && card.assignedUsers.length > 0
@@ -183,7 +182,7 @@ export const useCardStore = defineStore('card', {
 				})
 				.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 		},
-		cardById: state => id => {
+		cardById: (state) => (id) => {
 			return state.cards.find((card) => card.id === id)
 		},
 	},
@@ -191,62 +190,62 @@ export const useCardStore = defineStore('card', {
 		addCardToStore(card) {
 			card.labels = card.labels || []
 			card.assignedUsers = card.assignedUsers || []
-			const existingIndex = this.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === card.id)
 			if (existingIndex !== -1) {
 				const existingCard = this.cards[existingIndex]
-				this.cards[existingIndex] = Object.assign({}, existingCard, card)
+				this.cards[existingIndex] = { ...existingCard, ...card }
 			} else {
 				this.cards.push(card)
 			}
 		},
 		updateCard(card) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === card.id)
 			if (existingIndex !== -1) {
-				this.cards[existingIndex] = Object.assign({}, this.cards[existingIndex], card)
+				this.cards[existingIndex] = { ...this.cards[existingIndex], ...card }
 			}
 		},
 		deleteCardFromStore(card) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === card.id)
 			if (existingIndex !== -1) {
 				this.cards.splice(existingIndex, 1)
 			}
 		},
 		assignCardToUserInStore(user) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === user.cardId)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === user.cardId)
 			if (existingIndex !== -1) {
 				this.cards[existingIndex].assignedUsers.push(user)
 			}
 		},
 		removeUserFromCardInStore(user) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === user.cardId)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === user.cardId)
 			if (existingIndex !== -1) {
-				const foundIndex = this.cards[existingIndex].assignedUsers.findIndex(_user => _user.id === user.id)
+				const foundIndex = this.cards[existingIndex].assignedUsers.findIndex((_user) => _user.id === user.id)
 				if (foundIndex !== -1) {
 					this.cards[existingIndex].assignedUsers.splice(foundIndex, 1)
 				}
 			}
 		},
 		updateCardProperty({ card, property }) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === card.id)
 			if (existingIndex !== -1) {
 				this.cards[existingIndex][property] = card[property]
 				this.cards[existingIndex].lastModified = Date.now() / 1000
 			}
 		},
 		cardSetAttachmentCount({ cardId, count }) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === cardId)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === cardId)
 			if (existingIndex !== -1) {
 				this.cards[existingIndex].attachmentCount = count
 			}
 		},
 		cardIncreaseAttachmentCount(cardId) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === cardId)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === cardId)
 			if (existingIndex !== -1) {
 				this.cards[existingIndex].attachmentCount = this.cards[existingIndex].attachmentCount + 1
 			}
 		},
 		cardDecreaseAttachmentCount(cardId) {
-			const existingIndex = this.cards.findIndex(_card => _card.id === cardId)
+			const existingIndex = this.cards.findIndex((_card) => _card.id === cardId)
 			if (existingIndex !== -1) {
 				this.cards[existingIndex].attachmentCount = this.cards[existingIndex].attachmentCount - 1
 			}
@@ -255,7 +254,7 @@ export const useCardStore = defineStore('card', {
 			this.cards.push(card)
 		},
 		setCards(cards) {
-			const deletedCards = this.cards.filter(_card => cards.findIndex(c => _card.id === c.id) === -1)
+			const deletedCards = this.cards.filter((_card) => cards.findIndex((c) => _card.id === c.id) === -1)
 			for (const card of deletedCards) {
 				this.deleteCardFromStore(card)
 			}
@@ -265,7 +264,7 @@ export const useCardStore = defineStore('card', {
 		},
 		updateCardsReorder(cards) {
 			for (const newCard of cards) {
-				const existingIndex = this.cards.findIndex(_card => _card.id === newCard.id)
+				const existingIndex = this.cards.findIndex((_card) => _card.id === newCard.id)
 				if (existingIndex !== -1) {
 					this.cards[existingIndex].order = newCard.order
 					this.cards[existingIndex].stackId = newCard.stackId
@@ -344,9 +343,7 @@ export const useCardStore = defineStore('card', {
 			if (card.done !== false) {
 				const stackStore = useStackStore()
 				const cardStack = stackStore.stackById(card.stackId)
-				const doneStack = stackStore.stacks.find(
-					s => s.boardId === cardStack?.boardId && s.isDoneColumn,
-				)
+				const doneStack = stackStore.stacks.find((s) => s.boardId === cardStack?.boardId && s.isDoneColumn)
 				if (doneStack && card.stackId !== doneStack.id) {
 					await this.reorderCard({ ...updatedCard, stackId: doneStack.id, order: 0 })
 				}

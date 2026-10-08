@@ -4,7 +4,6 @@
  */
 import { generateFilePath } from '@nextcloud/router'
 
-// eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
 
 if (!process.env.WEBPACK_SERVE) {

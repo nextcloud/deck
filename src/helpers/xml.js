@@ -3,7 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const xmlToJson = (xml) => {
+/**
+ *
+ * @param xml
+ */
+function xmlToJson(xml) {
 	let obj = {}
 	if (xml.nodeType === 1) {
 		if (xml.attributes.length > 0) {
@@ -34,7 +38,11 @@ const xmlToJson = (xml) => {
 	}
 	return obj
 }
-const parseXml = (xml) => {
+/**
+ *
+ * @param xml
+ */
+function parseXml(xml) {
 	let dom = null
 	try {
 		dom = (new DOMParser()).parseFromString(xml, 'text/xml')
@@ -44,7 +52,11 @@ const parseXml = (xml) => {
 	return dom
 }
 
-const commentToObject = (tag) => {
+/**
+ *
+ * @param tag
+ */
+function commentToObject(tag) {
 	let mentions = tag['d:prop']['oc:mentions']['oc:mention'] ?? []
 	if (mentions && !Array.isArray(mentions)) {
 		mentions = [mentions]
@@ -69,8 +81,11 @@ const commentToObject = (tag) => {
 }
 
 // FIXME: make this generic and not depending on comments
-const xmlToTagList = (xml) => {
-
+/**
+ *
+ * @param xml
+ */
+function xmlToTagList(xml) {
 	const json = xmlToJson(parseXml(xml))
 	const list = json['d:multistatus']['d:response']
 

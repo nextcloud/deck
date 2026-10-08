@@ -5,66 +5,72 @@
 
 <template>
 	<div v-if="copiedCard">
-		<TagSelector :card="card"
+		<TagSelector
+			:card="card"
 			:labels="currentBoard.labels"
 			:disabled="!canEdit"
 			@select="addLabelToCard"
 			@remove="removeLabelFromCard"
 			@newtag="addLabelToBoardAndCard" />
 
-		<AssignmentSelector :card="card"
+		<AssignmentSelector
+			:card="card"
 			:assignables="assignables"
-			:can-edit="canEdit"
+			:canEdit="canEdit"
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
-		<StartDateSelector :card="card"
-			:can-edit="canEdit"
+		<StartDateSelector
+			:card="card"
+			:canEdit="canEdit"
 			@input="debouncedUpdateCardStartDate" />
 
-		<DueDateSelector :card="card"
-			:can-edit="canEdit"
+		<DueDateSelector
+			:card="card"
+			:canEdit="canEdit"
 			@input="debouncedUpdateCardDue" />
 
-		<DependentCardsSelector :card="card"
-			:can-edit="canEdit"
+		<DependentCardsSelector
+			:card="card"
+			:canEdit="canEdit"
 			@select="assignDependentCard"
 			@remove="removeDependentCard" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
-			<NcCollectionList v-if="card.id"
+			<NcCollectionList
+				v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"
 				type="deck-card" />
 		</div>
 
-		<Description :key="card.id"
+		<Description
+			:key="card.id"
 			:card="card"
-			:can-edit="canEdit"
-			show-attachments
+			:canEdit="canEdit"
+			showAttachments
 			@change="descriptionChanged" />
 	</div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import moment from '@nextcloud/moment'
 import { loadState } from '@nextcloud/initial-state'
-
-import { NcCollectionList } from '@nextcloud/vue'
-import Color from '../../mixins/color.js'
 import {
 	getLocale,
 } from '@nextcloud/l10n'
-import Description from './Description.vue'
-import TagSelector from './TagSelector.vue'
+import moment from '@nextcloud/moment'
+import { NcCollectionList } from '@nextcloud/vue'
+import { debounce } from 'lodash'
+import { mapActions, mapState } from 'pinia'
 import AssignmentSelector from './AssignmentSelector.vue'
+import DependentCardsSelector from './DependentCardsSelector.vue'
+import Description from './Description.vue'
 import DueDateSelector from './DueDateSelector.vue'
 import StartDateSelector from './StartDateSelector.vue'
-import { debounce } from 'lodash'
-import DependentCardsSelector from './DependentCardsSelector.vue'
-import { useCardStore } from '../../stores/card.js'
+import TagSelector from './TagSelector.vue'
+import Color from '../../mixins/color.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
@@ -78,6 +84,7 @@ export default {
 		Description,
 		NcCollectionList,
 	},
+
 	mixins: [Color],
 	props: {
 		card: {
@@ -85,6 +92,7 @@ export default {
 			default: null,
 		},
 	},
+
 	data() {
 		return {
 			addedLabelToCard: null,
@@ -93,28 +101,34 @@ export default {
 			projectsEnabled: loadState('core', 'projects_enabled', false),
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, ['currentBoard', 'canEdit', 'assignables']),
 		cardDetailsInModal: {
 			get() {
 				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
 				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
+
 		labelsSorted() {
 			return [...this.currentBoard.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+
 	watch: {
 		card() {
 			this.initialize()
 		},
 	},
+
 	mounted() {
 		this.initialize()
 	},
+
 	methods: {
 		...mapActions(useBoardStore, ['addLabelToCurrentBoardAndCard']),
 		...mapActions(useCardStore, {
@@ -127,12 +141,14 @@ export default {
 			assignDependentCardInStore: 'assignDependentCard',
 			removeDependentCardInStore: 'removeDependentCard',
 		}),
+
 		async descriptionChanged(newDesc) {
 			if (newDesc === this.copiedCard.description) {
 				return
 			}
 			this.copiedCard.description = newDesc
 		},
+
 		async initialize() {
 			if (!this.card) {
 				return
@@ -219,6 +235,7 @@ export default {
 			}
 			this.removeLabelInStore(data)
 		},
+
 		assignDependentCard(dependentCard) {
 			if (!dependentCard?.id) {
 				return
@@ -237,6 +254,7 @@ export default {
 				dependentCard,
 			})
 		},
+
 		removeDependentCard(dependentCard) {
 			const dependentCardId = dependentCard?.id
 			if (!dependentCardId) {
@@ -252,15 +270,18 @@ export default {
 				dependentCardId,
 			})
 		},
+
 		stringify(date) {
 			return moment(date).locale(this.locale).format('LLL')
 		},
+
 		parse(value) {
 			return moment(value).toDate()
 		},
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .section-wrapper {
 	display: flex;
