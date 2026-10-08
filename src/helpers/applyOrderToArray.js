@@ -3,12 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/**
- *
- * @param arrayToSort
- * @param removedIndex
- * @param addedIndex
- */
 function arrayMove(arrayToSort, removedIndex, addedIndex) {
 	if (removedIndex === null && addedIndex === null) {
 		return arrayToSort

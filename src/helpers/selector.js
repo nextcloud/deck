@@ -6,11 +6,6 @@
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { createApp, defineAsyncComponent, h } from 'vue'
 
-/**
- *
- * @param selector
- * @param propsData
- */
 function buildSelector(selector, propsData = {}) {
 	return new Promise((resolve, reject) => {
 		const container = document.createElement('div')

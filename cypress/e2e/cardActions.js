@@ -14,10 +14,6 @@ const auth = {
 	password: user.password,
 }
 
-/**
- *
- * @param useModal
- */
 function useModal(useModal) {
 	return cy.request({
 		method: 'POST',

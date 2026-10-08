@@ -8,9 +8,6 @@ import './shared-init.js'
 
 let _imports = null
 
-/**
- *
- */
 async function getAsyncImports() {
 	if (_imports) {
 		return _imports
@@ -29,11 +26,6 @@ async function getAsyncImports() {
 	return _imports
 }
 
-/**
- *
- * @param el
- * @param componentImport
- */
 async function mountDashboardWidget(el, componentImport) {
 	const { createApp, pinia } = await getAsyncImports()
 	const { default: Component } = await componentImport()

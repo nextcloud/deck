@@ -5,10 +5,6 @@
 
 import logger from '../logger.js'
 
-/**
- *
- * @param xml
- */
 function xmlToJson(xml) {
 	let obj = {}
 	if (xml.nodeType === 1) {
@@ -40,10 +36,6 @@ function xmlToJson(xml) {
 	}
 	return obj
 }
-/**
- *
- * @param xml
- */
 function parseXml(xml) {
 	let dom = null
 	try {
@@ -54,10 +46,6 @@ function parseXml(xml) {
 	return dom
 }
 
-/**
- *
- * @param tag
- */
 function commentToObject(tag) {
 	let mentions = tag['d:prop']['oc:mentions']['oc:mention'] ?? []
 	if (mentions && !Array.isArray(mentions)) {
@@ -83,10 +71,6 @@ function commentToObject(tag) {
 }
 
 // FIXME: make this generic and not depending on comments
-/**
- *
- * @param xml
- */
 function xmlToTagList(xml) {
 	const json = xmlToJson(parseXml(xml))
 	const list = json['d:multistatus']['d:response']
