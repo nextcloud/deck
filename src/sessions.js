@@ -39,22 +39,30 @@ export function initSessions() {
 	store = useBoardStore()
 	hasPush = listen('deck_board_update', (name, body) => {
 		// ignore update events which we have triggered ourselves
-		if (isOurSessionToken(body._causingSessionToken)) { return }
+		if (isOurSessionToken(body._causingSessionToken)) {
+			return
+		}
 
 		// only handle update events for the currently open board
 		const currentBoardId = store.currentBoard?.id
-		if (body.id !== currentBoardId) { return }
+		if (body.id !== currentBoardId) {
+			return
+		}
 
 		store.refreshBoard(currentBoardId)
 	})
 
 	listen('deck_card_update', (name, body) => {
 		// ignore update events which we have triggered ourselves
-		if (isOurSessionToken(body._causingSessionToken)) { return }
+		if (isOurSessionToken(body._causingSessionToken)) {
+			return
+		}
 
 		// only handle update events for the currently open board
 		const currentBoardId = store.currentBoard?.id
-		if (body.boardId !== currentBoardId) { return }
+		if (body.boardId !== currentBoardId) {
+			return
+		}
 
 		useStackStore().loadStacks(currentBoardId)
 	})

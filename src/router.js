@@ -149,7 +149,7 @@ const router = createRouter({
 	],
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
 	// Redirect if fullPath begins with a hash (ignore hashes later in path)
 	if (to.hash.substring(0, 2) === '#/') {
 		const path = to.fullPath.replace('/#/', '/').trimEnd('/')

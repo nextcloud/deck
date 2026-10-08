@@ -377,7 +377,7 @@ export default {
 			}
 			window.addEventListener('mousemove', (e) => {
 				if (!this.draggingCard) {
-					timer && clearInterval(timer)
+					clearInterval(timer)
 					return
 				}
 

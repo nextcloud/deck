@@ -24,7 +24,7 @@ export const useCardStore = defineStore('card', {
 				if (completed === 'open' && card.done !== null) {
 					return false
 				}
-				if (completed === 'completed' && card.done == null) {
+				if (completed === 'completed' && !card.done) {
 					return false
 				}
 				let allTagsMatch = true
@@ -87,7 +87,8 @@ export const useCardStore = defineStore('card', {
 						return q
 					}
 					for (const match of matches) {
-						let [filter, query] = match.indexOf(':') !== -1 ? match.split(/:(.*)/) : [null, match]
+						const [filter, rawQuery] = match.indexOf(':') !== -1 ? match.split(/:(.*)/) : [null, match]
+						let query = rawQuery
 						const isEmptyQuery = typeof query === 'undefined' || filterOutQuotes(query) === ''
 
 						if (filter === 'title') {

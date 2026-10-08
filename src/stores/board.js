@@ -34,7 +34,9 @@ export const useBoardStore = defineStore('board', {
 			return state.boards.find((board) => board.id === id)
 		},
 		viewMode(state) {
-			if (!state.currentBoard) { return 'kanban' }
+			if (!state.currentBoard) {
+				return 'kanban'
+			}
 			if (state.viewModeByBoard[state.currentBoard.id] !== undefined) {
 				return state.viewModeByBoard[state.currentBoard.id]
 			}
@@ -136,7 +138,9 @@ export const useBoardStore = defineStore('board', {
 			this.showArchived = newState !== undefined ? newState : !this.showArchived
 		},
 		setViewMode(mode) {
-			if (!this.currentBoard) { return }
+			if (!this.currentBoard) {
+				return
+			}
 			this.viewModeByBoard[this.currentBoard.id] = mode
 			localStorage.setItem(`deck.viewMode.${this.currentBoard.id}`, mode)
 		},

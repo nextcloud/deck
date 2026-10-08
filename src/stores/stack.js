@@ -121,7 +121,7 @@ export const useStackStore = defineStore('stack', {
 				// Mirror the backend bulk-done: mark all undone cards in this stack as done
 				const now = new Date().toISOString()
 				cardStore.cards
-					.filter((c) => c.stackId === stackId && c.done == null)
+					.filter((c) => c.stackId === stackId && !c.done)
 					.forEach((c) => cardStore.updateCardProperty({ property: 'done', card: { ...c, done: now } }))
 			}
 			const stack = this.stacks.find((s) => s.id === stackId)

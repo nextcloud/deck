@@ -109,13 +109,17 @@ const GANTT_VIEW_MODES = [
 		column_width: 38,
 		date_format: 'YYYY-MM-DD',
 		lower_text(date, last, lang) {
-			if (last && date.getDate() === last.getDate()) { return '' }
+			if (last && date.getDate() === last.getDate()) {
+				return ''
+			}
 			const day = date.getDate()
 			const weekday = new Intl.DateTimeFormat(lang || 'en', { weekday: 'short' }).format(date)
 			return day + '\n' + weekday
 		},
 		upper_text(date, last, lang) {
-			if (last && date.getMonth() === last.getMonth()) { return '' }
+			if (last && date.getMonth() === last.getMonth()) {
+				return ''
+			}
 			return new Intl.DateTimeFormat(lang || 'en', { month: 'long', year: 'numeric' }).format(date)
 		},
 		thick_line(date) {
@@ -152,7 +156,9 @@ const GANTT_VIEW_MODES = [
 			return fmt.format(date) + ' – ' + (sameMonth ? fmtDay.format(end) : fmt.format(end))
 		},
 		upper_text(date, last, lang) {
-			if (last && date.getMonth() === last.getMonth()) { return '' }
+			if (last && date.getMonth() === last.getMonth()) {
+				return ''
+			}
 			return new Intl.DateTimeFormat(lang || 'en', { month: 'long', year: 'numeric' }).format(date)
 		},
 		thick_line(date) {
@@ -168,7 +174,9 @@ const GANTT_VIEW_MODES = [
 		date_format: 'YYYY-MM',
 		lower_text: 'MMMM',
 		upper_text(date, last, lang) {
-			if (last && date.getFullYear() === last.getFullYear()) { return '' }
+			if (last && date.getFullYear() === last.getFullYear()) {
+				return ''
+			}
 			return new Intl.DateTimeFormat(lang || 'en', { year: 'numeric' }).format(date)
 		},
 		thick_line(date) {
@@ -418,9 +426,13 @@ export default {
 
 		_patchBarDuration() {
 			const bars = this.ganttInstance?.bars
-			if (!bars?.length) { return }
+			if (!bars?.length) {
+				return
+			}
 			const BarProto = Object.getPrototypeOf(bars[0])
-			if (BarProto._deckDurationPatched) { return }
+			if (BarProto._deckDurationPatched) {
+				return
+			}
 			BarProto._deckDurationPatched = true
 
 			// we overwrite the compute_duration function because it enforces a minimum of 1 day duration
@@ -447,7 +459,9 @@ export default {
 
 		fitColumnsToWidth() {
 			const gantt = this.ganttInstance
-			if (!gantt?.dates?.length) { return }
+			if (!gantt?.dates?.length) {
+				return
+			}
 			const containerWidth = this.$refs.ganttContainer.clientWidth
 			const contentWidth = gantt.dates.length * gantt.config.column_width
 			if (contentWidth < containerWidth) {

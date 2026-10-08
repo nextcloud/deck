@@ -15,6 +15,7 @@ export default [
 			'jsdoc/no-undefined-types': 'off',
 			'jsdoc/require-property-description': 'off',
 			'@typescript-eslint/no-unused-vars': 'off',
+			'vue/multi-word-component-names': 'off',
 		},
 	},
 	{

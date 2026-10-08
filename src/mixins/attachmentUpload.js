@@ -4,7 +4,6 @@
  */
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
-// eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue'
 import { mapActions } from 'pinia'
 import { useAttachmentStore } from '../stores/attachment.js'

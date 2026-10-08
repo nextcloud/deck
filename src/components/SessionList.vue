@@ -46,7 +46,9 @@ export default {
 
 	computed: {
 		sessionsVisible() {
-			if (!this.sessions) { return [] }
+			if (!this.sessions) {
+				return []
+			}
 			return this.sessions.slice(0, 5)
 		},
 

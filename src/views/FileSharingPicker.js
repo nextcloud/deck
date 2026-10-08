@@ -23,7 +23,7 @@ export default {
 
 		return result.data.ocs.data
 	},
-	condition: (self) => {
+	condition: () => {
 		return !!OC.appswebroots.deck
 	},
 }
