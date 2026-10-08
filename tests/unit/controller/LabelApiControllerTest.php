@@ -24,18 +24,21 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Service\LabelService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class LabelApiControllerTest extends \Test\TestCase {
-	private $controller;
-	private $request;
-	private $labelService;
-	private $userId = 'admin';
-	private $exampleLabel = [
+	private LabelApiController $controller;
+	private IRequest&MockObject $request;
+	private LabelService&MockObject $labelService;
+	private ChangeHelper&MockObject $changeHelper;
+	private string $userId = 'admin';
+	private array $exampleLabel = [
 		'id' => 123
 	];
 
@@ -43,12 +46,12 @@ class LabelApiControllerTest extends \Test\TestCase {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->labelService = $this->createMock(LabelService::class);
-		$this->exampleLabel['id'];
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->controller = new LabelApiController(
 			'deck',
 			$this->request,
 			$this->labelService,
-			$this->userId
+			$this->changeHelper
 		);
 	}
 
@@ -65,7 +68,13 @@ class LabelApiControllerTest extends \Test\TestCase {
 			->method('find')
 			->willReturn($label);
 
+		$this->changeHelper->expects($this->once())
+			->method('getEtag')
+			->with(ChangeHelper::TYPE_LABEL, $this->exampleLabel['id'])
+			->willReturn('');
+
 		$expected = new DataResponse($label, HTTP::STATUS_OK);
+		$expected->setETag($label->getETag());
 		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
 	}
@@ -98,7 +107,17 @@ class LabelApiControllerTest extends \Test\TestCase {
 			->will($this->returnValue($this->exampleLabel['id']));
 
 		$this->labelService->expects($this->once())
+			->method('find')
+			->with($this->exampleLabel['id'])
+			->willReturn($label);
+
+		$this->changeHelper->expects($this->once())
+			->method('checkIfMatch')
+			->with(ChangeHelper::TYPE_LABEL, $this->exampleLabel['id'], $label->getETag());
+
+		$this->labelService->expects($this->once())
 			->method('update')
+			->with($this->exampleLabel['id'], 'title', '000000')
 			->will($this->returnValue($label));
 
 		$expected = new DataResponse($label, HTTP::STATUS_OK);
@@ -116,7 +135,17 @@ class LabelApiControllerTest extends \Test\TestCase {
 			->will($this->returnValue($this->exampleLabel['id']));
 
 		$this->labelService->expects($this->once())
+			->method('find')
+			->with($this->exampleLabel['id'])
+			->willReturn($label);
+
+		$this->changeHelper->expects($this->once())
+			->method('checkIfMatch')
+			->with(ChangeHelper::TYPE_LABEL, $this->exampleLabel['id'], $label->getETag());
+
+		$this->labelService->expects($this->once())
 			->method('delete')
+			->with($this->exampleLabel['id'])
 			->willReturn($label);
 
 		$expected = new DataResponse($label, HTTP::STATUS_OK);
