@@ -15,7 +15,6 @@ const testBoardData = {
 }
 
 describe('Stack', function() {
-
 	before(function() {
 		cy.createUser(user)
 		cy.login(user)

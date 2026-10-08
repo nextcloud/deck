@@ -19,7 +19,7 @@ describe('Deck dashboard', function() {
 		cy.visit('/apps/deck')
 		cy.get('.board-title h2')
 			.should('have.length', 1).first()
-			.should($el => expect($el.text().trim()).to.equal('Upcoming cards'))
+			.should(($el) => expect($el.text().trim()).to.equal('Upcoming cards'))
 	})
 
 	it('Can see the default "Welcome Board" created for user by default', function() {

@@ -7,7 +7,6 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 
 export class SessionApi {
-
 	url(url) {
 		return generateOcsUrl(`apps/deck/api/v1.0${url}`)
 	}
@@ -35,7 +34,6 @@ export class SessionApi {
 		const blob = new Blob([JSON.stringify(body)], headers)
 		navigator.sendBeacon(this.url('/session/close'), blob)
 	}
-
 }
 
 export const sessionApi = new SessionApi()

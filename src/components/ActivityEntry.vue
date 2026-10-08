@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import { NcRichText, NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
+import { NcRichText, NcUserBubble } from '@nextcloud/vue'
 import DOMPurify from 'dompurify'
-import relativeDate from '../mixins/relativeDate.js'
-import formatReadableDate from '../mixins/readableDate.js'
 import { h } from 'vue'
+import formatReadableDate from '../mixins/readableDate.js'
+import relativeDate from '../mixins/relativeDate.js'
 
 // Vue 2's `{ functional: true, render(createElement, context) }` signature no
 // longer exists in Vue 3, so this is a regular component instead.
@@ -48,6 +48,7 @@ export default {
 	components: {
 		NcRichText,
 	},
+
 	mixins: [relativeDate, formatReadableDate],
 	props: {
 		activity: {
@@ -55,6 +56,7 @@ export default {
 			default: null,
 		},
 	},
+
 	computed: {
 		message() {
 			const subject = this.activity.subject_rich[0]
@@ -67,32 +69,32 @@ export default {
 			Object.keys(parameters).forEach(function(key, index) {
 				const { type } = parameters[key]
 				switch (type) {
-				case 'highlight':
-					parameters[key] = {
-						component: InternalLink,
-						props: {
-							href: parameters[key].link,
-							name: parameters[key].name,
-						},
-					}
-					break
-				case 'user':
-					parameters[key] = {
-						component: NcUserBubble,
-						props: {
-							user: parameters[key].id,
-							displayName: parameters[key].name,
-						},
-					}
-					break
-				default:
-					parameters[key] = `{${key}}`
+					case 'highlight':
+						parameters[key] = {
+							component: InternalLink,
+							props: {
+								href: parameters[key].link,
+								name: parameters[key].name,
+							},
+						}
+						break
+					case 'user':
+						parameters[key] = {
+							component: NcUserBubble,
+							props: {
+								user: parameters[key].id,
+								displayName: parameters[key].name,
+							},
+						}
+						break
+					default:
+						parameters[key] = `{${key}}`
 				}
-
 			})
 
 			return {
-				subject, parameters,
+				subject,
+				parameters,
 			}
 		},
 
@@ -150,6 +152,7 @@ export default {
 		}
 	}
 </style>
+
 <style>
 	.visualdiff ins {
 		color: green;

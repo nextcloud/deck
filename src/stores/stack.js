@@ -4,11 +4,11 @@
  */
 
 import { defineStore } from 'pinia'
-import { StackApi } from '../services/StackApi.js'
 import applyOrderToArray from '../helpers/applyOrderToArray.js'
-import { useTrashbinStore } from './trashbin.js'
-import { useCardStore } from './card.js'
+import { StackApi } from '../services/StackApi.js'
 import { useBoardStore } from './board.js'
+import { useCardStore } from './card.js'
+import { useTrashbinStore } from './trashbin.js'
 
 const apiClient = new StackApi()
 
@@ -26,9 +26,9 @@ export const useStackStore = defineStore('stack', {
 	},
 	actions: {
 		addStack(stack) {
-			const existingIndex = this.stacks.findIndex(_stack => _stack.id === stack.id)
+			const existingIndex = this.stacks.findIndex((_stack) => _stack.id === stack.id)
 			if (existingIndex !== -1) {
-				this.stacks[existingIndex] = Object.assign({}, this.stacks[existingIndex], stack)
+				this.stacks[existingIndex] = { ...this.stacks[existingIndex], ...stack }
 			} else {
 				this.stacks.push(stack)
 			}
@@ -94,7 +94,7 @@ export const useStackStore = defineStore('stack', {
 		deleteStack(stack) {
 			apiClient.deleteStack(stack.id, stack.boardId)
 				.then((stack) => {
-					const existingIndex = this.stacks.findIndex(_stack => _stack.id === stack.id)
+					const existingIndex = this.stacks.findIndex((_stack) => _stack.id === stack.id)
 					if (existingIndex !== -1) {
 						this.stacks.splice(existingIndex, 1)
 					}
@@ -104,7 +104,7 @@ export const useStackStore = defineStore('stack', {
 		updateStack(stack) {
 			apiClient.updateStack(stack)
 				.then((stack) => {
-					const existingIndex = this.stacks.findIndex(_stack => _stack.id === stack.id)
+					const existingIndex = this.stacks.findIndex((_stack) => _stack.id === stack.id)
 					if (existingIndex !== -1) {
 						this.stacks[existingIndex].title = stack.title
 					}
@@ -122,9 +122,7 @@ export const useStackStore = defineStore('stack', {
 				const now = new Date().toISOString()
 				cardStore.cards
 					.filter((c) => c.stackId === stackId && c.done == null)
-					.forEach((c) =>
-						cardStore.updateCardProperty({ property: 'done', card: { ...c, done: now } }),
-					)
+					.forEach((c) => cardStore.updateCardProperty({ property: 'done', card: { ...c, done: now } }))
 			}
 			const stack = this.stacks.find((s) => s.id === stackId)
 			if (stack) {

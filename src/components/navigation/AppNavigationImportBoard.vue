@@ -5,7 +5,8 @@
 <template>
 	<div>
 		<NcAppNavigationItem :name="t('deck', 'Import board')" icon="icon-upload" @click.prevent.stop="startImportBoard" />
-		<input ref="fileInput"
+		<input
+			ref="fileInput"
 			type="file"
 			accept="application/json"
 			style="display: none;"
@@ -14,9 +15,9 @@
 </template>
 
 <script>
+import { showLoading, showSuccess } from '@nextcloud/dialogs'
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import { showError } from '../../helpers/errors.js'
-import { showSuccess, showLoading } from '@nextcloud/dialogs'
 import { useBoardStore } from '../../stores/board.js'
 
 export default {
@@ -28,20 +29,23 @@ export default {
 			default: false,
 		},
 	},
+
 	data() {
 		return {
 			value: '',
 		}
 	},
+
 	methods: {
 		startImportBoard() {
 			this.$refs.fileInput.value = ''
 			this.$refs.fileInput.click()
 		},
+
 		async doImportBoard(event) {
 			const file = event.target.files[0]
 			if (file) {
-				const loadingToast = showLoading(t('deck', 'Importing board...'))
+				const loadingToast = showLoading(t('deck', 'Importing board…'))
 				const result = await useBoardStore().importBoard(file)
 				loadingToast.hideToast()
 				if (result?.message) {

@@ -7,7 +7,20 @@ import { generateOcsUrl } from '@nextcloud/router'
 
 const shareUrl = generateOcsUrl('apps/files_sharing/api/v1/shares')
 
-const createShare = async function({ path, permissions, shareType, shareWith, publicUpload, password, sendPasswordByTalk, expireDate, label }) {
+/**
+ *
+ * @param root0
+ * @param root0.path
+ * @param root0.permissions
+ * @param root0.shareType
+ * @param root0.shareWith
+ * @param root0.publicUpload
+ * @param root0.password
+ * @param root0.sendPasswordByTalk
+ * @param root0.expireDate
+ * @param root0.label
+ */
+async function createShare({ path, permissions, shareType, shareWith, publicUpload, password, sendPasswordByTalk, expireDate, label }) {
 	try {
 		const request = await axios.post(shareUrl, { path, permissions, shareType, shareWith, publicUpload, password, sendPasswordByTalk, expireDate, label })
 		if (!request?.data?.ocs) {

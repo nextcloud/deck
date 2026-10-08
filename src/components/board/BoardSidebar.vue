@@ -4,12 +4,14 @@
 -->
 
 <template>
-	<NcAppSidebar v-if="board != null"
+	<NcAppSidebar
+		v-if="board != null"
 		:actions="[]"
 		:name="board.title"
 		@update:active="(value) => activeTabId = value"
 		@close="closeSidebar">
-		<NcAppSidebarTab id="sharing"
+		<NcAppSidebarTab
+			id="sharing"
 			:order="0"
 			:name="t('deck', 'Sharing')">
 			<template #icon>
@@ -18,7 +20,8 @@
 			<SharingTabSidebar :board="board" />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab id="tags"
+		<NcAppSidebarTab
+			id="tags"
 			:order="1"
 			:name="t('deck', 'Tags')">
 			<template #icon>
@@ -27,7 +30,8 @@
 			<TagsTabSidebar :board="board" />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="canEdit"
+		<NcAppSidebarTab
+			v-if="canEdit"
 			id="deleted"
 			:order="2"
 			:name="t('deck', 'Deleted items')">
@@ -37,29 +41,30 @@
 			<DeletedTabSidebar :board="board" />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="hasActivity"
+		<NcAppSidebarTab
+			v-if="hasActivity"
 			id="activity"
 			:order="3"
 			:name="t('deck', 'Activity')">
 			<template #icon>
 				<ActivityIcon :size="20" />
 			</template>
-			<TimelineTabSidebar :board="board" :is-active="activeTabId === 'activity'" />
+			<TimelineTabSidebar :board="board" :isActive="activeTabId === 'activity'" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import SharingTabSidebar from './SharingTabSidebar.vue'
-import TagsTabSidebar from './TagsTabSidebar.vue'
-import DeletedTabSidebar from './DeletedTabSidebar.vue'
-import TimelineTabSidebar from './TimelineTabSidebar.vue'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import SharingIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import TagsIcon from 'vue-material-design-icons/TagMultipleOutline.vue'
 import TrashIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import DeletedTabSidebar from './DeletedTabSidebar.vue'
+import SharingTabSidebar from './SharingTabSidebar.vue'
+import TagsTabSidebar from './TagsTabSidebar.vue'
+import TimelineTabSidebar from './TimelineTabSidebar.vue'
 import { useBoardStore } from '../../stores/board.js'
 const capabilities = window.OC.getCapabilities()
 
@@ -77,12 +82,14 @@ export default {
 		TagsIcon,
 		TrashIcon,
 	},
+
 	props: {
 		id: {
 			type: Number,
 			required: true,
 		},
 	},
+
 	data() {
 		return {
 			hasActivity: capabilities && capabilities.activity,
@@ -91,12 +98,14 @@ export default {
 			activeTabId: 'sharing',
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, {
 			board: 'currentBoard',
 			canEdit: 'canEdit',
 		}),
 	},
+
 	methods: {
 		closeSidebar() {
 			this.$router.push({ name: 'board' })

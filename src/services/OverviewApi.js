@@ -7,7 +7,6 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 
 export class OverviewApi {
-
 	url(url) {
 		return generateOcsUrl(`apps/deck/api/v1.0/${url}`)
 	}
@@ -20,8 +19,6 @@ export class OverviewApi {
 				(response) => Promise.resolve(response.data.ocs.data),
 				(err) => Promise.reject(err),
 			)
-			.catch((err) => Promise.reject(err),
-			)
+			.catch((err) => Promise.reject(err))
 	}
-
 }

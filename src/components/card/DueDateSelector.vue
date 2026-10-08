@@ -9,30 +9,34 @@
 			<CalendarCheck v-else :size="20" />
 		</template>
 		<template v-if="!card.done && !card.archived">
-			<NcDateTimePickerNative v-if="duedate"
+			<NcDateTimePickerNative
+				v-if="duedate"
 				id="card-duedate-picker"
 				v-model="duedate"
 				:placeholder="t('deck', 'Set a due date')"
-				:hide-label="true"
+				:hideLabel="true"
 				type="datetime-local" />
-			<NcActions v-if="canEdit"
-				:menu-name="!duedate ? t('deck', 'Add due date') : null"
+			<NcActions
+				v-if="canEdit"
+				:menuName="!duedate ? t('deck', 'Add due date') : null"
 				variant="tertiary"
 				data-cy-due-date-actions>
 				<template v-if="!duedate" #icon>
 					<Plus :size="20" />
 				</template>
-				<NcActionButton v-for="shortcut in reminderOptions"
+				<NcActionButton
+					v-for="shortcut in reminderOptions"
 					:key="shortcut.key"
-					close-after-click
+					closeAfterClick
 					:data-cy-due-date-shortcut="shortcut.key"
 					@click="() => selectShortcut(shortcut)">
 					{{ shortcut.label }}
 				</NcActionButton>
 				<NcActionSeparator />
 
-				<NcActionButton v-if="!duedate"
-					close-after-click
+				<NcActionButton
+					v-if="!duedate"
+					closeAfterClick
 					data-cy-due-date-pick
 					@click="initDate">
 					<template #icon>
@@ -40,16 +44,18 @@
 					</template>
 					{{ t('deck', 'Choose a date') }}
 				</NcActionButton>
-				<NcActionButton v-else
+				<NcActionButton
+					v-else
 					icon="icon-delete"
-					close-after-click
+					closeAfterClick
 					data-cy-due-date-remove
 					@click="removeDue">
 					{{ t('deck', 'Remove due date') }}
 				</NcActionButton>
 			</NcActions>
 
-			<NcButton v-if="!card.done && canEdit"
+			<NcButton
+				v-if="!card.done && canEdit"
 				variant="secondary"
 				class="completed-button"
 				@click="changeCardDoneStatus()">
@@ -64,13 +70,14 @@
 				<span v-if="card.done" class="done-info--done">
 					{{ formatReadableDate(card.done) }}
 				</span>
-				<span v-if="duedate" class="done-info--duedate" :class="{ 'dimmed': card.done }">
+				<span v-if="duedate" class="done-info--duedate" :class="{ dimmed: card.done }">
 					{{ t('deck', 'Due at:') }}
 					{{ formatReadableDate(duedate) }}
 				</span>
 			</div>
 			<div v-if="canEdit" class="due-actions">
-				<NcButton v-if="!card.archived"
+				<NcButton
+					v-if="!card.archived"
 					variant="tertiary"
 					:name="t('deck', 'Not done')"
 					@click="changeCardDoneStatus()">
@@ -90,8 +97,8 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import { mapActions } from 'pinia'
+import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 import {
 	NcActionButton,
 	NcActions,
@@ -99,16 +106,16 @@ import {
 	NcButton,
 	NcDateTimePickerNative,
 } from '@nextcloud/vue'
-import readableDate from '../../mixins/readableDate.js'
-import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
+import { mapActions } from 'pinia'
+import { defineComponent } from 'vue'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import Plus from 'vue-material-design-icons/Plus.vue'
-import Calendar from 'vue-material-design-icons/CalendarOutline.vue'
 import CalendarCheck from 'vue-material-design-icons/CalendarCheckOutline.vue'
+import Calendar from 'vue-material-design-icons/CalendarOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import ClearIcon from 'vue-material-design-icons/Close.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
+import readableDate from '../../mixins/readableDate.js'
 import { useCardStore } from '../../stores/card.js'
 
 export default defineComponent({
@@ -127,19 +134,23 @@ export default defineComponent({
 		NcActionSeparator,
 		NcDateTimePickerNative,
 	},
+
 	mixins: [
 		readableDate,
 	],
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	emits: ['input'],
 	data() {
 		return {
@@ -149,21 +160,25 @@ export default defineComponent({
 				formatLocale: {
 					firstDayOfWeek: getFirstDay() === 0 ? 7 : getFirstDay(),
 				},
+
 				placeholder: {
 					date: t('deck', 'Select Date'),
 				},
 			},
+
 			format: {
 				stringify: this.stringify,
 				parse: this.parse,
 			},
 		}
 	},
+
 	computed: {
 		duedate: {
 			get() {
 				return this.card?.duedate ? new Date(this.card.duedate) : null
 			},
+
 			set(val) {
 				this.$emit('input', val ? new Date(val) : null)
 			},
@@ -208,14 +223,16 @@ export default defineComponent({
 					label: t('deck', 'Next week – {timeLocale}', { timeLocale: nextWeekTime?.format('ddd LT') }),
 					ariaLabel: t('deck', 'Set due date for next week'),
 				},
-			].filter(option => option.timestamp !== null)
+			].filter((option) => option.timestamp !== null)
 		},
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			changeCardDoneStatusInStore: 'changeCardDoneStatus',
 			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
 		}),
+
 		initDate() {
 			if (this.duedate === null) {
 				// We initialize empty dates with a time once clicked to make picking a day easier
@@ -227,25 +244,30 @@ export default defineComponent({
 				this.duedate = now
 			}
 		},
+
 		removeDue() {
 			this.duedate = null
-
 		},
+
 		selectShortcut(shortcut) {
 			this.duedate = shortcut.timestamp
 		},
+
 		getTimestamp(momentObject) {
 			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
 		},
+
 		changeCardDoneStatus() {
 			this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
 		},
+
 		archiveUnarchiveCard() {
 			this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
 		},
 	},
 })
 </script>
+
 <style scoped lang="scss">
 .done-info {
 	flex-grow: 1;

@@ -4,11 +4,10 @@
  */
 
 import { generateUrl } from '@nextcloud/router'
-
 import CardCreateDialog from './CardCreateDialog.vue'
 import { buildSelector } from './helpers/selector.js'
-import './init-collections.js'
 
+import './init-collections.js'
 import './shared-init.js'
 
 window.addEventListener('DOMContentLoaded', () => {

@@ -7,7 +7,6 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 
 export class CardApi {
-
 	url(url) {
 		url = `/apps/deck${url}`
 		return generateUrl(url)
@@ -267,5 +266,4 @@ export class CardApi {
 				return Promise.reject(err)
 			})
 	}
-
 }

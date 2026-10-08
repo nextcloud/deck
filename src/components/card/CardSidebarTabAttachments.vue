@@ -4,10 +4,11 @@
 -->
 
 <template>
-	<AttachmentList :card-id="card.id"
+	<AttachmentList
+		:cardId="card.id"
 		:removable="true"
-		@delete-attachment="deleteAttachment"
-		@restore-attachment="restoreAttachment" />
+		@deleteAttachment="deleteAttachment"
+		@restoreAttachment="restoreAttachment" />
 </template>
 
 <script>
@@ -19,12 +20,14 @@ export default {
 	components: {
 		AttachmentList,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
 	},
+
 	methods: {
 		...mapActions(useAttachmentStore, [
 			'deleteAttachment',

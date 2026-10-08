@@ -7,33 +7,35 @@
 		<div class="selector-wrapper--icon">
 			<AccountMultiple :size="20" />
 		</div>
-		<NcSelect v-if="canEdit"
+		<NcSelect
+			v-if="canEdit"
 			v-model="assignedUsers"
 			class="selector-wrapper--selector"
 			:disabled="assignables.length === 0"
 			:multiple="true"
 			:options="formatedAssignables"
-			:user-select="true"
+			:userSelect="true"
 			:aria-label-combobox="t('deck', 'Assign a user to this card…')"
 			:placeholder="t('deck', 'Select a user to assign to this card…')"
 			label="displayname"
-			track-by="multiselectKey"
+			trackBy="multiselectKey"
 			@option:selected="onSelect"
 			@option:deselected="onRemove" />
 		<div v-else class="avatar-list--readonly">
-			<NcUserBubble v-for="option in assignedUsers"
+			<NcUserBubble
+				v-for="option in assignedUsers"
 				:key="option.primaryKey"
 				:user="option.uid"
-				:display-name="option.displayname"
-				:is-no-user="option.isNoUser"
+				:displayName="option.displayname"
+				:isNoUser="option.isNoUser"
 				:size="32" />
 		</div>
 	</div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
 import { NcSelect, NcUserBubble } from '@nextcloud/vue'
+import { defineComponent } from 'vue'
 import AccountMultiple from 'vue-material-design-icons/AccountMultipleOutline.vue'
 
 export default defineComponent({
@@ -43,29 +45,34 @@ export default defineComponent({
 		NcSelect,
 		NcUserBubble,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: true,
 		},
+
 		assignables: {
 			type: Array,
 			default: () => [],
 		},
 	},
+
 	emits: ['select', 'remove'],
 	data() {
 		return {
 			assignedUsers: [],
 		}
 	},
+
 	computed: {
 		formatedAssignables() {
-			return this.assignables.map(item => {
+			return this.assignables.map((item) => {
 				const assignable = {
 					...item,
 					user: item.primaryKey,
@@ -88,14 +95,17 @@ export default defineComponent({
 			})
 		},
 	},
+
 	watch: {
 		card() {
 			this.initialize()
 		},
 	},
+
 	mounted() {
 		this.initialize()
 	},
+
 	methods: {
 		async initialize() {
 			if (!this.card) {
@@ -113,10 +123,12 @@ export default defineComponent({
 				this.assignedUsers = []
 			}
 		},
+
 		onSelect(options) {
 			const addition = options.filter((item) => !this.card.assignedUsers.find((user) => user.participant.primaryKey === item.primaryKey))
 			this.$emit('select', addition[0])
 		},
+
 		onRemove(removed) {
 			this.$emit('remove', removed)
 		},

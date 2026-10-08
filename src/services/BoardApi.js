@@ -5,13 +5,13 @@
 
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
+
 import '../models/index.js'
 
 /**
  * This class handles all the api communication with the Deck backend.
  */
 export class BoardApi {
-
 	url(url) {
 		url = `/apps/deck${url}`
 		return generateUrl(url)
@@ -184,17 +184,17 @@ export class BoardApi {
 
 					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), assignedUsers: t('deck', 'Assigned users'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
 					let row = ''
-					Object.keys(fields).forEach(field => {
+					Object.keys(fields).forEach((field) => {
 						row += '"' + fields[field] + '"' + '\t'
 					})
 
 					row = row.slice(0, -1)
 					let CSV = row + '\r\n'
 
-					response.data.stacks.forEach(stack => {
-						stack?.cards?.forEach(card => {
+					response.data.stacks.forEach((stack) => {
+						stack?.cards?.forEach((card) => {
 							row = ''
-							Object.keys(fields).forEach(field => {
+							Object.keys(fields).forEach((field) => {
 								if (field === 'createdAt' || field === 'lastModified') {
 									const date = new Date(Number(card[field]) * 1000)
 									row += '"' + date.toLocaleDateString() + '"' + '\t'
@@ -202,7 +202,7 @@ export class BoardApi {
 									row += '"' + stack.title.replaceAll('"', '""') + '"' + '\t'
 								} else if (field === 'labels') {
 									row += '"'
-									card[field].forEach(label => {
+									card[field].forEach((label) => {
 										row += label.title.replaceAll('"', '""') + ', '
 									})
 									if (card[field].length > 0) {
@@ -211,7 +211,7 @@ export class BoardApi {
 									row += '"' + '\t'
 								} else if (field === 'assignedUsers') {
 									row += '"'
-									card[field].forEach(assignedUsers => {
+									card[field].forEach((assignedUsers) => {
 										row += assignedUsers.participant.displayname.replaceAll('"', '""') + ', '
 									})
 									if (card[field].length > 0) {
@@ -367,5 +367,4 @@ export class BoardApi {
 				return Promise.reject(err)
 			})
 	}
-
 }
