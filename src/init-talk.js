@@ -1,11 +1,11 @@
+import { generateUrl } from '@nextcloud/router'
+import CardCreateDialog from './CardCreateDialog.vue'
+import { buildSelector } from './helpers/selector.js'
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
-import { generateUrl } from '@nextcloud/router'
-import CardCreateDialog from './CardCreateDialog.vue'
-import { buildSelector } from './helpers/selector.js'
+import logger from './logger.js'
 
 import './init-collections.js'
 import './shared-init.js'
@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					},
 				})
 			} catch {
-				console.debug('Card creation dialog was canceled')
+				logger.debug('Card creation dialog was canceled')
 			}
 		},
 	})

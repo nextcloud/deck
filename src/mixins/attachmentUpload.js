@@ -1,11 +1,12 @@
-/**
- * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 import PQueue from 'p-queue'
 import { mapActions } from 'pinia'
+/**
+ * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+import logger from '../logger.js'
 import { useAttachmentStore } from '../stores/attachment.js'
 
 const queue = new PQueue({ concurrency: 2 })
@@ -40,7 +41,7 @@ export default {
 						formData: bodyFormData,
 						onUploadProgress: (e) => {
 							const percentCompleted = Math.round((e.loaded * 100) / e.total)
-							console.debug(percentCompleted)
+							logger.debug('Upload progress', { file: file.name, percentCompleted })
 							this.uploadQueue[file.name].progress = percentCompleted
 						},
 					})

@@ -153,6 +153,7 @@ import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import CardItem from '../cards/CardItem.vue'
 import StackCardAdd from './StackCardAdd.vue'
+import logger from '../../logger.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
@@ -288,12 +289,12 @@ export default {
 					// move card to new stack
 					card.stackId = stackId
 					card.order = addedIndex
-					console.debug('move card to stack', card.stackId, card.order)
+					logger.debug('Move card to stack', { stackId: card.stackId, order: card.order })
 					await this.reorderCardInStore(card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
 					card.order = addedIndex
-					console.debug('move card in stack', card.stackId, card.order)
+					logger.debug('Move card in stack', { stackId: card.stackId, order: card.order })
 					await this.reorderCardInStore(card)
 				}
 			}

@@ -44,6 +44,7 @@ import { vInfiniteScroll } from '@vueuse/components'
 import { mapActions, mapState } from 'pinia'
 import CardItem from '../cards/CardItem.vue'
 import Placeholder from './Placeholder.vue'
+import logger from '../../logger.js'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -119,7 +120,7 @@ export default {
 				this.loading = false
 			} catch (e) {
 				if (!axios.isCancel(e)) {
-					console.error('Search request failed', e)
+					logger.error('Search request failed', { error: e })
 					this.loading = false
 				}
 			}
@@ -144,7 +145,7 @@ export default {
 				this.loading = false
 			} catch (e) {
 				if (!axios.isCancel(e)) {
-					console.error('Search request failed', e)
+					logger.error('Search request failed', { error: e })
 					this.hasMore = false
 					this.loading = false
 				}

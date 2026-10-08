@@ -100,6 +100,7 @@ import { generateOcsUrl, generateRemoteUrl, generateUrl } from '@nextcloud/route
 import { NcActionButton, NcActionLink, NcActions, NcButton } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import logger from '../../logger.js'
 import attachmentUpload from '../../mixins/attachmentUpload.js'
 import relativeDate from '../../mixins/relativeDate.js'
 import { useAttachmentStore } from '../../stores/attachment.js'
@@ -259,7 +260,7 @@ export default {
 		shareFromFiles() {
 			picker.pick()
 				.then(async (path) => {
-					console.debug(`path ${path} selected for sharing`)
+					logger.debug('Path selected for sharing', { path })
 					if (!path.startsWith('/')) {
 						throw new Error(t('files', 'Invalid path selected'))
 					}

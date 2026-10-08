@@ -1,10 +1,10 @@
+import { defineStore } from 'pinia'
+import applyOrderToArray from '../helpers/applyOrderToArray.js'
 /**
  * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
-import { defineStore } from 'pinia'
-import applyOrderToArray from '../helpers/applyOrderToArray.js'
+import logger from '../logger.js'
 import { StackApi } from '../services/StackApi.js'
 import { useBoardStore } from './board.js'
 import { useCardStore } from './card.js'
@@ -42,7 +42,7 @@ export const useStackStore = defineStore('stack', {
 			apiClient.reorderStack(stack.id, addedIndex, stack.boardId)
 				.catch((err) => {
 					OC.Notification.showTemporary('Failed to change order')
-					console.error(err.response.data.message)
+					logger.error('Failed to reorder stack', { error: err })
 
 					// restore old order
 					for (let i = 0; i < currentOrder.length; i++) {

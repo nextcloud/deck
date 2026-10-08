@@ -1,10 +1,10 @@
+import axios from '@nextcloud/axios'
+import { listen } from '@nextcloud/notify_push'
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
-import axios from '@nextcloud/axios'
-import { listen } from '@nextcloud/notify_push'
+import logger from './logger.js'
 import { sessionApi } from './services/SessionApi.js'
 import { useBoardStore } from './stores/board.js'
 import { useStackStore } from './stores/stack.js'
@@ -120,7 +120,7 @@ export function createSession(boardId) {
 				// create a fresh session
 				create()
 			} else {
-				console.error('Failed to sync deck session', err)
+				logger.error('Failed to sync deck session', { error: err })
 			}
 		} finally {
 			syncRunning = false

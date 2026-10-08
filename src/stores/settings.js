@@ -1,12 +1,12 @@
-/**
- * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 import axios from '@nextcloud/axios'
 import { loadState } from '@nextcloud/initial-state'
 import { generateOcsUrl } from '@nextcloud/router'
 import { defineStore } from 'pinia'
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+import logger from '../logger.js'
 import { useBoardStore } from './board.js'
 
 export const useSettingsStore = defineStore('settings', {
@@ -84,7 +84,7 @@ export const useSettingsStore = defineStore('settings', {
 					})
 					this.setConfigLocal({ key, value })
 				} catch (e) {
-					console.error(`Error while saving ${key}`, e.response)
+					logger.error('Error while saving config', { key, error: e })
 					throw e
 				}
 			}

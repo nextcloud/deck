@@ -94,6 +94,7 @@ import { loadState } from '@nextcloud/initial-state'
 import { NcActionButton, NcActionCheckbox, NcActions, NcAvatar, NcCollectionList, NcRelatedResourcesPanel, NcSelectUsers } from '@nextcloud/vue'
 import debounce from 'lodash/debounce.js'
 import { mapActions, mapState } from 'pinia'
+import logger from '../../logger.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
 const SOURCE_TO_SHARE_TYPE = {
@@ -235,7 +236,7 @@ export default {
 				await this.addAclToCurrentBoard(this.addAclForAPI)
 			} catch (e) {
 				const errorMessage = t('deck', 'Failed to create share with {displayName}', { displayName: this.addAcl.displayName })
-				console.error(errorMessage, e)
+				logger.error('Failed to create share', { error: e })
 				showError(errorMessage)
 			}
 			this.addAcl = null

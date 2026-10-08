@@ -88,6 +88,7 @@ import NcFormBox from '@nextcloud/vue/components/NcFormBox'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcHotkey from '@nextcloud/vue/components/NcHotkey'
 import NcHotkeyList from '@nextcloud/vue/components/NcHotkeyList'
+import logger from '../logger.js'
 import { useSettingsStore } from '../stores/settings.js'
 
 import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
@@ -192,7 +193,7 @@ export default {
 					return obj
 				}, [])
 			}, (error) => {
-				console.error('Error while loading group list', error.response)
+				logger.error('Error while loading group list', { error })
 			})
 		}
 	},
