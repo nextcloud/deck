@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				await buildSelector(CardCreateDialog, {
 					props: {
 						title: shortenedMessage,
-						description: parsedMessage + '\n\n' + '['
+						description: parsedMessage + '\n\n['
 							+ t('deck', 'Message from {author} in {conversationName}', {
 								author: actorDisplayName,
 								conversationName,
@@ -52,7 +52,7 @@ window.addEventListener('DOMContentLoaded', () => {
 							+ '](' + window.location.protocol + '//' + window.location.host + generateUrl('/call/' + conversationToken) + ')',
 					},
 				})
-			} catch (e) {
+			} catch {
 				console.debug('Card creation dialog was canceled')
 			}
 		},

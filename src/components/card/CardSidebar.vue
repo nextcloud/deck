@@ -149,7 +149,9 @@ const cardOwnerDisplayName = computed(() => {
 })
 const cardOwner = computed(() => {
 	const owner = currentCard.value.owner
-	if (!owner) { return null }
+	if (!owner) {
+		return null
+	}
 	return {
 		uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
 		displayName: cardOwnerDisplayName.value,

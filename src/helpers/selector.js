@@ -18,6 +18,7 @@ function buildSelector(selector, propsData = {}) {
 		const component = typeof selector === 'function' ? defineAsyncComponent(selector) : selector
 		const selectorProps = propsData?.props ?? propsData
 		let settled = false
+		let app = null
 
 		const cleanup = () => {
 			if (app) {
@@ -44,7 +45,7 @@ function buildSelector(selector, propsData = {}) {
 			resolve(id)
 		}
 
-		const app = createApp({
+		app = createApp({
 			render() {
 				return h(component, {
 					...selectorProps,

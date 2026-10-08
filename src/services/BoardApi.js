@@ -185,7 +185,7 @@ export class BoardApi {
 					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), assignedUsers: t('deck', 'Assigned users'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
 					let row = ''
 					Object.keys(fields).forEach((field) => {
-						row += '"' + fields[field] + '"' + '\t'
+						row += '"' + fields[field] + '"\t'
 					})
 
 					row = row.slice(0, -1)
@@ -197,9 +197,9 @@ export class BoardApi {
 							Object.keys(fields).forEach((field) => {
 								if (field === 'createdAt' || field === 'lastModified') {
 									const date = new Date(Number(card[field]) * 1000)
-									row += '"' + date.toLocaleDateString() + '"' + '\t'
+									row += '"' + date.toLocaleDateString() + '"\t'
 								} else if (field === 'stackId') {
-									row += '"' + stack.title.replaceAll('"', '""') + '"' + '\t'
+									row += '"' + stack.title.replaceAll('"', '""') + '"\t'
 								} else if (field === 'labels') {
 									row += '"'
 									card[field].forEach((label) => {
@@ -208,7 +208,7 @@ export class BoardApi {
 									if (card[field].length > 0) {
 										row = row.slice(0, -1)
 									}
-									row += '"' + '\t'
+									row += '"\t'
 								} else if (field === 'assignedUsers') {
 									row += '"'
 									card[field].forEach((assignedUsers) => {
@@ -217,22 +217,21 @@ export class BoardApi {
 									if (card[field].length > 0) {
 										row = row.slice(0, -1)
 									}
-									row += '"' + '\t'
+									row += '"\t'
 								} else if (field === 'description' || field === 'title') {
-									row += '"' + card[field].replaceAll('"', '""') + '"' + '\t'
+									row += '"' + card[field].replaceAll('"', '""') + '"\t'
 								} else {
-									row += '"' + card[field] + '"' + '\t'
+									row += '"' + card[field] + '"\t'
 								}
 							})
 							row = row.slice(0, -1)
 							CSV += row + '\r\n'
 						})
 					})
-					let charCode = []
 					const byteArray = []
 					byteArray.push(255, 254)
 					for (let i = 0; i < CSV.length; ++i) {
-						charCode = CSV.charCodeAt(i)
+						const charCode = CSV.charCodeAt(i)
 						byteArray.push(charCode & 0xff)
 						byteArray.push(charCode / 256 >>> 0)
 					}

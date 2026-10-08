@@ -198,9 +198,11 @@ export default {
 		},
 
 		isEmpty(newValue) {
-			newValue && this.$nextTick(() => {
-				this.$refs?.newStackInput?.focus()
-			})
+			if (newValue) {
+				this.$nextTick(() => {
+					this.$refs?.newStackInput?.focus()
+				})
+			}
 		},
 	},
 

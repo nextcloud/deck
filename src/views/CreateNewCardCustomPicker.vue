@@ -304,7 +304,9 @@ export default {
 		},
 
 		onSelectLabel(label) {
-			if (!label.id) { return }
+			if (!label.id) {
+				return
+			}
 			this.card.labels.push(label)
 		},
 

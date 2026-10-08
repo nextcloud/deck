@@ -438,7 +438,9 @@ export default {
 		},
 
 		presentUsers() {
-			if (!this.board) { return [] }
+			if (!this.board) {
+				return []
+			}
 			// get user object including displayname from the list of all users with acces
 			return this.board.users.filter((user) => this.board.activeSessions.includes(user.uid))
 		},

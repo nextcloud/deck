@@ -33,7 +33,7 @@
 								:displayName="user.participant.displayname"
 								:tooltipMessage="user.participant.displayname + ' ' + t('deck', '(Group)')"
 								:isNoUser="true"
-								:disable-="true"
+								:disableMenu="true"
 								:size="32" />
 							<NcAvatar
 								v-if="user.type === 7"
@@ -41,7 +41,7 @@
 								:displayName="user.participant.displayname"
 								:tooltipMessage="user.participant.displayname + ' ' + t('deck', '(Team)')"
 								:isNoUser="true"
-								:disable-="true"
+								:disableMenu="true"
 								:size="32" />
 						</div>
 					</button>

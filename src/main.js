@@ -32,7 +32,7 @@ app.directive('focus', {
 	},
 })
 
-app.config.errorHandler = (err, vm, info) => {
+app.config.errorHandler = (err) => {
 	if (err.response && err.response.data.message) {
 		const errorMessage = t('deck', 'Something went wrong')
 		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)

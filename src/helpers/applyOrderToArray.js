@@ -10,7 +10,9 @@
  * @param addedIndex
  */
 function arrayMove(arrayToSort, removedIndex, addedIndex) {
-	if (removedIndex === null && addedIndex === null) { return arrayToSort }
+	if (removedIndex === null && addedIndex === null) {
+		return arrayToSort
+	}
 
 	const result = [...arrayToSort]
 	let itemToAdd = arrayToSort[removedIndex]
