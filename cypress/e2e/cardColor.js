@@ -3,30 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { randUser } from '../utils/index.js'
-import { sampleBoard } from '../utils/sampleBoard'
+import { sampleBoard } from '../utils/sampleBoard.js'
 
 const user = randUser()
 const boardData = sampleBoard()
-
-const auth = {
-	username: user.userId,
-	password: user.password,
-}
-
-/**
- *
- * @param useModal
- */
-function useModal(useModal) {
-	return cy.request({
-		method: 'POST',
-		url: `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/cardDetailsInModal?format=json`,
-		auth,
-		body: { value: useModal },
-	}).then((response) => {
-		expect(response.status).to.eq(200)
-	})
-}
 
 describe('Card color', function() {
 	let boardId
