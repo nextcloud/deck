@@ -17,7 +17,6 @@
 			:aria-label-combobox="t('deck', 'Assign a tag to this card…')"
 			:placeholder="t('deck', 'Select or create a tag…')"
 			:taggable="true"
-			:closeOnSelect="false"
 			label="title"
 			trackBy="id"
 			tagPosition="bottom"

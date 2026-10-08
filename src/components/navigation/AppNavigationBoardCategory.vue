@@ -7,7 +7,6 @@
 		v-if="boards.length > 0"
 		:name="text"
 		:to="to"
-		:exact="true"
 		:allowCollapse="collapsible"
 		:open="opened"
 		:data-cy-navigation-category="id">
