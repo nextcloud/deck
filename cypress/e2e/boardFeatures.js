@@ -5,7 +5,7 @@
 import { randUser } from '../utils/index.js'
 const user = randUser()
 const recipient = randUser()
-import { sampleBoard } from '../utils/sampleBoard'
+import { sampleBoard } from '../utils/sampleBoard.js'
 
 describe('Board', function() {
 	before(function() {
