@@ -9,6 +9,7 @@ export default [
 	...recommended,
 	{
 		rules: {
+			'jsdoc/require-jsdoc': 'off',
 			'jsdoc/require-param-description': 'off',
 			'jsdoc/require-param-type': 'off',
 			'jsdoc/check-param-names': 'off',

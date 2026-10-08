@@ -8,11 +8,6 @@ import { NcCustomPickerRenderResult, registerCustomPickerElement, registerWidget
 
 import './shared-init.js'
 
-/**
- *
- * @param Component
- * @param props
- */
 async function createVueApp(Component, props) {
 	const { createApp } = await import('vue')
 	const { createPinia } = await import('pinia')

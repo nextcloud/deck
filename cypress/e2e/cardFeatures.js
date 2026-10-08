@@ -15,10 +15,6 @@ const auth = {
 	password: user.password,
 }
 
-/**
- *
- * @param useModal
- */
 function useModal(useModal) {
 	return cy.request({
 		method: 'POST',
@@ -30,10 +26,6 @@ function useModal(useModal) {
 	})
 }
 
-/**
- *
- * @param enabled
- */
 function addCardsAtTop(enabled) {
 	return cy.request({
 		method: 'POST',

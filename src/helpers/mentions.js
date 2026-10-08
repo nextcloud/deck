@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/**
- *
- * @param text
- */
 function rawToParsed(text) {
 	text = text.replace(/<br>/g, '\n')
 	text = text.replace(/&nbsp;/g, ' ')
