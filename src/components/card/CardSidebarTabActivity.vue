@@ -4,11 +4,12 @@
 -->
 
 <template>
-	<ActivityList v-if="isActive"
+	<ActivityList
+		v-if="isActive"
 		:key="card.id"
 		filter="filter"
-		:object-id="card.id"
-		object-type="deck_card"
+		:objectId="card.id"
+		objectType="deck_card"
 		type="deck" />
 </template>
 
@@ -20,16 +21,19 @@ export default {
 	components: {
 		ActivityList,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		isActive: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	data() {
 		return {
 			id: 'activity',

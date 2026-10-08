@@ -4,9 +4,10 @@
  */
 
 import axios from '@nextcloud/axios'
-import { defineStore } from 'pinia'
-import { generateOcsUrl } from '@nextcloud/router'
 import { loadState } from '@nextcloud/initial-state'
+import { generateOcsUrl } from '@nextcloud/router'
+import { defineStore } from 'pinia'
+import logger from '../logger.js'
 import { useBoardStore } from './board.js'
 
 export const useSettingsStore = defineStore('settings', {
@@ -58,22 +59,22 @@ export const useSettingsStore = defineStore('settings', {
 		setConfigLocal({ key, value }) {
 			const [scope, id, configKey] = key.split(':', 3)
 			switch (scope) {
-			case 'board': {
-				const boardStore = useBoardStore()
-				const indexExisting = boardStore.boards.findIndex((b) => {
-					return id === '' + b.id
-				})
+				case 'board': {
+					const boardStore = useBoardStore()
+					const indexExisting = boardStore.boards.findIndex((b) => {
+						return id === '' + b.id
+					})
 
-				if (indexExisting > -1) {
-					if (!boardStore.boards[indexExisting].settings) {
-						boardStore.boards[indexExisting].settings = {}
+					if (indexExisting > -1) {
+						if (!boardStore.boards[indexExisting].settings) {
+							boardStore.boards[indexExisting].settings = {}
+						}
+						boardStore.boards[indexExisting].settings[configKey] = value
 					}
-					boardStore.boards[indexExisting].settings[configKey] = value
+					break
 				}
-				break
-			}
-			default:
-				this.config[key] = value
+				default:
+					this.config[key] = value
 			}
 		},
 		async setConfig(config) {
@@ -84,7 +85,7 @@ export const useSettingsStore = defineStore('settings', {
 					})
 					this.setConfigLocal({ key, value })
 				} catch (e) {
-					console.error(`Error while saving ${key}`, e.response)
+					logger.error('Error while saving config', { key, error: e })
 					throw e
 				}
 			}

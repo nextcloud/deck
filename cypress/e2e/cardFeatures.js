@@ -2,9 +2,10 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { randUser } from '../utils/index.js'
-import { sampleBoard } from '../utils/sampleBoard'
+
 import moment from '@nextcloud/moment'
+import { randUser } from '../utils/index.js'
+import { sampleBoard } from '../utils/sampleBoard.js'
 
 const user = randUser()
 const boardData = sampleBoard()
@@ -14,7 +15,7 @@ const auth = {
 	password: user.password,
 }
 
-const useModal = (useModal) => {
+function useModal(useModal) {
 	return cy.request({
 		method: 'POST',
 		url: `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/cardDetailsInModal?format=json`,
@@ -25,7 +26,7 @@ const useModal = (useModal) => {
 	})
 }
 
-const addCardsAtTop = (enabled) => {
+function addCardsAtTop(enabled) {
 	return cy.request({
 		method: 'POST',
 		url: `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/deck/api/v1.0/config/stackAddCardAtTop?format=json`,
@@ -36,9 +37,9 @@ const addCardsAtTop = (enabled) => {
 	})
 }
 
-describe('Card', function () {
+describe('Card', function() {
 	let boardId
-	before(function () {
+	before(function() {
 		cy.createUser(user)
 		cy.login(user)
 		cy.createExampleBoard({
@@ -49,11 +50,11 @@ describe('Card', function () {
 		})
 	})
 
-	beforeEach(function () {
+	beforeEach(function() {
 		cy.login(user)
 	})
 
-	it('Can add a card', function () {
+	it('Can add a card', function() {
 		cy.visit(`/apps/deck/#/board/${boardId}`)
 		const newCardTitle = 'Write some cypress tests'
 
@@ -139,8 +140,8 @@ describe('Card', function () {
 		})
 	})
 
-	it('Create card from overview', function () {
-		cy.visit(`/apps/deck/#/`)
+	it('Create card from overview', function() {
+		cy.visit('/apps/deck/#/')
 		const newCardTitle = 'Test create from overview'
 		cy.intercept({ method: 'POST', url: '**/ocs/v2.php/apps/deck/api/v1.0/cards' }).as('save')
 		cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
@@ -172,7 +173,7 @@ describe('Card', function () {
 
 	it('Card with link reference', () => {
 		cy.visit(`/apps/deck/#/board/${boardId}`)
-		const absoluteUrl = `https://example.com`
+		const absoluteUrl = 'https://example.com'
 		cy.get('.board .stack').eq(0).within(() => {
 			cy.get('[data-cy="action:add-card"]')
 				.first().click()
@@ -193,7 +194,7 @@ describe('Card', function () {
 
 	it('Rename card with link', () => {
 		cy.visit(`/apps/deck/#/board/${boardId}`)
-		const absoluteUrl = `https://example.com`
+		const absoluteUrl = 'https://example.com'
 		const plainTitle = 'New title'
 		cy.get('.board .stack').eq(0).within(() => {
 			cy.get('[data-cy="action:add-card"]')
@@ -230,18 +231,17 @@ describe('Card', function () {
 		cy.get('.board').click()
 		cy.get('.card:contains("Example Domain")')
 			.should('be.visible')
-
 	})
 
 	describe('Modal', () => {
-		beforeEach(function () {
+		beforeEach(function() {
 			cy.login(user)
 			useModal(true).then(() => {
 				cy.visit(`/apps/deck/#/board/${boardId}`)
 			})
 		})
 
-		it('Can show card details modal', function () {
+		it('Can show card details modal', function() {
 			cy.getNavigationEntry(boardData.title)
 				.first().click({ force: true })
 
@@ -322,7 +322,7 @@ describe('Card', function () {
 	})
 
 	describe('Sidebar', () => {
-		beforeEach(function () {
+		beforeEach(function() {
 			cy.login(user)
 			useModal(false).then(() => {
 				cy.visit(`/apps/deck/#/board/${boardId}`)
@@ -335,7 +335,7 @@ describe('Card', function () {
 				.find('.ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 		})
 
-		it('Set a due date', function () {
+		it('Set a due date', function() {
 			const newCardTitle = 'Card with a due date'
 
 			cy.get('[data-cy="action:add-card"]')
@@ -358,9 +358,7 @@ describe('Card', function () {
 			const tomorrow = moment().add(1, 'days').hour(8).minutes(0).seconds(0)
 			cy.get('#card-duedate-picker').should('have.value', tomorrow.format('YYYY-MM-DDTHH:mm'))
 
-
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state="Now"]').should('be.visible').should('contain', '21 hours')
-
 
 			// Remove the due date again
 			cy.get('#app-sidebar-vue [data-cy-due-date-actions]').should('be.visible').click()
@@ -371,7 +369,7 @@ describe('Card', function () {
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state]').should('not.exist')
 		})
 
-		it('Add a label', function () {
+		it('Add a label', function() {
 			const newCardTitle = 'Card with labels'
 
 			cy.get('[data-cy="action:add-card"]')
@@ -401,6 +399,5 @@ describe('Card', function () {
 			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Action needed")')
 				.should('not.exist')
 		})
-
 	})
 })

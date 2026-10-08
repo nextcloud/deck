@@ -4,11 +4,12 @@
  */
 
 import { defineStore } from 'pinia'
-import { StackApi } from '../services/StackApi.js'
 import applyOrderToArray from '../helpers/applyOrderToArray.js'
-import { useTrashbinStore } from './trashbin.js'
-import { useCardStore } from './card.js'
+import logger from '../logger.js'
+import { StackApi } from '../services/StackApi.js'
 import { useBoardStore } from './board.js'
+import { useCardStore } from './card.js'
+import { useTrashbinStore } from './trashbin.js'
 
 const apiClient = new StackApi()
 
@@ -26,9 +27,9 @@ export const useStackStore = defineStore('stack', {
 	},
 	actions: {
 		addStack(stack) {
-			const existingIndex = this.stacks.findIndex(_stack => _stack.id === stack.id)
+			const existingIndex = this.stacks.findIndex((_stack) => _stack.id === stack.id)
 			if (existingIndex !== -1) {
-				this.stacks[existingIndex] = Object.assign({}, this.stacks[existingIndex], stack)
+				this.stacks[existingIndex] = { ...this.stacks[existingIndex], ...stack }
 			} else {
 				this.stacks.push(stack)
 			}
@@ -42,7 +43,7 @@ export const useStackStore = defineStore('stack', {
 			apiClient.reorderStack(stack.id, addedIndex, stack.boardId)
 				.catch((err) => {
 					OC.Notification.showTemporary('Failed to change order')
-					console.error(err.response.data.message)
+					logger.error('Failed to reorder stack', { error: err })
 
 					// restore old order
 					for (let i = 0; i < currentOrder.length; i++) {
@@ -94,7 +95,7 @@ export const useStackStore = defineStore('stack', {
 		deleteStack(stack) {
 			apiClient.deleteStack(stack.id, stack.boardId)
 				.then((stack) => {
-					const existingIndex = this.stacks.findIndex(_stack => _stack.id === stack.id)
+					const existingIndex = this.stacks.findIndex((_stack) => _stack.id === stack.id)
 					if (existingIndex !== -1) {
 						this.stacks.splice(existingIndex, 1)
 					}
@@ -104,7 +105,7 @@ export const useStackStore = defineStore('stack', {
 		updateStack(stack) {
 			apiClient.updateStack(stack)
 				.then((stack) => {
-					const existingIndex = this.stacks.findIndex(_stack => _stack.id === stack.id)
+					const existingIndex = this.stacks.findIndex((_stack) => _stack.id === stack.id)
 					if (existingIndex !== -1) {
 						this.stacks[existingIndex].title = stack.title
 					}
@@ -121,10 +122,8 @@ export const useStackStore = defineStore('stack', {
 				// Mirror the backend bulk-done: mark all undone cards in this stack as done
 				const now = new Date().toISOString()
 				cardStore.cards
-					.filter((c) => c.stackId === stackId && c.done == null)
-					.forEach((c) =>
-						cardStore.updateCardProperty({ property: 'done', card: { ...c, done: now } }),
-					)
+					.filter((c) => c.stackId === stackId && !c.done)
+					.forEach((c) => cardStore.updateCardProperty({ property: 'done', card: { ...c, done: now } }))
 			}
 			const stack = this.stacks.find((s) => s.id === stackId)
 			if (stack) {

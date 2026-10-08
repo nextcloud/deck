@@ -8,29 +8,33 @@
 			<CalendarStart :size="20" />
 		</template>
 		<template v-if="!card.done && !card.archived">
-			<NcDateTimePickerNative v-if="startdate"
+			<NcDateTimePickerNative
+				v-if="startdate"
 				id="card-startdate-picker"
 				v-model="startdate"
 				:placeholder="t('deck', 'Set a start date')"
-				:hide-label="true"
+				:hideLabel="true"
 				type="datetime-local" />
-			<NcActions v-if="canEdit"
-				:force-name="!startdate"
+			<NcActions
+				v-if="canEdit"
+				:forceName="!startdate"
 				variant="tertiary">
 				<template v-if="!startdate" #icon>
 					<Plus :size="20" />
 				</template>
-				<NcActionButton v-if="!startdate"
-					close-after-click
+				<NcActionButton
+					v-if="!startdate"
+					closeAfterClick
 					@click="initDate">
 					<template #icon>
 						<Plus :size="20" />
 					</template>
 					{{ t('deck', 'Add start date') }}
 				</NcActionButton>
-				<NcActionButton v-else
+				<NcActionButton
+					v-else
 					icon="icon-delete"
-					close-after-click
+					closeAfterClick
 					@click="removeStartDate">
 					{{ t('deck', 'Remove start date') }}
 				</NcActionButton>
@@ -45,16 +49,16 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
 import {
 	NcActionButton,
 	NcActions,
 	NcDateTimePickerNative,
 } from '@nextcloud/vue'
-import readableDate from '../../mixins/readableDate.js'
-import Plus from 'vue-material-design-icons/Plus.vue'
+import { defineComponent } from 'vue'
 import CalendarStart from 'vue-material-design-icons/CalendarArrowLeft.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
+import readableDate from '../../mixins/readableDate.js'
 
 export default defineComponent({
 	name: 'StartDateSelector',
@@ -66,30 +70,36 @@ export default defineComponent({
 		NcActionButton,
 		NcDateTimePickerNative,
 	},
+
 	mixins: [
 		readableDate,
 	],
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	emits: ['input'],
 	computed: {
 		startdate: {
 			get() {
 				return this.card?.startdate ? new Date(this.card.startdate) : null
 			},
+
 			set(val) {
 				this.$emit('input', val ? new Date(val) : null)
 			},
 		},
 	},
+
 	methods: {
 		initDate() {
 			if (this.startdate === null) {
@@ -100,12 +110,14 @@ export default defineComponent({
 				this.startdate = now
 			}
 		},
+
 		removeStartDate() {
 			this.startdate = null
 		},
 	},
 })
 </script>
+
 <style scoped lang="scss">
 .start-info {
 	flex-grow: 1;

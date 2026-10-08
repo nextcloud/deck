@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
 import { generateUrl, getRootUrl } from '@nextcloud/router'
-import { BOARD_FILTERS } from './stores/board.js'
-import Boards from './components/boards/Boards.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import Board from './components/board/Board.vue'
-import Sidebar from './components/Sidebar.vue'
 import BoardSidebar from './components/board/BoardSidebar.vue'
+import Boards from './components/boards/Boards.vue'
 import CardSidebar from './components/card/CardSidebar.vue'
 import Overview from './components/overview/Overview.vue'
+import Sidebar from './components/Sidebar.vue'
+import { BOARD_FILTERS } from './stores/board.js'
 
 // We apply a dynamic base URL depending on the URL used in the browser
 const baseUrl = generateUrl('/apps/deck/')
@@ -149,7 +149,7 @@ const router = createRouter({
 	],
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
 	// Redirect if fullPath begins with a hash (ignore hashes later in path)
 	if (to.hash.substring(0, 2) === '#/') {
 		const path = to.fullPath.replace('/#/', '/').trimEnd('/')
@@ -164,7 +164,6 @@ router.beforeEach((to, from) => {
 			return { name: 'upcoming' }
 		}
 	}
-
 })
 
 export default router

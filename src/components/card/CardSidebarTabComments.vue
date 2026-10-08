@@ -11,7 +11,8 @@
 			</span>
 		</div>
 
-		<CommentItem v-if="commentStore.replyTo"
+		<CommentItem
+			v-if="commentStore.replyTo"
 			:comment="commentStore.replyTo"
 			:reply="true"
 			:preview="true"
@@ -19,10 +20,11 @@
 		<CommentForm v-model="newComment" @submit="createComment($event)" />
 
 		<ul v-if="commentStore.getCommentsForCard(card.id).length > 0" id="commentsFeed">
-			<CommentItem v-for="comment in commentStore.getCommentsForCard(card.id)"
+			<CommentItem
+				v-for="comment in commentStore.getCommentsForCard(card.id)"
 				:key="comment.id"
 				:comment="comment"
-				@do-reload="loadComments" />
+				@doReload="loadComments" />
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
@@ -33,14 +35,15 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import { NcAvatar } from '@nextcloud/vue'
-import CommentItem from './CommentItem.vue'
-import CommentForm from './CommentForm.vue'
-import { vInfiniteScroll } from '@vueuse/components'
 import { getCurrentUser } from '@nextcloud/auth'
-import { useCommentStore } from '../../stores/comment.js'
+import { NcAvatar } from '@nextcloud/vue'
+import { vInfiniteScroll } from '@vueuse/components'
+import { mapState } from 'pinia'
+import CommentForm from './CommentForm.vue'
+import CommentItem from './CommentItem.vue'
+import logger from '../../logger.js'
 import { useBoardStore } from '../../stores/board.js'
+import { useCommentStore } from '../../stores/comment.js'
 
 export default {
 	name: 'CardSidebarTabComments',
@@ -49,24 +52,29 @@ export default {
 		CommentItem,
 		CommentForm,
 	},
+
 	directives: {
 		vInfiniteScroll,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: undefined,
 		},
+
 		tabQuery: {
 			type: String,
 			required: false,
 			default: null,
 		},
 	},
+
 	setup() {
 		const commentStore = useCommentStore()
 		return { commentStore }
 	},
+
 	data() {
 		return {
 			newComment: '',
@@ -75,14 +83,17 @@ export default {
 			error: null,
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, {
 			currentBoard: 'currentBoard',
 		}),
+
 		members() {
 			return this.currentBoard.users
 		},
 	},
+
 	watch: {
 		card: {
 			immediate: true,
@@ -91,16 +102,18 @@ export default {
 			},
 		},
 	},
+
 	methods: {
 		async infiniteHandler() {
 			this.error = null
 			try {
 				await this.loadMore()
 			} catch (e) {
-				console.error('Failed to fetch more comments during infinite loading', e)
+				logger.error('Failed to fetch more comments during infinite loading', { error: e })
 				this.error = t('deck', 'Failed to load comments')
 			}
 		},
+
 		async loadComments() {
 			this.commentStore.setReplyTo(null)
 			this.error = null
@@ -113,10 +126,11 @@ export default {
 				}
 			} catch (e) {
 				this.isLoading = false
-				console.error('Failed to fetch more comments during infinite loading', e)
+				logger.error('Failed to fetch more comments during infinite loading', { error: e })
 				this.error = t('deck', 'Failed to load comments')
 			}
 		},
+
 		async createComment(comment) {
 			const commentObj = {
 				cardId: this.card.id,
@@ -127,11 +141,13 @@ export default {
 			this.newComment = ''
 			await this.loadComments()
 		},
+
 		async loadMore() {
 			this.isLoading = true
 			await this.commentStore.fetchMore({ cardId: this.card.id })
 			this.isLoading = false
 		},
+
 		cancelReply() {
 			this.commentStore.setReplyTo(null)
 		},

@@ -9,11 +9,12 @@
 			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
 			<input v-model="filter" type="text" :placeholder="t('deck', 'Search by board title')">
 			<ul v-if="!loading">
-				<li v-for="board in availableBoards"
+				<li
+					v-for="board in availableBoards"
 					:key="board.id"
-					:class="{'selected': (selectedBoard === board.id) }"
-					@click="selectedBoard=board.id">
-					<span :style="{ 'backgroundColor': '#' + board.color }" class="board-bullet" />
+					:class="{selected: (selectedBoard === board.id) }"
+					@click="selectedBoard = board.id">
+					<span :style="{ backgroundColor: '#' + board.color }" class="board-bullet" />
 					<span>{{ board.title }}</span>
 				</li>
 			</ul>
@@ -23,16 +24,18 @@
 		</div>
 	</NcModal>
 </template>
+
 <script>
-import { NcModal } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import { NcModal } from '@nextcloud/vue'
 
 export default {
 	name: 'BoardSelector',
 	components: {
 		NcModal,
 	},
+
 	emits: ['close', 'select'],
 	data() {
 		return {
@@ -43,6 +46,7 @@ export default {
 			currentBoard: null,
 		}
 	},
+
 	computed: {
 		availableBoards() {
 			return this.boards.filter((board) => (
@@ -51,11 +55,13 @@ export default {
 			))
 		},
 	},
+
 	beforeMount() {
 		this.fetchBoards()
 		const hash = window.location.hash.match(/\/boards\/([0-9]+)/)
 		this.currentBoard = hash ? hash[1] : null
 	},
+
 	methods: {
 		fetchBoards() {
 			axios.get(generateUrl('/apps/deck/boards')).then((response) => {
@@ -63,9 +69,11 @@ export default {
 				this.loading = false
 			})
 		},
+
 		close() {
 			this.$emit('close')
 		},
+
 		select() {
 			this.$emit('select', this.selectedBoard)
 		},
@@ -73,6 +81,7 @@ export default {
 
 }
 </script>
+
 <style scoped>
 	#modal-inner {
 		width: 90vw;

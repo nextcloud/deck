@@ -2,13 +2,13 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import { randUser } from '../utils/index.js'
 const user = randUser()
 const recipient = randUser()
-import { sampleBoard } from '../utils/sampleBoard'
+import { sampleBoard } from '../utils/sampleBoard.js'
 
 describe('Board', function() {
-
 	before(function() {
 		cy.createUser(user)
 		cy.createUser(recipient)
@@ -257,7 +257,7 @@ describe('Board title editing', function() {
 })
 
 describe('Board import', function() {
-	before(function () {
+	before(function() {
 		cy.createUser(user)
 	})
 	beforeEach(function() {

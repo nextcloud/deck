@@ -4,19 +4,22 @@
 -->
 
 <template>
-	<div class="attachments-drag-zone"
+	<div
+		class="attachments-drag-zone"
 		@dragover.prevent="!isDraggingOver && (isDraggingOver = true)"
 		@dragleave.prevent="isDraggingOver && (isDraggingOver = false)"
 		@drop.prevent="handleDropFiles">
 		<slot />
 		<transition name="fade" mode="out-in">
-			<div v-show="isDraggingOver"
+			<div
+				v-show="isDraggingOver"
 				class="dragover">
 				<div class="drop-hint">
-					<div class="drop-hint__icon"
+					<div
+						class="drop-hint__icon"
 						:class="{
-							'icon-upload' : !isReadOnly,
-							'icon-error' : isReadOnly}" />
+							'icon-upload': !isReadOnly,
+							'icon-error': isReadOnly}" />
 					<h2 class="drop-hint__text">
 						{{ dropHintText }}
 					</h2>
@@ -24,7 +27,7 @@
 			</div>
 		</transition>
 
-		<NcModal v-if="modalShow" :name="t('deck', 'File already exists')" @close="modalShow=false">
+		<NcModal v-if="modalShow" :name="t('deck', 'File already exists')" @close="modalShow = false">
 			<div class="modal__content">
 				<h2>{{ t('deck', 'File already exists') }}</h2>
 				<p>
@@ -36,7 +39,7 @@
 				<button class="primary" @click="overrideAttachment">
 					{{ t('deck', 'Overwrite file') }}
 				</button>
-				<button @click="modalShow=false">
+				<button @click="modalShow = false">
 					{{ t('deck', 'Keep existing file') }}
 				</button>
 			</div>
@@ -45,10 +48,10 @@
 </template>
 
 <script>
-import { NcModal } from '@nextcloud/vue'
-import attachmentUpload from '../mixins/attachmentUpload.js'
 import { loadState } from '@nextcloud/initial-state'
+import { NcModal } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import attachmentUpload from '../mixins/attachmentUpload.js'
 import { useBoardStore } from '../stores/board.js'
 
 const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
@@ -63,6 +66,7 @@ export default {
 			default: null,
 		},
 	},
+
 	data() {
 		return {
 			modalShow: false,
@@ -72,11 +76,13 @@ export default {
 			maxUploadSize: maxUploadSizeState,
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, ['canEdit']),
 		isReadOnly() {
 			return !this.canEdit
 		},
+
 		dropHintText() {
 			if (this.isReadOnly) {
 				return t('deck', 'This board is read only')
@@ -85,6 +91,7 @@ export default {
 			}
 		},
 	},
+
 	methods: {
 		handleDropFiles(event) {
 			event.dataTransfer.dropEffect = 'copy'

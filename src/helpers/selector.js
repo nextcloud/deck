@@ -2,10 +2,11 @@
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { createApp, defineAsyncComponent, h } from 'vue'
-import { translate, translatePlural } from '@nextcloud/l10n'
 
-const buildSelector = (selector, propsData = {}) => {
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { createApp, defineAsyncComponent, h } from 'vue'
+
+function buildSelector(selector, propsData = {}) {
 	return new Promise((resolve, reject) => {
 		const container = document.createElement('div')
 		document.getElementById('body-user').append(container)
@@ -13,6 +14,7 @@ const buildSelector = (selector, propsData = {}) => {
 		const component = typeof selector === 'function' ? defineAsyncComponent(selector) : selector
 		const selectorProps = propsData?.props ?? propsData
 		let settled = false
+		let app = null
 
 		const cleanup = () => {
 			if (app) {
@@ -39,7 +41,7 @@ const buildSelector = (selector, propsData = {}) => {
 			resolve(id)
 		}
 
-		const app = createApp({
+		app = createApp({
 			render() {
 				return h(component, {
 					...selectorProps,

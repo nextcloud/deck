@@ -5,7 +5,8 @@
 
 <template>
 	<div>
-		<NcCollectionList v-if="boardId"
+		<NcCollectionList
+			v-if="boardId"
 			:id="boardId"
 			:name="boardTitle"
 			type="deck" />
@@ -20,6 +21,7 @@ export default {
 	components: {
 		NcCollectionList,
 	},
+
 	computed: {
 		boardId() {
 			if (this.$root.model && this.$root.model.id) {
@@ -27,6 +29,7 @@ export default {
 			}
 			return null
 		},
+
 		boardTitle() {
 			if (this.$root.model && this.$root.model.title) {
 				return '' + this.$root.model.title

@@ -5,8 +5,8 @@
 
 import { defineStore } from 'pinia'
 import { AttachmentApi } from '../services/AttachmentApi.js'
-import { useCardStore } from './card.js'
 import { useBoardStore } from './board.js'
+import { useCardStore } from './card.js'
 
 const apiClient = new AttachmentApi()
 
@@ -44,7 +44,7 @@ export const useAttachmentStore = defineStore('attachment', {
 		async updateAttachment({ cardId, attachment, formData }) {
 			const boardId = useBoardStore().currentBoard.id
 			const result = await apiClient.updateAttachment({ cardId, attachment, formData, boardId })
-			const existingIndex = this.attachments[attachment.cardId].findIndex(a => a.id === attachment.id && a.type === attachment.type)
+			const existingIndex = this.attachments[attachment.cardId].findIndex((a) => a.id === attachment.id && a.type === attachment.type)
 			if (existingIndex !== -1) {
 				this.attachments[cardId][existingIndex] = result
 			}
@@ -53,7 +53,7 @@ export const useAttachmentStore = defineStore('attachment', {
 			const cardStore = useCardStore()
 			const boardId = useBoardStore().currentBoard.id
 			await apiClient.deleteAttachment(attachment, boardId)
-			const existingIndex = this.attachments[attachment.cardId].findIndex(a => a.id === attachment.id && a.type === attachment.type)
+			const existingIndex = this.attachments[attachment.cardId].findIndex((a) => a.id === attachment.id && a.type === attachment.type)
 			if (existingIndex !== -1) {
 				this.attachments[attachment.cardId][existingIndex].deletedAt = Date.now() / 1000 | 0
 			}
@@ -63,7 +63,7 @@ export const useAttachmentStore = defineStore('attachment', {
 			const cardStore = useCardStore()
 			const boardId = useBoardStore().currentBoard.id
 			await apiClient.deleteAttachment(attachment, boardId)
-			const existingIndex = this.attachments[attachment.cardId].findIndex(a => a.id === attachment.id && a.type === attachment.type)
+			const existingIndex = this.attachments[attachment.cardId].findIndex((a) => a.id === attachment.id && a.type === attachment.type)
 			if (existingIndex !== -1) {
 				this.attachments[attachment.cardId][existingIndex].deletedAt = -1
 			}
@@ -73,7 +73,7 @@ export const useAttachmentStore = defineStore('attachment', {
 			const cardStore = useCardStore()
 			const boardId = useBoardStore().currentBoard.id
 			const restoredAttachment = await apiClient.restoreAttachment(attachment, boardId)
-			const existingIndex = this.attachments[restoredAttachment.cardId].findIndex(a => a.id === restoredAttachment.id && a.type === restoredAttachment.type)
+			const existingIndex = this.attachments[restoredAttachment.cardId].findIndex((a) => a.id === restoredAttachment.id && a.type === restoredAttachment.type)
 			if (existingIndex !== -1) {
 				this.attachments[restoredAttachment.cardId][existingIndex].deletedAt = 0
 			}

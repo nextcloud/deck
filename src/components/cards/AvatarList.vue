@@ -13,44 +13,50 @@
 							<AccountMultiple class="avatardiv more-avatars" :size="24" />
 						</div>
 						<div v-for="user in firstUsers" :key="user.id">
-							<NcAvatar v-if="user.type === 0"
+							<NcAvatar
+								v-if="user.type === 0"
 								:user="user.participant.uid"
-								:display-name="user.participant.displayname"
-								:disable-menu="true"
-								:hide-status="true"
+								:displayName="user.participant.displayname"
+								:disableMenu="true"
+								:hideStatus="true"
 								:size="32" />
-							<NcAvatar v-if="user.type === 6"
+							<NcAvatar
+								v-if="user.type === 6"
 								:user="user.participant.uid"
-								:display-name="user.participant.displayname"
-								:disable-menu="true"
-								:hide-status="true"
+								:displayName="user.participant.displayname"
+								:disableMenu="true"
+								:hideStatus="true"
 								:size="32" />
-							<NcAvatar v-if="user.type === 1"
+							<NcAvatar
+								v-if="user.type === 1"
 								:user="user.participant.uid"
-								:display-name="user.participant.displayname"
-								:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Group)')"
-								:is-no-user="true"
-								:disable-="true"
+								:displayName="user.participant.displayname"
+								:tooltipMessage="user.participant.displayname + ' ' + t('deck', '(Group)')"
+								:isNoUser="true"
+								:disableMenu="true"
 								:size="32" />
-							<NcAvatar v-if="user.type === 7"
+							<NcAvatar
+								v-if="user.type === 7"
 								:user="user.participant.uid"
-								:display-name="user.participant.displayname"
-								:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Team)')"
-								:is-no-user="true"
-								:disable-="true"
+								:displayName="user.participant.displayname"
+								:tooltipMessage="user.participant.displayname + ' ' + t('deck', '(Team)')"
+								:isNoUser="true"
+								:disableMenu="true"
 								:size="32" />
 						</div>
 					</button>
 				</template>
 				<div>
-					<div v-for="user in users"
+					<div
+						v-for="user in users"
 						:key="user.id"
 						class="avatar-list-entry">
-						<NcAvatar :user="user.participant.uid"
-							:display-name="user.participant.displayname"
-							:hide-status="true"
-							:disable-menu="true"
-							:is-no-user="user.type !== 0"
+						<NcAvatar
+							:user="user.participant.uid"
+							:displayName="user.participant.displayname"
+							:hideStatus="true"
+							:disableMenu="true"
+							:isNoUser="user.type !== 0"
 							:size="32" />
 						<div class="avatar-list-entry__label">
 							{{ user.participant.displayname }}
@@ -62,12 +68,13 @@
 
 		<div class="avatar-print-list">
 			<div v-for="user in avatarUsers" :key="user.id" class="avatar-print-list-item">
-				<NcAvatar class="avatar-print-list-avatar"
+				<NcAvatar
+					class="avatar-print-list-avatar"
 					:user="user.participant.uid"
-					:display-name="user.participant.displayname"
-					:disable-menu="true"
-					:hide-status="true"
-					:is-no-user="user.type !== 0"
+					:displayName="user.participant.displayname"
+					:disableMenu="true"
+					:hideStatus="true"
+					:isNoUser="user.type !== 0"
 					:size="24" />
 				{{ user.participant.displayname }}
 			</div>
@@ -76,8 +83,8 @@
 </template>
 
 <script>
-import { NcAvatar, NcPopover } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
+import { NcAvatar, NcPopover } from '@nextcloud/vue'
 import AccountMultiple from 'vue-material-design-icons/AccountMultipleOutline.vue'
 
 export default {
@@ -87,17 +94,20 @@ export default {
 		NcPopover,
 		AccountMultiple,
 	},
+
 	props: {
 		users: {
 			type: Array,
 			default: () => ([]),
 		},
 	},
+
 	data() {
 		return {
 			popoverVisible: false,
 		}
 	},
+
 	computed: {
 		firstUsers() {
 			if (!this.users || this.users.length === 0) {
@@ -105,6 +115,7 @@ export default {
 			}
 			return this.users.slice(0, 3)
 		},
+
 		avatarUrl() {
 			return (assignable) => {
 				if (assignable.type === 1) {
@@ -112,14 +123,14 @@ export default {
 				}
 				const user = assignable.participant.uid
 				const size = 32
-				const avatarUrl = generateUrl('/avatar/{user}/{size}',
-					{
-						user,
-						size,
-					})
+				const avatarUrl = generateUrl('/avatar/{user}/{size}', {
+					user,
+					size,
+				})
 				return window.location.protocol + '//' + window.location.host + avatarUrl
 			}
 		},
+
 		popover() {
 			if (!this.users || this.users.length === 0) {
 				return []
@@ -134,6 +145,7 @@ export default {
 				}),
 			]
 		},
+
 		avatarUsers() {
 			if (!this.users) {
 				return []
@@ -144,6 +156,7 @@ export default {
 			})
 		},
 	},
+
 	methods: {
 		togglePopover() {
 			if (this.popover.length > 0) {

@@ -14,16 +14,19 @@ export default {
 	directives: {
 		vOnClickOutside,
 	},
+
 	props: {
 		visible: {
 			type: Boolean,
 			default: true,
 		},
 	},
+
 	methods: {
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
 		},
+
 		onClickOutside(e) {
 			if (e.target?.dataset?.clickClosesSidebar) {
 				this.closeSidebar()
