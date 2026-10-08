@@ -34,7 +34,7 @@ class FixCardDate extends Command {
 			->addOption(
 				'dry-run',
 				null,
-				InputOption::VALUE_OPTIONAL,
+				InputOption::VALUE_NONE,
 				'Dry run, do not make any changes.',
 			)
 		;
@@ -47,13 +47,20 @@ class FixCardDate extends Command {
 		$isDryRun = (bool)$input->getOption('dry-run');
 		$defaultYear = $input->getOption('default-year');
 
+		// Validate default year if provided
+		if ($defaultYear !== null && !preg_match('/^\d{4}$/', $defaultYear)) {
+			$output->writeln('<error>Invalid default year provided. It must be a 4-digit year.</error>');
+			return 1;
+		}
+
+		// Fetch cards with date values and validate invalid years in PHP for DB portability.
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
 			->where($qb->expr()->orX(
-				$qb->expr()->gt('duedate', $qb->createNamedParameter('9999-01-01')),
-				$qb->expr()->gt('startdate', $qb->createNamedParameter('9999-01-01')),
-				$qb->expr()->gt('done', $qb->createNamedParameter('9999-01-01')),
+				$qb->expr()->isNotNull('duedate'),
+				$qb->expr()->isNotNull('startdate'),
+				$qb->expr()->isNotNull('done'),
 			));
 		$cards = $qb->executeQuery()->fetchAllAssociative();
 
@@ -62,15 +69,26 @@ class FixCardDate extends Command {
 			return 0;
 		}
 
+		$hasInvalidCards = false;
+
 		foreach ($cards as $card) {
 			$cardId = $card['id'];
 			$duedate = $card['duedate'];
 			$startdate = $card['startdate'];
 			$done = $card['done'];
+			$hasInvalidDueDate = $duedate && $this->isInvalidDate($duedate);
+			$hasInvalidStartDate = $startdate && $this->isInvalidDate($startdate);
+			$hasInvalidDoneDate = $done && $this->isInvalidDate($done);
+
+			if (!$hasInvalidDueDate && !$hasInvalidStartDate && !$hasInvalidDoneDate) {
+				continue;
+			}
+
+			$hasInvalidCards = true;
 
 			$output->writeln("Card ID: $cardId");
 
-			if ($duedate && $this->isInvalidDate($duedate)) {
+			if ($hasInvalidDueDate) {
 				$output->writeln("  Original Due Date: $duedate");
 				$duedate = $this->fixDate($duedate, $defaultYear);
 
@@ -80,7 +98,7 @@ class FixCardDate extends Command {
 				$output->writeln("  Fixed Due Date: $duedate");
 			}
 
-			if ($startdate && $this->isInvalidDate($startdate)) {
+			if ($hasInvalidStartDate) {
 				$output->writeln("  Original Start Date: $startdate");
 				$startdate = $this->fixDate($startdate, $defaultYear);
 
@@ -90,7 +108,7 @@ class FixCardDate extends Command {
 				$output->writeln("  Fixed Start Date: $startdate");
 			}
 
-			if ($done && $this->isInvalidDate($done)) {
+			if ($hasInvalidDoneDate) {
 				$output->writeln("  Original Done Date: $done");
 				$done = $this->fixDate($done, $defaultYear);
 
@@ -99,6 +117,10 @@ class FixCardDate extends Command {
 				}
 				$output->writeln("  Fixed Done Date: $done");
 			}
+		}
+
+		if (!$hasInvalidCards) {
+			$output->writeln('No cards with invalid dates found.');
 		}
 
 		return 0;
@@ -124,6 +146,7 @@ class FixCardDate extends Command {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update('deck_cards')
 			->set($field, $qb->createNamedParameter($newDate))
+			->set('last_modified', $qb->createNamedParameter(time()))
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($cardId)));
 		$qb->executeStatement();
 	}

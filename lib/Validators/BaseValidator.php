@@ -167,10 +167,6 @@ abstract class BaseValidator {
 		foreach ($allowedFormats as $format) {
 			$datetime = \DateTime::createFromFormat($format, $value);
 			if ($datetime && $datetime->format($format) === $value) {
-				// Check if the year is within the valid range
-				if ((int)$datetime->format('Y') > 9999) {
-					return false;
-				}
 				return true;
 			}
 		}
