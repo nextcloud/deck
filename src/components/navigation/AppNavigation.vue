@@ -8,7 +8,6 @@
 		<template #list>
 			<NcAppNavigationItem
 				:name="t('deck', 'Upcoming cards')"
-				:exact="true"
 				to="/upcoming">
 				<template #icon>
 					<CalendarIcon v-if="$route.path === '/upcoming'" :size="20" />

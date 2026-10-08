@@ -65,7 +65,6 @@
 					ref="cardSelector"
 					:options="candidateCards"
 					:multiple="true"
-					:closeOnSelect="true"
 					:aria-label-combobox="t('deck', 'Assign a dependent card…')"
 					:placeholder="t('deck', 'Select a dependent card…')"
 					label="title"

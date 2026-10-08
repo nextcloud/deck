@@ -86,7 +86,6 @@
 		<NcModal
 			v-if="localModal"
 			:clearViewDelay="0"
-			:closeButtonContained="true"
 			:closeOnClickOutside="true"
 			size="large"
 			@close="localModal = null">
