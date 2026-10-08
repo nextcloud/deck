@@ -1,9 +1,10 @@
-import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
 /**
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import axios from '@nextcloud/axios'
+import { generateOcsUrl } from '@nextcloud/router'
 import logger from '../logger.js'
 
 const shareUrl = generateOcsUrl('apps/files_sharing/api/v1/shares')

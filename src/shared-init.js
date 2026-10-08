@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import { generateFilePath } from '@nextcloud/router'
 
 __webpack_nonce__ = btoa(OC.requestToken)

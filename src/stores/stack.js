@@ -1,9 +1,10 @@
-import { defineStore } from 'pinia'
-import applyOrderToArray from '../helpers/applyOrderToArray.js'
 /**
  * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import { defineStore } from 'pinia'
+import applyOrderToArray from '../helpers/applyOrderToArray.js'
 import logger from '../logger.js'
 import { StackApi } from '../services/StackApi.js'
 import { useBoardStore } from './board.js'
