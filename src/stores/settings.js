@@ -1,11 +1,12 @@
-import axios from '@nextcloud/axios'
-import { loadState } from '@nextcloud/initial-state'
-import { generateOcsUrl } from '@nextcloud/router'
-import { defineStore } from 'pinia'
 /**
  * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import axios from '@nextcloud/axios'
+import { loadState } from '@nextcloud/initial-state'
+import { generateOcsUrl } from '@nextcloud/router'
+import { defineStore } from 'pinia'
 import logger from '../logger.js'
 import { useBoardStore } from './board.js'
 

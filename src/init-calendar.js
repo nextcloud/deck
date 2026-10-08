@@ -1,9 +1,10 @@
-import { subscribe } from '@nextcloud/event-bus'
-import { generateUrl } from '@nextcloud/router'
 /**
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import { subscribe } from '@nextcloud/event-bus'
+import { generateUrl } from '@nextcloud/router'
 import logger from './logger.js'
 
 import './shared-init.js'

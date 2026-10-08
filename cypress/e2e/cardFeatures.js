@@ -1,8 +1,9 @@
-import moment from '@nextcloud/moment'
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import moment from '@nextcloud/moment'
 import { randUser } from '../utils/index.js'
 import { sampleBoard } from '../utils/sampleBoard.js'
 

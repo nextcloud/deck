@@ -1,11 +1,12 @@
-import { showError } from '@nextcloud/dialogs'
-import { formatFileSize } from '@nextcloud/files'
-import PQueue from 'p-queue'
-import { mapActions } from 'pinia'
 /**
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import { showError } from '@nextcloud/dialogs'
+import { formatFileSize } from '@nextcloud/files'
+import PQueue from 'p-queue'
+import { mapActions } from 'pinia'
 import logger from '../logger.js'
 import { useAttachmentStore } from '../stores/attachment.js'
 
