@@ -80,6 +80,7 @@ import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import { mapActions, mapState } from 'pinia'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import AttachmentList from './AttachmentList.vue'
+import logger from '../../logger.js'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -251,7 +252,7 @@ export default {
 				this?.editor?.destroy()
 			} catch (e) {
 				// Ignore errors during editor destruction
-				console.debug('Error destroying text editor:', e)
+				logger.debug('Error destroying text editor', { error: e })
 			}
 		},
 
@@ -351,7 +352,7 @@ export default {
 			} catch (e) {
 				this.setHasCardSaveError(true)
 				showWarning(t('deck', 'Could not save description'), { timeout: 2500 })
-				console.error(e)
+				logger.error('Could not save description', { error: e })
 
 				// Retry of network error
 				if (['ERR_NETWORK', 'ETIMEDOUT'].includes(e.code)) {

@@ -110,6 +110,7 @@ import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import GanttView from './GanttView.vue'
 import Stack from './Stack.vue'
 import { showError } from '../../helpers/errors.js'
+import logger from '../../logger.js'
 import { createSession } from '../../sessions.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useCardStore } from '../../stores/card.js'
@@ -244,7 +245,7 @@ export default {
 				this.session = createSession(this.id)
 			} catch (e) {
 				this.loading = false
-				console.error(e)
+				logger.error('Failed to load board', { error: e })
 				showError(e)
 			} finally {
 				this.loading = false

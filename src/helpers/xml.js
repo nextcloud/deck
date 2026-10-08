@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import logger from '../logger.js'
 
 /**
  *
@@ -47,7 +48,7 @@ function parseXml(xml) {
 	try {
 		dom = (new DOMParser()).parseFromString(xml, 'text/xml')
 	} catch (e) {
-		console.error('Failed to parse xml document', e)
+		logger.error('Failed to parse xml document', { error: e })
 	}
 	return dom
 }

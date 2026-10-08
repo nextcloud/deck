@@ -235,6 +235,7 @@ import PinIcon from 'vue-material-design-icons/Pin.vue'
 import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
 import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
+import logger from '../../logger.js'
 import isTouchDevice from '../../mixins/isTouchDevice.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
@@ -531,9 +532,8 @@ export default {
 					this.loading = false
 					this.$router.push({ name: 'board', params: { id: newBoard.id } })
 				} catch (e) {
-					console.error(e)
+					logger.error('Failed to clone board', { error: e })
 					OC.Notification.showTemporary(t('deck', 'An error occurred'))
-					console.error(e)
 				}
 			}
 		},

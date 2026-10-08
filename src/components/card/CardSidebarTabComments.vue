@@ -41,6 +41,7 @@ import { vInfiniteScroll } from '@vueuse/components'
 import { mapState } from 'pinia'
 import CommentForm from './CommentForm.vue'
 import CommentItem from './CommentItem.vue'
+import logger from '../../logger.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useCommentStore } from '../../stores/comment.js'
 
@@ -108,7 +109,7 @@ export default {
 			try {
 				await this.loadMore()
 			} catch (e) {
-				console.error('Failed to fetch more comments during infinite loading', e)
+				logger.error('Failed to fetch more comments during infinite loading', { error: e })
 				this.error = t('deck', 'Failed to load comments')
 			}
 		},
@@ -125,7 +126,7 @@ export default {
 				}
 			} catch (e) {
 				this.isLoading = false
-				console.error('Failed to fetch more comments during infinite loading', e)
+				logger.error('Failed to fetch more comments during infinite loading', { error: e })
 				this.error = t('deck', 'Failed to load comments')
 			}
 		},

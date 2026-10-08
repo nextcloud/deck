@@ -49,6 +49,7 @@ import { mapActions, mapState } from 'pinia'
 import CardItem from '../cards/CardItem.vue'
 import Controls from '../Controls.vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
+import logger from '../../logger.js'
 import { useOverviewStore } from '../../stores/overview.js'
 
 const FILTER_UPCOMING = 'upcoming'
@@ -143,7 +144,7 @@ export default {
 					await this.loadUpcoming()
 				}
 			} catch (e) {
-				console.error(e)
+				logger.error('Failed to load overview', { error: e })
 			}
 			this.loading = false
 		},
