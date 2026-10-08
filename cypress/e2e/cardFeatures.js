@@ -335,6 +335,14 @@ describe('Card', function () {
 				.find('.ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 		})
 
+		it('Shows the card title in the page title', () => {
+			cy.title().should('match', new RegExp(`^${boardData.title} - Deck - `))
+			cy.get('.card:contains("Hello world")').should('be.visible').click()
+			cy.title().should('match', new RegExp(`^Hello world - ${boardData.title} - Deck - `))
+			cy.go('back')
+			cy.title().should('match', new RegExp(`^${boardData.title} - Deck - `))
+		})
+
 		it('Set a due date', function () {
 			const newCardTitle = 'Card with a due date'
 
