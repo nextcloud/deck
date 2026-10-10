@@ -44,7 +44,7 @@
     "@nextcloud/notify_push": "^1.4.0",
     "@nextcloud/password-confirmation": "^6.1.0",
     "@nextcloud/router": "^3.2.0",
-    "@nextcloud/vue": "^9.9.0",
+    "@nextcloud/vue": "^9.13.1",
     "@vueuse/components": "^14.4.0",
     "@vueuse/core": "^15.0.0",
     "blueimp-md5": "^2.19.0",
