@@ -71,6 +71,7 @@ OC.L10N.register(
     "File already exists" : "La dosiero jam ekzistas",
     "Add card" : "Aldoni karton",
     "Archived cards" : "Arĥivigitaj kartoj",
+    "Clear search" : "Viŝi serĉon",
     "Open" : "Malfermi",
     "Completed" : "Plenumita",
     "Hide archived cards" : "Kaŝi arĥivigitajn kartojn",
