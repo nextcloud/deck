@@ -5,10 +5,11 @@
 
 <template>
 	<div v-v-on-click-outside="close" class="stack__card-add">
-		<NcButton v-if="!visible"
+		<NcButton
+			v-if="!visible"
 			data-cy="action:add-card"
 			class="stack__card-add-button"
-			type="tertiary"
+			variant="tertiary"
 			:wide="true"
 			@click.stop="visible = true">
 			<template #icon>
@@ -16,11 +17,13 @@
 			</template>
 			{{ t('deck', 'Add card') }}
 		</NcButton>
-		<form v-else
+		<form
+			v-else
 			:class="{ 'icon-loading-small': creating }"
 			@submit.prevent.stop="addCard">
 			<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-			<input id="new-stack-input-main"
+			<input
+				id="new-stack-input-main"
 				ref="newCardInput"
 				v-model="title"
 				type="text"
@@ -31,7 +34,8 @@
 				pattern=".*\S+.*"
 				@focus="toggleShortcutLock(true)"
 				@keydown.esc.stop="visible = false">
-			<input v-show="!creating"
+			<input
+				v-show="!creating"
 				class="icon-confirm"
 				type="submit"
 				value="">
@@ -40,12 +44,11 @@
 </template>
 
 <script>
-import { vOnClickOutside } from '@vueuse/components'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcButton } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
+import { NcButton } from '@nextcloud/vue'
+import { vOnClickOutside } from '@vueuse/components'
 import { mapActions } from 'pinia'
-
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -55,19 +58,23 @@ export default {
 		NcButton,
 		PlusIcon,
 	},
+
 	directives: {
 		vOnClickOutside,
 	},
+
 	props: {
 		stack: {
 			type: Object,
 			required: true,
 		},
+
 		addAtTop: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	emits: ['creating', 'created'],
 	data() {
 		return {
@@ -76,11 +83,13 @@ export default {
 			creating: false,
 		}
 	},
+
 	computed: {
 		cardDetailsInModal() {
 			return useSettingsStore().configByKey('cardDetailsInModal')
 		},
 	},
+
 	watch: {
 		visible(newValue) {
 			if (!newValue) {
@@ -91,16 +100,20 @@ export default {
 			this.$nextTick(() => this.$refs.newCardInput.focus())
 		},
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			addCardInStore: 'addCard',
 		}),
+
 		...mapActions(useSettingsStore, {
 			toggleShortcutLock: 'toggleShortcutLock',
 		}),
+
 		close() {
 			this.visible = false
 		},
+
 		async addCard() {
 			this.creating = true
 			this.$emit('creating')

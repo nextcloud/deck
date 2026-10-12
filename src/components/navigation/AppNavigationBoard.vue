@@ -4,20 +4,22 @@
 -->
 <template>
 	<span>
-		<NcAppNavigationItem v-if="!editing"
+		<NcAppNavigationItem
+			v-if="!editing"
 			:name="!deleted ? board.title : undoText"
 			:loading="loading"
 			:to="routeTo"
 			:undo="deleted"
-			:menu-placement="'auto'"
-			:force-display-actions="isTouchDevice"
+			menuPlacement="auto"
+			:forceDisplayActions="isTouchDevice"
 			@click="onNavigate"
 			@undo="unDelete">
 			<template #icon>
 				<NcAppNavigationIconBullet :color="board.color" />
-				<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
-				<BoardExportModal v-if="exportModalOpen"
-					:board-title="board.title"
+				<BoardCloneModal v-if="cloneModalOpen" :boardTitle="board.title" @close="onCloseCloneModal" />
+				<BoardExportModal
+					v-if="exportModalOpen"
+					:boardTitle="board.title"
 					@export="onExportBoard"
 					@close="onCloseExportBoard" />
 			</template>
@@ -28,47 +30,53 @@
 
 			<template v-if="!deleted" #actions>
 				<template v-if="!isDueSubmenuActive">
-					<NcActionButton :close-after-click="true"
+					<NcActionButton
+						:closeAfterClick="true"
 						@click="actionDetails">
 						<template #icon>
 							<InformationOutlineIcon :size="20" decorative />
 						</template>
 						{{ t('deck', 'Board details') }}
 					</NcActionButton>
-					<NcActionButton v-if="canManage && !board.archived"
-						:close-after-click="true"
+					<NcActionButton
+						v-if="canManage && !board.archived"
+						:closeAfterClick="true"
 						@click="actionEdit">
 						<template #icon>
 							<PencilIcon :size="20" decorative />
 						</template>
 						{{ t('deck', 'Edit board') }}
 					</NcActionButton>
-					<NcActionButton v-if="canCreate && !board.archived"
-						:close-after-click="true"
+					<NcActionButton
+						v-if="canCreate && !board.archived"
+						:closeAfterClick="true"
 						@click="showCloneModal">
 						<template #icon>
 							<CloneIcon :size="20" decorative />
 						</template>
 						{{ t('deck', 'Clone board') }}
 					</NcActionButton>
-					<NcActionButton v-if="canManage && board.archived"
-						:close-after-click="true"
+					<NcActionButton
+						v-if="canManage && board.archived"
+						:closeAfterClick="true"
 						@click="actionUnarchive">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
 						</template>
 						{{ t('deck', 'Unarchive board') }}
 					</NcActionButton>
-					<NcActionButton v-else-if="canManage && !board.archived"
-						:close-after-click="true"
+					<NcActionButton
+						v-else-if="canManage && !board.archived"
+						:closeAfterClick="true"
 						@click="actionArchive">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
 						</template>
 						{{ t('deck', 'Archive board') }}
 					</NcActionButton>
-					<NcActionButton v-if="canManage && !board.archived"
-						:close-after-click="true"
+					<NcActionButton
+						v-if="canManage && !board.archived"
+						:closeAfterClick="true"
 						@click="actionExport">
 						<template #icon>
 							<DownloadIcon :size="20" decorative />
@@ -82,7 +90,7 @@
 						</template>
 						{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
 					</NcActionButton>
-					<NcActionButton :close-after-click="true" @click="toggleDefaultBoard">
+					<NcActionButton :closeAfterClick="true" @click="toggleDefaultBoard">
 						<template #icon>
 							<PinOffIcon v-if="isDefaultBoard" :size="20" decorative />
 							<PinIcon v-else :size="20" decorative />
@@ -93,8 +101,9 @@
 
 				<!-- Due date reminder settings -->
 				<template v-if="isDueSubmenuActive">
-					<NcActionButton :disabled="updateDueSetting"
-						@click="isDueSubmenuActive=false">
+					<NcActionButton
+						:disabled="updateDueSetting"
+						@click="isDueSubmenuActive = false">
 						<template #icon>
 							<NcLoadingIcon v-if="updateDueSetting" :size="20" />
 							<ChevronLeftIcon v-else :size="20" decorative />
@@ -102,7 +111,8 @@
 						{{ t('deck', 'Due date reminders') }}
 					</NcActionButton>
 
-					<NcActionButton name="notification"
+					<NcActionButton
+						name="notification"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 						@click="updateSetting('notify-due', 'all')">
@@ -111,7 +121,8 @@
 						</template>
 						{{ t('deck', 'All cards') }}
 					</NcActionButton>
-					<NcActionButton name="notification"
+					<NcActionButton
+						name="notification"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 						@click="updateSetting('notify-due', 'assigned')">
@@ -120,7 +131,8 @@
 						</template>
 						{{ t('deck', 'Assigned cards') }}
 					</NcActionButton>
-					<NcActionButton name="notification"
+					<NcActionButton
+						name="notification"
 						:disabled="updateDueSetting"
 						:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 						@click="updateSetting('notify-due', 'off')">
@@ -130,17 +142,19 @@
 						{{ t('deck', 'No notifications') }}
 					</NcActionButton>
 				</template>
-				<NcActionButton v-else-if="!board.archived && board.acl?.length > 0"
+				<NcActionButton
+					v-else-if="!board.archived && board.acl?.length > 0"
 					:name="t('deck', 'Due date reminders')"
-					@click="isDueSubmenuActive=true">
+					@click="isDueSubmenuActive = true">
 					<template #icon>
 						<component :is="dueDateReminderIcon" :size="20" decorative />
 					</template>
 					{{ dueDateReminderText }}
 				</NcActionButton>
 
-				<NcActionButton v-if="canManage && !isDueSubmenuActive"
-					:close-after-click="true"
+				<NcActionButton
+					v-if="canManage && !isDueSubmenuActive"
+					:closeAfterClick="true"
 					@click="actionDelete">
 					<template #icon>
 						<DeleteIcon :size="20" decorative />
@@ -148,8 +162,9 @@
 					{{ t('deck', 'Delete board') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="canLeave && !isDueSubmenuActive"
-					:close-after-click="true"
+				<NcActionButton
+					v-if="canLeave && !isDueSubmenuActive"
+					:closeAfterClick="true"
 					@click="actionLeave">
 					<template #icon>
 						<LeaveIcon :size="20" decorative />
@@ -163,13 +178,15 @@
 				<button :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 			</NcColorPicker>
 			<form @submit.prevent.stop="applyEdit">
-				<NcTextField ref="inputField"
+				<NcTextField
+					ref="inputField"
 					v-model="editTitle"
 					:disable="loading"
 					:placeholder="t('deck', 'Board name')"
 					type="text"
 					required />
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					:disabled="loading"
 					type="button"
 					:title="t('deck', 'Cancel edit')"
@@ -178,7 +195,8 @@
 						<CloseIcon :size="20" />
 					</template>
 				</NcButton>
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					type="submit"
 					:disabled="loading"
 					:title="t('deck', 'Save board')">
@@ -193,33 +211,32 @@
 </template>
 
 <script>
-import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton, NcLoadingIcon } from '@nextcloud/vue'
+import { getCurrentUser } from '@nextcloud/auth'
+import { showError, showLoading } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import { loadState } from '@nextcloud/initial-state'
+import { NcActionButton, NcAppNavigationIconBullet, NcAppNavigationItem, NcButton, NcColorPicker, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import { vOnClickOutside } from '@vueuse/components'
-import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
-import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
+import { mapActions } from 'pinia'
 import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
+import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import BellOffOutlineIcon from 'vue-material-design-icons/BellOffOutline.vue'
+import BellOutlineIcon from 'vue-material-design-icons/BellOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import PinIcon from 'vue-material-design-icons/Pin.vue'
-import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import LeaveIcon from 'vue-material-design-icons/ExitRun.vue'
 import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
-import DownloadIcon from 'vue-material-design-icons/Download.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
-import BellOutlineIcon from 'vue-material-design-icons/BellOutline.vue'
-import BellOffOutlineIcon from 'vue-material-design-icons/BellOffOutline.vue'
-
-import { loadState } from '@nextcloud/initial-state'
-import { emit } from '@nextcloud/event-bus'
-
-import isTouchDevice from '../../mixins/isTouchDevice.js'
+import PinIcon from 'vue-material-design-icons/Pin.vue'
+import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
 import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
-import { showLoading, showError } from '@nextcloud/dialogs'
-import { getCurrentUser } from '@nextcloud/auth'
-import { mapActions } from 'pinia'
+import logger from '../../logger.js'
+import isTouchDevice from '../../mixins/isTouchDevice.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -253,19 +270,23 @@ export default {
 		BoardCloneModal,
 		BoardExportModal,
 	},
+
 	directives: {
 		vOnClickOutside,
 	},
+
 	mixins: [isTouchDevice],
 	inject: [
 		'boardApi',
 	],
+
 	props: {
 		board: {
 			type: Object,
 			required: true,
 		},
 	},
+
 	data() {
 		return {
 			classes: [],
@@ -285,6 +306,7 @@ export default {
 			defaultBoardId: localStorage.getItem('deck.defaultBoardId'),
 		}
 	},
+
 	computed: {
 		getColor() {
 			if (this.editColor !== '') {
@@ -292,21 +314,26 @@ export default {
 			}
 			return this.board.color
 		},
+
 		undoText() {
 			return t('deck', 'Board {0} deleted', [this.board.title])
 		},
+
 		routeTo() {
 			return {
 				name: 'board',
 				params: { id: this.board.id },
 			}
 		},
+
 		canManage() {
 			return this.board.permissions.PERMISSION_MANAGE
 		},
+
 		canLeave() {
 			return this.board.acl?.find((acl) => acl.participant.uid === this.currentUser?.uid && acl.participant.type === 0) !== undefined
 		},
+
 		dueDateReminderIcon() {
 			if (this.board.settings['notify-due'] === 'all') {
 				return 'BellOutlineIcon'
@@ -317,6 +344,7 @@ export default {
 			}
 			return 'BellOutlineIcon'
 		},
+
 		dueDateReminderText() {
 			if (this.board.settings['notify-due'] === 'all') {
 				return t('deck', 'All cards')
@@ -327,14 +355,17 @@ export default {
 			}
 			return ''
 		},
+
 		isDefaultBoard() {
 			return this.defaultBoardId === String(this.board.id)
 		},
 	},
+
 	mounted() {
 		// prevent click outside event with popupItem.
 		this.popupItem = this.$el
 	},
+
 	methods: {
 		...mapActions(useBoardStore, ['cloneBoard', 'archiveBoard', 'unarchiveBoard', 'removeBoard', 'updateBoard']),
 		toggleDefaultBoard() {
@@ -346,6 +377,7 @@ export default {
 				this.defaultBoardId = String(this.board.id)
 			}
 		},
+
 		unDelete() {
 			clearTimeout(this.undoTimeoutHandle)
 			this.boardApi.unDeleteBoard(this.board)
@@ -353,6 +385,7 @@ export default {
 					this.deleted = false
 				})
 		},
+
 		actionEdit() {
 			this.editTitle = this.board.title
 			this.editColor = '#' + this.board.color
@@ -361,14 +394,17 @@ export default {
 				this.$refs?.inputField.focus()
 			})
 		},
+
 		actionArchive() {
 			this.loading = true
 			this.archiveBoard(this.board)
 		},
+
 		actionUnarchive() {
 			this.loading = true
 			this.unarchiveBoard(this.board)
 		},
+
 		actionDelete() {
 			OC.dialogs.confirmDestructive(
 				t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards.', { title: this.board.title }),
@@ -396,6 +432,7 @@ export default {
 				true,
 			)
 		},
+
 		actionLeave() {
 			OC.dialogs.confirmDestructive(
 				t('deck', 'Are you sure you want to leave the board {title}?', { title: this.board.title }),
@@ -424,9 +461,11 @@ export default {
 				true,
 			)
 		},
+
 		actionDetails() {
 			this.$router.push({ name: 'board.details', params: { id: this.board.id } })
 		},
+
 		applyEdit(e) {
 			this.editing = false
 			if (this.editTitle || this.editColor) {
@@ -440,9 +479,11 @@ export default {
 					})
 			}
 		},
+
 		cancelEdit(e) {
 			this.editing = false
 		},
+
 		async updateSetting(key, value) {
 			this.updateDueSetting = value
 			const setting = {}
@@ -451,18 +492,22 @@ export default {
 			this.isDueSubmenuActive = false
 			this.updateDueSetting = null
 		},
+
 		actionExport() {
 			this.exportModalOpen = true
 		},
+
 		async onExportBoard(format) {
 			this.exportModalOpen = false
-			const loadingToast = showLoading(t('deck', 'Exporting board...'))
+			const loadingToast = showLoading(t('deck', 'Exporting board…'))
 			await this.boardApi.exportBoard(this.board, format)
 			loadingToast.hideToast()
 		},
+
 		onCloseExportBoard() {
 			this.exportModalOpen = false
 		},
+
 		onNavigate() {
 			if (this.isTouchDevice) {
 				emit('toggle-navigation', {
@@ -470,9 +515,11 @@ export default {
 				})
 			}
 		},
+
 		showCloneModal() {
 			this.cloneModalOpen = true
 		},
+
 		async onCloseCloneModal(data) {
 			this.cloneModalOpen = false
 			if (data) {
@@ -485,12 +532,12 @@ export default {
 					this.loading = false
 					this.$router.push({ name: 'board', params: { id: newBoard.id } })
 				} catch (e) {
-					console.error(e)
+					logger.error('Failed to clone board', { error: e })
 					OC.Notification.showTemporary(t('deck', 'An error occurred'))
-					console.error(e)
 				}
 			}
 		},
+
 		redirectToOverviewIfCurrentBoard() {
 			const currentBoardId = Number.parseInt(this.$route?.params?.id, 10)
 			if (!Number.isNaN(currentBoardId) && currentBoardId === this.board.id) {

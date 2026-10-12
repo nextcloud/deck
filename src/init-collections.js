@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import './../css/collections.css'
-import FileSharingPicker from './views/FileSharingPicker.js'
 import { buildSelector } from './helpers/selector.js'
+import FileSharingPicker from './views/FileSharingPicker.js'
 
+import './../css/collections.css'
 import './shared-init.js'
 
 window.addEventListener('DOMContentLoaded', () => {

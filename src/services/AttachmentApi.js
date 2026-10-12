@@ -7,7 +7,6 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 
 export class AttachmentApi {
-
 	url(url) {
 		return generateUrl(`/apps/deck${url}`)
 	}
@@ -43,14 +42,14 @@ export class AttachmentApi {
 
 	async updateAttachment({ cardId, attachment, formData, boardId }) {
 		const response = await axios({
-		   method: 'POST',
-		   url: this.ocsUrl(`/cards/${cardId}/attachment/${attachment.type}:${attachment.id}`),
-		   params: {
+			method: 'POST',
+			url: this.ocsUrl(`/cards/${cardId}/attachment/${attachment.type}:${attachment.id}`),
+			params: {
 				boardId: boardId ?? null,
-		   },
-		   data: formData,
-	   })
-	   return response.data
+			},
+			data: formData,
+		})
+		return response.data
 	}
 
 	async deleteAttachment(attachment, boardId) {
@@ -73,5 +72,4 @@ export class AttachmentApi {
 		})
 		return response.data.ocs.data
 	}
-
 }

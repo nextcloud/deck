@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { listen } from '@nextcloud/notify_push'
-import { sessionApi } from './services/SessionApi.js'
 import axios from '@nextcloud/axios'
-import { useStackStore } from './stores/stack.js'
+import { listen } from '@nextcloud/notify_push'
+import logger from './logger.js'
+import { sessionApi } from './services/SessionApi.js'
 import { useBoardStore } from './stores/board.js'
+import { useStackStore } from './stores/stack.js'
 
 const SESSION_INTERVAL = 90 // in seconds
 
@@ -39,23 +40,30 @@ export function initSessions() {
 	store = useBoardStore()
 	hasPush = listen('deck_board_update', (name, body) => {
 		// ignore update events which we have triggered ourselves
-		if (isOurSessionToken(body._causingSessionToken)) return
+		if (isOurSessionToken(body._causingSessionToken)) {
+			return
+		}
 
 		// only handle update events for the currently open board
 		const currentBoardId = store.currentBoard?.id
-		if (body.id !== currentBoardId) return
+		if (body.id !== currentBoardId) {
+			return
+		}
 
 		store.refreshBoard(currentBoardId)
 	})
 
 	listen('deck_card_update', (name, body) => {
-
 		// ignore update events which we have triggered ourselves
-		if (isOurSessionToken(body._causingSessionToken)) return
+		if (isOurSessionToken(body._causingSessionToken)) {
+			return
+		}
 
 		// only handle update events for the currently open board
 		const currentBoardId = store.currentBoard?.id
-		if (body.boardId !== currentBoardId) return
+		if (body.boardId !== currentBoardId) {
+			return
+		}
 
 		useStackStore().loadStacks(currentBoardId)
 	})
@@ -74,7 +82,6 @@ export function isNotifyPushEnabled() {
  * @param boardId
  */
 export function createSession(boardId) {
-
 	if (!boardId || !isNotifyPushEnabled()) {
 		// return a dummy object
 		return {
@@ -87,7 +94,7 @@ export function createSession(boardId) {
 	let tokenPromise
 	let token
 	const create = () => {
-		tokenPromise = sessionApi.createSession(boardId).then(res => res.token)
+		tokenPromise = sessionApi.createSession(boardId).then((res) => res.token)
 		tokenPromise.then((t) => {
 			token = t
 			axios.defaults.headers['x-nc-deck-session'] = t
@@ -114,7 +121,7 @@ export function createSession(boardId) {
 				// create a fresh session
 				create()
 			} else {
-				console.error('Failed to sync deck session', err)
+				logger.error('Failed to sync deck session', { error: err })
 			}
 		} finally {
 			syncRunning = false

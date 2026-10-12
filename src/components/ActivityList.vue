@@ -6,7 +6,8 @@
 <template>
 	<div class="activity-list">
 		<div v-if="isLoading" class="icon icon-loading" />
-		<ActivityEntry v-for="activity in activities"
+		<ActivityEntry
+			v-for="activity in activities"
 			:key="activity.activity_id"
 			:activity="activity" />
 		<!-- Sentinel at the end of the list: the surrounding sidebar tab is the
@@ -19,8 +20,8 @@
 <script>
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import ActivityEntry from './ActivityEntry.vue'
 import { vInfiniteScroll } from '@vueuse/components'
+import ActivityEntry from './ActivityEntry.vue'
 
 const ACTIVITY_FETCH_LIMIT = 50
 
@@ -29,27 +30,33 @@ export default {
 	components: {
 		ActivityEntry,
 	},
+
 	directives: {
 		vInfiniteScroll,
 	},
+
 	props: {
 		filter: {
 			type: String,
 			default: 'deck',
 		},
+
 		type: {
 			type: String,
 			required: true,
 		},
+
 		objectId: {
 			type: Number,
 			required: true,
 		},
+
 		objectType: {
 			type: String,
 			required: true,
 		},
 	},
+
 	data() {
 		return {
 			activities: [],
@@ -58,6 +65,7 @@ export default {
 			endReached: false,
 		}
 	},
+
 	methods: {
 		async loadActivity() {
 			const params = new URLSearchParams()
@@ -88,7 +96,7 @@ export default {
 				// to tell the backend to fetch all activites related to cards of a given board
 				activities = activities.filter((activity) => {
 					return (activity.object_type === 'deck_board' && activity.object_id === this.objectId)
-							|| (activity.object_type === 'deck_card' && activity.subject_rich[1].board.id === this.objectId.toString())
+						|| (activity.object_type === 'deck_card' && activity.subject_rich[1].board.id === this.objectId.toString())
 				})
 			}
 			this.activities.push(...activities)
@@ -99,9 +107,11 @@ export default {
 			this.since = (activities[activities.length - 1].activity_id)
 			return activities
 		},
+
 		async loadMore() {
 			await this.loadActivity()
 		},
+
 		canLoadMore() {
 			return !this.endReached
 		},

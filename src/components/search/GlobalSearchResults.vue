@@ -4,10 +4,11 @@
 -->
 
 <template>
-	<section v-if="searchQuery!==''" class="global-search">
+	<section v-if="searchQuery !== ''" class="global-search">
 		<header class="search-header">
 			<h2>
-				<NcRichText :text="$route.params.id ? t('deck', 'Search for {searchQuery} in other boards') : t('deck', 'Search for {searchQuery} in all boards')"
+				<NcRichText
+					:text="$route.params.id ? t('deck', 'Search for {searchQuery} in other boards') : t('deck', 'Search for {searchQuery} in all boards')"
 					:arguments="queryStringArgs" />
 				<span v-if="loading" class="icon-loading-small" />
 			</h2>
@@ -17,7 +18,8 @@
 		</header>
 		<template v-if="loading || filteredResults.length > 0">
 			<div class="search-wrapper">
-				<CardItem v-for="card in filteredResults"
+				<CardItem
+					v-for="card in filteredResults"
 					:id="card.id"
 					:key="card.id"
 					:standalone="true" />
@@ -35,14 +37,15 @@
 </template>
 
 <script>
-import CardItem from '../cards/CardItem.vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
+import { NcActionButton, NcActions, NcRichText } from '@nextcloud/vue'
 import { vInfiniteScroll } from '@vueuse/components'
-import Placeholder from './Placeholder.vue'
-import { NcActions, NcActionButton, NcRichText } from '@nextcloud/vue'
-import { useCardStore } from '../../stores/card.js'
 import { mapActions, mapState } from 'pinia'
+import CardItem from '../cards/CardItem.vue'
+import Placeholder from './Placeholder.vue'
+import logger from '../../logger.js'
+import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
 const createCancelToken = () => axios.CancelToken.source()
@@ -76,6 +79,7 @@ export default {
 	directives: {
 		vInfiniteScroll,
 	},
+
 	data() {
 		return {
 			results: [],
@@ -85,10 +89,12 @@ export default {
 			hasMore: true,
 		}
 	},
+
 	computed: {
 		...mapState(useSettingsStore, {
-			searchQuery: state => state.searchQuery,
+			searchQuery: (state) => state.searchQuery,
 		}),
+
 		filteredResults() {
 			const sortFn = (a, b) => a.archived - b.archived || b.lastModified - a.lastModified
 			if (this.$route.params.id) {
@@ -96,12 +102,14 @@ export default {
 			}
 			return [...this.results].sort(sortFn)
 		},
+
 		queryStringArgs() {
 			return {
 				searchQuery: this.searchQuery,
 			}
 		},
 	},
+
 	watch: {
 		async searchQuery() {
 			this.cursor = null
@@ -112,20 +120,23 @@ export default {
 				this.loading = false
 			} catch (e) {
 				if (!axios.isCancel(e)) {
-					console.error('Search request failed', e)
+					logger.error('Search request failed', { error: e })
 					this.loading = false
 				}
 			}
 		},
 	},
+
 	methods: {
 		...mapActions(useSettingsStore, ['setSearchQuery']),
 		clearSearchQuery() {
 			this.setSearchQuery('')
 		},
+
 		canLoadMore() {
 			return this.hasMore
 		},
+
 		async infiniteHandler() {
 			this.loading = true
 			try {
@@ -134,12 +145,13 @@ export default {
 				this.loading = false
 			} catch (e) {
 				if (!axios.isCancel(e)) {
-					console.error('Search request failed', e)
+					logger.error('Search request failed', { error: e })
 					this.hasMore = false
 					this.loading = false
 				}
 			}
 		},
+
 		async search() {
 			if (this.cancel) {
 				this.cancel()

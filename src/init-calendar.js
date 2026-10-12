@@ -5,6 +5,7 @@
 
 import { subscribe } from '@nextcloud/event-bus'
 import { generateUrl } from '@nextcloud/router'
+import logger from './logger.js'
 
 import './shared-init.js'
 
@@ -13,7 +14,7 @@ subscribe('calendar:handle-todo-click', ({ calendarId, taskId }) => {
 	if (calendarId.startsWith(deckAppPrefix)) {
 		const board = calendarId.slice(deckAppPrefix.length)
 		const card = taskId.slice('card-'.length).replace('.ics', '')
-		console.debug('[deck] Clicked task matches deck calendar pattern')
+		logger.debug('Clicked task matches deck calendar pattern')
 		window.location = generateUrl(`apps/deck/#/board/${board}/card/${card}`)
 	}
 })

@@ -17,13 +17,19 @@
 </template>
 
 <script setup>
+import { useFormatRelativeTime, useFormatTime } from '@nextcloud/vue'
+import { computed } from 'vue'
+import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
-import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
-import { useFormatTime, useFormatRelativeTime } from '@nextcloud/vue'
 import { useSettingsStore } from '../../../stores/settings.js'
-import { computed } from 'vue'
 
+const { card } = defineProps({
+	card: {
+		type: Object,
+		default: null,
+	},
+})
 const DueState = {
 	Done: 'Done',
 	Future: 'Future',
@@ -33,13 +39,6 @@ const DueState = {
 }
 const settingsStore = useSettingsStore()
 const compactMode = computed(() => settingsStore.compactMode)
-const { card } = defineProps({
-	card: {
-		type: Object,
-		default: null,
-	},
-})
-
 const dueState = computed(() => {
 	if (card.done) {
 		return DueState.Done

@@ -7,7 +7,6 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
 
 export class CommentApi {
-
 	url(url) {
 		url = `dav/comments/deckCard/${url}`
 		return generateRemoteUrl(url)
@@ -57,5 +56,4 @@ export class CommentApi {
 		})
 		return response.data
 	}
-
 }

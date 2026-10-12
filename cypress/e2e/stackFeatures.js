@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import { randUser } from '../utils/index.js'
 const user = randUser()
 
@@ -15,7 +16,6 @@ const testBoardData = {
 }
 
 describe('Stack', function() {
-
 	before(function() {
 		cy.createUser(user)
 		cy.login(user)

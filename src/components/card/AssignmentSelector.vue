@@ -7,72 +7,75 @@
 		<div class="selector-wrapper--icon">
 			<AccountMultiple :size="20" />
 		</div>
-		<NcSelect v-if="canEdit"
-			v-model="assignedUsers"
+		<NcSelectUsers
+			v-if="canEdit"
+			:modelValue="assignedUsers"
 			class="selector-wrapper--selector"
 			:disabled="assignables.length === 0"
 			:multiple="true"
 			:options="formatedAssignables"
-			:user-select="true"
 			:aria-label-combobox="t('deck', 'Assign a user to this card…')"
 			:placeholder="t('deck', 'Select a user to assign to this card…')"
-			label="displayname"
-			track-by="multiselectKey"
-			@option:selected="onSelect"
-			@option:deselected="onRemove" />
+			@update:modelValue="onUpdate" />
 		<div v-else class="avatar-list--readonly">
-			<NcUserBubble v-for="option in assignedUsers"
+			<NcUserBubble
+				v-for="option in assignedUsers"
 				:key="option.primaryKey"
 				:user="option.uid"
-				:display-name="option.displayname"
-				:is-no-user="option.isNoUser"
+				:displayName="option.displayname"
+				:isNoUser="option.isNoUser"
 				:size="32" />
 		</div>
 	</div>
 </template>
 
 <script>
+import { NcSelectUsers, NcUserBubble } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
-import { NcSelect, NcUserBubble } from '@nextcloud/vue'
 import AccountMultiple from 'vue-material-design-icons/AccountMultipleOutline.vue'
 
 export default defineComponent({
 	name: 'AssignmentSelector',
 	components: {
 		AccountMultiple,
-		NcSelect,
+		NcSelectUsers,
 		NcUserBubble,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: true,
 		},
+
 		assignables: {
 			type: Array,
 			default: () => [],
 		},
 	},
+
 	emits: ['select', 'remove'],
 	data() {
 		return {
 			assignedUsers: [],
 		}
 	},
+
 	computed: {
 		formatedAssignables() {
-			return this.assignables.map(item => {
+			return this.assignables.map((item) => {
 				const assignable = {
 					...item,
+					id: item.type + ':' + item.uid,
 					user: item.primaryKey,
 					displayName: item.displayname,
 					icon: 'icon-user',
 					isNoUser: false,
-					multiselectKey: item.type + ':' + item.uid,
 				}
 
 				if (item.type === 1) {
@@ -88,14 +91,17 @@ export default defineComponent({
 			})
 		},
 	},
+
 	watch: {
 		card() {
 			this.initialize()
 		},
 	},
+
 	mounted() {
 		this.initialize()
 	},
+
 	methods: {
 		async initialize() {
 			if (!this.card) {
@@ -105,20 +111,22 @@ export default defineComponent({
 			if (this.card.assignedUsers && this.card.assignedUsers.length > 0) {
 				this.assignedUsers = this.card.assignedUsers.map((item) => ({
 					...item.participant,
+					id: item.participant.type + ':' + item.participant.uid,
+					displayName: item.participant.displayname,
 					isNoUser: item.participant.type !== 0,
-					multiselectKey: item.participant.type + ':' + item.participant.primaryKey,
 					user: item.participant.uid,
 				}))
 			} else {
 				this.assignedUsers = []
 			}
 		},
-		onSelect(options) {
-			const addition = options.filter((item) => !this.card.assignedUsers.find((user) => user.participant.primaryKey === item.primaryKey))
-			this.$emit('select', addition[0])
-		},
-		onRemove(removed) {
-			this.$emit('remove', removed)
+
+		onUpdate(value) {
+			const added = value.filter((item) => !this.assignedUsers.some((user) => user.id === item.id))
+			const removed = this.assignedUsers.filter((user) => !value.some((item) => item.id === user.id))
+			this.assignedUsers = value
+			added.forEach((item) => this.$emit('select', item))
+			removed.forEach((item) => this.$emit('remove', item))
 		},
 	},
 })

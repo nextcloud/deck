@@ -6,7 +6,7 @@
 <template>
 	<div>
 		<!-- No hint: this matches plain titles, the card prefixes do not apply here -->
-		<Controls show-search :search-label="t('deck', 'Search boards')" />
+		<Controls showSearch :searchLabel="t('deck', 'Search boards')" />
 		<div class="board-list">
 			<div class="board-list-row board-list-header-row">
 				<div class="board-list-bullet-cell">
@@ -27,8 +27,8 @@
 
 <script>
 
-import BoardItem from './BoardItem.vue'
 import Controls from '../Controls.vue'
+import BoardItem from './BoardItem.vue'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -38,16 +38,19 @@ export default {
 		BoardItem,
 		Controls,
 	},
+
 	props: {
 		navFilter: {
 			type: String,
 			default: '',
 		},
 	},
+
 	computed: {
 		boardsSorted() {
 			return [...this.filteredBoards].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
+
 		filteredBoards() {
 			const query = useSettingsStore().searchQuery
 			return useBoardStore().filteredBoards.filter((board) => {
@@ -55,6 +58,7 @@ export default {
 			})
 		},
 	},
+
 	watch: {
 		navFilter(value) {
 			useBoardStore().setBoardFilter(value)

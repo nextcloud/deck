@@ -5,10 +5,10 @@
 
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
+
 import '../models/index.js'
 
 export class StackApi {
-
 	url(url) {
 		url = `/apps/deck${url}`
 		return generateUrl(url)
@@ -139,5 +139,4 @@ export class StackApi {
 				return Promise.reject(err)
 			})
 	}
-
 }

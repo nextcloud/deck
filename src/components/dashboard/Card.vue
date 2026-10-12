@@ -3,7 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<a :key="card.id"
+	<a
+		:key="card.id"
 		:href="cardLink"
 		target="_blank"
 		class="card">
@@ -11,7 +12,8 @@
 			<DueDate class="right" :card="card" />
 			<span class="title" dir="auto">{{ card.title }}</span>
 		</div>
-		<ul v-if="card.labels && card.labels.length"
+		<ul
+			v-if="card.labels && card.labels.length"
 			class="labels">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
 				<span dir="auto">{{ label.title }}</span>
@@ -21,8 +23,8 @@
 </template>
 
 <script>
-import DueDate from '../cards/badges/DueDate.vue'
 import { generateUrl } from '@nextcloud/router'
+import DueDate from '../cards/badges/DueDate.vue'
 import labelStyle from '../../mixins/labelStyle.js'
 
 export default {
@@ -31,10 +33,11 @@ export default {
 	mixins: [labelStyle],
 	props: {
 		card: {
-		  type: Object,
+			type: Object,
 			required: true,
 		},
 	},
+
 	computed: {
 		cardLink() {
 			return generateUrl('/apps/deck') + `#/board/${this.card.boardId}/card/${this.card.id}`

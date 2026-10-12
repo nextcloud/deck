@@ -10,7 +10,8 @@
 		<div class="selector-wrapper--selector">
 			<ul v-if="selectedDependentCards.length > 0" class="dependency-list">
 				<li v-for="dependentCard in selectedDependentCards" :key="dependentCard.id" class="dependency-item">
-					<NcButton v-if="isEditable && !dependentCard.done"
+					<NcButton
+						v-if="isEditable && !dependentCard.done"
 						type="button"
 						:aria-label="t('deck', 'Mark as done')"
 						:title="t('deck', 'Mark as done')"
@@ -19,7 +20,8 @@
 							<CircleOutline :size="16" />
 						</template>
 					</NcButton>
-					<NcButton v-if="isEditable && dependentCard.done"
+					<NcButton
+						v-if="isEditable && dependentCard.done"
 						type="button"
 						:aria-label="t('deck', 'Mark as not done')"
 						:title="t('deck', 'Mark as not done')"
@@ -31,7 +33,8 @@
 					<div class="dependency-link" @click.stop="openCard(dependentCard)">
 						<span :class="{ 'dependency-title--done': !!dependentCard.done }">{{ dependentCard.title }}</span>
 					</div>
-					<NcButton v-if="isEditable"
+					<NcButton
+						v-if="isEditable"
 						type="button"
 						variant="tertiary"
 						:aria-label="t('deck', 'Remove dependency')"
@@ -44,7 +47,8 @@
 				</li>
 			</ul>
 
-			<NcButton v-if="isEditable && !showSelector"
+			<NcButton
+				v-if="isEditable && !showSelector"
 				class="add-dependency-button"
 				type="button"
 				variant="tertiary"
@@ -57,14 +61,14 @@
 			</NcButton>
 
 			<div v-if="isEditable && showSelector" class="selector-row">
-				<NcSelect ref="cardSelector"
+				<NcSelect
+					ref="cardSelector"
 					:options="candidateCards"
 					:multiple="true"
-					:close-on-select="true"
 					:aria-label-combobox="t('deck', 'Assign a dependent card…')"
 					:placeholder="t('deck', 'Select a dependent card…')"
 					label="title"
-					track-by="id"
+					trackBy="id"
 					@option:selected="onSelect">
 					<template #option="scope">
 						<div class="dependency-option">
@@ -72,7 +76,8 @@
 						</div>
 					</template>
 				</NcSelect>
-				<NcButton type="button"
+				<NcButton
+					type="button"
 					variant="tertiary"
 					:aria-label="t('deck', 'Cancel')"
 					:title="t('deck', 'Cancel')"
@@ -87,18 +92,18 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
 import { generateUrl } from '@nextcloud/router'
-import { NcSelect, NcButton } from '@nextcloud/vue'
-import ListBoxOutline from 'vue-material-design-icons/ListBoxOutline.vue'
-import CircleOutline from 'vue-material-design-icons/CircleOutline.vue'
+import { NcButton, NcSelect } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
+import { defineComponent } from 'vue'
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
+import CircleOutline from 'vue-material-design-icons/CircleOutline.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import ListBoxOutline from 'vue-material-design-icons/ListBoxOutline.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
-import { mapActions, mapState } from 'pinia'
-import { useStackStore } from '../../stores/stack.js'
 import { useCardStore } from '../../stores/card.js'
+import { useStackStore } from '../../stores/stack.js'
 
 export default defineComponent({
 	name: 'DependentCardsSelector',
@@ -112,28 +117,33 @@ export default defineComponent({
 		NcSelect,
 		NcButton,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	emits: ['select', 'remove'],
 	data() {
 		return {
 			showSelector: false,
 		}
 	},
+
 	computed: {
 		...mapState(useStackStore, ['stackById']),
 		...mapState(useCardStore, ['cards', 'cardById']),
 		isEditable() {
 			return this.canEdit && !this.card?.done && !this.card?.archived
 		},
+
 		dependentCardIds() {
 			if (!Array.isArray(this.card?.dependentCards)) {
 				return []
@@ -142,11 +152,13 @@ export default defineComponent({
 				.map((id) => parseInt(id, 10))
 				.filter((id) => Number.isInteger(id))
 		},
+
 		selectedDependentCards() {
 			return this.dependentCardIds
 				.map((id) => this.cardById(id))
 				.filter(Boolean)
 		},
+
 		candidateCards() {
 			const currentBoardId = this.getCardBoardId(this.card)
 			return this.cards
@@ -156,16 +168,19 @@ export default defineComponent({
 				.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 		},
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			changeCardDoneStatusInStore: 'changeCardDoneStatus',
 		}),
+
 		openSelector() {
 			this.showSelector = true
 			this.$nextTick(() => {
 				this.$refs.cardSelector?.$el?.querySelector('input')?.focus()
 			})
 		},
+
 		onSelect(options) {
 			const addedCard = options.find((option) => !this.dependentCardIds.includes(option.id))
 			if (addedCard) {
@@ -173,9 +188,11 @@ export default defineComponent({
 				this.showSelector = false
 			}
 		},
+
 		onRemove(removedCard) {
 			this.$emit('remove', removedCard)
 		},
+
 		getCardBoardId(card) {
 			if (!card) {
 				return null
@@ -188,6 +205,7 @@ export default defineComponent({
 			const stack = this.stackById(card.stackId)
 			return stack?.boardId ?? null
 		},
+
 		openCard(dependentCard) {
 			if (!dependentCard?.id) {
 				return
@@ -208,12 +226,14 @@ export default defineComponent({
 
 			window.location = generateUrl('/apps/deck') + `#/board/${boardId}/card/${dependentCard.id}`
 		},
+
 		changeCardDoneStatus(card) {
 			this.changeCardDoneStatusInStore({ ...card, done: !card.done })
 		},
 	},
 })
 </script>
+
 <style scoped lang="scss">
 .dependency-list {
 	width: 100%;

@@ -2,16 +2,19 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+import { showError } from '@nextcloud/dialogs'
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import App from './App.vue'
+import logger from './logger.js'
 import router from './router.js'
-import { translate, translatePlural } from '@nextcloud/l10n'
-import { showError } from '@nextcloud/dialogs'
-import './shared-init.js'
-import './models/index.js'
 import { initSessions } from './sessions.js'
 import { useActionsStore } from './stores/actions.js'
-import { createPinia } from 'pinia'
+
+import './shared-init.js'
+import './models/index.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
@@ -31,12 +34,12 @@ app.directive('focus', {
 	},
 })
 
-app.config.errorHandler = (err, vm, info) => {
+app.config.errorHandler = (err) => {
 	if (err.response && err.response.data.message) {
 		const errorMessage = t('deck', 'Something went wrong')
 		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
 	}
-	console.error(err)
+	logger.error('Unhandled error', { error: err })
 }
 
 initSessions()

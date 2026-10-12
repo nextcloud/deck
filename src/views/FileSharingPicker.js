@@ -9,7 +9,7 @@ import { createShare } from '../services/SharingApi.js'
 export default {
 	icon: 'icon-deck',
 	displayName: t('deck', 'Share with a Deck card'),
-	handler: async self => {
+	handler: async (self) => {
 		const cardId = await buildSelector(() => import('./../CardSelector.vue'), {
 			title: t('deck', 'Share {file} with a Deck card', { file: decodeURIComponent(self.fileInfo.name) }),
 			action: t('deck', 'Share'),
@@ -23,7 +23,7 @@ export default {
 
 		return result.data.ocs.data
 	},
-	condition: self => {
+	condition: () => {
 		return !!OC.appswebroots.deck
 	},
 }

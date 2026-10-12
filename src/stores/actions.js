@@ -5,16 +5,15 @@
 
 import { defineStore } from 'pinia'
 
-export const useActionsStore = defineStore('actions',
-	{
-		state: () => ({
-			actions: {
-				card: [],
-			},
-		}),
+export const useActionsStore = defineStore('actions', {
+	state: () => ({
 		actions: {
-			async addCardAction(action) {
-				this.actions.card.push(action)
-			},
+			card: [],
 		},
-	})
+	}),
+	actions: {
+		async addCardAction(action) {
+			this.actions.card.push(action)
+		},
+	},
+})

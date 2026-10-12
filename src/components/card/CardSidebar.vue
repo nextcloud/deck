@@ -4,23 +4,24 @@
 -->
 
 <template>
-	<NcAppSidebar v-if="boardStore.currentBoard && currentCard"
+	<NcAppSidebar
+		v-if="boardStore.currentBoard && currentCard"
 		ref="cardSidebar"
-		v-model:name-editable="isEditingTitle"
+		v-model:nameEditable="isEditingTitle"
 		:active="tabId"
 		:name="displayTitle"
 		:subtitle="subtitleTooltip"
 		@update:name="(value) => titleEditing = value"
 		@update:active="(value) => activeTabId = value"
-		@dismiss-editing="titleEditing = currentCard.title"
-		@submit-name="handleSubmitTitle"
+		@dismissEditing="titleEditing = currentCard.title"
+		@submitName="handleSubmitTitle"
 		@opened="focusHeader"
 		@close="closeSidebar">
 		<template #subname>
 			<span>{{ subtitle }}</span>
 			<template v-if="cardOwner">
 				<span> ⸱ </span>
-				<NcUserBubble :user="cardOwner.uid" :display-name="cardOwner.displayName" />
+				<NcUserBubble :user="cardOwner.uid" :displayName="cardOwner.displayName" />
 			</template>
 		</template>
 		<template #secondary-actions>
@@ -31,15 +32,17 @@
 				{{ t('deck', 'Open in bigger view') }}
 			</NcActionButton>
 
-			<CardMenuEntries :card="currentCard" :hide-details-entry="true" />
+			<CardMenuEntries :card="currentCard" :hideDetailsEntry="true" />
 		</template>
 		<template #description>
-			<NcReferenceList v-if="currentCard.referenceData"
+			<NcReferenceList
+				v-if="currentCard.referenceData"
 				:text="currentCard.title"
 				:interactive="false" />
 		</template>
 
-		<NcAppSidebarTab id="details"
+		<NcAppSidebarTab
+			id="details"
 			:order="0"
 			:name="t('deck', 'Details')">
 			<CardSidebarTabDetails :card="currentCard" />
@@ -49,7 +52,8 @@
 			</template>
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab id="attachments"
+		<NcAppSidebarTab
+			id="attachments"
 			:order="1"
 			:name="t('deck', 'Attachments')">
 			<template #icon>
@@ -58,54 +62,51 @@
 			<CardSidebarTabAttachments :card="currentCard" />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab id="comments"
+		<NcAppSidebarTab
+			id="comments"
 			:order="2"
 			:name="t('deck', 'Comments')">
 			<template #icon>
 				<CommentIcon v-if="activeTabId === 'comments'" :size="20" />
 				<CommentOutlineIcon v-else :size="20" />
 			</template>
-			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
+			<CardSidebarTabComments :card="currentCard" :tabQuery="tabQuery" />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="hasActivity"
+		<NcAppSidebarTab
+			v-if="hasActivity"
 			id="timeline"
 			:order="3"
 			:name="t('deck', 'Activity')">
 			<template #icon>
 				<ActivityIcon :size="20" />
 			</template>
-			<CardSidebarTabActivity :card="currentCard" :is-active="activeTabId === 'timeline'" />
+			<CardSidebarTabActivity :card="currentCard" :isActive="activeTabId === 'timeline'" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>
 
 <script setup>
-import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble, useFormatRelativeTime, useFormatTime } from '@nextcloud/vue'
-import { NcReferenceList } from '@nextcloud/vue/components/NcRichText'
 import { getCapabilities } from '@nextcloud/capabilities'
-import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
-import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
-import CardSidebarTabComments from './CardSidebarTabComments.vue'
-import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
-import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
-import HomeIcon from 'vue-material-design-icons/Home.vue'
-import HomeOutlineIcon from 'vue-material-design-icons/HomeOutline.vue'
-import CommentIcon from 'vue-material-design-icons/Comment.vue'
-import CommentOutlineIcon from 'vue-material-design-icons/CommentOutline.vue'
-import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-
 import { showError, showWarning } from '@nextcloud/dialogs'
-import CardMenuEntries from '../cards/NcActionsCardMenuEntries.vue'
-import { useCardStore } from '../../stores/card.js'
-import { useBoardStore } from '../../stores/board.js'
-import { useSettingsStore } from '../../stores/settings.js'
+import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcUserBubble, useFormatRelativeTime, useFormatTime } from '@nextcloud/vue'
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
-
-const capabilities = getCapabilities()
-
-const router = useRouter()
+import { NcReferenceList } from '@nextcloud/vue/components/NcRichText'
+import CommentIcon from 'vue-material-design-icons/Comment.vue'
+import CommentOutlineIcon from 'vue-material-design-icons/CommentOutline.vue'
+import HomeIcon from 'vue-material-design-icons/Home.vue'
+import HomeOutlineIcon from 'vue-material-design-icons/HomeOutline.vue'
+import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
+import CardMenuEntries from '../cards/NcActionsCardMenuEntries.vue'
+import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
+import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
+import CardSidebarTabComments from './CardSidebarTabComments.vue'
+import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
+import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const { id, tabId, tabQuery } = defineProps({
 	id: {
@@ -126,6 +127,10 @@ const { id, tabId, tabQuery } = defineProps({
 
 const emit = defineEmits(['close'])
 
+const capabilities = getCapabilities()
+
+const router = useRouter()
+
 const settingsStore = useSettingsStore()
 const cardStore = useCardStore()
 const boardStore = useBoardStore()
@@ -144,7 +149,9 @@ const cardOwnerDisplayName = computed(() => {
 })
 const cardOwner = computed(() => {
 	const owner = currentCard.value.owner
-	if (!owner) return null
+	if (!owner) {
+		return null
+	}
 	return {
 		uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
 		displayName: cardOwnerDisplayName.value,

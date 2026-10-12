@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import { BoardApi } from '../services/BoardApi.js'
-import { useStackStore } from './stack.js'
-import { useCardStore } from './card.js'
 import { loadState } from '@nextcloud/initial-state'
+import { generateUrl } from '@nextcloud/router'
+import { defineStore } from 'pinia'
+import { BoardApi } from '../services/BoardApi.js'
+import { useCardStore } from './card.js'
+import { useStackStore } from './stack.js'
 
 const apiClient = new BoardApi()
 
@@ -34,7 +34,9 @@ export const useBoardStore = defineStore('board', {
 			return state.boards.find((board) => board.id === id)
 		},
 		viewMode(state) {
-			if (!state.currentBoard) return 'kanban'
+			if (!state.currentBoard) {
+				return 'kanban'
+			}
 			if (state.viewModeByBoard[state.currentBoard.id] !== undefined) {
 				return state.viewModeByBoard[state.currentBoard.id]
 			}
@@ -42,7 +44,7 @@ export const useBoardStore = defineStore('board', {
 			const stored = localStorage.getItem(`deck.viewMode.${state.currentBoard.id}`)
 			return stored !== null ? stored : 'kanban'
 		},
-		assignables: state => {
+		assignables: (state) => {
 			if (!state.currentBoard) {
 				return []
 			}
@@ -53,43 +55,43 @@ export const useBoardStore = defineStore('board', {
 				...state.currentBoard.acl.filter((acl) => acl.type === 7 && typeof acl.participant === 'object').map((circle) => ({ ...circle.participant, type: 7 })),
 			]
 		},
-		noneArchivedBoards: state => {
-			return state.boards.filter(board => {
+		noneArchivedBoards: (state) => {
+			return state.boards.filter((board) => {
 				return board.archived === false && !board.deletedAt
 			})
 		},
-		archivedBoards: state => {
-			return state.boards.filter(board => {
+		archivedBoards: (state) => {
+			return state.boards.filter((board) => {
 				return board.archived === true && !board.deletedAt
 			})
 		},
-		sharedBoards: state => {
-			return state.boards.filter(board => {
+		sharedBoards: (state) => {
+			return state.boards.filter((board) => {
 				return board.shared && !board.deletedAt
 			})
 		},
-		filteredBoards: state => {
+		filteredBoards: (state) => {
 			// filters the boards depending on the active filter
-			const boards = state.boards.filter(board => {
+			const boards = state.boards.filter((board) => {
 				return (state.boardFilter === BOARD_FILTERS.ALL && board.archived === false)
 					|| (state.boardFilter === BOARD_FILTERS.ARCHIVED && board.archived === true)
 					|| (state.boardFilter === BOARD_FILTERS.SHARED && board.shared === 1)
 			})
 			return boards
 		},
-		currentBoardLabels: state => {
+		currentBoardLabels: (state) => {
 			return state.currentBoard ? state.currentBoard.labels : []
 		},
-		canEdit: state => {
+		canEdit: (state) => {
 			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_EDIT : false
 		},
-		canManage: state => {
+		canManage: (state) => {
 			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_MANAGE : false
 		},
-		canShare: state => {
+		canShare: (state) => {
 			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_SHARE : false
 		},
-		isArchived: state => {
+		isArchived: (state) => {
 			return state.currentBoard && state.currentBoard.archived
 		},
 	},
@@ -103,19 +105,19 @@ export const useBoardStore = defineStore('board', {
 		toggleFilter(filter) {
 			Object.keys(filter).forEach((key) => {
 				switch (key) {
-				case 'due':
-					this.filter.due = filter.due
-					break
-				default:
-					filter[key].forEach((item) => {
-						const index = this.filter[key].indexOf(item)
-						if (index === -1) {
-							this.filter[key].push(item)
-						} else {
-							this.filter[key].splice(index, 1)
-						}
-					})
-					break
+					case 'due':
+						this.filter.due = filter.due
+						break
+					default:
+						filter[key].forEach((item) => {
+							const index = this.filter[key].indexOf(item)
+							if (index === -1) {
+								this.filter[key].push(item)
+							} else {
+								this.filter[key].splice(index, 1)
+							}
+						})
+						break
 				}
 			})
 		},
@@ -136,7 +138,9 @@ export const useBoardStore = defineStore('board', {
 			this.showArchived = newState !== undefined ? newState : !this.showArchived
 		},
 		setViewMode(mode) {
-			if (!this.currentBoard) return
+			if (!this.currentBoard) {
+				return
+			}
 			this.viewModeByBoard[this.currentBoard.id] = mode
 			localStorage.setItem(`deck.viewMode.${this.currentBoard.id}`, mode)
 		},

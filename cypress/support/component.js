@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 // ***********************************************************
 // This example support/component.js is processed and
 // loaded automatically before your test files.
@@ -17,13 +18,12 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
-import './commands'
+import { mount } from 'cypress/vue2'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
-import { mount } from 'cypress/vue2'
+// Import commands.js using ES2015 syntax:
+import './commands.js'
 
 Cypress.Commands.add('mount', mount)
 
