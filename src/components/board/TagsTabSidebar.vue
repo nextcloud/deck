@@ -8,12 +8,18 @@
 			<li v-for="label in labelsSorted" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
 				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
-					<form class="label-form" @submit.prevent="updateLabel(label)">
+					<form class="label-form" @submit.prevent="updateLabel">
 						<NcColorPicker v-model="editingLabelColor"
 							class="color-picker-wrapper"
 							:advanced-fields="true"
 							@submit="updateColor">
-							<div :style="{ backgroundColor: editingLabelColor }" class="color0 icon-colorpicker" />
+							<NcButton
+								variant="tertiary-no-background"
+								:style="{ backgroundColor: `#${editingLabel.color}`, color: textColor(editingLabel.color) }">
+								<template #icon>
+									<Eyedropper :size="20" />
+								</template>
+							</NcButton>
 						</NcColorPicker>
 						<input v-model="editingLabel.title" type="text">
 						<input :disabled="!editLabelObjValidated"
@@ -40,12 +46,12 @@
 						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
 					</div>
 
-					<NcActions v-if="canManage && !isArchived">
+					<NcActions
+						inline="2"
+						v-if="canManage && !isArchived">
 						<NcActionButton icon="icon-rename" @click="clickEdit(label)">
 							{{ t('deck', 'Edit') }}
 						</NcActionButton>
-					</NcActions>
-					<NcActions v-if="canManage && !isArchived">
 						<NcActionButton icon="icon-delete" @click="deleteLabel(label.id)">
 							{{ t('deck', 'Delete') }}
 						</NcActionButton>
@@ -59,8 +65,14 @@
 					<NcColorPicker v-model="addLabelColor"
 						class="color-picker-wrapper"
 						:advanced-fields="true"
-						@input="updateColor">
-						<div :style="{ backgroundColor: addLabelColor }" class="color0 icon-colorpicker" />
+						@submit="updateColor">
+						<NcButton
+							variant="tertiary-no-background"
+							:style="{ backgroundColor: `#${addLabelObj.color}`, color: textColor(addLabelObj.color) }">
+							<template #icon>
+								<Eyedropper :size="20" />
+							</template>
+						</NcButton>
 					</NcColorPicker>
 					<input v-model="addLabelObj.title" type="text">
 					<input :disabled="!addLabelObjValidated"
@@ -77,9 +89,13 @@
 					{{ missingDataLabel }}
 				</p>
 			</li>
-			<button v-if="canManage && !isArchived" @click="clickShowAddLabel()">
-				<span class="icon-add" />{{ t('deck', 'Add a new tag') }}
-			</button>
+			<NcButton v-if="canManage && !isArchived"
+				:text="t('deck', 'Add a new tag')"
+				@click="clickShowAddLabel()">
+				<template #icon>
+					<Plus :size="20" />
+				</template>
+			</NcButton>
 		</ul>
 	</div>
 </template>
@@ -88,15 +104,20 @@
 
 import { mapActions, mapState } from 'pinia'
 import Color from '../../mixins/color.js'
-import { NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
+import { NcButton, NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 import { useBoardStore } from '../../stores/board.js'
+import Eyedropper from 'vue-material-design-icons/Eyedropper.vue'
+import Plus from 'vue-material-design-icons/Plus.vue'
 
 export default {
 	name: 'TagsTabSidebar',
 	components: {
+		NcButton,
 		NcColorPicker,
 		NcActions,
 		NcActionButton,
+		Eyedropper,
+		Plus,
 	},
 	mixins: [Color],
 	data() {
@@ -151,13 +172,14 @@ export default {
 			'addLabelToCurrentBoard',
 		]),
 		updateColor(c) {
-			if (this.editingLabel === null) {
+			if (this.editingLabelId === null) {
 				this.addLabelObj.color = c.substring(1, 7)
 			} else {
 				this.editingLabel.color = c.substring(1, 7)
 			}
 		},
 		clickEdit(label) {
+			this.addLabel = false
 			this.editingLabelId = label.id
 			this.editingLabel = Object.assign({}, label)
 			this.editingLabelColor = '#' + label.color
@@ -165,11 +187,12 @@ export default {
 		deleteLabel(id) {
 			this.removeLabelFromCurrentBoard(id)
 		},
-		updateLabel(label) {
+		updateLabel() {
 			this.updateLabelFromCurrentBoard(this.editingLabel)
 			this.editingLabelId = null
 		},
 		clickShowAddLabel() {
+			this.editingLabelId = null
 			this.addLabelObj = { cardId: null, color: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)], title: '' }
 			this.addLabelColor = '#' + this.addLabelObj.color
 			this.addLabel = true
@@ -189,8 +212,7 @@ export default {
 	.labels li {
 		display: flex;
 		margin-bottom: 3px;
-		align-items: stretch;
-		height: $clickable-area;
+		align-items: center;
 
 		&:hover {
 			background-color: var(--color-background-hover);
@@ -199,7 +221,6 @@ export default {
 
 		.label-title {
 			flex-grow: 1;
-			padding: 10px;
 
 			&:hover, span:hover {
 				cursor: pointer;
@@ -216,35 +237,18 @@ export default {
 			margin: 0 0 0 -3px;
 		}
 
-		.color-picker-wrapper {
-			&, &:deep > .trigger {
-				width: $clickable-area;
-				padding: 3px;
-				display: flex;
-				align-items: stretch;
-				position: relative;
-			}
-
-			.color0 {
-				position: absolute;
-				width: calc(#{$clickable-area} - 6px);
-				height: calc(#{$clickable-area} - 6px);
-				background-size: 14px;
-				border-radius: 50%;
-			}
-		}
-
 		&.editing {
-			display: block;
+			flex-direction: column;
+			align-items: stretch;
 		}
 		form {
 			display: flex;
+			align-items: center;
+
 			input[type=text] {
 				flex-grow: 1;
 				margin: 5px;
-			}
-			input[type=submit] {
-				margin-top: 5px;
+				width: 100%;
 			}
 		}
 	}
