@@ -14,8 +14,7 @@
 			:disabled="assignables.length === 0"
 			:multiple="true"
 			:options="formatedAssignables"
-			:aria-label-combobox="t('deck', 'Assign a user to this card…')"
-			:placeholder="t('deck', 'Select a user to assign to this card…')"
+			:inputLabel="t('deck', 'Assign a user to this card…')"
 			@update:modelValue="onUpdate" />
 		<div v-else class="avatar-list--readonly">
 			<NcUserBubble

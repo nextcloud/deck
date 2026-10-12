@@ -11,6 +11,7 @@
 				:placeholder="t('deck', 'Select a board')"
 				:options="activeBoards"
 				:max-height="100"
+				data-cy="select-board"
 				label="title"
 				@option:selected="loadStacksFromBoard" />
 			<NcSelect
