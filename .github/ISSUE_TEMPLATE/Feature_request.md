@@ -1,6 +1,10 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
+title: ''
+labels: 0. Needs triage, enhancement
+assignees: ''
+type: Enhancement
 
 ---
 
