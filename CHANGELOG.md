@@ -6,6 +6,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## 1.17.6
+
+### Fixed
+* [stable33] fix: due date events in activity logging by @luka-nextcloud in https://github.com/nextcloud/deck/pull/8416
+
 ## 1.17.5
 
 ### Fixed
@@ -969,4 +974,3 @@ Android app team for helping to improve our REST API:
 - Assign labels
 - Markdown notes for each card
 - Archive cards
-
