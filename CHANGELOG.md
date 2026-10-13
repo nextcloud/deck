@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.17.7
+
+### Fixed
+- [stable33] fix: Use strict comparison #8538
+- [stable33] ci: always report integration-summary #8514
 
 ## 1.17.6
 
