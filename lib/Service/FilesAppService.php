@@ -18,6 +18,7 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IFilenameValidator;
 use OCP\Files\IMimeTypeDetector;
@@ -261,7 +262,22 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 
 	public function update(Attachment $attachment) {
 		$share = $this->getShareForAttachment($attachment);
-		$target = $share->getNode();
+
+		// Multiple mounts can expose the same file with different permissions.
+		$nodes = $this->rootFolder->getUserFolder($this->userId)->getById($share->getNodeId());
+		if ($nodes === []) {
+			throw new NotFoundException('File not found');
+		}
+		$target = null;
+		foreach ($nodes as $node) {
+			if ($node instanceof File && ($node->getPermissions() & Constants::PERMISSION_UPDATE) !== 0) {
+				$target = $node;
+				break;
+			}
+		}
+		if ($target === null) {
+			throw new NoPermissionException('The file is not writable for this user');
+		}
 		$file = $this->getUploadedFile();
 		$fileName = $file['name'];
 		$attachment->setData($fileName);
@@ -271,7 +287,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			throw new StatusException('Could not read file');
 		}
 		$target->putContent($content);
-		fclose($content);
 
 		$attachment->setLastModified(time());
 		return $attachment;
