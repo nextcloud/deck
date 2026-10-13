@@ -232,7 +232,6 @@ OC.L10N.register(
     "Reply" : "Отговори",
     "Update" : "Обновяване",
     "Mark as done" : "Маркирай като готово",
-    "Write a description …" : "Напишете описание ...",
     "Description" : "Описание",
     "(Unsaved)" : " (Незаписан)",
     "(Saving…)" : "(Записване...)",
@@ -302,7 +301,6 @@ OC.L10N.register(
     "Create card" : "Създаване на карта",
     "Create a new card" : "Създаване на нова карта",
     "Card title" : "Заглавие на карта",
-    "Creating the new card …" : "Създаване на новата карта ...",
     "Card \"{card}\" was added to \"{board}\"" : "Карта \"{card}\" беше добавена към \"{board}\"",
     "Open card" : "Отваряне на карта",
     "Close" : "Затваряне",
@@ -326,9 +324,11 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Картата \"%s\" on \"%s\" е достигнала датата на падежа си.",
     "No participants found" : "Няма намерени участници",
     "Save" : "Запазване",
+    "Write a description …" : "Напишете описание ...",
     "seconds ago" : "преди секунди",
     "Today" : "Днес",
     "Tomorrow" : "Утре",
-    "No due" : "Не се дължи"
+    "No due" : "Не се дължи",
+    "Creating the new card …" : "Създаване на новата карта ..."
 },
 "nplurals=2; plural=(n != 1);");

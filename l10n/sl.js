@@ -226,7 +226,6 @@ OC.L10N.register(
     "Update" : "Posodobi",
     "Mark as done" : "Označi kot končano",
     "Mark as not done" : "Označi kot Ni končano",
-    "Write a description …" : "Vpišite opis ...",
     "Description" : "Opis",
     "(Unsaved)" : "(neshranjeno)",
     "(Saving…)" : "(shranjevanje ...)",
@@ -253,7 +252,6 @@ OC.L10N.register(
     "Unarchive card" : "Povrni nalogo",
     "Archive card" : "Arhiviraj nalogo",
     "Assign a tag to this card…" : "Dodeli oznako nalogi ...",
-    "Select or create a tag…" : "Izberi ali ustvari oznako ...",
     "Create a new tag:" : "Ustvari novo oznako:",
     "(group)" : "(skupina)",
     "{count} comments, {unread} unread" : "{count} sporočil, {unread} neprebranih",
@@ -299,7 +297,6 @@ OC.L10N.register(
     "Create card" : "Ustvari nalogo",
     "Create a new card" : "Ustvari novo nalogo",
     "Card title" : "Naslov naloge",
-    "Creating the new card …" : "Poteka ustvarjanje nove naloge ...",
     "Card \"{card}\" was added to \"{board}\"" : "Naloga »{card}« je dodana v zbirko »{board}«.",
     "Open card" : "Odpri nalogo",
     "Close" : "Zapri",
@@ -323,9 +320,12 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Naloga »%s« na »%s« je dosegla datum preteka.",
     "No participants found" : "Ni zaznanih udeleženev",
     "Save" : "Shrani",
+    "Write a description …" : "Vpišite opis ...",
+    "Select or create a tag…" : "Izberi ali ustvari oznako ...",
     "seconds ago" : "pred nekaj sekundami",
     "Today" : "Danes",
     "Tomorrow" : "Jutri",
-    "No due" : "Ni datuma preteka"
+    "No due" : "Ni datuma preteka",
+    "Creating the new card …" : "Poteka ustvarjanje nove naloge ..."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
