@@ -2,7 +2,6 @@ const { defineConfig } = require('cypress')
 const cypressSplit = require('cypress-split')
 
 module.exports = defineConfig({
-	allowCypressEnv: false,
 	projectId: '1s7wkc',
 	viewportWidth: 1280,
 	viewportHeight: 720,
@@ -16,6 +15,5 @@ module.exports = defineConfig({
 		},
 		baseUrl: 'http://nextcloud.local/index.php',
 		specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
-		experimentalMemoryManagement: true,
 	},
 })
