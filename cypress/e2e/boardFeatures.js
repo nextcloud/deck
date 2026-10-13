@@ -196,9 +196,8 @@ describe('Board title editing', function() {
 
 			cy.get('button:contains("Edit board")').click()
 
-			cy.get('.board-edit form input[type=text]')
-				.clear()
-				.type(updatedTitle)
+			cy.get('.board-edit form input[type=text]').clear()
+			cy.get('.board-edit form input[type=text]').type(updatedTitle)
 
 			cy.get('.board-edit form button[title="Save board"]').click()
 
@@ -233,9 +232,8 @@ describe('Board title editing', function() {
 
 				cy.get('button:contains("Edit board")').click()
 
-				cy.get('.board-edit form input[type=text]')
-					.clear()
-					.type(boardBUpdatedTitle)
+				cy.get('.board-edit form input[type=text]').clear()
+				cy.get('.board-edit form input[type=text]').type(boardBUpdatedTitle)
 
 				cy.get('.board-edit form button[title="Save board"]').click()
 

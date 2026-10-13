@@ -149,10 +149,11 @@ describe('Card', function() {
 		cy.get('[data-cy="action:add-card"]')
 			.first().click()
 
-		// Somehow this avoids the electron crash
+		// eslint-disable-next-line cypress/no-unnecessary-waiting -- somehow this avoids the electron crash
 		cy.wait(2000)
 
-		cy.get('.modal-mask.card-selector .card-title').should('be.visible').click().type(newCardTitle)
+		cy.get('.modal-mask.card-selector .card-title').should('be.visible').click()
+		cy.get('.modal-mask.card-selector .card-title').type(newCardTitle)
 		cy.get('.modal-mask.card-selector .multiselect-board').should('be.visible').click()
 		cy.get('.vs__dropdown-menu [data-cy="board-select-title"]:contains("' + boardData.title + '")').should('be.visible').click()
 
@@ -274,8 +275,8 @@ describe('Card', function() {
 			cy.get('.modal__card').should('be.visible')
 			cy.get('.app-sidebar-header__mainname').contains('Hello world')
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world').should('be.visible')
+			cy.get('.modal__card .ProseMirror h1').click()
 			cy.get('.modal__card .ProseMirror h1')
-				.click()
 				.type(' writing more text{enter}- List item{enter}with entries{enter}{enter}Paragraph')
 			cy.wait('@save', { timeout: 7000 })
 
@@ -284,7 +285,8 @@ describe('Card', function() {
 
 			// Scroll to the bottom to ensure all content is loaded and visible
 			cy.get('.modal__card .app-sidebar-tabs, .modal__card .app-sidebar__tab--active').first().scrollTo('bottom', { ensureScrollable: false })
-			cy.contains('.modal__card .ProseMirror p', 'Paragraph').scrollIntoView().should('be.visible')
+			cy.contains('.modal__card .ProseMirror p', 'Paragraph').scrollIntoView()
+			cy.contains('.modal__card .ProseMirror p', 'Paragraph').should('be.visible')
 
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(0).contains('List item').should('be.visible')
@@ -297,14 +299,14 @@ describe('Card', function() {
 			cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('.modal__card').should('be.visible')
-			cy.get('.modal__card .ProseMirror h1')
-				.click()
-				.type('{enter}/create')
+			cy.get('.modal__card .ProseMirror h1').click()
+			cy.get('.modal__card .ProseMirror h1').type('{enter}/create')
 			cy.get('.suggestion-list__item.is-selected').should('be.visible').contains('Create a new deck card')
 			cy.get('.suggestion-list__item.is-selected .link-picker__item').click()
 			cy.get('.reference-picker-modal--content .reference-picker').should('be.visible')
 			cy.get('.reference-picker-modal--content .reference-picker').contains('Create a new card')
-			cy.get('.reference-picker-modal--content .reference-picker .card-title').should('be.visible').click().type(newCardTitle)
+			cy.get('.reference-picker-modal--content .reference-picker .card-title').should('be.visible').click()
+			cy.get('.reference-picker-modal--content .reference-picker .card-title').type(newCardTitle)
 			cy.get('.reference-picker-modal--content .reference-picker .multiselect-board').should('be.visible').contains(boardData.title)
 			cy.get('.reference-picker-modal--content .reference-picker .multiselect-list').should('be.visible').contains(boardData.stacks[0].title)
 			cy.get('.reference-picker-modal--content .reference-picker button.button-vue--primary').should('be.visible').click()
@@ -314,9 +316,8 @@ describe('Card', function() {
 			cy.visit(`/apps/deck/board/${boardId}`)
 			cy.reload()
 			cy.get('.board .stack').eq(0).within(() => {
-				cy.get(`.card:contains("${newCardTitle}")`)
-					.scrollIntoView({ block: 'center' })
-					.should('be.visible')
+				cy.get(`.card:contains("${newCardTitle}")`).scrollIntoView({ block: 'center' })
+				cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
 			})
 		})
 	})
@@ -388,7 +389,7 @@ describe('Card', function() {
 				.first().click()
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
 
-			// Add delay to ensure the events are bound
+			// eslint-disable-next-line cypress/no-unnecessary-waiting -- ensure the events are bound
 			cy.wait(1000)
 
 			cy.get('#app-sidebar-vue [data-test="tag-selector"]  .vs__dropdown-toggle').should('be.visible').click()
@@ -400,8 +401,8 @@ describe('Card', function() {
 			cy.get('.vs__selected .tag:contains("Action needed")')
 				.parent().find('button').click()
 
+			cy.get(`.card:contains("${newCardTitle}")`).scrollIntoView({ block: 'center' })
 			cy.get(`.card:contains("${newCardTitle}")`)
-				.scrollIntoView({ block: 'center' })
 				.find('.labels li:contains("Later")')
 				.should('be.visible')
 			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Action needed")')

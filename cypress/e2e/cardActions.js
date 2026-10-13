@@ -49,9 +49,7 @@ describe('Card actions', function() {
 		const myAction = {
 			label: 'Test action',
 			icon: 'icon-user',
-			callback(card) {
-				console.log('Called callback', card)
-			},
+			callback() {},
 		}
 		cy.spy(myAction, 'callback').as('myAction.callback')
 
@@ -95,7 +93,8 @@ describe('Card actions', function() {
 		cy.get('.v-popper__popper button:contains("Move/copy card")').click()
 		cy.get('[data-cy="select-board"] .vs__dropdown-toggle').should('be.visible').click()
 		cy.get('.vs__dropdown-menu span[title="MyTestBoard"]').should('be.visible').click()
-		cy.wait(3000) // wait for select component to load stacks
+		// eslint-disable-next-line cypress/no-unnecessary-waiting -- wait for select component to load stacks
+		cy.wait(3000)
 		cy.get('[data-cy="select-stack"] .vs__dropdown-toggle').should('be.visible').click()
 		cy.get('.vs__dropdown-menu span[title="TestList"]').should('be.visible').click()
 		cy.get('.modal-container button:contains("Copy card")').click()
