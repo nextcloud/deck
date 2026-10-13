@@ -252,7 +252,6 @@ OC.L10N.register(
     "Update" : "Update",
     "Mark as done" : "Mark as done",
     "Mark as not done" : "Mark as not done",
-    "Write a description …" : "Write a description …",
     "Description" : "Description",
     "(Unsaved)" : "(Unsaved)",
     "(Saving…)" : "(Saving…)",
@@ -327,7 +326,6 @@ OC.L10N.register(
     "Create card" : "Create card",
     "Create a new card" : "Create a new card",
     "Card title" : "Card title",
-    "Creating the new card …" : "Creating the new card …",
     "Card \"{card}\" was added to \"{board}\"" : "Card \"{card}\" was added to \"{board}\"",
     "Open card" : "Open card",
     "Close" : "Close",
@@ -353,9 +351,11 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "The card \"%s\" on \"%s\" has reached its due date.",
     "No participants found" : "No participants found",
     "Save" : "Save",
+    "Write a description …" : "Write a description …",
     "seconds ago" : "seconds ago",
     "Today" : "Today",
     "Tomorrow" : "Tomorrow",
-    "No due" : "No due"
+    "No due" : "No due",
+    "Creating the new card …" : "Creating the new card …"
 },
 "nplurals=2; plural=(n!=1);");

@@ -203,7 +203,6 @@ OC.L10N.register(
     "Reply" : "Vastaa",
     "Update" : "Päivitä",
     "Mark as done" : "Merkitse valmiiksi",
-    "Write a description …" : "Kirjoita kuvaus…",
     "Description" : "Kuvaus",
     "(Unsaved)" : "(Tallentamaton)",
     "(Saving…)" : "(Tallennetaan…)",
@@ -266,7 +265,6 @@ OC.L10N.register(
     "Create card" : "Luo kortti",
     "Create a new card" : "Luo uusi kortti",
     "Card title" : "Kortin otsikko",
-    "Creating the new card …" : "Luodaan uutta korttia…",
     "Card \"{card}\" was added to \"{board}\"" : "Kortti \"{card}\" lisättiin taululle \"{board}\"",
     "Open card" : "Avaa kortti",
     "Close" : "Sulje",
@@ -288,8 +286,10 @@ OC.L10N.register(
     "Share board with a user, group or team …" : "Jaa taulu käyttäjän, ryhmän tai tiimin kanssa...",
     "No participants found" : "Ei osallistujia löydetty",
     "Save" : "Tallenna",
+    "Write a description …" : "Kirjoita kuvaus…",
     "seconds ago" : "sekuntia sitten",
     "Today" : "Tänään",
-    "Tomorrow" : "Huomenna"
+    "Tomorrow" : "Huomenna",
+    "Creating the new card …" : "Luodaan uutta korttia…"
 },
 "nplurals=2; plural=(n != 1);");

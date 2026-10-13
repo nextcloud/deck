@@ -206,7 +206,6 @@ OC.L10N.register(
     "Reply" : "Risponde",
     "Update" : "Agiorna",
     "Mark as done" : "Marca comente cumpletadu",
-    "Write a description …" : "Iscrie una descritzione ...",
     "Description" : "Descritzione",
     "(Unsaved)" : "(Non sarvada)",
     "(Saving…)" : "(Sarbende…)",
@@ -261,7 +260,6 @@ OC.L10N.register(
     "Create card" : "Crea ischeda",
     "Create a new card" : "Crea un'ischeda noa",
     "Card title" : "Tìtulu ischeda",
-    "Creating the new card …" : "Creende s'ischeda noa ...",
     "Card \"{card}\" was added to \"{board}\"" : "S'ischeda \"{card}\" est istada agiunta a \"{board}\"",
     "Open card" : "Aberi ischeda",
     "Close" : "Serra",
@@ -285,9 +283,11 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "S'ischeda \"%s\" in \"%s\" est cròmpida a sa data de iscadèntzia.",
     "No participants found" : "Perunu partetzipante agatadu",
     "Save" : "Sarva",
+    "Write a description …" : "Iscrie una descritzione ...",
     "seconds ago" : "segundos a immoe",
     "Today" : "Oe",
     "Tomorrow" : "Cras",
-    "No due" : "Peruna iscadèntzia"
+    "No due" : "Peruna iscadèntzia",
+    "Creating the new card …" : "Creende s'ischeda noa ..."
 },
 "nplurals=2; plural=(n != 1);");
