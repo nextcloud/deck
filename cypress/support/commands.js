@@ -102,10 +102,11 @@ Cypress.Commands.add('shareBoardWithUi', (query, userId = query) => {
 	cy.get('[aria-label="Open details"]').click()
 	cy.get('.app-sidebar').should('be.visible')
 
-	// Add delay to ensure the events are bound
+	// eslint-disable-next-line cypress/no-unnecessary-waiting -- ensure the events are bound
 	cy.wait(1000)
 
-	cy.get('.select input').click().type(`${query}`)
+	cy.get('.select input').click()
+	cy.get('.select input').type(`${query}`)
 	cy.wait('@fetchRecipients', { timeout: 7000 })
 
 	cy.get('.vs__dropdown-menu .option').first().contains(query)
