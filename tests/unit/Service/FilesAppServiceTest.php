@@ -11,6 +11,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Attachment;
+use OCA\Deck\NoPermissionException;
 use OCP\Files\IFilenameValidator;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -25,6 +26,7 @@ class FilesAppServiceTest extends TestCase {
 	private \OCP\Files\IRootFolder&MockObject $rootFolder;
 	private ConfigService&MockObject $configService;
 	private \OCP\Share\IManager&MockObject $shareManager;
+	private \OCA\Deck\Sharing\DeckShareProvider&MockObject $shareProvider;
 	private FilesAppService $filesAppService;
 
 	public function setUp(): void {
@@ -39,6 +41,7 @@ class FilesAppServiceTest extends TestCase {
 		$this->rootFolder = $this->createMock(\OCP\Files\IRootFolder::class);
 		$this->configService = $this->createMock(ConfigService::class);
 		$this->shareManager = $this->createMock(\OCP\Share\IManager::class);
+		$this->shareProvider = $this->createMock(\OCA\Deck\Sharing\DeckShareProvider::class);
 
 		$this->filesAppService = new FilesAppService(
 			$this->request,
@@ -46,7 +49,7 @@ class FilesAppServiceTest extends TestCase {
 			$this->rootFolder,
 			$this->shareManager,
 			$this->configService,
-			$this->createMock(\OCA\Deck\Sharing\DeckShareProvider::class),
+			$this->shareProvider,
 			$this->createMock(\OCP\IPreview::class),
 			$this->createMock(\OCP\Files\IMimeTypeDetector::class),
 			$this->createMock(PermissionService::class),
@@ -166,5 +169,76 @@ class FilesAppServiceTest extends TestCase {
 		} catch (\Exception $e) {
 			// Other exceptions are expected since not everything is mocked.
 		}
+	}
+
+	private function mockShare(int $permissions): \OCP\Share\IShare&MockObject {
+		$share = $this->createMock(\OCP\Share\IShare::class);
+		$share->method('getSharedWith')->willReturn('123');
+		$share->method('getNodeId')->willReturn(279);
+		$share->method('getPermissions')->willReturn($permissions);
+		$this->shareProvider->method('getShareById')->with('6')->willReturn($share);
+		return $share;
+	}
+
+	private function createUpdateAttachment(): Attachment {
+		$attachment = new Attachment();
+		$attachment->setId(6);
+		$attachment->setCardId(123);
+		return $attachment;
+	}
+
+	public function testUpdateUsesCurrentUsersNode() {
+		$share = $this->mockShare(\OCP\Constants::PERMISSION_READ | \OCP\Constants::PERMISSION_UPDATE);
+		$share->expects($this->never())->method('getNode');
+
+		$readOnlyFile = $this->createMock(\OCP\Files\File::class);
+		$readOnlyFile->method('getPermissions')->willReturn(\OCP\Constants::PERMISSION_READ);
+		$file = $this->createMock(\OCP\Files\File::class);
+		$file->method('getPermissions')->willReturn(\OCP\Constants::PERMISSION_READ | \OCP\Constants::PERMISSION_UPDATE);
+		$userFolder = $this->createMock(\OCP\Files\IUserFolder::class);
+		$userFolder->expects($this->once())
+			->method('getById')
+			->with(279)
+			->willReturn([$readOnlyFile, $file]);
+		$this->rootFolder->expects($this->once())
+			->method('getUserFolder')
+			->with('admin')
+			->willReturn($userFolder);
+
+		$this->request->method('getUploadedFile')
+			->with('file')
+			->willReturn([
+				'name' => 'normal.md',
+				'tmp_name' => __FILE__,
+				'error' => UPLOAD_ERR_OK,
+			]);
+		$readOnlyFile->expects($this->never())->method('putContent');
+		$file->expects($this->once())->method('putContent');
+
+		$attachment = $this->filesAppService->update($this->createUpdateAttachment());
+		$this->assertEquals('normal.md', $attachment->getData());
+	}
+
+	public function testUpdateRejectsWhenNoNodeIsWritable() {
+		$this->mockShare(\OCP\Constants::PERMISSION_READ | \OCP\Constants::PERMISSION_UPDATE);
+		$readOnlyFile = $this->createMock(\OCP\Files\File::class);
+		$readOnlyFile->method('getPermissions')->willReturn(\OCP\Constants::PERMISSION_READ);
+		$userFolder = $this->createMock(\OCP\Files\IUserFolder::class);
+		$userFolder->method('getById')->willReturn([$readOnlyFile]);
+		$this->rootFolder->method('getUserFolder')->willReturn($userFolder);
+
+		$this->request->expects($this->never())->method('getUploadedFile');
+		$this->expectException(NoPermissionException::class);
+		$this->filesAppService->update($this->createUpdateAttachment());
+	}
+
+	public function testUpdateNodeNotAccessibleForUser() {
+		$this->mockShare(\OCP\Constants::PERMISSION_READ | \OCP\Constants::PERMISSION_UPDATE);
+		$userFolder = $this->createMock(\OCP\Files\IUserFolder::class);
+		$userFolder->method('getById')->willReturn([]);
+		$this->rootFolder->method('getUserFolder')->willReturn($userFolder);
+
+		$this->expectException(\OCP\Files\NotFoundException::class);
+		$this->filesAppService->update($this->createUpdateAttachment());
 	}
 }
