@@ -241,7 +241,6 @@ OC.L10N.register(
     "Update" : "Actualizare",
     "Mark as done" : "Marchează ca realizat",
     "Mark as not done" : "Marchează ca realizat",
-    "Write a description …" : "Scrieți o descriere ...",
     "Description" : "Descriere",
     "(Unsaved)" : "(Nesalvat)",
     "(Saving…)" : "(Se salvează…)",
@@ -319,7 +318,6 @@ OC.L10N.register(
     "Create card" : "Creează card",
     "Create a new card" : "Creează un card",
     "Card title" : "Titlu card",
-    "Creating the new card …" : "Se creează un nou card ...",
     "Card \"{card}\" was added to \"{board}\"" : "Cardul \"{card}\" a fost adăugat la \"{board}\"",
     "Open card" : "Deschide cardul",
     "Close" : "Închide",
@@ -345,9 +343,11 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Cardul \"%s\" din \"%s\" a ajuns la scadență.",
     "No participants found" : "Nu s-au găsit participanți",
     "Save" : "Salvează",
+    "Write a description …" : "Scrieți o descriere ...",
     "seconds ago" : "secunde în urmă",
     "Today" : "Azi",
     "Tomorrow" : "Mâine",
-    "No due" : "Fără scadență"
+    "No due" : "Fără scadență",
+    "Creating the new card …" : "Se creează un nou card ..."
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

@@ -245,7 +245,6 @@
     "Members" : "Membres",
     "Assign to users/groups/team" : "Assigna a usuaris/grups/equip",
     "Assign a user to this card…" : "Assignació d'un usuari a aquesta targeta…",
-    "Select a user to assign to this card…" : "Seleccioneu un usuari per assignar-lo a aquesta targeta…",
     "File to share" : "Fitxer a compartir",
     "Invalid path selected" : "S'ha seleccionat un camí no vàlid",
     "Upload new files" : "Pujada de nous fitxers",
@@ -273,7 +272,6 @@
     "Update" : "Actualitza",
     "Mark as done" : "Marcat com a fet",
     "Mark as not done" : "Marca com no fet",
-    "Write a description …" : "Escriviu una descripció …",
     "Description" : "Descripció",
     "(Unsaved)" : "(No desat)",
     "(Saving…)" : "(Desant…)",
@@ -301,7 +299,6 @@
     "Unarchive card" : "Desarxiva targeta",
     "Archive card" : "Arxiva la targeta",
     "Assign a tag to this card…" : "Assignació d'una etiqueta a aquesta targeta…",
-    "Select or create a tag…" : "Seleccioneu o creeu una etiqueta…",
     "Create a new tag:" : "Crea una etiqueta nova:",
     "(group)" : "(grup)",
     "{count} comments, {unread} unread" : "{count} comentaris, {unread} no llegits",
@@ -362,7 +359,6 @@
     "Create card" : "Crea una targeta",
     "Create a new card" : "Crea una nova targeta",
     "Card title" : "Títol de la targeta",
-    "Creating the new card …" : "Creant la nova targeta …",
     "Card \"{card}\" was added to \"{board}\"" : "La targeta \"{card}\" s'ha afegit a \"{board}\"",
     "Open card" : "Obre la targeta",
     "Close" : "Tanca",
@@ -389,10 +385,14 @@
     "Share board with a user, group or team …" : "Comparteix el tauler amb un usuari, grup o equip …",
     "Searching for users, groups and teams …" : "Cercant usuaris, grups i equips …",
     "No participants found" : "No s'han trobat participants",
+    "Select a user to assign to this card…" : "Seleccioneu un usuari per assignar-lo a aquesta targeta…",
     "Save" : "Desa",
+    "Write a description …" : "Escriviu una descripció …",
+    "Select or create a tag…" : "Seleccioneu o creeu una etiqueta…",
     "seconds ago" : "fa uns segons",
     "Today" : "Avui",
     "Tomorrow" : "Demà",
-    "No due" : "Sense venciment"
+    "No due" : "Sense venciment",
+    "Creating the new card …" : "Creant la nova targeta …"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
