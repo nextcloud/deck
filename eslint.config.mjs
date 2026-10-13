@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { recommended } from '@nextcloud/eslint-config'
-import pluginCypress from 'eslint-plugin-cypress/flat'
+import pluginCypress from 'eslint-plugin-cypress'
 
 export default [
 	...recommended,
