@@ -46,17 +46,11 @@ describe('Board', function() {
 	})
 
 	it('Shows and hides the navigation', () => {
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-			.contains('Upcoming cards')
-			.should('be.visible')
+		cy.get('#app-navigation-vue').should('have.attr', 'aria-hidden', 'false')
 		cy.openLeftSidebar()
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-			.contains('Upcoming cards')
-			.should('not.be.visible')
+		cy.get('#app-navigation-vue').should('have.attr', 'aria-hidden', 'true')
 		cy.openLeftSidebar()
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-			.contains('Upcoming cards')
-			.should('be.visible')
+		cy.get('#app-navigation-vue').should('have.attr', 'aria-hidden', 'false')
 	})
 })
 
