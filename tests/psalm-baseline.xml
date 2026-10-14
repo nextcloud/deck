@@ -5,11 +5,6 @@
       <code><![CDATA[parseDate($modified)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="lib/Controller/PageController.php">
-    <UndefinedClass>
-      <code><![CDATA[LoadSidebar]]></code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Controller/StackApiController.php">
     <UndefinedFunction>
       <code><![CDATA[parseDate($modified)]]></code>

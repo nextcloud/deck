@@ -12,6 +12,7 @@ webpackConfig.entry = {
 	calendar: path.join(__dirname, 'src', 'init-calendar.js'),
 	talk: path.join(__dirname, 'src', 'init-talk.js'),
 	reference: path.join(__dirname, 'src', 'init-reference.js'),
+	boardComponent: path.join(__dirname, 'src', 'init-board-component.js'),
 }
 
 if (isDevServer) {

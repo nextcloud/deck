@@ -267,11 +267,12 @@ export const useBoardStore = defineStore('board', {
 			this.currentBoard?.labels?.push(created)
 		},
 		async addLabelToCurrentBoardAndCard({ newLabel, card }) {
+			const cardStore = useCardStore()
 			newLabel.boardId = this.currentBoard.id
 			const label = await apiClient.createLabel(newLabel)
 			card.labels.push(label)
 			this.currentBoard?.labels?.push(label)
-			await useCardStore().addLabel({
+			await cardStore.addLabel({
 				card,
 				labelId: label.id,
 			})

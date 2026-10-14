@@ -69,7 +69,7 @@ export const useStackStore = defineStore('stack', {
 			}
 			cardStore.setCards(cards)
 		},
-		async loadArchivedStacks(boardId) {
+		async loadArchivedStacks(boardId, { preserveExistingCards = false } = {}) {
 			const cardStore = useCardStore()
 			const archivedStacks = await apiClient.loadArchivedStacks(boardId)
 			const cards = []
@@ -83,7 +83,13 @@ export const useStackStore = defineStore('stack', {
 					this.addStack(stack)
 				}
 			}
-			cardStore.setCards(cards)
+			if (preserveExistingCards) {
+				for (const card of cards) {
+					cardStore.addCardToStore(card)
+				}
+			} else {
+				cardStore.setCards(cards)
+			}
 		},
 		createStack(stack) {
 			stack.boardId = useBoardStore().currentBoard.id
@@ -93,13 +99,14 @@ export const useStackStore = defineStore('stack', {
 				})
 		},
 		deleteStack(stack) {
+			const trashbin = useTrashbinStore()
 			apiClient.deleteStack(stack.id, stack.boardId)
 				.then((stack) => {
 					const existingIndex = this.stacks.findIndex((_stack) => _stack.id === stack.id)
 					if (existingIndex !== -1) {
 						this.stacks.splice(existingIndex, 1)
 					}
-					useTrashbinStore().moveStackToTrash(stack)
+					trashbin.moveStackToTrash(stack)
 				})
 		},
 		updateStack(stack) {

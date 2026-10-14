@@ -57,15 +57,17 @@ export const useTrashbinStore = defineStore('trashbin', {
 			})
 		},
 		stackUndoDelete(stack) {
+			const stackStore = useStackStore()
 			stackApi.updateStack(stack).then((restoredStack) => {
-				useStackStore().addStack(restoredStack)
+				stackStore.addStack(restoredStack)
 				this.removeStackFromTrash(restoredStack)
 			})
 		},
 		cardUndoDelete(card) {
+			const cardStore = useCardStore()
 			cardApi.updateCard(card, card.boardId).then((restoredCard) => {
 				this.removeCardFromTrash(restoredCard)
-				useCardStore().addCardToStore(restoredCard)
+				cardStore.addCardToStore(restoredCard)
 			})
 		},
 	},

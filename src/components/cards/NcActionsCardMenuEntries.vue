@@ -115,6 +115,10 @@ import '@nextcloud/dialogs/style.css'
 export default {
 	name: 'NcActionsCardMenuEntries',
 	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor, AccountPlusIcon, AccountMinusIcon, CheckIcon, OpenInNewIcon, DeleteIcon },
+	inject: {
+		deckEmbedding: { default: null },
+	},
+
 	props: {
 		card: {
 			type: Object,
@@ -221,9 +225,10 @@ export default {
 		},
 
 		deleteCard() {
+			const trashbin = useTrashbinStore(this.$pinia)
 			this.deleteCardInStore(this.card)
 			const undoCard = { ...this.card, deletedAt: 0, boardId: this.boardId }
-			showUndo(t('deck', 'Card deleted'), () => useTrashbinStore().cardUndoDelete(undoCard))
+			showUndo(t('deck', 'Card deleted'), () => trashbin.cardUndoDelete(undoCard))
 			if (this.$router.currentRoute.name === 'card') {
 				this.$router.push({ name: 'board' })
 			}
@@ -258,7 +263,11 @@ export default {
 		},
 
 		openCardMoveDialog() {
-			emit('deck:card:show-move-dialog', this.card)
+			if (this.deckEmbedding) {
+				this.deckEmbedding.openMoveDialog(this.card)
+			} else {
+				emit('deck:card:show-move-dialog', this.card)
+			}
 		},
 
 		openColorPicker() {
