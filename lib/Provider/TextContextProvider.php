@@ -47,7 +47,7 @@ class TextContextProvider implements IContext {
 		$document->setContextType($this->getType());
 		$document->setContextId($this->getId());
 		$document->setLastSavedVersion(0);
-		$document->setLastSavedVersionTime(1);
+		$document->setLastSavedVersionTime($this->getLastModified());
 		$document->setLastSavedVersionEtag($this->secureRandom->generate(6));
 
 		$document->setChecksum($this->computeChecksum());
@@ -70,6 +70,12 @@ class TextContextProvider implements IContext {
 
 	public function updateDocument(Document $document): void {
 		$document->setChecksum($this->computeChecksum());
+		$document->setLastSavedVersionTime($this->getLastModified());
+	}
+
+	private function getLastModified(): int {
+		$card = $this->cardService->find($this->cardId);
+		return (int)($card?->getLastModified() ?: time());
 	}
 
 	public function getFile(): ?File{
