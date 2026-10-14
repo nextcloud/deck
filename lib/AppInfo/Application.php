@@ -38,6 +38,7 @@ use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
 use OCA\Deck\Listeners\ResourceTypeRegisterListener;
+use OCA\Deck\Listeners\TextDocumentContentListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Middleware\FederationMiddleware;
@@ -195,6 +196,7 @@ class Application extends App implements IBootstrap {
 		$context->registerUserMigrator(DeckMigrator::class);
 
 		$context->registerEventListener(RegisterContextEvent::class, RegisterTextContextEventListener::class);
+		$context->registerEventListener(CardUpdatedEvent::class, TextDocumentContentListener::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
