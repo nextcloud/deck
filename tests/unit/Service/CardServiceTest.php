@@ -36,6 +36,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Notification\NotificationHelper;
@@ -602,6 +603,40 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->never())->method('update');
 		$this->expectException(StatusException::class);
 		$this->cardService->rename(123, 'newtitle');
+	}
+
+	public function testUpdateDescriptionKeepsOtherFields() {
+		$duedate = new \DateTime('2017-01-01T00:00:00+00:00');
+		$startdate = new \DateTime('2016-12-01T00:00:00+00:00');
+		$done = new \DateTime('2017-01-02T00:00:00+00:00');
+		$card = new Card();
+		$card->setId(123);
+		$card->setTitle('title');
+		$card->setDescription('old');
+		$card->setArchived(false);
+		$card->setDuedate($duedate);
+		$card->setStartdate($startdate);
+		$card->setDone($done);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->once())->method('update')->willReturnArgument(0);
+		$this->eventDispatcher->expects($this->once())->method('dispatchTyped')
+			->with($this->isInstanceOf(CardUpdatedEvent::class));
+		$actual = $this->cardService->updateDescription(123, 'new');
+		$this->assertEquals('new', $actual->getDescription());
+		$this->assertEquals('old', $actual->getDescriptionPrev());
+		$this->assertEquals('title', $actual->getTitle());
+		$this->assertEquals($duedate, $actual->getDuedate());
+		$this->assertEquals($startdate, $actual->getStartdate());
+		$this->assertEquals($done, $actual->getDone());
+	}
+
+	public function testUpdateDescriptionArchived() {
+		$card = new Card();
+		$card->setArchived(true);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->cardMapper->expects($this->never())->method('update');
+		$this->expectException(StatusException::class);
+		$this->cardService->updateDescription(123, 'new');
 	}
 
 	public static function dataReorder() {
