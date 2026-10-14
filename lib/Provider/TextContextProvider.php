@@ -94,12 +94,7 @@ class TextContextProvider implements IContext {
 	}
 
 	public function save(string $content, callable $afterSave): void {
-		$card = $this->cardService->find($this->cardId);
-		if ($card === null) {
-			return;
-		}
-		$card->setDescription($content);
-		$this->cardService->update($card->getId(), $card->getTitle(), $card->getStackId(), $card->getType(), $card->getOwner(), $card->getDescription(), $card->getOrder());
+		$this->cardService->updateDescription($this->cardId, $content);
 		$afterSave();
 	}
 
