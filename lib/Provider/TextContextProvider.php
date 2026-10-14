@@ -8,20 +8,19 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Provider;
 
-use Co\Http\Server;
 use OC\Security\SecureRandom;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\PermissionService;
-use OCA\Text\Context\DocumentData;
 use OCA\Text\Context\IContext;
 use OCA\Text\Context\SessionInfo;
 use OCA\Text\Db\Document;
-use OCA\Text\Exception\DocumentSaveConflictException;
 use OCP\Files\File;
 
 class TextContextProvider implements IContext {
+	public const CONTEXT_TYPE = 'deck_card';
+
 	public function __construct(
 		private readonly SecureRandom $secureRandom,
 		private readonly CardService $cardService,
@@ -36,7 +35,7 @@ class TextContextProvider implements IContext {
 	}
 
 	public function getType(): string {
-		return 'deck_card';
+		return self::CONTEXT_TYPE;
 	}
 
 	public function toString(): string {
@@ -56,18 +55,12 @@ class TextContextProvider implements IContext {
 		return $document;
 	}
 
-	public function prepareSession(DocumentData $documentData): SessionInfo {
-		if ($documentData->documentState === null) {
-			$content = null;
-		} else {
-			$content = $this->cardService->find($this->cardId)->getDescription();
-		}
+	public function prepareSession(): SessionInfo {
 		$readonly = !$this->permissionService->checkPermission($this->cardMapper, $this->cardId, Acl::PERMISSION_EDIT, $this->userId);
 		return new SessionInfo(
-			content: $content,
 			readOnly: $readonly,
 			lock: null,
-			hasOwner: true,
+			canAttachFiles: false,
 		);
 	}
 
@@ -75,12 +68,8 @@ class TextContextProvider implements IContext {
 		return !$this->permissionService->checkPermission($this->cardMapper, $this->cardId, Acl::PERMISSION_EDIT, $this->userId);
 	}
 
-	public function updateDocument(Document $document): ?Document {
-		if ($this->computeChecksum() !== $document->getChecksum()) {
-			$card = $this->cardService->find($this->cardId);
-			throw new DocumentSaveConflictException($card->getDescription());
-		}
-		return null;
+	public function updateDocument(Document $document): void {
+		$document->setChecksum($this->computeChecksum());
 	}
 
 	public function getFile(): ?File{
@@ -95,16 +84,17 @@ class TextContextProvider implements IContext {
 		return $card->getDescription();
 	}
 
-	public function saveWithLock(string $content, callable $doWhileLocked): void {
+	public function cleanup(): void {
+	}
+
+	public function save(string $content, callable $afterSave): void {
 		$card = $this->cardService->find($this->cardId);
 		if ($card === null) {
 			return;
 		}
 		$card->setDescription($content);
 		$this->cardService->update($card->getId(), $card->getTitle(), $card->getStackId(), $card->getType(), $card->getOwner(), $card->getDescription(), $card->getOrder());
-	}
-
-	public function cleanup(): void {
+		$afterSave();
 	}
 
 	private function computeChecksum(): string {

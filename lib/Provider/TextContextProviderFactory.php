@@ -27,13 +27,17 @@ class TextContextProviderFactory implements IContextFactory{
 	}
 
 	public function build(IUser|IShare $auth, string $type, int $id): IContext {
+		return $this->buildForCard($id);
+	}
+
+	public function buildForCard(int $cardId): TextContextProvider {
 		return new TextContextProvider(
 			secureRandom: $this->secureRandom,
 			cardService: $this->cardService,
 			cardMapper: $this->cardMapper,
 			permissionService: $this->permissionService,
 			userId: $this->userId,
-			cardId: $id,
+			cardId: $cardId,
 		);
 	}
 }
