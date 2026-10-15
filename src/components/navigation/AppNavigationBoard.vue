@@ -174,12 +174,11 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
 import { getCurrentUser } from '@nextcloud/auth'
-import { showError } from '@nextcloud/dialogs'
+import { showError, showLoading } from '@nextcloud/dialogs'
 
 import isTouchDevice from '../../mixins/isTouchDevice.js'
 import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
-import { showLoading } from '@nextcloud/dialogs'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -229,6 +228,7 @@ export default {
 			canCreate: canCreateState,
 			cloneModalOpen: false,
 			currentUser: getCurrentUser(),
+			exportModalOpen: false,
 		}
 	},
 	computed: {
