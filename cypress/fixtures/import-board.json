@@ -1,0 +1,102 @@
+{
+  "boards": [
+    {
+      "id": 70,
+      "title": "Imported board",
+      "owner": "unvjrmwuag",
+      "color": "00ff00",
+      "archived": false,
+      "labels": [
+        {
+          "id": 293,
+          "title": "Finished",
+          "color": "31CC7C",
+          "boardId": 70,
+          "cardId": null,
+          "lastModified": 0,
+          "ETag": "cfcd208495d565ef66e7dff9f98764da"
+        },
+        {
+          "id": 294,
+          "title": "To review",
+          "color": "317CCC",
+          "boardId": 70,
+          "cardId": null,
+          "lastModified": 0,
+          "ETag": "cfcd208495d565ef66e7dff9f98764da"
+        },
+        {
+          "id": 295,
+          "title": "Action needed",
+          "color": "FF7A66",
+          "boardId": 70,
+          "cardId": null,
+          "lastModified": 0,
+          "ETag": "cfcd208495d565ef66e7dff9f98764da"
+        },
+        {
+          "id": 296,
+          "title": "Later",
+          "color": "F1DB50",
+          "boardId": 70,
+          "cardId": null,
+          "lastModified": 0,
+          "ETag": "cfcd208495d565ef66e7dff9f98764da"
+        }
+      ],
+      "acl": [],
+      "permissions": [],
+      "users": [],
+      "stacks": {
+        "114": {
+          "id": 114,
+          "title": "TestList",
+          "boardId": 70,
+          "deletedAt": 0,
+          "lastModified": 1743495533,
+          "cards": [
+            {
+              "id": 124,
+              "title": "Hello world",
+              "description": "# Hello world",
+              "descriptionPrev": null,
+              "stackId": 114,
+              "type": "plain",
+              "lastModified": 1743495533,
+              "lastEditor": null,
+              "createdAt": 1743495533,
+              "labels": [],
+              "assignedUsers": null,
+              "attachments": null,
+              "attachmentCount": null,
+              "owner": {
+                "primaryKey": "unvjrmwuag",
+                "uid": "unvjrmwuag",
+                "displayname": "unvjrmwuag",
+                "type": 0
+              },
+              "order": 999,
+              "archived": false,
+              "done": null,
+              "duedate": null,
+              "notified": false,
+              "deletedAt": 0,
+              "commentsUnread": 0,
+              "commentsCount": 0,
+              "relatedStack": null,
+              "relatedBoard": null,
+              "ETag": "aa85bb973089e7fbc0bbf122e926c23f"
+            }
+          ],
+          "order": 0,
+          "ETag": "aa85bb973089e7fbc0bbf122e926c23f"
+        }
+      },
+      "activeSessions": [],
+      "deletedAt": 0,
+      "lastModified": 1743495533,
+      "settings": [],
+      "ETag": "aa85bb973089e7fbc0bbf122e926c23f"
+    }
+  ]
+}
