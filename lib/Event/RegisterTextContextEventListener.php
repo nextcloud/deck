@@ -15,11 +15,12 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 
 /** @template-implements IEventListener<Event|RegisterContextEvent> */
-class RegisterTextContextEventListener implements IEventListener{
+class RegisterTextContextEventListener implements IEventListener {
 	public function __construct(
 		private readonly TextContextProviderFactory $textContextProviderFactory,
-	){}
-	public function handle(Event $event): void{
+	) {
+	}
+	public function handle(Event $event): void {
 		if (!$event instanceof RegisterContextEvent) {
 			return;
 		}
