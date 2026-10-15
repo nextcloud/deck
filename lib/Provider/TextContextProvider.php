@@ -10,13 +10,18 @@ namespace OCA\Deck\Provider;
 
 use OC\Security\SecureRandom;
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Text\Context\IContext;
 use OCA\Text\Context\SessionInfo;
 use OCA\Text\Db\Document;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\Files\File;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 
 class TextContextProvider implements IContext {
 	public const CONTEXT_TYPE = 'deck_card';
@@ -73,8 +78,26 @@ class TextContextProvider implements IContext {
 		$document->setLastSavedVersionTime($this->getLastModified());
 	}
 
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function findCard(): Card {
+		try {
+			return $this->cardService->find($this->cardId);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		} catch (NoPermissionException $e) {
+			throw new NotPermittedException($e->getMessage(), 0, $e);
+		}
+	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
 	private function getLastModified(): int {
-		$card = $this->cardService->find($this->cardId);
+		$card = $this->findCard();
 		return (int)($card->getLastModified() ?: time());
 	}
 
@@ -82,8 +105,12 @@ class TextContextProvider implements IContext {
 		return null;
 	}
 
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
 	public function loadContent(): ?string {
-		$card = $this->cardService->find($this->cardId);
+		$card = $this->findCard();
 		return $card->getDescription();
 	}
 
@@ -95,8 +122,12 @@ class TextContextProvider implements IContext {
 		$afterSave();
 	}
 
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
 	private function computeChecksum(): string {
-		$card = $this->cardService->find($this->cardId);
+		$card = $this->findCard();
 		return hash('crc32', $card->getDescription());
 	}
 
