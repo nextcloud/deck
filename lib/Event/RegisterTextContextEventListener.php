@@ -14,6 +14,7 @@ use OCA\Text\Event\RegisterContextEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 
+/** @template-implements IEventListener<Event|RegisterContextEvent> */
 class RegisterTextContextEventListener implements IEventListener{
 	public function __construct(
 		private readonly TextContextProviderFactory $textContextProviderFactory,

@@ -75,7 +75,7 @@ class TextContextProvider implements IContext {
 
 	private function getLastModified(): int {
 		$card = $this->cardService->find($this->cardId);
-		return (int)($card?->getLastModified() ?: time());
+		return (int)($card->getLastModified() ?: time());
 	}
 
 	public function getFile(): ?File{
@@ -84,9 +84,6 @@ class TextContextProvider implements IContext {
 
 	public function loadContent(): ?string {
 		$card = $this->cardService->find($this->cardId);
-		if ($card === null) {
-			return null;
-		}
 		return $card->getDescription();
 	}
 
@@ -100,9 +97,6 @@ class TextContextProvider implements IContext {
 
 	private function computeChecksum(): string {
 		$card = $this->cardService->find($this->cardId);
-		if ($card === null) {
-			return '';
-		}
 		return hash('crc32', $card->getDescription());
 	}
 
