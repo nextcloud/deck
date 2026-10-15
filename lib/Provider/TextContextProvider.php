@@ -47,7 +47,7 @@ class TextContextProvider implements IContext {
 		return $this->getType() . ' (' . $this->getId() . ')';
 	}
 
-	public function buildDocument(): Document{
+	public function buildDocument(): Document {
 		$document = new Document();
 		$document->setContextType($this->getType());
 		$document->setContextId($this->getId());
@@ -101,7 +101,7 @@ class TextContextProvider implements IContext {
 		return (int)($card->getLastModified() ?: time());
 	}
 
-	public function getFile(): ?File{
+	public function getFile(): ?File {
 		return null;
 	}
 

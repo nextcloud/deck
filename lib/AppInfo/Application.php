@@ -54,6 +54,7 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
 use OCA\Deck\UserMigration\DeckMigrator;
+use OCA\Text\Event\DocumentContentUpdated;
 use OCA\Text\Event\LoadEditor;
 use OCA\Text\Event\RegisterContextEvent;
 use OCP\AppFramework\App;
@@ -108,6 +109,12 @@ class Application extends App implements IBootstrap {
 	public function boot(IBootContext $context): void {
 		$context->injectFn($this->registerCommentsEntity(...));
 		$context->injectFn($this->registerCollaborationResources(...));
+
+		if (class_exists(DocumentContentUpdated::class)) {
+			$context->injectFn(function (IEventDispatcher $eventDispatcher) {
+				$eventDispatcher->addServiceListener(CardUpdatedEvent::class, TextDocumentContentListener::class);
+			});
+		}
 
 		$context->injectFn(function (IManager $shareManager) {
 			$shareManager->registerShareProvider(DeckShareProvider::class);
@@ -196,7 +203,6 @@ class Application extends App implements IBootstrap {
 		$context->registerUserMigrator(DeckMigrator::class);
 
 		$context->registerEventListener(RegisterContextEvent::class, RegisterTextContextEventListener::class);
-		$context->registerEventListener(CardUpdatedEvent::class, TextDocumentContentListener::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {

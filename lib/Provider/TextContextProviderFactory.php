@@ -16,7 +16,7 @@ use OCA\Text\Context\IContextFactory;
 use OCP\IUser;
 use OCP\Share\IShare;
 
-class TextContextProviderFactory implements IContextFactory{
+class TextContextProviderFactory implements IContextFactory {
 	public function __construct(
 		private readonly SecureRandom $secureRandom,
 		private readonly CardService $cardService,
