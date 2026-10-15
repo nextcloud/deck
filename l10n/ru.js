@@ -418,7 +418,7 @@ OC.L10N.register(
     "upcoming cards today" : "карточки со сроком на сегодня",
     "upcoming cards tomorrow" : "карточки со сроком на завтра",
     "upcoming cards" : "предстоящие карточки",
-    "New card" : "Новая карточка",
+    "New card" : "Создать карточку",
     "Link to a board" : "Ссылка на доску",
     "Link to a card" : "Ссылка на карточку",
     "Create a card" : "Создать карточку",
