@@ -7,8 +7,8 @@
 	<div data-test="description">
 		<h5>
 			{{ t('deck', 'Description') }}
-			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
-			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
+			<span v-if="!textAppAvailable && descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
+			<span v-if="!textAppAvailable && descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
 			<a v-if="!textAppAvailable"
 				:title="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
@@ -76,6 +76,7 @@ import { generateUrl } from '@nextcloud/router'
 import { showWarning } from '@nextcloud/dialogs'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import { mapState, mapActions } from 'pinia'
+import VueEasymde from 'vue-easymde'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
