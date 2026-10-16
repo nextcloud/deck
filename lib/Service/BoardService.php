@@ -11,6 +11,7 @@ use OC\User\LazyUser;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -48,6 +49,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Security\ISecureRandom;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
@@ -225,6 +227,15 @@ class BoardService {
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Board %s of "%s" was created',
+			[
+				'boardId' => $board->getId(),
+				'owner' => $userId,
+			],
+			false,
+			Operation::BoardCreated->value,
+		));
 
 		return $board;
 	}
@@ -297,6 +308,14 @@ class BoardService {
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Board %s was moved to the trash',
+			[
+				'boardId' => $board->getId(),
+			],
+			false,
+			Operation::BoardDeleted->value,
+		));
 
 		if (class_exists(UserShareAccessUpdatedEvent::class)) {
 			$acls = $this->aclMapper->findAll($id);
@@ -324,6 +343,14 @@ class BoardService {
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Board %s was restored from the trash',
+			[
+				'boardId' => $board->getId(),
+			],
+			false,
+			Operation::BoardRestored->value,
+		));
 
 		if (class_exists(UserShareAccessUpdatedEvent::class)) {
 			$acls = $this->aclMapper->findAll($id);
@@ -365,6 +392,7 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$changes = new ChangeSet($board);
+		$wasArchived = $board->getArchived();
 		$board->setTitle($title);
 		$board->setColor($color);
 		$board->setArchived($archived);
@@ -374,6 +402,14 @@ class BoardService {
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
 		$this->changeHelper->boardChanged($board->getId());
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($board->getId()));
+		if ($wasArchived !== $archived) {
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+				$archived ? 'Board %s was archived' : 'Board %s was unarchived',
+				['boardId' => $board->getId()],
+				false,
+				($archived ? Operation::BoardArchived : Operation::BoardUnarchived)->value,
+			));
+		}
 
 		return $board;
 	}
@@ -664,6 +700,16 @@ class BoardService {
 		if ($withCards) {
 			$this->cloneCards($board, $newBoard, $withAssignments, $withLabels, $withDueDate, $moveCardsToLeftStack, $restoreArchivedCards);
 		}
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Board %s was cloned into board %s of "%s"',
+			[
+				'sourceBoardId' => $board->getId(),
+				'boardId' => $newBoard->getId(),
+				'owner' => $userId,
+			],
+			false,
+			Operation::BoardCloned->value,
+		));
 
 		return $this->find($newBoard->getId());
 	}
@@ -692,6 +738,17 @@ class BoardService {
 				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
 			}
 			$this->connection->commit();
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+				'Ownership of board %s was transferred from "%s" to "%s"',
+				[
+					'boardId' => $boardId,
+					'previousOwner' => $previousOwner,
+					'newOwner' => $newOwner,
+					'changeContent' => $changeContent,
+				],
+				false,
+				Operation::BoardOwnershipTransferred->value,
+			));
 			return $this->boardMapper->find($boardId);
 		} catch (\Throwable $e) {
 			$this->connection->rollBack();

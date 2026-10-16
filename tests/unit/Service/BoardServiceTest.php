@@ -56,12 +56,14 @@ use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
+use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -635,5 +637,115 @@ class BoardServiceTest extends TestCase {
 			->method('dispatchTyped')
 			->with(new AclDeletedEvent($acl));
 		$this->assertEquals($acl, $this->service->deleteAcl(123));
+	}
+
+	/**
+	 * @return \ArrayObject<int, CriticalActionPerformedEvent>
+	 */
+	private function collectAuditEvents(): \ArrayObject {
+		$auditEvents = new \ArrayObject();
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event) use ($auditEvents): void {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$auditEvents[] = $event;
+				}
+			});
+		return $auditEvents;
+	}
+
+	public function testCreateLogsCriticalAction(): void {
+		$board = new Board();
+		$board->setId(5);
+		$board->setOwner('admin');
+		$this->boardMapper->method('insert')->willReturn($board);
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->service->create('MyBoard', 'admin', '00ff00');
+
+		$this->assertCount(1, $auditEvents);
+		$this->assertSame('deck.board.created', $auditEvents[0]->getOperation());
+		$this->assertSame('Board %s of "%s" was created', $auditEvents[0]->getLogMessage());
+		$this->assertSame(['boardId' => 5, 'owner' => 'admin'], $auditEvents[0]->getParameters());
+	}
+
+	public function testDeleteAndRestoreLogCriticalAction(): void {
+		$board = new Board();
+		$board->setId(42);
+		$board->setOwner('admin');
+		$board->setDeletedAt(0);
+		$this->boardMapper->method('find')->willReturn($board);
+		$this->boardMapper->method('update')->willReturnArgument(0);
+		$this->permissionService->method('findUsers')->willReturn(['admin' => 'admin']);
+		$this->sessionMapper->method('findAllActive')->willReturn([]);
+		$this->aclMapper->method('findAll')->willReturn([]);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->service->delete(42);
+		$this->service->deleteUndo(42);
+
+		$this->assertSame(['deck.board.deleted', 'deck.board.restored'], array_map(static fn ($event) => $event->getOperation(), $auditEvents->getArrayCopy()));
+		$this->assertSame(['boardId' => 42], $auditEvents[1]->getParameters());
+	}
+
+	public function testUpdateArchivedLogsCriticalAction(): void {
+		$board = new Board();
+		$board->setId(123);
+		$board->setOwner('admin');
+		$board->setArchived(false);
+		$this->boardMapper->method('find')->willReturn($board);
+		$this->boardMapper->method('update')->willReturnArgument(0);
+		$this->permissionService->method('findUsers')->willReturn(['admin' => 'admin']);
+		$this->sessionMapper->method('findAllActive')->willReturn([]);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->service->update(123, 'MyBoard', 'ffffff', true);
+		$this->service->update(123, 'MyBoard', 'ffffff', true);
+
+		$this->assertCount(1, $auditEvents);
+		$this->assertSame('deck.board.archived', $auditEvents[0]->getOperation());
+		$this->assertSame(['boardId' => 123], $auditEvents[0]->getParameters());
+	}
+
+	public function testCloneLogsCriticalAction(): void {
+		$board = new Board();
+		$board->setId(1);
+		$board->setOwner('admin');
+		$board->setTitle('Board');
+		$board->setColor('ffffff');
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->permissionService->method('findUsers')->willReturn(['admin' => 'admin']);
+		$this->boardMapper->method('find')->willReturn($board);
+		$this->boardMapper->method('insert')
+			->willReturnCallback(static function (Board $newBoard): Board {
+				$newBoard->setId(2);
+				return $newBoard;
+			});
+		$this->aclMapper->method('findAll')->willReturn([]);
+		$this->labelMapper->method('findAll')->willReturn([]);
+		$this->stackMapper->method('findAll')->willReturn([]);
+		$this->sessionMapper->method('findAllActive')->willReturn([]);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->service->clone(1, 'admin');
+
+		$this->assertCount(1, $auditEvents);
+		$this->assertSame('deck.board.cloned', $auditEvents[0]->getOperation());
+		$this->assertSame(['sourceBoardId' => 1, 'boardId' => 2, 'owner' => 'admin'], $auditEvents[0]->getParameters());
+	}
+
+	public function testTransferBoardOwnershipLogsCriticalAction(): void {
+		$board = new Board();
+		$board->setId(7);
+		$board->setOwner('admin');
+		$this->boardMapper->method('find')->willReturn($board);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->service->transferBoardOwnership(7, 'newowner', true);
+
+		$this->assertCount(1, $auditEvents);
+		$this->assertSame('deck.board.ownership_transferred', $auditEvents[0]->getOperation());
+		$this->assertSame('Ownership of board %s was transferred from "%s" to "%s"', $auditEvents[0]->getLogMessage());
+		$this->assertSame(['boardId' => 7, 'previousOwner' => 'admin', 'newOwner' => 'newowner', 'changeContent' => true], $auditEvents[0]->getParameters());
 	}
 }
