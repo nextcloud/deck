@@ -38,7 +38,9 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Validators\StackServiceValidator;
+use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
@@ -221,7 +223,10 @@ class StackServiceTest extends TestCase {
 		$this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
 		$this->stackMapper->expects($this->once())->method('update')->willReturn($stackToBeDeleted);
 		$this->cardMapper->expects($this->once())->method('findAllForStacks')->willReturn([]);
+		$auditEvents = $this->collectAuditEvents();
 		$this->stackService->delete(123);
+		$this->assertSame(['deck.stack.deleted'], $this->getAuditOperations($auditEvents));
+		$this->assertSame(['stackId' => 1, 'boardId' => 1], $auditEvents[0]->getParameters());
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), 'deletedAt is in the past');
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() > 0, 'deletedAt is set');
 	}
@@ -341,5 +346,42 @@ class StackServiceTest extends TestCase {
 		$this->stackMapper->expects($this->never())->method('setIsDoneColumn');
 		$this->expectException(\OCA\Deck\BadRequestException::class);
 		$this->stackService->setDoneStack(5, 2, true);
+	}
+
+	/**
+	 * @return \ArrayObject<int, CriticalActionPerformedEvent>
+	 */
+	private function collectAuditEvents(): \ArrayObject {
+		$auditEvents = new \ArrayObject();
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event) use ($auditEvents): void {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$auditEvents[] = $event;
+				}
+			});
+		return $auditEvents;
+	}
+
+	/**
+	 * @param \ArrayObject<int, CriticalActionPerformedEvent> $auditEvents
+	 * @return list<?string>
+	 */
+	private function getAuditOperations(\ArrayObject $auditEvents): array {
+		return array_map(static fn (CriticalActionPerformedEvent $event): ?string => $event->getOperation(), $auditEvents->getArrayCopy());
+	}
+
+	public function testUpdateRestoreLogsCriticalAction(): void {
+		$stack = new Stack();
+		$stack->setId(123);
+		$stack->setBoardId(2);
+		$stack->setDeletedAt(100);
+		$this->stackMapper->method('find')->willReturn($stack);
+		$this->stackMapper->method('update')->willReturnArgument(0);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->stackService->update(123, 'Foo', 2, 1, 0);
+
+		$this->assertSame(['deck.stack.restored'], $this->getAuditOperations($auditEvents));
+		$this->assertSame(['stackId' => 123, 'boardId' => 2], $auditEvents[0]->getParameters());
 	}
 }

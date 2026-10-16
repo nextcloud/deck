@@ -9,6 +9,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignmentMapper;
@@ -34,6 +35,7 @@ use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use Psr\Log\LoggerInterface;
 
 class CardService {
@@ -225,6 +227,10 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE, [], $card->getOwner());
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
+		$this->logCardAction('Card %s was created in stack %s', [
+			'cardId' => $card->getId(),
+			'stackId' => $card->getStackId(),
+		], Operation::CardCreated);
 
 		[$card] = $this->enrichCards([$card]);
 
@@ -251,6 +257,10 @@ class CardService {
 		$this->notificationHelper->markDuedateAsRead($card);
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardDeletedEvent($card));
+		$this->logCardAction('Card %s of stack %s was moved to the trash', [
+			'cardId' => $id,
+			'stackId' => $card->getStackId(),
+		], Operation::CardDeleted);
 
 		return $card;
 	}
@@ -374,6 +384,20 @@ class CardService {
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
+		$before = $changes->getBefore();
+		if ($before->getDeletedAt() > 0 && $card->getDeletedAt() === 0) {
+			$this->logCardAction('Card %s of stack %s was restored from the trash', [
+				'cardId' => $card->getId(),
+				'stackId' => $card->getStackId(),
+			], Operation::CardRestored);
+		}
+		if ($boardId !== $oldBoardId) {
+			$this->logCardMoved($card->getId(), $oldBoardId, $boardId);
+		}
+		if ($before->getArchived() !== $card->getArchived()) {
+			$this->logCardArchived($card->getId(), $card->getStackId(), $card->getArchived());
+		}
+
 		[$card] = $this->enrichCards([$card]);
 
 		return $card;
@@ -466,6 +490,8 @@ class CardService {
 		$changes = new ChangeSet($card);
 		$oldStackId = $card->getStackId();
 		$card->setStackId($stackId);
+		$newStack = null;
+		$oldStack = null;
 
 		if ($stackId !== $oldStackId) {
 			$newStack = $this->stackMapper->find($stackId);
@@ -487,7 +513,36 @@ class CardService {
 		$this->changeHelper->cardChanged($id, false);
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
+		if ($newStack !== null) {
+			$oldStack ??= $this->stackMapper->find($oldStackId);
+			if ($newStack->getBoardId() !== $oldStack->getBoardId()) {
+				$this->logCardMoved($id, $oldStack->getBoardId(), $newStack->getBoardId());
+			}
+		}
+
 		return $result;
+	}
+
+	private function logCardMoved(int $cardId, ?int $fromBoardId, ?int $toBoardId): void {
+		$this->logCardAction('Card %s was moved from board %s to board %s', [
+			'cardId' => $cardId,
+			'fromBoardId' => $fromBoardId,
+			'toBoardId' => $toBoardId,
+		], Operation::CardMoved);
+	}
+
+	private function logCardArchived(int $cardId, ?int $stackId, bool $archived): void {
+		$this->logCardAction($archived ? 'Card %s of stack %s was archived' : 'Card %s of stack %s was unarchived', [
+			'cardId' => $cardId,
+			'stackId' => $stackId,
+		], $archived ? Operation::CardArchived : Operation::CardUnarchived);
+	}
+
+	/**
+	 * @param array<string, scalar|null> $parameters
+	 */
+	private function logCardAction(string $message, array $parameters, Operation $operation): void {
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent($message, $parameters, false, $operation->value));
 	}
 
 	/**
@@ -543,6 +598,7 @@ class CardService {
 		$this->changeHelper->cardChanged($id, false);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+		$this->logCardArchived($id, $card->getStackId(), true);
 
 		return $newCard;
 	}
@@ -569,6 +625,7 @@ class CardService {
 		$this->changeHelper->cardChanged($id, false);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+		$this->logCardArchived($id, $card->getStackId(), false);
 
 		return $newCard;
 	}

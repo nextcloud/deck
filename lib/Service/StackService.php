@@ -9,6 +9,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignmentMapper;
@@ -25,6 +26,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\StackServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use Psr\Log\LoggerInterface;
 
 class StackService {
@@ -219,6 +221,12 @@ class StackService {
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Stack %s of board %s was moved to the trash',
+			['stackId' => $stack->getId(), 'boardId' => $stack->getBoardId()],
+			false,
+			Operation::StackDeleted->value,
+		));
 		$this->enrichStacksWithCards([$stack]);
 
 		return $stack;
@@ -243,6 +251,7 @@ class StackService {
 
 		$stack = $this->stackMapper->find($id);
 		$changes = new ChangeSet($stack);
+		$wasDeleted = $stack->getDeletedAt() > 0;
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
@@ -254,6 +263,14 @@ class StackService {
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
+		if ($wasDeleted && $stack->getDeletedAt() === 0) {
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+				'Stack %s of board %s was restored from the trash',
+				['stackId' => $stack->getId(), 'boardId' => $stack->getBoardId()],
+				false,
+				Operation::StackRestored->value,
+			));
+		}
 
 		return $stack;
 	}

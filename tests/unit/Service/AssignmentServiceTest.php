@@ -35,7 +35,9 @@ use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\Activity\IEvent;
+use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -143,8 +145,11 @@ class AssignmentServiceTest extends TestCase {
 			->method('insert')
 			->with($assignment)
 			->willReturn($assignment);
+		$auditEvents = $this->collectAuditEvents();
 		$actual = $this->assignmentService->assignUser(123, 'admin');
 		$this->assertEquals($assignment, $actual);
+		$this->assertSame(['deck.card_assignment.created'], $this->getAuditOperations($auditEvents));
+		$this->assertSame(['assigneeType' => 'user', 'assignee' => 'admin', 'cardId' => 123, 'stackId' => null], $auditEvents[0]->getParameters());
 	}
 
 	public function testAssignUserNoParticipant() {
@@ -206,8 +211,10 @@ class AssignmentServiceTest extends TestCase {
 			->method('delete')
 			->with($assignment)
 			->willReturn($assignment);
+		$auditEvents = $this->collectAuditEvents();
 		$actual = $this->assignmentService->unassignUser(123, 'admin');
 		$this->assertEquals($assignment, $actual);
+		$this->assertSame(['deck.card_assignment.deleted'], $this->getAuditOperations($auditEvents));
 	}
 
 	public function testUnassignUserNotExisting() {
@@ -225,5 +232,27 @@ class AssignmentServiceTest extends TestCase {
 			->willReturn($assignments);
 		$this->expectException(NotFoundException::class);
 		$actual = $this->assignmentService->unassignUser(123, 'user');
+	}
+
+	/**
+	 * @return \ArrayObject<int, CriticalActionPerformedEvent>
+	 */
+	private function collectAuditEvents(): \ArrayObject {
+		$auditEvents = new \ArrayObject();
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event) use ($auditEvents): void {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$auditEvents[] = $event;
+				}
+			});
+		return $auditEvents;
+	}
+
+	/**
+	 * @param \ArrayObject<int, CriticalActionPerformedEvent> $auditEvents
+	 * @return list<?string>
+	 */
+	private function getAuditOperations(\ArrayObject $auditEvents): array {
+		return array_map(static fn (CriticalActionPerformedEvent $event): ?string => $event->getOperation(), $auditEvents->getArrayCopy());
 	}
 }

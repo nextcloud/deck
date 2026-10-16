@@ -33,6 +33,19 @@ enum Operation: string {
 	case BoardShareLeft = 'deck.board_share.left';
 	case BoardShareReceived = 'deck.board_share.received';
 
+	// Stacks, cards and labels
+	case StackDeleted = 'deck.stack.deleted';
+	case StackRestored = 'deck.stack.restored';
+	case CardCreated = 'deck.card.created';
+	case CardDeleted = 'deck.card.deleted';
+	case CardRestored = 'deck.card.restored';
+	case CardMoved = 'deck.card.moved';
+	case CardArchived = 'deck.card.archived';
+	case CardUnarchived = 'deck.card.unarchived';
+	case CardAssignmentCreated = 'deck.card_assignment.created';
+	case CardAssignmentDeleted = 'deck.card_assignment.deleted';
+	case LabelDeleted = 'deck.label.deleted';
+
 	/**
 	 * Short description of when the operation is logged, used for the documentation
 	 */
@@ -52,6 +65,17 @@ enum Operation: string {
 			self::BoardShareDeleted => 'A board share was removed',
 			self::BoardShareLeft => 'A user left a board shared with them',
 			self::BoardShareReceived => 'A board was shared with a local user from another server',
+			self::StackDeleted => 'A stack was moved to the trash with all its cards',
+			self::StackRestored => 'A stack was restored from the trash',
+			self::CardCreated => 'A card was created',
+			self::CardDeleted => 'A card was moved to the trash',
+			self::CardRestored => 'A card was restored from the trash',
+			self::CardMoved => 'A card was moved to another board',
+			self::CardArchived => 'A card was archived',
+			self::CardUnarchived => 'A card was unarchived',
+			self::CardAssignmentCreated => 'A user, group or team was assigned to a card',
+			self::CardAssignmentDeleted => 'A user, group or team was unassigned from a card',
+			self::LabelDeleted => 'A label was deleted and removed from all cards of its board',
 		};
 	}
 }
