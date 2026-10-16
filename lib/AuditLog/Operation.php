@@ -56,6 +56,10 @@ enum Operation: string {
 	case CommentUpdated = 'deck.comment.updated';
 	case CommentDeleted = 'deck.comment.deleted';
 
+	// Administration
+	case ConfigGroupLimitUpdated = 'deck.config.group_limit_updated';
+	case ConfigFederationUpdated = 'deck.config.federation_updated';
+
 	/**
 	 * Short description of when the operation is logged, used for the documentation
 	 */
@@ -92,6 +96,8 @@ enum Operation: string {
 			self::CommentCreated => 'A comment was added to a card',
 			self::CommentUpdated => 'A comment on a card was edited by its author',
 			self::CommentDeleted => 'A comment was deleted from a card by its author',
+			self::ConfigGroupLimitUpdated => 'The groups allowed to use Deck were changed',
+			self::ConfigFederationUpdated => 'Sharing boards with other servers was turned on or off',
 		};
 	}
 }
