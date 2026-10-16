@@ -51,6 +51,11 @@ enum Operation: string {
 	case AttachmentDeleted = 'deck.attachment.deleted';
 	case AttachmentRestored = 'deck.attachment.restored';
 
+	// Comments
+	case CommentCreated = 'deck.comment.created';
+	case CommentUpdated = 'deck.comment.updated';
+	case CommentDeleted = 'deck.comment.deleted';
+
 	/**
 	 * Short description of when the operation is logged, used for the documentation
 	 */
@@ -84,6 +89,9 @@ enum Operation: string {
 			self::AttachmentCreated => 'A file stored by Deck was attached to a card',
 			self::AttachmentDeleted => 'A file stored by Deck was deleted from a card',
 			self::AttachmentRestored => 'A deleted file stored by Deck was restored on a card',
+			self::CommentCreated => 'A comment was added to a card',
+			self::CommentUpdated => 'A comment on a card was edited by its author',
+			self::CommentDeleted => 'A comment was deleted from a card by its author',
 		};
 	}
 }
