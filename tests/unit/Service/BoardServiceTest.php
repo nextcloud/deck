@@ -563,9 +563,9 @@ class BoardServiceTest extends TestCase {
 					&& $actual->getLastModifiedAt() > 0;
 			}))
 			->willReturn($acl);
-		$this->eventDispatcher->expects(self::once())
+		$this->eventDispatcher->expects(self::exactly(2))
 			->method('dispatchTyped')
-			->with($this->callback(function (AclCreatedEvent $event) use ($acl) {
+			->withConsecutive([$this->callback(function (AclCreatedEvent $event) use ($acl) {
 				$eventAcl = $event->getAcl();
 				return $eventAcl->getBoardId() === $acl->getBoardId()
 					&& $eventAcl->getType() === $acl->getType()
@@ -575,7 +575,10 @@ class BoardServiceTest extends TestCase {
 					&& $eventAcl->getPermissionManage() === $acl->getPermissionManage()
 					&& $eventAcl->getCreatedAt() > 0
 					&& $eventAcl->getLastModifiedAt() > 0;
-			}));
+			})], [$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getOperation() === 'deck.board_share.created'
+				&& $event->getParameters()['boardId'] === 123
+				&& $event->getParameters()['sharedWith'] === 'admin'
+				&& $event->getParameters()['shareType'] === 'user')]);
 		$this->assertEquals($expected, $this->service->addAcl(
 			123, Acl::PERMISSION_TYPE_USER, 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
 		));
@@ -599,10 +602,15 @@ class BoardServiceTest extends TestCase {
 			->with($acl)
 			->willReturn($acl);
 
+		$auditEvents = $this->collectAuditEvents();
+
 		$result = $this->service->updateAcl(
 			123, false, false, false
 		);
 
+		$this->assertCount(1, $auditEvents);
+		$this->assertSame('deck.board_share.updated', $auditEvents[0]->getOperation());
+		$this->assertSame('read', $auditEvents[0]->getParameters()['permissions']);
 		$this->assertFalse($result->getPermissionEdit());
 		$this->assertFalse($result->getPermissionShare());
 		$this->assertFalse($result->getPermissionManage());
@@ -633,10 +641,31 @@ class BoardServiceTest extends TestCase {
 			->method('delete')
 			->with($acl)
 			->willReturn($acl);
-		$this->eventDispatcher->expects(self::once())
+		$this->eventDispatcher->expects(self::exactly(2))
 			->method('dispatchTyped')
-			->with(new AclDeletedEvent($acl));
+			->withConsecutive([new AclDeletedEvent($acl)], [$this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getOperation() === 'deck.board_share.deleted'
+				&& $event->getLogMessage() === 'Share %s of board %s with %s "%s" was removed (permissions: %s)'
+				&& $event->getParameters() === ['aclId' => null, 'boardId' => 123, 'shareType' => 'user', 'sharedWith' => 'admin', 'permissions' => 'read, edit, share, manage'])]);
 		$this->assertEquals($acl, $this->service->deleteAcl(123));
+	}
+
+	public function testLeaveLogsCriticalAction(): void {
+		$acl = new Acl();
+		$acl->setId(9);
+		$acl->setBoardId(123);
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
+		$acl->setParticipant('admin');
+		$acl->setPermissionEdit(true);
+		$this->permissionService->method('userIsBoardOwner')->willReturn(false);
+		$this->aclMapper->method('findParticipantFromBoard')->willReturn($acl);
+		$this->aclMapper->method('delete')->willReturn($acl);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->service->leave(123);
+
+		$this->assertCount(1, $auditEvents);
+		$this->assertSame('deck.board_share.left', $auditEvents[0]->getOperation());
+		$this->assertSame(['aclId' => 9, 'boardId' => 123, 'shareType' => 'user', 'sharedWith' => 'admin', 'permissions' => 'read, edit'], $auditEvents[0]->getParameters());
 	}
 
 	/**

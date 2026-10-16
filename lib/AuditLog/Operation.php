@@ -26,6 +26,13 @@ enum Operation: string {
 	case BoardImported = 'deck.board.imported';
 	case BoardOwnershipTransferred = 'deck.board.ownership_transferred';
 
+	// Sharing
+	case BoardShareCreated = 'deck.board_share.created';
+	case BoardShareUpdated = 'deck.board_share.updated';
+	case BoardShareDeleted = 'deck.board_share.deleted';
+	case BoardShareLeft = 'deck.board_share.left';
+	case BoardShareReceived = 'deck.board_share.received';
+
 	/**
 	 * Short description of when the operation is logged, used for the documentation
 	 */
@@ -40,6 +47,11 @@ enum Operation: string {
 			self::BoardCloned => 'A board was cloned into a new board',
 			self::BoardImported => 'A board was imported from another system',
 			self::BoardOwnershipTransferred => 'The ownership of a board was transferred to another user',
+			self::BoardShareCreated => 'A board was shared with a user, group, team or remote user',
+			self::BoardShareUpdated => 'The permissions of a board share were changed',
+			self::BoardShareDeleted => 'A board share was removed',
+			self::BoardShareLeft => 'A user left a board shared with them',
+			self::BoardShareReceived => 'A board was shared with a local user from another server',
 		};
 	}
 }

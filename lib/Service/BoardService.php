@@ -508,6 +508,7 @@ class BoardService {
 		}
 
 		$this->eventDispatcher->dispatchTyped(new AclCreatedEvent($acl));
+		$this->logBoardShare($newAcl, 'created', Operation::BoardShareCreated);
 
 		// Sync permissions to remote server since shareReceived() creates ACL with no permissions
 		if ($type === Acl::PERMISSION_TYPE_REMOTE && ($edit || $share || $manage)) {
@@ -562,6 +563,7 @@ class BoardService {
 		}
 
 		$this->eventDispatcher->dispatchTyped(new AclUpdatedEvent($acl));
+		$this->logBoardShare($acl, 'updated', Operation::BoardShareUpdated);
 
 		return $acl;
 	}
@@ -598,6 +600,7 @@ class BoardService {
 
 		$deletedAcl = $this->aclMapper->delete($acl);
 		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
+		$this->logBoardShare($acl, 'removed', Operation::BoardShareDeleted);
 
 		return $deletedAcl;
 	}
@@ -629,6 +632,7 @@ class BoardService {
 
 		$deletedAcl = $this->aclMapper->delete($acl);
 		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
+		$this->logBoardShare($acl, 'left', Operation::BoardShareLeft);
 
 		return $deletedAcl;
 	}
@@ -928,6 +932,38 @@ class BoardService {
 	/**
 	 * Clean a given board data from the Cache
 	 */
+	private function logBoardShare(Acl $acl, string $action, Operation $operation): void {
+		$permissions = ['read'];
+		if ($acl->getPermissionEdit()) {
+			$permissions[] = 'edit';
+		}
+		if ($acl->getPermissionShare()) {
+			$permissions[] = 'share';
+		}
+		if ($acl->getPermissionManage()) {
+			$permissions[] = 'manage';
+		}
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Share %s of board %s with %s "%s" was ' . $action . ' (permissions: %s)',
+			[
+				'aclId' => $acl->getId(),
+				'boardId' => $acl->getBoardId(),
+				'shareType' => match ($acl->getType()) {
+					Acl::PERMISSION_TYPE_USER => 'user',
+					Acl::PERMISSION_TYPE_GROUP => 'group',
+					Acl::PERMISSION_TYPE_REMOTE => 'remote user',
+					Acl::PERMISSION_TYPE_CIRCLE => 'team',
+					default => 'unknown',
+				},
+				'sharedWith' => $acl->getParticipant(),
+				'permissions' => implode(', ', $permissions),
+			],
+			false,
+			$operation->value,
+		));
+	}
+
 	private function clearBoardFromCache(Board $board): void {
 		$boardId = $board->getId();
 		$boardOwnerId = $board->getOwner();
