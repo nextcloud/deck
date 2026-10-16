@@ -46,6 +46,11 @@ enum Operation: string {
 	case CardAssignmentDeleted = 'deck.card_assignment.deleted';
 	case LabelDeleted = 'deck.label.deleted';
 
+	// Attachments
+	case AttachmentCreated = 'deck.attachment.created';
+	case AttachmentDeleted = 'deck.attachment.deleted';
+	case AttachmentRestored = 'deck.attachment.restored';
+
 	/**
 	 * Short description of when the operation is logged, used for the documentation
 	 */
@@ -76,6 +81,9 @@ enum Operation: string {
 			self::CardAssignmentCreated => 'A user, group or team was assigned to a card',
 			self::CardAssignmentDeleted => 'A user, group or team was unassigned from a card',
 			self::LabelDeleted => 'A label was deleted and removed from all cards of its board',
+			self::AttachmentCreated => 'A file stored by Deck was attached to a card',
+			self::AttachmentDeleted => 'A file stored by Deck was deleted from a card',
+			self::AttachmentRestored => 'A deleted file stored by Deck was restored on a card',
 		};
 	}
 }
