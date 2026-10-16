@@ -270,6 +270,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		return $share;
 	}
 
+	/**
+	 * @throws DoesNotExistException
+	 */
 	private function applyBoardPermission($share, $permissions, $userId) {
 		try {
 			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT, $userId, true);
@@ -622,7 +625,11 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		$share = $this->createShareObject($data);
 
 		if ($recipientId !== null) {
-			$share = $this->resolveSharesForRecipient([$share], $recipientId)[0];
+			$resolvedShares = $this->resolveSharesForRecipient([$share], $recipientId);
+			if ($resolvedShares === []) {
+				throw new ShareNotFound();
+			}
+			$share = $resolvedShares[0];
 		}
 
 		return $share;
@@ -675,8 +682,16 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			$stmt = $query->executeQuery();
 
 			while ($data = $stmt->fetch()) {
-				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId);
-				$shareMap[$data['parent']]->setTarget($data['file_target']);
+				if (!isset($shareMap[$data['parent']])) {
+					continue;
+				}
+
+				try {
+					$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId);
+					$shareMap[$data['parent']]->setTarget($data['file_target']);
+				} catch (DoesNotExistException $e) {
+					unset($shareMap[$data['parent']]);
+				}
 			}
 
 			$stmt->closeCursor();
