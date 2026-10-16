@@ -56,7 +56,6 @@ class LabelControllerTest extends \Test\TestCase {
 		);
 	}
 
-
 	public function testCreate(): void {
 		$label = $this->createMock(Label::class);
 		$this->labelService->expects($this->once())

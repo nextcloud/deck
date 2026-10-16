@@ -5,64 +5,86 @@
 
 <template>
 	<div v-if="copiedCard">
-		<TagSelector :card="card"
+		<TagSelector
+			:card="card"
 			:labels="currentBoard.labels"
 			:disabled="!canEdit"
 			@select="addLabelToCard"
 			@remove="removeLabelFromCard"
 			@newtag="addLabelToBoardAndCard" />
 
-		<AssignmentSelector :card="card"
+		<AssignmentSelector
+			:card="card"
 			:assignables="assignables"
-			:can-edit="canEdit"
+			:canEdit="canEdit"
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
-		<DueDateSelector :card="card"
-			:can-edit="canEdit"
-			@change="updateCardDue"
+		<StartDateSelector
+			:card="card"
+			:canEdit="canEdit"
+			@input="debouncedUpdateCardStartDate" />
+
+		<DueDateSelector
+			:card="card"
+			:canEdit="canEdit"
 			@input="debouncedUpdateCardDue" />
 
+		<DependentCardsSelector
+			:card="card"
+			:canEdit="canEdit"
+			@select="assignDependentCard"
+			@remove="removeDependentCard" />
+
 		<div v-if="projectsEnabled" class="section-wrapper">
-			<NcCollectionList v-if="card.id"
+			<NcCollectionList
+				v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"
 				type="deck-card" />
 		</div>
 
-		<Description :key="card.id"
+		<Description
+			:key="card.id"
 			:card="card"
-			:can-edit="canEdit"
-			show-attachments
+			:canEdit="canEdit"
+			showAttachments
 			@change="descriptionChanged" />
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import moment from '@nextcloud/moment'
 import { loadState } from '@nextcloud/initial-state'
-
-import { NcCollectionList } from '@nextcloud/vue'
-import Color from '../../mixins/color.js'
 import {
 	getLocale,
 } from '@nextcloud/l10n'
-import Description from './Description.vue'
-import TagSelector from './TagSelector.vue'
-import AssignmentSelector from './AssignmentSelector.vue'
-import DueDateSelector from './DueDateSelector.vue'
+import moment from '@nextcloud/moment'
+import { NcCollectionList } from '@nextcloud/vue'
 import { debounce } from 'lodash'
+import { mapActions, mapState } from 'pinia'
+import AssignmentSelector from './AssignmentSelector.vue'
+import DependentCardsSelector from './DependentCardsSelector.vue'
+import Description from './Description.vue'
+import DueDateSelector from './DueDateSelector.vue'
+import StartDateSelector from './StartDateSelector.vue'
+import TagSelector from './TagSelector.vue'
+import Color from '../../mixins/color.js'
+import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'CardSidebarTabDetails',
 	components: {
+		DependentCardsSelector,
 		DueDateSelector,
+		StartDateSelector,
 		AssignmentSelector,
 		TagSelector,
 		Description,
 		NcCollectionList,
 	},
+
 	mixins: [Color],
 	props: {
 		card: {
@@ -70,6 +92,7 @@ export default {
 			default: null,
 		},
 	},
+
 	data() {
 		return {
 			addedLabelToCard: null,
@@ -78,38 +101,54 @@ export default {
 			projectsEnabled: loadState('core', 'projects_enabled', false),
 		}
 	},
+
 	computed: {
-		...mapState({
-			currentBoard: state => state.currentBoard,
-		}),
-		...mapGetters(['canEdit', 'assignables']),
+		...mapState(useBoardStore, ['currentBoard', 'canEdit', 'assignables']),
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
+
 		labelsSorted() {
 			return [...this.currentBoard.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+
 	watch: {
 		card() {
 			this.initialize()
 		},
 	},
+
 	mounted() {
 		this.initialize()
 	},
+
 	methods: {
+		...mapActions(useBoardStore, ['addLabelToCurrentBoardAndCard']),
+		...mapActions(useCardStore, {
+			assignCardToUserInStore: 'assignCardToUser',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			updateCardDueInStore: 'updateCardDue',
+			updateCardStartDateInStore: 'updateCardStartDate',
+			addLabelInStore: 'addLabel',
+			removeLabelInStore: 'removeLabel',
+			assignDependentCardInStore: 'assignDependentCard',
+			removeDependentCardInStore: 'removeDependentCard',
+		}),
+
 		async descriptionChanged(newDesc) {
 			if (newDesc === this.copiedCard.description) {
 				return
 			}
 			this.copiedCard.description = newDesc
 		},
+
 		async initialize() {
 			if (!this.card) {
 				return
@@ -121,7 +160,7 @@ export default {
 		},
 
 		assignUserToCard(user) {
-			this.$store.dispatch('assignCardToUser', {
+			this.assignCardToUserInStore({
 				card: this.copiedCard,
 				assignee: {
 					userId: user.uid,
@@ -131,7 +170,7 @@ export default {
 		},
 
 		removeUserFromCard(user) {
-			this.$store.dispatch('removeUserFromCard', {
+			this.removeUserFromCardInStore({
 				card: this.copiedCard,
 				assignee: {
 					userId: user.uid,
@@ -141,7 +180,7 @@ export default {
 		},
 
 		updateCardDue(val) {
-			this.$store.dispatch('updateCardDue', {
+			this.updateCardDueInStore({
 				...this.copiedCard,
 				duedate: val ? (new Date(val)).toISOString() : null,
 			})
@@ -149,7 +188,18 @@ export default {
 
 		debouncedUpdateCardDue: debounce(function(val) {
 			this.updateCardDue(val)
-		}, 500),
+		}, 500, { leading: true }),
+
+		updateCardStartDate(val) {
+			this.updateCardStartDateInStore({
+				...this.copiedCard,
+				startdate: val ? (new Date(val)).toISOString() : null,
+			})
+		},
+
+		debouncedUpdateCardStartDate: debounce(function(val) {
+			this.updateCardStartDate(val)
+		}, 500, { leading: true }),
 
 		addLabelToCard(newLabel) {
 			this.copiedCard.labels.push(newLabel)
@@ -158,11 +208,11 @@ export default {
 				labelId: newLabel.id,
 				boardId: this.copiedCard.boardId,
 			}
-			this.$store.dispatch('addLabel', data)
+			this.addLabelInStore(data)
 		},
 
 		async addLabelToBoardAndCard(name) {
-			await this.$store.dispatch('addLabelToCurrentBoardAndCard', {
+			await this.addLabelToCurrentBoardAndCard({
 				card: this.copiedCard,
 				newLabel: {
 					title: name,
@@ -183,17 +233,55 @@ export default {
 				card: this.copiedCard,
 				labelId: removedLabel.id,
 			}
-			this.$store.dispatch('removeLabel', data)
+			this.removeLabelInStore(data)
 		},
+
+		assignDependentCard(dependentCard) {
+			if (!dependentCard?.id) {
+				return
+			}
+
+			if (!Array.isArray(this.copiedCard.dependentCards)) {
+				this.copiedCard.dependentCards = []
+			}
+
+			if (!this.copiedCard.dependentCards.includes(dependentCard.id)) {
+				this.copiedCard.dependentCards.push(dependentCard.id)
+			}
+
+			this.assignDependentCardInStore({
+				card: this.copiedCard,
+				dependentCard,
+			})
+		},
+
+		removeDependentCard(dependentCard) {
+			const dependentCardId = dependentCard?.id
+			if (!dependentCardId) {
+				return
+			}
+
+			if (Array.isArray(this.copiedCard.dependentCards)) {
+				this.copiedCard.dependentCards = this.copiedCard.dependentCards.filter((id) => id !== dependentCardId)
+			}
+
+			this.removeDependentCardInStore({
+				card: this.copiedCard,
+				dependentCardId,
+			})
+		},
+
 		stringify(date) {
 			return moment(date).locale(this.locale).format('LLL')
 		},
+
 		parse(value) {
 			return moment(value).toDate()
 		},
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .section-wrapper {
 	display: flex;
@@ -203,7 +291,7 @@ export default {
 	.section-label {
 		background-position: 0px center;
 		width: 28px;
-		margin-left: 9px;
+		margin-inline-start: 9px;
 		flex-shrink: 0;
 	}
 
@@ -214,7 +302,7 @@ export default {
 
 		.remove-due-button{
 			margin-top: -2px;
-			margin-left: 6px;
+			margin-inline-start: 6px;
 		}
 	}
 }
@@ -239,7 +327,7 @@ export default {
 	padding: 0px 5px;
 	border-radius: 15px;
 	font-size: 85%;
-	margin-right: 3px;
+	margin-inline-end: 3px;
 }
 
 .avatarLabel {
@@ -251,13 +339,13 @@ export default {
 }
 
 .avatar-list--readonly .avatardiv {
-	margin-right: 3px;
+	margin-inline-end: 3px;
 }
 
 .avatarlist--inline {
 	display: flex;
 	align-items: center;
-	margin-right: 3px;
+	margin-inline-end: 3px;
 	.avatarLabel {
 		padding: 0;
 	}

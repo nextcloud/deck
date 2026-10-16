@@ -3,18 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
-import Router from 'vue-router'
 import { generateUrl, getRootUrl } from '@nextcloud/router'
-import { BOARD_FILTERS } from './store/main.js'
-import Boards from './components/boards/Boards.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import Board from './components/board/Board.vue'
-import Sidebar from './components/Sidebar.vue'
 import BoardSidebar from './components/board/BoardSidebar.vue'
+import Boards from './components/boards/Boards.vue'
 import CardSidebar from './components/card/CardSidebar.vue'
 import Overview from './components/overview/Overview.vue'
-
-Vue.use(Router)
+import Sidebar from './components/Sidebar.vue'
+import { BOARD_FILTERS } from './stores/board.js'
 
 // We apply a dynamic base URL depending on the URL used in the browser
 const baseUrl = generateUrl('/apps/deck/')
@@ -22,14 +19,18 @@ const webRootWithIndexPHP = getRootUrl() + '/index.php'
 const doesURLContainIndexPHP = window.location.pathname.startsWith(webRootWithIndexPHP)
 const currentBaseUrl = doesURLContainIndexPHP ? baseUrl : baseUrl.replace('/index.php/', '/')
 
-const router = new Router({
-	mode: 'history',
-	base: currentBaseUrl,
+const router = createRouter({
+	history: createWebHistory(currentBaseUrl),
 	linkActiveClass: 'active',
 	routes: [
 		{
 			path: '/',
 			name: 'main',
+			component: Overview,
+		},
+		{
+			path: '/upcoming',
+			name: 'upcoming',
 			component: Overview,
 		},
 		{
@@ -148,22 +149,21 @@ const router = new Router({
 	],
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
 	// Redirect if fullPath begins with a hash (ignore hashes later in path)
 	if (to.hash.substring(0, 2) === '#/') {
 		const path = to.fullPath.replace('/#/', '/').trimEnd('/')
-		next(path)
-		return
+		return path
 	}
 	// Redirect to the pinned default board if set and navigating to the main route
 	if (to.name === 'main') {
 		const defaultBoardId = localStorage.getItem('deck.defaultBoardId')
 		if (defaultBoardId) {
-			next({ name: 'board', params: { id: parseInt(defaultBoardId, 10) } })
-			return
+			return { name: 'board', params: { id: parseInt(defaultBoardId, 10) } }
+		} else {
+			return { name: 'upcoming' }
 		}
 	}
-	next()
 })
 
 export default router

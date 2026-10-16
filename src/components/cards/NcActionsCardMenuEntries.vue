@@ -1,0 +1,276 @@
+<!--
+  - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<template>
+	<div>
+		<NcColorPicker v-model="editingCardColor" clearable @submit="updateCardColor">
+			<NcActionButton @click="openColorPicker">
+				<template #icon>
+					<SelectColor :fillColor="cardColor" :size="20" decorative />
+				</template>
+				{{ t('deck', 'Change card color') }}
+			</NcActionButton>
+		</NcColorPicker>
+		<NcActionButton v-if="!hideDetailsEntry" :closeAfterClick="true" @click="openCard">
+			<template #icon>
+				<CardBulletedIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Card details') }}
+		</NcActionButton>
+		<NcActionButton v-if="canEdit" :closeAfterClick="true" @click="editTitle">
+			<template #icon>
+				<PencilIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Edit title') }}
+		</NcActionButton>
+		<NcActionButton
+			v-if="canEdit && !isCurrentUserAssigned"
+			:closeAfterClick="true"
+			@click="assignCardToMe()">
+			<template #icon>
+				<AccountPlusIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Assign to me') }}
+		</NcActionButton>
+		<NcActionButton
+			v-if="canEdit && isCurrentUserAssigned"
+			:closeAfterClick="true"
+			@click="unassignCardFromMe()">
+			<template #icon>
+				<AccountMinusIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Unassign myself') }}
+		</NcActionButton>
+		<NcActionButton
+			v-if="canEdit"
+			:closeAfterClick="true"
+			:disabled="isInDoneColumn && !!card.done"
+			@click="changeCardDoneStatus()">
+			<template #icon>
+				<CheckIcon :size="20" decorative />
+			</template>
+			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
+		</NcActionButton>
+		<NcActionButton
+			v-if="canEdit"
+			:closeAfterClick="true"
+			@click="openCardMoveDialog">
+			<template #icon>
+				<OpenInNewIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Move/copy card') }}
+		</NcActionButton>
+		<NcActionButton
+			v-for="action in cardActions"
+			:key="action.label"
+			:closeAfterClick="true"
+			:icon="action.icon"
+			@click="action.callback(cardRichObject)">
+			{{ action.label }}
+		</NcActionButton>
+		<NcActionButton v-if="canEditBoard" :closeAfterClick="true" @click="archiveUnarchiveCard()">
+			<template #icon>
+				<ArchiveIcon :size="20" decorative />
+			</template>
+			{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+		</NcActionButton>
+		<NcActionButton
+			v-if="canEdit"
+			:closeAfterClick="true"
+			@click="deleteCard()">
+			<template #icon>
+				<DeleteIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Delete card') }}
+		</NcActionButton>
+	</div>
+</template>
+
+<script>
+import { getCurrentUser } from '@nextcloud/auth'
+import { showUndo } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import { generateUrl } from '@nextcloud/router'
+import { NcActionButton, NcColorPicker } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
+import AccountMinusIcon from 'vue-material-design-icons/AccountMinusOutline.vue'
+import AccountPlusIcon from 'vue-material-design-icons/AccountPlusOutline.vue'
+import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import CardBulletedIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import SelectColor from 'vue-material-design-icons/Circle.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
+import { useActionsStore } from '../../stores/actions.js'
+import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+import { useStackStore } from '../../stores/stack.js'
+import { useTrashbinStore } from '../../stores/trashbin.js'
+
+import '@nextcloud/dialogs/style.css'
+
+export default {
+	name: 'NcActionsCardMenuEntries',
+	components: { NcColorPicker, NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon, SelectColor, AccountPlusIcon, AccountMinusIcon, CheckIcon, OpenInNewIcon, DeleteIcon },
+	props: {
+		card: {
+			type: Object,
+			default: null,
+		},
+
+		hideDetailsEntry: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
+	emits: ['editTitle'],
+	setup() {
+		const actionsStore = useActionsStore()
+		return {
+			cardActions: actionsStore.actions.card,
+		}
+	},
+
+	data() {
+		return {
+			modalShow: false,
+			selectedBoard: '',
+			selectedStack: '',
+			stacksFromBoard: [],
+			editingCardColor: '',
+		}
+	},
+
+	computed: {
+		...mapState(useStackStore, ['stackById']),
+		...mapState(useBoardStore, {
+			showArchived: 'showArchived',
+			currentBoard: 'currentBoard',
+			canEditPermission: 'canEdit',
+			boards: 'boards',
+			boardById: 'boardById',
+			isArchived: 'isArchived',
+		}),
+
+		canEdit() {
+			return !this.card.archived
+		},
+
+		isInDoneColumn() {
+			return this.stackById(this.card.stackId)?.isDoneColumn === true
+		},
+
+		canEditBoard() {
+			if (this.currentBoard) {
+				return this.canEditPermission
+			}
+			const board = this.boards.find((item) => item.id === this.card.boardId)
+			return !!board?.permissions?.PERMISSION_EDIT
+		},
+
+		isCurrentUserAssigned() {
+			return this.card.assignedUsers.find((item) => (item.type === 0 || item.type === 6) && item.participant.uid === getCurrentUser()?.uid)
+		},
+
+		boardId() {
+			return this.card?.boardId ? this.card.boardId : Number(this.$route.params.id)
+		},
+
+		cardRichObject() {
+			return {
+				id: '' + this.card.id,
+				name: this.card.title,
+				boardname: this.boardById(this.boardId)?.title,
+				stackname: this.stackById(this.card.stackId)?.title,
+				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `card/${this.card.id}`,
+			}
+		},
+
+		cardColor() {
+			return this.card.color ? '#' + this.card.color : ''
+		},
+	},
+
+	methods: {
+		...mapActions(useCardStore, {
+			deleteCardInStore: 'deleteCard',
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+			assignCardToUserInStore: 'assignCardToUser',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			updateCardColorInStore: 'updateCardColor',
+		}),
+
+		openCard() {
+			const boardId = this.card?.boardId ? this.card.boardId : this.$route?.params.id ?? this.currentBoard.id
+
+			if (this.$router) {
+				this.$router?.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
+				return
+			}
+
+			emit('deck:card:open-modal', this.card.id)
+		},
+
+		editTitle() {
+			this.$emit('editTitle', this.card.id)
+		},
+
+		deleteCard() {
+			this.deleteCardInStore(this.card)
+			const undoCard = { ...this.card, deletedAt: 0, boardId: this.boardId }
+			showUndo(t('deck', 'Card deleted'), () => useTrashbinStore().cardUndoDelete(undoCard))
+			if (this.$router.currentRoute.name === 'card') {
+				this.$router.push({ name: 'board' })
+			}
+		},
+
+		changeCardDoneStatus() {
+			this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
+		},
+
+		archiveUnarchiveCard() {
+			this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
+		},
+
+		assignCardToMe() {
+			this.assignCardToUserInStore({
+				card: this.card,
+				assignee: {
+					userId: getCurrentUser()?.uid,
+					type: 0,
+				},
+			})
+		},
+
+		unassignCardFromMe() {
+			this.removeUserFromCardInStore({
+				card: this.card,
+				assignee: {
+					userId: getCurrentUser()?.uid,
+					type: 0,
+				},
+			})
+		},
+
+		openCardMoveDialog() {
+			emit('deck:card:show-move-dialog', this.card)
+		},
+
+		openColorPicker() {
+			this.editingCardColor = this.card.color ? '#' + this.card.color : ''
+		},
+
+		updateCardColor(val) {
+			this.updateCardColorInStore({
+				...this.card,
+				color: val ? val.substring(1) : null,
+			})
+		},
+	},
+}
+</script>

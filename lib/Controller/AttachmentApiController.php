@@ -4,6 +4,7 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Attachment;
@@ -46,8 +47,8 @@ class AttachmentApiController extends ApiController {
 	#[NoAdminRequired]
 	#[CORS]
 	#[NoCSRFRequired]
-	public function create(int $cardId, string $type, string $data): DataResponse {
-		$attachment = $this->attachmentService->create($cardId, $type, $data);
+	public function create(int $cardId, string $type, ?string $data): DataResponse {
+		$attachment = $this->attachmentService->create($cardId, $type, $data ?? '');
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 

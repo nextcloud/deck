@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export const sampleBoard = (title = 'MyTestBoard') => {
+export function sampleBoard(title = 'MyTestBoard') {
 	return {
-		title: title,
+		title,
 		color: '00ff00',
 		stacks: [
 			{

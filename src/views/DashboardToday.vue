@@ -4,11 +4,12 @@
 -->
 
 <template>
-	<NcDashboardWidget :items="cards"
-		empty-content-icon="icon-deck"
-		:empty-content-message="t('deck', 'No upcoming cards')"
-		:show-more-text="t('deck', 'upcoming cards today')"
-		:show-more-url="showMoreUrl"
+	<NcDashboardWidget
+		:items="cards"
+		emptyContentIcon="icon-deck"
+		:emptyContentMessage="t('deck', 'No upcoming cards')"
+		:showMoreText="t('deck', 'upcoming cards today')"
+		:showMoreUrl="showMoreUrl"
 		:loading="loading"
 		@hide="() => {}"
 		@markDone="() => {}">
@@ -19,10 +20,11 @@
 </template>
 
 <script>
-import { NcDashboardWidget } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
-import Card from '../components/dashboard/Card.vue'
 import { generateUrl } from '@nextcloud/router'
+import { NcDashboardWidget } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
+import Card from '../components/dashboard/Card.vue'
+import { useDashboardStore } from '../stores/dashboard.js'
 
 export default {
 	name: 'DashboardToday',
@@ -30,31 +32,37 @@ export default {
 		NcDashboardWidget,
 		Card,
 	},
+
 	data() {
 		return {
 			loading: false,
 		}
 	},
+
 	computed: {
-		...mapGetters([
-			'assignedCardsDashboard',
-		]),
+		...mapState(useDashboardStore, ['assignedCards']),
 		cards() {
-			const list = [...this.assignedCardsDashboard.today || []]
+			const list = [...this.assignedCards.today || []]
 			list.sort((a, b) => {
 				return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
 			})
 			return list
 		},
+
 		showMoreUrl() {
 			return this.cards.length > 7 ? generateUrl('/apps/deck') : null
 		},
 	},
+
 	beforeMount() {
 		this.loading = true
-		this.$store.dispatch('loadUpcoming').then(() => {
+		this.loadUpcoming().then(() => {
 			this.loading = false
 		})
+	},
+
+	methods: {
+		...mapActions(useDashboardStore, ['loadUpcoming']),
 	},
 }
 </script>

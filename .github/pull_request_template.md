@@ -15,3 +15,7 @@
 - [ ] Sign-off message is added to all commits
 - [ ] Tests (unit, integration, api and/or acceptance) are included
 - [ ] Documentation (manuals or wiki) has been updated or is not required
+
+### 🤖 AI (if applicable)
+
+- [ ] The content of this PR was partly or fully generated using AI (N/A)

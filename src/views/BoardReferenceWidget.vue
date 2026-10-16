@@ -11,7 +11,8 @@
 		<div class="line">
 			<DeckIcon :size="20" class="title-icon" />
 			<strong>
-				<a :href="boardLink"
+				<a
+					:href="boardLink"
 					:title="boardTooltip"
 					target="_blank"
 					class="link">
@@ -21,29 +22,26 @@
 		</div>
 		<div class="line">
 			{{ t('deck', 'Owner') + ': ' }}
-			<NcUserBubble :user="boardOwnerUserId"
-				:display-name="boardOwnerDisplayName" />
+			<NcUserBubble
+				:user="boardOwnerUserId"
+				:displayName="boardOwnerDisplayName" />
 		</div>
 	</div>
 </template>
 
 <script>
-import Board from '../components/board/Board.vue'
-import DeckIcon from '../components/icons/DeckIcon.vue'
-import { BoardApi } from './../services/BoardApi.js'
-import storeFactory from './../store/main.js'
-
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
-
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
+import { NcUserBubble } from '@nextcloud/vue'
+import Board from '../components/board/Board.vue'
+import DeckIcon from '../components/icons/DeckIcon.vue'
+import { useSettingsStore } from '../stores/settings.js'
+import { BoardApi } from './../services/BoardApi.js'
 
 const boardApi = new BoardApi()
 
 export default {
 	name: 'BoardReferenceWidget',
-
-	store: storeFactory(),
 
 	components: {
 		DeckIcon,
@@ -62,14 +60,17 @@ export default {
 			type: String,
 			default: '',
 		},
+
 		richObject: {
 			type: Object,
 			default: null,
 		},
+
 		accessible: {
 			type: Boolean,
 			default: true,
 		},
+
 		interactive: {
 			type: Boolean,
 			default: false,
@@ -80,25 +81,29 @@ export default {
 		board() {
 			return this.richObject.board
 		},
+
 		boardLink() {
 			return generateUrl('/apps/deck/#/board/{boardId}', { boardId: this.board.id })
 		},
+
 		boardTooltip() {
 			return t('deck', 'Deck board {name}\n* Last modified on {lastMod}', {
 				name: this.board.title,
 				lastMod: moment.unix(this.board.lastModified).format('LLL'),
 			})
 		},
+
 		boardOwnerUserId() {
 			return this.board.owner?.uid ?? '???'
 		},
+
 		boardOwnerDisplayName() {
 			return this.board.owner?.displayname ?? this.boardOwnerUserId
 		},
 	},
 
 	created() {
-		this.$store.commit('setFullApp', false)
+		useSettingsStore().setFullApp(false)
 	},
 
 }
@@ -124,10 +129,10 @@ export default {
 		display: flex;
 		align-items: center;
 		.icon {
-			margin-right: 4px;
+			margin-inline-end: 4px;
 		}
 		.title-icon {
-			margin-right: 8px;
+			margin-inline-end: 8px;
 		}
 	}
 }
@@ -137,10 +142,10 @@ export default {
 	min-height: min(50vh, calc(100vh - 100px));
 	max-height: calc(100vh - 120px);
 	&:deep(.controls) {
-		padding-left: 12px;
+		padding-inline-start: 12px;
 	}
 	&:deep(.board) {
-		padding-left: 0;
+		padding-inline-start: 0;
 	}
 	&:deep(*) {
 		-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */

@@ -4,16 +4,20 @@
 -->
 
 <template>
-	<div v-if="cardId && ( attachments.length > 0 )" class="card-cover">
-		<div v-for="attachment in attachments"
+	<div v-if="cardId && (attachments.length > 0)" class="card-cover">
+		<div
+			v-for="attachment in attachments"
 			:key="attachment.id"
 			class="image-wrapper"
 			:style="{ backgroundImage: `url(${attachmentPreview(attachment)})` }" />
 	</div>
 </template>
+
 <script>
-import { mapActions } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
+import { mapActions, mapState } from 'pinia'
+import { useAttachmentStore } from '../../stores/attachment.js'
+import { useCardStore } from '../../stores/card.js'
 export default {
 	name: 'CardCover',
 	props: {
@@ -22,46 +26,53 @@ export default {
 			required: true,
 		},
 	},
+
 	computed: {
+		...mapState(useCardStore, ['cardById']),
 		attachments() {
-			return [...this.$store.getters.attachmentsByCard(this.cardId)]
+			return [...useAttachmentStore().attachmentsByCard(this.cardId)]
 				// Filter deleted and hasPreview
-				.filter(attachment => attachment.deletedAt >= 0 && attachment.extendedData.hasPreview)
+				.filter((attachment) => attachment.deletedAt >= 0 && attachment.extendedData.hasPreview)
 				// sort by id (same as in AttachmentList) to get Newest
 				.sort((a, b) => b.id - a.id)
 				// limit to 3 like with android Deck app
 				.slice(0, 3)
 		},
+
 		attachmentPreview() {
 			// FIXME find a better way to get the stack-width
 			const stackWidth = getComputedStyle(document.documentElement).getPropertyValue('--stack-width').trim()
 			const x = Math.ceil(parseInt(stackWidth) / this.attachments.length) | 260
 			const y = 100
-			return attachment => (
+			return (attachment) => (
 				// The core preview provider is a bit strange at times, providing much larger than needed images
 				// when cropping is enabled. Therefore use a=1 to not crop the image and let css handle the overflow
 				attachment.extendedData.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=${x}&y=${y}&a=1`) : null
 			)
 		},
+
 		card() {
-			return this.$store.getters.cardById(this.cardId)
+			return this.cardById(this.cardId)
 		},
+
 		referencePreview() {
 			return this.card?.referenceData?.richObject?.thumb
 		},
 	},
+
 	watch: {
 		cardId: {
 			immediate: true,
 			handler() {
-				if (this.$store.getters.cardById(this.cardId)?.attachmentCount > 0) {
+				if (this.card?.attachmentCount > 0) {
 					this.fetchAttachments(this.cardId)
 				}
 			},
 		},
 	},
+
 	methods: {
-		...mapActions([
+		...mapActions(useAttachmentStore, [
 			'fetchAttachments',
 		]),
 	},
@@ -69,7 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@use '../../css/variables.scss' as *;
 
 .card-cover {
 	height: 90px;

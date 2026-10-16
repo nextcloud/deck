@@ -5,10 +5,10 @@
 
 import axios from '@nextcloud/axios'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
+
 import '../models/index.js'
 
 export class StackApi {
-
 	url(url) {
 		url = `/apps/deck${url}`
 		return generateUrl(url)
@@ -29,9 +29,6 @@ export class StackApi {
 					return Promise.reject(err)
 				},
 			)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
 	}
 
 	deletedStacks(boardId) {
@@ -83,11 +80,11 @@ export class StackApi {
 			})
 	}
 
-	reorderStack(stackId, order) {
-		return axios.put(this.url(`/stacks/${stackId}/reorder`), { order })
+	reorderStack(stackId, order, boardId) {
+		return axios.put(this.ocsUrl(`/stacks/${stackId}/reorder`), { order, boardId: boardId ?? null })
 			.then(
 				(response) => {
-					return Promise.resolve(response.data)
+					return Promise.resolve(response.data.ocs.data)
 				},
 				(err) => {
 					return Promise.reject(err)
@@ -128,4 +125,18 @@ export class StackApi {
 			})
 	}
 
+	setDoneStack(stackId, boardId, isDone) {
+		return axios.put(this.ocsUrl(`/stacks/${stackId}/done`), { boardId, isDone })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data.ocs.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
 }

@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Sharing;
 
 use OC\Files\Cache\Cache;
@@ -270,22 +269,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		return $share;
 	}
 
-	private function applyBoardPermission($share, $permissions, $userId) {
-		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT, $userId, true);
-		} catch (NoPermissionException $e) {
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE;
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_CREATE;
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE;
-		}
-
-		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_SHARE, $userId, true);
-		} catch (NoPermissionException $e) {
-			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE;
-		}
-		$share->setPermissions($permissions);
-	}
 	/**
 	 * @inheritDoc
 	 */
@@ -653,11 +636,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 			/** @var int[] $ids */
 			$ids = [];
+			$cardIds = [];
 			/** @var IShare[] $shareMap */
 			$shareMap = [];
 
 			foreach ($shareSlice as $share) {
 				$ids[] = (int)$share->getId();
+				$cardIds[] = (int)$share->getSharedWith();
 				$shareMap[$share->getId()] = $share;
 			}
 
@@ -674,8 +659,22 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 			$stmt = $query->executeQuery();
 
+			$permissions = $this->permissionService->getPermissionsForCards($cardIds, $userId);
+
 			while ($data = $stmt->fetch()) {
-				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId);
+				$parent = $shareMap[$data['parent']];
+				$sharePermissions = (int)$data['permissions'];
+				if (isset($permissions[(int)$parent->getSharedWith()])) {
+					if ($permissions[(int)$parent->getSharedWith()][Acl::PERMISSION_EDIT] === false) {
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE;
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_CREATE;
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE;
+					}
+					if ($permissions[(int)$parent->getSharedWith()][Acl::PERMISSION_SHARE] === false) {
+						$sharePermissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE;
+					}
+				}
+				$shareMap[$data['parent']]->setPermissions($sharePermissions);
 				$shareMap[$data['parent']]->setTarget($data['file_target']);
 			}
 
@@ -1024,7 +1023,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		while ($row = $cursor->fetch()) {
 			$type = (int)$row['share_type'];
 			if ($type === IShare::TYPE_DECK) {
-				$cardId = $row['share_with'];
+				$cardId = (int)$row['share_with'];
 				$boardId = $this->cardMapper->findBoardId($cardId);
 				if ($boardId === null) {
 					continue;

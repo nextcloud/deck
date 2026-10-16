@@ -10,11 +10,12 @@
 				<span class="icon icon-deck" />
 				<div class="title" dir="auto">
 					<span>{{ deletedStack.title }}</span>
-					<span class="timestamp">{{ relativeDate(deletedStack.deletedAt*1000) }}</span>
+					<span class="timestamp">{{ relativeDate(deletedStack.deletedAt * 1000) }}</span>
 				</div>
-				<button :title="t('settings', 'Undo')"
+				<button
+					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="stackUndoDelete(deletedStack)" />
+					@click="stackUndoDeleteLocal(deletedStack)" />
 			</li>
 		</ul>
 
@@ -24,19 +25,21 @@
 				<div class="icon icon-deck" />
 				<div class="title" dir="auto">
 					<span>{{ deletedCard.title }}</span>
-					<span class="timestamp">{{ relativeDate(deletedCard.deletedAt*1000) }}</span>
+					<span class="timestamp">{{ relativeDate(deletedCard.deletedAt * 1000) }}</span>
 				</div>
-				<button :title="t('settings', 'Undo')"
+				<button
+					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="cardUndoDelete(deletedCard)" />
+					@click="cardUndoDeleteLocal(deletedCard)" />
 			</li>
 		</ul>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 import relativeDate from '../../mixins/relativeDate.js'
+import { useTrashbinStore } from '../../stores/trashbin.js'
 
 export default {
 	name: 'DeletedTabSidebar',
@@ -47,6 +50,7 @@ export default {
 			default: undefined,
 		},
 	},
+
 	data() {
 		return {
 			isLoading: false,
@@ -54,31 +58,37 @@ export default {
 			copiedDeletedCard: null,
 		}
 	},
-	computed: {
-		...mapState({
-			deletedStacks: state => [...state.trashbin.deletedStacks].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
-			deletedCards: state => [...state.trashbin.deletedCards].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
-		}),
 
+	computed: {
+		...mapState(useTrashbinStore, {
+			deletedStacks: (state) => [...state.deletedStacks].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
+			deletedCards: (state) => [...state.deletedCards].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
+		}),
 	},
+
 	created() {
 		this.getData()
 	},
+
 	methods: {
+		...mapActions(useTrashbinStore, ['fetchDeletedItems', 'stackUndoDelete', 'cardUndoDelete']),
 		async getData() {
 			this.isLoading = true
-			await this.$store.dispatch('fetchDeletedItems', this.board.id)
+			this.fetchDeletedItems(this.board.id)
 			this.isLoading = false
 		},
-		stackUndoDelete(deletedStack) {
-			const copiedDeletedStack = Object.assign({}, deletedStack)
+
+		stackUndoDeleteLocal(deletedStack) {
+			const copiedDeletedStack = { ...deletedStack }
 			copiedDeletedStack.deletedAt = 0
-			this.$store.dispatch('stackUndoDelete', copiedDeletedStack)
+			this.stackUndoDelete(copiedDeletedStack)
 		},
-		cardUndoDelete(deletedCard) {
-			const copiedDeletedCard = Object.assign({}, deletedCard)
+
+		cardUndoDeleteLocal(deletedCard) {
+			const copiedDeletedCard = { ...deletedCard }
 			copiedDeletedCard.deletedAt = 0
-			this.$store.dispatch('cardUndoDelete', copiedDeletedCard)
+			copiedDeletedCard.boardId = this.board.id
+			this.cardUndoDelete(copiedDeletedCard)
 		},
 	},
 }

@@ -5,7 +5,11 @@
 
 <template>
 	<div class="board-wrapper" :tabindex="-1" @touchend="fixActionRestriction">
-		<Controls :board="board" />
+		<Controls
+			:board="board"
+			showSearch
+			:searchLabel="t('deck', 'Search cards')"
+			:searchHint="searchHint" />
 
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
@@ -28,13 +32,15 @@
 				<template v-if="canManage" #action>
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
-						<NcTextField ref="newStackInput"
+						<NcTextField
+							ref="newStackInput"
+							v-model="newStackTitle"
 							:disable="loading"
-							:value.sync="newStackTitle"
 							:placeholder="t('deck', 'List name')"
 							type="text" />
-						<NcButton type="secondary"
-							native-type="submit"
+						<NcButton
+							variant="secondary"
+							type="submit"
 							:disabled="loading"
 							:title="t('deck', 'Add list')">
 							<template #icon>
@@ -46,19 +52,27 @@
 					</form>
 				</template>
 			</NcEmptyContent>
-			<div v-else-if="!isEmpty && !loading"
+			<GanttView
+				v-else-if="!isEmpty && !loading && viewMode === 'gantt'"
+				key="gantt"
+				:board="board"
+				:stacks="stacks" />
+			<div
+				v-else-if="!isEmpty && !loading"
 				key="board"
 				ref="board"
 				class="board"
 				@mousedown="onMouseDown">
-				<Container lock-axix="y"
+				<Container
+					lockAxix="y"
 					orientation="horizontal"
-					:drag-handle-selector="dragHandleSelector"
+					:dragHandleSelector="dragHandleSelector"
 					data-click-closes-sidebar="true"
-					@drag-start="draggingStack = true"
-					@drag-end="draggingStack = false"
+					@dragStart="draggingStack = true"
+					@dragEnd="draggingStack = false"
 					@drop="onDropStack">
-					<Draggable v-for="stack in stacksByBoard"
+					<Draggable
+						v-for="stack in stacks"
 						:key="stack.id"
 						data-click-closes-sidebar="true"
 						data-dragscroll-enabled
@@ -69,9 +83,10 @@
 			</div>
 		</transition>
 		<GlobalSearchResults v-if="isFullApp" />
-		<NcModal v-if="localModal"
-			:clear-view-delay="0"
-			:close-button-contained="true"
+		<NcModal
+			v-if="localModal"
+			:clearViewDelay="0"
+			:closeOnClickOutside="true"
 			size="large"
 			@close="localModal = null">
 			<div class="modal__content modal__card">
@@ -82,17 +97,24 @@
 </template>
 
 <script>
-import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState, mapGetters } from 'vuex'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { NcButton, NcEmptyContent, NcLoadingIcon, NcModal, NcTextField } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
+import { Container, Draggable } from 'vue3-smooth-dnd'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CardSidebar from '../card/CardSidebar.vue'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import Stack from './Stack.vue'
-import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
+import GanttView from './GanttView.vue'
+import Stack from './Stack.vue'
 import { showError } from '../../helpers/errors.js'
+import logger from '../../logger.js'
 import { createSession } from '../../sessions.js'
-import CardSidebar from '../card/CardSidebar.vue'
+import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
+import { useStackStore } from '../../stores/stack.js'
 export default {
 	name: 'Board',
 	components: {
@@ -102,6 +124,7 @@ export default {
 		DeckIcon,
 		Draggable,
 		Stack,
+		GanttView,
 		NcEmptyContent,
 		NcModal,
 		NcTextField,
@@ -110,15 +133,18 @@ export default {
 		CheckIcon,
 		CardSidebar,
 	},
+
 	inject: [
 		'boardApi',
 	],
+
 	props: {
 		id: {
 			type: Number,
 			default: null,
 		},
 	},
+
 	data() {
 		return {
 			draggingStack: false,
@@ -129,63 +155,88 @@ export default {
 			localModal: null,
 		}
 	},
+
 	computed: {
-		...mapState({
-			isFullApp: state => state.isFullApp,
-			board: state => state.currentBoard,
-			showArchived: state => state.showArchived,
+		...mapState(useStackStore, ['stacksByBoard']),
+		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, {
+			board: 'currentBoard',
+			showArchived: 'showArchived',
+			canEdit: 'canEdit',
+			canManage: 'canManage',
+			viewMode: 'viewMode',
 		}),
-		...mapGetters([
-			'canEdit',
-			'canManage',
-		]),
-		stacksByBoard() {
-			return this.board?.id ? this.$store.getters.stacksByBoard(this.board.id) : []
+
+		...mapState(useSettingsStore, ['isFullApp']),
+		stacks() {
+			return this.board?.id ? this.stacksByBoard(this.board.id) : []
 		},
+
+		searchHint() {
+			// Parameterised so translators never see the prefixes as translatable text
+			return t('deck', 'Supported prefixes: {prefixes}. Wrap phrases in double quotes.', {
+				prefixes: 'title:, description:, tag:, assigned:, list:, date:',
+			})
+		},
+
 		dragHandleSelector() {
 			return this.canEdit ? '.stack__title' : '.no-drag'
 		},
+
 		isEmpty() {
-			return this.stacksByBoard.length === 0
+			return this.stacks.length === 0
 		},
 	},
+
 	watch: {
 		id(newValue, oldValue) {
 			this.fetchData()
 		},
+
 		showArchived() {
 			this.fetchData()
 		},
+
 		isEmpty(newValue) {
-			newValue && this.$nextTick(() => {
-				this.$refs?.newStackInput?.focus()
-			})
+			if (newValue) {
+				this.$nextTick(() => {
+					this.$refs?.newStackInput?.focus()
+				})
+			}
 		},
 	},
+
 	created() {
 		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
-		this.$root.$on('open-card', (cardId) => {
-			this.localModal = cardId
-		})
+		subscribe('deck:card:open-modal', this.openCardModal)
 	},
-	beforeDestroy() {
+
+	beforeUnmount() {
 		this.session?.close()
+		unsubscribe('deck:card:open-modal', this.openCardModal)
 	},
+
 	methods: {
+		...mapActions(useBoardStore, ['loadBoardById', 'toggleShowArchived']),
+		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
+		openCardModal(cardId) {
+			this.localModal = cardId
+		},
+
 		async fetchData() {
 			this.loading = true
 			try {
-				await this.$store.dispatch('loadBoardById', this.id)
-				await this.$store.dispatch('loadStacks', this.id)
+				await this.loadBoardById(this.id)
+				await this.loadStacks(this.id)
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
-				if (routeCardId && !this.$store.getters.cardById(routeCardId)) {
-					await this.$store.dispatch('loadArchivedStacks', this.id)
+				if (routeCardId && !this.cardById(routeCardId)) {
+					await this.loadArchivedStacks(this.id)
 
-					if (this.$store.getters.cardById(routeCardId)) {
-						this.$store.commit('toggleShowArchived', true)
+					if (this.cardById(routeCardId)) {
+						this.toggleShowArchived(true)
 					}
 				}
 
@@ -193,7 +244,7 @@ export default {
 				this.session = createSession(this.id)
 			} catch (e) {
 				this.loading = false
-				console.error(e)
+				logger.error('Failed to load board', { error: e })
 				showError(e)
 			} finally {
 				this.loading = false
@@ -201,7 +252,7 @@ export default {
 		},
 
 		onDropStack({ removedIndex, addedIndex }) {
-			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
+			this.orderStack({ stack: this.stacks[removedIndex], removedIndex, addedIndex })
 		},
 
 		addNewStack() {
@@ -209,7 +260,7 @@ export default {
 				title: this.newStackTitle,
 				boardId: this.id,
 			}
-			this.$store.dispatch('createStack', newStack)
+			this.createStack(newStack)
 			this.newStackTitle = ''
 		},
 
@@ -253,8 +304,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import '../../css/animations';
-	@import '../../css/variables';
+	@use '../../css/animations.scss';
+	@use '../../css/variables.scss' as *;
 
 	form {
 		text-align: center;
@@ -310,12 +361,11 @@ export default {
 				position: relative;
 
 				.smooth-dnd-container.vertical {
-					$margin-x: calc($stack-gap * -1);
 					display: flex;
 					flex-direction: column;
 					gap: $stack-gap;
 					padding: $stack-gap;
-					margin: 0 $margin-x;
+					margin: 0 calc(#{$stack-gap} * -1);
 					overflow-y: auto;
 					scrollbar-gutter: stable;
 				}

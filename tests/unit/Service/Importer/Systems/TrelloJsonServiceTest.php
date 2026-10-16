@@ -21,6 +21,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 namespace OCA\Deck\Service\Importer\Systems;
 
 use OCA\Deck\Service\Importer\BoardImportService;

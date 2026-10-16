@@ -2,8 +2,9 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import { randUser } from '../utils/index.js'
-import { sampleBoard } from '../utils/sampleBoard'
+import { sampleBoard } from '../utils/sampleBoard.js'
 const user = randUser()
 const recipient = randUser()
 const domain = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
@@ -32,7 +33,7 @@ describe('Board', function() {
 			cy.login(recipient)
 			cy.visit(`/apps/deck/#/board/${boardId}`)
 			cy.get('.board-title').contains(board.title)
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.should('not.exist')
 		})
 	})
@@ -50,7 +51,7 @@ describe('Board', function() {
 			cy.login(recipient)
 			cy.visit(`/apps/deck/#/board/${boardId}`)
 			cy.get('.board-title').contains(board.title)
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.should('not.exist')
 		})
 	})
@@ -71,7 +72,7 @@ describe('Board', function() {
 			cy.login(recipient)
 			cy.visit(`/apps/deck/#/board/${boardId}`)
 			cy.get('.board-title').contains(board.title)
-			cy.get('.button-vue[aria-label*="Add card"]')
+			cy.get('[data-cy="action:add-card"]')
 				.first().click()
 		})
 	})

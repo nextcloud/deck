@@ -82,6 +82,7 @@ class BoardService {
 		private IUserManager $userManager,
 		private ISecureRandom $random,
 		private ConfigService $configService,
+		private CirclesService $circlesService,
 		private ?string $userId,
 	) {
 	}
@@ -181,7 +182,6 @@ class BoardService {
 		return $board->getDeletedAt() > 0;
 	}
 
-
 	/**
 	 * @throws BadRequestException
 	 */
@@ -227,6 +227,56 @@ class BoardService {
 		$this->changeHelper->boardChanged($board->getId());
 
 		return $board;
+	}
+
+	/**
+	 * Create a board with the current user as owner and attach it to a team
+	 *
+	 * @throws BadRequestException
+	 * @throws NoPermissionException
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 */
+	public function createForTeam(string $title, string $userId, ?string $color, string $teamId): Board {
+		if ($color === null || $color === '') {
+			$color = sprintf('%06x', random_int(0, 0xffffff));
+		} elseif (str_starts_with($color, '#')) {
+			$color = substr($color, 1);
+		}
+
+		$this->boardServiceValidator->check(compact('title', 'userId', 'color'));
+
+		if ($teamId === '') {
+			throw new BadRequestException('teamId must not be empty');
+		}
+
+		if (!$this->circlesService->isCirclesEnabled()) {
+			throw new BadRequestException('Circles/Teams app is not enabled');
+		}
+
+		if ($this->circlesService->getCircle($teamId) === null) {
+			throw new BadRequestException('Team not found');
+		}
+
+		if (!$this->circlesService->isUserInCircle($teamId, $userId)) {
+			throw new NoPermissionException('You must be a member of the team to create a team board');
+		}
+
+		$board = $this->create($title, $userId, $color);
+		$board->setTeamId($teamId);
+		$board = $this->boardMapper->update($board);
+
+		// give edit access to the team members
+		$this->addAcl(
+			$board->getId(),
+			Acl::PERMISSION_TYPE_CIRCLE,
+			$teamId,
+			true,
+			false,
+			false,
+		);
+
+		return $this->find($board->getId());
 	}
 
 	/**
@@ -401,6 +451,9 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
+		$now = time();
+		$acl->setCreatedAt($now);
+		$acl->setLastModifiedAt($now);
 		$newAcl = $this->aclMapper->insert($acl);
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE, [], $this->userId);
@@ -419,6 +472,18 @@ class BoardService {
 		}
 
 		$this->eventDispatcher->dispatchTyped(new AclCreatedEvent($acl));
+
+		// Sync permissions to remote server since shareReceived() creates ACL with no permissions
+		if ($type === Acl::PERMISSION_TYPE_REMOTE && ($edit || $share || $manage)) {
+			$notification = $this->federationFactory->getCloudFederationNotification();
+			$payload = [
+				$newAcl->jsonSerialize(),
+				'sharedSecret' => $newAcl->getToken(),
+			];
+			$notification->setMessage('update-permissions', 'deck', (string)$boardId, $payload);
+			$url = $this->cloudIdManager->resolveCloudId($participant);
+			$this->cloudFederationProviderManager->sendCloudNotification($url->getRemote(), $notification);
+		}
 
 		return $newAcl;
 	}
@@ -440,6 +505,7 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
+		$acl->setLastModifiedAt(time());
 		$this->boardMapper->mapAcl($acl);
 		$acl = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
@@ -572,7 +638,6 @@ class BoardService {
 				$acl->getPermissionShare(),
 				$acl->getPermissionManage());
 		}
-
 
 		$labels = $this->labelMapper->findAll($id);
 		foreach ($labels as $label) {
@@ -709,13 +774,14 @@ class BoardService {
 		usort($stacks, $stackSorter);
 		usort($newStacks, $stackSorter);
 
+		$stackIds = array_map(fn (Stack $stack) => $stack->getId(), $stacks);
+		$activeCardsByStack = $this->cardMapper->findAllForStacks($stackIds);
+		$archivedCardsByStack = $this->cardMapper->findAllArchivedForStacks($stackIds);
+
 		$i = 0;
 		foreach ($stacks as $stack) {
-			$cards = $this->cardMapper->findAll($stack->getId());
-			$archivedCards = $this->cardMapper->findAllArchived($stack->getId());
-
 			/** @var Card[] $cards */
-			$cards = array_merge($cards, $archivedCards);
+			$cards = array_merge($activeCardsByStack[$stack->getId()] ?? [], $archivedCardsByStack[$stack->getId()] ?? []);
 
 			foreach ($cards as $card) {
 				$targetStackId = $moveCardsToLeftStack ? $newStacks[0]->getId() : $newStacks[$i]->getId();
@@ -736,7 +802,6 @@ class BoardService {
 				// Persist the cloned card.
 				$newCard = $this->cardMapper->insert($newCard);
 
-
 				// Copy labels.
 				if ($withLabels) {
 					$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
@@ -753,7 +818,6 @@ class BoardService {
 						}
 					}
 				}
-
 
 				// Copy assignments.
 				if ($withAssignments) {
@@ -818,20 +882,36 @@ class BoardService {
 
 	private function enrichWithCards(Board $board): void {
 		$stacks = $this->stackMapper->findAll($board->getId());
-		foreach ($stacks as $stack) {
-			$cards = $this->cardMapper->findAllByStack($stack->getId());
-			$fullCards = [];
-			foreach ($cards as $card) {
-				$fullCard = $this->cardMapper->find($card->getId());
-				$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
-				$fullCard->setAssignedUsers($assignedUsers);
-				array_push($fullCards, $fullCard);
-			}
-			$stack->setCards($fullCards);
-		}
-
 		if (\count($stacks) === 0) {
 			return;
+		}
+
+		$stackIds = array_map(fn (Stack $stack) => $stack->getId(), $stacks);
+
+		// Fetch all active cards for all stacks in one query
+		$cardsByStack = $this->cardMapper->findAllForStacks($stackIds);
+
+		$allCards = array_merge(...array_values(array_filter($cardsByStack)));
+		$allCardIds = array_map(fn (Card $card) => $card->getId(), $allCards);
+
+		// Batch-fetch labels and assigned users for all cards
+		$labelsByCard = [];
+		foreach ($this->labelMapper->findAssignedLabelsForCards($allCardIds) as $label) {
+			$labelsByCard[$label->getCardId()][] = $label;
+		}
+		$usersByCard = [];
+		foreach ($this->assignedUsersMapper->findIn($allCardIds) as $assignment) {
+			$usersByCard[$assignment->getCardId()][] = $assignment;
+		}
+
+		foreach ($stacks as $stack) {
+			$fullCards = [];
+			foreach ($cardsByStack[$stack->getId()] ?? [] as $card) {
+				$card->setLabels($labelsByCard[$card->getId()] ?? []);
+				$card->setAssignedUsers($usersByCard[$card->getId()] ?? []);
+				$fullCards[] = $card;
+			}
+			$stack->setCards($fullCards);
 		}
 
 		$board->setStacks($stacks);

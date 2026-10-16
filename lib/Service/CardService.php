@@ -11,13 +11,11 @@ use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
-use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\CardCreatedEvent;
@@ -32,6 +30,7 @@ use OCA\Deck\Validators\CardServiceValidator;
 use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
@@ -60,6 +59,7 @@ class CardService {
 		private CardServiceValidator $cardServiceValidator,
 		private AssignmentService $assignmentService,
 		private IReferenceManager $referenceManager,
+		private IDBConnection $connection,
 		private ?string $userId,
 	) {
 	}
@@ -71,12 +71,19 @@ class CardService {
 	public function enrichCards(array $cards): array {
 		$user = $this->userManager->get($this->userId);
 
-		$cardIds = array_map(function (Card $card) use ($user): int {
+		$allCardIds = array_map(fn (Card $card) => $card->getId(), $cards);
+		$attachmentCounts = $this->attachmentService->countForCards($allCardIds);
+
+		// Pre-fetch all stacks for this batch in one query and index by ID
+		$stackIds = array_unique(array_map(fn (Card $card) => $card->getStackId(), $cards));
+		$stacksById = $this->stackMapper->findByIds($stackIds);
+
+		$cardIds = array_map(function (Card $card) use ($user, $attachmentCounts, $stacksById): int {
 			// Everything done in here might be heavy as it is executed for every card
 			$cardId = $card->getId();
 			$this->cardMapper->mapOwner($card);
 
-			$card->setAttachmentCount($this->attachmentService->count($cardId));
+			$card->setAttachmentCount($attachmentCounts[$cardId] ?? 0);
 
 			// TODO We should find a better way just to get the comment count so we can save 1-3 queries per card here
 			$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
@@ -85,7 +92,7 @@ class CardService {
 			$card->setCommentsUnread($countUnreadComments);
 			$card->setCommentsCount($countComments);
 
-			$stack = $this->stackMapper->find($card->getStackId());
+			$stack = $stacksById[$card->getStackId()] ?? $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($stack->getBoardId(), false);
 			$card->setRelatedStack($stack);
 			$card->setRelatedBoard($board);
@@ -95,16 +102,22 @@ class CardService {
 
 		$assignedLabels = $this->labelMapper->findAssignedLabelsForCards($cardIds);
 		$assignedUsers = $this->assignedUsersMapper->findIn($cardIds);
+		$dependenciesByCard = $this->cardMapper->findDependenciesForCards($cardIds);
+
+		// Pre-group labels and users by card ID
+		$labelsByCard = [];
+		foreach ($assignedLabels as $label) {
+			$labelsByCard[$label->getCardId()][] = $label;
+		}
+		$usersByCard = [];
+		foreach ($assignedUsers as $assignment) {
+			$usersByCard[$assignment->getCardId()][] = $assignment;
+		}
 
 		foreach ($cards as $card) {
-			$cardLabels = array_values(array_filter($assignedLabels, function (Label $label) use ($card) {
-				return $label->getCardId() === $card->getId();
-			}));
-			$cardAssignedUsers = array_values(array_filter($assignedUsers, function (Assignment $assignment) use ($card) {
-				return $assignment->getCardId() === $card->getId();
-			}));
-			$card->setLabels($cardLabels);
-			$card->setAssignedUsers($cardAssignedUsers);
+			$card->setLabels($labelsByCard[$card->getId()] ?? []);
+			$card->setAssignedUsers($usersByCard[$card->getId()] ?? []);
+			$card->setDependentCards($dependenciesByCard[$card->getId()] ?? []);
 		}
 
 		return array_map(
@@ -176,7 +189,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null): Card {
+	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, $startdate = null, ?string $color = null, bool $insertAtPosition = false): Card {
 		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
@@ -191,7 +204,23 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
-		$card = $this->cardMapper->insert($card);
+		$card->setStartdate($startdate);
+		$card->setColor($color);
+
+		if (!$insertAtPosition) {
+			$card = $this->cardMapper->insert($card);
+		} else {
+			// Insert at the requested position and shift the surrounding cards
+			$this->connection->beginTransaction();
+			try {
+				$card = $this->cardMapper->insert($card);
+				$this->reorderCards($card->getId(), $stackId, $order);
+				$this->connection->commit();
+			} catch (\Throwable $e) {
+				$this->connection->rollBack();
+				throw $e;
+			}
+		}
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE, [], $card->getOwner());
 		$this->changeHelper->cardChanged($card->getId(), false);
@@ -233,7 +262,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null): Card {
+	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null, ?string $startdate = null, ?OptionalNullableValue $color = null): Card {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
@@ -274,8 +303,12 @@ class CardService {
 		$card->setStackId($stackId);
 		$card->setType($type);
 		$card->setOrder($order);
-		$card->setOwner($owner);
 		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
+		$card->setStartdate($startdate ? new \DateTime($startdate) : null);
+		if ($color !== null) {
+			$colorValue = $color->getValue();
+			$card->setColor(is_string($colorValue) && $colorValue !== '' ? $colorValue : null);
+		}
 		$resetDuedateNotification = false;
 		if (
 			$card->getDuedate() === null
@@ -296,7 +329,6 @@ class CardService {
 		} else {
 			$card->setDone(null);
 		}
-
 
 		// Trigger update events before setting description as it is handled separately
 		$changes->setAfter($card);
@@ -374,8 +406,10 @@ class CardService {
 			}
 			$this->assignmentService->assignUser($newCard->getId(), $assignement->getParticipant());
 		}
-		$newCard->setDescription($originCard->getDescription());
-		$card = $this->enrichCards([$this->cardMapper->update($newCard)]);
+		$freshCard = $this->cardMapper->find($newCard->getId());
+		$freshCard->setDescription($originCard->getDescription());
+		$card = $this->enrichCards([$this->cardMapper->update($freshCard)]);
+
 		return $card[0];
 	}
 
@@ -430,11 +464,36 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$changes = new ChangeSet($card);
+		$oldStackId = $card->getStackId();
 		$card->setStackId($stackId);
+
+		if ($stackId !== $oldStackId) {
+			$newStack = $this->stackMapper->find($stackId);
+			if ($newStack->getIsDoneColumn()) {
+				$card->setDone(new \DateTime());
+			} else {
+				$oldStack = $this->stackMapper->find($oldStackId);
+				if ($oldStack->getIsDoneColumn()) {
+					$card->setDone(null);
+				}
+			}
+		}
+
 		$this->cardMapper->update($card);
 		$changes->setAfter($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
 
+		$result = $this->reorderCards($id, $stackId, $order);
+		$this->changeHelper->cardChanged($id, false);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+
+		return $result;
+	}
+
+	/**
+	 * @return list<Card>
+	 */
+	private function reorderCards(int $id, int $stackId, int $order): array {
 		$cardsToReorder = $this->cardMapper->findAll($stackId);
 		$result = [];
 		$i = 0;
@@ -457,8 +516,6 @@ class CardService {
 			$this->cardMapper->update($cardToReorder);
 			$result[$cardToReorder->getOrder()] = $cardToReorder;
 		}
-		$this->changeHelper->cardChanged($id, false);
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return array_values($result);
 	}
@@ -500,7 +557,6 @@ class CardService {
 	public function unarchive(int $id): Card {
 		$this->cardServiceValidator->check(compact('id'));
 
-
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -533,6 +589,15 @@ class CardService {
 		$changes = new ChangeSet($card);
 		$card->setDone(new \DateTime());
 		$newCard = $this->cardMapper->update($card);
+		// Auto-move to done column if one is configured and card is not already there
+		$currentStack = $this->stackMapper->find($newCard->getStackId());
+		if (!$currentStack->getIsDoneColumn()) {
+			$doneStack = $this->stackMapper->findDoneColumnForBoard($currentStack->getBoardId());
+			if ($doneStack !== null) {
+				$newCard->setStackId($doneStack->getId());
+				$newCard = $this->cardMapper->update($newCard);
+			}
+		}
 		$this->notificationHelper->markDuedateAsRead($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_DONE);
 		$this->changeHelper->cardChanged($id, false);
@@ -609,7 +674,6 @@ class CardService {
 	public function removeLabel(int $cardId, int $labelId): Card {
 		$this->cardServiceValidator->check(compact('cardId', 'labelId'));
 
-
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
 
@@ -637,5 +701,63 @@ class CardService {
 
 	public function getRedirectUrlForCard(int $cardId): string {
 		return $this->urlGenerator->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $cardId]);
+	}
+
+	/**
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function assignDependentCard(int $cardId, int $dependentCardId): Card {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $dependentCardId, Acl::PERMISSION_READ);
+
+		if ($this->boardService->isArchived($this->cardMapper, $cardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+
+		$card = $this->cardMapper->find($cardId);
+		if ($card->getArchived()) {
+			throw new StatusException('Operation not allowed. This card is archived.');
+		}
+
+		if ($this->cardMapper->addDependency($cardId, $dependentCardId)) {
+			$this->changeHelper->cardChanged($cardId);
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_UPDATE);
+		}
+
+		[$card] = $this->enrichCards([$card]);
+		return $card;
+	}
+
+	/**
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function removeDependentCard(int $cardId, int $dependentCardId): Card {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $dependentCardId, Acl::PERMISSION_READ);
+
+		if ($this->boardService->isArchived($this->cardMapper, $cardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+
+		$card = $this->cardMapper->find($cardId);
+		if ($card->getArchived()) {
+			throw new StatusException('Operation not allowed. This card is archived.');
+		}
+
+		if ($this->cardMapper->removeDependency($cardId, $dependentCardId)) {
+			$this->changeHelper->cardChanged($cardId);
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_UPDATE);
+		}
+
+		[$card] = $this->enrichCards([$card]);
+		return $card;
 	}
 }

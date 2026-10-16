@@ -154,7 +154,8 @@ class BoardMapperTest extends TestCase {
 		$this->boards[0]->setDeletedAt(1);
 		$this->boards[0] = $this->boardMapper->update($this->boards[0]);
 
-		$actual = $this->boardMapper->findToDelete();
+		$timeLimit = time() - (60 * 60 * 5);
+		$actual = $this->boardMapper->findToDelete($timeLimit);
 		$this->boards[0]->resetUpdatedFields();
 
 		$filteredActual = array_values(array_filter($actual, function ($board) {

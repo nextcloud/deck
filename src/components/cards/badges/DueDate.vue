@@ -16,13 +16,20 @@
 	</div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-import moment from '@nextcloud/moment'
+<script setup>
+import { useFormatRelativeTime, useFormatTime } from '@nextcloud/vue'
+import { computed } from 'vue'
+import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
-import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
+import { useSettingsStore } from '../../../stores/settings.js'
 
+const { card } = defineProps({
+	card: {
+		type: Object,
+		default: null,
+	},
+})
 const DueState = {
 	Done: 'Done',
 	Future: 'Future',
@@ -30,57 +37,36 @@ const DueState = {
 	Now: 'Now',
 	Overdue: 'Overdue',
 }
-export default {
-	name: 'DueDate',
-	components: {
-		CheckCircle,
-		Clock,
-		ClockOutline,
-	},
-	props: {
-		card: {
-			type: Object,
-			default: null,
-		},
-	},
-	computed: {
-		...mapState({
-			compactMode: state => state.compactMode,
-		}),
-		dueState() {
-			if (this.card.done) {
-				return DueState.Done
-			}
-			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
-			if (days < 0) {
-				return DueState.Overdue
-			}
-			if (days === 0) {
-				return DueState.Now
-			}
-			if (days === 1) {
-				return DueState.Next
-			}
+const settingsStore = useSettingsStore()
+const compactMode = computed(() => settingsStore.compactMode)
+const dueState = computed(() => {
+	if (card.done) {
+		return DueState.Done
+	}
+	const days = Math.floor((new Date(card.duedate).getTime() - new Date().getTime()) / 60 / 60 / 24 / 1000)
+	if (days < 0) {
+		return DueState.Overdue
+	}
+	if (days === 0) {
+		return DueState.Now
+	}
+	if (days === 1) {
+		return DueState.Next
+	}
 
-			return DueState.Future
-		},
-		overdue() {
-			return this.dueState === DueState.Overdue
-		},
-		relativeDate() {
-			const date = this.card.done ? this.card.done : this.card.duedate
-			const diff = moment(this.$root.time).diff(date, 'seconds')
-			if (diff >= 0 && diff < 45) {
-				return t('core', 'seconds ago')
-			}
-			return moment(date).fromNow()
-		},
-		absoluteDate() {
-			const date = this.card.done ? this.card.done : this.card.duedate
-			return moment(date).format('LLLL')
-		},
-	},
-}
+	return DueState.Future
+})
+const overdue = computed(() => {
+	return dueState.value === DueState.Overdue
+})
+
+const dueTimestamp = computed(() => card.done ? card.done : card.duedate)
+
+const relativeDate = useFormatRelativeTime(dueTimestamp)
+const absoluteDate = useFormatTime(
+	computed(() => new Date(dueTimestamp.value)),
+	{ format: { dateStyle: 'full', timeStyle: 'short' } },
+)
 </script>
 
 <style lang="scss" scoped>
@@ -111,7 +97,7 @@ export default {
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
-			margin-left: 4px;
+			margin-inline-start: 4px;
 			font-size: 13px;
 		}
 	}

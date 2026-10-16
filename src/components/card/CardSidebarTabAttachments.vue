@@ -4,32 +4,35 @@
 -->
 
 <template>
-	<AttachmentList :card-id="card.id"
+	<AttachmentList
+		:cardId="card.id"
 		:removable="true"
-		@delete-attachment="deleteAttachment"
-		@restore-attachment="restoreAttachment" />
+		@deleteAttachment="deleteAttachment"
+		@restoreAttachment="restoreAttachment" />
 </template>
 
 <script>
+import { mapActions } from 'pinia'
 import AttachmentList from './AttachmentList.vue'
+import { useAttachmentStore } from '../../stores/attachment.js'
 export default {
 	name: 'CardSidebarTabAttachments',
 	components: {
 		AttachmentList,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
 	},
+
 	methods: {
-		deleteAttachment(attachment) {
-			this.$store.dispatch('deleteAttachment', attachment)
-		},
-		restoreAttachment(attachment) {
-			this.$store.dispatch('restoreAttachment', attachment)
-		},
+		...mapActions(useAttachmentStore, [
+			'deleteAttachment',
+			'restoreAttachment',
+		]),
 	},
 }
 </script>

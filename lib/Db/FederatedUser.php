@@ -17,6 +17,14 @@ class FederatedUser extends RelationalObject {
 		parent::__construct($cloudId->getId(), $cloudId);
 	}
 
+	public function getCloudId(): ICloudId {
+		return $this->cloudId;
+	}
+
+	public function getUID(): string {
+		return $this->cloudId->getId();
+	}
+
 	public function getObjectSerialization(): array {
 		return [
 			'uid' => $this->cloudId->getId(),

@@ -4,25 +4,30 @@
 -->
 <template>
 	<!--  :style="{top:cardTop, left:cardLeft}" -->
-	<div v-if="card && selector"
+	<div
+		v-if="card && selector"
 		ref="shortcutModal"
-		v-click-outside="close"
+		v-v-on-click-outside="close"
 		class="keyboard-shortcuts__modal"
 		tabindex="0"
 		@keydown.esc="close">
 		<CardItem :card="card" />
-		<DueDateSelector v-if="selector === 'due-date'" :card="card" :can-edit="true" />
-		<TagSelector v-if="selector === 'tag'" :card="card" :can-edit="true" />
-		<AssignmentSelector v-if="selector === 'assignment'" :card="card" :can-edit="true" />
+		<DueDateSelector v-if="selector === 'due-date'" :card="card" :canEdit="true" />
+		<TagSelector v-if="selector === 'tag'" :card="card" :canEdit="true" />
+		<AssignmentSelector v-if="selector === 'assignment'" :card="card" :canEdit="true" />
 	</div>
 </template>
+
 <script>
-import DueDateSelector from './card/DueDateSelector.vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState } from 'vuex'
-import TagSelector from './card/TagSelector.vue'
+import { vOnClickOutside } from '@vueuse/components'
+import { mapState } from 'pinia'
 import AssignmentSelector from './card/AssignmentSelector.vue'
+import DueDateSelector from './card/DueDateSelector.vue'
+import TagSelector from './card/TagSelector.vue'
 import CardItem from './cards/CardItem.vue'
+import { useBoardStore } from '../stores/board.js'
+import { useSettingsStore } from '../stores/settings.js'
 
 export default {
 	name: 'KeyboardShortcuts',
@@ -32,6 +37,11 @@ export default {
 		AssignmentSelector,
 		CardItem,
 	},
+
+	directives: {
+		vOnClickOutside,
+	},
+
 	data() {
 		return {
 			card: null,
@@ -40,23 +50,29 @@ export default {
 			selector: null,
 		}
 	},
+
 	computed: {
-		...mapState({
-			board: state => state.currentBoard,
+		...mapState(useBoardStore, {
+			board: 'currentBoard',
 		}),
+
+		...mapState(useSettingsStore, ['shortcutLock']),
 	},
+
 	created() {
 		document.addEventListener('keydown', this.onKeydown)
 		subscribe('deck:card:show-assignment-selector', this.handleShowAssignemnt)
 		subscribe('deck:card:show-due-date-selector', this.handleShowDueDate)
 		subscribe('deck:card:show-label-selector', this.handleShowLabel)
 	},
-	destroyed() {
+
+	unmounted() {
 		document.removeEventListener('keydown', this.onKeydown)
 		unsubscribe('deck:card:show-assignment-selector', this.handleShowAssignemnt)
 		unsubscribe('deck:card:show-due-date-selector', this.handleShowDueDate)
 		unsubscribe('deck:card:show-label-selector', this.handleShowLabel)
 	},
+
 	methods: {
 		onKeydown(key) {
 			if (OCP.Accessibility.disableKeyboardShortcuts()) {
@@ -70,11 +86,15 @@ export default {
 			// Global shortcuts (not board specific)
 			if ((key.metaKey || key.ctrlKey) && key.code === 'KeyF') {
 				const searchInput = document.getElementById('deck-search-input')
+				// Overviews have no search field, so leave Ctrl+F to the browser there
+				if (!searchInput) {
+					return
+				}
 				if (searchInput === document.activeElement) {
 					return false
 				}
 
-				document.getElementById('deck-search-input').focus()
+				searchInput.focus()
 				key.preventDefault()
 				return true
 			}
@@ -83,7 +103,7 @@ export default {
 				return
 			}
 
-			if (this.$store.state.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
+			if (this.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
 				return
 			}
 
@@ -98,49 +118,50 @@ export default {
 			}
 
 			switch (key.code) {
-			case 'KeyN':
-				emit('deck:board:show-new-card', this.board.id)
-				break
-			case 'KeyF':
-				emit('deck:board:toggle-filter-popover', this.board.id)
-				break
-			case 'KeyX':
-				emit('deck:board:clear-filter', this.board.id)
-				break
-			case 'KeyQ':
-				emit('deck:board:toggle-filter-by-me', this.board.id)
-				break
-			case 'ArrowDown':
-				this.keyboardFocusDown()
-				break
-			case 'ArrowUp':
-				this.keyboardFocusUp()
-				break
-			case 'ArrowLeft':
-				this.keyboardFocusLeft()
-				break
-			case 'ArrowRight':
-				this.keyboardFocusRight()
-				break
-			default:
-				return
+				case 'KeyN':
+					emit('deck:board:show-new-card', this.board.id)
+					break
+				case 'KeyF':
+					emit('deck:board:toggle-filter-popover', this.board.id)
+					break
+				case 'KeyX':
+					emit('deck:board:clear-filter', this.board.id)
+					break
+				case 'KeyQ':
+					emit('deck:board:toggle-filter-by-me', this.board.id)
+					break
+				case 'ArrowDown':
+					this.keyboardFocusDown()
+					break
+				case 'ArrowUp':
+					this.keyboardFocusUp()
+					break
+				case 'ArrowLeft':
+					this.keyboardFocusLeft()
+					break
+				case 'ArrowRight':
+					this.keyboardFocusRight()
+					break
+				default:
+					return
 			}
 
 			key.preventDefault()
 		},
+
 		keyboardFocusDown() {
 			const activeCard = document.activeElement.closest('.card')
 			const cards = document.querySelectorAll('.card')
 			const stacks = document.querySelectorAll('.stack')
-			const index = Array.from(cards).findIndex(card => card === activeCard)
+			const index = Array.from(cards).findIndex((card) => card === activeCard)
 			if (index === -1) {
 				cards[0]?.focus()
 				return
 			}
 
-			const currentStack = Array.from(stacks).find(stack => stack.contains(document.activeElement))
+			const currentStack = Array.from(stacks).find((stack) => stack.contains(document.activeElement))
 			const currentStackCards = currentStack.querySelectorAll('.card')
-			const currentStackIndex = Array.from(currentStackCards).findIndex(card => card === document.activeElement)
+			const currentStackIndex = Array.from(currentStackCards).findIndex((card) => card === document.activeElement)
 
 			if (currentStackIndex === currentStackCards.length - 1) {
 				return
@@ -154,15 +175,15 @@ export default {
 			const activeCard = document.activeElement.closest('.card')
 			const cards = document.querySelectorAll('.card')
 			const stacks = document.querySelectorAll('.stack')
-			const index = Array.from(cards).findIndex(card => card === activeCard)
+			const index = Array.from(cards).findIndex((card) => card === activeCard)
 			if (index === -1) {
 				cards[0]?.focus()
 				return
 			}
 
-			const currentStack = Array.from(stacks).find(stack => stack.contains(document.activeElement))
+			const currentStack = Array.from(stacks).find((stack) => stack.contains(document.activeElement))
 			const currentStackCards = currentStack.querySelectorAll('.card')
-			const currentStackIndex = Array.from(currentStackCards).findIndex(card => card === document.activeElement)
+			const currentStackIndex = Array.from(currentStackCards).findIndex((card) => card === document.activeElement)
 
 			if (currentStackIndex === 0) {
 				return
@@ -171,10 +192,11 @@ export default {
 			cards[index - 1]?.focus()
 			cards[index - 1]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 		},
+
 		keyboardFocusLeft() {
 			const activeCard = document.activeElement.closest('.card')
 			const stacks = document.querySelectorAll('.stack')
-			const currentStackIndex = Array.from(stacks).findIndex(stack => stack.contains(activeCard))
+			const currentStackIndex = Array.from(stacks).findIndex((stack) => stack.contains(activeCard))
 
 			if (!currentStackIndex === 0) {
 				return
@@ -204,10 +226,11 @@ export default {
 			nextCard?.focus()
 			nextCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 		},
+
 		keyboardFocusRight() {
 			const activeCard = document.activeElement.closest('.card')
 			const stacks = document.querySelectorAll('.stack')
-			const currentStackIndex = Array.from(stacks).findIndex(stack => stack.contains(activeCard))
+			const currentStackIndex = Array.from(stacks).findIndex((stack) => stack.contains(activeCard))
 
 			if (currentStackIndex === stacks.length - 1) {
 				return
@@ -237,6 +260,7 @@ export default {
 			nextCard?.focus()
 			nextCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 		},
+
 		handleShowDueDate({ card, element }) {
 			// this.cardTop = element.getBoundingClientRect().top + 'px'
 			// this.cardLeft = element.getBoundingClientRect().left + 'px'
@@ -244,6 +268,7 @@ export default {
 			this.selector = 'due-date'
 			this.$refs.shortcutModal?.focus()
 		},
+
 		handleShowAssignemnt({ card, element }) {
 			// this.cardTop = element.getBoundingClientRect().top + 'px'
 			// this.cardLeft = element.getBoundingClientRect().left + 'px'
@@ -251,6 +276,7 @@ export default {
 			this.selector = 'assignment'
 			this.$refs.shortcutModal?.focus()
 		},
+
 		handleShowLabel({ card, element }) {
 			// this.cardTop = element.getBoundingClientRect().top + 'px'
 			// this.cardLeft = element.getBoundingClientRect().left + 'px'
@@ -258,6 +284,7 @@ export default {
 			this.selector = 'tag'
 			this.$refs.shortcutModal?.focus()
 		},
+
 		close() {
 			this.card = null
 			this.selector = null
@@ -265,6 +292,7 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
 .keyboard-shortcuts__modal {
 	position: fixed;
@@ -272,7 +300,7 @@ export default {
 	box-shadow: 0 0 100px 30px rgba(0, 0, 0, 0.5);
 	max-width: 500px;
 	bottom: 32px;
-	left: 50%;
+	inset-inline-start: 50%;
 	transform: translateX(-50%);
 	background-color: var(--color-background-dark);
 	border-radius: var(--border-radius-rounded);

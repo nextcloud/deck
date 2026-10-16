@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const arrayMove = function(arrayToSort, removedIndex, addedIndex) {
-	if (removedIndex === null && addedIndex === null) return arrayToSort
+function arrayMove(arrayToSort, removedIndex, addedIndex) {
+	if (removedIndex === null && addedIndex === null) {
+		return arrayToSort
+	}
 
 	const result = [...arrayToSort]
 	let itemToAdd = arrayToSort[removedIndex]

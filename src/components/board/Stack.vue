@@ -4,69 +4,87 @@
 -->
 
 <template>
-	<div class="stack" :data-cy-stack="stack.title">
-		<div v-click-outside="stopCardCreation"
+	<div
+		class="stack"
+		:class="{
+			'stack--done-column': isDoneColumn,
+			'stack--add-card-at-top': canAddCard && stackAddCardAtTop,
+			'stack--add-card-at-bottom': canAddCard && !stackAddCardAtTop,
+		}"
+		:data-cy-stack="stack.title">
+		<div
 			class="stack__header"
-			:class="{'stack__header--add': showAddCard}"
+			:class="{'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived" tabindex="0">
 					{{ stack.title }}
+					<CheckCircleOutline
+						v-if="isDoneColumn"
+						class="stack__done-icon"
+						decorative />
+					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
-				<h3 v-else-if="!editing"
-					dir="auto"
+				<h3
+					v-else-if="!editing"
 					tabindex="0"
 					:aria-label="stack.title"
 					:title="stack.title"
 					class="stack__title"
 					@click="startEditing(stack)"
 					@keydown.enter="startEditing(stack)">
-					{{ stack.title }}
+					<span dir="auto">{{ stack.title }}</span>
+					<CheckCircleOutline
+						v-if="isDoneColumn"
+						class="stack__done-icon"
+						decorative />
+					<span class="stack__card-count">{{ cardsByStack.length }}</span>
 				</h3>
-				<form v-else-if="editing"
-					v-click-outside="cancelEdit"
+				<form
+					v-else-if="editing"
+					v-v-on-click-outside="cancelEdit"
 					data-cy="editStackTitleForm"
 					@submit.prevent="finishedEdit(stack)"
 					@keyup.esc="cancelEdit">
-					<input v-model="copiedStack.title"
+					<input
+						v-model="copiedStack.title"
 						v-focus
 						dir="auto"
 						type="text"
 						required="required">
-					<input title="t('deck', 'Edit list title')"
+					<input
+						title="t('deck', 'Edit list title')"
 						class="icon-confirm"
 						type="submit"
 						value="">
 				</form>
 			</transition>
-			<NcActions v-if="canManage && !isArchived" :force-menu="true">
-				<NcActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+			<NcActions v-if="canManage && !isArchived" :forceMenu="true">
+				<NcActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow = true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Archive all cards') }}
 				</NcActionButton>
-				<NcActionButton v-if="showArchived" @click="modalArchivAllCardsShow=true">
+				<NcActionButton v-if="showArchived" @click="modalArchivAllCardsShow = true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Unarchive all cards') }}
 				</NcActionButton>
-				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
-					{{ t('deck', 'Delete list') }}
-				</NcActionButton>
-			</NcActions>
-			<NcActions v-if="canEdit && !showArchived && !isArchived">
-				<NcActionButton data-cy="action:add-card" @click.stop="showAddCard=true">
-					{{ t('deck', 'Add card') }}
+				<NcActionButton closeAfterClick @click="toggleDoneColumn">
 					<template #icon>
-						<CardPlusOutline :size="20" />
+						<CheckCircleOutline decorative />
 					</template>
+					{{ isDoneColumn ? t('deck', 'Do not set cards as "done"') : t('deck', 'Set cards as "done"') }}
+				</NcActionButton>
+				<NcActionButton icon="icon-delete" @click="deleteStackShowUndo(stack)">
+					{{ t('deck', 'Delete list') }}
 				</NcActionButton>
 			</NcActions>
 		</div>
 
-		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
+		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow = false">
 			<div class="modal__content">
 				<h3 v-if="!showArchived">
 					{{ t('deck', 'Archive all cards in this list') }}
@@ -82,68 +100,65 @@
 				<button v-else class="primary" @click="setArchivedToAllCardsFromStack(stack, !showArchived)">
 					{{ t('deck', 'Unarchive all cards') }}
 				</button>
-				<button @click="modalArchivAllCardsShow=false">
+				<button @click="modalArchivAllCardsShow = false">
 					{{ t('deck', 'Cancel') }}
 				</button>
 			</div>
 		</NcModal>
 
-		<Container :get-child-payload="payloadForCard(stack.id)"
+		<StackCardAdd
+			v-if="canAddCard && stackAddCardAtTop"
+			:stack="stack"
+			:addAtTop="true"
+			@creating="animate = true"
+			@created="handleCardCreated" />
+
+		<Container
+			:getChildPayload="payloadForCard(stack.id)"
 			class="dnd-container"
-			group-name="stack"
+			groupName="stack"
 			data-click-closes-sidebar="true"
-			non-drag-area-selector=".dragDisabled"
-			:drag-handle-selector="dragHandleSelector"
+			nonDragAreaSelector=".dragDisabled"
+			:dragHandleSelector="dragHandleSelector"
 			data-dragscroll-enabled
-			@should-accept-drop="canEdit"
-			@drag-start="draggingCard = true"
-			@drag-end="draggingCard = false"
+			:shouldAcceptDrop="() => canEdit"
+			@dragStart="draggingCard = true"
+			@dragEnd="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
-				<transition :appear="animate && !card.animated && (card.animated=true)"
-					:appear-class="'zoom-appear-class'"
-					:appear-active-class="'zoom-appear-active-class'">
+				<transition
+					:appear="animate && !card.animated && (card.animated = true)"
+					appearClass="zoom-appear-class"
+					appearActiveClass="zoom-appear-active-class">
 					<CardItem :id="card.id" ref="card" :dragging="draggingCard" />
 				</transition>
 			</Draggable>
 		</Container>
 
-		<transition name="slide-bottom" appear>
-			<div v-if="showAddCard" class="stack__card-add">
-				<form :class="{ 'icon-loading-small': stateCardCreating }"
-					@submit.prevent.stop="clickAddCard()">
-					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-					<input id="new-stack-input-main"
-						ref="newCardInput"
-						v-model="newCardTitle"
-						type="text"
-						class="no-close"
-						:disabled="stateCardCreating"
-						:placeholder="t('deck', 'Card name')"
-						required
-						pattern=".*\S+.*"
-						@focus="onCreateCardFocus"
-						@keydown.esc="stopCardCreation">
-					<input v-show="!stateCardCreating"
-						class="icon-confirm"
-						type="submit"
-						value="">
-				</form>
-			</div>
-		</transition>
+		<StackCardAdd
+			v-if="canAddCard && !stackAddCardAtTop"
+			:stack="stack"
+			@creating="animate = true"
+			@created="handleCardCreated" />
 	</div>
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
-import { mapGetters, mapState } from 'vuex'
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { showUndo } from '@nextcloud/dialogs'
+import { NcActionButton, NcActions, NcModal } from '@nextcloud/vue'
+import { vOnClickOutside } from '@vueuse/components'
+import { mapActions, mapState } from 'pinia'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
-import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
-import { showError, showUndo } from '@nextcloud/dialogs'
-
+import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import CardItem from '../cards/CardItem.vue'
+import StackCardAdd from './StackCardAdd.vue'
+import logger from '../../logger.js'
+import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
+import { useStackStore } from '../../stores/stack.js'
+import { useTrashbinStore } from '../../stores/trashbin.js'
 
 import '@nextcloud/dialogs/style.css'
 
@@ -153,33 +168,35 @@ export default {
 		NcActions,
 		NcActionButton,
 		CardItem,
+		StackCardAdd,
 		Container,
 		Draggable,
 		NcModal,
 		ArchiveIcon,
-		CardPlusOutline,
+		CheckCircleOutline,
 	},
+
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
+
 	props: {
 		dragging: {
 			type: Boolean,
 			default: false,
 		},
+
 		stack: {
 			type: Object,
 			default: undefined,
 		},
 	},
+
 	data() {
 		return {
 			editing: false,
 			draggingCard: false,
 			copiedStack: '',
-			newCardTitle: '',
-			showAddCard: false,
-			stateCardCreating: false,
 			animate: false,
 			modalArchivAllCardsShow: false,
 			stackTransfer: {
@@ -188,44 +205,58 @@ export default {
 			},
 		}
 	},
+
 	computed: {
-		...mapGetters([
+		...mapState(useBoardStore, [
 			'canManage',
 			'canEdit',
 			'isArchived',
+			'showArchived',
 		]),
-		...mapState({
-			showArchived: state => state.showArchived,
+
+		...mapState(useCardStore, {
+			cardsByStackGetter: 'cardsByStack',
 		}),
+
+		...mapState(useSettingsStore, [
+			'compactMode',
+			'showCardCover',
+			'shortcutLock',
+		]),
+
 		cardsByStack() {
-			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
+			return this.cardsByStackGetter(this.stack.id).filter((card) => {
 				if (this.showArchived) {
 					return card.archived
 				}
 				return !card.archived
 			})
 		},
+
+		isDoneColumn() {
+			return !!this.stack.isDoneColumn
+		},
+
 		dragHandleSelector() {
 			return this.canEdit && !this.showArchived ? null : '.no-drag'
 		},
+
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
-	},
-	watch: {
-		showAddCard(newValue) {
-			if (!newValue) {
-				this.$store.dispatch('toggleShortcutLock', false)
-			} else {
-				this.$nextTick(() => {
-					this.$refs.newCardInput.focus()
-				})
-			}
+
+		stackAddCardAtTop() {
+			return useSettingsStore().configByKey('stackAddCardAtTop') === true
+		},
+
+		canAddCard() {
+			return this.canEdit && !this.showArchived && !this.isArchived
 		},
 	},
 
@@ -234,97 +265,97 @@ export default {
 	},
 
 	methods: {
+		...mapActions(useTrashbinStore, ['stackUndoDelete']),
+		...mapActions(useStackStore, ['setDoneStack', 'deleteStack', 'updateStack']),
+		...mapActions(useCardStore, {
+			reorderCardInStore: 'reorderCard',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+			addCardInStore: 'addCard',
+		}),
+
+		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		stopCardCreation(e) {
-			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
-			// so we have to ignore it
-			e.stopPropagation()
 			if (this.$refs.newCardInput && this.$refs.newCardInput.parentElement === e.target.parentElement) {
 				return false
 			}
-			this.showAddCard = false
 			return false
 		},
+
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
-			const card = Object.assign({}, payload)
+			const card = { ...payload }
 			if (this.stack.id === stackId) {
 				if (addedIndex !== null && removedIndex === null) {
 					// move card to new stack
 					card.stackId = stackId
 					card.order = addedIndex
-					console.debug('move card to stack', card.stackId, card.order)
-					await this.$store.dispatch('reorderCard', card)
+					logger.debug('Move card to stack', { stackId: card.stackId, order: card.order })
+					await this.reorderCardInStore(card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
 					card.order = addedIndex
-					console.debug('move card in stack', card.stackId, card.order)
-					await this.$store.dispatch('reorderCard', card)
+					logger.debug('Move card in stack', { stackId: card.stackId, order: card.order })
+					await this.reorderCardInStore(card)
 				}
 			}
 		},
+
 		payloadForCard(stackId) {
-			return index => {
+			return (index) => {
 				return this.cardsByStack[index]
 			}
 		},
-		deleteStack(stack) {
-			this.$store.dispatch('deleteStack', stack)
-			showUndo(t('deck', 'List deleted'), () => this.$store.dispatch('stackUndoDelete', stack))
-		},
-		setArchivedToAllCardsFromStack(stack, isArchived) {
 
+		toggleDoneColumn() {
+			this.setDoneStack({
+				stackId: this.stack.id,
+				boardId: this.stack.boardId,
+				isDone: !this.isDoneColumn,
+			})
+		},
+
+		deleteStackShowUndo(stack) {
+			this.deleteStack(stack)
+			showUndo(t('deck', 'List deleted'), () => this.stackUndoDelete(stack))
+		},
+
+		setArchivedToAllCardsFromStack(stack, isArchived) {
 			this.stackTransfer.total = this.cardsByStack.length
 			this.cardsByStack.forEach((card, index) => {
 				this.stackTransfer.current = index
-				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: isArchived })
+				this.archiveUnarchiveCardInStore({ ...card, archived: isArchived })
 			})
 			this.modalArchivAllCardsShow = false
 		},
+
 		startEditing(stack) {
 			if (this.dragging) {
 				return
 			}
 
-			this.copiedStack = Object.assign({}, stack)
+			this.copiedStack = { ...stack }
 			this.editing = true
 		},
+
 		finishedEdit(stack) {
 			if (this.copiedStack.title !== stack.title) {
-				this.$store.dispatch('updateStack', this.copiedStack)
+				this.updateStack(this.copiedStack)
 			}
 			this.editing = false
 		},
+
 		cancelEdit() {
 			this.editing = false
 		},
-		async clickAddCard() {
-			this.stateCardCreating = true
-			try {
-				this.animate = true
-				const newCard = await this.$store.dispatch('addCard', {
-					title: this.newCardTitle,
-					stackId: this.stack.id,
-					boardId: this.stack.boardId,
-				})
-				this.newCardTitle = ''
-				this.showAddCard = true
-				this.$nextTick(() => {
-					this.$refs.newCardInput.focus()
-					this.animate = false
-					this.$refs.card[(this.$refs.card.length - 1)].scrollIntoView()
-				})
-				if (!this.cardDetailsInModal) {
-					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
-				}
-			} catch (e) {
-				showError('Could not create card: ' + e.response.data.message)
-			} finally {
-				this.stateCardCreating = false
-			}
+
+		handleCardCreated(newCard) {
+			this.$nextTick(() => {
+				this.animate = false
+				// Refs of a v-for are registered in creation order, not in list order
+				this.$refs.card?.find((card) => card.id === newCard.id)?.scrollIntoView()
+			})
 		},
-		onCreateCardFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
-		},
+
 		setupAutoscrollOnDrag() {
 			let timer
 			const autoscroll = (event) => {
@@ -347,7 +378,7 @@ export default {
 			}
 			window.addEventListener('mousemove', (e) => {
 				if (!this.draggingCard) {
-					timer && clearInterval(timer)
+					clearInterval(timer)
 					return
 				}
 
@@ -363,12 +394,34 @@ export default {
 
 	@use 'sass:math';
 
-	@import './../../css/variables';
+	@use './../../css/variables.scss' as *;
 
 	.stack {
+		--stack-card-add-control-height: calc(var(--default-clickable-area) + 2 * var(--default-grid-baseline));
 		width: 100%;
 		.dnd-container {
-			flex-grow: 1;
+			flex: 1 1 auto;
+			min-height: 0;
+		}
+
+		&.stack--add-card-at-top {
+			&:after {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 100%;
+				height: $stack-gap;
+				bottom: 0;
+				z-index: 99;
+				pointer-events: none;
+				background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
+			}
+		}
+
+		&.stack--done-column {
+			.stack__header--done-column {
+				border-bottom: 2px solid var(--color-success);
+			}
 		}
 	}
 
@@ -422,10 +475,40 @@ export default {
 			padding: $card-padding;
 			font-size: var(--default-font-size);
 
+			span {
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
 			&:focus-visible {
 				outline: 2px solid var(--color-border-dark);
 				border-radius: 3px;
 			}
+		}
+
+		.stack__done-icon {
+			flex-shrink: 0;
+			color: var(--color-main-text);
+			margin-inline-start: 2px;
+			width: 1em;
+			height: 1em;
+
+			:deep(svg) {
+				width: 1em;
+				height: 1em;
+			}
+		}
+
+		.stack__card-count {
+			flex-shrink: 0;
+			margin-inline-start: 6px;
+			padding: 0 8px;
+			border-radius: var(--border-radius-pill, 16px);
+			background-color: var(--color-background-darker);
+			color: var(--color-text-maxcontrast);
+			font-size: var(--default-font-size);
+			font-weight: normal;
+			line-height: 1.5;
 		}
 
 		form {
@@ -435,7 +518,7 @@ export default {
 			}
 			input[type="submit"] {
 				border-style: solid;
-				border-left-style: none;
+				border-inline-start-style: none;
 			}
 		}
 
@@ -447,76 +530,6 @@ export default {
 		}
 	}
 
-	.stack__card-add {
-		flex-shrink: 0;
-		z-index: 100;
-		display: flex;
-		padding-bottom: $stack-gap;
-		background-color: var(--color-main-background);
-		position: relative;
-
-		// Smooth fade out of the cards at the top
-		&:before {
-			content: '';
-			display: block;
-			position: absolute;
-			width: 100%;
-			height: $stack-gap;
-			z-index: 99;
-			transition: bottom var(--animation-slow);
-			background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
-			transform: translateY(-100%);
-		}
-
-		form {
-			display: flex;
-			width: 100%;
-			border: 2px solid var(--color-border-maxcontrast);
-			border-radius: var(--border-radius-large);
-			overflow: hidden;
-			padding: 2px;
-		}
-
-		&.icon-loading-small:after,
-		&.icon-loading-small-dark:after {
-			margin-left: calc(50% - 25px);
-		}
-
-		input[type=text] {
-			flex-grow: 1;
-			padding-right: 16px;
-		}
-
-		input {
-			border: none;
-			margin: 0;
-		}
-	}
-
-	/**
-	 * Rules to handle scrolling behaviour are inherited from Board.vue
-	 */
-
-	.slide-top-enter-active,
-	.slide-top-leave-active {
-		transition: all 100ms ease;
-	}
-
-	.slide-top-enter, .slide-top-leave-to {
-		transform: translateY(-10px);
-		opacity: 0;
-	}
-
-	.slide-bottom-enter-active,
-	.slide-bottom-leave-active {
-		transition: all 100ms ease;
-	}
-
-	.slide-bottom-enter, .slide-bottom-leave-to {
-		transform: translateY(20px);
-		opacity: 0;
-	}
-
 	.modal__content {
 		width: 25vw;
 		min-width: 250px;
@@ -526,7 +539,7 @@ export default {
 	}
 
 	.modal__content button {
-		float: right;
+		float: inline-end;
 	}
 
 	progress {

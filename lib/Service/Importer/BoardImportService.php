@@ -23,7 +23,8 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\Service\FileService;
+use OCA\Deck\Service\AttachmentService;
+use OCA\Deck\Service\FilesAppService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\Importer\Systems\TrelloApiService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
@@ -73,6 +74,7 @@ class BoardImportService {
 		private ICommentsManager $commentsManager,
 		private IEventDispatcher $eventDispatcher,
 		private LoggerInterface $logger,
+		private AttachmentService $attachmentService,
 	) {
 		$this->board = new Board();
 		$this->disableCommentsEvents();
@@ -125,6 +127,7 @@ class BoardImportService {
 				$this->importLabels();
 				$this->importStacks();
 				$this->importCards();
+				$this->getImportSystem()->importAttachments();
 				$this->assignCardsToLabels();
 				$this->importComments();
 				$this->importCardAssignments();
@@ -319,11 +322,23 @@ class BoardImportService {
 		}
 	}
 
+	/**
+	 * Insert parsed comments by card and remap parent IDs from source to imported comments.
+	 *
+	 * @return void
+	 */
 	public function importComments(): void {
-		$allComments = $this->getImportSystem()->getComments();
-		foreach ($allComments as $cardId => $comments) {
+		$commentsByCard = $this->getImportSystem()->getComments();
+		$sourceToImportedCommentId = [];
+		foreach ($commentsByCard as $cardId => $comments) {
 			foreach ($comments as $commentId => $comment) {
+				$metaData = $comment->getMetaData() ?? [];
+				$sourceParentId = $comment->getParentId();
+				$comment->setParentId($sourceToImportedCommentId[$sourceParentId] ?? '0');
+
 				$this->insertComment((int)$cardId, $comment);
+				$sourceId = (string)($metaData['deckImportSourceId'] ?? $commentId);
+				$sourceToImportedCommentId[$sourceId] = $comment->getId();
 				$this->getImportSystem()->updateComment((int)$cardId, $commentId, $comment);
 			}
 		}
@@ -369,20 +384,16 @@ class BoardImportService {
 	}
 
 	public function insertAttachment(Attachment $attachment, string $content): Attachment {
-		$service = Server::get(FileService::class);
-		$folder = $service->getFolder($attachment);
+		$attachment->setType('file');
+		$attachment->setLastModified(time());
+		$attachment->setCreatedAt(time());
 
-		if ($folder->fileExists($attachment->getData())) {
-			$attachment = $this->attachmentMapper->findByData($attachment->getCardId(), $attachment->getData());
-			throw new ConflictException('File already exists.', $attachment);
-		}
+		/** @var FilesAppService $fileService */
+		$fileService = $this->attachmentService->getService('file');
+		$fileService->createFromImport($attachment, $content);
+		$fileService->extendData($attachment);
+		$this->attachmentService->syncAttachmentCreateSideEffects($attachment);
 
-		$target = $folder->newFile($attachment->getData());
-		$target->putContent($content);
-
-		$attachment = $this->attachmentMapper->insert($attachment);
-
-		$service->extendData($attachment);
 		return $attachment;
 	}
 

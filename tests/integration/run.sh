@@ -33,7 +33,7 @@ echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:$PORT/ocs/"
 
-vendor/bin/behat --colors $SCENARIO_TO_RUN
+vendor/bin/behat --colors --suite=test $SCENARIO_TO_RUN
 RESULT=$?
 
 kill -9 $PHPPID

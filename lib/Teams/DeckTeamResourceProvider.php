@@ -23,7 +23,6 @@ class DeckTeamResourceProvider implements \OCP\Teams\ITeamResourceProvider {
 	) {
 	}
 
-
 	public function getId(): string {
 		return Application::APP_ID;
 	}

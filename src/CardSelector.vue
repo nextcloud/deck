@@ -7,7 +7,8 @@
 	<NcModal class="card-selector" @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h3>{{ title }}</h3>
-			<NcSelect v-model="selectedBoard"
+			<NcSelect
+				v-model="selectedBoard"
 				:placeholder="t('deck', 'Select a board')"
 				:options="boards"
 				:disabled="loading"
@@ -15,19 +16,20 @@
 				@option:selected="fetchCardsFromBoard">
 				<template #selected-option="props">
 					<span>
-						<span :style="{ 'backgroundColor': '#' + props.color }" class="board-bullet" />
+						<span :style="{ backgroundColor: '#' + props.color }" class="board-bullet" />
 						<span>{{ props.title }}</span>
 					</span>
 				</template>
 				<template #option="props">
 					<span>
-						<span :style="{ 'backgroundColor': '#' + props.color }" class="board-bullet" />
+						<span :style="{ backgroundColor: '#' + props.color }" class="board-bullet" />
 						<span>{{ props.title }}</span>
 					</span>
 				</template>
 			</NcSelect>
 
-			<NcSelect v-model="selectedCard"
+			<NcSelect
+				v-model="selectedCard"
 				:placeholder="t('deck', 'Select a card')"
 				:options="cardsFromBoard"
 				:disabled="loading || selectedBoard === ''"
@@ -44,9 +46,9 @@
 </template>
 
 <script>
+import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { NcModal, NcSelect } from '@nextcloud/vue'
-import axios from '@nextcloud/axios'
 
 export default {
 	name: 'CardSelector',
@@ -54,16 +56,20 @@ export default {
 		NcModal,
 		NcSelect,
 	},
+
 	props: {
 		title: {
 			type: String,
 			default: t('deck', 'Select the card to link to a project'),
 		},
+
 		action: {
 			type: String,
 			default: t('deck', 'Link to card'),
 		},
 	},
+
+	emits: ['close', 'select'],
 	data() {
 		return {
 			boards: [],
@@ -73,14 +79,17 @@ export default {
 			loading: true,
 		}
 	},
+
 	computed: {
 		isBoardAndStackChoosen() {
 			return !(this.selectedBoard === '' || this.selectedCard === '')
 		},
 	},
+
 	beforeMount() {
 		this.fetchBoards()
 	},
+
 	methods: {
 		fetchBoards() {
 			axios.get(generateUrl('/apps/deck/boards')).then((response) => {
@@ -88,25 +97,26 @@ export default {
 				this.loading = false
 			})
 		},
+
 		async fetchCardsFromBoard(board) {
 			try {
 				this.cardsFromBoard = []
 				const url = generateUrl('/apps/deck/stacks/' + board.id)
 				const response = await axios.get(url)
-				response.data.forEach(stack => {
+				response.data.forEach((stack) => {
 					this.cardsFromBoard.push(...stack.cards)
 				})
 			} catch (err) {
 				return err
 			}
-
 		},
+
 		close() {
-			this.$root.$emit('close')
+			this.$emit('close')
 		},
-		select() {
-			this.$root.$emit('select', this.selectedCard.id)
 
+		select() {
+			this.$emit('select', this.selectedCard.id)
 		},
 	},
 
@@ -149,7 +159,7 @@ export default {
 	}
 
 	button {
-		float: right;
+		float: inline-end;
 	}
 
 	.card-selector:deep(.modal-container) {

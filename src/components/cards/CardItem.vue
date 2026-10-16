@@ -4,9 +4,11 @@
 -->
 
 <template>
-	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
-		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': currentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
+	<AttachmentDragAndDrop v-if="card" :cardId="card.id" class="drop-upload--card">
+		<div
+			:ref="`card${card.id}`"
+			:class="{compact: compactMode, 'current-card': isCurrentCard, 'no-labels': !hasLabels, card__editable: canEdit, card__archived: card.archived, card__highlight: highlight}"
+			:style="{backgroundColor: color}"
 			tag="div"
 			:tabindex="0"
 			class="card"
@@ -17,17 +19,19 @@
 				<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" dir="auto" />
 				{{ board.title }} » {{ stack.title }}
 			</div>
-			<CardCover v-if="showCardCover" :card-id="card.id" />
+			<CardCover v-if="showCardCover" :cardId="card.id" />
 			<div class="card-upper">
 				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
-					<span class="dragDisabled" contenteditable="false">{{ displayTitle }}</span>
+					<span>{{ displayTitle }}</span>
 				</h4>
-				<h4 v-if="editingTitle >= 1"
+				<h4
+					v-if="editingTitle >= 1"
 					key="title-edit"
 					dir="auto"
 					class="editable dragDisabled"
 					:aria-label="t('deck', 'Edit card title')">
-					<span ref="titleContentEditable"
+					<span
+						ref="titleContentEditable"
 						tabindex="0"
 						contenteditable="true"
 						role="textbox"
@@ -40,37 +44,40 @@
 				</h4>
 
 				<DueDate v-if="compactMode" :card="card" />
-				<CardMenu v-if="showMenuAtTitle"
+				<CardMenu
+					v-if="showMenuAtTitle"
 					:card="card"
 					class="right card-menu"
-					@edit-title="triggerEditTitle" />
+					@editTitle="triggerEditTitle" />
 			</div>
 
 			<div v-if="hasLabels" class="card-labels">
-				<transition-group v-if="card.labels && card.labels.length"
-					name="zoom"
-					tag="ul"
+				<ul
+					v-if="card.labels && card.labels.length"
 					class="labels"
 					@click.stop="openCard">
 					<li v-for="label in labelsSorted" :key="label?.id ?? label?.title" :style="labelStyle(label)">
 						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 					</li>
-				</transition-group>
-				<CardMenu v-if="showMenuAtLabels"
+				</ul>
+				<CardMenu
+					v-if="showMenuAtLabels"
 					:card="card"
 					class="right"
-					@edit-title="triggerEditTitle" />
+					@editTitle="triggerEditTitle" />
 			</div>
 
-			<div v-if="hasBadges"
+			<div
+				v-if="hasBadges"
 				v-show="!compactMode"
 				class="card-controls compact-item"
 				@click="openCard">
 				<CardBadges :card="card">
-					<CardMenu v-if="showMenuAtBadges"
+					<CardMenu
+						v-if="showMenuAtBadges"
 						:card="card"
 						class="right"
-						@edit-title="triggerEditTitle" />
+						@editTitle="triggerEditTitle" />
 				</CardBadges>
 			</div>
 		</div>
@@ -78,16 +85,21 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
-import { mapState, mapGetters } from 'vuex'
+import { getCurrentUser } from '@nextcloud/auth'
+import { emit } from '@nextcloud/event-bus'
+import { vOnClickOutside } from '@vueuse/components'
+import { mapActions, mapState } from 'pinia'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import DueDate from './badges/DueDate.vue'
 import CardBadges from './CardBadges.vue'
+import CardCover from './CardCover.vue'
+import CardMenu from './CardMenu.vue'
 import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
-import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
-import CardMenu from './CardMenu.vue'
-import CardCover from './CardCover.vue'
-import DueDate from './badges/DueDate.vue'
-import { getCurrentUser } from '@nextcloud/auth'
+import { useBoardStore } from '../../stores/board.js'
+import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
+import { useStackStore } from '../../stores/stack.js'
 
 const TITLE_EDITING_STATE = {
 	OFF: 0,
@@ -99,73 +111,90 @@ export default {
 	name: 'CardItem',
 	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
+
 	mixins: [Color, labelStyle],
 	props: {
 		id: {
 			type: Number,
 			default: null,
 		},
+
 		item: {
 			type: Object,
 			default: null,
 		},
+
 		standalone: {
 			type: Boolean,
 			default: false,
 		},
+
 		dragging: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	data() {
 		return {
 			highlight: false,
 			editingTitle: TITLE_EDITING_STATE.OFF,
+			isCurrentCard: false,
 		}
 	},
+
 	computed: {
-		...mapState({
-			compactMode: state => state.compactMode,
-			showArchived: state => state.showArchived,
-			currentBoard: state => state.currentBoard,
-			showCardCover: state => state.showCardCover,
-			shortcutLock: state => state.shortcutLock,
+		...mapState(useStackStore, ['stackById']),
+		...mapState(useCardStore, ['cardById']),
+		...mapState(useBoardStore, {
+			showArchived: 'showArchived',
+			currentBoard: 'currentBoard',
+			canEditPermission: 'canEdit',
+			boards: 'boards',
+			boardById: 'boardById',
 		}),
-		...mapGetters([
-			'isArchived',
-		]),
+
+		...mapState(useSettingsStore, {
+			compactMode: (state) => state.compactMode,
+			showCardCover: (state) => state.showCardCover,
+			shortcutLock: (state) => state.shortcutLock,
+		}),
+
 		board() {
-			return this.$store.getters.boardById(this?.stack?.boardId)
+			return this.boardById(this?.stack?.boardId)
 		},
+
 		stack() {
-			return this.$store.getters.stackById(this?.card?.stackId)
+			return this.stackById(this?.card?.stackId)
 		},
+
 		canEdit() {
 			if (this.currentBoard) {
-				return !this.currentBoard.archived && this.$store.getters.canEdit
+				return !this.currentBoard.archived && this.canEditPermission
 			}
-			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			const board = this.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
+
 		card() {
-			return this.item ? this.item : this.$store.getters.cardById(this.id)
+			return this.item ? this.item : this.cardById(this.id)
 		},
+
 		displayTitle() {
 			const reference = this.card?.referenceData
 			return reference ? reference.openGraphObject.name : this.card.title
 		},
-		currentCard() {
-			return this.card && this.$route && this.$route.params.cardId === this.card.id
-		},
+
 		labelsSorted() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
+
 		hasLabels() {
 			return this.card.labels.length > 0
 		},
+
 		hasBadges() {
 			return this.card.done
 				|| this.card.duedate
@@ -175,50 +204,86 @@ export default {
 				|| this.card.attachmentCount > 0
 				|| this.card.assignedUsers.length > 0
 		},
+
 		idBadge() {
-			return this.$store.getters.config('cardIdBadge')
+			return useSettingsStore().configByKey('cardIdBadge')
 		},
+
 		showMenuAtTitle() {
 			return this.compactMode || (!this.compactMode && !this.hasBadges && !this.hasLabels)
 		},
+
 		showMenuAtLabels() {
 			if (this.compactMode) {
 				return false
 			}
 			return !this.hasBadges && this.hasLabels
 		},
+
 		showMenuAtBadges() {
 			if (this.compactMode) {
 				return false
 			}
 			return this.hasBadges
 		},
-	},
-	watch: {
-		currentCard(newValue) {
-			if (newValue) {
-				this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
-			}
+
+		color() {
+			return this.card.color ? '#' + this.card.color : null
 		},
 	},
+
+	watch: {
+		'$route.params.cardId': {
+			immediate: true,
+			handler(cardId) {
+				if (!this.card) {
+					return
+				}
+				const newValue = cardId && parseInt(cardId, 10) === this.card.id
+				if (newValue === this.isCurrentCard) {
+					return
+				}
+				this.isCurrentCard = newValue
+				if (newValue) {
+					this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
+				}
+			},
+		},
+	},
+
 	methods: {
+		...mapActions(useCardStore, {
+			updateCardTitleInStore: 'updateCardTitle',
+			archiveUnarchiveCardInStore: 'archiveUnarchiveCard',
+			changeCardDoneStatusInStore: 'changeCardDoneStatus',
+			removeUserFromCardInStore: 'removeUserFromCard',
+			assignCardToUserInStore: 'assignCardToUser',
+		}),
+
+		...mapActions(useBoardStore, ['toggleFilter']),
+		...mapActions(useSettingsStore, ['toggleShortcutLock']),
 		hasSelection() {
 			const selection = window.getSelection()
-			return selection.toString() !== ''
+			// Ignore stray selections left over elsewhere in the host document
+			// (e.g. when embedded as a non-editable widget inside a
+			// contenteditable area, such as the Text app)
+			return selection.toString() !== '' && this.$el.contains(selection.anchorNode)
 		},
+
 		focus(card) {
 			if (this.shortcutLock || this.hasSelection()) {
 				return
 			}
-			card = this.$refs[`card${card}`]
+			card = this.$refs[`card${card || this.card.id}`]
 			card.focus()
 		},
+
 		openCard(event) {
 			if (event.target.tagName.toLowerCase() === 'a') {
 				return
 			}
 			if (this.dragging || this.hasSelection()) {
-			  return
+				return
 			}
 			const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
 
@@ -227,11 +292,12 @@ export default {
 				return
 			}
 
-			this.$root.$emit('open-card', this.card.id)
+			emit('deck:card:open-modal', this.card.id)
 		},
+
 		triggerEditTitle() {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 			setTimeout(() => {
 				const sel = window.getSelection()
 				sel.selectAllChildren(this.$refs.titleContentEditable)
@@ -239,6 +305,7 @@ export default {
 				this.editingTitle = TITLE_EDITING_STATE.ON
 			}, 0)
 		},
+
 		onTitleBlur(e) {
 			const value = e.target.innerText.trim().replace(/\n$/, '')
 			if (this.editingTitle !== TITLE_EDITING_STATE.ON || value === '') {
@@ -246,65 +313,73 @@ export default {
 			}
 			this.editingTitle = TITLE_EDITING_STATE.OFF
 			if (value !== this.card.title) {
-				this.$store.dispatch('updateCardTitle', {
+				this.updateCardTitleInStore({
 					...this.card,
 					title: value,
 				})
 			}
-			this.$store.dispatch('toggleShortcutLock', false)
+			this.toggleShortcutLock(false)
 		},
+
 		onTitleFocus() {
-			this.$store.dispatch('toggleShortcutLock', true)
+			this.toggleShortcutLock(true)
 		},
+
 		handleCardKeyboardShortcut(key) {
 			if (OCP.Accessibility.disableKeyboardShortcuts()) {
 				return
 			}
 
-			if (!this.canEdit || this.$store.state.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
+			if (!this.canEdit || this.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
 				return
 			}
 
 			switch (key.code) {
-			case 'KeyE':
-				this.triggerEditTitle()
-				break
-			case 'KeyA':
-				this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
-				break
-			case 'KeyO':
-				this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
-				break
-			case 'KeyM':
-				this.$el.querySelector('button.action-item__menutoggle')?.click()
-				break
-			case 'Enter':
-			case 'Space':
-				this.openCard().then(() => document.getElementById('app-sidebar-vue')?.focus())
-				break
-			case 'KeyS':
-				this.toggleSelfAsignment()
-				break
+				case 'KeyE':
+					this.triggerEditTitle()
+					break
+				case 'KeyA':
+					this.archiveUnarchiveCardInStore({ ...this.card, archived: !this.card.archived })
+					break
+				case 'KeyO':
+					this.changeCardDoneStatusInStore({ ...this.card, done: !this.card.done })
+					break
+				case 'KeyM':
+					this.$el.querySelector('button.action-item__menutoggle')?.click()
+					break
+				case 'Enter':
+				case 'Space':
+					this.openCard().then(() => document.getElementById('app-sidebar-vue')?.focus())
+					break
+				case 'KeyS':
+					this.toggleSelfAsignment()
+					break
 			}
 		},
+
 		applyLabelFilter(label) {
 			if (this.dragging) {
 				return
 			}
-			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
+			this.$nextTick(() => this.toggleFilter({ tags: [label.id] }))
 		},
+
 		toggleSelfAsignment() {
-			const isAssigned = this.card.assignedUsers.find(
-				(item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid,
-			)
-			this.$store.dispatch(isAssigned ? 'removeUserFromCard' : 'assignCardToUser', {
+			const isAssigned = this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
+			const assigneeData = {
 				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
 					type: 0,
 				},
-			})
+			}
+			if (isAssigned) {
+				this.removeUserFromCardInStore(assigneeData)
+				return
+			}
+			this.assignCardToUserInStore(assigneeData)
 		},
+
 		scrollIntoView() {
 			this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
 			this.focus()
@@ -318,8 +393,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/animations';
-	@import './../../css/variables';
+	@use './../../css/animations.scss';
+	@use './../../css/variables.scss' as *;
+	@use './../../css/labels.scss' as labels;
 
 	@mixin dark-card {
 		border: 2px solid var(--color-border-dark);
@@ -364,7 +440,7 @@ export default {
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
-				word-wrap: break-word;
+				overflow-wrap: break-word;
 				align-self: center;
 
 				:deep(a) {
@@ -393,14 +469,13 @@ export default {
 			}
 		}
 
-		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/labels';
+		@include labels.render-labels;
 
 		.card-controls {
 			display: flex;
 		}
 		&.card__editable .card-controls {
-			margin-right: 0;
+			margin-inline-end: 0;
 		}
 		&.card__archived {
 			background-color: var(--color-background-dark);
@@ -452,7 +527,7 @@ export default {
 			border-radius: 50%;
 			background-color: transparent;
 			margin-top: 4px;
-			margin-right: 4px;
+			margin-inline-end: 4px;
 		}
 	}
 
@@ -460,7 +535,7 @@ export default {
 		min-height: var(--default-clickable-area);
 
 		.duedate {
-			margin-right: 0;
+			margin-inline-end: 0;
 			display: flex;
 			height: 32px;
 			width: 32px;

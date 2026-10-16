@@ -3,12 +3,13 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcAppNavigationItem v-if="boards.length > 0"
+	<NcAppNavigationItem
+		v-if="boards.length > 0"
 		:name="text"
 		:to="to"
-		:exact="true"
-		:allow-collapse="collapsible"
-		:open="opened">
+		:allowCollapse="collapsible"
+		:open="opened"
+		:data-cy-navigation-category="id">
 		<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
 		<template #icon>
 			<slot name="icon" />
@@ -17,8 +18,8 @@
 </template>
 
 <script>
-import AppNavigationBoard from './AppNavigationBoard.vue'
 import { NcAppNavigationItem } from '@nextcloud/vue'
+import AppNavigationBoard from './AppNavigationBoard.vue'
 
 export default {
 	name: 'AppNavigationBoardCategory',
@@ -26,23 +27,28 @@ export default {
 		NcAppNavigationItem,
 		AppNavigationBoard,
 	},
+
 	props: {
 		to: {
 			type: String,
 			default: '',
 		},
+
 		id: {
 			type: String,
 			required: true,
 		},
+
 		text: {
 			type: String,
 			required: true,
 		},
+
 		boards: {
 			type: Array,
 			required: true,
 		},
+
 		/**
 		 * Control whether the category should be opened when adding boards.
 		 * This is for example used in the case a new board has been added, so the user directly sees it.
@@ -51,31 +57,41 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
 		defaultOpen: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	data() {
 		return {
 			opened: false,
 		}
 	},
+
 	computed: {
 		boardsSorted() {
 			return [...this.boards].sort((a, b) => a.title.localeCompare(b.title))
 		},
+
 		collapsible() {
 			return this.boards.length > 0
 		},
 	},
+
 	watch: {
+		// `boards` comes from a store getter that returns a fresh array, so a
+		// shallow watcher already sees every addition. With `deep` a nested
+		// change would hand out the very same array as old and new value, and
+		// the length comparison below could never be true anyway.
 		boards(newVal, prevVal) {
 			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
 				this.opened = true
 			}
 		},
 	},
+
 	mounted() {
 		this.opened = this.defaultOpen
 	},

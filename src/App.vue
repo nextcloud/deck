@@ -4,17 +4,18 @@
 -->
 
 <template>
-	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
+	<NcContent appName="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
-		<NcAppContent :allow-swipe-navigation="false">
+		<NcAppContent :disableSwipe="true">
 			<router-view />
 		</NcAppContent>
 
 		<div v-if="$route.params.id || $route.params.cardId">
-			<NcModal v-if="cardDetailsInModal && $route.params.cardId"
+			<NcModal
+				v-if="cardDetailsInModal && $route.params.cardId"
 				:name="t('deck', 'Card details')"
-				:clear-view-delay="0"
-				:close-button-contained="true"
+				:clearViewDelay="0"
+				:closeOnClickOutside="true"
 				size="large"
 				@close="hideModal()">
 				<div class="modal__content modal__card">
@@ -30,15 +31,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import AppNavigation from './components/navigation/AppNavigation.vue'
-import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
-import { NcModal, NcContent, NcAppContent, isMobile } from '@nextcloud/vue'
-import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
+import { NcAppContent, NcContent, NcModal, useIsMobile } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import CardMoveDialog from './CardMoveDialog.vue'
-
+import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
+import AppNavigation from './components/navigation/AppNavigation.vue'
+import { BoardApi } from './services/BoardApi.js'
+import { useBoardStore } from './stores/board.js'
+import { useSettingsStore } from './stores/settings.js'
 const boardApi = new BoardApi()
 
 export default {
@@ -51,12 +53,20 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
-	mixins: [isMobile],
+
 	provide() {
 		return {
 			boardApi,
 		}
 	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return {
+			isMobile,
+		}
+	},
+
 	data() {
 		return {
 			addButton: {
@@ -67,45 +77,46 @@ export default {
 					text: t('deck', 'Add board'),
 					action: () => {
 					},
+
 					reset: () => {
 					},
 				},
+
 				action: () => {
 					this.addButton.classes.push('editing')
 				},
 			},
 		}
 	},
+
 	computed: {
-		...mapState({
-			navShown: state => state.navShown,
-			sidebarShownState: state => state.sidebarShown,
-			currentBoard: state => state.currentBoard,
-		}),
+		...mapState(useBoardStore, ['currentBoard']),
+		...mapState(useSettingsStore, ['navShown']),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
 			// console.log(this.$route)
 			return this.$route.name === 'card' || this.$route.name === 'board.details'
 		},
-		sidebarShown() {
-			return this.sidebarRouterView || this.sidebarShownState
-		},
+
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.config('cardDetailsInModal')
+				return useSettingsStore().configByKey('cardDetailsInModal')
 			},
+
 			set(newValue) {
-				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+				useSettingsStore().setConfig({ cardDetailsInModal: newValue })
 			},
 		},
 	},
+
 	created() {
 		const initialState = loadState('deck', 'initialBoards', null)
 		if (initialState !== null) {
-			this.$store.dispatch('loadBoards')
+			useBoardStore().loadBoards()
 		}
-		this.$store.dispatch('loadSharees')
+		useSettingsStore().loadSharees()
 	},
+
 	mounted() {
 		// Redirect to cleaner URL (without /index.php) if RewriteBase is enabled
 		if (this.$route.path.startsWith('/index.php')) {
@@ -115,10 +126,11 @@ export default {
 		emit('toggle-navigation', { open: !this.isMobile && this.navShown, _initial: true })
 		this.$nextTick(() => {
 			subscribe('navigation-toggled', (navState) => {
-				this.$store.dispatch('toggleNav', navState.open)
+				useSettingsStore().toggleNav(navState.open)
 			})
 		})
 	},
+
 	methods: {
 		hideModal() {
 			this.$router.push({ name: 'board' })
@@ -143,7 +155,7 @@ export default {
 
 		&.nav-hidden {
 			#app-content {
-				margin-left: 0;
+				margin-inline-start: 0;
 			}
 		}
 
@@ -157,7 +169,7 @@ export default {
 </style>
 
 <style lang="scss">
-	@import '../css/print';
+	@use '../css/print.scss';
 
 	.icon-activity {
 		background-image: url(../img/activity-dark.svg);

@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
@@ -25,16 +24,12 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
-	private IConfig $config;
 	private ?string $userId = null;
-	private IGroupManager $groupManager;
 
 	public function __construct(
-		IConfig $config,
-		IGroupManager $groupManager,
+		private readonly IConfig $config,
+		private readonly IGroupManager $groupManager,
 	) {
-		$this->groupManager = $groupManager;
-		$this->config = $config;
 	}
 
 	public function getUserId(): ?string {
@@ -57,7 +52,8 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
-			'cardIdBadge' => $this->isCardIdBadgeEnabled()
+			'cardIdBadge' => $this->isCardIdBadgeEnabled(),
+			'stackAddCardAtTop' => $this->isStackAddCardAtTopEnabled()
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -139,6 +135,15 @@ class ConfigService {
 		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'cardIdBadge', $defaultState);
 	}
 
+	public function isStackAddCardAtTopEnabled(): bool {
+		$userId = $this->getUserId();
+		if ($userId === null) {
+			return false;
+		}
+
+		return (bool)$this->config->getUserValue($userId, Application::APP_ID, 'stackAddCardAtTop', false);
+	}
+
 	public function ensureFederationEnabled() {
 		if (!$this->get('federationEnabled')) {
 			throw new FederationDisabledException();
@@ -186,8 +191,17 @@ class ConfigService {
 				$this->config->setUserValue($userId, Application::APP_ID, 'cardIdBadge', (string)$value);
 				$result = $value;
 				break;
+			case 'stackAddCardAtTop':
+				$this->config->setUserValue($userId, Application::APP_ID, 'stackAddCardAtTop', (string)$value);
+				$result = $value;
+				break;
 			case 'board':
-				[$boardId, $boardConfigKey] = explode(':', $key);
+				// extra check that user only send one of the allowed board settings and not something random
+				$parts = explode(':', $key, 3);
+				if (count($parts) < 3) {
+					break;
+				}
+				$boardConfigKey = $parts[2];
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}
@@ -250,5 +264,11 @@ class ConfigService {
 		}
 
 		$this->config->setUserValue($userId ?? $this->getUserId(), 'deck', 'attachment_folder', $path);
+	}
+
+	public function getTrashRetention(): int {
+		$value = $this->config->getAppValue(Application::APP_ID, 'trashRetentionHours', '5');
+		$hours = (int)$value > 0 ? (int)$value : 5;
+		return 60 * 60 * $hours;
 	}
 }

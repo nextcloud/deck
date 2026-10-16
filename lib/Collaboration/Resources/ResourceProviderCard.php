@@ -14,7 +14,6 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\AppFramework\QueryException;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProvider;
 use OCP\Collaboration\Resources\IResource;
@@ -22,6 +21,7 @@ use OCP\Collaboration\Resources\ResourceException;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
 
 class ResourceProviderCard implements IProvider {
 	public const RESOURCE_TYPE = 'deck-card';
@@ -127,7 +127,7 @@ class ResourceProviderCard implements IProvider {
 		try {
 			/** @var IManager $resourceManager */
 			$resourceManager = Server::get(IManager::class);
-		} catch (QueryException $e) {
+		} catch (ContainerExceptionInterface $e) {
 		}
 		if ($cardId !== null) {
 			$resource = $resourceManager->getResourceForUser(self::RESOURCE_TYPE, (string)$cardId, null);

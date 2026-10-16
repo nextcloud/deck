@@ -8,23 +8,30 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Model\OptionalNullableValue;
+use OCA\Deck\NotImplementedException;
+use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ExternalBoardService;
 use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
-use OCP\AppFramework\Http\Attribute\RequestHeader;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class CardOcsController extends OCSController {
+	/**
+	 * Sentinel order used when the client does not request a specific position.
+	 * Cards created with this order are appended to the end of the stack.
+	 */
+	private const DEFAULT_ORDER = 999;
+
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private CardService $cardService,
+		private AssignmentService $assignmentService,
 		private StackService $stackService,
 		private BoardService $boardService,
 		private ExternalBoardService $externalBoardService,
@@ -35,9 +42,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
-	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = 999, ?string $description = '', $duedate = null, ?array $labels = [], ?array $users = []) {
+	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = self::DEFAULT_ORDER, ?string $description = '', $duedate = null, $startdate = null, ?array $labels = [], ?array $users = [], ?string $color = null) {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
 			if ($board->getExternalId()) {
@@ -49,23 +54,22 @@ class CardOcsController extends OCSController {
 		if (!$owner) {
 			$owner = $this->userId;
 		}
-		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate);
+		// An explicit order means the client wants the card at that position, so shift the surrounding cards
+		$card = $this->cardService->create($title, $stackId, $type, $order, $owner, $description, $duedate, $startdate, $color, insertAtPosition: $order !== self::DEFAULT_ORDER);
 
-		// foreach ($labels as $label) {
-		// 	$this->assignLabel($card->getId(), $label);
-		// }
+		foreach ($labels ?? [] as $label) {
+			$this->assignLabel($boardId, $card->getId(), $label);
+		}
 
-		// foreach ($users as $user) {
-		// 	$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
-		// }
+		foreach ($users ?? [] as $user) {
+			$this->assignmentService->assignUser($card->getId(), $user['id'], $user['type']);
+		}
 
 		return new DataResponse($card);
 	}
 
-
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
 	public function assignLabel(?int $boardId, int $cardId, int $labelId): DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -79,7 +83,30 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
+	public function assignUser(?int $boardId, int $cardId, string $userId, int $type = 0): DataResponse {
+		if ($boardId) {
+			$localBoard = $this->boardService->find($boardId, false);
+			if ($localBoard->getExternalId()) {
+				return new DataResponse($this->externalBoardService->assignUserOnRemote($localBoard, $cardId, $userId, $type));
+			}
+		}
+		return new DataResponse($this->assignmentService->assignUser($cardId, $userId, $type));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function unAssignUser(?int $boardId, int $cardId, string $userId, int $type = 0): DataResponse {
+		if ($boardId) {
+			$localBoard = $this->boardService->find($boardId, false);
+			if ($localBoard->getExternalId()) {
+				return new DataResponse($this->externalBoardService->unAssignUserOnRemote($localBoard, $cardId, $userId, $type));
+			}
+		}
+		return new DataResponse($this->assignmentService->unAssignUser($cardId, $userId, $type));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
 	public function removeLabel(?int $boardId, int $cardId, int $labelId): DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -93,11 +120,12 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	#[NoCSRFRequired]
-	#[RequestHeader(name: 'x-nextcloud-federation', description: 'Set to 1 when the request is performed by another Nextcloud Server to indicate a federation request', indirect: true)]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null): DataResponse {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, ?int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
+			: null;
+		$color = array_key_exists('color', $this->request->getParams())
+			? new OptionalNullableValue($this->request->getParam('color', null))
 			: null;
 		if (!$owner) {
 			$owner = $this->userId;
@@ -107,22 +135,24 @@ class CardOcsController extends OCSController {
 			}
 		}
 
-		$localBoard = $this->boardService->find($boardId, false);
-		if ($localBoard->getExternalId()) {
-			return new DataResponse($this->externalBoardService->updateCardOnRemote(
-				$localBoard,
-				$id,
-				$title,
-				$stackId,
-				$type,
-				$owner,
-				$description,
-				$order,
-				$duedate,
-				$deletedAt,
-				$archived,
-				$done
-			));
+		if ($boardId) {
+			$localBoard = $this->boardService->find($boardId, false);
+			if ($localBoard->getExternalId()) {
+				return new DataResponse($this->externalBoardService->updateCardOnRemote(
+					$localBoard,
+					$id,
+					$title,
+					$stackId,
+					$type,
+					$owner,
+					$description,
+					$order,
+					$duedate,
+					$deletedAt,
+					$archived,
+					$done
+				));
+			}
 		}
 
 		return new DataResponse($this->cardService->update($id,
@@ -135,7 +165,45 @@ class CardOcsController extends OCSController {
 			$duedate,
 			$deletedAt,
 			$archived,
-			$done
+			$done,
+			$startdate,
+			$color
 		));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function reorder(int $cardId, int $stackId, int $order, ?int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->reorderCardOnRemote($board, $cardId, $stackId, $order));
+			}
+		}
+		return new DataResponse($this->cardService->reorder($cardId, $stackId, $order));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function assignDependentCard(int $cardId, int $dependentCardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				throw new NotImplementedException('Dependent cards are not supported for external boards');
+			}
+		}
+		return new DataResponse($this->cardService->assignDependentCard($cardId, $dependentCardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function removeDependentCard(int $cardId, int $dependentCardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				throw new NotImplementedException('Dependent cards are not supported for external boards');
+			}
+		}
+		return new DataResponse($this->cardService->removeDependentCard($cardId, $dependentCardId));
 	}
 }

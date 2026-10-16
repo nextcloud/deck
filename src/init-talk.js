@@ -3,18 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
 import { generateUrl } from '@nextcloud/router'
-
 import CardCreateDialog from './CardCreateDialog.vue'
 import { buildSelector } from './helpers/selector.js'
+import logger from './logger.js'
+
 import './init-collections.js'
-
 import './shared-init.js'
-
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
 
 window.addEventListener('DOMContentLoaded', () => {
 	if (!window.OCA?.Talk?.registerMessageAction) {
@@ -50,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				await buildSelector(CardCreateDialog, {
 					props: {
 						title: shortenedMessage,
-						description: parsedMessage + '\n\n' + '['
+						description: parsedMessage + '\n\n['
 							+ t('deck', 'Message from {author} in {conversationName}', {
 								author: actorDisplayName,
 								conversationName,
@@ -58,8 +53,8 @@ window.addEventListener('DOMContentLoaded', () => {
 							+ '](' + window.location.protocol + '//' + window.location.host + generateUrl('/call/' + conversationToken) + ')',
 					},
 				})
-			} catch (e) {
-				console.debug('Card creation dialog was canceled')
+			} catch {
+				logger.debug('Card creation dialog was canceled')
 			}
 		},
 	})

@@ -13,12 +13,14 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Cache\CappedMemoryCache;
+use OCP\Federation\ICloudIdManager;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -27,7 +29,7 @@ use Psr\Log\LoggerInterface;
 
 class PermissionService {
 
-	/** @var array<string, array<string, User>> */
+	/** @var array<string, array<string, User|FederatedUser>> */
 	private $users = [];
 
 	// accessToken to check permission for federated shares
@@ -47,6 +49,7 @@ class PermissionService {
 		private IGroupManager $groupManager,
 		private IManager $shareManager,
 		private IConfig $config,
+		private ICloudIdManager $cloudIdManager,
 		private ?string $userId,
 	) {
 		$this->boardCache = new CappedMemoryCache();
@@ -58,6 +61,31 @@ class PermissionService {
 	 */
 	public function setAccessToken(string $token) {
 		$this->accessToken = $token;
+	}
+
+	/**
+	 * Get permissions for all supplied card ids
+	 * @param int[] $cardIds
+	 * @param ?string $userId
+	 * @param bool $allowDeleted
+	 * @return array<int, array<Acl::PERMISSION_*, bool>>
+	 */
+	public function getPermissionsForCards(array $cardIds, ?string $userId = null, bool $allowDeleted = false): array {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
+		$permissions = $this->aclMapper->findInCards($cardIds);
+		return array_map(
+			function (array $acls) use ($userId) {
+				return [
+					Acl::PERMISSION_READ => $this->userCan($acls, Acl::PERMISSION_READ, $userId),
+					Acl::PERMISSION_EDIT => $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
+					Acl::PERMISSION_MANAGE => $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
+					Acl::PERMISSION_SHARE => $this->userCan($acls, Acl::PERMISSION_SHARE, $userId),
+				];
+			},
+			$permissions
+		);
 	}
 
 	/**
@@ -89,7 +117,6 @@ class PermissionService {
 			];
 			return $permissions;
 		}
-
 
 		try {
 			$owner = $this->userIsBoardOwner($boardId, $userId, $allowDeleted);
@@ -200,7 +227,6 @@ class PermissionService {
 		return $this->boardCache[(string)$boardId];
 	}
 
-
 	public function externalUserCan(array $acls, int $permission, string $shareToken):bool {
 		$this->configService->ensureFederationEnabled();
 		foreach ($acls as $acl) {
@@ -263,7 +289,7 @@ class PermissionService {
 	 *
 	 * @param $boardId
 	 * @param $refresh
-	 * @return array<string, User>
+	 * @return array<string, User | FederatedUser>
 	 * */
 	public function findUsers($boardId, $refresh = false) {
 		// cache users of a board so we don't query them for every cards
@@ -302,8 +328,12 @@ class PermissionService {
 					continue;
 				}
 				foreach ($group->getUsers() as $user) {
-					$users[(string)$user->getUID()] = new User($user->getUID(), $this->userManager);
+					$users[$user->getUID()] = new User($user->getUID(), $this->userManager);
 				}
+			}
+
+			if ($acl->getType() === Acl::PERMISSION_TYPE_REMOTE) {
+				$users[(string)$acl->getParticipant()] = new FederatedUser($this->cloudIdManager->resolveCloudId($acl->getParticipant()));
 			}
 
 			if ($this->circlesService->isCirclesEnabled() && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {

@@ -21,6 +21,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 namespace OCA\Deck\Service\Importer;
 
 use OC\Comments\Comment;
@@ -29,6 +30,7 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\AttachmentMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
@@ -37,6 +39,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\BoardImportGetAllowedEvent;
+use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -71,6 +74,8 @@ class BoardImportServiceTest extends \Test\TestCase {
 	private $eventDispatcher;
 	/** @var TrelloJsonService|MockObject */
 	private $trelloJsonService;
+	/** @var AttachmentService|MockObject */
+	private $attachmentService;
 	/** @var BoardImportService|MockObject */
 	private $boardImportService;
 	public function setUp(): void {
@@ -82,6 +87,7 @@ class BoardImportServiceTest extends \Test\TestCase {
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->assignmentMapper = $this->createMock(AssignmentMapper::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
+		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->boardImportService = new BoardImportService(
@@ -96,6 +102,7 @@ class BoardImportServiceTest extends \Test\TestCase {
 			$this->commentsManager,
 			$this->eventDispatcher,
 			$this->createMock(LoggerInterface::class),
+			$this->attachmentService,
 		);
 
 		$this->boardImportService->setSystem('trelloJson');
@@ -150,6 +157,12 @@ class BoardImportServiceTest extends \Test\TestCase {
 	public function testImportSuccess() {
 		$this->userManager->method('userExists')
 			->willReturn(true);
+
+		$board = new Board();
+		$board->setOwner('admin');
+		$this->trelloJsonService
+			->method('getBoard')
+			->willReturn($board);
 
 		$this->boardMapper
 			->expects($this->once())

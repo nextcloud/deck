@@ -7,12 +7,20 @@ default:
     test:
       paths:
         - '%paths.base%/../features/'
+      filters:
+        tags: '~@federation'
       contexts:
         - ServerContext:
             baseUrl:  http://localhost:8080/
         - RequestContext
         - BoardContext
+        - DeckApiContext
         - CommentContext
         - AttachmentContext
         - SearchContext
         - SessionContext
+    federation:
+      paths:
+        - '%paths.base%/../features/federation/'
+      contexts:
+        - FederationContext

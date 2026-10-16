@@ -2,6 +2,12 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+ .comments {
+	height: 100%;
+	overflow: auto;
+ }
+
 .comment-form form {
 	display: flex;
 	flex-grow: 1;
@@ -9,7 +15,7 @@
 
 	.editor__content:deep {
 		flex-grow: 1;
-		margin-left: var(--default-clickable-area);
+		margin-inline-start: var(--default-clickable-area);
 
 		.ProseMirror {
 			width: 100%;
@@ -25,7 +31,7 @@
 		border: none;
 		position: absolute;
 		bottom: var(--default-grid-baseline);
-		right: var(--default-grid-baseline);
+		inset-inline-end: var(--default-grid-baseline);
 
 		&:disabled {
 			opacity: .7;
@@ -54,6 +60,6 @@
 }
 
 .comment--content {
-	margin-left: var(--default-clickable-area);
-	word-break: break-word;
+	margin-inline-start: var(--default-clickable-area);
+	overflow-wrap: break-word;
 }

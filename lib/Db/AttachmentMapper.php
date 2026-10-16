@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -65,6 +64,34 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * Returns a map of cardId => attachment count for the given card IDs in a single query.
+	 *
+	 * @param int[] $cardIds
+	 * @return array<int, int>
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findCountByCardIds(array $cardIds): array {
+		if (empty($cardIds)) {
+			return [];
+		}
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('card_id')
+			->selectAlias($qb->func()->count('id'), 'attachment_count')
+			->from($this->getTableName())
+			->where($qb->expr()->in('card_id', $qb->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->groupBy('card_id');
+
+		$counts = [];
+		$cursor = $qb->executeQuery();
+		while ($row = $cursor->fetch()) {
+			$counts[(int)$row['card_id']] = (int)$row['attachment_count'];
+		}
+		$cursor->closeCursor();
+		return $counts;
+	}
+
+	/**
 	 * @return Entity[]
 	 * @throws \OCP\DB\Exception
 	 */
@@ -75,16 +102,13 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
-
 		return $this->findEntities($qb);
 	}
 
 	/**
 	 * @return Attachment[]
 	 */
-	public function findToDelete(?int $cardId = null, bool $withOffset = true): array {
-		// add buffer of 5 min
-		$timeLimit = time() - (60 * 5);
+	public function findToDelete(int $timeLimit, ?int $cardId = null, bool $withOffset = true): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
@@ -100,7 +124,6 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 		return $this->findEntities($qb);
 	}
-
 
 	/**
 	 * Check if $userId is owner of Entity with $id

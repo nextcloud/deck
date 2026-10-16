@@ -9,7 +9,8 @@
 			{{ t('deck', 'Description') }}
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
 			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
-			<a v-if="!textAppAvailable"
+			<a
+				v-if="!textAppAvailable"
 				:title="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
@@ -36,15 +37,17 @@
 			<div ref="editor" />
 		</div>
 		<template v-else>
-			<div v-if="!descriptionEditing && hasDescription"
+			<div
+				v-if="!descriptionEditing && hasDescription"
 				id="description-preview"
 				dir="auto"
 				@click="clickedPreview"
 				v-html="renderedDescription" />
 			<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
-				{{ t('deck', 'Write a description …') }}
+				{{ t('deck', 'Write a description …') }}
 			</p>
-			<VueEasymde v-else
+			<VueEasymde
+				v-else
 				:key="card.id"
 				ref="markdownEditor"
 				v-model="description"
@@ -54,28 +57,32 @@
 				@blur="saveDescription" />
 		</template>
 
-		<NcModal v-if="modalShow && !!card.id" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
+		<NcModal v-if="modalShow && !!card.id" :title="t('deck', 'Choose attachment')" @close="modalShow = false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
-				<AttachmentList :card-id="card.id"
+				<AttachmentList
+					:cardId="card.id"
 					:selectable="true"
-					@select-attachment="addAttachment" />
+					@selectAttachment="addAttachment" />
 			</div>
 		</NcModal>
 	</div>
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it'
-import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
-import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
-import AttachmentList from './AttachmentList.vue'
-import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
+import { showWarning } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
-import { showWarning } from '@nextcloud/dialogs'
+import { NcActionButton, NcActions, NcModal } from '@nextcloud/vue'
+import MarkdownIt from 'markdown-it'
+import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
+import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
+import { mapActions, mapState } from 'pinia'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
-import { mapState } from 'vuex'
+import AttachmentList from './AttachmentList.vue'
+import logger from '../../logger.js'
+import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -99,25 +106,31 @@ export default {
 		AttachmentList,
 		PaperclipIcon,
 	},
+
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: true,
 		},
+
 		showAttachments: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
+	emits: ['change'],
 	data() {
 		return {
 			textAppAvailable: !!window.OCA?.Text?.createEditor,
 			editor: null,
 			keyExitState: 0,
+			descriptionOld: '',
 			description: '',
 			markdownIt: null,
 			descriptionEditing: false,
@@ -127,19 +140,19 @@ export default {
 				autofocus: true,
 				autosave: { enabled: false, uniqueId: 'unique' },
 				toolbar: false,
-				placeholder: t('deck', 'Write a description …'),
+				placeholder: t('deck', 'Write a description …'),
 				previewImagesInEditor: false,
 			},
+
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
 			descriptionLastEdit: 0,
 			modalShow: false,
 		}
 	},
+
 	computed: {
-		...mapState({
-			hasCardSaveError: (state) => state.hasCardSaveError,
-		}),
+		...mapState(useSettingsStore, ['hasCardSaveError']),
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -149,6 +162,7 @@ export default {
 				return styles
 			}
 		},
+
 		attachmentUrl() {
 			return (attachment) => {
 				if (attachment.extendedData.fileid) {
@@ -157,31 +171,60 @@ export default {
 				return generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 			}
 		},
+
 		attachmentPreview() {
 			return (attachment) => (attachment.extendedData.fileid
 				? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=600&y=600&a=true`)
 				: generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`))
 		},
+
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
 		},
+
 		renderedDescription() {
 			return markdownIt.render(this.card.description || '')
 		},
+
 		hasDescription() {
 			return this.card?.description?.trim?.() !== ''
 		},
 	},
+
+	watch: {
+		card(newCard) {
+			if (newCard.description !== this.descriptionOld) {
+				clearTimeout(this.descriptionSaveTimeout)
+				this.descriptionLastEdit = 0
+
+				this.descriptionOld = newCard.description
+				this.description = newCard.description
+				if (this.editor) {
+					this.editor.setContent(this.description)
+				}
+				showWarning(t('deck', 'The description has been changed by another user.'), { timeout: 3000 })
+			}
+		},
+	},
+
 	mounted() {
 		this.setupEditor()
 	},
-	async beforeDestroy() {
+
+	async beforeUnmount() {
 		await this.destroyEditor()
 	},
+
 	methods: {
+		...mapActions(useCardStore, {
+			updateCardDescInStore: 'updateCardDesc',
+		}),
+
+		...mapActions(useSettingsStore, ['setHasCardSaveError']),
 		async setupEditor() {
 			await this.destroyEditor()
 			this.descriptionLastEdit = 0
+			this.descriptionOld = this.card.description
 			this.description = this.card.description
 			this.editor = await window.OCA.Text.createEditor({
 				el: this.$refs.editor,
@@ -201,12 +244,18 @@ export default {
 					this.showAttachmentModal()
 				},
 			})
-
 		},
+
 		async destroyEditor() {
 			await this.saveDescription()
-			this?.editor?.destroy()
+			try {
+				this?.editor?.destroy()
+			} catch (e) {
+				// Ignore errors during editor destruction
+				logger.debug('Error destroying text editor', { error: e })
+			}
 		},
+
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
 				if (this.keyExitState === 0 && (b.key === 'Meta' || b.key === 'Alt')) {
@@ -223,36 +272,36 @@ export default {
 				if (b.key === 'Meta' || b.key === 'Control') {
 					this.keyExitState = 0
 				}
-
 			})
 		},
+
 		showEditor() {
 			if (!this.canEdit) {
 				return
 			}
 			this.descriptionEditing = true
 			this.description = this.card.description
-
 		},
+
 		hideEditor() {
 			this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
 			this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
 			this.descriptionEditing = false
 		},
+
 		showAttachmentModal() {
 			this.modalShow = true
 		},
+
 		addAttachment(attachment) {
 			const asImage = (attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')
 			// We need to strip those as text does not support rtl yet, so we cannot insert them separately
 			const stripRTLO = (text) => text.replaceAll('\u202e', '')
 			const fileName = stripRTLO(attachment.extendedData.info.filename) + '.' + stripRTLO(attachment.extendedData.info.extension)
 			if (this.editor) {
-				this.editor.insertAtCursor(
-					asImage
-						? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
-						: `<a href="${this.attachmentPreview(attachment)}">${fileName}</a>`,
-				)
+				this.editor.insertAtCursor(asImage
+					? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
+					: `<a href="${this.attachmentPreview(attachment)}">${fileName}</a>`)
 				return
 			} else {
 				const attachmentString = (asImage ? '!' : '') + '[📎 ' + fileName + '](' + this.attachmentPreview(attachment) + ')'
@@ -264,6 +313,7 @@ export default {
 			this.updateDescription()
 			this.modalShow = false
 		},
+
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {
 				const clickedIndex = [...document.querySelector('#description-preview').querySelectorAll('input')].findIndex((li) => li.id === e.target.id)
@@ -285,6 +335,7 @@ export default {
 				this.$emit('change', updatedDescription)
 			}
 		},
+
 		async saveDescription() {
 			if (this.descriptionLastEdit === 0 || this.descriptionSaving) {
 				return
@@ -292,15 +343,16 @@ export default {
 			this.descriptionSaving = true
 			try {
 				if (this.card.id !== undefined) {
-					await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
+					await this.updateCardDescInStore({ ...this.card, description: this.description })
 				}
 				this.$emit('change', this.description)
 				this.descriptionLastEdit = 0
-				this.$store.commit('setHasCardSaveError', false)
+				this.descriptionOld = this.description
+				this.setHasCardSaveError(false)
 			} catch (e) {
-				this.$store.commit('setHasCardSaveError', true)
+				this.setHasCardSaveError(true)
 				showWarning(t('deck', 'Could not save description'), { timeout: 2500 })
-				console.error(e)
+				logger.error('Could not save description', { error: e })
 
 				// Retry of network error
 				if (['ERR_NETWORK', 'ETIMEDOUT'].includes(e.code)) {
@@ -310,10 +362,12 @@ export default {
 				this.descriptionSaving = false
 			}
 		},
+
 		updateDescription() {
 			this.descriptionLastEdit = Date.now()
 			this.setSaveTimeout()
 		},
+
 		setSaveTimeout() {
 			clearTimeout(this.descriptionSaveTimeout)
 			this.descriptionSaveTimeout = setTimeout(async () => {
@@ -323,7 +377,9 @@ export default {
 	},
 }
 </script>
+
 <style lang="scss" scoped>
+	@use './../../css/markdown.scss' as markdown;
 
 .modal__content {
 	width: 25vw;
@@ -350,8 +406,7 @@ export default {
 	overflow-x: auto;
 
 	&:deep {
-		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
-		@import './../../css/markdown';
+		@include markdown.render-markdown;
 	}
 
 	&:deep(input) {
@@ -373,19 +428,19 @@ h5 {
 		display: inline-block;
 		width: 32px;
 		height: 16px;
-		float: right;
+		float: inline-end;
 		opacity: .7;
 	}
 
 	.icon-attach {
 		background-size: 16px;
-		float: right;
+		float: inline-end;
 		margin-top: -14px;
 		opacity: .7;
 	}
 
 	.icon-toggle, .icon-rename {
-		float: right;
+		float: inline-end;
 		margin-top: -14px;
 	}
 }
@@ -395,6 +450,7 @@ h5 {
 }
 
 </style>
+
 <style>
 @import '~easymde/dist/easymde.min.css';
 
@@ -412,7 +468,7 @@ h5 {
 }
 
 .CodeMirror-cursor {
-	border-left: 1px solid var(--color-main-text);
+	border-inline-start: 1px solid var(--color-main-text);
 }
 
 .CodeMirror-selected,

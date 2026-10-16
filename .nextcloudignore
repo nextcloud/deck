@@ -5,7 +5,7 @@
 /tests
 /babel.config.js
 /.editorconfig
-/.eslintrc.js
+/.eslint.config.mjs
 /.nextcloudignore
 /webpack.js
 /.codecov.yml

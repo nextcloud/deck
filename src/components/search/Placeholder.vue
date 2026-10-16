@@ -8,13 +8,15 @@
 			<defs>
 				<linearGradient id="card-placeholder__gradient">
 					<stop offset="0%" :stop-color="light">
-						<animate attributeName="stop-color"
+						<animate
+							attributeName="stop-color"
 							:values="`${light}; ${light}; ${dark}; ${dark}; ${light}`"
 							dur="2s"
 							repeatCount="indefinite" />
 					</stop>
 					<stop offset="100%" :stop-color="dark">
-						<animate attributeName="stop-color"
+						<animate
+							attributeName="stop-color"
 							:values="`${dark}; ${light}; ${light}; ${dark}; ${dark}`"
 							dur="2s"
 							repeatCount="indefinite" />
@@ -22,8 +24,9 @@
 				</linearGradient>
 			</defs>
 		</svg>
-		<svg class="card-placeholder__placeholder"
-			:class="{ 'standalone': standalone }"
+		<svg
+			class="card-placeholder__placeholder"
+			:class="{ standalone: standalone }"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="url(#card-placeholder__gradient)">
 			<rect class="card-placeholder__placeholder-line-header" :style="{width: `calc(${randWidth()}%)`}" />
@@ -43,6 +46,7 @@ export default {
 			standalone: true,
 		}
 	},
+
 	mounted() {
 		const styles = getComputedStyle(document.documentElement)
 		this.dark = styles.getPropertyValue('--color-placeholder-dark')
@@ -58,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@use '../../css/variables.scss' as *;
 $clickable-area: var(--default-clickable-area);
 
 .card--placeholder {

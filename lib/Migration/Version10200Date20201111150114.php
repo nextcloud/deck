@@ -5,6 +5,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Deck\Migration;
 
 use Closure;
@@ -97,7 +98,7 @@ class Version10200Date20201111150114 extends SimpleMigrationStep {
 
 		$table = $schema->getTable('deck_cards');
 		if ($table->getColumn('title')->getLength() !== 255) {
-			$table->changeColumn('title', [
+			$table->modifyColumn('title', [
 				'length' => 255
 			]);
 		}

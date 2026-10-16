@@ -2,83 +2,49 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router.js'
-import storeFactory from './store/main.js'
-import { sync } from 'vuex-router-sync'
-import { translate, translatePlural } from '@nextcloud/l10n'
+
 import { showError } from '@nextcloud/dialogs'
-import { subscribe } from '@nextcloud/event-bus'
-import ClickOutside from 'vue-click-outside'
+import { translate, translatePlural } from '@nextcloud/l10n'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+import App from './App.vue'
+import logger from './logger.js'
+import router from './router.js'
+import { initSessions } from './sessions.js'
+import { useActionsStore } from './stores/actions.js'
+
 import './shared-init.js'
 import './models/index.js'
-import { initSessions } from './sessions.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
 
-const store = storeFactory()
-sync(store, router)
-initSessions(store)
+const app = createApp(App)
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
+const pinia = createPinia()
+app.use(router)
+app.use(pinia)
 
-Vue.directive('click-outside', ClickOutside)
+app.config.globalProperties.t = translate
+app.config.globalProperties.n = translatePlural
 
-Vue.directive('focus', {
-	inserted(el) {
+app.directive('focus', {
+	mounted(el) {
 		el.focus()
 	},
 })
 
-Vue.config.errorHandler = (err, vm, info) => {
+app.config.errorHandler = (err) => {
 	if (err.response && err.response.data.message) {
 		const errorMessage = t('deck', 'Something went wrong')
 		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
 	}
-	console.error(err)
+	logger.error('Unhandled error', { error: err })
 }
 
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
-	// eslint-disable-next-line vue/match-component-file-name
-	name: 'Deck',
-	router,
-	store,
-	data() {
-		return {
-			time: Date.now(),
-			interval: null,
-		}
-	},
-	created() {
-		subscribe('nextcloud:unified-search.search', ({ query }) => {
-			this.$store.commit('setSearchQuery', query)
-		})
-		subscribe('nextcloud:unified-search.reset', () => {
-			this.$store.commit('setSearchQuery', '')
-		})
+initSessions()
 
-		this.interval = setInterval(() => {
-			this.time = Date.now()
-		}, 1000)
-	},
-	beforeDestroy() {
-		clearInterval(this.interval)
-	},
-	methods: {
-		filter(query) {
-			this.$store.commit('setSearchQuery', query)
-		},
-		cleanSearch() {
-			this.$store.commit('setSearchQuery', '')
-		},
-	},
-	render: h => h(App),
-})
+app.mount('#content')
 
 if (!window.OCA.Deck) {
 	window.OCA.Deck = {}
@@ -115,5 +81,6 @@ window.OCA.Deck.registerCardAction = ({ label, callback, icon }) => {
 		callback,
 		icon,
 	}
-	store.dispatch('addCardAction', cardAction)
+	const actionsStore = useActionsStore()
+	actionsStore.addCardAction(cardAction)
 }

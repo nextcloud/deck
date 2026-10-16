@@ -4,60 +4,67 @@
 -->
 <template>
 	<div>
-		<NcSelectUsers v-model="addAcl"
+		<NcSelectUsers
+			v-model="addAcl"
 			:options="formatedSharees"
 			:loading="isLoading"
 			@search="(search) => asyncFind(search)" />
 
-		<ul id="shareWithList"
+		<ul
+			id="shareWithList"
 			class="shareWithList">
 			<li>
 				<NcAvatar :user="board.owner.uid" />
 				<span class="username">
 					{{ board.owner.displayname }}
-					<span v-if="!isCurrentUser(board.owner.uid)" class="board-owner-label">
+					<span class="board-owner-label">
 						{{ t('deck', 'Board owner') }}
 					</span>
 				</span>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.id" :data-cy="'acl-participant:' + acl.participant.uid">
-				<NcAvatar v-if="acl.type===0" :user="acl.participant.uid" />
-				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
-				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
-				<div v-if="acl.type===6" class="avatardiv icon" />
+				<NcAvatar v-if="acl.type === 0" :user="acl.participant.uid" />
+				<div v-if="acl.type === 1" class="avatardiv icon icon-group" />
+				<div v-if="acl.type === 7" class="avatardiv icon icon-circles" />
+				<div v-if="acl.type === 6" class="avatardiv icon" />
 				<span class="username">
 					{{ acl.participant.displayname || acl.participant }}
-					<span v-if="acl.type===1">{{ t('deck', '(Group)') }}</span>
-					<span v-if="acl.type===7">{{ t('deck', '(Team)') }}</span>
-					<span v-if="acl.type===6">{{ t('deck', '(remote)') }}</span>
+					<span v-if="acl.type === 1">{{ t('deck', '(Group)') }}</span>
+					<span v-if="acl.type === 7">{{ t('deck', '(Team)') }}</span>
+					<span v-if="acl.type === 6">{{ t('deck', '(remote)') }}</span>
 				</span>
 
-				<NcActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))"
-					:checked="acl.permissionEdit"
+				<NcActionCheckbox
+					v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))"
+					:modelValue="acl.permissionEdit"
 					data-cy="action:permission-edit"
 					@change="clickEditAcl(acl)">
 					{{ t('deck', 'Can edit') }}
 				</NcActionCheckbox>
-				<NcActions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :force-menu="true">
-					<NcActionCheckbox v-if="canManage || canShare"
-						:checked="acl.permissionShare"
+				<NcActions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :forceMenu="true">
+					<NcActionCheckbox
+						v-if="canManage || canShare"
+						:modelValue="acl.permissionShare"
 						data-cy="action:permission-share"
 						@change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
 					</NcActionCheckbox>
-					<NcActionCheckbox v-if="canManage"
-						:checked="acl.permissionManage"
+					<NcActionCheckbox
+						v-if="canManage"
+						:modelValue="acl.permissionManage"
 						data-cy="action:permission-manage"
 						@change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
 					</NcActionCheckbox>
-					<NcActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)"
-						:checked="acl.owner"
+					<NcActionCheckbox
+						v-if="acl.type === 0 && isCurrentUser(board.owner.uid)"
+						:modelValue="acl.owner"
 						data-cy="action:permission-owner"
 						@change="clickTransferOwner(acl.participant.uid)">
 						{{ t('deck', 'Owner') }}
 					</NcActionCheckbox>
-					<NcActionButton v-if="canManage"
+					<NcActionButton
+						v-if="canManage"
 						icon="icon-delete"
 						data-cy="action:acl-delete"
 						@click="clickDeleteAcl(acl)">
@@ -67,11 +74,13 @@
 			</li>
 		</ul>
 
-		<NcRelatedResourcesPanel v-if="board.id"
-			provider-id="deck"
-			:item-id="board.id" />
+		<NcRelatedResourcesPanel
+			v-if="board.id"
+			providerId="deck"
+			:itemId="board.id" />
 
-		<NcCollectionList v-if="projectsEnabled && board.id"
+		<NcCollectionList
+			v-if="projectsEnabled && board.id"
 			:id="`${board.id}`"
 			:name="board.title"
 			type="deck" />
@@ -79,17 +88,21 @@
 </template>
 
 <script>
-import { NcCollectionList, NcAvatar, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel, NcSelectUsers } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
+import { NcActionButton, NcActionCheckbox, NcActions, NcAvatar, NcCollectionList, NcRelatedResourcesPanel, NcSelectUsers } from '@nextcloud/vue'
 import debounce from 'lodash/debounce.js'
+import { mapActions, mapState } from 'pinia'
+import logger from '../../logger.js'
+import { useBoardStore } from '../../stores/board.js'
+import { useSettingsStore } from '../../stores/settings.js'
 const SOURCE_TO_SHARE_TYPE = {
 	users: 0,
 	groups: 1,
 	emails: 4,
 	remotes: 6,
+	circles: 7,
 	teams: 7,
 }
 
@@ -104,12 +117,14 @@ export default {
 		NcCollectionList,
 		NcRelatedResourcesPanel,
 	},
+
 	props: {
 		board: {
 			type: Object,
 			default: undefined,
 		},
 	},
+
 	data() {
 		return {
 			isLoading: false,
@@ -120,30 +135,36 @@ export default {
 			projectsEnabled: loadState('core', 'projects_enabled', false),
 		}
 	},
+
 	computed: {
-		...mapState([
+		...mapState(useSettingsStore, [
 			'sharees',
 		]),
-		...mapGetters([
+
+		...mapState(useBoardStore, [
 			'canEdit',
 			'canManage',
 			'canShare',
 		]),
+
 		isCurrentUser() {
 			return (uid) => uid === getCurrentUser().uid
 		},
+
 		formatedSharees() {
-			const result = this.unallocatedSharees.map(item => {
+			const result = this.unallocatedSharees.map((item) => {
 				const res = {
 					...item,
 					displayName: item.displayname || item.name || item.label || item.id,
 					user: item.id,
 					subname: item.shareWithDisplayNameUnique || item.subline || item.id, // NcSelectUser does its own pattern matching to filter things out
+					type: SOURCE_TO_SHARE_TYPE[item.source],
 				}
 				return res
 			}).slice(0, 10)
 			return result
 		},
+
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
 				const foundIndex = this.board.acl.findIndex((acl) => {
@@ -162,6 +183,7 @@ export default {
 			})
 		},
 	},
+
 	watch: {
 		addAcl: {
 			handler() {
@@ -171,20 +193,36 @@ export default {
 			},
 		},
 	},
+
 	mounted() {
 		this.asyncFind('', () => {})
 	},
+
 	methods: {
+		...mapActions(useBoardStore, [
+			'addAclToCurrentBoard',
+			'updateAclFromCurrentBoard',
+			'deleteAclFromCurrentBoard',
+			'transferOwnership',
+		]),
+
+		...mapActions(useSettingsStore, [
+			'loadSharees',
+		]),
+
 		debouncedFind: debounce(async function(query) {
 			this.isSearching = true
-			await this.$store.dispatch('loadSharees', query)
+
+			await this.loadSharees(query)
 			this.isSearching = false
 		}, 300),
+
 		async asyncFind(query) {
 			this.isLoading = true
 			await this.debouncedFind(query)
 			this.isLoading = false
 		},
+
 		async clickAddAcl() {
 			this.addAclForAPI = {
 				type: SOURCE_TO_SHARE_TYPE[this.addAcl.source],
@@ -195,33 +233,38 @@ export default {
 			}
 			this.isLoading = true
 			try {
-				await this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI)
+				await this.addAclToCurrentBoard(this.addAclForAPI)
 			} catch (e) {
 				const errorMessage = t('deck', 'Failed to create share with {displayName}', { displayName: this.addAcl.displayName })
-				console.error(errorMessage, e)
+				logger.error('Failed to create share', { error: e })
 				showError(errorMessage)
 			}
 			this.addAcl = null
 			this.isLoading = false
 		},
+
 		clickEditAcl(acl) {
-			this.addAclForAPI = Object.assign({}, acl)
+			this.addAclForAPI = { ...acl }
 			this.addAclForAPI.permissionEdit = !acl.permissionEdit
-			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+			this.updateAclFromCurrentBoard(this.addAclForAPI)
 		},
+
 		clickShareAcl(acl) {
-			this.addAclForAPI = Object.assign({}, acl)
+			this.addAclForAPI = { ...acl }
 			this.addAclForAPI.permissionShare = !acl.permissionShare
-			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+			this.updateAclFromCurrentBoard(this.addAclForAPI)
 		},
+
 		clickManageAcl(acl) {
-			this.addAclForAPI = Object.assign({}, acl)
+			this.addAclForAPI = { ...acl }
 			this.addAclForAPI.permissionManage = !acl.permissionManage
-			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+			this.updateAclFromCurrentBoard(this.addAclForAPI)
 		},
+
 		clickDeleteAcl(acl) {
-			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
+			this.deleteAclFromCurrentBoard(acl)
 		},
+
 		clickTransferOwner(newOwner) {
 			OC.dialogs.confirmDestructive(
 				t('deck', 'Are you sure you want to transfer the board {title} to {user}?', { title: this.board.title, user: newOwner }),
@@ -236,7 +279,7 @@ export default {
 					if (result) {
 						try {
 							this.isLoading = true
-							await this.$store.dispatch('transferOwnership', {
+							await this.transferOwnership({
 								boardId: this.board.id,
 								newOwner,
 							})
@@ -257,6 +300,7 @@ export default {
 	},
 }
 </script>
+
 <style scoped>
 	#shareWithList {
 		margin-bottom: 20px;

@@ -4,22 +4,29 @@
 -->
 
 <template>
-	<router-view v-if="visible" v-click-outside="onClickOutside" name="sidebar" />
+	<router-view v-if="visible" v-v-on-click-outside="onClickOutside" name="sidebar" />
 </template>
 
 <script>
+import { vOnClickOutside } from '@vueuse/components'
 export default {
 	name: 'Sidebar',
+	directives: {
+		vOnClickOutside,
+	},
+
 	props: {
 		visible: {
 			type: Boolean,
 			default: true,
 		},
 	},
+
 	methods: {
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
 		},
+
 		onClickOutside(e) {
 			if (e.target?.dataset?.clickClosesSidebar) {
 				this.closeSidebar()

@@ -5,10 +5,11 @@
 
 <template>
 	<div>
-		<NcDashboardWidget :items="cards"
-			empty-content-icon="icon-deck"
-			:empty-content-message="t('deck', 'No upcoming cards')"
-			:show-more-text="t('deck', 'upcoming cards')"
+		<NcDashboardWidget
+			:items="cards"
+			emptyContentIcon="icon-deck"
+			:emptyContentMessage="t('deck', 'No upcoming cards')"
+			:showMoreText="t('deck', 'upcoming cards')"
 			:loading="loading"
 			@hide="() => {}"
 			@markDone="() => {}">
@@ -24,19 +25,20 @@
 				{{ t('deck', 'New card') }}
 			</NcButton>
 			<NcModal v-if="showAddCardModal" class="card-selector" @close="toggleAddCardModel">
-				<CreateNewCardCustomPicker show-created-notice @cancel="toggleAddCardModel" />
+				<CreateNewCardCustomPicker showCreatedNotice @cancel="toggleAddCardModel" />
 			</NcModal>
 		</div>
 	</div>
 </template>
 
 <script>
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcButton, NcDashboardWidget, NcModal } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
-import Card from '../components/dashboard/Card.vue'
 import { generateUrl } from '@nextcloud/router'
+import { NcButton, NcDashboardWidget, NcModal } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import Card from '../components/dashboard/Card.vue'
 import CreateNewCardCustomPicker from './CreateNewCardCustomPicker.vue'
+import { useDashboardStore } from '../stores/dashboard.js'
 
 export default {
 	name: 'DashboardUpcoming',
@@ -48,18 +50,18 @@ export default {
 		PlusIcon,
 		Card,
 	},
+
 	data() {
 		return {
 			loading: false,
 			showAddCardModal: false,
 		}
 	},
+
 	computed: {
-		...mapGetters([
-			'assignedCardsDashboard',
-		]),
+		...mapState(useDashboardStore, ['assignedCards']),
 		cards() {
-			const list = Object.values(this.assignedCardsDashboard).flat()
+			const list = Object.values(this.assignedCards).flat()
 				.filter((card) => {
 					return card.duedate !== null
 				})
@@ -68,17 +70,21 @@ export default {
 			})
 			return list.slice(0, 5)
 		},
+
 		showMoreUrl() {
 			return this.cards.length > 7 ? generateUrl('/apps/deck') : null
 		},
 	},
+
 	beforeMount() {
 		this.loading = true
-		this.$store.dispatch('loadUpcoming').then(() => {
+		this.loadUpcoming().then(() => {
 			this.loading = false
 		})
 	},
+
 	methods: {
+		...mapActions(useDashboardStore, ['loadUpcoming']),
 		toggleAddCardModel() {
 			this.showAddCardModal = !this.showAddCardModal
 		},
@@ -122,7 +128,7 @@ export default {
 	}
 
 	.labels {
-		margin-left: 0;
+		margin-inline-start: 0;
 		margin-top: 3px;
 	}
 
@@ -136,6 +142,6 @@ export default {
 	}
 
 	.right {
-		float: right;
+		float: inline-end;
 	}
 </style>
