@@ -224,7 +224,7 @@ OC.L10N.register(
     "Activity" : "События",
     "Deleted lists" : "Удалённые колонки",
     "Undo" : "Отменить",
-    "Deleted cards" : "Карточки в корзине",
+    "Deleted cards" : "Удалённые карточки",
     "Hours" : "Часы",
     "Days" : "Дни",
     "Weeks" : "Недели",
