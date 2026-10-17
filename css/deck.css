@@ -22,3 +22,11 @@ input[type=text]:focus+input[type=submit].icon-confirm,
 input[type=text]:hover+input[type=submit].icon-confirm {
 	border-color: var(--color-main-text) !important;
 }
+.app-deck {
+  .stack__card-add form {
+    order: 1;
+  }
+  .smooth-dnd-container.vertical {
+    order: 2;
+  }
+}
