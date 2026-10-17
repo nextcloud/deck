@@ -5,6 +5,7 @@
 
 import axios from '@nextcloud/axios'
 import { listen } from '@nextcloud/notify_push'
+import { showError } from './helpers/errors.js'
 import logger from './logger.js'
 import { sessionApi } from './services/SessionApi.js'
 import { useBoardStore } from './stores/board.js'
@@ -13,8 +14,6 @@ import { useStackStore } from './stores/stack.js'
 const SESSION_INTERVAL = 90 // in seconds
 
 let hasPush = false
-
-let syncRunning = false
 
 let store = null
 
@@ -80,9 +79,19 @@ export function isNotifyPushEnabled() {
 /**
  *
  * @param boardId
+ * @param options
+ * @param options.pushEnabled
+ * @param options.boardStore
+ * @param options.globalHeader
+ * @param options.onError
  */
-export function createSession(boardId) {
-	if (!boardId || !isNotifyPushEnabled()) {
+export function createSession(boardId, {
+	pushEnabled = isNotifyPushEnabled(),
+	boardStore = store,
+	globalHeader = true,
+	onError = showError,
+} = {}) {
+	if (!boardId || !pushEnabled) {
 		// return a dummy object
 		return {
 			async close() {},
@@ -93,16 +102,39 @@ export function createSession(boardId) {
 	// the component doesn't need to bother about the asynchronousness
 	let tokenPromise
 	let token
+	let closed = false
+	let syncRunning = false
+	let generation = 0
+	const clearHeader = () => {
+		if (globalHeader && axios.defaults.headers['x-nc-deck-session'] === token) {
+			delete axios.defaults.headers['x-nc-deck-session']
+		}
+	}
+	const report = (error) => {
+		logger.error('Failed to create deck session', { error })
+		onError(error)
+	}
 	const create = () => {
-		tokenPromise = sessionApi.createSession(boardId).then((res) => res.token)
-		tokenPromise.then((t) => {
+		const currentGeneration = ++generation
+		tokenPromise = sessionApi.createSession(boardId).then(async ({ token: t }) => {
+			if (closed || currentGeneration !== generation) {
+				await sessionApi.closeSession(boardId, t)
+				return null
+			}
 			token = t
-			axios.defaults.headers['x-nc-deck-session'] = t
+			if (globalHeader) {
+				axios.defaults.headers['x-nc-deck-session'] = t
+			}
+			return t
 		})
+		tokenPromise.catch(report)
 	}
 	create()
 
 	const ensureSession = async () => {
+		if (closed) {
+			return
+		}
 		if (!tokenPromise) {
 			create()
 			return
@@ -114,14 +146,21 @@ export function createSession(boardId) {
 
 		try {
 			syncRunning = true
-			await sessionApi.syncSession(boardId, await tokenPromise)
+			const currentToken = await tokenPromise
+			if (!closed && currentToken) {
+				await sessionApi.syncSession(boardId, currentToken)
+			}
 		} catch (err) {
+			if (closed) {
+				return
+			}
 			if (err.response?.status === 404) {
 				// session probably expired, let's
 				// create a fresh session
 				create()
 			} else {
 				logger.error('Failed to sync deck session', { error: err })
+				onError(err)
 			}
 		} finally {
 			syncRunning = false
@@ -133,11 +172,14 @@ export function createSession(boardId) {
 
 	// close session when tab gets hidden/inactive
 	const visibilitychangeListener = () => {
-		if (document.visibilityState === 'hidden' && token) {
-			sessionApi.closeSessionViaBeacon(boardId, token)
+		if (document.visibilityState === 'hidden') {
+			generation++
+			if (token) {
+				sessionApi.closeSessionViaBeacon(boardId, token)
+			}
+			clearHeader()
 			tokenPromise = null
 			token = null
-			delete axios.defaults.headers['x-nc-deck-session']
 
 			// stop session refresh interval
 			clearInterval(interval)
@@ -147,7 +189,12 @@ export function createSession(boardId) {
 
 			// we must assume that the websocket connection was
 			// paused and we have missed updates in the meantime.
-			store.refreshBoard(store.currentBoard?.id)
+			if (boardStore?.currentBoard) {
+				boardStore.refreshBoard(boardStore.currentBoard.id).catch((error) => {
+					logger.error('Failed to refresh deck session board', { error })
+					onError(error)
+				})
+			}
 
 			// restart session refresh interval
 			clearInterval(interval)
@@ -158,13 +205,18 @@ export function createSession(boardId) {
 
 	return {
 		async close() {
+			if (closed) {
+				return
+			}
+			closed = true
 			clearInterval(interval)
 			document.removeEventListener('visibilitychange', visibilitychangeListener)
+			await tokenPromise
 			if (token) {
+				clearHeader()
 				await sessionApi.closeSession(boardId, token)
 				tokenPromise = null
 				token = null
-				delete axios.defaults.headers['x-nc-deck-session']
 			}
 		},
 	}

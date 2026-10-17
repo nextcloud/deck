@@ -104,9 +104,12 @@
       "^@/(.*)$": "<rootDir>/src/$1"
     },
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.[cm]?js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/@vue/vue3-jest"
     },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(nostics|pinia)/)"
+    ],
     "snapshotSerializers": [
       "<rootDir>/node_modules/jest-serializer-vue"
     ]

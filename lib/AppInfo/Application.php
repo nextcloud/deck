@@ -25,6 +25,7 @@ use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\Event\LoadBoardWebComponentEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Federation\DeckFederationProvider;
@@ -33,6 +34,7 @@ use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Listeners\LiveUpdateListener;
+use OCA\Deck\Listeners\LoadBoardWebComponentListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
@@ -147,6 +149,7 @@ class Application extends App implements IBootstrap {
 		$context->registerReferenceProvider(CommentReferenceProvider::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+		$context->registerEventListener(LoadBoardWebComponentEvent::class, LoadBoardWebComponentListener::class);
 		$context->registerEventListener(ResourceTypeRegisterEvent::class, ResourceTypeRegisterListener::class);
 
 		// Event listening to emit UserShareAccessUpdatedEvent for files_sharing

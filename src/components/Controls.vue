@@ -366,6 +366,11 @@ export default {
 	},
 
 	mixins: [labelStyle],
+
+	inject: {
+		deckEmbedding: { default: null },
+	},
+
 	props: {
 		board: {
 			type: Object,
@@ -404,7 +409,7 @@ export default {
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
 			defaultPageTitle: false,
-			isNotifyPushEnabled: isNotifyPushEnabled(),
+			isNotifyPushEnabled: this.deckEmbedding?.pushEnabled ?? isNotifyPushEnabled(),
 		}
 	},
 
@@ -475,6 +480,9 @@ export default {
 	},
 
 	beforeMount() {
+		if (this.deckEmbedding) {
+			return
+		}
 		subscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		subscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
 		subscribe('deck:board:clear-filter', this.triggerClearFilter)
@@ -482,6 +490,9 @@ export default {
 	},
 
 	beforeUnmount() {
+		if (this.deckEmbedding) {
+			return
+		}
 		unsubscribe('deck:board:show-new-card', this.clickShowAddCardModel)
 		unsubscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
 		unsubscribe('deck:board:clear-filter', this.triggerClearFilter)

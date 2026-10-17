@@ -48,6 +48,10 @@ import { useStackStore } from './stores/stack.js'
 export default {
 	name: 'CardMoveDialog',
 	components: { NcDialog, NcSelect, NcButton },
+	inject: {
+		deckEmbedding: { default: null },
+	},
+
 	data() {
 		return {
 			card: null,
@@ -81,11 +85,15 @@ export default {
 	},
 
 	mounted() {
-		subscribe('deck:card:show-move-dialog', this.openModal)
+		if (!this.deckEmbedding) {
+			subscribe('deck:card:show-move-dialog', this.openModal)
+		}
 	},
 
 	unmounted() {
-		unsubscribe('deck:card:show-move-dialog', this.openModal)
+		if (!this.deckEmbedding) {
+			unsubscribe('deck:card:show-move-dialog', this.openModal)
+		}
 	},
 
 	methods: {

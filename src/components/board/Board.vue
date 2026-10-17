@@ -134,9 +134,10 @@ export default {
 		CardSidebar,
 	},
 
-	inject: [
-		'boardApi',
-	],
+	inject: {
+		boardApi: {},
+		deckEmbedding: { default: null },
+	},
 
 	props: {
 		id: {
@@ -144,6 +145,8 @@ export default {
 			default: null,
 		},
 	},
+
+	emits: ['ready', 'error'],
 
 	data() {
 		return {
@@ -153,6 +156,7 @@ export default {
 			currentScrollPosX: null,
 			currentMousePosX: null,
 			localModal: null,
+			disposed: false,
 		}
 	},
 
@@ -209,12 +213,20 @@ export default {
 	created() {
 		// Session is created in fetchData() after loadBoardById succeeds
 		this.fetchData()
-		subscribe('deck:card:open-modal', this.openCardModal)
+		if (!this.deckEmbedding) {
+			subscribe('deck:card:open-modal', this.openCardModal)
+		}
 	},
 
 	beforeUnmount() {
-		this.session?.close()
-		unsubscribe('deck:card:open-modal', this.openCardModal)
+		this.disposed = true
+		this.stopMouseDrag()
+		this.session?.close().catch((error) => {
+			logger.error('Failed to close board session', { error })
+		})
+		if (!this.deckEmbedding) {
+			unsubscribe('deck:card:open-modal', this.openCardModal)
+		}
 	},
 
 	methods: {
@@ -228,6 +240,9 @@ export default {
 			this.loading = true
 			try {
 				await this.loadBoardById(this.id)
+				if (this.disposed) {
+					return
+				}
 				await this.loadStacks(this.id)
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
@@ -240,12 +255,22 @@ export default {
 					}
 				}
 
-				this.session?.close()
-				this.session = createSession(this.id)
+				if (this.disposed) {
+					return
+				}
+				await this.session?.close()
+				if (this.disposed) {
+					return
+				}
+				this.session = this.deckEmbedding
+					? this.deckEmbedding.createSession(this.id)
+					: createSession(this.id)
+				this.$emit('ready', this.board)
 			} catch (e) {
 				this.loading = false
 				logger.error('Failed to load board', { error: e })
 				showError(e)
+				this.$emit('error', e)
 			} finally {
 				this.loading = false
 			}

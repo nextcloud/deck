@@ -48,6 +48,70 @@ which would increase the page loading time significantly.
 
 Improvements on Nextcloud server and Deck itself will improve the situation.
 
+## Embedding a Deck board in another Nextcloud app
+
+Deck provides an opt-in `nextcloud-deck-board` custom element implemented as a
+Vue single-file component and registered with Vue's `defineCustomElement()`.
+It reuses the
+existing board UI without Deck's app navigation or browser-history router.
+The normal Deck app and the reference widgets keep their existing entry points.
+The element is intended for authenticated, same-instance Nextcloud pages.
+Existing Deck permissions apply to every API request; passing a board ID does
+not grant access or establish that the board belongs to a particular team.
+The host app must validate its own team-resource context.
+
+Before rendering the host page, check that Deck is enabled for the current user
+and dispatch its loading event:
+
+```php
+$eventDispatcher->dispatchTyped(new \OCA\Deck\Event\LoadBoardWebComponentEvent());
+```
+
+This loads `deck-boardComponent`, the Deck styles, and the attachment/editor
+integrations. Do not load `deck-main` in the host page. Hosts supporting older
+Deck versions must check that the event class exists and show an explicit
+unavailable state when this integration is not supported.
+
+```html
+<nextcloud-deck-board board-id="42" style="display: block; height: 100%">
+</nextcloud-deck-board>
+```
+
+Wait for `customElements.whenDefined('nextcloud-deck-board')` before relying on
+the component. Vue hosts must configure this tag as a custom element. Give the
+element a bounded height; the board handles its own scrolling. The component
+uses light DOM to work with Nextcloud's shared styles, dialogs and viewer.
+When binding IDs from Vue, use `:board-id.attr="boardId"` and
+`:card-id.attr="cardId"` so a `null` card ID removes the attribute rather than
+being coerced into an empty or zero-valued DOM property.
+Vue manages the element's rendering, reactive attributes and lifecycle. Each
+element still mounts an isolated Deck app with its own stores and memory router;
+removing an element disposes that app after Vue's disconnection tick. Moving an
+element within the same document preserves its mounted instance.
+
+- `board-id`: required positive safe integer. Changing it disposes the previous
+  instance and opens the new board with independent state.
+- `card-id`: optional positive safe integer. Set it to open a card, or remove it
+  to close card details. Cards must belong to the displayed board. Opening
+  archived card details after the board has loaded preserves the current list
+  view and its active cards.
+- `deck-ready`: the board and its lists have loaded; `detail` contains `boardId`.
+- `deck-error`: loading, navigation, or runtime failed; `detail` contains
+  `boardId`, `message`, and `status` (HTTP status when available).
+- `deck-navigation`: user navigation requested a board/card; `detail` contains
+  `boardId`, `cardId` (or `null`), and `tabId` (or `null`).
+
+Events bubble. The component never changes the host's URL. The host owns its
+route and active navigation styling, and should mirror card navigation into
+`card-id`. Cross-board links emit a navigation request but do not change the
+embedded board; the host must check its context before changing `board-id`.
+Removing the element disposes its Vue app, stores, live-update subscriptions
+and session. The embedded sessions do not change global Axios session headers.
+
+Board management/sharing sidebars and global Deck keyboard shortcuts are not
+part of this embed entry point. Board-level filtering, view modes, lists, card
+editing and card-detail tabs use the existing Deck components.
+
 ## Developing
 
 There are multiple ways to develop on Deck. As you will need a Nextcloud server running, the individual options are described below.
@@ -100,6 +164,28 @@ You need to setup a [development environment](https://docs.nextcloud.com/server/
 After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder.
 
 ### Running tests
+Run the frontend logic regression tests with `npm test -- --runInBand`.
+The embedded board's browser lifecycle, navigation, archive and undo behavior,
+and the existing non-interactive board reference entry point are tested in the Cypress E2E
+suite. With a running Nextcloud test instance (using the existing `admin`/`admin`
+test credentials), build the frontend and run:
+
+```sh
+npm run dev
+npx cypress run --spec cypress/e2e/embeddedBoard.js
+```
+
+The default test URL is `http://nextcloud.local/index.php`; set `CYPRESS_baseUrl`
+to use another instance. The spec creates its own user and boards and deletes
+the user afterwards. It swaps the normal Deck entry bundle for the embed or
+reference bundle in the browser, reusing the authenticated page's integrations
+without mounting the full Deck app.
+
+Cypress runs in the existing E2E CI workflow. It does not collect JavaScript
+coverage; `npm run test:coverage -- --runInBand` measures the Jest logic tests
+only. The Codecov configuration enables project and patch coverage checks,
+but does not make Cypress E2E assertions a JavaScript coverage report.
+
 You can use the provided Makefile to run all tests by using:
 
     make test

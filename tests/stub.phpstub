@@ -730,6 +730,10 @@ namespace OCA\NotifyPush\Queue {
 	}
 }
 
+namespace OCA\Files\Event {
+	class LoadSidebar extends \OCP\EventDispatcher\Event {}
+}
+
 namespace OCA\Text\Event {
 	class LoadEditor extends \OCP\EventDispatcher\Event {}
 }
