@@ -1,7 +1,10 @@
-const { defineConfig } = require('cypress')
-const cypressSplit = require('cypress-split')
+import vue from '@vitejs/plugin-vue2'
+import { defineConfig } from 'cypress'
+import cypressSplit from 'cypress-split'
+import vitePreprocessor from 'cypress-vite'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
-module.exports = defineConfig({
+export default defineConfig({
 	projectId: '1s7wkc',
 	viewportWidth: 1280,
 	viewportHeight: 720,
@@ -9,8 +12,14 @@ module.exports = defineConfig({
 		// We've imported your old cypress plugins here.
 		// You may want to clean this up later by importing these.
 		setupNodeEvents(on, config) {
+			on(
+				'file:preprocessor',
+				vitePreprocessor({
+					plugins: [vue(), nodePolyfills()],
+					configFile: false,
+				}),
+			)
 			cypressSplit(on, config)
-			require('./cypress/plugins/index.js')(on, config)
 			return config
 		},
 		baseUrl: 'http://nextcloud.local/index.php',
