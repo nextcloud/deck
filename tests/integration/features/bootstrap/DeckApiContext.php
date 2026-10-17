@@ -77,9 +77,13 @@ class DeckApiContext implements Context {
 
 	/**
 	 * @When /^sending "([^"]*)" to the API endpoint "([^"]*)" with the header "([^"]*)" set to "([^"]*)"$/
+	 * @When /^sending "([^"]*)" to the API endpoint "([^"]*)" with the header "([^"]*)" set to "([^"]*)" and body:$/
 	 */
-	public function sendingToTheApiEndpointWithHeader(string $method, string $endpoint, string $header, string $value): void {
-		$this->sendRequest($method, $endpoint, [], [$header => $this->resolve($value)]);
+	public function sendingToTheApiEndpointWithHeader(string $method, string $endpoint, string $header, string $value, ?TableNode $body = null): void {
+		$options = $body === null
+			? []
+			: ['json' => $this->parseBody($body)];
+		$this->sendRequest($method, $endpoint, $options, [$header => $this->resolve($value)]);
 	}
 
 	/**

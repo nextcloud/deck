@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Card;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Http;
@@ -38,6 +39,7 @@ class CardApiControllerTest extends \Test\TestCase {
 	private CardApiController $controller;
 	private IRequest&MockObject $request;
 	private CardService&MockObject $cardService;
+	private ChangeHelper&MockObject $changeHelper;
 	private string $userId = 'admin';
 	private array $cardExample;
 	private array $stackExample;
@@ -49,6 +51,7 @@ class CardApiControllerTest extends \Test\TestCase {
 		$this->request = $this->createMock(IRequest::class);
 		$this->cardService = $this->createMock(CardService::class);
 		$this->assignmentService = $this->createMock(AssignmentService::class);
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 
 		$this->cardExample['id'] = 1;
 		$this->stackExample['id'] = 1;
@@ -58,6 +61,7 @@ class CardApiControllerTest extends \Test\TestCase {
 			$this->request,
 			$this->cardService,
 			$this->assignmentService,
+			$this->changeHelper,
 			$this->userId
 		);
 	}
@@ -74,6 +78,11 @@ class CardApiControllerTest extends \Test\TestCase {
 		$this->cardService->expects($this->once())
 			->method('find')
 			->willReturn($card);
+
+		$this->changeHelper->expects($this->once())
+			->method('getEtag')
+			->with(ChangeHelper::TYPE_CARD, $this->cardExample['id'])
+			->willReturn('');
 
 		$expected = new DataResponse($card, HTTP::STATUS_OK);
 		$expected->setETag($card->getETag());

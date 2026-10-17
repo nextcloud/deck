@@ -138,7 +138,15 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	public function insert(Entity $entity): Entity {
+		if (!isset($entity->getUpdatedFields()['lastModified'])) {
+			$entity->setLastModified(time());
+		}
+		return parent::insert($entity);
+	}
+
 	public function update(Entity $entity): Entity {
+		$entity->setLastModified(time());
 		$result = parent::update($entity);
 		$this->stackCache[(string)$entity->getId()] = $result;
 		return $result;
