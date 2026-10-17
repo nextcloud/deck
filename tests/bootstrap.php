@@ -24,3 +24,7 @@
 
 require_once __DIR__ . '/../../../tests/bootstrap.php';
 require_once __DIR__ . '/../appinfo/autoload.php';
+
+if (!interface_exists('OCP\Share\ShareReview\IShareReviewSource')) {
+	require_once __DIR__ . '/unit/ShareReview/Stubs.php';
+}
