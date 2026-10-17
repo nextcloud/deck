@@ -32,7 +32,7 @@ abstract class AAclEvent extends Event implements IWebhookCompatibleEvent {
 
 	public function getWebhookSerializable(): array {
 		return [
-			'acl' => $this->acl->jsonSerialize(),
+			'acl' => json_decode(json_encode($this->acl), true),
 		];
 	}
 }

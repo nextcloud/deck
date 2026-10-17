@@ -28,7 +28,7 @@ abstract class ACardEvent extends Event implements IWebhookCompatibleEvent {
 
 	public function getWebhookSerializable(): array {
 		return [
-			'card' => $this->card->jsonSerialize(),
+			'card' => json_decode(json_encode($this->card), true),
 		];
 	}
 }
