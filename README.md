@@ -91,12 +91,12 @@ You can enable HMR (Hot module replacement) to avoid page reloads when working o
 docker run --rm \
     -p 8080:80 \
     -v $PWD:/var/www/html/apps-extra/deck \
-    ghcr.io/juliushaertl/nextcloud-dev-php81:latest
+    ghcr.io/juliusknorr/nextcloud-dev-php81:latest
 ```
 
 ### Full Nextcloud development environment
 
-You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current Nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliushaertl/nextcloud-docker-dev).
+You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current Nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliusknorr/nextcloud-docker-dev).
 After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder.
 
 ### Running tests
