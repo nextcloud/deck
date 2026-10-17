@@ -25,6 +25,7 @@ use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\Event\RegisterTextContextEventListener;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Federation\DeckFederationProvider;
@@ -37,6 +38,7 @@ use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
 use OCA\Deck\Listeners\ResourceTypeRegisterListener;
+use OCA\Deck\Listeners\TextDocumentContentListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Middleware\FederationMiddleware;
@@ -52,7 +54,9 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
 use OCA\Deck\Teams\DeckTeamResourceProvider;
 use OCA\Deck\UserMigration\DeckMigrator;
+use OCA\Text\Event\DocumentContentUpdated;
 use OCA\Text\Event\LoadEditor;
+use OCA\Text\Event\RegisterContextEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -105,6 +109,12 @@ class Application extends App implements IBootstrap {
 	public function boot(IBootContext $context): void {
 		$context->injectFn($this->registerCommentsEntity(...));
 		$context->injectFn($this->registerCollaborationResources(...));
+
+		if (class_exists(DocumentContentUpdated::class)) {
+			$context->injectFn(function (IEventDispatcher $eventDispatcher) {
+				$eventDispatcher->addServiceListener(CardUpdatedEvent::class, TextDocumentContentListener::class);
+			});
+		}
 
 		$context->injectFn(function (IManager $shareManager) {
 			$shareManager->registerShareProvider(DeckShareProvider::class);
@@ -191,6 +201,8 @@ class Application extends App implements IBootstrap {
 		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
 
 		$context->registerUserMigrator(DeckMigrator::class);
+
+		$context->registerEventListener(RegisterContextEvent::class, RegisterTextContextEventListener::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
