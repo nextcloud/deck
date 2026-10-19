@@ -7,8 +7,8 @@
 	<div data-test="description">
 		<h5>
 			{{ t('deck', 'Description') }}
-			<span v-if="!textAppAvailable && descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
-			<span v-if="!textAppAvailable && descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
+			<span v-if="!collaborative && descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
+			<span v-if="!collaborative && descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
 			<a v-if="!textAppAvailable"
 				:title="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
@@ -143,6 +143,12 @@ export default {
 	},
 	computed: {
 		...mapState(useSettingsStore, ['hasCardSaveError']),
+
+		// Only persisted cards can have a collaborative Text session
+		collaborative() {
+			return this.textAppAvailable && !!this.card?.id
+		},
+
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -177,7 +183,7 @@ export default {
 	},
 	watch: {
 		card(newCard) {
-			if (this.textAppAvailable) {
+			if (this.collaborative) {
 				return
 			}
 			if (newCard.description !== this.descriptionOld) {
@@ -191,6 +197,10 @@ export default {
 		},
 	},
 	mounted() {
+		if (!this.collaborative) {
+			this.descriptionOld = this.card.description
+			this.description = this.card.description
+		}
 		if (this.textAppAvailable) {
 			this.setupEditor()
 		}
@@ -205,16 +215,31 @@ export default {
 		...mapActions(useSettingsStore, ['setHasCardSaveError']),
 		async setupEditor() {
 			await this.destroyEditor()
-			this.editor = await window.OCA.Text.createCollaborativeEditor({
-				context: { type: 'deck_card', id: this.card.id },
+			if (this.collaborative) {
+				this.editor = await window.OCA.Text.createCollaborativeEditor({
+					context: { type: 'deck_card', id: this.card.id },
+					el: this.$refs.editor,
+					readOnly: !this.canEdit,
+				})
+				return
+			}
+			this.editor = await window.OCA.Text.createMarkdownContentEditor({
 				el: this.$refs.editor,
+				content: this.card.description,
 				readOnly: !this.canEdit,
+				onUpdate: ({ markdown }) => {
+					if (this.description === markdown) {
+						return
+					}
+					this.description = markdown
+					this.updateDescription()
+				},
 			})
 
 		},
 		async destroyEditor() {
 			clearTimeout(this.descriptionSaveTimeout)
-			if (!this.textAppAvailable) {
+			if (!this.collaborative) {
 				await this.saveDescription()
 			}
 			try {
