@@ -97,7 +97,7 @@ class DeckProvider implements IFullTextSearchProvider {
 
 	public function getSearchTemplate(): ISearchTemplate {
 		/** @psalm-var ISearchTemplate */
-		$template = new SearchTemplate('icon-deck', 'icons');
+		$template = new SearchTemplate('icon-deck', 'deck');
 
 		return $template;
 	}
