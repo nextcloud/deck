@@ -276,6 +276,7 @@ describe('Card', function () {
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world').should('be.visible')
 			cy.get('.modal__card .ProseMirror h1')
 				.click()
+				.parent()
 				.type(' writing more text{enter}- List item{enter}with entries{enter}{enter}Paragraph')
 			cy.wait('@save', { timeout: 7000 })
 
@@ -284,7 +285,7 @@ describe('Card', function () {
 
 			// Scroll to the bottom to ensure all content is loaded and visible
 			cy.get('.modal__card .app-sidebar-tabs, .modal__card .app-sidebar__tab--active').first().scrollTo('bottom', { ensureScrollable: false })
-			cy.contains('.modal__card .ProseMirror p', 'Paragraph').scrollIntoView().should('be.visible')
+			cy.contains('.modal__card .ProseMirror p', 'Paragraph').should('be.visible')
 
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(0).contains('List item').should('be.visible')
@@ -298,7 +299,7 @@ describe('Card', function () {
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('.modal__card').should('be.visible')
 			cy.get('.modal__card .ProseMirror h1')
-				.click()
+				.click().parent()
 				.type('{enter}/create')
 			cy.get('.suggestion-list__item.is-selected').should('be.visible').contains('Create a new deck card')
 			cy.get('.suggestion-list__item.is-selected .link-picker__item').click()
