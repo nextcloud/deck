@@ -732,4 +732,62 @@ namespace OCA\NotifyPush\Queue {
 
 namespace OCA\Text\Event {
 	class LoadEditor extends \OCP\EventDispatcher\Event {}
+
+	class RegisterContextEvent extends \OCP\EventDispatcher\Event {
+		public function getContextManager(): \OCA\Text\Context\ContextManager {
+		}
+	}
+
+	class DocumentContentUpdated extends \OCP\EventDispatcher\Event {
+		public function __construct(\OCA\Text\Context\IContext $context) {
+		}
+	}
+}
+
+namespace OCA\Text\Context {
+	class ContextManager {
+		public function registerContext(string $type, string $factoryClass): void {
+		}
+	}
+
+	class SessionInfo {
+		public ?string $content = null;
+
+		public function __construct(
+			public bool $readOnly,
+			public bool $canAttachFiles,
+			public ?\OCP\Files\Lock\ILock $lock,
+		) {
+		}
+	}
+
+	interface IContext {
+		public function getId(): int;
+		public function getType(): string;
+		public function toString(): string;
+		public function buildDocument(): \OCA\Text\Db\Document;
+		public function prepareSession(): SessionInfo;
+		public function isReadOnly(): bool;
+		public function updateDocument(\OCA\Text\Db\Document $document): void;
+		public function getFile(): ?\OCP\Files\File;
+		public function loadContent(): ?string;
+		public function save(string $content, callable $afterSave): void;
+		public function cleanup(): void;
+	}
+
+	interface IContextFactory {
+		public function build(\OCP\IUser|\OCP\Share\IShare $auth, string $type, int $id): IContext;
+	}
+}
+
+namespace OCA\Text\Db {
+	/**
+	 * @method void setContextType(string $contextType)
+	 * @method void setContextId(int $contextId)
+	 * @method void setLastSavedVersion(int $version)
+	 * @method void setLastSavedVersionTime(int $time)
+	 * @method void setChecksum(?string $checksum)
+	 */
+	class Document extends \OCP\AppFramework\Db\Entity {
+	}
 }
