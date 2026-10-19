@@ -7,8 +7,8 @@
 	<div data-test="description">
 		<h5>
 			{{ t('deck', 'Description') }}
-			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
-			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
+			<span v-if="!collaborative && descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
+			<span v-if="!collaborative && descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
 			<a v-if="!textAppAvailable"
 				:title="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
@@ -76,6 +76,7 @@ import { generateUrl } from '@nextcloud/router'
 import { showWarning } from '@nextcloud/dialogs'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import { mapState, mapActions } from 'pinia'
+import VueEasymde from 'vue-easymde'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -94,7 +95,7 @@ markdownIt.use(MarkdownItLinkAttributes, {
 export default {
 	name: 'Description',
 	components: {
-		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common.js'),
+		VueEasymde,
 		NcActions,
 		NcActionButton,
 		NcModal,
@@ -118,7 +119,7 @@ export default {
 	emits: ['change'],
 	data() {
 		return {
-			textAppAvailable: !!window.OCA?.Text?.createEditor,
+			textAppAvailable: !!window.OCA?.Text?.createCollaborativeEditor,
 			editor: null,
 			keyExitState: 0,
 			descriptionOld: '',
@@ -142,6 +143,12 @@ export default {
 	},
 	computed: {
 		...mapState(useSettingsStore, ['hasCardSaveError']),
+
+		// Only persisted cards can have a collaborative Text session
+		collaborative() {
+			return this.textAppAvailable && !!this.card?.id
+		},
+
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -176,21 +183,27 @@ export default {
 	},
 	watch: {
 		card(newCard) {
+			if (this.collaborative) {
+				return
+			}
 			if (newCard.description !== this.descriptionOld) {
 				clearTimeout(this.descriptionSaveTimeout)
 				this.descriptionLastEdit = 0
 
 				this.descriptionOld = newCard.description
 				this.description = newCard.description
-				if (this.editor) {
-					this.editor.setContent(this.description)
-				}
 				showWarning(t('deck', 'The description has been changed by another user.'), { timeout: 3000 })
 			}
 		},
 	},
 	mounted() {
-		this.setupEditor()
+		if (!this.collaborative) {
+			this.descriptionOld = this.card.description
+			this.description = this.card.description
+		}
+		if (this.textAppAvailable) {
+			this.setupEditor()
+		}
 	},
 	async beforeUnmount() {
 		await this.destroyEditor()
@@ -202,16 +215,18 @@ export default {
 		...mapActions(useSettingsStore, ['setHasCardSaveError']),
 		async setupEditor() {
 			await this.destroyEditor()
-			this.descriptionLastEdit = 0
-			this.descriptionOld = this.card.description
-			this.description = this.card.description
-			this.editor = await window.OCA.Text.createEditor({
+			if (this.collaborative) {
+				this.editor = await window.OCA.Text.createCollaborativeEditor({
+					context: { type: 'deck_card', id: this.card.id },
+					el: this.$refs.editor,
+					readOnly: !this.canEdit,
+				})
+				return
+			}
+			this.editor = await window.OCA.Text.createMarkdownContentEditor({
 				el: this.$refs.editor,
 				content: this.card.description,
 				readOnly: !this.canEdit,
-				onLoaded: () => {
-					this.descriptionLastEdit = 0
-				},
 				onUpdate: ({ markdown }) => {
 					if (this.description === markdown) {
 						return
@@ -219,14 +234,14 @@ export default {
 					this.description = markdown
 					this.updateDescription()
 				},
-				onFileInsert: () => {
-					this.showAttachmentModal()
-				},
 			})
 
 		},
 		async destroyEditor() {
-			await this.saveDescription()
+			clearTimeout(this.descriptionSaveTimeout)
+			if (!this.collaborative) {
+				await this.saveDescription()
+			}
 			try {
 				this?.editor?.destroy()
 			} catch (e) {
@@ -287,8 +302,8 @@ export default {
 				const newContent = descString + '\n' + attachmentString
 				this.$refs.markdownEditor.easymde.value(newContent)
 				this.description = newContent
+				this.updateDescription()
 			}
-			this.updateDescription()
 			this.modalShow = false
 		},
 		clickedPreview(e) {
