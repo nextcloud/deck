@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface;
 
 /** @template-extends DeckMapper<Board> */
 class BoardMapper extends DeckMapper implements IPermissionMapper {
+	public const TABLE_NAME = 'deck_boards';
 	/** @var CappedMemoryCache<Board[]> */
 	private CappedMemoryCache $userBoardCache;
 	/** @var CappedMemoryCache<Board> */
@@ -35,7 +36,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		private ICloudIdManager $cloudIdManager,
 		private LoggerInterface $logger,
 	) {
-		parent::__construct($db, 'deck_boards', Board::class);
+		parent::__construct($db, self::TABLE_NAME, Board::class);
 
 		$this->userBoardCache = new CappedMemoryCache();
 		$this->boardCache = new CappedMemoryCache();
