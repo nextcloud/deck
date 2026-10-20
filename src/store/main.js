@@ -409,6 +409,14 @@ export default function storeFactory() {
 					return err
 				}
 			},
+			async importBoard({ commit }, file) {
+				try {
+					const board = await apiClient.importBoard(file)
+					commit('addBoard', board)
+				} catch (err) {
+					return err
+				}
+			},
 			async cloneBoard({ commit }, boardData) {
 				try {
 					const newBoard = await apiClient.cloneBoard(boardData)
