@@ -410,20 +410,15 @@
     "Share with a Deck card" : "Dijeli s Deck karticom",
     "Share {file} with a Deck card" : "Dijeli {file} s Deck karticom",
     "Share" : "Dijeli",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Kartica „%s” na „%s” dosegla je datum dospijeća.",
     "Share board with a user, group or team …" : "Dijeli ploču s korisnikom, grupom ili timom …",
     "Searching for users, groups and teams …" : "Pretraživanje korisnika, grupa i timova …",
     "No participants found" : "Nije pronađen nijedan sudionik",
     "Select a user to assign to this card…" : "Odaberite korisnika kojem želite dodijeliti ovu karticu…",
-    "Save" : "Spremi",
     "Write a description …" : "Napišite opis...",
     "Select or create a tag…" : "Odaberite ili stvorite oznaku…",
     "seconds ago" : "prije nekoliko sekundi",
     "Exporting board..." : "Izvoz ploče…",
     "Importing board..." : "Uvoz ploče…",
-    "Today" : "Danas",
-    "Tomorrow" : "Sutra",
-    "No due" : "Nema nezavršenih",
     "Creating the new card …" : "Stvaranje nove kartice…"
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

@@ -396,20 +396,15 @@
     "Share with a Deck card" : "Дели са Шпил картицом",
     "Share {file} with a Deck card" : "Дели {file} са Шпил картицом",
     "Share" : "Подели",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Картици „%s“ на табли „%s“ је истекао рок.",
     "Share board with a user, group or team …" : "Делите таблу са корисником, групом или тимом…",
     "Searching for users, groups and teams …" : "Траже се корисници, групе и тимови…",
     "No participants found" : "Нема нађених учесника",
     "Select a user to assign to this card…" : "Изаберите корисника који ће се доделити овој картици",
-    "Save" : "Сачувај",
     "Write a description …" : "Напишите опис ...",
     "Select or create a tag…" : "Изаберите или креирајте ознаку",
     "seconds ago" : "пре неколико секунди",
     "Exporting board..." : "Табла се извози",
     "Importing board..." : "Табла се увози",
-    "Today" : "Данас",
-    "Tomorrow" : "сутра",
-    "No due" : "Нема рокова",
     "Creating the new card …" : "Креира се нова картица ..."
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

@@ -44,9 +44,6 @@ OC.L10N.register(
     "Close" : "Zoumaachen",
     "Modified" : "Geännert",
     "Share" : "Deelen",
-    "Save" : "Späicheren",
-    "seconds ago" : "Sekonnen hier",
-    "Today" : "Haut",
-    "Tomorrow" : "Muer"
+    "seconds ago" : "Sekonnen hier"
 },
 "nplurals=2; plural=(n != 1);");

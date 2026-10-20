@@ -46,9 +46,6 @@ OC.L10N.register(
     "Modified" : "Gewysig",
     "Share" : "Deel",
     "No participants found" : "Geen deelnemers gevind",
-    "Save" : "Stoor",
-    "seconds ago" : "sekondes gelede",
-    "Today" : "Vandag",
-    "Tomorrow" : "Môre"
+    "seconds ago" : "sekondes gelede"
 },
 "nplurals=2; plural=(n != 1);");
