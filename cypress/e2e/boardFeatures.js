@@ -129,3 +129,81 @@ describe('Board cloning', function() {
 		})
 	})
 })
+
+describe('Board export', function() {
+	before(function() {
+		cy.createUser(user)
+	})
+
+	it('Exports a board as JSON', function() {
+		const boardName = 'Export JSON board'
+		const board = sampleBoard(boardName)
+		cy.createExampleBoard({ user, board }).then((board) => {
+			const boardId = board.id
+			cy.visit(`/apps/deck/board/${boardId}`)
+			cy.get('.app-navigation__list .app-navigation-entry:contains("' + boardName + '")')
+				.parent()
+				.find('button[aria-label="Actions"]')
+				.click()
+			cy.get('button:contains("Export board")')
+				.click()
+			cy.get('.modal-container .checkbox-radio-switch__text:contains("Export as JSON")')
+				.click()
+			cy.get('.modal-container button:contains("Export")')
+				.click()
+
+			const downloadsFolder = Cypress.config('downloadsFolder')
+			cy.readFile(`${downloadsFolder}/${boardName}.json`)
+		})
+	})
+
+	it('Exports a board as CSV', function() {
+		const boardName = 'Export CSV board'
+		const board = sampleBoard(boardName)
+		cy.createExampleBoard({ user, board }).then((board) => {
+			const boardId = board.id
+			cy.visit(`/apps/deck/board/${boardId}`)
+			cy.get('.app-navigation__list .app-navigation-entry:contains("' + boardName + '")')
+				.parent()
+				.find('button[aria-label="Actions"]')
+				.click()
+			cy.get('button:contains("Export board")')
+				.click()
+			cy.get('.modal-container .checkbox-radio-switch__text:contains("Export as CSV")')
+				.click()
+			cy.get('.modal-container button:contains("Export")')
+				.click()
+
+			const downloadsFolder = Cypress.config('downloadsFolder')
+			cy.readFile(`${downloadsFolder}/${boardName}.csv`)
+		})
+	})
+})
+
+describe('Board import', function() {
+	before(function () {
+		cy.createUser(user)
+	})
+	beforeEach(function() {
+		cy.login(user)
+		cy.visit('/apps/deck')
+	})
+
+	it('Imports a board from JSON', function() {
+		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry:contains("Import board")')
+			.should('be.visible')
+			.click()
+
+		// Upload a JSON file
+		cy.get('input[type="file"]')
+			.selectFile([
+				{
+					contents: 'cypress/fixtures/import-board.json',
+					fileName: 'import-board.json',
+				},
+			], { force: true })
+
+		cy.get('.app-navigation__list .app-navigation-entry:contains("Imported board")')
+			.should('be.visible')
+	})
+})

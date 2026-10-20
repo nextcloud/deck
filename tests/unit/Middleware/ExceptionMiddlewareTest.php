@@ -29,6 +29,7 @@ use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
@@ -86,7 +87,15 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 	public function testAfterExceptionFail() {
 		$this->request->expects($this->any())->method('getId')->willReturn('abc123');
 		// BoardService $boardService, PermissionService $permissionService, $userId
-		$boardController = new BoardController('deck', $this->createMock(IRequest::class), $this->createMock(BoardService::class), $this->createMock(PermissionService::class), 'admin');
+		$boardController = new BoardController(
+			'deck',
+			$this->createMock(IRequest::class),
+			$this->createMock(BoardService::class),
+			$this->createMock(PermissionService::class),
+			$this->createMock(BoardImportService::class),
+			$this->createMock(\OCP\IL10N::class),
+			'admin'
+		);
 		$result = $this->exceptionMiddleware->afterException($boardController, 'bar', new \Exception('other exception message'));
 		$this->assertEquals('Internal server error: Please contact the server administrator if this error reappears multiple times, please include the request ID "abc123" below in your report.', $result->getData()['message']);
 		$this->assertEquals(500, $result->getData()['status']);
