@@ -5,8 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.12
+### Added
+* [stable30] feat: add board import and export #8566
+
 ## 1.14.11
-### Fixed## What's Changed
+### Fixed
 * [stable30] fix: board notify-due by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7994
 * [stable30] fix: exclude deleted cards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8046
 
