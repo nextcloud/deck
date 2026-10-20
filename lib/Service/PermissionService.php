@@ -60,11 +60,12 @@ class PermissionService {
 		$permissions = $this->aclMapper->findInCards($cardIds);
 		return array_map(
 			function (array $acls) use ($userId) {
+				$owner = $this->userIsBoardOwner($acls[0]->getBoardId(), $userId);
 				return [
-					Acl::PERMISSION_READ => $this->userCan($acls, Acl::PERMISSION_READ, $userId),
-					Acl::PERMISSION_EDIT => $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
-					Acl::PERMISSION_MANAGE => $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
-					Acl::PERMISSION_SHARE => $this->userCan($acls, Acl::PERMISSION_SHARE, $userId),
+					Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
+					Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
+					Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
+					Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId)) && !$this->shareManager->sharingDisabledForUser($userId),
 				];
 			},
 			$permissions
