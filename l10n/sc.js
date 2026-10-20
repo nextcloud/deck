@@ -280,14 +280,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Cumpartzi cun un'ischeda deck",
     "Share {file} with a Deck card" : "Cumpartzi {file} cun un'ischeda de deck",
     "Share" : "Cumpartzi",
-    "The card \"%s\" on \"%s\" has reached its due date." : "S'ischeda \"%s\" in \"%s\" est cròmpida a sa data de iscadèntzia.",
     "No participants found" : "Perunu partetzipante agatadu",
-    "Save" : "Sarva",
     "Write a description …" : "Iscrie una descritzione ...",
     "seconds ago" : "segundos a immoe",
-    "Today" : "Oe",
-    "Tomorrow" : "Cras",
-    "No due" : "Peruna iscadèntzia",
     "Creating the new card …" : "Creende s'ischeda noa ..."
 },
 "nplurals=2; plural=(n != 1);");

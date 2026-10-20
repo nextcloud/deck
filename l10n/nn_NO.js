@@ -39,8 +39,6 @@ OC.L10N.register(
     "Created" : "Lagd",
     "Modified" : "Endra",
     "Share" : "Del",
-    "Save" : "Lagre",
-    "seconds ago" : "sekund sidan",
-    "Today" : "I dag"
+    "seconds ago" : "sekund sidan"
 },
 "nplurals=2; plural=(n != 1);");

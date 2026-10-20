@@ -384,18 +384,13 @@ OC.L10N.register(
     "Share with a Deck card" : "مشاركة مع بطاقة Deck",
     "Share {file} with a Deck card" : "مشاركة الملف {file} مع بطاقة Deck",
     "Share" : "مشاركة ",
-    "The card \"%s\" on \"%s\" has reached its due date." : "وصلت بطاقة \"%s\" على %s\" الموعد المحدد ",
     "Share board with a user, group or team …" : "مشاركة اللوحة مع مستخدِم او مجموعة أو فريق ...",
     "Searching for users, groups and teams …" : "البحث عن مستخدِمين، أو مجموعات، أو فرق",
     "No participants found" : "لم يتم العثور على مشاركين",
     "Select a user to assign to this card…" : "حدِّد مستخدِماً ليتم إسناد هذه البطاقة له...",
-    "Save" : "حفظ",
     "Write a description …" : "كتابة وصف...",
     "Select or create a tag…" : "اختيار أو إنشاء وسم جديد...",
     "seconds ago" : "ثوانٍ مضت",
-    "Today" : "اليوم",
-    "Tomorrow" : "غدا",
-    "No due" : "غير محدد",
     "Creating the new card …" : "أنشى البطاقة الجديدة "
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

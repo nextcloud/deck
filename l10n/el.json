@@ -395,20 +395,15 @@
     "Share with a Deck card" : "Μοιραστείτε με μια καρτέλα Deck",
     "Share {file} with a Deck card" : "Μοιραστείτε το {file} με μια καρτέλα Deck",
     "Share" : "Μοιραστείτε",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Η καρτέλα \"%s\" στο \"%s\" έχει λήξει.",
     "Share board with a user, group or team …" : "Κοινή χρήση πίνακα με έναν χρήστη, μια ομάδα ή team ...",
     "Searching for users, groups and teams …" : "Αναζήτηση χρηστών, ομάδων και teams …",
     "No participants found" : "Δε βρέθηκαν συμμετέχοντες",
     "Select a user to assign to this card…" : "Επιλέξτε έναν χρήστη για να του αναθέσετε αυτή την κάρτα...",
-    "Save" : "Αποθήκευση",
     "Write a description …" : "Γράψτε μια περιγραφή…",
     "Select or create a tag…" : "Επιλέξτε ή δημιουργήστε μια ετικέτα...",
     "seconds ago" : " δευτερόλεπτα πριν ",
     "Exporting board..." : "Εξαγωγή πίνακα...",
     "Importing board..." : "Εισαγωγή πίνακα...",
-    "Today" : "Σήμερα",
-    "Tomorrow" : "Αύριο",
-    "No due" : "Χωρίς λήξη",
     "Creating the new card …" : "Γίνεται δημιουργία της νέας καρτέλας..."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

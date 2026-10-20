@@ -42,9 +42,6 @@
     "Close" : "Zoumaachen",
     "Modified" : "Geännert",
     "Share" : "Deelen",
-    "Save" : "Späicheren",
-    "seconds ago" : "Sekonnen hier",
-    "Today" : "Haut",
-    "Tomorrow" : "Muer"
+    "seconds ago" : "Sekonnen hier"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

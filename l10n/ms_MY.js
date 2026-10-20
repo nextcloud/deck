@@ -22,8 +22,6 @@ OC.L10N.register(
     "Export" : "Eksport",
     "Close" : "Tutup",
     "Modified" : "Dimodifikasi",
-    "Share" : "Kongsi",
-    "Save" : "Simpan",
-    "Today" : "Hari ini"
+    "Share" : "Kongsi"
 },
 "nplurals=1; plural=0;");

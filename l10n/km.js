@@ -26,8 +26,6 @@ OC.L10N.register(
     "Close" : "បិទ",
     "Modified" : "បាន​កែ​ប្រែ",
     "Share" : "ចែក​រំលែក",
-    "Save" : "រក្សាទុក",
-    "seconds ago" : "វិនាទី​មុន",
-    "Today" : "ថ្ងៃ​នេះ"
+    "seconds ago" : "វិនាទី​មុន"
 },
 "nplurals=1; plural=0;");

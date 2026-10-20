@@ -321,14 +321,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Споделяне с Deck карта",
     "Share {file} with a Deck card" : "Споделяне {file} с Deck карта",
     "Share" : "Споделяне",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Картата \"%s\" on \"%s\" е достигнала датата на падежа си.",
     "No participants found" : "Няма намерени участници",
-    "Save" : "Запазване",
     "Write a description …" : "Напишете описание ...",
     "seconds ago" : "преди секунди",
-    "Today" : "Днес",
-    "Tomorrow" : "Утре",
-    "No due" : "Не се дължи",
     "Creating the new card …" : "Създаване на новата карта ..."
 },
 "nplurals=2; plural=(n != 1);");
