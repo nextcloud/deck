@@ -14,7 +14,11 @@
 			</NcButton>
 		</div>
 
-		<div v-if="ganttTasks.length > 0" ref="ganttContainer" class="gantt-chart" />
+		<div
+			v-if="ganttTasks.length > 0"
+			ref="ganttContainer"
+			class="gantt-chart"
+			@mousedown.capture="onChartMouseDown" />
 
 		<NcEmptyContent v-if="!ganttTasks.length && !undatedCards.length">
 			<template #icon>
@@ -68,6 +72,7 @@ import { mapActions, mapState } from 'pinia'
 import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
+import { computeDraggedDates, DAYS_PER_UNIT } from '../../helpers/ganttDates.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useCardStore } from '../../stores/card.js'
 
@@ -87,18 +92,6 @@ const STACK_COLORS = [
 	'#ff5722',
 	'#009688',
 ]
-
-// Mirrors frappe-gantt date_utils.convert_scales() constants.
-// days_per_unit[scale] = how many days one unit of that scale is.
-const DAYS_PER_UNIT = {
-	millisecond: 1 / 86400000,
-	second: 1 / 86400,
-	minute: 1 / 1440,
-	hour: 1 / 24,
-	day: 1,
-	month: 30,
-	year: 365,
-}
 
 const GANTT_VIEW_MODES = [
 	{
@@ -225,7 +218,7 @@ export default {
 
 	computed: {
 		...mapState(useBoardStore, ['canEdit']),
-		...mapState(useCardStore, ['cardsByStack']),
+		...mapState(useCardStore, ['cardsByStack', 'cardById']),
 		partitionedCards() {
 			const undatedCards = []
 			const ganttTasks = []
@@ -304,9 +297,11 @@ export default {
 		this._onMouseUp = async (event) => {
 			if (this.pendingChange) {
 				const { task, start, end } = this.pendingChange
-				await this.updateTaskDate(task, start, end)
+				const changed = await this.updateTaskDate(task, start, end)
 				this.pendingChange = null
-				return
+				if (changed) {
+					return
+				}
 			}
 
 			const barWrapper = event.target.closest('.bar-wrapper')
@@ -405,26 +400,43 @@ export default {
 				readonly_progress: true,
 				readonly: !this.canEdit,
 				popup: false,
-				on_date_change: (task, start, end) => {
-					this.pendingChange = { task, start, end }
+				on_date_change: (task) => {
+					this.pendingChange = { task, start: task._start, end: task._end }
 				},
 			})
 
-			this._patchBarDuration()
+			this._patchBarPrototype()
 			this.fitColumnsToWidth()
 			this.ganttInstance.change_view_mode(this.ganttInstance.config.view_mode.name, true)
 			this.ganttInstance.scroll_current()
 		},
 
 		async updateTaskDate(task, start, end) {
+			const card = this.cardById(task._card.id)
+			const current = this.cardToGanttTask(card, 0)
+			if (current.start.getTime() === start.getTime() && current.end.getTime() === end.getTime()) {
+				return false
+			}
 			await this.updateCardDatesInStore({
-				...task._card,
-				startdate: new Date(start).toISOString(),
-				duedate: new Date(end).toISOString(),
+				...card,
+				startdate: start.toISOString(),
+				duedate: end.toISOString(),
 			})
+			return true
 		},
 
-		_patchBarDuration() {
+		onChartMouseDown(event) {
+			const barWrapper = event.target.closest('.bar-wrapper')
+			const bar = barWrapper && this.ganttInstance?.get_bar(barWrapper.getAttribute('data-id'))
+			const card = bar && this.cardById(bar.task._card.id)
+			if (!card) {
+				return
+			}
+			const { start, end } = this.cardToGanttTask(card, 0)
+			bar._deckDragOrigin = { start, end, x: bar.$bar.getX(), width: bar.$bar.getWidth() }
+		},
+
+		_patchBarPrototype() {
 			const bars = this.ganttInstance?.bars
 			if (!bars?.length) {
 				return
@@ -434,6 +446,20 @@ export default {
 				return
 			}
 			BarProto._deckDurationPatched = true
+
+			// frappe-gantt converts the bar position back to dates in whole units, which snaps
+			// dates to the start of a month or day. Shift the dates by the dragged distance instead.
+			BarProto.compute_start_end_date = function() {
+				if (!this._deckDragOrigin) {
+					return { new_start_date: this.task._start, new_end_date: this.task._end }
+				}
+				const { start, end } = computeDraggedDates(this._deckDragOrigin, this.$bar.getX(), this.$bar.getWidth(), {
+					unit: this.gantt.config.unit,
+					step: this.gantt.config.step,
+					columnWidth: this.gantt.config.column_width,
+				})
+				return { new_start_date: start, new_end_date: end }
+			}
 
 			// we overwrite the compute_duration function because it enforces a minimum of 1 day duration
 			// for reference: https://github.com/frappe/gantt/issues/534
