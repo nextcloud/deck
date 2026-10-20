@@ -426,7 +426,7 @@ export default {
 		...mapState(useCardStore, ['cardById']),
 		...mapWritableState(useSettingsStore, ['searchQuery']),
 		pageTitle() {
-			if (!this.board?.title) {
+			if (!this.isFullApp || !this.board?.title) {
 				return ''
 			}
 			const cardTitle = this.$route.params.cardId && this.cardById(Number(this.$route.params.cardId))?.title

@@ -78,6 +78,7 @@ import MarkdownIt from 'markdown-it'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import { mapActions, mapState } from 'pinia'
+import { markRaw } from 'vue'
 import VueEasymde from 'vue-easymde'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import AttachmentList from './AttachmentList.vue'
@@ -130,6 +131,7 @@ export default {
 		return {
 			textAppAvailable: !!window.OCA?.Text?.createCollaborativeEditor,
 			editor: null,
+			disposed: false,
 			keyExitState: 0,
 			descriptionOld: '',
 			description: '',
@@ -225,6 +227,7 @@ export default {
 	},
 
 	async beforeUnmount() {
+		this.disposed = true
 		await this.destroyEditor()
 	},
 
@@ -236,38 +239,46 @@ export default {
 		...mapActions(useSettingsStore, ['setHasCardSaveError']),
 		async setupEditor() {
 			await this.destroyEditor()
-			if (this.collaborative) {
-				this.editor = await window.OCA.Text.createCollaborativeEditor({
-					context: { type: 'deck_card', id: this.card.id },
-					el: this.$refs.editor,
-					readOnly: !this.canEdit,
-				})
+			if (this.disposed) {
 				return
 			}
-			this.editor = await window.OCA.Text.createMarkdownContentEditor({
-				el: this.$refs.editor,
-				content: this.card.description,
-				readOnly: !this.canEdit,
-				onUpdate: ({ markdown }) => {
-					if (this.description === markdown) {
-						return
-					}
-					this.description = markdown
-					this.updateDescription()
-				},
-			})
+			const editor = this.collaborative
+				? await window.OCA.Text.createCollaborativeEditor({
+						context: { type: 'deck_card', id: this.card.id },
+						el: this.$refs.editor,
+						readOnly: !this.canEdit,
+					})
+				: await window.OCA.Text.createMarkdownContentEditor({
+						el: this.$refs.editor,
+						content: this.card.description,
+						readOnly: !this.canEdit,
+						onUpdate: ({ markdown }) => {
+							if (this.description === markdown) {
+								return
+							}
+							this.description = markdown
+							this.updateDescription()
+						},
+					})
+			if (this.disposed) {
+				editor.destroy()
+				return
+			}
+			// Text embeds use native private fields and must not be proxied by Vue.
+			this.editor = markRaw(editor)
 		},
 
 		async destroyEditor() {
+			const editor = this.editor
+			this.editor = null
 			clearTimeout(this.descriptionSaveTimeout)
 			if (!this.collaborative) {
 				await this.saveDescription()
 			}
 			try {
-				this?.editor?.destroy()
+				editor?.destroy()
 			} catch (e) {
-				// Ignore errors during editor destruction
-				logger.debug('Error destroying text editor', { error: e })
+				logger.error('Error destroying text editor', { error: e })
 			}
 		},
 

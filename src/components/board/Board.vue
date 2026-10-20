@@ -153,6 +153,10 @@ export default {
 			currentScrollPosX: null,
 			currentMousePosX: null,
 			localModal: null,
+			disposed: false,
+			loadId: 0,
+			session: null,
+			sessionClosing: null,
 		}
 	},
 
@@ -213,7 +217,11 @@ export default {
 	},
 
 	beforeUnmount() {
-		this.session?.close()
+		this.disposed = true
+		this.stopMouseDrag()
+		this.closeSession().catch((error) => {
+			logger.error('Failed to close board session', { error })
+		})
 		unsubscribe('deck:card:open-modal', this.openCardModal)
 	},
 
@@ -221,33 +229,67 @@ export default {
 		...mapActions(useBoardStore, ['loadBoardById', 'toggleShowArchived']),
 		...mapActions(useStackStore, ['loadStacks', 'loadArchivedStacks', 'createStack', 'orderStack']),
 		openCardModal(cardId) {
-			this.localModal = cardId
+			if (this.cardById(cardId)) {
+				this.localModal = cardId
+			}
+		},
+
+		closeSession() {
+			if (!this.sessionClosing && this.session) {
+				const session = this.session
+				this.session = null
+				// Reloads and unmount share one close operation.
+				this.sessionClosing = session.close().finally(() => {
+					this.sessionClosing = null
+				})
+			}
+			return this.sessionClosing ?? Promise.resolve()
 		},
 
 		async fetchData() {
+			const loadId = ++this.loadId
+			const boardId = this.id
+			const isCurrentLoad = () => !this.disposed && loadId === this.loadId
 			this.loading = true
+			// Any await can resume after unmount or a newer load. Only the current
+			// load may continue with further work or create a session.
 			try {
-				await this.loadBoardById(this.id)
-				await this.loadStacks(this.id)
+				await this.loadBoardById(boardId)
+				if (!isCurrentLoad()) {
+					return
+				}
+				await this.loadStacks(boardId)
+				if (!isCurrentLoad()) {
+					return
+				}
 
 				const routeCardId = this.$route?.params?.cardId ? parseInt(this.$route.params.cardId) : null
 				// If an archived card is requested, and we cannot find it in the current we load the archived stacks instead
 				if (routeCardId && !this.cardById(routeCardId)) {
-					await this.loadArchivedStacks(this.id)
+					await this.loadArchivedStacks(boardId)
+					if (!isCurrentLoad()) {
+						return
+					}
 
 					if (this.cardById(routeCardId)) {
 						this.toggleShowArchived(true)
 					}
 				}
 
-				this.session?.close()
-				this.session = createSession(this.id)
+				await this.closeSession()
+				if (!isCurrentLoad()) {
+					return
+				}
+				this.session = createSession(boardId)
 			} catch (e) {
-				this.loading = false
 				logger.error('Failed to load board', { error: e })
-				showError(e)
+				if (isCurrentLoad()) {
+					showError(e)
+				}
 			} finally {
-				this.loading = false
+				if (isCurrentLoad()) {
+					this.loading = false
+				}
 			}
 		},
 
