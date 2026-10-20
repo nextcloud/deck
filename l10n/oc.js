@@ -63,9 +63,6 @@ OC.L10N.register(
     "Create a card" : "Crear una carta",
     "Modified" : "Modificat",
     "Share" : "Partejar",
-    "Save" : "Salvar",
-    "seconds ago" : "fa qualques segondas",
-    "Today" : "Uèi",
-    "Tomorrow" : "Deman"
+    "seconds ago" : "fa qualques segondas"
 },
 "nplurals=2; plural=(n > 1);");

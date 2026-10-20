@@ -112,9 +112,6 @@ OC.L10N.register(
     "Modified" : "Modificóse",
     "Error creating the share" : "Hebo un error al crear la compartición",
     "Share" : "Compartir",
-    "Save" : "Guardar",
-    "seconds ago" : "hai segundos",
-    "Today" : "Güei",
-    "Tomorrow" : "Mañana"
+    "seconds ago" : "hai segundos"
 },
 "nplurals=2; plural=(n != 1);");

@@ -52,8 +52,6 @@ OC.L10N.register(
     "Created" : "Yettwarna.",
     "Modified" : "Yettwabeddel",
     "Share" : "Bḍu",
-    "Save" : "Sekles",
-    "seconds ago" : "Tasinin aya",
-    "Today" : "Ass-a"
+    "seconds ago" : "Tasinin aya"
 },
 "nplurals=2; plural=(n != 1);");

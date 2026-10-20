@@ -370,18 +370,13 @@
     "Share with a Deck card" : "デッキのカードで共有する",
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
     "Share" : "共有",
-    "The card \"%s\" on \"%s\" has reached its due date." : "カード \"%s\"(\"%s\"に所属)は期日に達しました。",
     "Share board with a user, group or team …" : "ユーザー、グループ、チームでボードを共有 ...",
     "Searching for users, groups and teams …" : "ユーザー、グループ、チームの検索中...",
     "No participants found" : "参加者が見つかりません",
     "Select a user to assign to this card…" : "このカードに割り当てるユーザーを選択してください。",
-    "Save" : "保存",
     "Write a description …" : "説明を書く…",
     "Select or create a tag…" : "タグを選択または作成する",
     "seconds ago" : "数秒前",
-    "Today" : "今日",
-    "Tomorrow" : "明日",
-    "No due" : "日付なし",
     "Creating the new card …" : "新しいカードを作成しています..."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -62,10 +62,6 @@ OC.L10N.register(
     "Created" : "შექმნილია",
     "Modified" : "შეიცვალა",
     "Share" : "გაზიარება",
-    "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
-    "Save" : "შენახვა",
-    "seconds ago" : "წამის წინ",
-    "Today" : "დღეს",
-    "Tomorrow" : "ხვალ"
+    "seconds ago" : "წამის წინ"
 },
 "nplurals=2; plural=(n!=1);");

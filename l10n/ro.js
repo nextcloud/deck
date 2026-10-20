@@ -342,14 +342,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Partajează cu un card Deck",
     "Share {file} with a Deck card" : "Partajează {file} cu un card Deck",
     "Share" : "Partajează",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Cardul \"%s\" din \"%s\" a ajuns la scadență.",
     "No participants found" : "Nu s-au găsit participanți",
-    "Save" : "Salvează",
     "Write a description …" : "Scrieți o descriere ...",
     "seconds ago" : "secunde în urmă",
-    "Today" : "Azi",
-    "Tomorrow" : "Mâine",
-    "No due" : "Fără scadență",
     "Creating the new card …" : "Se creează un nou card ..."
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

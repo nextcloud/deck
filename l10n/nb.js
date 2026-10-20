@@ -368,18 +368,13 @@ OC.L10N.register(
     "Share with a Deck card" : "Del med et Stokk-kort",
     "Share {file} with a Deck card" : "Del {file} med et Stokk-kort",
     "Share" : "Del",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nådd sin utløpsdato.",
     "Share board with a user, group or team …" : "Del tavle med en bruker, gruppe eller lag...",
     "Searching for users, groups and teams …" : "Søker etter brukere, grupper og lag...",
     "No participants found" : "Ingen deltakere funnet",
     "Select a user to assign to this card…" : "Velg en bruker som skal tilordnes dette kortet...",
-    "Save" : "Lagre",
     "Write a description …" : "Skriv en beskrivelse ...",
     "Select or create a tag…" : "Velg eller opprett et merke...",
     "seconds ago" : "sekunder siden",
-    "Today" : "I dag",
-    "Tomorrow" : "I morgen",
-    "No due" : "Ingen forfall",
     "Creating the new card …" : "Oppretter det nye kortet ..."
 },
 "nplurals=2; plural=(n != 1);");

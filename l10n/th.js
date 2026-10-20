@@ -60,9 +60,6 @@ OC.L10N.register(
     "Due date" : "วันที่ครบกำหนด",
     "Modified" : "แก้ไขเมื่อ",
     "Share" : "แชร์",
-    "Save" : "บันทึก",
-    "seconds ago" : "วินาทีที่ผ่านมา",
-    "Today" : "วันนี้",
-    "Tomorrow" : "พรุ่งนี้"
+    "seconds ago" : "วินาทีที่ผ่านมา"
 },
 "nplurals=1; plural=0;");

@@ -367,18 +367,13 @@ OC.L10N.register(
     "Share with a Deck card" : "Partekatu Deck txartel baten bidez",
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
     "Share" : "Partekatu",
-    "The card \"%s\" on \"%s\" has reached its due date." : " \"%s\" txartela,  \"%s\" -n dagoena, epe-mugara ailegatu da.",
     "Share board with a user, group or team …" : "Partekatu taula erabiltzaile, talde edo lantalde batekin…",
     "Searching for users, groups and teams …" : "Erabiltzaileak, taldeak, lantaldeak... bilatzen",
     "No participants found" : "Ez da parte-hartzailerik aurkitu",
     "Select a user to assign to this card…" : "Hautatu erabiltzaile bat txartel honetara esleitzeko...",
-    "Save" : "Gorde",
     "Write a description …" : "Idatzi deskribapen bat ...",
     "Select or create a tag…" : "Hautatu edo sortu etiketa bat...",
     "seconds ago" : "segundo lehenago",
-    "Today" : "Gaur",
-    "Tomorrow" : "Bihar",
-    "No due" : "Epemugarik ez",
     "Creating the new card …" : "Txartel berria sortzen..."
 },
 "nplurals=2; plural=(n != 1);");

@@ -91,9 +91,6 @@ OC.L10N.register(
     "Modified" : "Mainīts",
     "Share" : "Koplietot",
     "Searching for users, groups and teams …" : "Meklē lietotājus, kopas un komandas …",
-    "Save" : "Saglabāt",
-    "seconds ago" : "pirms vairākām sekundēm",
-    "Today" : "Šodien",
-    "Tomorrow" : "Rīt"
+    "seconds ago" : "pirms vairākām sekundēm"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

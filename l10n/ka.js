@@ -348,14 +348,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "Share",
-    "The card \"%s\" on \"%s\" has reached its due date." : "The card \"%s\" on \"%s\" has reached its due date.",
     "No participants found" : "No participants found",
-    "Save" : "Save",
     "Write a description …" : "Write a description …",
     "seconds ago" : "seconds ago",
-    "Today" : "Today",
-    "Tomorrow" : "Tomorrow",
-    "No due" : "No due",
     "Creating the new card …" : "Creating the new card …"
 },
 "nplurals=2; plural=(n!=1);");
