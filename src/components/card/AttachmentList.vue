@@ -36,19 +36,19 @@
 				v-for="attachment in attachments"
 				:key="attachment.id"
 				class="attachment"
-				:class="{ 'attachment--deleted': attachment.deletedAt > 0 }">
+				:class="{ 'attachment--deleted': attachment.deletedAt > 0, 'attachment--pending': attachment.deletedAt === 0 && !isAttachmentReady(attachment) }">
 				<a
 					class="fileicon"
 					:href="internalLink(attachment)"
 					:style="mimetypeForAttachment(attachment)"
-					@click.prevent="showViewer(attachment)" />
+					@click.prevent="handleAttachmentClick(attachment)" />
 				<div class="details">
-					<a :href="internalLink(attachment)" @click.prevent="showViewer(attachment)">
+					<a :href="internalLink(attachment)" @click.prevent="handleAttachmentClick(attachment)">
 						<div class="filename">
 							<span>{{ attachmentBasename(attachment) }}</span>
 							<span class="extension">.{{ attachmentExtension(attachment) }}</span>
 						</div>
-						<div v-if="attachment.deletedAt === 0">
+						<div v-if="attachment.deletedAt === 0 && isAttachmentReady(attachment)">
 							<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
 							<span class="filedate">{{ relativeDate(attachment.createdAt * 1000) }}</span>
 							<span class="filedate">{{ attachment.extendedData.attachmentCreator.displayName }}</span>
@@ -58,12 +58,12 @@
 						</div>
 					</a>
 				</div>
-				<NcActions v-if="selectable">
+				<NcActions v-if="selectable && isAttachmentReady(attachment)">
 					<NcActionButton icon="icon-confirm" @click="$emit('selectAttachment', attachment)">
 						{{ t('deck', 'Add this attachment') }}
 					</NcActionButton>
 				</NcActions>
-				<NcActions v-if="removable && !isReadOnly" :forceMenu="true">
+				<NcActions v-if="removable && !isReadOnly && isAttachmentReady(attachment)" :forceMenu="true">
 					<NcActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
 						{{ t('deck', 'Show in Files') }}
 					</NcActionLink>
@@ -151,6 +151,9 @@ export default {
 			overwriteAttachment: null,
 			isDraggingOver: false,
 			maxUploadSize: maxUploadSizeState,
+			attachmentReadyById: {},
+			attachmentsPollingIntervalId: null,
+			isRefreshingAttachments: false,
 		}
 	},
 
@@ -234,15 +237,22 @@ export default {
 		cardId: {
 			immediate: true,
 			handler() {
-				this.fetchAttachments(this.cardId)
+				this.stopAttachmentsPolling()
+				this.attachmentReadyById = {}
+				this.refreshAttachmentsAndReadiness()
 			},
 		},
+	},
+
+	beforeUnmount() {
+		this.stopAttachmentsPolling()
 	},
 
 	methods: {
 		...mapActions(useAttachmentStore, [
 			'fetchAttachments',
 			'unshareAttachment',
+			'shareFileToRemoteBoard',
 		]),
 
 		handleUploadFile(event) {
@@ -265,18 +275,114 @@ export default {
 						throw new Error(t('files', 'Invalid path selected'))
 					}
 
-					axios.post(generateOcsUrl('apps/files_sharing/api/v1/shares'), {
-						path,
-						shareType: 12,
-						shareWith: '' + this.cardId,
-					}).then(() => {
-						this.fetchAttachments(this.cardId)
-					})
+					if (!this.currentBoard.externalId) {
+						axios.post(generateOcsUrl('apps/files_sharing/api/v1/shares'), {
+							path,
+							shareType: 12,
+							shareWith: '' + this.cardId,
+						}).then(() => {
+							this.refreshAttachmentsAndReadiness()
+						})
+					} else {
+						const bodyFormData = new FormData()
+						bodyFormData.append('path', path)
+						await this.shareFileToRemoteBoard({ cardId: this.cardId, formData: bodyFormData })
+						await this.refreshAttachmentsAndReadiness()
+					}
 				})
+		},
+
+		isAttachmentReady(attachment) {
+			return this.attachmentReadyById[attachment.id] === true
+		},
+
+		async testAttachmentReadiness(attachment) {
+			if (attachment.deletedAt > 0 || !attachment.extendedData.fileid) {
+				return false
+			}
+
+			try {
+				const response = await axios.request({
+					method: 'HEAD',
+					url: this.downloadLink(attachment),
+					validateStatus: () => true,
+				})
+
+				return response.status >= 200 && response.status < 400
+			} catch (_error) {
+				return false
+			}
+		},
+
+		startAttachmentsPolling() {
+			if (this.attachmentsPollingIntervalId !== null) {
+				return
+			}
+
+			this.attachmentsPollingIntervalId = window.setInterval(() => {
+				this.refreshAttachmentsAndReadiness()
+			}, 5000)
+		},
+
+		stopAttachmentsPolling() {
+			if (this.attachmentsPollingIntervalId === null) {
+				return
+			}
+
+			window.clearInterval(this.attachmentsPollingIntervalId)
+			this.attachmentsPollingIntervalId = null
+		},
+
+		async checkAttachmentsReadiness() {
+			const attachments = this.attachments.filter(attachment => attachment.deletedAt === 0)
+			const readinessById = {}
+			const readinessChecks = await Promise.all(attachments.map(async (attachment) => {
+				if (!attachment.extendedData.fileid) {
+					return [attachment.id, false]
+				}
+
+				return [attachment.id, await this.testAttachmentReadiness(attachment)]
+			}))
+
+			for (const [id, isReady] of readinessChecks) {
+				readinessById[id] = isReady
+			}
+
+			this.attachmentReadyById = readinessById
+
+			const hasPendingAttachments = readinessChecks.some(([, isReady]) => !isReady)
+			if (hasPendingAttachments) {
+				this.startAttachmentsPolling()
+				return
+			}
+
+			this.stopAttachmentsPolling()
+		},
+
+		async refreshAttachmentsAndReadiness() {
+			if (this.isRefreshingAttachments) {
+				return
+			}
+
+			this.isRefreshingAttachments = true
+			try {
+				await this.fetchAttachments(this.cardId)
+				await this.checkAttachmentsReadiness()
+			} finally {
+				this.isRefreshingAttachments = false
+			}
 		},
 
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
+		},
+
+		handleAttachmentClick(attachment) {
+			if (!this.isAttachmentReady(attachment)) {
+				return
+			}
+
+			this.showViewer(attachment)
 		},
 
 		showViewer(attachment) {
@@ -361,6 +467,11 @@ export default {
 				opacity: .5;
 			}
 
+			&.attachment--pending {
+				opacity: .5;
+				pointer-events: none;
+			}
+
 			.fileicon {
 				display: inline-block;
 				min-width: 32px;
@@ -393,6 +504,7 @@ export default {
 			.filesize, .filedate {
 				font-size: 90%;
 				color: var(--color-text-maxcontrast);
+				padding-right: 3px;
 			}
 			.app-popover-menu-utils {
 				position: relative;

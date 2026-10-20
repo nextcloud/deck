@@ -8,9 +8,10 @@
 			<div class="reply--header">
 				<div class="reply--hint">
 					{{ t('deck', 'In reply to') }}
-					<NcUserBubble :user="comment.actorRemote !== null ? undefined : comment.actorId"
-						:display-name="comment.actorDisplayName"
-						:is-no-user="comment.actorRemote !== null" />
+					<NcUserBubble
+						:user="comment.actorRemote !== null ? undefined : comment.actorId"
+						:displayName="comment.actorDisplayName"
+						:isNoUser="comment.actorRemote !== null" />
 				</div>
 				<NcActions v-if="preview" class="reply--cancel">
 					<NcActionButton icon="icon-close" @click="$emit('cancel')">
@@ -18,9 +19,10 @@
 					</NcActionButton>
 				</NcActions>
 			</div>
-			<NcRichText class="comment--content"
+			<NcRichText
+				class="comment--content"
 				dir="auto"
-				use-markdown
+				useMarkdown
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />
@@ -28,26 +30,28 @@
 	</div>
 	<li v-else class="comment">
 		<div class="comment--header">
-			<NcAvatar :user="comment.actorId" :is-no-user="comment.actorRemote !== null" />
+			<NcAvatar :user="comment.actorId" :isNoUser="comment.actorRemote !== null" />
 			<span class="username">
 				{{ comment.actorDisplayName }}
 			</span>
-			<NcActions v-show="!edit" :force-menu="true">
-				<NcActionButton :close-after-click="true" @click="replyTo()">
+			<NcActions v-show="!edit" :forceMenu="true">
+				<NcActionButton :closeAfterClick="true" @click="replyTo()">
 					<template #icon>
 						<ReplyIcon decorative />
 					</template>
 					{{ t('deck', 'Reply') }}
 				</NcActionButton>
-				<NcActionButton v-if="canEdit"
+				<NcActionButton
+					v-if="canEdit"
 					icon="icon-rename"
-					:close-after-click="true"
+					:closeAfterClick="true"
 					@click="showUpdateForm()">
 					{{ t('deck', 'Update') }}
 				</NcActionButton>
-				<NcActionButton v-if="canEdit"
+				<NcActionButton
+					v-if="canEdit"
 					icon="icon-delete"
-					:close-after-click="true"
+					:closeAfterClick="true"
 					@click="deleteComment()">
 					{{ t('deck', 'Delete') }}
 				</NcActionButton>
@@ -56,7 +60,8 @@
 				<NcActionButton icon="icon-close" @click="hideUpdateForm" />
 			</NcActions>
 			<div class="spacer" />
-			<div class="timestamp"
+			<div
+				class="timestamp"
 				:aria-label="formattedTimestamp"
 				:title="formattedTimestamp">
 				{{ relativeDate(comment.creationDateTime) }}
@@ -64,14 +69,16 @@
 		</div>
 		<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
 		<div v-show="!edit" ref="richTextElement">
-			<NcRichText class="comment--content"
+			<NcRichText
+				class="comment--content"
 				dir="auto"
-				use-markdown
+				useMarkdown
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />
 		</div>
-		<CommentForm v-if="edit"
+		<CommentForm
+			v-if="edit"
 			v-model="commentMsg"
 			dir="auto"
 			@submit="updateComment($event)" />
@@ -79,15 +86,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { NcAvatar, NcActions, NcActionButton, NcRichText, NcUserBubble } from '@nextcloud/vue'
-import CommentForm from './CommentForm.vue'
+import { useBoardStore } from '../../stores/board.js'
+import { mapState } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
+import { NcActionButton, NcActions, NcAvatar, NcRichText, NcUserBubble } from '@nextcloud/vue'
 import md5 from 'blueimp-md5'
-import relativeDate from '../../mixins/relativeDate.js'
-import ReplyIcon from 'vue-material-design-icons/ReplyOutline.vue'
 import moment from 'moment'
 import { h } from 'vue'
+import ReplyIcon from 'vue-material-design-icons/ReplyOutline.vue'
+import CommentForm from './CommentForm.vue'
+import relativeDate from '../../mixins/relativeDate.js'
 import { useCommentStore } from '../../stores/comment.js'
 
 // Vue 2's `{ functional: true, render(createElement, context) }` signature no
@@ -124,26 +132,31 @@ export default {
 		NcRichText,
 		ReplyIcon,
 	},
+
 	mixins: [relativeDate],
 	props: {
 		comment: {
 			type: Object,
 			default: undefined,
 		},
+
 		reply: {
 			type: Boolean,
 			default: false,
 		},
+
 		preview: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
 	emits: ['cancel'],
 	setup() {
 		const commentStore = useCommentStore()
 		return { commentStore }
 	},
+
 	data() {
 		return {
 			edit: false,
@@ -152,12 +165,13 @@ export default {
 	},
 
 	computed: {
-		...mapState({
+		...mapState(useBoardStore, {
 			currentBoard: state => state.currentBoard,
 		}),
 		canEdit() {
 			return this.comment.actorId === getCurrentUser().uid
 		},
+
 		richText() {
 			return (comment) => {
 				let message = this.parsedMessage(comment.message)
@@ -176,6 +190,7 @@ export default {
 				return message
 			}
 		},
+
 		richArgs() {
 			return (comment) => {
 				const mentions = [...comment.mentions]
@@ -197,6 +212,7 @@ export default {
 				return result
 			}
 		},
+
 		parsedMessage() {
 			return (message) => {
 				const div = document.createElement('div')
@@ -204,6 +220,7 @@ export default {
 				return (div.textContent || div.innerText || '')
 			}
 		},
+
 		formattedTimestamp() {
 			return t('deck', 'Created:') + ' ' + moment(this.comment.creationDateTime).format('LLLL')
 		},
@@ -213,14 +230,17 @@ export default {
 		replyTo() {
 			this.commentStore.setReplyTo(this.comment)
 		},
+
 		showUpdateForm() {
 			this.edit = true
 			this.commentMsg = this.comment.message
 		},
+
 		hideUpdateForm() {
 			this.commentMsg = ''
 			this.edit = false
 		},
+
 		async updateComment(message) {
 			const data = {
 				comment: { id: this.comment.id, message },
@@ -230,6 +250,7 @@ export default {
 			await this.commentStore.updateComment(data)
 			this.hideUpdateForm()
 		},
+
 		deleteComment() {
 			const data = {
 				id: this.comment.id,
