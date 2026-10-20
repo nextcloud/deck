@@ -49,7 +49,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function findInCards(array $cardIds, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('acl.id', 'acl.board_id', 'acl.type', 'acl.participant', 'acl.permission_edit', 'acl.permission_share', 'acl.permission_manage', 'acl.created_at', 'acl.last_modified_at', 'c.id AS card_id')
+		$qb->select('acl.id', 'acl.board_id', 'acl.type', 'acl.participant', 'acl.permission_edit', 'acl.permission_share', 'acl.permission_manage', 'c.id AS card_id')
 			->from('deck_board_acl', 'acl')
 			->innerJoin('acl', 'deck_boards', 'b', 'acl.board_id = b.id')
 			->innerJoin('b', 'deck_stacks', 's', 's.board_id = b.id')
