@@ -12,7 +12,13 @@
 		:force-display-actions="isTouchDevice"
 		@click="onNavigate"
 		@undo="unDelete">
-		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
+		<template #icon>
+			<NcAppNavigationIconBullet :color="board.color" />
+			<BoardExportModal v-if="exportModalOpen"
+				:board-title="board.title"
+				@export="onExportBoard"
+				@close="onCloseExportBoard" />
+		</template>
 
 		<template #counter>
 			<AccountIcon v-if="board.acl.length > 0" />
@@ -157,6 +163,8 @@ import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
 
 import isTouchDevice from '../../mixins/isTouchDevice.js'
+import BoardExportModal from './BoardExportModal.vue'
+import { showMessage, TOAST_PERMANENT_TIMEOUT } from '@nextcloud/dialogs'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -174,6 +182,7 @@ export default {
 		CloneIcon,
 		CloseIcon,
 		CheckIcon,
+		BoardExportModal,
 	},
 	directives: {
 		ClickOutside,
@@ -201,6 +210,7 @@ export default {
 			isDueSubmenuActive: false,
 			updateDueSetting: null,
 			canCreate: canCreateState,
+			exportModalOpen: false,
 		}
 	},
 	computed: {
@@ -344,7 +354,7 @@ export default {
 		},
 		async onExportBoard(format) {
 			this.exportModalOpen = false
-			const loadingToast = showLoading(t('deck', 'Exporting board...'))
+			const loadingToast = showMessage(t('deck', 'Exporting board...'), { timeout: TOAST_PERMANENT_TIMEOUT })
 			await this.boardApi.exportBoard(this.board, format)
 			loadingToast.hideToast()
 		},

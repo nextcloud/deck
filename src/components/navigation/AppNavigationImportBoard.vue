@@ -16,7 +16,7 @@
 <script>
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import { showError } from '../../helpers/errors.js'
-import { showSuccess, showLoading } from '@nextcloud/dialogs'
+import { showSuccess, showMessage, TOAST_PERMANENT_TIMEOUT } from '@nextcloud/dialogs'
 
 export default {
 	name: 'AppNavigationImportBoard',
@@ -40,7 +40,7 @@ export default {
 		async doImportBoard(event) {
 			const file = event.target.files[0]
 			if (file) {
-				const loadingToast = showLoading(t('deck', 'Importing board...'))
+				const loadingToast = showMessage(t('deck', 'Importing board...'), { timeout: TOAST_PERMANENT_TIMEOUT })
 				const result = await this.$store.dispatch('importBoard', file)
 				loadingToast.hideToast()
 				if (result?.message) {

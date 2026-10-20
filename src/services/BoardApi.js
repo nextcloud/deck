@@ -136,6 +136,25 @@ export class BoardApi {
 		return axios.get(this.url(`/boards/${board.id}/export`))
 			.then(
 				(response) => {
+					if (format === 'json') {
+						const exportData = {
+							boards: [response.data],
+						}
+						const stacks = {}
+						for (const stack of response.data.stacks) {
+							stacks[stack.id] = stack
+						}
+						exportData.boards[0].stacks = stacks
+						const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+						const blobUrl = URL.createObjectURL(blob)
+						const a = document.createElement('a')
+						a.href = blobUrl
+						a.download = response.data.title + '.json'
+						a.click()
+						a.remove()
+						return Promise.resolve()
+					}
+
 					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
 					let row = ''
 					Object.keys(fields).forEach(field => {
