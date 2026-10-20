@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.11
+### Added
+* [stable31] feat: add board import and export #8544
+
 ## 1.15.10
 ### Fixed
 * [stable31] fix: board notify-due by @backportbot[bot] in https://github.com/nextcloud/deck/pull/7993
