@@ -32,8 +32,6 @@ OC.L10N.register(
     "Close" : "Փակել",
     "Modified" : "Փոփոխված",
     "Share" : "Կիսվել",
-    "Save" : "Պահպանել",
-    "seconds ago" : "վրկ. առաջ",
-    "Today" : "այսօր"
+    "seconds ago" : "վրկ. առաջ"
 },
 "nplurals=2; plural=(n != 1);");

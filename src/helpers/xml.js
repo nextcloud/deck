@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const xmlToJson = (xml) => {
+import logger from '../logger.js'
+
+function xmlToJson(xml) {
 	let obj = {}
 	if (xml.nodeType === 1) {
 		if (xml.attributes.length > 0) {
@@ -34,17 +36,17 @@ const xmlToJson = (xml) => {
 	}
 	return obj
 }
-const parseXml = (xml) => {
+function parseXml(xml) {
 	let dom = null
 	try {
 		dom = (new DOMParser()).parseFromString(xml, 'text/xml')
 	} catch (e) {
-		console.error('Failed to parse xml document', e)
+		logger.error('Failed to parse xml document', { error: e })
 	}
 	return dom
 }
 
-const commentToObject = (tag) => {
+function commentToObject(tag) {
 	let mentions = tag['d:prop']['oc:mentions']['oc:mention'] ?? []
 	if (mentions && !Array.isArray(mentions)) {
 		mentions = [mentions]
@@ -69,8 +71,7 @@ const commentToObject = (tag) => {
 }
 
 // FIXME: make this generic and not depending on comments
-const xmlToTagList = (xml) => {
-
+function xmlToTagList(xml) {
 	const json = xmlToJson(parseXml(xml))
 	const list = json['d:multistatus']['d:response']
 

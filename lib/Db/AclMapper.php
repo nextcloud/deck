@@ -44,6 +44,33 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * @return array<int, Acl[]> Acl entries grouped by card id
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findInCards(array $cardIds, ?int $limit = null, ?int $offset = null): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('acl.id', 'acl.board_id', 'acl.type', 'acl.participant', 'acl.permission_edit', 'acl.permission_share', 'acl.permission_manage', 'acl.created_at', 'acl.last_modified_at', 'c.id AS card_id')
+			->from('deck_board_acl', 'acl')
+			->innerJoin('acl', 'deck_boards', 'b', 'acl.board_id = b.id')
+			->innerJoin('b', 'deck_stacks', 's', 's.board_id = b.id')
+			->innerJoin('s', 'deck_cards', 'c', 'c.stack_id = s.id')
+			->where($qb->expr()->in('c.id', $qb->createParameter('cardIds')))
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		$aclsByCardId = [];
+		foreach ($this->chunkQuery($cardIds, function (array $ids) use ($qb) {
+			$qb->setParameter('cardIds', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			return $qb->executeQuery()->fetchAll();
+		}) as $row) {
+			$cardId = (int)$row['card_id'];
+			unset($row['card_id']);
+			$aclsByCardId[$cardId][] = Acl::fromRow($row);
+		}
+		return $aclsByCardId;
+	}
+
 	public function findIn(array $boardIds, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage', 'created_at', 'last_modified_at')

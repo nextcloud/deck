@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bamarni/composer-bin-plugin",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bamarni/composer-bin-plugin.git",
-                "reference": "f6af6be0534fad47b38b34311e7d6148a67b5587"
+                "reference": "641d0663f5ac270b1aeec4337b7856f76204df47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bamarni/composer-bin-plugin/zipball/f6af6be0534fad47b38b34311e7d6148a67b5587",
-                "reference": "f6af6be0534fad47b38b34311e7d6148a67b5587",
+                "url": "https://api.github.com/repos/bamarni/composer-bin-plugin/zipball/641d0663f5ac270b1aeec4337b7856f76204df47",
+                "reference": "641d0663f5ac270b1aeec4337b7856f76204df47",
                 "shasum": ""
             },
             "require": {
@@ -25,7 +25,7 @@
                 "php": "^7.2.5 || ^8.0"
             },
             "require-dev": {
-                "composer/composer": "^2.6",
+                "composer/composer": "^2.2.26",
                 "ext-json": "*",
                 "phpstan/extension-installer": "^1.1",
                 "phpstan/phpstan": "^1.8 || ^2.0",
@@ -59,25 +59,26 @@
             ],
             "support": {
                 "issues": "https://github.com/bamarni/composer-bin-plugin/issues",
-                "source": "https://github.com/bamarni/composer-bin-plugin/tree/1.9.0"
+                "source": "https://github.com/bamarni/composer-bin-plugin/tree/1.9.1"
             },
-            "time": "2026-01-29T23:07:38+00:00"
+            "time": "2026-02-04T10:18:12+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "6.10.0",
+            "version": "6.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsonrainbow/json-schema.git",
-                "reference": "8b1308a9d7bdbdb20ce87ef920f82b4564bb2d33"
+                "reference": "e54aacc4c0657b3a4af4f628428d2702146828c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/8b1308a9d7bdbdb20ce87ef920f82b4564bb2d33",
-                "reference": "8b1308a9d7bdbdb20ce87ef920f82b4564bb2d33",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/e54aacc4c0657b3a4af4f628428d2702146828c6",
+                "reference": "e54aacc4c0657b3a4af4f628428d2702146828c6",
                 "shasum": ""
             },
             "require": {
+                "ext-filter": "*",
                 "ext-json": "*",
                 "marc-mabe/php-enum": "^4.4",
                 "php": "^7.2 || ^8.0"
@@ -110,20 +111,9 @@
             ],
             "authors": [
                 {
-                    "name": "Bruno Prieto Reis",
-                    "email": "bruno.p.reis@gmail.com"
-                },
-                {
-                    "name": "Justin Rainbow",
-                    "email": "justin.rainbow@gmail.com"
-                },
-                {
-                    "name": "Igor Wiedler",
-                    "email": "igor@wiedler.ch"
-                },
-                {
-                    "name": "Robert Schönthal",
-                    "email": "seroscho@googlemail.com"
+                    "name": "Danny van der Sluijs",
+                    "email": "danny.vandersluijs@icloud.com",
+                    "role": "Maintainer"
                 }
             ],
             "description": "A library to validate a json schema.",
@@ -134,9 +124,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jsonrainbow/json-schema/issues",
-                "source": "https://github.com/jsonrainbow/json-schema/tree/6.10.0"
+                "source": "https://github.com/jsonrainbow/json-schema/tree/6.13.1"
             },
-            "time": "2026-06-16T20:50:26+00:00"
+            "time": "2026-09-30T07:42:28+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
@@ -446,12 +436,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "8e0d2537bab13824ede074f334a40432a4bc0367"
+                "reference": "5a16256ebc107e0f2618321df8d588fa997d7b6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/8e0d2537bab13824ede074f334a40432a4bc0367",
-                "reference": "8e0d2537bab13824ede074f334a40432a4bc0367",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/5a16256ebc107e0f2618321df8d588fa997d7b6a",
+                "reference": "5a16256ebc107e0f2618321df8d588fa997d7b6a",
                 "shasum": ""
             },
             "require": {
@@ -470,7 +460,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "35.0.0-dev"
+                    "dev-master": "36.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -492,7 +482,7 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/master"
             },
-            "time": "2026-08-29T04:41:42+00:00"
+            "time": "2026-10-18T01:59:53+00:00"
         },
         {
             "name": "nikic/php-parser",

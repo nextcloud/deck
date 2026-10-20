@@ -122,6 +122,7 @@ OC.L10N.register(
     "Archived cards" : "כרטיסים בארכיון",
     "Add list" : "הוספת רשימה",
     "List name" : "שם הרשימה",
+    "Clear search" : "נקה חיפוש",
     "Apply filter" : "החלת מסנן",
     "Filter by tag" : "סינון לפי תגית",
     "Filter by assigned user" : "סינון לפי משתמש מוקצה",
@@ -202,7 +203,6 @@ OC.L10N.register(
     "In reply to" : "בתגובה אל",
     "Reply" : "תגובה",
     "Update" : "עדכון",
-    "Write a description …" : "כתוב תיאור ...",
     "Description" : "תיאור",
     "(Unsaved)" : "(לא נשמר)",
     "(Saving…)" : "(מתבצעת שמירה…)",
@@ -264,12 +264,8 @@ OC.L10N.register(
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
-    "The card \"%s\" on \"%s\" has reached its due date." : "הכרטיס „%s” שתחת „%s” הגיע למועד התפוגה שלו.",
     "No participants found" : "לא נמצאו משתתפים",
-    "Save" : "שמור",
-    "seconds ago" : "לפני מספר שניות",
-    "Today" : "היום",
-    "Tomorrow" : "מחר",
-    "No due" : "אין תאריך יעד"
+    "Write a description …" : "כתוב תיאור ...",
+    "seconds ago" : "לפני מספר שניות"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

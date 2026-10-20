@@ -5,11 +5,13 @@
 
 <template>
 	<NcModal class="card-selector" @close="close">
-		<CreateNewCardCustomPicker :title="title"
+		<CreateNewCardCustomPicker
+			:title="title"
 			:description="description"
-			show-created-notice
+			showCreatedNotice
 			@cancel="close"
-			@close="close" />
+			@close="close"
+			@submit="onSubmit" />
 	</NcModal>
 </template>
 
@@ -23,14 +25,27 @@ export default {
 		NcModal,
 		CreateNewCardCustomPicker,
 	},
+
 	props: {
 		title: {
 			type: String,
 			default: '',
 		},
+
 		description: {
 			type: String,
 			default: '',
+		},
+	},
+
+	emits: ['close', 'select'],
+	methods: {
+		close() {
+			this.$emit('close')
+		},
+
+		onSubmit(link) {
+			this.$emit('select', link)
 		},
 	},
 }

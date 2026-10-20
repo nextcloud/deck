@@ -6,6 +6,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "অস্থায়ী ফোল্ডারটি হারানো গিয়েছে",
     "Done" : "Done",
     "Cancel" : "বাতির",
+    "Clear search" : "Clear search",
     "Completed" : "সুসম্পন্ন",
     "Details" : "বিসতারিত",
     "General" : "সাধারণ",
@@ -30,9 +31,6 @@ OC.L10N.register(
     "Close" : "বন্ধ",
     "Modified" : "পরিবর্তিত",
     "Share" : "ভাগাভাগি কর",
-    "Save" : "সংরক্ষণ",
-    "seconds ago" : "সেকেন্ড পূর্বে",
-    "Today" : "আজ",
-    "Tomorrow" : "আগামীকাল"
+    "seconds ago" : "সেকেন্ড পূর্বে"
 },
 "nplurals=2; plural=(n != 1);");

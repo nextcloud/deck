@@ -31,8 +31,6 @@ OC.L10N.register(
     "Close" : "Cau",
     "Modified" : "Addaswyd",
     "Share" : "Rhannu",
-    "Save" : "Cadw",
-    "seconds ago" : "eiliad yn ôl",
-    "Today" : "Heddiw"
+    "seconds ago" : "eiliad yn ôl"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

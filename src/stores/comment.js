@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
 import { defineStore } from 'pinia'
 import { CommentApi } from '../services/CommentApi.js'
 
@@ -35,35 +34,35 @@ export const useCommentStore = defineStore('comment', {
 		},
 		addComments({ comments, cardId }) {
 			if (this.comments[cardId] === undefined) {
-				Vue.set(this.comments, cardId, {
+				this.comments[cardId] = {
 					hasMore: comments.length > 0,
 					comments: [...comments],
-				})
+				}
 			} else {
 				const newComments = comments.filter((comment) => {
 					return this.comments[cardId].comments.findIndex((item) => item.id === comment.id) === -1
 				})
-				this.comments[cardId].comments.push(...newComments)
+				this.comments[cardId].comments = [...this.comments[cardId].comments, ...newComments]
 			}
 		},
 		async updateComment({ cardId, comment }) {
 			const updatedComment = await apiClient.updateComment({ cardId, id: comment.id, comment: comment.message })
-			const existingIndex = this.comments[cardId].comments.findIndex(c => c.id === updatedComment.id)
+			const existingIndex = this.comments[cardId].comments.findIndex((c) => c.id === updatedComment.id)
 			if (existingIndex !== -1) {
 				Object.assign(this.comments[cardId].comments[existingIndex], updatedComment)
 			}
 		},
 		async deleteComment(comment) {
 			await apiClient.deleteComment(comment)
-			const existingIndex = this.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.id)
+			const existingIndex = this.comments[comment.cardId].comments.findIndex((_comment) => _comment.id === comment.id)
 			if (existingIndex !== -1) {
 				this.comments[comment.cardId].comments.splice(existingIndex, 1)
 			}
 		},
 		async markCommentsAsRead(cardId) {
 			await apiClient.markCommentsAsRead(cardId)
-			this.comments[cardId].comments.forEach(_comment => {
-				Vue.set(_comment, 'isUnread', false)
+			this.comments[cardId].comments.forEach((_comment) => {
+				_comment.isUnread = false
 			})
 		},
 		setReplyTo(comment) {

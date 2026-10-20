@@ -64,9 +64,6 @@ OC.L10N.register(
     "Created" : "U krijua",
     "Modified" : "Modifikuar ",
     "Share" : "Shpërndaje",
-    "Save" : "Ruaj",
-    "seconds ago" : "sekonda më parë",
-    "Today" : "Sot",
-    "Tomorrow" : "Nesër"
+    "seconds ago" : "sekonda më parë"
 },
 "nplurals=2; plural=(n != 1);");

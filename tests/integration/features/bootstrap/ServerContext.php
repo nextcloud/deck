@@ -4,6 +4,12 @@ use Behat\Behat\Context\Context;
 use GuzzleHttp\Cookie\CookieJar;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../../../../../build/integration/features/bootstrap/autoload.php';
+
+// The server's integration autoloader ships its own Behat; keep the app's version in front
+$appLoader = require __DIR__ . '/../../vendor/autoload.php';
+$appLoader->unregister();
+$appLoader->register(true);
 
 class ServerContext implements Context {
 	use WebDav {

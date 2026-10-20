@@ -32,9 +32,6 @@ OC.L10N.register(
     "Select Date" : "දිනය තෝරන්න",
     "Close" : "වසන්න",
     "Share" : "බෙදාගන්න",
-    "Save" : "සුරකින්න",
-    "seconds ago" : "තත්පර කිහිපයකට පෙර",
-    "Today" : "අද",
-    "Tomorrow" : "හෙට"
+    "seconds ago" : "තත්පර කිහිපයකට පෙර"
 },
 "nplurals=2; plural=(n != 1);");

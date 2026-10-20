@@ -5,14 +5,16 @@
 
 <template>
 	<div class="comment-form">
-		<NcRichContenteditable v-model="commentText"
+		<NcRichContenteditable
+			v-model="commentText"
 			dir="auto"
-			:auto-complete="autoComplete"
+			:autoComplete="autoComplete"
 			:maxlength="1000"
-			:user-data="members"
+			:userData="members"
 			@submit="submit" />
-		<NcButton v-show="hasContent"
-			type="tertiary"
+		<NcButton
+			v-show="hasContent"
+			variant="tertiary"
 			:aria-label="t('deck', 'Submit')"
 			:title="t('deck', 'Submit')"
 			class="comment-form__submit"
@@ -28,8 +30,8 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
 import { NcButton, NcRichContenteditable } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { useBoardStore } from '../../stores/board.js'
 
@@ -40,25 +42,39 @@ export default {
 		NcButton,
 		NcRichContenteditable,
 	},
+
 	props: {
-		value: {
+		modelValue: {
 			type: String,
 			default: '',
 		},
 	},
+
+	emits: ['update:modelValue', 'submit'],
 	data() {
 		return {
-			commentText: this.value,
 			error: null,
 		}
 	},
+
 	computed: {
 		...mapState(useBoardStore, {
 			currentBoard: 'currentBoard',
 		}),
+
+		commentText: {
+			get() {
+				return this.modelValue
+			},
+
+			set(value) {
+				this.$emit('update:modelValue', value)
+			},
+		},
+
 		members() {
 			const obj = {}
-			this.currentBoard.users.forEach(user => {
+			this.currentBoard.users.forEach((user) => {
 				obj[user.uid] = {
 					icon: 'icon-user',
 					id: user.uid,
@@ -68,22 +84,20 @@ export default {
 			})
 			return obj
 		},
+
 		hasContent() {
-			return this.commentText.trim().length > 0
+			return this.modelValue.trim().length > 0
 		},
 	},
-	watch: {
-		value(val) {
-			this.commentText = val
-		},
-	},
+
 	methods: {
 		autoComplete(search, callback) {
 			callback(Object.values(this.members))
 		},
+
 		validate(submit) {
 			this.error = null
-			const content = this.commentText
+			const content = this.modelValue
 			if (submit && content.length === 0) {
 				this.error = t('deck', 'The comment cannot be empty.')
 			}
@@ -92,6 +106,7 @@ export default {
 			}
 			return this.error === null ? content : null
 		},
+
 		submit() {
 			const content = this.validate(true)
 			if (content) {
@@ -100,7 +115,6 @@ export default {
 				const temp = document.createElement('div')
 				temp.innerHTML = content
 				const text = temp.textContent || temp.innerText || ''
-				this.$emit('input', text)
 				this.$emit('submit', text)
 			}
 		},
@@ -109,7 +123,7 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../../css/comments.scss';
+	@use '../../css/comments.scss';
 
 	[class^="_tribute-container-autocomplete_"],
 	[class*=" _tribute-container-autocomplete_"],

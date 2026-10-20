@@ -284,21 +284,7 @@ class CardService {
 		}
 
 		$changes = new ChangeSet($card);
-		if ($card->getLastEditor() !== $this->userId && $card->getLastEditor() !== null) {
-			$this->activityManager->triggerEvent(
-				ActivityManager::DECK_OBJECT_CARD,
-				$card,
-				ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION,
-				[
-					'before' => $card->getDescriptionPrev(),
-					'after' => $card->getDescription()
-				],
-				$card->getLastEditor()
-			);
-
-			$card->setDescriptionPrev($card->getDescription());
-			$card->setLastEditor($this->userId);
-		}
+		$this->trackDescriptionEditor($card);
 		$card->setTitle($title);
 		$card->setStackId($stackId);
 		$card->setType($type);
@@ -439,6 +425,61 @@ class CardService {
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $update;
+	}
+
+	/**
+	 * Update only the description, leaving all other card fields untouched.
+	 *
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function updateDescription(int $id, string $description): Card {
+		$this->cardServiceValidator->check(compact('id'));
+
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if ($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+		$card = $this->cardMapper->find($id);
+		if ($card->getArchived()) {
+			throw new StatusException('Operation not allowed. This card is archived.');
+		}
+		$changes = new ChangeSet($card);
+		$this->trackDescriptionEditor($card);
+		if ($card->getDescriptionPrev() === null) {
+			$card->setDescriptionPrev($card->getDescription());
+		}
+		$card->setDescription($description);
+		$update = $this->cardMapper->update($card);
+		$this->changeHelper->cardChanged($card->getId());
+
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+
+		return $update;
+	}
+
+	/**
+	 * Publish description changes as activity
+	 */
+	private function trackDescriptionEditor(Card $card): void {
+		if ($card->getLastEditor() !== $this->userId && $card->getLastEditor() !== null) {
+			$this->activityManager->triggerEvent(
+				ActivityManager::DECK_OBJECT_CARD,
+				$card,
+				ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION,
+				[
+					'before' => $card->getDescriptionPrev(),
+					'after' => $card->getDescription()
+				],
+				$card->getLastEditor()
+			);
+
+			$card->setDescriptionPrev($card->getDescription());
+			$card->setLastEditor($this->userId);
+		}
 	}
 
 	/**

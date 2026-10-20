@@ -110,7 +110,7 @@ jobs:
           curl -v http://localhost:8081/index.php/login
 
       - name: Cypress run
-        uses: cypress-io/github-action@09090944bd8aaa2a517cefb6e38bf1aae336b42b # v7.4.3
+        uses: cypress-io/github-action@789d836053c5ca389c2905fc0c9f2909da778c46 # v7.4.5
         with:
           build: npm run dev
           record: false
@@ -126,7 +126,7 @@ jobs:
           SPLIT_INDEX: ${{ strategy.job-index }}
 
       - name: Upload test failure screenshots
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:
           name: Upload screenshots
@@ -134,7 +134,7 @@ jobs:
           retention-days: 5
 
       - name: Upload nextcloud logs
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:
           name: Upload nextcloud log

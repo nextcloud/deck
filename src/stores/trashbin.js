@@ -4,10 +4,10 @@
  */
 
 import { defineStore } from 'pinia'
-import { StackApi } from '../services/StackApi.js'
 import { CardApi } from '../services/CardApi.js'
-import { useStackStore } from './stack.js'
+import { StackApi } from '../services/StackApi.js'
 import { useCardStore } from './card.js'
+import { useStackStore } from './stack.js'
 
 const stackApi = new StackApi()
 const cardApi = new CardApi()
@@ -29,7 +29,7 @@ export const useTrashbinStore = defineStore('trashbin', {
 			this.deletedStacks.push(stack)
 		},
 		removeStackFromTrash(stack) {
-			const existingIndex = this.deletedStacks.findIndex(_stack => _stack.id === stack.id)
+			const existingIndex = this.deletedStacks.findIndex((_stack) => _stack.id === stack.id)
 			if (existingIndex !== -1) {
 				this.deletedStacks.splice(existingIndex, 1)
 			}
@@ -43,7 +43,7 @@ export const useTrashbinStore = defineStore('trashbin', {
 			this.deletedCards.push(card)
 		},
 		removeCardFromTrash(card) {
-			const existingIndex = this.deletedCards.findIndex(_card => _card.id === card.id)
+			const existingIndex = this.deletedCards.findIndex((_card) => _card.id === card.id)
 			if (existingIndex !== -1) {
 				this.deletedCards.splice(existingIndex, 1)
 			}

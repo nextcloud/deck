@@ -2,13 +2,13 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import { randUser } from '../utils/index.js'
 const user = randUser()
 const recipient = randUser()
-import { sampleBoard } from '../utils/sampleBoard'
+import { sampleBoard } from '../utils/sampleBoard.js'
 
 describe('Board', function() {
-
 	before(function() {
 		cy.createUser(user)
 		cy.createUser(recipient)
@@ -46,17 +46,11 @@ describe('Board', function() {
 	})
 
 	it('Shows and hides the navigation', () => {
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-			.contains('Upcoming cards')
-			.should('be.visible')
+		cy.get('#app-navigation-vue').should('have.attr', 'aria-hidden', 'false')
 		cy.openLeftSidebar()
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-			.contains('Upcoming cards')
-			.should('not.be.visible')
+		cy.get('#app-navigation-vue').should('have.attr', 'aria-hidden', 'true')
 		cy.openLeftSidebar()
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-			.contains('Upcoming cards')
-			.should('be.visible')
+		cy.get('#app-navigation-vue').should('have.attr', 'aria-hidden', 'false')
 	})
 })
 
@@ -202,9 +196,8 @@ describe('Board title editing', function() {
 
 			cy.get('button:contains("Edit board")').click()
 
-			cy.get('.board-edit form input[type=text]')
-				.clear()
-				.type(updatedTitle)
+			cy.get('.board-edit form input[type=text]').clear()
+			cy.get('.board-edit form input[type=text]').type(updatedTitle)
 
 			cy.get('.board-edit form button[title="Save board"]').click()
 
@@ -239,9 +232,8 @@ describe('Board title editing', function() {
 
 				cy.get('button:contains("Edit board")').click()
 
-				cy.get('.board-edit form input[type=text]')
-					.clear()
-					.type(boardBUpdatedTitle)
+				cy.get('.board-edit form input[type=text]').clear()
+				cy.get('.board-edit form input[type=text]').type(boardBUpdatedTitle)
 
 				cy.get('.board-edit form button[title="Save board"]').click()
 
@@ -257,7 +249,7 @@ describe('Board title editing', function() {
 })
 
 describe('Board import', function() {
-	before(function () {
+	before(function() {
 		cy.createUser(user)
 	})
 	beforeEach(function() {

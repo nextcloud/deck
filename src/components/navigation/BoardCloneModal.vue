@@ -5,16 +5,16 @@
 <template>
 	<NcDialog :name="t('deck', 'Clone {boardTitle}', {boardTitle: boardTitle})" :show="true" @close="close(false)">
 		<div class="modal__content">
-			<NcCheckboxRadioSwitch :checked.sync="withCards">
+			<NcCheckboxRadioSwitch v-model="withCards">
 				{{ t('deck', 'Clone cards') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withAssignments">
+			<NcCheckboxRadioSwitch v-if="withCards" v-model="withAssignments">
 				{{ t('deck', 'Clone assignments') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withLabels">
+			<NcCheckboxRadioSwitch v-if="withCards" v-model="withLabels">
 				{{ t('deck', 'Clone labels') }}
 			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withDueDate">
+			<NcCheckboxRadioSwitch v-if="withCards" v-model="withDueDate">
 				{{ t('deck', 'Clone due dates') }}
 			</NcCheckboxRadioSwitch>
 			<div v-if="withCards" class="accordion" :class="{ 'is-open': accordionOpen }">
@@ -25,10 +25,10 @@
 					{{ t('deck', 'Advanced options') }}
 				</div>
 				<div v-if="accordionOpen" class="accordion__content">
-					<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="moveCardsToLeftStack">
+					<NcCheckboxRadioSwitch v-if="withCards" v-model="moveCardsToLeftStack">
 						{{ t('deck', 'Move all cards to the first list') }}
 					</NcCheckboxRadioSwitch>
-					<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="restoreArchivedCards">
+					<NcCheckboxRadioSwitch v-if="withCards" v-model="restoreArchivedCards">
 						{{ t('deck', 'Restore archived cards') }}
 					</NcCheckboxRadioSwitch>
 				</div>
@@ -39,7 +39,7 @@
 			<NcButton @click="cancel">
 				{{ t('deck', 'Cancel') }}
 			</NcButton>
-			<NcButton type="primary" @click="save">
+			<NcButton variant="primary" @click="save">
 				{{ t('deck', 'Clone') }}
 			</NcButton>
 		</template>
@@ -56,12 +56,15 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcButton,
 	},
+
 	props: {
 		boardTitle: {
 			type: String,
 			default: 'Board',
 		},
 	},
+
+	emits: ['close'],
 	data() {
 		return {
 			withCards: false,
@@ -73,10 +76,12 @@ export default {
 			accordionOpen: false,
 		}
 	},
+
 	methods: {
 		close(data) {
 			this.$emit('close', data)
 		},
+
 		save() {
 			const data = {
 				withCards: this.withCards,
@@ -88,6 +93,7 @@ export default {
 			}
 			this.close(data)
 		},
+
 		cancel() {
 			this.close(false)
 		},

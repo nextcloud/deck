@@ -15,6 +15,7 @@ OC.L10N.register(
     "File" : "Lêer",
     "Cancel" : "Kanselleer",
     "File already exists" : "Lêer bestaan reeds",
+    "Clear search" : "Maak soektog skoon",
     "Open" : "Open",
     "Completed" : "Voltooid",
     "Open details" : "Open besonderhede",
@@ -45,9 +46,6 @@ OC.L10N.register(
     "Modified" : "Gewysig",
     "Share" : "Deel",
     "No participants found" : "Geen deelnemers gevind",
-    "Save" : "Stoor",
-    "seconds ago" : "sekondes gelede",
-    "Today" : "Vandag",
-    "Tomorrow" : "Môre"
+    "seconds ago" : "sekondes gelede"
 },
 "nplurals=2; plural=(n != 1);");

@@ -4,31 +4,39 @@
 -->
 
 <template>
-	<router-link :id="`board-${board.id}`"
-		:title="board.title"
+	<router-link
+		v-slot="{ href, navigate }"
 		:to="routeTo"
-		class="board-list-row"
-		tag="a">
-		<div class="board-list-bullet-cell">
-			<div :style="{ 'background-color': `#${board.color}` }" class="board-list-bullet" />
-		</div>
-		<div class="board-list-title-cell">
-			{{ board.title }}
-		</div>
-		<div class="board-list-avatars-cell" title="">
-			<NcAvatar :user="board.owner.uid"
-				:display-name="board.owner.displayname"
-				class="board-list-avatar"
-				:hide-status="true" />
-			<NcAvatar v-for="user in limitedAcl"
-				:key="user.id"
-				:user="user.participant.uid"
-				:hide-status="true"
-				:display-name="user.participant.displayname"
-				class="board-list-avatar" />
-			<div v-if="board.acl.length > 5" :title="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
-		</div>
-		<div class="board-list-actions-cell" />
+		custom>
+		<a
+			:id="`board-${board.id}`"
+			:href="href"
+			:title="board.title"
+			class="board-list-row"
+			@click="navigate">
+			<div class="board-list-bullet-cell">
+				<div :style="{ 'background-color': `#${board.color}` }" class="board-list-bullet" />
+			</div>
+			<div class="board-list-title-cell">
+				{{ board.title }}
+			</div>
+			<div class="board-list-avatars-cell" title="">
+				<NcAvatar
+					:user="board.owner.uid"
+					:displayName="board.owner.displayname"
+					class="board-list-avatar"
+					:hideStatus="true" />
+				<NcAvatar
+					v-for="user in limitedAcl"
+					:key="user.id"
+					:user="user.participant.uid"
+					:hideStatus="true"
+					:displayName="user.participant.displayname"
+					class="board-list-avatar" />
+				<div v-if="board.acl.length > 5" :title="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
+			</div>
+			<div class="board-list-actions-cell" />
+		</a>
 	</router-link>
 </template>
 
@@ -40,12 +48,14 @@ export default {
 	components: {
 		NcAvatar,
 	},
+
 	props: {
 		board: {
 			type: Object,
 			default: () => { return {} },
 		},
 	},
+
 	computed: {
 		routeTo() {
 			return {
@@ -53,9 +63,11 @@ export default {
 				params: { id: this.board.id },
 			}
 		},
+
 		limitedAcl() {
 			return [...this.board.acl].splice(0, 5)
 		},
+
 		otherAcl() {
 			return [...this.board.acl].splice(6).map((item) => item.participant.displayname || item.participant).join(', ')
 		},

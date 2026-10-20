@@ -71,6 +71,7 @@ OC.L10N.register(
     "File already exists" : "La dosiero jam ekzistas",
     "Add card" : "Aldoni karton",
     "Archived cards" : "Arĥivigitaj kartoj",
+    "Clear search" : "Viŝi serĉon",
     "Open" : "Malfermi",
     "Completed" : "Plenumita",
     "Hide archived cards" : "Kaŝi arĥivigitajn kartojn",
@@ -126,10 +127,6 @@ OC.L10N.register(
     "Modified" : "Modifita",
     "Error creating the share" : "Eraro dum kreo de la kunhavigo",
     "Share" : "Kunhavigi",
-    "The card \"%s\" on \"%s\" has reached its due date." : "La karto „%s“ sur „%s“ atingis sian limdaton.",
-    "Save" : "Konservi",
-    "seconds ago" : "antaŭ kelkaj sekundoj",
-    "Today" : "Hodiaŭ",
-    "Tomorrow" : "Morgaŭ"
+    "seconds ago" : "antaŭ kelkaj sekundoj"
 },
 "nplurals=2; plural=(n != 1);");

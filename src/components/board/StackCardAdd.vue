@@ -4,11 +4,12 @@
 -->
 
 <template>
-	<div v-click-outside="close" class="stack__card-add">
-		<NcButton v-if="!visible"
+	<div v-v-on-click-outside="close" class="stack__card-add">
+		<NcButton
+			v-if="!visible"
 			data-cy="action:add-card"
 			class="stack__card-add-button"
-			type="tertiary"
+			variant="tertiary"
 			:wide="true"
 			@click.stop="visible = true">
 			<template #icon>
@@ -16,11 +17,13 @@
 			</template>
 			{{ t('deck', 'Add card') }}
 		</NcButton>
-		<form v-else
+		<form
+			v-else
 			:class="{ 'icon-loading-small': creating }"
 			@submit.prevent.stop="addCard">
 			<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-			<input id="new-stack-input-main"
+			<input
+				id="new-stack-input-main"
 				ref="newCardInput"
 				v-model="title"
 				type="text"
@@ -29,9 +32,10 @@
 				:placeholder="t('deck', 'Card name')"
 				required
 				pattern=".*\S+.*"
-				@focus="$store.dispatch('toggleShortcutLock', true)"
+				@focus="toggleShortcutLock(true)"
 				@keydown.esc.stop="visible = false">
-			<input v-show="!creating"
+			<input
+				v-show="!creating"
 				class="icon-confirm"
 				type="submit"
 				value="">
@@ -40,13 +44,13 @@
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcButton } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
+import { NcButton } from '@nextcloud/vue'
+import { vOnClickOutside } from '@vueuse/components'
 import { mapActions } from 'pinia'
-
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { useCardStore } from '../../stores/card.js'
+import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
 	name: 'StackCardAdd',
@@ -54,19 +58,24 @@ export default {
 		NcButton,
 		PlusIcon,
 	},
+
 	directives: {
-		ClickOutside,
+		vOnClickOutside,
 	},
+
 	props: {
 		stack: {
 			type: Object,
 			required: true,
 		},
+
 		addAtTop: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
+	emits: ['creating', 'created'],
 	data() {
 		return {
 			title: '',
@@ -74,28 +83,37 @@ export default {
 			creating: false,
 		}
 	},
+
 	computed: {
 		cardDetailsInModal() {
-			return this.$store.getters.config('cardDetailsInModal')
+			return useSettingsStore().configByKey('cardDetailsInModal')
 		},
 	},
+
 	watch: {
 		visible(newValue) {
 			if (!newValue) {
-				this.$store.dispatch('toggleShortcutLock', false)
+				this.toggleShortcutLock(false)
 				return
 			}
 
 			this.$nextTick(() => this.$refs.newCardInput.focus())
 		},
 	},
+
 	methods: {
 		...mapActions(useCardStore, {
 			addCardInStore: 'addCard',
 		}),
+
+		...mapActions(useSettingsStore, {
+			toggleShortcutLock: 'toggleShortcutLock',
+		}),
+
 		close() {
 			this.visible = false
 		},
+
 		async addCard() {
 			this.creating = true
 			this.$emit('creating')
@@ -132,6 +150,8 @@ export default {
 		flex-shrink: 0;
 		display: flex;
 		background-color: var(--color-main-background);
+		width: 100%;
+		padding-inline-end: $stack-gap;
 
 		.stack--add-card-at-top & {
 			position: relative;

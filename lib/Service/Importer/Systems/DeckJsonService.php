@@ -201,11 +201,7 @@ class DeckJsonService extends ABoardImportService {
 				continue;
 			}
 
-			try {
-				$this->getImportService()->insertAttachment($attachment, $content);
-			} catch (\Throwable $e) {
-				continue;
-			}
+			$this->getImportService()->insertAttachment($attachment, $content);
 		}
 	}
 

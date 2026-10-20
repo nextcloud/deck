@@ -2,11 +2,12 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
-// eslint-disable-next-line import/no-unresolved
 import PQueue from 'p-queue'
 import { mapActions } from 'pinia'
+import logger from '../logger.js'
 import { useAttachmentStore } from '../stores/attachment.js'
 
 const queue = new PQueue({ concurrency: 2 })
@@ -20,15 +21,16 @@ export default {
 	methods: {
 		async onLocalAttachmentSelected(file, type) {
 			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
-				showError(
-					t('deck', 'Failed to upload {name}', { name: file.name }) + ' - '
-						+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) }),
-				)
+				showError(t('deck', 'Failed to upload {name}', { name: file.name }) + ' - '
+					+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) }))
 				event.target.value = ''
 				return
 			}
 
-			this.$set(this.uploadQueue, file.name, { name: file.name, progress: 0 })
+			this.uploadQueue[file.name] = {
+				progress: 0,
+				name: file.name,
+			}
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
 			bodyFormData.append('type', type)
@@ -40,8 +42,8 @@ export default {
 						formData: bodyFormData,
 						onUploadProgress: (e) => {
 							const percentCompleted = Math.round((e.loaded * 100) / e.total)
-							console.debug(percentCompleted)
-							this.$set(this.uploadQueue[file.name], 'progress', percentCompleted)
+							logger.debug('Upload progress', { file: file.name, percentCompleted })
+							this.uploadQueue[file.name].progress = percentCompleted
 						},
 					})
 				} catch (err) {
@@ -52,9 +54,8 @@ export default {
 						showError(err.response.data ? err.response.data.message : 'Failed to upload file')
 					}
 				}
-				this.$delete(this.uploadQueue, file.name)
+				delete this.uploadQueue[file.name]
 			})
-
 		},
 		...mapActions(useAttachmentStore, [
 			'createAttachment',

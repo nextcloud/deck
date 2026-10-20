@@ -7,18 +7,18 @@
 		<div class="selector-wrapper--icon">
 			<TagMultiple :size="20" />
 		</div>
-		<NcSelect :value="assignedLabels"
+		<NcSelect
+			:modelValue="assignedLabels"
 			class="selector-wrapper--selector"
+			:keepOpen="true"
 			:multiple="true"
 			:disabled="disabled"
 			:options="labelsSorted"
-			:aria-label-combobox="t('deck', 'Assign a tag to this card…')"
-			:placeholder="t('deck', 'Select or create a tag…')"
+			:inputLabel="t('deck', 'Assign a tag to this card…')"
 			:taggable="true"
-			:close-on-select="false"
 			label="title"
-			track-by="id"
-			tag-position="bottom"
+			trackBy="id"
+			tagPosition="bottom"
 			@option:selected="onSelect"
 			@option:deselected="onRemove"
 			@option:created="onNewTag">
@@ -43,8 +43,8 @@
 
 <script>
 import { NcSelect } from '@nextcloud/vue'
-import Color from '../../mixins/color.js'
 import TagMultiple from 'vue-material-design-icons/TagMultipleOutline.vue'
+import Color from '../../mixins/color.js'
 
 export default {
 	name: 'TagSelector',
@@ -55,35 +55,43 @@ export default {
 			type: Object,
 			default: null,
 		},
+
 		labels: {
 			type: Array,
 			default: () => [],
 		},
+
 		disabled: {
 			type: Boolean,
 			default: false,
 		},
 	},
+
+	emits: ['select', 'remove', 'newtag'],
 	computed: {
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
-				.filter(label => this.card.labels.findIndex((l) => l.id === label.id) === -1)
+				.filter((label) => this.card.labels.findIndex((l) => l.id === label.id) === -1)
 		},
+
 		assignedLabels() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+
 	methods: {
 		onSelect(options) {
-			const addedLabel = options.filter(option => !this.card.labels.includes(option) && option.id && option.color)
+			const addedLabel = options.filter((option) => !this.card.labels.includes(option) && option.id && option.color)
 			if (addedLabel.length === 0) {
 				return
 			}
 			this.$emit('select', addedLabel[0])
 		},
+
 		onRemove(removedLabel) {
 			this.$emit('remove', removedLabel)
 		},
+
 		async onNewTag(option) {
 			this.$emit('newtag', option.title)
 		},
@@ -92,7 +100,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/selector.scss';
+@use '../../css/selector.scss';
 
 .v-select:deep(.vs__selected) {
 	padding-inline-start: 0 !important;

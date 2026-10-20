@@ -228,7 +228,6 @@ OC.L10N.register(
     "Reply" : "Responder",
     "Update" : "Actualizar",
     "Mark as done" : "Marcar como hecha",
-    "Write a description …" : "Escribir una descripción …",
     "Description" : "Descripción",
     "(Unsaved)" : "(No guardado)",
     "(Saving…)" : "(Guardando…)",
@@ -293,7 +292,6 @@ OC.L10N.register(
     "Create card" : "Crear tarjeta",
     "Create a new card" : "Crear una nueva tarjeta",
     "Card title" : "Título de la tarjeta",
-    "Creating the new card …" : "Creando la nueva tarjeta …",
     "Card \"{card}\" was added to \"{board}\"" : "La tarjeta \"{card}\" se ha añadido a \"{board}\"",
     "Open card" : "Abrir tarjeta",
     "Close" : "Cerrar",
@@ -314,12 +312,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir con una tarjeta de Deck",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta de Deck",
     "Share" : "Compartir",
-    "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "No participants found" : "No se encontraron participantes",
-    "Save" : "Guardar",
+    "Write a description …" : "Escribir una descripción …",
     "seconds ago" : "hace segundos",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
-    "No due" : "Sin vencimiento"
+    "Creating the new card …" : "Creando la nueva tarjeta …"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

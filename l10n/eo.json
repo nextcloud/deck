@@ -69,6 +69,7 @@
     "File already exists" : "La dosiero jam ekzistas",
     "Add card" : "Aldoni karton",
     "Archived cards" : "Arĥivigitaj kartoj",
+    "Clear search" : "Viŝi serĉon",
     "Open" : "Malfermi",
     "Completed" : "Plenumita",
     "Hide archived cards" : "Kaŝi arĥivigitajn kartojn",
@@ -124,10 +125,6 @@
     "Modified" : "Modifita",
     "Error creating the share" : "Eraro dum kreo de la kunhavigo",
     "Share" : "Kunhavigi",
-    "The card \"%s\" on \"%s\" has reached its due date." : "La karto „%s“ sur „%s“ atingis sian limdaton.",
-    "Save" : "Konservi",
-    "seconds ago" : "antaŭ kelkaj sekundoj",
-    "Today" : "Hodiaŭ",
-    "Tomorrow" : "Morgaŭ"
+    "seconds ago" : "antaŭ kelkaj sekundoj"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

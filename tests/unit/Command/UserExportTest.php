@@ -98,6 +98,7 @@ class UserExportTest extends \Test\TestCase {
 		$comment = new Comment();
 		$comment->setActor('users', 'admin');
 		$comment->setMessage('fake comment' . $id);
+		$comment->setCreationDateTime(new \DateTime('2026-01-01T00:00:00+00:00'));
 		return $comment;
 	}
 

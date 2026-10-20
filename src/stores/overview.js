@@ -5,8 +5,8 @@
 
 import { defineStore } from 'pinia'
 import { OverviewApi } from '../services/OverviewApi.js'
-import { useCardStore } from './card.js'
 import { useBoardStore } from './board.js'
+import { useCardStore } from './card.js'
 
 const overviewApi = new OverviewApi()
 

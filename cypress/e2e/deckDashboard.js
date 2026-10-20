@@ -2,8 +2,9 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import { randUser } from '../utils/index.js'
-import { sampleBoard } from '../utils/sampleBoard'
+import { sampleBoard } from '../utils/sampleBoard.js'
 const user = randUser()
 
 describe('Deck dashboard', function() {
@@ -19,7 +20,7 @@ describe('Deck dashboard', function() {
 		cy.visit('/apps/deck')
 		cy.get('.board-title h2')
 			.should('have.length', 1).first()
-			.should($el => expect($el.text().trim()).to.equal('Upcoming cards'))
+			.should(($el) => expect($el.text().trim()).to.equal('Upcoming cards'))
 	})
 
 	it('Can see the default "Welcome Board" created for user by default', function() {
@@ -27,7 +28,7 @@ describe('Deck dashboard', function() {
 
 		const defaultBoard = 'Welcome to Nextcloud Deck!'
 
-		cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
+		cy.get('.app-navigation-entry-wrapper[data-cy-navigation-category="deck-navigation-all"]')
 			.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + defaultBoard + ')')
 			.first()
 			.contains(defaultBoard)
