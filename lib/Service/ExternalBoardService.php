@@ -74,7 +74,8 @@ class ExternalBoardService {
 		}
 		// if it's already a valid cloud id the user originates from a third instance and we pass it as is
 		if ($this->cloudIdManager->isValidCloudId($user['uid'])) {
-			if ($user['remote'] == $this->urlGenerator->getBaseUrl()) {
+			$cloudId = $this->cloudIdManager->resolveCloudId($user['uid']);
+			if ($cloudId->getRemote() == $this->urlGenerator->getBaseUrl()) {
 				// local user from remote: return as local user
 				$localuid = $this->cloudIdManager->resolveCloudId($user['uid'])->getUser();
 				return new User($localuid, $this->userManager);
@@ -592,7 +593,7 @@ class ExternalBoardService {
 	public function localizeRemoteAttachments(Board $localBoard, array $attachments): array {
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
 		foreach ($attachments as $i => $attachment) {
-			$createdByUser = $this->localizeRemoteUser($localBoard, ['uid' => $attachment['createdBy']]);
+			$createdByUser = $this->localizeRemoteUser($localBoard, ['uid' => $attachment['createdBy'], 'remote' => $attachment['extendedData']['createdByRemote']]);
 			if ($createdByUser instanceof FederatedUser) {
 				$attachments[$i]['createdBy'] = $createdByUser->getCloudId()->getId();
 				$attachments[$i]['createdByRemote'] = $createdByUser->getCloudId()->getRemote();
@@ -600,8 +601,19 @@ class ExternalBoardService {
 				$attachments[$i]['extendedData']['attachmentCreator']['remote'] = $createdByUser->getCloudId()->getRemote();
 				$attachments[$i]['extendedData']['attachmentCreator']['displayName'] = $createdByUser->getCloudId()->getId();
 			}
+			if ($createdByUser instanceof User) {
+				$attachments[$i]['createdBy'] = $createdByUser->getUID();
+				$attachments[$i]['createdByRemote'] = null;
+				$attachments[$i]['extendedData']['attachmentCreator']['id'] = $createdByUser->getUID();
+				$attachments[$i]['extendedData']['attachmentCreator']['remote'] = null;
+				$attachments[$i]['extendedData']['attachmentCreator']['displayName'] = $createdByUser->getDisplayName();
+			}
 			if (!empty($attachment['extendedData']['shareToken'])) {
-				$file = $this->deckShareProvider->getRemoteFile($attachment['extendedData']['shareToken'], $ownerCloudId->getRemote());
+				if ($createdByUser instanceof User) {
+					$file = $this->deckShareProvider->getLocalFile($attachment['extendedData']['shareToken']);
+				} else {
+					$file = $this->deckShareProvider->getRemoteFile($attachment['extendedData']['shareToken'], $ownerCloudId->getRemote());
+				}
 
 				if (empty($file)) {
 					unset($attachments[$i]);
@@ -648,46 +660,23 @@ class ExternalBoardService {
 		return $this->proxy->getOcsData($resp);
 	}
 
-	public function updateAttachmentOnRemote(Board $localBoard, int $cardId, int $attachmentId, string $data, string $type = 'file', ?array $uploadedFile = null): array {
+	public function shareAttachmentForRemote(Board $localBoard, int $cardId, string $path): array {
 		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
 		$shareToken = $localBoard->getShareToken();
 		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
-		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments/' . $attachmentId;
-		if ($uploadedFile !== null) {
-			$content = fopen($uploadedFile['tmp_name'], 'rb');
-			if ($content === false) {
-				throw new Exception('Could not read uploaded file');
-			}
-			$params = [
-				[
-					'name' => 'boardId',
-					'contents' => (string)$localBoard->getExternalId(),
-				],
-				[
-					'name' => 'file',
-					'contents' => $content,
-					'filename' => $uploadedFile['name'],
-				],
-				[
-					'name' => 'type',
-					'contents' => $type,
-				],
-				[
-					'name' => 'data',
-					'contents' => $data,
-				],
-			];
-			$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, ['multipart' => $params]);
-			return $this->proxy->getOcsData($resp);
-		}
-		$params = [
+
+		// Create remote share
+		$shareWithFederatedId = $ownerCloudId->getId();
+		$fileShareToken = $this->filesAppService->createRemoteShareForPath($path, $shareWithFederatedId);
+
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/remote-attachment';
+		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, [
 			'boardId' => $localBoard->getExternalId(),
-			'data' => $data,
-			'type' => $type,
-		];
-		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
+			'cardId' => $cardId,
+			'token' => $fileShareToken,
+		]);
 		return $this->proxy->getOcsData($resp);
 	}
 
@@ -696,24 +685,9 @@ class ExternalBoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
 		$shareToken = $localBoard->getShareToken();
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
-		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments/' . $attachmentId;
+		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments/' . $type . ':' . $attachmentId;
 		$resp = $this->proxy->delete($ownerCloudId->getId(), $shareToken, $url, [
 			'boardId' => $localBoard->getExternalId(),
-			'type' => $type,
-		]);
-		return $this->proxy->getOcsData($resp);
-	}
-
-	public function restoreAttachmentOnRemote(Board $localBoard, int $cardId, int $attachmentId, string $type = 'file'): array {
-		$this->configService->ensureFederationEnabled();
-		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);
-		$shareToken = $localBoard->getShareToken();
-		$participantCloudId = $this->cloudIdManager->getCloudId($this->userId, null);
-		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
-		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/attachments/' . $attachmentId . '/restore';
-		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, [
-			'boardId' => $localBoard->getExternalId(),
-			'type' => $type,
 		]);
 		return $this->proxy->getOcsData($resp);
 	}
