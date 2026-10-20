@@ -37,9 +37,6 @@ OC.L10N.register(
     "Close" : "Bağla",
     "Modified" : "Dəyişdirildi",
     "Share" : "Paylaş",
-    "Save" : "Saxla",
-    "seconds ago" : "saniyələr öncə",
-    "Today" : "Bu gün",
-    "Tomorrow" : "Sabah"
+    "seconds ago" : "saniyələr öncə"
 },
 "nplurals=2; plural=(n != 1);");

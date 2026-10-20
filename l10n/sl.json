@@ -315,15 +315,10 @@
     "Share with a Deck card" : "Poveži z nalogo Deck",
     "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
     "Share" : "Souporaba",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Naloga »%s« na »%s« je dosegla datum preteka.",
     "No participants found" : "Ni zaznanih udeleženev",
-    "Save" : "Shrani",
     "Write a description …" : "Vpišite opis ...",
     "Select or create a tag…" : "Izberi ali ustvari oznako ...",
     "seconds ago" : "pred nekaj sekundami",
-    "Today" : "Danes",
-    "Tomorrow" : "Jutri",
-    "No due" : "Ni datuma preteka",
     "Creating the new card …" : "Poteka ustvarjanje nove naloge ..."
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

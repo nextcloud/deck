@@ -38,9 +38,6 @@
     "Close" : "Clauder",
     "Modified" : "Modificate",
     "Share" : "Compartir",
-    "Save" : "Salveguardar",
-    "seconds ago" : "secundas passate",
-    "Today" : "Hodie",
-    "Tomorrow" : "Deman"
+    "seconds ago" : "secundas passate"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

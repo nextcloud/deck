@@ -396,14 +396,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Deck карттай хуваалцах",
     "Share {file} with a Deck card" : "{file}-г Deck карттай хуваалцах",
     "Share" : "–¢“Ø–≥—ç—ç—Ö",
-    "The card \"%s\" on \"%s\" has reached its due date." : "\"%s\" дээрх \"%s\" картын хугацаа дууслаа.",
     "No participants found" : "Оролцогч олдсонгүй",
-    "Save" : "–•–∞–¥–≥–∞–ª–∞—Ö",
     "seconds ago" : "—Ö–æ—ë—Ä–¥–∞—Ö—å ”©–º–Ω”©",
     "Exporting board..." : "Самбарыг экспортлож байна...",
-    "Importing board..." : "Самбарыг импортлож байна...",
-    "Today" : "”©–Ω”©”©–¥”©—Ä",
-    "Tomorrow" : "–º–∞—Ä–≥–∞–∞—à",
-    "No due" : "Дуусах огноо байхгүй"
+    "Importing board..." : "Самбарыг импортлож байна..."
 },
 "nplurals=2; plural=(n != 1);");

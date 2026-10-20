@@ -365,18 +365,13 @@ OC.L10N.register(
     "Share with a Deck card" : "Deck 카드와 공유",
     "Share {file} with a Deck card" : "Deck 카드와 함께 {file} 공유",
     "Share" : "공유",
-    "The card \"%s\" on \"%s\" has reached its due date." : "카드 \"%s\"(\"%s\"에 있음)의 만료 날짜가 다가왔습니다.",
     "Share board with a user, group or team …" : "사용자, 그룹 또는 팀과 보드 공유…",
     "Searching for users, groups and teams …" : "사용자, 그룹, 팀 검색 중…",
     "No participants found" : "참가자를 찾을 수 없음",
     "Select a user to assign to this card…" : "이 카드에 할당할 사용자를 선택하세요...",
-    "Save" : "저장",
     "Write a description …" : "설명 작성",
     "Select or create a tag…" : "태그를 선택하거나 생성하기...",
     "seconds ago" : "초 전",
-    "Today" : "오늘",
-    "Tomorrow" : "내일",
-    "No due" : "기한 없음",
     "Creating the new card …" : "새로운 카드 생성 중..."
 },
 "nplurals=1; plural=0;");

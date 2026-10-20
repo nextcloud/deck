@@ -31,9 +31,6 @@ OC.L10N.register(
     "Close" : "বন্ধ",
     "Modified" : "পরিবর্তিত",
     "Share" : "ভাগাভাগি কর",
-    "Save" : "সংরক্ষণ",
-    "seconds ago" : "সেকেন্ড পূর্বে",
-    "Today" : "আজ",
-    "Tomorrow" : "আগামীকাল"
+    "seconds ago" : "সেকেন্ড পূর্বে"
 },
 "nplurals=2; plural=(n != 1);");

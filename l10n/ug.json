@@ -400,20 +400,15 @@
     "Share with a Deck card" : "پالۋان كارتىسى بىلەن ئورتاقلىشىڭ",
     "Share {file} with a Deck card" : "{file} نى پالۋان كارتىسى بىلەن ھەمبەھىرلەڭ",
     "Share" : "ھەمبەھىر",
-    "The card \"%s\" on \"%s\" has reached its due date." : "«%s» دىكى «%s» كارتىسى قەرەلى توشقان.",
     "Share board with a user, group or team …" : "ئىشلەتكۈچى ، گۇرۇپپا ياكى گۇرۇپپا بىلەن ئورتاقلىشىش تاختىسى…",
     "Searching for users, groups and teams …" : "ئىشلەتكۈچى ، گۇرۇپپا ۋە گۇرۇپپىلارنى ئىزدەش…",
     "No participants found" : "قاتناشقۇچىلار تېپىلمىدى",
     "Select a user to assign to this card…" : "بۇ كارتىغا تەقسىملەيدىغان ئىشلەتكۈچىنى تاللاڭ…",
-    "Save" : "ساقلا",
     "Write a description …" : "چۈشەندۈرۈش يېزىڭ…",
     "Select or create a tag…" : "بەلگە تاللاڭ ياكى قۇر…",
     "seconds ago" : "سېكۇنت بۇرۇن",
     "Exporting board..." : "تاختىنى چىقىرۋاتىدۇ…",
     "Importing board..." : "تاختىنى كىرگۈزۋاتىدۇ…",
-    "Today" : "بۈگۈن",
-    "Tomorrow" : "ئەتە",
-    "No due" : "مۇۋاپىق ئەمەس",
     "Creating the new card …" : "يېڭى كارتا قۇرۇش…"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

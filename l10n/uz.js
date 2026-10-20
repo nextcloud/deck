@@ -78,9 +78,6 @@ OC.L10N.register(
     "Due date" : "Muddati",
     "Modified" : "Modified",
     "Share" : "Ulashish",
-    "Save" : "Saqlash",
-    "seconds ago" : "seconds ago",
-    "Today" : "Today",
-    "Tomorrow" : "Ertaga"
+    "seconds ago" : "seconds ago"
 },
 "nplurals=1; plural=0;");

@@ -112,11 +112,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir con una tarjeta del Tablero",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
     "Share" : "Compartir",
-    "Save" : "Guardar",
     "seconds ago" : "segundos",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
-    "No due" : "Sin finalizar",
     "Creating the new card …" : "Creando una nueva tarjeta …"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

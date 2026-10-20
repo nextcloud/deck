@@ -264,13 +264,8 @@ OC.L10N.register(
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
-    "The card \"%s\" on \"%s\" has reached its due date." : "הכרטיס „%s” שתחת „%s” הגיע למועד התפוגה שלו.",
     "No participants found" : "לא נמצאו משתתפים",
-    "Save" : "שמור",
     "Write a description …" : "כתוב תיאור ...",
-    "seconds ago" : "לפני מספר שניות",
-    "Today" : "היום",
-    "Tomorrow" : "מחר",
-    "No due" : "אין תאריך יעד"
+    "seconds ago" : "לפני מספר שניות"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

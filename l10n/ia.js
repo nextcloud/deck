@@ -40,9 +40,6 @@ OC.L10N.register(
     "Close" : "Clauder",
     "Modified" : "Modificate",
     "Share" : "Compartir",
-    "Save" : "Salveguardar",
-    "seconds ago" : "secundas passate",
-    "Today" : "Hodie",
-    "Tomorrow" : "Deman"
+    "seconds ago" : "secundas passate"
 },
 "nplurals=2; plural=(n != 1);");
