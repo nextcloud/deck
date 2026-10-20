@@ -28,6 +28,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudIdManager;
 use OCP\Files\Config\IUserMountCache;
 use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\Folder;
@@ -85,6 +86,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		private IUserManager $userManager,
 		private IUserMountCache $userMountCache,
 		private IEventDispatcher $eventDispatcher,
+		private ICloudIdManager $cloudIdManager,
 		private ?string $userId = null,
 	) {
 	}
@@ -360,6 +362,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @inheritDoc
 	 */
 	public function delete(IShare $share) {
+		$this->deleteRemoteShares($share);
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->delete('share')
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($share->getId())));
@@ -368,7 +371,68 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 		$qb->executeStatement();
 
+		$this->deleteExternalShare($share);
 		$this->attachmentCacheHelper->clearAttachmentCount((int)$share->getSharedWith());
+	}
+
+	private function deleteRemoteShares(IShare $share) {
+		$qb = $this->dbConnection->getQueryBuilder();
+		$qb->select('id', 'token')
+			->from('share')
+			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
+			->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_REMOTE)));
+		$stmt = $qb->executeQuery();
+
+		while ($row = $stmt->fetchAssociative()) {
+			try {
+				$remoteShare = $this->shareManager->getShareByToken((string)$row['token']);
+				$this->shareManager->deleteShare($remoteShare);
+			} catch (\Exception $e) {
+				continue;
+			}
+		}
+	}
+
+	private function deleteExternalShare(IShare $share) {
+		$shareBy = $share->getSharedBy();
+
+		if (!$this->cloudIdManager->isValidCloudId($shareBy)) {
+			return;
+		}
+
+		$externalShare = $this->findRootExternalShare($share, $shareBy);
+
+		if (empty($externalShare)) {
+			return;
+		}
+
+		$user = $this->userManager->get($externalShare->getUser());
+		$this->externalShareManager->declineShare($externalShare, $user);
+	}
+
+	public function findRootExternalShare(IShare $share, string $ownerCloudId): ?ExternalShare {
+		$node = $share->getNode();
+		$cloudId = $this->cloudIdManager->resolveCloudId($ownerCloudId);
+		$mountPoint = str_replace('/' . $share->getShareOwner() . '/files', '', $node->getPath());
+
+		$qb = $this->dbConnection->getQueryBuilder();
+		$qb->select('id', 'refresh_token', 'mountpoint', 'user')
+			->from('share_external')
+			->andWhere($qb->expr()->eq('remote', $qb->createNamedParameter($cloudId->getRemote() . '/')))
+			->andWhere($qb->expr()->eq('owner', $qb->createNamedParameter($cloudId->getUser())))
+			->andWhere($qb->expr()->eq('mountpoint', $qb->createNamedParameter($mountPoint)))
+			->setMaxResults(1);
+
+		$cursor = $qb->executeQuery();
+		$data = $cursor->fetch();
+		$cursor->closeCursor();
+
+		if ($data === false) {
+			return null;
+		}
+
+		$user = $this->userManager->get($data['user']);
+		return $this->externalShareManager->getShare((string)$data['id'], $user);
 	}
 
 	/**
@@ -1242,7 +1306,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		return [];
 	}
 
-	public function getRemoteFile(string $shareToken, string $remote): array|null {
+	public function getRemoteFile(string $shareToken, string $remote): ?array {
 		$externalShare = $this->ensureAcceptRemoteShare($shareToken, $remote);
 		$user = $this->userManager->get($externalShare->getUser());
 		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
@@ -1257,8 +1321,34 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 				'mimetype' => $node->getMimetype(),
 				'info' => pathinfo($node->getName()),
 				'hasPreview' => false,
-				'isReady' => false,
 			];
+		}
+
+		$file = array_shift($files);
+
+		return [
+			'path' => $userFolder->getRelativePath($file->getPath()),
+			'fileid' => $file->getId(),
+			'filesize' => $file->getSize(),
+			'mimetype' => $file->getMimeType(),
+			'info' => pathinfo($file->getName()),
+			'hasPreview' => $this->preview->isAvailable($file),
+		];
+	}
+
+	public function getLocalFile(string $shareToken): ?array {
+		try {
+			$share = $this->shareManager->getShareByToken($shareToken);
+		} catch (ShareNotFound $e) {
+			return null;
+		}
+
+		$userFolder = $this->rootFolder->getUserFolder($share->getSharedBy());
+		$node = $share->getNode();
+		$files = $userFolder->getById($node->getId());
+
+		if (count($files) === 0) {
+			return null;
 		}
 
 		$file = array_shift($files);
@@ -1316,14 +1406,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			$externalShare->setMountpoint('/Deck' . $externalShare->getName());
 		}
 
-		$mount = $this->mountExternalShare($externalShare, $user);
-		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
-		$node = $userFolder->get($externalShare->getMountpoint());
-		$files = $userFolder->getById($node->getId());
-
-		if (count($files) === 0) {
-			$this->userMountCache->addMount($user, '/' . $user->getUID() . '/files' . $externalShare->getMountpoint() . '/', $node->getData(), $mount->getMountProvider(), $mount->getMountId());
-		}
+		$this->mountExternalShare($externalShare, $user);
 
 		return $externalShare;
 	}
@@ -1346,6 +1429,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		];
 		$mount = $this->externalShareManager->getMount($options, $user);
 		$this->mountManager->addMount($mount);
+
+		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
+		$node = $userFolder->get($externalShare->getMountpoint());
+		$this->userMountCache->addMount($user, '/' . $user->getUID() . '/files' . $externalShare->getMountpoint() . '/', $node->getData(), $mount->getMountProvider(), $mount->getMountId());
 
 		return $mount;
 	}

@@ -34,6 +34,17 @@ export const useAttachmentStore = defineStore('attachment', {
 			}
 			cardStore.cardIncreaseAttachmentCount(cardId)
 		},
+		async shareFileToRemoteBoard({ cardId, formData, onUploadProgress }) {
+			const cardStore = useCardStore()
+			const boardId = useBoardStore().currentBoard.id
+			const attachment = await apiClient.shareFileToRemoteBoard({ cardId, formData, onUploadProgress, boardId })
+			if (typeof this.attachments[cardId] === 'undefined') {
+				this.attachments[cardId] = [attachment]
+			} else {
+				this.attachments[cardId].push(attachment)
+			}
+			cardStore.cardIncreaseAttachmentCount(cardId)
+		},
 		async fetchAttachments(cardId) {
 			const cardStore = useCardStore()
 			const boardId = useBoardStore().currentBoard.id

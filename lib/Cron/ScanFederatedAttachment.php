@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace OCA\Deck\Cron;
 
 use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Files_Sharing\External\Manager as ExternalShareManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJobList;
 use OCP\BackgroundJob\QueuedJob;
 use OCP\Constants;
 use OCP\Files\IRootFolder;
-use OCA\Files_Sharing\External\Manager as ExternalShareManager;
 use OCP\IUserManager;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
@@ -74,11 +74,10 @@ class ScanFederatedAttachment extends QueuedJob {
 		$share->setShareType(ISHARE::TYPE_DECK);
 		$share->setSharedWith((string)$cardId);
 		$share->setPermissions(Constants::PERMISSION_READ);
-		$share->setSharedBy($externalShare->getUser());
 		$remote = substr($externalShare->getRemote(), 0, strrpos($externalShare->getRemote(), '/'));
-		$share->setShareOwner($externalShare->getOwner() . '@' . $remote);
-		$share = $this->shareManager->createShare($share);
-
-		var_dump('Created share for cardId: ' . $cardId . ' and shareId: ' . $shareId . ' with shareId: ' . $share->getId() . ' and nodeId: ' . $node->getId());
+		$federatedId = $externalShare->getOwner() . '@' . $remote;
+		$share->setSharedBy($federatedId);
+		$share->setShareOwner($externalShare->getUser());
+		$this->shareManager->createShare($share);
 	}
 }

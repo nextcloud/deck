@@ -13,7 +13,6 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
@@ -160,11 +159,18 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 
 		$requestUserId = $this->permissionService->getUserId();
 		if ($this->cloudIdManager->isValidCloudId($requestUserId)) {
-			$shareToken = $this->ensureFederatedAttachmentShare($share, $node, $requestUserId);
-			$attachment->setExtendedData([
-				'fileid' => $node->getId(),
-				'shareToken' => $shareToken,
-			]);
+			if ($share->getSharedBy() === $requestUserId) {
+				$externalShare = $this->shareProvider->findRootExternalShare($share, $requestUserId);
+				$attachment->setExtendedData([
+					'data' => $node->getName(),
+					'shareToken' => $externalShare ? $externalShare->getRefreshToken() : null,
+				]);
+			} else {
+				$shareToken = $this->ensureFederatedAttachmentShare($share, $node, $requestUserId);
+				$attachment->setExtendedData([
+					'shareToken' => $shareToken,
+				]);
+			}
 		}
 
 		if ($this->userId !== null) {
@@ -202,19 +208,18 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$share->setSharedBy($attachmentShare->getShareOwner());
 		$share->setShareOwner($attachmentShare->getShareOwner());
 
-		try {
-			$createdShare = $this->shareManager->createShare($share);
-			return $createdShare->getToken();
-		} catch (GenericShareException $e) {
-			// Ignore races where another request already created the same federated share.
-			if (!$this->findFederatedAttachmentShareToken($file->getId(), $federatedCloudId)) {
-				throw $e;
-			}
-			return $this->findFederatedAttachmentShareToken($file->getId(), $federatedCloudId);
-		}
+		$createdShare = $this->shareManager->createShare($share);
+
+		$qb = $this->connection->getQueryBuilder();
+		$qb->update('share')
+			->set('parent', $qb->createNamedParameter($attachmentShare->getId(), IQueryBuilder::PARAM_INT))
+			->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($createdShare->getId(), IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+
+		return $createdShare->getToken();
 	}
 
-	private function findFederatedAttachmentShareToken(int $fileId, string $federatedCloudId): string|null {
+	private function findFederatedAttachmentShareToken(int $fileId, string $federatedCloudId): ?string {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select('id', 'token')
 			->from('share')
@@ -307,7 +312,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $attachment;
 	}
 
-	public function createForRemote(string $federatedCloudId) {
+	public function createForRemote(string $federatedCloudId): string {
 		$file = $this->getUploadedFile();
 		$fileName = $file['name'];
 		$this->validateFilename($fileName);
@@ -336,17 +341,33 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			throw new StatusException('Could not read file');
 		}
 		$target->putContent($content);
+		$createdShare = $this->createRemoteShareForNode($target, $federatedCloudId);
 
+		return $createdShare->getToken();
+	}
+
+	public function createRemoteShareForPath(string $path, string $federatedCloudId): string {
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+		try {
+			$node = $userFolder->get($path);
+		} catch (NotFoundException) {
+			throw new NotFoundException('No target file found');
+		}
+		$createdShare = $this->createRemoteShareForNode($node, $federatedCloudId);
+
+		return $createdShare->getToken();
+	}
+
+	private function createRemoteShareForNode(Node $node, string $federatedCloudId): IShare {
 		$share = $this->shareManager->newShare();
-		$share->setNode($target);
+		$share->setNode($node);
 		$share->setShareType(IShare::TYPE_REMOTE);
 		$share->setSharedWith($federatedCloudId);
 		$share->setPermissions(Constants::PERMISSION_READ);
 		$share->setSharedBy($this->userId);
 		$share->setShareOwner($this->userId);
 
-		$createdShare = $this->shareManager->createShare($share);
-		return $createdShare->getToken();
+		return $this->shareManager->createShare($share);
 	}
 
 	/**
