@@ -157,10 +157,40 @@ abstract class BaseValidator {
 			return false;
 		}
 
+		// Java/Android commonly send ISO_OFFSET_DATE_TIME and ISO_INSTANT.
+		if (preg_match('/^(?<date>\d{4}-\d{2}-\d{2})T(?<hour>\d{2}):(?<minute>\d{2})(?::(?<second>\d{2})(?:\.(?<fraction>\d{1,9}))?)?(?<timezone>Z|[+\-]\d{2}:\d{2})$/', $value, $matches)) {
+			$second = ($matches['second'] ?? '') !== '' ? $matches['second'] : '00';
+			$fraction = $matches['fraction'] ?? '';
+
+			if ($fraction !== '') {
+				// PHP supports microseconds, so normalize Java nanoseconds to 6 digits.
+				$fraction = str_pad(substr($fraction, 0, 6), 6, '0');
+			} else {
+				$fraction = '000000';
+			}
+
+			$timezone = $matches['timezone'] === 'Z' ? '+00:00' : $matches['timezone'];
+			$normalizedValue = sprintf(
+				'%sT%s:%s:%s.%s%s',
+				$matches['date'],
+				$matches['hour'],
+				$matches['minute'],
+				$second,
+				$fraction,
+				$timezone
+			);
+
+			$datetime = \DateTime::createFromFormat('Y-m-d\TH:i:s.uP', $normalizedValue);
+			if ($datetime && $datetime->format('Y-m-d\TH:i:s.uP') === $normalizedValue) {
+				return true;
+			}
+		}
+
 		$allowedFormats = [
 			'Y-m-d',
 			'Y-m-d H:i:s',
 			'Y-m-d\TH:i:sP',
+			'Y-m-d\TH:i:s\Z',
 			'Y-m-d\TH:i:s.v\Z',
 		];
 

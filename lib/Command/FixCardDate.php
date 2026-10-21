@@ -55,23 +55,18 @@ class FixCardDate extends Command {
 
 		// Fetch cards with date values and validate invalid years in PHP for DB portability.
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
+		$qb->select('id', 'duedate', 'startdate', 'done')
 			->from('deck_cards')
 			->where($qb->expr()->orX(
 				$qb->expr()->isNotNull('duedate'),
 				$qb->expr()->isNotNull('startdate'),
 				$qb->expr()->isNotNull('done'),
 			));
-		$cards = $qb->executeQuery()->fetchAllAssociative();
-
-		if (empty($cards)) {
-			$output->writeln('No cards with invalid dates found.');
-			return 0;
-		}
+		$result = $qb->executeQuery();
 
 		$hasInvalidCards = false;
 
-		foreach ($cards as $card) {
+		while (($card = $result->fetchAssociative()) !== false) {
 			$cardId = $card['id'];
 			$duedate = $card['duedate'];
 			$startdate = $card['startdate'];
