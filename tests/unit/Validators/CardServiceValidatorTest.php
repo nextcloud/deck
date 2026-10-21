@@ -39,6 +39,15 @@ class CardServiceValidatorTest extends ValidatorTestBase {
 		$this->assertFail([
 			'duedate' => '+1 day',
 		]);
+		$this->assertFail([
+			'duedate' => '99999-01-01T00:00:00Z',
+		]);
+		$this->assertFail([
+			'duedate' => '99999-01-01T00:00Z',
+		]);
+		$this->assertFail([
+			'duedate' => '99999-01-01',
+		]);
 	}
 
 	public function testValidDueDateIsAccepted(): void {
@@ -50,6 +59,32 @@ class CardServiceValidatorTest extends ValidatorTestBase {
 		]);
 		$this->assertPass([
 			'duedate' => '2026-01-01T00:00:00+00:00',
+		]);
+		// Java/Android ISO_INSTANT samples
+		$this->assertPass([
+			'duedate' => '2026-01-01T00:00:00Z',
+		]);
+		$this->assertPass([
+			'duedate' => '2026-01-01T00:00:00.123Z',
+		]);
+		$this->assertPass([
+			'duedate' => '2026-01-01T00:00:00.123456789Z',
+		]);
+		// Java/Android ISO_OFFSET_DATE_TIME samples
+		$this->assertPass([
+			'duedate' => '2026-01-01T07:00:00+07:00',
+		]);
+		$this->assertPass([
+			'duedate' => '2026-01-01T07:00+07:00',
+		]);
+		$this->assertPass([
+			'duedate' => '2026-01-01T00:00Z',
+		]);
+		$this->assertPass([
+			'duedate' => '2026-01-01T07:00:00.123+07:00',
+		]);
+		$this->assertPass([
+			'duedate' => '2026-01-01T07:00:00.123456789+07:00',
 		]);
 		$this->assertPass([
 			'duedate' => '2026-01-01',
