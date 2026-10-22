@@ -64,6 +64,32 @@ class PermissionService {
 	}
 
 	/**
+	 * Get permissions for all supplied card ids
+	 * @param int[] $cardIds
+	 * @param ?string $userId
+	 * @param bool $allowDeleted
+	 * @return array<int, array<Acl::PERMISSION_*, bool>>
+	 */
+	public function getPermissionsForCards(array $cardIds, ?string $userId = null, bool $allowDeleted = false): array {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
+		$permissions = $this->aclMapper->findInCards($cardIds);
+		return array_map(
+			function (array $acls) use ($userId) {
+				$owner = $this->userIsBoardOwner($acls[0]->getBoardId(), $userId);
+				return [
+					Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
+					Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
+					Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
+					Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId)) && !$this->shareManager->sharingDisabledForUser($userId),
+				];
+			},
+			$permissions
+		);
+	}
+
+	/**
 	 * Get current user permissions for a board by id
 	 *
 	 * @throws DoesNotExistException
