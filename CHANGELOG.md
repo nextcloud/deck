@@ -5,6 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.17.8
+### Changed
+* [stable33] enh(performance): get deck share permissions in one query by @grnd-alt in https://github.com/nextcloud/deck/pull/8392
+
+### Fixed
+* [stable33] fix(search): load the deck stylesheet on the full text search page by @hweihwang in https://github.com/nextcloud/deck/pull/8563
+
 ## 1.17.7
 
 ### Fixed
