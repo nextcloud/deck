@@ -8,7 +8,10 @@
 			<div class="reply--header">
 				<div class="reply--hint">
 					{{ t('deck', 'In reply to') }}
-					<NcUserBubble :user="comment.actorId" :displayName="comment.actorDisplayName" />
+					<NcUserBubble
+						:user="comment.actorRemote !== null ? undefined : comment.actorId"
+						:displayName="comment.actorDisplayName"
+						:isNoUser="comment.actorRemote !== null" />
 				</div>
 				<NcActions v-if="preview" class="reply--cancel">
 					<NcActionButton icon="icon-close" @click="$emit('cancel')">
@@ -27,7 +30,7 @@
 	</div>
 	<li v-else class="comment">
 		<div class="comment--header">
-			<NcAvatar :user="comment.actorId" />
+			<NcAvatar :user="comment.actorId" :isNoUser="comment.actorRemote !== null" />
 			<span class="username">
 				{{ comment.actorDisplayName }}
 			</span>
@@ -83,6 +86,8 @@
 </template>
 
 <script>
+import { useBoardStore } from '../../stores/board.js'
+import { mapState } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcActionButton, NcActions, NcAvatar, NcRichText, NcUserBubble } from '@nextcloud/vue'
 import md5 from 'blueimp-md5'
@@ -160,6 +165,9 @@ export default {
 	},
 
 	computed: {
+		...mapState(useBoardStore, {
+			currentBoard: state => state.currentBoard,
+		}),
 		canEdit() {
 			return this.comment.actorId === getCurrentUser().uid
 		},
@@ -167,11 +175,17 @@ export default {
 		richText() {
 			return (comment) => {
 				let message = this.parsedMessage(comment.message)
+				message = message.replace('federated_user/', '')
 				comment.mentions.forEach((mention, index) => {
+					let mentionId = mention.mentionId
+					if (mention.mentionRemote === window.location.origin) {
+						mentionId = mention.mentionId.replace('@' + window.location.origin, '')
+						message = message.replace(mention.mentionId, mentionId)
+					}
 					// Currently only [a-z\-_0-9] are allowed inside of placeholders so we use a hash of the mention id as a unique identifier
-					const hash = md5(mention.mentionId)
-					message = message.split('@' + mention.mentionId + '').join(`{user-${hash}}`)
-					message = message.split('@"' + mention.mentionId + '"').join(`{user-${hash}}`)
+					const hash = md5(mentionId)
+					message = message.split('@' + mentionId + '').join(`{user-${hash}}`)
+					message = message.split('@"' + mentionId + '"').join(`{user-${hash}}`)
 				})
 				return message
 			}
@@ -181,11 +195,15 @@ export default {
 			return (comment) => {
 				const mentions = [...comment.mentions]
 				const result = mentions.reduce((result, item, index) => {
-					const itemKey = 'user-' + md5(item.mentionId)
+					let mentionId = item.mentionId
+					if (item.mentionRemote === window.location.origin) {
+						mentionId = item.mentionId.replace('@' + window.location.origin, '')
+					}
+					const itemKey = 'user-' + md5(mentionId)
 					result[itemKey] = {
 						component: AtMention,
 						props: {
-							user: item.mentionId,
+							user: mentionId,
 							displayName: item.mentionDisplayName,
 						},
 					}
@@ -227,6 +245,7 @@ export default {
 			const data = {
 				comment: { id: this.comment.id, message },
 				cardId: this.comment.objectId,
+				boardId: this.currentBoard.id,
 			}
 			await this.commentStore.updateComment(data)
 			this.hideUpdateForm()
@@ -236,6 +255,7 @@ export default {
 			const data = {
 				id: this.comment.id,
 				cardId: this.comment.objectId,
+				boardId: this.currentBoard.id,
 			}
 			this.commentStore.deleteComment(data)
 		},

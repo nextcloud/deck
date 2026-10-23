@@ -20,7 +20,7 @@
 			<NcUserBubble
 				v-for="option in assignedUsers"
 				:key="option.primaryKey"
-				:user="option.uid"
+				:user="option.isNoUser ? undefined : option.uid"
 				:displayName="option.displayname"
 				:isNoUser="option.isNoUser"
 				:size="32" />
@@ -72,7 +72,7 @@ export default defineComponent({
 					...item,
 					id: item.type + ':' + item.uid,
 					user: item.primaryKey,
-					displayName: item.displayname,
+					displayname: item.displayname,
 					icon: 'icon-user',
 					isNoUser: false,
 				}
@@ -84,6 +84,11 @@ export default defineComponent({
 				if (item.type === 7) {
 					assignable.icon = 'icon-circles'
 					assignable.isNoUser = true
+				}
+				if (item.type === 6) {
+					assignable.isNoUser = true
+					assignable.icon = null
+					assignable.displayname = item.primaryKey
 				}
 
 				return assignable
@@ -111,9 +116,9 @@ export default defineComponent({
 				this.assignedUsers = this.card.assignedUsers.map((item) => ({
 					...item.participant,
 					id: item.participant.type + ':' + item.participant.uid,
-					displayName: item.participant.displayname,
 					isNoUser: item.participant.type !== 0,
 					user: item.participant.uid,
+					displayname: item.participant.type === 6 ? item.participant.uid : item.participant.displayname,
 				}))
 			} else {
 				this.assignedUsers = []
