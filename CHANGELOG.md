@@ -5,6 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.16.9
+### Changed
+* [stable32] enh(performance): get deck share permissions in one query by @grnd-alt in https://github.com/nextcloud/deck/pull/8579
+
+### Fixed
+* [stable32] Submit changes to board color and name on enter key press by @theoholl in https://github.com/nextcloud/deck/pull/8357
+
 ## 1.16.8
 ### Fixed
 * [stable32] fix(trash): allow to configure the trash retention in hours by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8243
