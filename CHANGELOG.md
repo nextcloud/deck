@@ -5,6 +5,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.19.1
+
+### Added
+* [stable35] feat: collaborative description editing by @grnd-alt in https://github.com/nextcloud/deck/pull/8558
+* Add new cards to top or bottom by @theoholl in https://github.com/nextcloud/deck/pull/8181
+
+### Changed
+* Refactor/vue3 by @grnd-alt in https://github.com/nextcloud/deck/pull/8276
+
+### Fixed
+* Fix undoing deleted cards by @theoholl in https://github.com/nextcloud/deck/pull/8326
+* fix: due date events in activity logging by @luka-nextcloud in https://github.com/nextcloud/deck/pull/8402
+* [stable35] fix(cards): assign lables and users when creating a card via OCS by @mejo- in https://github.com/nextcloud/deck/pull/8463
+* [stable35] fix(search): load the deck stylesheet on the full text search page by @hweihwang in https://github.com/nextcloud/deck/pull/8565
+* [stable35] fix(gantt): keep exact dates when dragging or clicking bars by @mejo- in https://github.com/nextcloud/deck/pull/8572
+* [stable35] fix(sharing): apply owner when getting card permissions by @grnd-alt in https://github.com/nextcloud/deck/pull/8581
+
 ## 1.16.0-beta.1
 
 ### Added
