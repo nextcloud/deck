@@ -42,14 +42,18 @@ use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
 use OCP\Comments\ICommentsManager;
+use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 class BoardImportServiceTest extends \Test\TestCase {
+	/** @var list<CriticalActionPerformedEvent> */
+	private array $auditEvents = [];
 	/** @var IDBConnection|MockObject */
 	protected $dbConn;
 	/** @var IUserManager|MockObject */
@@ -109,7 +113,14 @@ class BoardImportServiceTest extends \Test\TestCase {
 
 		$this->eventDispatcher
 			->method('dispatchTyped')
-			->willReturnCallback(function (BoardImportGetAllowedEvent $event) {
+			->willReturnCallback(function (Event $event) {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$this->auditEvents[] = $event;
+					return;
+				}
+				if (!$event instanceof BoardImportGetAllowedEvent) {
+					return;
+				}
 				$event->getService()->addAllowedImportSystem([
 					'name' => TrelloJsonService::$name,
 					'class' => TrelloJsonService::class,
@@ -218,6 +229,9 @@ class BoardImportServiceTest extends \Test\TestCase {
 			->willReturn($assignment);
 
 		$this->boardImportService->import();
-		self::assertTrue(true);
+
+		$auditOperations = array_map(static fn (CriticalActionPerformedEvent $event): ?string => $event->getOperation(), $this->auditEvents);
+		$this->assertSame(['deck.board.imported'], $auditOperations);
+		$this->assertSame('trelloJson', $this->auditEvents[0]->getParameters()['importSystem']);
 	}
 }

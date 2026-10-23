@@ -11,6 +11,9 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -20,6 +23,9 @@ class TeamBoardServiceTest extends TestCase {
 	/** @var CirclesService|MockObject */
 	private $circlesService;
 	private TeamBoardService $service;
+	private IEventDispatcher&MockObject $eventDispatcher;
+	/** @var list<CriticalActionPerformedEvent> */
+	private array $auditEvents = [];
 	private $userId1 = 'user1';
 	private $userId2 = 'user2';
 
@@ -27,10 +33,26 @@ class TeamBoardServiceTest extends TestCase {
 		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->circlesService = $this->createMock(CirclesService::class);
+		$this->auditEvents = [];
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event): void {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$this->auditEvents[] = $event;
+				}
+			});
 		$this->service = new TeamBoardService(
 			$this->boardMapper,
 			$this->circlesService,
+			$this->eventDispatcher,
 		);
+	}
+
+	/**
+	 * @return list<?string>
+	 */
+	private function getAuditOperations(): array {
+		return array_map(static fn (CriticalActionPerformedEvent $event): ?string => $event->getOperation(), $this->auditEvents);
 	}
 
 	public function testHandleMemberLeftTeamTransfersOwnership(): void {
@@ -54,6 +76,9 @@ class TeamBoardServiceTest extends TestCase {
 			->method('delete');
 
 		$this->service->handleMemberLeftTeam('team-a', $this->userId1);
+
+		$this->assertSame(['deck.board.ownership_transferred'], $this->getAuditOperations());
+		$this->assertSame(['boardId' => 10, 'previousOwner' => $this->userId1, 'newOwner' => $this->userId2, 'teamId' => 'team-a'], $this->auditEvents[0]->getParameters());
 	}
 
 	public function testHandleMemberLeftTeamDeletesWhenNoNextMember(): void {
@@ -77,6 +102,9 @@ class TeamBoardServiceTest extends TestCase {
 			->method('transferOwnership');
 
 		$this->service->handleMemberLeftTeam('team-a', $this->userId1);
+
+		$this->assertSame(['deck.board.purged'], $this->getAuditOperations());
+		$this->assertSame(['boardId' => 11, 'owner' => $this->userId1, 'teamId' => 'team-a'], $this->auditEvents[0]->getParameters());
 	}
 
 	public function testHandleMemberLeftTeamSkipsNonOwnerBoards(): void {
@@ -114,5 +142,8 @@ class TeamBoardServiceTest extends TestCase {
 			->withConsecutive([$boardA], [$boardB]);
 
 		$this->service->deleteBoardsAttachedToTeam('team-a');
+
+		$this->assertSame(['deck.board.purged', 'deck.board.purged'], $this->getAuditOperations());
+		$this->assertSame(['boardId' => 21, 'teamId' => 'team-a'], $this->auditEvents[1]->getParameters());
 	}
 }
