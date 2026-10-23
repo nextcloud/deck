@@ -5,6 +5,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.6
+### Changed
+* [stable34] enh(performance): get deck share permissions in one query by @grnd-alt in https://github.com/nextcloud/deck/pull/8391
+
+### Fixed
+* [stable34] fix(gantt): keep exact dates when dragging or clicking bars by @mejo- in https://github.com/nextcloud/deck/pull/8571
+* [stable34] fix(search): load the deck stylesheet on the full text search page by @hweihwang in https://github.com/nextcloud/deck/pull/8564
+* [stable34] fix: catch DoesNotExistException in DeckShareProvider by @grnd-alt in https://github.com/nextcloud/deck/pull/8458
+* [stable34] fix(cards): assign lables and users when creating a card via OCS by @mejo- in https://github.com/nextcloud/deck/pull/8464
+* [stable34] fix: due date events in activity logging by @luka-nextcloud in https://github.com/nextcloud/deck/pull/8417
+* [stable34] fix(cards): allow cards to be updated without boardID supplied by @grnd-alt in https://github.com/nextcloud/deck/pull/8428
+* [stable34] fix: avoid a TypeError when uploading an attachment via the API by @solracsf in https://github.com/nextcloud/deck/pull/8425
+* [stable34] fix: broken upload of attachment via api by @Somebodyisnobody in https://github.com/nextcloud/deck/pull/8424
+
 ## 1.18.5
 ### Fixed
 * [stable34] fix(db): chunk queries for shared boards by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8387
