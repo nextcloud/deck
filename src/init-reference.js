@@ -5,6 +5,7 @@
 
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { NcCustomPickerRenderResult, registerCustomPickerElement, registerWidget } from '@nextcloud/vue'
+import { disposePinia } from 'pinia'
 
 import './shared-init.js'
 
@@ -42,16 +43,36 @@ registerWidget('deck-card', async (el, { richObjectType, richObject, accessible 
 	app.mount(el)
 })
 
-const boardApps = {}
+const boardApps = new WeakMap()
+function destroyBoardWidget(el) {
+	const entry = boardApps.get(el)
+	boardApps.delete(el)
+	if (entry?.app) {
+		try {
+			entry.app.unmount()
+		} finally {
+			disposePinia(entry.pinia)
+		}
+	}
+}
+
 registerWidget('deck-board', async (el, { richObjectType, richObject, accessible, interactive }) => {
+	destroyBoardWidget(el)
+	const entry = {}
+	boardApps.set(el, entry)
 	const { default: BoardReferenceWidget } = await import('./views/BoardReferenceWidget.vue')
-	const { app } = await createVueApp(BoardReferenceWidget, { richObjectType, richObject, accessible, interactive })
-	boardApps[el] = app
+	if (boardApps.get(el) !== entry) {
+		return
+	}
+	const { app, pinia } = await createVueApp(BoardReferenceWidget, { richObjectType, richObject, accessible, interactive })
+	if (boardApps.get(el) !== entry) {
+		disposePinia(pinia)
+		return
+	}
+	entry.app = app
+	entry.pinia = pinia
 	app.mount(el)
-}, (el) => {
-	boardApps[el]?.unmount()
-	delete boardApps[el]
-})
+}, destroyBoardWidget)
 
 registerWidget('deck-comment', async (el, { richObjectType, richObject, accessible }) => {
 	const { default: CommentReferenceWidget } = await import('./views/CommentReferenceWidget.vue')
