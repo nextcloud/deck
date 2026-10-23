@@ -247,6 +247,11 @@ export default defineComponent({
 })
 </script>
 <style scoped lang="scss">
+.native-datetime-picker {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
 .done-info {
 	flex-grow: 1;
 }
