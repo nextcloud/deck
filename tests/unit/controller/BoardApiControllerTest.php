@@ -25,6 +25,7 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Board;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Service\BoardService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -36,6 +37,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 	private $userId = 'admin';
 	private $controller;
 	private $boardService;
+	private $changeHelper;
 	private $exampleBoard;
 	private $deniedBoard;
 
@@ -43,11 +45,13 @@ class BoardApiControllerTest extends \Test\TestCase {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->boardService = $this->createMock(BoardService::class);
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 
 		$this->controller = new BoardApiController(
 			$this->appName,
 			$this->request,
 			$this->boardService,
+			$this->changeHelper,
 			$this->userId
 		);
 
@@ -85,6 +89,11 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$this->boardService->expects($this->once())
 			->method('find')
 			->willReturn($board);
+
+		$this->changeHelper->expects($this->once())
+			->method('getEtag')
+			->with(ChangeHelper::TYPE_BOARD, $boardId)
+			->willReturn('');
 
 		$this->request->expects($this->any())
 			->method('getParam')

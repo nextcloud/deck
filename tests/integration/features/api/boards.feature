@@ -98,6 +98,31 @@ Feature: REST API - Boards
       | archived | true          |
     Then the response should have a status code "200"
     And the response value "title" should be "Updated board"
+
+  Scenario: PUT /boards/{boardId} - Update board details fails if If-Match doesn't match
+    Given sending "POST" to the API endpoint "/boards" with body:
+      | title | Board to update |
+      | color | ff0000          |
+    And the response value "id" is stored as "boardId"
+    When sending "PUT" to the API endpoint "/boards/<boardId>" with the header "If-Match" set to "invalid" and body:
+      | title    | Updated board |
+      | color    | 00ff00        |
+      | archived | true          |
+    Then the response should have a status code "412"
+
+  Scenario: PUT /boards/{boardId} - Update board details succeeds if If-Match matches
+    Given sending "POST" to the API endpoint "/boards" with body:
+      | title | Board to update |
+      | color | ff0000          |
+    And the response value "id" is stored as "boardId"
+    And sending "GET" to the API endpoint "/boards/<boardId>"
+    And the response header "ETag" is stored as "boardEtag"
+    When sending "PUT" to the API endpoint "/boards/<boardId>" with the header "If-Match" set to "<boardEtag>" and body:
+      | title    | Updated board |
+      | color    | 00ff00        |
+      | archived | true          |
+    Then the response should have a status code "200"
+    And the response value "title" should be "Updated board"
     And the response value "color" should be "00ff00"
     And the response value "archived" should be "true"
     When sending "GET" to the API endpoint "/boards/<boardId>"

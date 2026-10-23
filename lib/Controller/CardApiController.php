@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
@@ -37,6 +38,7 @@ class CardApiController extends ApiController {
 		IRequest $request,
 		private CardService $cardService,
 		private AssignmentService $assignmentService,
+		private ChangeHelper $changeHelper,
 		private $userId,
 	) {
 		parent::__construct($appName, $request);
@@ -50,9 +52,14 @@ class CardApiController extends ApiController {
 	 * Get a specific card.
 	 */
 	public function get() {
-		$card = $this->cardService->find($this->request->getParam('cardId'));
+		$cardId = (int)$this->request->getParam('cardId');
+		$card = $this->cardService->find($cardId);
 		$response = new DataResponse($card, HTTP::STATUS_OK);
-		$response->setETag($card->getEtag());
+		$etag = $this->changeHelper->getEtag(ChangeHelper::TYPE_CARD, $cardId);
+		if ($etag === '') {
+			$etag = $card->getEtag();
+		}
+		$response->setETag($etag);
 		return $response;
 	}
 
@@ -89,9 +96,12 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function update(string $title, $type, string $owner, string $description = '', int $order = 0, $duedate = null, $startdate = null, $archived = null): DataResponse {
+		$cardId = (int)$this->request->getParam('cardId');
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
 		$done = array_key_exists('done', $this->request->getParams()) ? new OptionalNullableValue($this->request->getParam('done', null)) : null;
 		$color = array_key_exists('color', $this->request->getParams()) ? new OptionalNullableValue($this->request->getParam('color', null)) : null;
-		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done, $startdate, $color);
+		$card = $this->cardService->update($cardId, $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done, $startdate, $color);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -102,7 +112,10 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function delete(): DataResponse {
-		$card = $this->cardService->delete($this->request->getParam('cardId'));
+		$cardId = (int)$this->request->getParam('cardId');
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
+		$card = $this->cardService->delete($cardId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -113,7 +126,10 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function assignLabel(int $labelId): DataResponse {
-		$card = $this->cardService->assignLabel($this->request->getParam('cardId'), $labelId);
+		$cardId = (int)$this->request->getParam('cardId');
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
+		$card = $this->cardService->assignLabel($cardId, $labelId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -124,7 +140,10 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function removeLabel(int $labelId): DataResponse {
-		$card = $this->cardService->removeLabel($this->request->getParam('cardId'), $labelId);
+		$cardId = (int)$this->request->getParam('cardId');
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
+		$card = $this->cardService->removeLabel($cardId, $labelId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -135,6 +154,8 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function assignUser(int $cardId, string $userId, int $type = 0): DataResponse {
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
 		$card = $this->assignmentService->assignUser($cardId, $userId, $type);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
@@ -146,6 +167,8 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function unassignUser(int $cardId, string $userId, int $type = 0): DataResponse {
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
 		$card = $this->assignmentService->unassignUser($cardId, $userId, $type);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
@@ -179,6 +202,8 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function archive(int $cardId): DataResponse {
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
 		$card = $this->cardService->archive($cardId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
@@ -190,6 +215,8 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function unarchive(int $cardId): DataResponse {
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
 		$card = $this->cardService->unarchive($cardId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
@@ -201,7 +228,10 @@ class CardApiController extends ApiController {
 	#[CORS]
 	#[NoCSRFRequired]
 	public function reorder(int $stackId, int $order): DataResponse {
-		$card = $this->cardService->reorder((int)$this->request->getParam('cardId'), $stackId, $order);
+		$cardId = (int)$this->request->getParam('cardId');
+		$card = $this->cardService->find($cardId);
+		$this->changeHelper->checkIfMatch(ChangeHelper::TYPE_CARD, $cardId, $card->getETag());
+		$card = $this->cardService->reorder($cardId, $stackId, $order);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 }

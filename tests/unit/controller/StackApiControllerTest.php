@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
@@ -38,6 +39,7 @@ class StackApiControllerTest extends \Test\TestCase {
 	private $controller;
 	private $boardService;
 	private $stackService;
+	private $changeHelper;
 	private $exampleStack = [];
 	private $exampleBoard = [];
 
@@ -46,6 +48,7 @@ class StackApiControllerTest extends \Test\TestCase {
 		$this->request = $this->createMock(IRequest::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->stackService = $this->createMock(StackService::class);
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 
 		$this->exampleBoard['boardId'] = '89';
 
@@ -58,7 +61,7 @@ class StackApiControllerTest extends \Test\TestCase {
 			$this->appName,
 			$this->request,
 			$this->stackService,
-			$this->boardService
+			$this->changeHelper
 		);
 	}
 
@@ -93,6 +96,11 @@ class StackApiControllerTest extends \Test\TestCase {
 		$this->stackService->expects($this->once())
 			->method('find')
 			->willReturn($stack);
+
+		$this->changeHelper->expects($this->once())
+			->method('getEtag')
+			->with(ChangeHelper::TYPE_STACK, $this->exampleStack['id'])
+			->willReturn('');
 
 		$this->request->expects($this->once())
 			->method('getParam')
