@@ -15,7 +15,9 @@
 				v-model="duedate"
 				:placeholder="t('deck', 'Set a due date')"
 				:hideLabel="true"
-				type="datetime-local" />
+				type="datetime-local"
+				:min="minDate"
+				:max="maxDate" />
 			<NcActions
 				v-if="canEdit"
 				:menuName="!duedate ? t('deck', 'Add due date') : null"
@@ -115,6 +117,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import ClearIcon from 'vue-material-design-icons/Close.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
+import { MAX_DATE, MIN_DATE } from '../../helpers/dateRange.js'
 import readableDate from '../../mixins/readableDate.js'
 import { useCardStore } from '../../stores/card.js'
 
@@ -174,6 +177,14 @@ export default defineComponent({
 	},
 
 	computed: {
+		minDate() {
+			return MIN_DATE
+		},
+
+		maxDate() {
+			return MAX_DATE
+		},
+
 		duedate: {
 			get() {
 				return this.card?.duedate ? new Date(this.card.duedate) : null
