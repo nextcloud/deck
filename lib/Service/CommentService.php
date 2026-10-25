@@ -18,6 +18,8 @@ use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\MessageTooLongException;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
+use OCP\Federation\ICloudIdManager;
+use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OutOfBoundsException;
 use Psr\Log\LoggerInterface;
@@ -30,6 +32,8 @@ class CommentService {
 		private CardMapper $cardMapper,
 		private IUserManager $userManager,
 		private LoggerInterface $logger,
+		private ICloudIdManager $cloudIdManager,
+		private IURLGenerator $urlGenerator,
 		private ?string $userId,
 	) {
 	}
@@ -110,7 +114,7 @@ class CommentService {
 		}
 
 		try {
-			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, (string)$cardId);
+			$comment = $this->commentsManager->create('users', $this->userId ?? $this->permissionService->getUserId(), Application::COMMENT_ENTITY_TYPE, (string)$cardId);
 			$comment->setMessage($message);
 			$comment->setVerb('comment');
 			$comment->setParentId((string)$replyTo);
@@ -128,7 +132,8 @@ class CommentService {
 
 	public function update(int $cardId, int $commentId, string $message): DataResponse {
 		$comment = $this->get($cardId, $commentId);
-		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
+		$userId = $this->userId ?? $this->permissionService->getUserId();
+		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
 
@@ -148,7 +153,8 @@ class CommentService {
 		} catch (CommentNotFoundException $e) {
 			throw new NotFoundException('No comment found.');
 		}
-		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
+		$userId = $this->userId ?? $this->permissionService->getUserId();
+		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
 		$this->commentsManager->delete((string)$commentId);
@@ -163,20 +169,28 @@ class CommentService {
 			'objectId' => (int)$comment->getObjectId(),
 			'message' => $comment->getMessage(),
 			'actorId' => $comment->getActorId(),
+			'actorRemote' => $this->cloudIdManager->isValidCloudId($comment->getActorId()) ? $this->cloudIdManager->resolveCloudId($comment->getActorId())->getRemote() : null,
 			'actorType' => $comment->getActorType(),
 			'actorDisplayName' => $actorDisplayName,
 			'creationDateTime' => $comment->getCreationDateTime()->format(\DateTime::ATOM),
 			'mentions' => array_map(function ($mention) {
+				$remote = $this->cloudIdManager->isValidCloudId($mention['id']) ? $this->cloudIdManager->resolveCloudId($mention['id'])->getRemote() : null;
+
 				try {
 					$displayName = $this->commentsManager->resolveDisplayName($mention['type'], $mention['id']);
 				} catch (OutOfBoundsException $e) {
 					$this->logger->warning('Mention type not registered, can not resolve display name.', ['exception' => $e, 'mention_type' => $mention['type']]);
 					// No display name, upon client's discretion what to display.
-					$displayName = '';
+					$displayName = $mention['id'] ?? '';
+					if ($remote === $this->urlGenerator->getBaseUrl()) {
+						$uid = $this->cloudIdManager->resolveCloudId($mention['id'])->getUser();
+						$displayName = $this->commentsManager->resolveDisplayName('user', $uid);
+					}
 				}
 
 				return [
 					'mentionId' => $mention['id'],
+					'mentionRemote' => $remote,
 					'mentionType' => $mention['type'],
 					'mentionDisplayName' => $displayName
 				];

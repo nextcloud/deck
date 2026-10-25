@@ -11,6 +11,7 @@ use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Cache\AttachmentCacheHelper;
+use OCA\Deck\Cron\ScanFederatedAttachment;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
@@ -19,10 +20,13 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Http\Response;
+use OCP\BackgroundJob\IJobList;
+use OCP\Federation\ICloudIdManager;
 use OCP\IL10N;
 use OCP\IUserManager;
 use Psr\Container\ContainerExceptionInterface;
@@ -44,6 +48,9 @@ class AttachmentService {
 		private readonly IL10N $l10n,
 		private readonly ActivityManager $activityManager,
 		private readonly AttachmentServiceValidator $attachmentServiceValidator,
+		private readonly DeckShareProvider $deckShareProvider,
+		private readonly ICloudIdManager $cloudIdManager,
+		private readonly IJobList $jobList,
 	) {
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -203,6 +210,22 @@ class AttachmentService {
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
 		return $attachment;
+	}
+
+	public function acceptRemoteAttachment(int $cardId, string $token): void {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+
+		$userId = $this->permissionService->getUserId();
+		if (!$this->cloudIdManager->isValidCloudId($userId)) {
+			throw new NoPermissionException('Only federated user is allowed');
+		}
+
+		$externalShare = $this->deckShareProvider->ensureAcceptRemoteShare($token, $this->cloudIdManager->resolveCloudId($userId)->getRemote());
+		$this->jobList->add(ScanFederatedAttachment::class, [
+			'cardId' => $cardId,
+			'shareId' => $externalShare->getId(),
+			'userId' => $externalShare->getUser(),
+		]);
 	}
 
 	/**
