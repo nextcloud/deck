@@ -7,13 +7,16 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\ExternalBoardService;
+use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
+use OCP\Teams\ITeamManager;
 use Psr\Log\LoggerInterface;
 
 class BoardOcsController extends OCSController {
@@ -21,7 +24,9 @@ class BoardOcsController extends OCSController {
 		string $appName,
 		IRequest $request,
 		private BoardService $boardService,
+		private BoardMapper $boardMapper,
 		private ExternalBoardService $externalBoardService,
+		private ITeamManager $teamManager,
 		private LoggerInterface $logger,
 		private $userId,
 	) {
@@ -32,6 +37,21 @@ class BoardOcsController extends OCSController {
 	public function index(): DataResponse {
 		$internalBoards = $this->boardService->findAll();
 		return new DataResponse($internalBoards);
+	}
+
+	#[NoAdminRequired]
+	public function listForTeam(string $teamId): DataResponse {
+		if ($this->userId === null || !$this->teamManager->isMemberOfTeam($teamId, $this->userId)) {
+			throw new OCSNotFoundException('Team not found');
+		}
+		$boards = array_map(static fn ($board) => [
+			'id' => $board->getId(),
+			'title' => $board->getTitle(),
+			'teamId' => $board->getTeamId(),
+			'archived' => $board->getArchived(),
+			'deletedAt' => $board->getDeletedAt(),
+		], $this->boardMapper->findAllAttachedToTeam($teamId));
+		return new DataResponse($boards);
 	}
 
 	#[NoAdminRequired]
