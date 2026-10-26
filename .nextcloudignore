@@ -33,3 +33,10 @@
 /psalm.xml
 /relativeci.config.js
 /stylelint.config.js
+/vendor/bamarni
+/vendor/bin
+/vendor/**/bin
+/vendor/**/tests
+/vendor-bin
+/.tx
+/tsconfig.json
