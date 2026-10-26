@@ -39,8 +39,11 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Http\Response;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 use Test\TestCase;
@@ -99,6 +102,9 @@ class AttachmentServiceTest extends TestCase {
 	 * @var AttachmentServiceValidator
 	 */
 	private $attachmentServiceValidator;
+	private IEventDispatcher&MockObject $eventDispatcher;
+	/** @var list<CriticalActionPerformedEvent> */
+	private array $auditEvents = [];
 
 	public function setUp(): void {
 		parent::setUp();
@@ -132,6 +138,14 @@ class AttachmentServiceTest extends TestCase {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->attachmentServiceValidator = $this->createMock(AttachmentServiceValidator::class);
+		$this->auditEvents = [];
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event): void {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$this->auditEvents[] = $event;
+				}
+			});
 
 		$this->attachmentService = new AttachmentService(
 			$this->configService,
@@ -145,7 +159,8 @@ class AttachmentServiceTest extends TestCase {
 			$this->userId,
 			$this->l10n,
 			$this->activityManager,
-			$this->attachmentServiceValidator
+			$this->attachmentServiceValidator,
+			$this->eventDispatcher,
 		);
 	}
 
@@ -171,7 +186,7 @@ class AttachmentServiceTest extends TestCase {
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
-		$attachmentService = new AttachmentService($this->configService, $this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager, $this->attachmentServiceValidator);
+		$attachmentService = new AttachmentService($this->configService, $this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager, $this->attachmentServiceValidator, $this->eventDispatcher);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$this->assertEquals($fileServiceMock, $attachmentService->getService('deck_file'));
 		$this->assertEquals(MyAttachmentService::class, get_class($attachmentService->getService('custom')));
@@ -196,7 +211,7 @@ class AttachmentServiceTest extends TestCase {
 			->method('getContainer')
 			->willReturn($appContainer);
 
-		$attachmentService = new AttachmentService($this->configService, $this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager, $this->attachmentServiceValidator);
+		$attachmentService = new AttachmentService($this->configService, $this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager, $this->attachmentServiceValidator, $this->eventDispatcher);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$attachmentService->getService('deck_file_invalid');
 	}
@@ -316,6 +331,7 @@ class AttachmentServiceTest extends TestCase {
 			],
 		]);
 		$this->assertEquals($expected, $actual);
+		$this->assertAuditOperations(['deck.attachment.created']);
 	}
 
 	public function testDisplay() {
@@ -402,6 +418,7 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn($attachment);
 		$actual = $this->attachmentService->delete(1, 1);
 		$this->assertEquals($expected, $actual);
+		$this->assertAuditOperations(['deck.attachment.deleted']);
 	}
 
 	public function testDeleteWithUndo() {
@@ -427,6 +444,7 @@ class AttachmentServiceTest extends TestCase {
 		$expected->setDeletedAt(23);
 		$actual = $this->attachmentService->delete(1, 1);
 		$this->assertEquals($expected, $actual);
+		$this->assertAuditOperations(['deck.attachment.deleted']);
 	}
 
 	public function testRestore() {
@@ -447,6 +465,8 @@ class AttachmentServiceTest extends TestCase {
 		$expected->setDeletedAt(0);
 		$actual = $this->attachmentService->restore(1, 1);
 		$this->assertEquals($expected, $actual);
+		$this->assertAuditOperations(['deck.attachment.restored']);
+		$this->assertSame(['attachmentId' => null, 'attachmentType' => 'deck_file', 'cardId' => 123], $this->auditEvents[0]->getParameters());
 	}
 
 	public function testRestoreNotAllowed() {
@@ -464,5 +484,24 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn(false);
 		$actual = $this->attachmentService->restore(1, 1);
 		$this->assertEquals($expected, $actual);
+	}
+
+	public function testFileAttachmentIsNotLogged(): void {
+		$attachment = $this->createAttachment('file', 'file_name.jpg');
+		$this->attachmentMapper->method('find')->willReturn($attachment);
+		$this->attachmentServiceImpl->method('allowUndo')->willReturn(false);
+		$this->attachmentMapper->method('delete')->willReturn($attachment);
+		$this->mockPermission(Acl::PERMISSION_EDIT);
+
+		$this->attachmentService->delete(1, 1, 'file');
+
+		$this->assertSame([], $this->auditEvents);
+	}
+
+	/**
+	 * @param list<string> $operations
+	 */
+	private function assertAuditOperations(array $operations): void {
+		$this->assertSame($operations, array_map(static fn (CriticalActionPerformedEvent $event): ?string => $event->getOperation(), $this->auditEvents));
 	}
 }

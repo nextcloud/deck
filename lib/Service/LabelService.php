@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\ChangeHelper;
@@ -14,6 +15,8 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\LabelServiceValidator;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 
 class LabelService {
 
@@ -23,6 +26,7 @@ class LabelService {
 		private BoardService $boardService,
 		private ChangeHelper $changeHelper,
 		private LabelServiceValidator $labelServiceValidator,
+		private IEventDispatcher $eventDispatcher,
 	) {
 	}
 
@@ -93,6 +97,13 @@ class LabelService {
 		}
 		$label = $this->labelMapper->delete($this->find($id));
 		$this->changeHelper->boardChanged($label->getBoardId());
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Label %s of board %s was deleted',
+			['labelId' => $label->getId(), 'boardId' => $label->getBoardId()],
+			false,
+			Operation::LabelDeleted->value,
+		));
 
 		return $label;
 	}

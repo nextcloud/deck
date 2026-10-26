@@ -9,6 +9,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
@@ -23,8 +24,10 @@ use OCA\Deck\StatusException;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Http\Response;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use Psr\Container\ContainerExceptionInterface;
 
 class AttachmentService {
@@ -44,6 +47,7 @@ class AttachmentService {
 		private readonly IL10N $l10n,
 		private readonly ActivityManager $activityManager,
 		private readonly AttachmentServiceValidator $attachmentServiceValidator,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -202,6 +206,7 @@ class AttachmentService {
 
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
+		$this->logAttachment($attachment, 'added to', Operation::AttachmentCreated);
 		return $attachment;
 	}
 
@@ -355,6 +360,7 @@ class AttachmentService {
 		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
+		$this->logAttachment($attachment, 'deleted from', Operation::AttachmentDeleted);
 		return $attachment;
 	}
 
@@ -375,6 +381,7 @@ class AttachmentService {
 				$attachment = $this->attachmentMapper->update($attachment);
 				$this->changeHelper->cardChanged($attachment->getCardId());
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_RESTORE);
+				$this->logAttachment($attachment, 'restored on', Operation::AttachmentRestored);
 				return $attachment;
 			}
 		} catch (InvalidAttachmentType $e) {
@@ -402,5 +409,26 @@ class AttachmentService {
 		$attachment->setExtendedData($extendedData);
 
 		return $attachment;
+	}
+
+	/**
+	 * Attachments of the type "file" are Nextcloud files shared with the card,
+	 * which the audit log already records as shares
+	 */
+	private function logAttachment(Attachment $attachment, string $action, Operation $operation): void {
+		if ($attachment->getType() === 'file') {
+			return;
+		}
+
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Attachment %s (%s) was ' . $action . ' card %s',
+			[
+				'attachmentId' => $attachment->getId(),
+				'attachmentType' => $attachment->getType(),
+				'cardId' => $attachment->getCardId(),
+			],
+			false,
+			$operation->value,
+		));
 	}
 }
