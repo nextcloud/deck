@@ -127,6 +127,9 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
+		if (interface_exists(\OCP\Teams\ITeamAppProvider::class)) {
+			$context->registerTeamAppProvider(\OCA\Deck\Teams\TeamsProvider::class);
+		}
 		if ((@include_once __DIR__ . '/../../vendor/autoload.php') === false) {
 			throw new Exception('Cannot include autoload. Did you run install dependencies using composer?');
 		}
