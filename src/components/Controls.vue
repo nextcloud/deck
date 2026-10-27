@@ -107,19 +107,32 @@
 
 						<template #default>
 							<div class="filter">
-								<div v-if="boardViews.length" class="filter--saved-views">
+								<div v-if="displayViews.length" class="filter--saved-views">
 									<h3>{{ t('deck', 'Saved views') }}</h3>
-									<div v-for="view in boardViews" :key="view.id" class="filter--saved-view">
+									<div v-for="view in displayViews" :key="view.id" class="filter--saved-view">
 										<NcButton type="tertiary"
 											class="filter--saved-view-name"
-											:title="t('deck', 'Apply view {name}', { name: view.name })"
-											@click="applyView(view)">
+											:title="view.isDefault
+												? t('deck', 'Apply default view {name}', { name: view.name })
+												: t('deck', 'Apply view {name}', { name: view.name })"
+											@click="view.isDefault ? applyDefaultView() : applyView(view)">
 											<template #icon>
-												<BookmarkOutline :size="18" decorative />
+												<StarIcon v-if="view.isDefault" :size="18" decorative />
+												<BookmarkOutline v-else :size="18" decorative />
 											</template>
 											{{ view.name }}
 										</NcButton>
-										<NcButton type="tertiary"
+										<NcButton v-if="view.isDefault"
+											type="tertiary"
+											:aria-label="t('deck', 'Remove default view')"
+											:title="t('deck', 'Remove default view')"
+											@click="removeDefaultView">
+											<template #icon>
+												<BookmarkOffOutline :size="18" decorative />
+											</template>
+										</NcButton>
+										<NcButton v-if="!view.isDefault || view.isLocal"
+											type="tertiary"
 											:aria-label="t('deck', 'Delete view {name}', { name: view.name })"
 											@click="removeView(view)">
 											<template #icon>
@@ -358,7 +371,9 @@ import { vOnClickOutside } from '@vueuse/components'
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue'
+import BookmarkOffOutline from 'vue-material-design-icons/BookmarkOffOutline.vue'
 import ContentSave from 'vue-material-design-icons/ContentSave.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
@@ -393,7 +408,9 @@ export default {
 		FilterIcon,
 		FilterOffIcon,
 		BookmarkOutline,
+		BookmarkOffOutline,
 		ContentSave,
+		StarIcon,
 		TrashCanOutline,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
@@ -459,6 +476,7 @@ export default {
 			'viewMode',
 			'showArchived',
 			'boardViews',
+			'allBoardViews',
 		]),
 
 		...mapState(useSettingsStore, {
@@ -492,6 +510,20 @@ export default {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 
+		displayViews() {
+			const defaultId = useSettingsStore().configByKey('defaultBoardView')
+			const defaultView = defaultId ? this.allBoardViews.find((view) => view.id === defaultId) : null
+			const isLocalDefault = defaultView && this.boardViews.some((view) => view.id === defaultView.id)
+			const localViews = this.boardViews.filter((view) => !defaultView || view.id !== defaultView.id)
+			if (!defaultView) {
+				return localViews.map((view) => ({ ...view, isDefault: false, isLocal: true }))
+			}
+			return [
+				{ ...defaultView, isDefault: true, isLocal: isLocalDefault },
+				...localViews.map((view) => ({ ...view, isDefault: false, isLocal: true })),
+			]
+		},
+
 		presentUsers() {
 			if (!this.board) {
 				return []
@@ -509,7 +541,7 @@ export default {
 			this.clearFilter()
 			this.newViewName = ''
 			if (this.board?.id) {
-				this.loadBoardViews(this.board.id)
+				this.loadAllBoardViews().then(() => this.applyDefaultView())
 			}
 		},
 
@@ -544,6 +576,7 @@ export default {
 			toggleShowArchived: 'toggleShowArchived',
 			setFilterInStore: 'setFilterInStore',
 			loadBoardViews: 'loadBoardViews',
+			loadAllBoardViews: 'loadAllBoardViews',
 			createBoardView: 'createBoardView',
 			deleteBoardView: 'deleteBoardView',
 			applyBoardView: 'applyBoardView',
@@ -630,22 +663,49 @@ export default {
 		},
 		applyView(view) {
 			this.applyBoardView(view)
-			this.filter = {
-				tags: [...(view.filters?.tags || [])],
-				users: [...(view.filters?.users || [])],
-				due: view.filters?.due || '',
-				unassigned: view.filters?.unassigned || false,
-				completed: view.filters?.completed || 'both',
+			this.filter = this.filterFromView(view)
+		},
+		applyDefaultView() {
+			if (!this.board) {
+				return
 			}
+			const defaultId = useSettingsStore().configByKey('defaultBoardView')
+			if (!defaultId) {
+				return
+			}
+			const view = this.allBoardViews.find((candidate) => candidate.id === defaultId)
+			if (!view) {
+				return
+			}
+			const boardLabelIds = this.board.labels?.map((label) => label.id) || []
+			const matchingTags = (view.filters?.tags || []).filter((tag) => boardLabelIds.includes(tag))
+			this.filter = this.filterFromView(view, matchingTags)
+			this.setFilterInStore({ ...this.filter })
+		},
+		filterFromView(view, tags = null) {
+			const filters = view.filters || {}
+			return {
+				tags: [...(tags ?? filters.tags ?? [])],
+				users: [...(filters.users || [])],
+				due: filters.due || '',
+				unassigned: filters.unassigned || false,
+				completed: filters.completed || 'both',
+			}
+		},
+		async removeDefaultView() {
+			await useSettingsStore().setConfig({ defaultBoardView: null })
 		},
 		async removeView(view) {
 			await this.deleteBoardView(view.boardId, view.id)
+			if (useSettingsStore().configByKey('defaultBoardView') === view.id) {
+				await useSettingsStore().setConfig({ defaultBoardView: null })
+			}
 		},
 		async saveView() {
 			if (!this.isFilterActive || this.newViewName.trim() === '' || !this.board) {
 				return
 			}
-			await this.createBoardView(this.board.id, this.newViewName.trim())
+			await this.createBoardView(this.board.id, this.newViewName.trim(), { ...this.filter })
 			this.newViewName = ''
 		},
 		clickShowAddCardModel() {

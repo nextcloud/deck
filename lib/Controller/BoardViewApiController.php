@@ -31,6 +31,11 @@ class BoardViewApiController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	public function all(): DataResponse {
+		return new DataResponse($this->boardViewService->findAllForUser());
+	}
+
+	#[NoAdminRequired]
 	public function create(int $boardId, string $name, array $filters): DataResponse {
 		return new DataResponse($this->boardViewService->create($boardId, $name, $filters));
 	}

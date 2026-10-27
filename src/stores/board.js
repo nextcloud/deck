@@ -28,6 +28,7 @@ export const useBoardStore = defineStore('board', {
 		filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 		boardFilter: BOARD_FILTERS.ALL,
 		boardViews: [],
+		allBoardViews: [],
 		boards: loadState('deck', 'initialBoards', {}),
 	}),
 	getters: {
@@ -158,22 +159,28 @@ export const useBoardStore = defineStore('board', {
 			this.boardViews = await apiClient.loadBoardViews(boardId)
 			return this.boardViews
 		},
-		async createBoardView(boardId, name) {
-			const view = await apiClient.createBoardView(boardId, name, this.filter)
+		async loadAllBoardViews() {
+			this.allBoardViews = await apiClient.loadAllBoardViews()
+			return this.allBoardViews
+		},
+		async createBoardView(boardId, name, filters = this.filter) {
+			const view = await apiClient.createBoardView(boardId, name, filters)
 			this.boardViews.push(view)
+			this.allBoardViews.push(view)
 			return view
 		},
 		async updateBoardView(view) {
 			const updated = await apiClient.updateBoardView(view.boardId, view)
 			const index = this.boardViews.findIndex((v) => v.id === updated.id)
 			if (index > -1) {
-				Vue.set(this.boardViews, index, updated)
+				this.boardViews[index] = updated
 			}
 			return updated
 		},
 		async deleteBoardView(boardId, viewId) {
 			await apiClient.deleteBoardView(boardId, viewId)
 			this.boardViews = this.boardViews.filter((v) => v.id !== viewId)
+			this.allBoardViews = this.allBoardViews.filter((v) => v.id !== viewId)
 		},
 		applyBoardView(view) {
 			this.setFilterInStore(this.normalizeFilter(view.filters))
