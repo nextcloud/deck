@@ -26,6 +26,7 @@ OC.L10N.register(
     "Open details" : "Hapni detajet",
     "Details" : "Detajet",
     "General" : "Të përgjithshme",
+    "Appearance" : "Pamja",
     "Search" : "Kërko",
     "Sharing" : "Ndarje",
     "Tags" : "Etiketa",
