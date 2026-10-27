@@ -66,6 +66,7 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Deck settings" : "Configuración del Tablero",
     "General" : "General",
+    "Appearance" : "Apariencia",
     "Search" : "Buscar",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",
