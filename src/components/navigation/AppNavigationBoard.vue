@@ -25,6 +25,7 @@
 			</template>
 
 			<template #counter>
+				<StarIcon v-if="board.settings?.favorite" class="favorite-icon" :size="20" />
 				<AccountIcon v-if="board.acl?.length > 0" />
 			</template>
 
@@ -37,6 +38,13 @@
 							<InformationOutlineIcon :size="20" decorative />
 						</template>
 						{{ t('deck', 'Board details') }}
+					</NcActionButton>
+					<NcActionButton :closeAfterClick="true" @click="updateSetting('favorite', !board.settings?.favorite)">
+						<template #icon>
+							<StarOutlineIcon v-if="board.settings?.favorite" :size="20" decorative />
+							<StarIcon v-else :size="20" decorative />
+						</template>
+						{{ board.settings?.favorite ? t('deck', 'Remove from favorites') : t('deck', 'Add to favorites') }}
 					</NcActionButton>
 					<NcActionButton
 						v-if="canManage && !board.archived"
@@ -233,6 +241,8 @@ import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import PinIcon from 'vue-material-design-icons/Pin.vue'
 import PinOffIcon from 'vue-material-design-icons/PinOff.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
+import StarOutlineIcon from 'vue-material-design-icons/StarOutline.vue'
 import BoardCloneModal from './BoardCloneModal.vue'
 import BoardExportModal from './BoardExportModal.vue'
 import logger from '../../logger.js'
@@ -259,6 +269,8 @@ export default {
 		CheckIcon,
 		PinIcon,
 		PinOffIcon,
+		StarIcon,
+		StarOutlineIcon,
 		LeaveIcon,
 		InformationOutlineIcon,
 		PencilIcon,
@@ -576,6 +588,10 @@ export default {
 			border-radius: 50%;
 			background-size: 14px;
 		}
+	}
+
+	.favorite-icon {
+		color: var(--color-favorite);
 	}
 
 	.forced-active {

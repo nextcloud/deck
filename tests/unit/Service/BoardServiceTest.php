@@ -208,6 +208,15 @@ class BoardServiceTest extends TestCase {
 		$this->assertEquals($b1, $this->service->find(1));
 	}
 
+	public function testEnrichWithBoardSettingsFavorite(): void {
+		$board = new Board();
+		$board->setId(1);
+		$this->config->method('getUserValue')
+			->willReturnCallback(fn ($userId, $app, $key, $default) => $key === 'board:1:favorite' ? '1' : $default);
+		$this->service->enrichWithBoardSettings($board);
+		$this->assertTrue($board->getSettings()['favorite']);
+	}
+
 	public function testCreate() {
 		$board = new Board();
 		$board->setTitle('MyBoard');

@@ -67,6 +67,19 @@ Feature: OCS API - Config
     When sending "GET" to the API endpoint "/boards/<boardId>"
     Then the response value "settings.notify-due" should be "assigned"
 
+  Scenario: POST /api/v1.0/config/{key} - Mark a board as favorite
+    Given sending "POST" to the API endpoint "/boards" with body:
+      | title | Favorite board |
+      | color | ff0000         |
+    And the response value "id" is stored as "boardId"
+    When sending "GET" to the API endpoint "/boards/<boardId>"
+    Then the response value "settings.favorite" should be "false"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:favorite" with body:
+      | value | true |
+    Then the response should have a status code "200"
+    When sending "GET" to the API endpoint "/boards/<boardId>"
+    Then the response value "settings.favorite" should be "true"
+
   Scenario: POST /api/v1.0/config/{key} - Board settings of other users cannot be changed
     Given sending "POST" to the API endpoint "/boards" with body:
       | title | Private config board |

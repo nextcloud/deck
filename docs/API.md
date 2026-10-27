@@ -170,7 +170,8 @@ Returns an array of board items
         "lastModified": 1586269585,
         "settings": {
             "notify-due": "off",
-            "calendar": true
+            "calendar": true,
+            "favorite": false
         }
     }
 ]
@@ -1172,6 +1173,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | --- | ----- |
 | notify-due | `off`, `assigned` or `all` |
 | calendar | Boolean |
+| favorite | Boolean |
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
 

@@ -431,6 +431,7 @@ class BoardService {
 		$settings = [
 			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
 			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':calendar', $globalCalendarConfig),
+			'favorite' => (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':favorite', false),
 		];
 		$board->setSettings($settings);
 	}

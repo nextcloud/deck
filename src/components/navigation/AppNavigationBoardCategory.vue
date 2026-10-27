@@ -72,7 +72,7 @@ export default {
 
 	computed: {
 		boardsSorted() {
-			return [...this.boards].sort((a, b) => a.title.localeCompare(b.title))
+			return [...this.boards].sort((a, b) => (!!b.settings?.favorite - !!a.settings?.favorite) || a.title.localeCompare(b.title))
 		},
 
 		collapsible() {
