@@ -175,6 +175,10 @@ export const useBoardStore = defineStore('board', {
 			if (index > -1) {
 				this.boardViews[index] = updated
 			}
+			const allIndex = this.allBoardViews.findIndex((v) => v.id === updated.id)
+			if (allIndex > -1) {
+				this.allBoardViews[allIndex] = updated
+			}
 			return updated
 		},
 		async deleteBoardView(boardId, viewId) {

@@ -110,7 +110,8 @@
 								<div v-if="displayViews.length" class="filter--saved-views">
 									<h3>{{ t('deck', 'Saved views') }}</h3>
 									<div v-for="view in displayViews" :key="view.id" class="filter--saved-view">
-										<NcButton type="tertiary"
+										<NcButton
+											variant="tertiary"
 											class="filter--saved-view-name"
 											:title="view.isDefault
 												? t('deck', 'Apply default view {name}', { name: view.name })
@@ -122,8 +123,9 @@
 											</template>
 											{{ view.name }}
 										</NcButton>
-										<NcButton v-if="view.isDefault"
-											type="tertiary"
+										<NcButton
+											v-if="view.isDefault"
+											variant="tertiary"
 											:aria-label="t('deck', 'Remove default view')"
 											:title="t('deck', 'Remove default view')"
 											@click="removeDefaultView">
@@ -131,8 +133,9 @@
 												<BookmarkOffOutline :size="18" decorative />
 											</template>
 										</NcButton>
-										<NcButton v-if="!view.isDefault || view.isLocal"
-											type="tertiary"
+										<NcButton
+											v-if="!view.isDefault || view.isLocal"
+											variant="tertiary"
 											:aria-label="t('deck', 'Delete view {name}', { name: view.name })"
 											@click="removeView(view)">
 											<template #icon>
@@ -279,11 +282,13 @@
 								</div>
 
 								<div class="filter--save-view">
-									<NcTextField v-model="newViewName"
+									<NcTextField
+										v-model="newViewName"
 										:label="t('deck', 'View name')"
 										:placeholder="t('deck', 'Name for the saved view')"
 										@keyup.enter="saveView" />
-									<NcButton :disabled="!isFilterActive || newViewName.trim() === ''"
+									<NcButton
+										:disabled="!isFilterActive || newViewName.trim() === ''"
 										:wide="true"
 										@click="saveView">
 										<template #icon>
@@ -370,18 +375,18 @@ import { NcActionButton, NcActions, NcActionSeparator, NcAvatar, NcButton, NcMod
 import { vOnClickOutside } from '@vueuse/components'
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue'
-import BookmarkOffOutline from 'vue-material-design-icons/BookmarkOffOutline.vue'
-import ContentSave from 'vue-material-design-icons/ContentSave.vue'
-import StarIcon from 'vue-material-design-icons/Star.vue'
-import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
+import BookmarkOffOutline from 'vue-material-design-icons/BookmarkOffOutline.vue'
+import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue'
 import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
+import ContentSave from 'vue-material-design-icons/ContentSave.vue'
 import FilterOffIcon from 'vue-material-design-icons/FilterOffOutline.vue'
 import FilterIcon from 'vue-material-design-icons/FilterOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
 import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter.vue'
+import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import ViewColumnIcon from 'vue-material-design-icons/ViewColumn.vue'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import SessionList from './SessionList.vue'
@@ -575,12 +580,12 @@ export default {
 			setViewMode: 'setViewMode',
 			toggleShowArchived: 'toggleShowArchived',
 			setFilterInStore: 'setFilterInStore',
-			loadBoardViews: 'loadBoardViews',
 			loadAllBoardViews: 'loadAllBoardViews',
 			createBoardView: 'createBoardView',
 			deleteBoardView: 'deleteBoardView',
 			applyBoardView: 'applyBoardView',
 		}),
+
 		...mapActions(useStackStore, ['createStack']),
 		...mapActions(useSettingsStore, {
 			setSearchQuery: 'setSearchQuery',
@@ -661,10 +666,12 @@ export default {
 			this.setFilterInStore({ ...filterReset })
 			this.filter = filterReset
 		},
+
 		applyView(view) {
 			this.applyBoardView(view)
 			this.filter = this.filterFromView(view)
 		},
+
 		applyDefaultView() {
 			if (!this.board) {
 				return
@@ -682,6 +689,7 @@ export default {
 			this.filter = this.filterFromView(view, matchingTags)
 			this.setFilterInStore({ ...this.filter })
 		},
+
 		filterFromView(view, tags = null) {
 			const filters = view.filters || {}
 			return {
@@ -692,15 +700,18 @@ export default {
 				completed: filters.completed || 'both',
 			}
 		},
+
 		async removeDefaultView() {
 			await useSettingsStore().setConfig({ defaultBoardView: null })
 		},
+
 		async removeView(view) {
 			await this.deleteBoardView(view.boardId, view.id)
 			if (useSettingsStore().configByKey('defaultBoardView') === view.id) {
 				await useSettingsStore().setConfig({ defaultBoardView: null })
 			}
 		},
+
 		async saveView() {
 			if (!this.isFilterActive || this.newViewName.trim() === '' || !this.board) {
 				return
@@ -708,6 +719,7 @@ export default {
 			await this.createBoardView(this.board.id, this.newViewName.trim(), { ...this.filter })
 			this.newViewName = ''
 		},
+
 		clickShowAddCardModel() {
 			this.showAddCardModal = true
 		},

@@ -20,12 +20,13 @@
 					:label="t('deck', 'Add new cards at the top of a list')" />
 			</NcFormBox>
 			<NcFormBox>
-				<NcSelect v-model="defaultBoardView"
-					open-direction="bottom"
+				<NcSelect
+					v-model="defaultBoardView"
+					openDirection="bottom"
 					:options="boardViewOptions"
-					:input-label="t('deck', 'Default view for all boards')"
+					:inputLabel="t('deck', 'Default view for all boards')"
 					label="label"
-					track-by="id"
+					trackBy="id"
 					clearable />
 				<p class="settings-hint">
 					{{ t('deck', 'The selected view is applied automatically when you open any board.') }}
@@ -93,6 +94,7 @@ import { confirmPassword } from '@nextcloud/password-confirmation'
 import { generateOcsUrl } from '@nextcloud/router'
 import { NcSelect } from '@nextcloud/vue'
 import { useHotKey } from '@nextcloud/vue/composables/useHotKey'
+import { mapActions, mapState } from 'pinia'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import NcAppSettingsShortcutsSection from '@nextcloud/vue/components/NcAppSettingsShortcutsSection'
@@ -101,11 +103,10 @@ import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcHotkey from '@nextcloud/vue/components/NcHotkey'
 import NcHotkeyList from '@nextcloud/vue/components/NcHotkeyList'
 import logger from '../logger.js'
+import { useBoardStore } from '../stores/board.js'
 import { useSettingsStore } from '../stores/settings.js'
 
 import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
-import { mapActions, mapState } from 'pinia'
-import { useBoardStore } from '../stores/board.js'
 
 export default {
 	name: 'DeckAppSettings',
@@ -141,6 +142,7 @@ export default {
 		isAdmin() {
 			return !!getCurrentUser()?.isAdmin
 		},
+
 		boardViewOptions() {
 			return this.allBoardViews.map((view) => {
 				const board = this.boards.find((candidate) => candidate.id === view.boardId)
@@ -151,6 +153,7 @@ export default {
 				}
 			})
 		},
+
 		cardDetailsInModal: {
 			get() {
 				return useSettingsStore().configByKey('cardDetailsInModal')
@@ -180,6 +183,7 @@ export default {
 				useSettingsStore().setConfig({ cardIdBadge: newValue })
 			},
 		},
+
 		defaultBoardView: {
 			get() {
 				const id = useSettingsStore().configByKey('defaultBoardView')
@@ -188,10 +192,12 @@ export default {
 				}
 				return this.boardViewOptions.find((view) => view.id === id) || null
 			},
+
 			set(view) {
 				useSettingsStore().setConfig({ defaultBoardView: view ? view.id : null })
 			},
 		},
+
 		federationEnabled: {
 			get() {
 				const value = useSettingsStore().configByKey('federationEnabled')

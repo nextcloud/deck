@@ -20,7 +20,6 @@ class BoardViewApiController extends OCSController {
 		string $appName,
 		IRequest $request,
 		private BoardViewService $boardViewService,
-		private $userId,
 	) {
 		parent::__construct($appName, $request);
 	}

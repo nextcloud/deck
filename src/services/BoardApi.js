@@ -442,5 +442,4 @@ export class BoardApi {
 				return Promise.reject(err)
 			})
 	}
-
 }

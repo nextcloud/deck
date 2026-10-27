@@ -52,6 +52,7 @@ class Version11003Date20260821120000 extends SimpleMigrationStep {
 			]);
 			$table->setPrimaryKey(['id']);
 			$table->addIndex(['board_id', 'owner'], 'deck_board_views_idx_board_owner');
+			$table->addIndex(['owner'], 'deck_board_views_idx_owner');
 		}
 		return $schema;
 	}
