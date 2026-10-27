@@ -107,6 +107,28 @@
 
 						<template #default>
 							<div class="filter">
+								<div v-if="boardViews.length" class="filter--saved-views">
+									<h3>{{ t('deck', 'Saved views') }}</h3>
+									<div v-for="view in boardViews" :key="view.id" class="filter--saved-view">
+										<NcButton type="tertiary"
+											class="filter--saved-view-name"
+											:title="t('deck', 'Apply view {name}', { name: view.name })"
+											@click="applyView(view)">
+											<template #icon>
+												<BookmarkOutline :size="18" decorative />
+											</template>
+											{{ view.name }}
+										</NcButton>
+										<NcButton type="tertiary"
+											:aria-label="t('deck', 'Delete view {name}', { name: view.name })"
+											@click="removeView(view)">
+											<template #icon>
+												<TrashCanOutline :size="18" decorative />
+											</template>
+										</NcButton>
+									</div>
+								</div>
+
 								<h3>{{ t('deck', 'Filter by tag') }}</h3>
 								<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
 									<input
@@ -243,6 +265,21 @@
 									<label for="noDue">{{ t('deck', 'No due date') }}</label>
 								</div>
 
+								<div class="filter--save-view">
+									<NcTextField v-model="newViewName"
+										:label="t('deck', 'View name')"
+										:placeholder="t('deck', 'Name for the saved view')"
+										@keyup.enter="saveView" />
+									<NcButton :disabled="!isFilterActive || newViewName.trim() === ''"
+										:wide="true"
+										@click="saveView">
+										<template #icon>
+											<ContentSave :size="20" decorative />
+										</template>
+										{{ t('deck', 'Save view') }}
+									</NcButton>
+								</div>
+
 								<NcButton :disabled="!isFilterActive" :wide="true" @click="clearFilter">
 									{{ t('deck', 'Clear filter') }}
 								</NcButton>
@@ -320,6 +357,9 @@ import { NcActionButton, NcActions, NcActionSeparator, NcAvatar, NcButton, NcMod
 import { vOnClickOutside } from '@vueuse/components'
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue'
+import ContentSave from 'vue-material-design-icons/ContentSave.vue'
+import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
 import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
@@ -352,6 +392,9 @@ export default {
 		ImageIcon,
 		FilterIcon,
 		FilterOffIcon,
+		BookmarkOutline,
+		ContentSave,
+		TrashCanOutline,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
 		ViewColumnIcon,
@@ -402,6 +445,7 @@ export default {
 			stack: '',
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
+			newViewName: '',
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -414,6 +458,7 @@ export default {
 			'canManage',
 			'viewMode',
 			'showArchived',
+			'boardViews',
 		]),
 
 		...mapState(useSettingsStore, {
@@ -462,6 +507,10 @@ export default {
 		// traversing labels, acl and users on every unrelated board mutation.
 		'board.id': function() {
 			this.clearFilter()
+			this.newViewName = ''
+			if (this.board?.id) {
+				this.loadBoardViews(this.board.id)
+			}
 		},
 
 		pageTitle: {
@@ -490,7 +539,15 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useBoardStore, { setViewMode: 'setViewMode', toggleShowArchived: 'toggleShowArchived', setFilterInStore: 'setFilterInStore' }),
+		...mapActions(useBoardStore, {
+			setViewMode: 'setViewMode',
+			toggleShowArchived: 'toggleShowArchived',
+			setFilterInStore: 'setFilterInStore',
+			loadBoardViews: 'loadBoardViews',
+			createBoardView: 'createBoardView',
+			deleteBoardView: 'deleteBoardView',
+			applyBoardView: 'applyBoardView',
+		}),
 		...mapActions(useStackStore, ['createStack']),
 		...mapActions(useSettingsStore, {
 			setSearchQuery: 'setSearchQuery',
@@ -571,7 +628,26 @@ export default {
 			this.setFilterInStore({ ...filterReset })
 			this.filter = filterReset
 		},
-
+		applyView(view) {
+			this.applyBoardView(view)
+			this.filter = {
+				tags: [...(view.filters?.tags || [])],
+				users: [...(view.filters?.users || [])],
+				due: view.filters?.due || '',
+				unassigned: view.filters?.unassigned || false,
+				completed: view.filters?.completed || 'both',
+			}
+		},
+		async removeView(view) {
+			await this.deleteBoardView(view.boardId, view.id)
+		},
+		async saveView() {
+			if (!this.isFilterActive || this.newViewName.trim() === '' || !this.board) {
+				return
+			}
+			await this.createBoardView(this.board.id, this.newViewName.trim())
+			this.newViewName = ''
+		},
 		clickShowAddCardModel() {
 			this.showAddCardModal = true
 		},
@@ -744,6 +820,30 @@ export default {
 	.filter h3 {
 		margin-top: 0px;
 		margin-bottom: 5px;
+	}
+
+	.filter--saved-views {
+		border-bottom: 1px solid var(--color-border);
+		margin-bottom: 8px;
+		padding-bottom: 4px;
+
+		.filter--saved-view {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+
+			.filter--saved-view-name {
+				flex-grow: 1;
+				justify-content: flex-start;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+	}
+
+	.filter--save-view {
+		margin-top: 8px;
 	}
 
 	.filter-button {
