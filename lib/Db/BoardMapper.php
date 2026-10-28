@@ -432,7 +432,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
 			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('acl.participant', $qb->createNamedParameter($teamId, IQueryBuilder::PARAM_STR)));
+			->andWhere($qb->expr()->eq('acl.participant', $qb->createNamedParameter($teamId, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('b.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		$entries = $this->findEntities($qb);
 		foreach ($entries as $entry) {
 			$entry->setShared(2);
