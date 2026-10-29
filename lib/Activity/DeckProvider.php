@@ -183,7 +183,6 @@ class DeckProvider implements IProvider {
 
 		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
 			->setRichSubject($subject, $richParameters);
-		$event->setSubject($subject, $parameters);
 	}
 
 	private function getIcon(IEvent $event) {

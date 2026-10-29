@@ -261,6 +261,8 @@ class DeckProviderTest extends TestCase {
 		$this->assertEquals('test string Card', $event->getParsedSubject());
 		$this->assertEquals('test string {card}', $event->getRichSubject());
 		$this->assertEquals('', $event->getMessage());
+		// the subject stays the identifier: notifications reject subjects longer than 64 characters
+		$this->assertEquals(ActivityManager::SUBJECT_CARD_CREATE, $event->getSubject());
 	}
 
 	public function testParseObjectTypeCardWithDiff() {
@@ -312,6 +314,7 @@ class DeckProviderTest extends TestCase {
 		$this->assertEquals('test string {card}', $event->getRichSubject());
 		$this->assertEquals('BCD', $event->getMessage());
 		$this->assertEquals('BCD', $event->getParsedMessage());
+		$this->assertEquals(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, $event->getSubject());
 	}
 
 	public function testParseParamForBoard() {
