@@ -91,6 +91,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$this->filenameValidator = $filenameValidator;
 	}
 
+	#[\Override]
 	public function listAttachments(int $cardId): array {
 		$shares = $this->shareProvider->getSharedWithByType($cardId, IShare::TYPE_DECK, -1, 0);
 		return array_filter(array_map(function (IShare $share) use ($cardId) {
@@ -113,10 +114,12 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		}, $shares));
 	}
 
+	#[\Override]
 	public function getAttachmentCount(int $cardId): int {
 		return $this->getAttachmentCountForCards([$cardId])[$cardId] ?? 0;
 	}
 
+	#[\Override]
 	public function getAttachmentCountForCards(array $cardIds): array {
 		if (empty($cardIds)) {
 			return [];
@@ -146,6 +149,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $counts;
 	}
 
+	#[\Override]
 	public function extendData(Attachment $attachment) {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		$share = $this->getShareForAttachment($attachment);
@@ -167,6 +171,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $attachment;
 	}
 
+	#[\Override]
 	public function display(Attachment $attachment) {
 		// Problem: Folders
 		/** @psalm-suppress InvalidCatch */
@@ -186,6 +191,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $response;
 	}
 
+	#[\Override]
 	public function create(Attachment $attachment) {
 		if ($attachment->getData() === 'DEFAULT_SAMPLE_FILE' && !$this->request->getUploadedFile('file')) {
 			$file = [
@@ -380,6 +386,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $file;
 	}
 
+	#[\Override]
 	public function update(Attachment $attachment) {
 		$share = $this->getShareForAttachment($attachment);
 		$target = $share->getNode();
@@ -406,6 +413,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	 * @throws NotFoundException
 	 * @throws ShareNotFound
 	 */
+	#[\Override]
 	public function delete(Attachment $attachment) {
 		$share = $this->getShareForAttachment($attachment);
 		$file = $share->getNode();
@@ -423,10 +431,12 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		throw new NoPermissionException('No permission to remove the attachment from the card');
 	}
 
+	#[\Override]
 	public function allowUndo() {
 		return false;
 	}
 
+	#[\Override]
 	public function markAsDeleted(Attachment $attachment) {
 		throw new \Exception('Not implemented');
 	}

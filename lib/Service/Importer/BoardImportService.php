@@ -10,6 +10,7 @@ namespace OCA\Deck\Service\Importer;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
@@ -33,6 +34,7 @@ use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Server;
 use Psr\Log\LoggerInterface;
 
@@ -222,6 +224,16 @@ class BoardImportService {
 
 		$this->boardMapper->insert($board);
 		$this->board = $board;
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Board %s of "%s" was imported from %s',
+			[
+				'boardId' => $board->getId(),
+				'owner' => $board->getOwner(),
+				'importSystem' => $this->getSystem(),
+			],
+			false,
+			Operation::BoardImported->value,
+		));
 	}
 
 	public function getBoard(bool $reset = false): Board {

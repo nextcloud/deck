@@ -31,6 +31,8 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Validators\LabelServiceValidator;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -47,6 +49,7 @@ class LabelServiceTest extends TestCase {
 	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
 	private ChangeHelper&MockObject $changeHelper;
 	private LabelServiceValidator&MockObject $labelServiceValidator;
+	private IEventDispatcher&MockObject $eventDispatcher;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -57,6 +60,7 @@ class LabelServiceTest extends TestCase {
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->labelServiceValidator = $this->createMock(LabelServiceValidator::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 
 		$this->labelService = new LabelService(
 			$this->labelMapper,
@@ -64,6 +68,7 @@ class LabelServiceTest extends TestCase {
 			$this->boardService,
 			$this->changeHelper,
 			$this->labelServiceValidator,
+			$this->eventDispatcher,
 		);
 	}
 
@@ -164,6 +169,11 @@ class LabelServiceTest extends TestCase {
 		$this->labelMapper->expects($this->once())
 			->method('delete')
 			->willReturn($label);
+		$label->setBoardId(9);
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(fn (CriticalActionPerformedEvent $event): bool => $event->getOperation() === 'deck.label.deleted'
+				&& $event->getParameters() === ['labelId' => 1, 'boardId' => 9]));
 		$this->assertEquals($label, $this->labelService->delete(1));
 	}
 }

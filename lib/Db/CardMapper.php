@@ -59,6 +59,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$this->database4ByteSupport = $database4ByteSupport;
 	}
 
+	#[\Override]
 	public function insert(Entity $entity): Entity {
 		$entity->setDatabaseType($this->databaseType);
 		$entity->setCreatedAt(time());
@@ -72,6 +73,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $entity;
 	}
 
+	#[\Override]
 	public function update(Entity $entity, $updateModified = true): Entity {
 		if (!$this->database4ByteSupport) {
 			$description = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $entity->getDescription());
@@ -612,6 +614,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $all;
 	}
 
+	#[\Override]
 	public function delete(Entity $entity): Entity {
 		$this->labelMapper->deleteLabelAssignmentsForCard($entity->getId());
 		$this->removeDependenciesForCard($entity->getId());
@@ -714,6 +717,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $qb->executeQuery()->fetchOne() !== false;
 	}
 
+	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.id')
@@ -726,6 +730,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
+	#[\Override]
 	public function findBoardId(int $id): ?int {
 		$result = $this->cache->get('findBoardId:' . $id);
 		if ($result === null) {

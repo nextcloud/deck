@@ -37,6 +37,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 * @param string $attribute the name of the attribute
 	 * @since 7.0.0
 	 */
+	#[\Override]
 	protected function markFieldUpdated(string $attribute): void {
 		if (!in_array($attribute, $this->_relations, true)) {
 			parent::markFieldUpdated($attribute);
@@ -47,6 +48,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 * @return array serialized data
 	 * @throws \ReflectionException
 	 */
+	#[\Override]
 	public function jsonSerialize(): array {
 		$properties = get_object_vars($this);
 		$reflection = new \ReflectionClass($this);
@@ -111,6 +113,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 		}
 	}
 
+	#[\Override]
 	public function __call(string $methodName, array $args) {
 		$attr = lcfirst(substr($methodName, 7));
 		if (array_key_exists($attr, $this->_resolvedProperties) && str_starts_with($methodName, 'resolve')) {

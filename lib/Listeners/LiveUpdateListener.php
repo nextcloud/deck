@@ -52,6 +52,7 @@ class LiveUpdateListener implements IEventListener {
 		$this->stackMapper = $stackMapper;
 	}
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!$this->queue) {
 			// notify_push is not active

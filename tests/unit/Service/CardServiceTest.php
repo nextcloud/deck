@@ -45,12 +45,14 @@ use OCA\Deck\Validators\CardServiceValidator;
 use OCP\Activity\IEvent;
 use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
+use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -244,8 +246,11 @@ class CardServiceTest extends TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($stack);
+		$auditEvents = $this->collectAuditEvents();
 		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin', '', null, null, '00ff00');
 
+		$this->assertSame(['deck.card.created'], $this->getAuditOperations($auditEvents));
+		$this->assertSame(['cardId' => 0, 'stackId' => 123], $auditEvents[0]->getParameters());
 		$this->assertEquals($b->getTitle(), 'Card title');
 		$this->assertEquals($b->getOwner(), 'admin');
 		$this->assertEquals($b->getType(), 'text');
@@ -416,7 +421,10 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('update')
 			->willReturn($cardToBeDeleted);
+		$auditEvents = $this->collectAuditEvents();
 		$this->cardService->delete(123);
+		$this->assertSame(['deck.card.deleted'], $this->getAuditOperations($auditEvents));
+		$this->assertSame(['cardId' => 123, 'stackId' => null], $auditEvents[0]->getParameters());
 		$this->assertTrue($cardToBeDeleted->getDeletedAt() <= time(), 'deletedAt is in the past');
 	}
 
@@ -691,7 +699,9 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$auditEvents = $this->collectAuditEvents();
 		$this->assertTrue($this->cardService->archive(123)->getArchived());
+		$this->assertSame(['deck.card.archived'], $this->getAuditOperations($auditEvents));
 	}
 	public function testUnarchive() {
 		$card = new Card();
@@ -701,7 +711,9 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$auditEvents = $this->collectAuditEvents();
 		$this->assertFalse($this->cardService->unarchive(123)->getArchived());
+		$this->assertSame(['deck.card.unarchived'], $this->getAuditOperations($auditEvents));
 	}
 
 	public function testAssignLabel() {
@@ -879,5 +891,65 @@ class CardServiceTest extends TestCase {
 			->willReturn($stack);
 		$result = $this->cardService->removeDependentCard(42, 43);
 		$this->assertEquals([44], $result->getDependentCards());
+	}
+
+	/**
+	 * @return \ArrayObject<int, CriticalActionPerformedEvent>
+	 */
+	private function collectAuditEvents(): \ArrayObject {
+		$auditEvents = new \ArrayObject();
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event) use ($auditEvents): void {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$auditEvents[] = $event;
+				}
+			});
+		return $auditEvents;
+	}
+
+	/**
+	 * @param \ArrayObject<int, CriticalActionPerformedEvent> $auditEvents
+	 * @return list<?string>
+	 */
+	private function getAuditOperations(\ArrayObject $auditEvents): array {
+		return array_map(static fn (CriticalActionPerformedEvent $event): ?string => $event->getOperation(), $auditEvents->getArrayCopy());
+	}
+
+	public function testUpdateRestoreAndArchiveLogCriticalAction(): void {
+		$card = Card::fromParams([
+			'title' => 'Card title',
+			'stackId' => 234,
+			'deletedAt' => 100,
+			'archived' => false,
+		]);
+		$this->cardMapper->method('find')->willReturn($card);
+		$this->cardMapper->method('update')->willReturnCallback(function ($c) {
+			$c->setId(1);
+			return $c;
+		});
+		$this->stackMapper->method('find')->willReturn(Stack::fromParams(['id' => 234, 'boardId' => 1337]));
+		$this->stackMapper->method('findBoardId')->willReturn(1337);
+		$this->cardMapper->method('findBoardId')->willReturn(1337);
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->cardService->update(123, 'Card title', 234, 'text', 'admin', '', 0, null, 0, true);
+
+		$this->assertSame(['deck.card.restored', 'deck.card.archived'], $this->getAuditOperations($auditEvents));
+		$this->assertSame(['cardId' => 1, 'stackId' => 234], $auditEvents[0]->getParameters());
+	}
+
+	public function testReorderToAnotherBoardLogsCriticalAction(): void {
+		$card = new Card();
+		$card->setId(5);
+		$card->setStackId(123);
+		$this->cardMapper->method('find')->willReturn($card);
+		$this->cardMapper->method('findAll')->willReturn([$card]);
+		$this->stackMapper->method('find')->willReturnCallback(fn (int $id): Stack => Stack::fromParams(['id' => $id, 'boardId' => $id === 123 ? 1 : 2]));
+		$auditEvents = $this->collectAuditEvents();
+
+		$this->cardService->reorder(5, 234, 0);
+
+		$this->assertSame(['deck.card.moved'], $this->getAuditOperations($auditEvents));
+		$this->assertSame(['cardId' => 5, 'fromBoardId' => 1, 'toBoardId' => 2], $auditEvents[0]->getParameters());
 	}
 }

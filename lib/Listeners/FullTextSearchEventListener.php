@@ -48,6 +48,7 @@ class FullTextSearchEventListener implements IEventListener {
 		}
 	}
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!$event instanceof ACardEvent && !$event instanceof AAclEvent) {
 			return;

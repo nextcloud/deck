@@ -88,6 +88,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	/**
 	 * @throws \OCP\DB\Exception
 	 */
+	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		$aclId = $id;
 		$qb = $this->db->getQueryBuilder();
@@ -100,6 +101,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
+	#[\Override]
 	public function findBoardId(int $id): ?int {
 		try {
 			$entity = $this->find($id);
@@ -156,6 +158,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	#[\Override]
 	public function insert(Entity $entity): Entity {
 		/** @var Acl $entity */
 		$now = time();
@@ -164,6 +167,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return parent::insert($entity);
 	}
 
+	#[\Override]
 	public function update(Entity $entity): Entity {
 		/** @var Acl $entity */
 		$entity->setLastModifiedAt(time());

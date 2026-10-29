@@ -19,6 +19,7 @@ class User extends RelationalObject {
 		});
 	}
 
+	#[\Override]
 	public function getObjectSerialization(): array {
 		return [
 			'uid' => $this->getObject()->getUID(),

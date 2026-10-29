@@ -10,13 +10,16 @@ declare(strict_types=1);
 namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Exceptions\FederationDisabledException;
 use OCA\Deck\NoPermissionException;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUserSession;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 
 class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_OFF = 'off';
@@ -29,6 +32,7 @@ class ConfigService {
 	public function __construct(
 		private readonly IConfig $config,
 		private readonly IGroupManager $groupManager,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 	}
 
@@ -171,6 +175,12 @@ class ConfigService {
 					throw new NoPermissionException('You must be admin to set the group limit');
 				}
 				$result = $this->setGroupLimit($value);
+				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+					'Deck usage was limited to the groups "%s"',
+					['groups' => implode(', ', $result)],
+					false,
+					Operation::ConfigGroupLimitUpdated->value,
+				));
 				break;
 			case 'federationEnabled':
 				if (!$this->groupManager->isAdmin($userId)) {
@@ -178,6 +188,12 @@ class ConfigService {
 				}
 				$this->config->setAppValue(Application::APP_ID, 'federationEnabled', (string)$value);
 				$result = $value;
+				$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+					'Federation of boards was %s',
+					['federation' => $value ? 'enabled' : 'disabled'],
+					false,
+					Operation::ConfigFederationUpdated->value,
+				));
 				break;
 			case 'calendar':
 				$this->config->setUserValue($userId, Application::APP_ID, 'calendar', (string)$value);

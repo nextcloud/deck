@@ -28,6 +28,7 @@ class TextDocumentContentListener implements IEventListener {
 	) {
 	}
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!($event instanceof CardUpdatedEvent) || !class_exists(DocumentContentUpdated::class)) {
 			return;

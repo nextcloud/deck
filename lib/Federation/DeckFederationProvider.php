@@ -8,6 +8,7 @@
 namespace OCA\Deck\Federation;
 
 use Exception;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
@@ -17,9 +18,11 @@ use OCA\Deck\Service\ConfigService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Common\Exception\NotFoundException;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Federation\ICloudFederationShare;
 use OCP\Federation\ICloudIdManager;
 use OCP\Federation\ISignedCloudFederationProvider;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Notification\IManager as INotificationManager;
 
 class DeckFederationProvider implements ISignedCloudFederationProvider {
@@ -32,13 +35,16 @@ class DeckFederationProvider implements ISignedCloudFederationProvider {
 		private AclMapper $aclMapper,
 		private ChangeHelper $changeHelper,
 		private ConfigService $configService,
+		private IEventDispatcher $eventDispatcher,
 	) {
 	}
 
+	#[\Override]
 	public function getShareType(): string {
 		return self::PROVIDER_ID;
 	}
 
+	#[\Override]
 	public function shareReceived(ICloudFederationShare $share): string {
 		$this->configService->ensureFederationEnabled();
 
@@ -60,6 +66,18 @@ class DeckFederationProvider implements ISignedCloudFederationProvider {
 
 		$this->changeHelper->boardChanged($insertedBoard->getId());
 
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Board %s was shared by "%s" with "%s" from the remote board %s',
+			[
+				'boardId' => $insertedBoard->getId(),
+				'sharedBy' => $share->getSharedBy(),
+				'sharedWith' => $share->getShareWith(),
+				'remoteBoardId' => $share->getProviderId(),
+			],
+			false,
+			Operation::BoardShareReceived->value,
+		));
+
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp('deck');
 		$notification->setUser($share->getShareWith());
@@ -71,6 +89,7 @@ class DeckFederationProvider implements ISignedCloudFederationProvider {
 		return (string)$insertedBoard->getId();
 	}
 
+	#[\Override]
 	public function notificationReceived($notificationType, $providerId, $notification): array {
 		switch ($notificationType) {
 			case 'update-permissions':
@@ -105,6 +124,7 @@ class DeckFederationProvider implements ISignedCloudFederationProvider {
 		return [];
 	}
 
+	#[\Override]
 	public function getSupportedShareTypes(): array {
 		return ['user'];
 	}

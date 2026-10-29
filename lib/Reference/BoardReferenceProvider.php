@@ -35,6 +35,7 @@ class BoardReferenceProvider implements IReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function matchReference(string $referenceText): bool {
 		$start = $this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID);
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
@@ -49,6 +50,7 @@ class BoardReferenceProvider implements IReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
 			$boardId = $this->getBoardId($referenceText);
@@ -105,6 +107,7 @@ class BoardReferenceProvider implements IReferenceProvider {
 		return null;
 	}
 
+	#[\Override]
 	public function getCachePrefix(string $referenceId): string {
 		$boardId = $this->getBoardId($referenceId);
 		if ($boardId !== null) {
@@ -114,6 +117,7 @@ class BoardReferenceProvider implements IReferenceProvider {
 		return $referenceId;
 	}
 
+	#[\Override]
 	public function getCacheKey(string $referenceId): ?string {
 		return $this->userId ?? '';
 	}
