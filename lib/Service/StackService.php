@@ -196,7 +196,7 @@ class StackService {
 		$this->activityManager->triggerEvent(
 			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE, [], $this->permissionService->getUserId()
 		);
-		$this->changeHelper->boardChanged($boardId);
+		$this->changeHelper->stackChanged($stack->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
 
 		return $stack;
@@ -219,7 +219,7 @@ class StackService {
 		$this->activityManager->triggerEvent(
 			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE, [], $this->permissionService->getUserId()
 		);
-		$this->changeHelper->boardChanged($stack->getBoardId());
+		$this->changeHelper->stackChanged($stack->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
 		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
 			'Stack %s of board %s was moved to the trash',
@@ -261,7 +261,7 @@ class StackService {
 		$this->activityManager->triggerUpdateEvents(
 			ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE
 		);
-		$this->changeHelper->boardChanged($stack->getBoardId());
+		$this->changeHelper->stackChanged($stack->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
 		if ($wasDeleted && $stack->getDeletedAt() === 0) {
 			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
@@ -304,6 +304,7 @@ class StackService {
 				$stack->setOrder($i++);
 			}
 			$stack = $this->stackMapper->update($stack);
+			$this->changeHelper->stackChanged($stack->getId(), false, false);
 			$result[$stack->getOrder()] = $stack;
 		}
 		$this->changeHelper->boardChanged($stackToSort->getBoardId());
@@ -346,7 +347,7 @@ class StackService {
 		}
 
 		$this->stackMapper->setIsDoneColumn($stackId, $isDone);
-		$this->changeHelper->boardChanged($boardId);
+		$this->changeHelper->stackChanged($stackId, true);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
 	}
 }
