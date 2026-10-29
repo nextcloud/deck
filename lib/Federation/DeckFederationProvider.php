@@ -39,10 +39,12 @@ class DeckFederationProvider implements ISignedCloudFederationProvider {
 	) {
 	}
 
+	#[\Override]
 	public function getShareType(): string {
 		return self::PROVIDER_ID;
 	}
 
+	#[\Override]
 	public function shareReceived(ICloudFederationShare $share): string {
 		$this->configService->ensureFederationEnabled();
 
@@ -87,6 +89,7 @@ class DeckFederationProvider implements ISignedCloudFederationProvider {
 		return (string)$insertedBoard->getId();
 	}
 
+	#[\Override]
 	public function notificationReceived($notificationType, $providerId, $notification): array {
 		switch ($notificationType) {
 			case 'update-permissions':
@@ -121,6 +124,7 @@ class DeckFederationProvider implements ISignedCloudFederationProvider {
 		return [];
 	}
 
+	#[\Override]
 	public function getSupportedShareTypes(): array {
 		return ['user'];
 	}

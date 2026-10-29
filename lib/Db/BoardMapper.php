@@ -49,6 +49,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
+	#[\Override]
 	public function find(int $id, bool $withLabels = false, bool $withAcl = false, bool $allowDeleted = false): Board {
 		$cacheKey = (string)$id;
 		if (!isset($this->boardCache[$cacheKey])) {
@@ -517,6 +518,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	#[\Override]
 	public function delete(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 		\OCP\AppFramework\Db\Entity $entity): \OCP\AppFramework\Db\Entity {
 		// delete acl
@@ -539,11 +541,13 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return parent::delete($entity);
 	}
 
+	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		$board = $this->find($id);
 		return ($board->getOwner() === $userId);
 	}
 
+	#[\Override]
 	public function findBoardId(int $id): ?int {
 		return $id;
 	}

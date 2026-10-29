@@ -33,10 +33,12 @@ class DeckJsonService extends ABoardImportService {
 	) {
 	}
 
+	#[\Override]
 	public function bootstrap(): void {
 		$this->validateUsers();
 	}
 
+	#[\Override]
 	public function getJsonSchemaPath(): string {
 		return implode(DIRECTORY_SEPARATOR, [
 			__DIR__,
@@ -46,6 +48,7 @@ class DeckJsonService extends ABoardImportService {
 		]);
 	}
 
+	#[\Override]
 	public function validateUsers(): void {
 		$relation = $this->getImportService()->getConfig('uidRelation');
 		if (empty($relation)) {
@@ -72,7 +75,7 @@ class DeckJsonService extends ABoardImportService {
 			return $ownerMap;
 		}
 
-		$uidCandidate = isset($this->members[$uid]) ? $this->members[$uid]?->getUID() ?? null : null;
+		$uidCandidate = isset($this->members[$uid]) ? $this->members[$uid]?->getUID() : null;
 		if ($uidCandidate) {
 			return $uidCandidate;
 		}
@@ -93,6 +96,7 @@ class DeckJsonService extends ABoardImportService {
 		return $uid;
 	}
 
+	#[\Override]
 	public function getCardAssignments(): array {
 		$assignments = [];
 		foreach ($this->tmpCards as $sourceCard) {
@@ -114,6 +118,7 @@ class DeckJsonService extends ABoardImportService {
 	 * Parse comments from source cards and return them as an array of comments by card ID.
 	 *
 	 */
+	#[\Override]
 	public function getComments(): array {
 		$comments = [];
 		foreach ($this->tmpCards as $sourceCard) {
@@ -147,6 +152,7 @@ class DeckJsonService extends ABoardImportService {
 		return $comments;
 	}
 
+	#[\Override]
 	public function importAttachments(): void {
 		foreach ($this->tmpCards as $sourceCard) {
 			$this->importAttachmentsForCard($sourceCard);
@@ -205,6 +211,7 @@ class DeckJsonService extends ABoardImportService {
 		}
 	}
 
+	#[\Override]
 	public function getCardLabelAssignment(): array {
 		$cardsLabels = [];
 		foreach ($this->tmpCards as $sourceCard) {
@@ -219,6 +226,7 @@ class DeckJsonService extends ABoardImportService {
 		return $cardsLabels;
 	}
 
+	#[\Override]
 	public function getBoard(): Board {
 		$board = $this->getImportService()->getBoard();
 		if (empty($this->getImportService()->getData()->title)) {
@@ -237,6 +245,7 @@ class DeckJsonService extends ABoardImportService {
 	/**
 	 * @return Label[]
 	 */
+	#[\Override]
 	public function getLabels(): array {
 		foreach ($this->getImportService()->getData()->labels as $label) {
 			$newLabel = new Label();
@@ -252,6 +261,7 @@ class DeckJsonService extends ABoardImportService {
 	/**
 	 * @return Stack[]
 	 */
+	#[\Override]
 	public function getStacks(): array {
 		$return = [];
 		foreach ($this->getImportService()->getData()->stacks as $index => $source) {
@@ -277,6 +287,7 @@ class DeckJsonService extends ABoardImportService {
 	/**
 	 * @return Card[]
 	 */
+	#[\Override]
 	public function getCards(): array {
 		$cards = [];
 		foreach ($this->tmpCards as $cardSource) {
@@ -303,6 +314,7 @@ class DeckJsonService extends ABoardImportService {
 	/**
 	 * @return Acl[]
 	 */
+	#[\Override]
 	public function getAclList(): array {
 		$board = $this->getImportService()->getData();
 		$return = [];
@@ -332,12 +344,14 @@ class DeckJsonService extends ABoardImportService {
 		return $text;
 	}
 
+	#[\Override]
 	public function getBoards(): array {
 		// Old format has just the raw board data, new one a key boards
 		$data = $this->getImportService()->getData();
 		return array_values((array)($data->boards ?? $data));
 	}
 
+	#[\Override]
 	public function reset(): void {
 		parent::reset();
 		$this->tmpCards = [];

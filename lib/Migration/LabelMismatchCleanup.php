@@ -18,10 +18,12 @@ class LabelMismatchCleanup implements IRepairStep {
 	) {
 	}
 
+	#[\Override]
 	public function getName() {
 		return 'Migrate labels with wrong board mapping';
 	}
 
+	#[\Override]
 	public function run(IOutput $output) {
 		// Find assingments where a label of another (wrong) board is used
 		$qb = $this->db->getQueryBuilder();

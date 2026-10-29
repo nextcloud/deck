@@ -29,6 +29,7 @@ class CardDescriptionActivity extends Job {
 	 * @param $argument
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
+	#[\Override]
 	public function run($argument) {
 		$cards = $this->cardMapper->findUnexposedDescriptionChances();
 		foreach ($cards as $card) {

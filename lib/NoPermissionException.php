@@ -15,6 +15,7 @@ class NoPermissionException extends StatusException {
 		}
 	}
 
+	#[\Override]
 	public function getStatus() {
 		return 403;
 	}

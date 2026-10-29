@@ -31,14 +31,17 @@ class CardCommentProvider implements IProvider {
 		$this->l10n = $l10n;
 	}
 
+	#[\Override]
 	public function getId(): string {
 		return 'search-deck-comment';
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return $this->l10n->t('Card comments');
 	}
 
+	#[\Override]
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		$cursor = $query->getCursor() !== null ? (int)$query->getCursor() : null;
 		$results = $this->searchService->searchComments($query->getTerm(), $query->getLimit(), $cursor);
@@ -56,6 +59,7 @@ class CardCommentProvider implements IProvider {
 		);
 	}
 
+	#[\Override]
 	public function getOrder(string $route, array $routeParameters): int {
 		// Negative value to force showing deck providers on first position if the app is opened
 		// This provider always has an order 1 higher than the default DeckProvider

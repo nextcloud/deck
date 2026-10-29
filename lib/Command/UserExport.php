@@ -34,6 +34,7 @@ class UserExport extends Command {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure() {
 		$this
 			->setName('deck:export')
@@ -50,6 +51,7 @@ class UserExport extends Command {
 	/**
 	 * @throws Exception
 	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$userId = $input->getArgument('user-id');
 		$legacyFormat = $input->getOption('legacy-format');

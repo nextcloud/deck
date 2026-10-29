@@ -31,6 +31,7 @@ class CardDetails extends Card {
 		$this->referenceData = $data;
 	}
 
+	#[\Override]
 	public function jsonSerialize(array $extras = []): array {
 		$array = parent::jsonSerialize();
 		$array['overdue'] = $this->getDueStatus();
@@ -75,10 +76,12 @@ class CardDetails extends Card {
 		$array['board'] = (new BoardSummary($this->board))->jsonSerialize();
 	}
 
+	#[\Override]
 	protected function getter(string $name): mixed {
 		return $this->card->getter($name);
 	}
 
+	#[\Override]
 	public function __call(string $methodName, array $args) {
 		return $this->card->__call($methodName, $args);
 	}

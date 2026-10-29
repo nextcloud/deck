@@ -26,6 +26,7 @@ class TextContextProviderFactory implements IContextFactory {
 	) {
 	}
 
+	#[\Override]
 	public function build(IUser|IShare $auth, string $type, int $id): IContext {
 		return $this->buildForCard($id);
 	}

@@ -42,6 +42,7 @@ class ResourceProvider implements IProvider {
 	 * @return string
 	 * @since 15.0.0
 	 */
+	#[\Override]
 	public function getType(): string {
 		return self::RESOURCE_TYPE;
 	}
@@ -55,6 +56,7 @@ class ResourceProvider implements IProvider {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @since 16.0.0
 	 */
+	#[\Override]
 	public function getResourceRichObject(IResource $resource): array {
 		$board = $this->getBoard($resource);
 		$link = $this->urlGenerator->linkToRoute('deck.page.indexBoard', ['boardId' => $resource->getId()]);
@@ -76,6 +78,7 @@ class ResourceProvider implements IProvider {
 	 * @return bool
 	 * @since 16.0.0
 	 */
+	#[\Override]
 	public function canAccessResource(IResource $resource, ?IUser $user): bool {
 		if ($resource->getType() !== self::RESOURCE_TYPE || !$user instanceof IUser) {
 			return false;

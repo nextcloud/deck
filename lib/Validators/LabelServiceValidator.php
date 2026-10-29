@@ -14,6 +14,7 @@ class LabelServiceValidator extends BaseValidator {
 		return preg_match('/[A-Fa-f0-9]{6}/', $value) === 1;
 	}
 
+	#[\Override]
 	public function rules() {
 		return [
 			'id' => ['numeric'],
