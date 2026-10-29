@@ -39,6 +39,7 @@ class TrelloApiService extends TrelloJsonService {
 		$this->httpClient = $httpClientService->newClient();
 	}
 
+	#[\Override]
 	public function bootstrap(): void {
 		$this->populateBoard();
 		$this->populateMembers();
@@ -50,6 +51,7 @@ class TrelloApiService extends TrelloJsonService {
 		parent::bootstrap();
 	}
 
+	#[\Override]
 	public function getJsonSchemaPath(): string {
 		return implode(DIRECTORY_SEPARATOR, [
 			__DIR__,

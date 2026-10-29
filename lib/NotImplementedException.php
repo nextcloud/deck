@@ -14,6 +14,7 @@ class NotImplementedException extends StatusException {
 		parent::__construct($message);
 	}
 
+	#[\Override]
 	public function getStatus() {
 		return HTTP::STATUS_NOT_IMPLEMENTED;
 	}

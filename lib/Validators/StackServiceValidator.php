@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Deck\Validators;
 
 class StackServiceValidator extends BaseValidator {
+	#[\Override]
 	public function rules() {
 		return [
 			'id' => ['numeric'],

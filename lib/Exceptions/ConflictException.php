@@ -17,6 +17,7 @@ class ConflictException extends StatusException {
 		$this->data = $data;
 	}
 
+	#[\Override]
 	public function getStatus() {
 		return 409;
 	}

@@ -57,6 +57,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	/**
 	 * return unique id of the provider
 	 */
+	#[\Override]
 	public function getId(): string {
 		return self::DECK_PROVIDER_ID;
 	}
@@ -64,6 +65,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	/**
 	 * return name of the provider
 	 */
+	#[\Override]
 	public function getName(): string {
 		return 'Deck';
 	}
@@ -71,6 +73,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	/**
 	 * @return array
 	 */
+	#[\Override]
 	public function getConfiguration(): array {
 		return [];
 	}
@@ -78,6 +81,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	/**
 	 * @param IRunner $runner
 	 */
+	#[\Override]
 	public function setRunner(IRunner $runner) {
 		$this->runner = $runner;
 	}
@@ -85,10 +89,12 @@ class DeckProvider implements IFullTextSearchProvider {
 	/**
 	 * @param IIndexOptions $options
 	 */
+	#[\Override]
 	public function setIndexOptions(IIndexOptions $options) {
 		$this->indexOptions = $options;
 	}
 
+	#[\Override]
 	public function getSearchTemplate(): ISearchTemplate {
 		/** @psalm-var ISearchTemplate */
 		$template = new SearchTemplate('icon-deck', 'deck');
@@ -99,6 +105,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	/**
 	 *
 	 */
+	#[\Override]
 	public function loadProvider() {
 	}
 
@@ -107,6 +114,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 *
 	 * @return string[]
 	 */
+	#[\Override]
 	public function generateChunks(string $userId): array {
 		return [];
 	}
@@ -117,6 +125,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 *
 	 * @return IIndexDocument[]
 	 */
+	#[\Override]
 	public function generateIndexableDocuments(string $userId, string $chunk): array {
 		$cards = $this->fullTextSearchService->getCardsFromUser($userId);
 
@@ -134,6 +143,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 */
+	#[\Override]
 	public function fillIndexDocument(IIndexDocument $document) {
 		$this->fullTextSearchService->fillIndexDocument($document);
 		$this->updateRunnerInfo('info', $document->getTitle());
@@ -144,6 +154,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 *
 	 * @return bool
 	 */
+	#[\Override]
 	public function isDocumentUpToDate(IIndexDocument $document): bool {
 		return false;
 	}
@@ -155,6 +166,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 */
+	#[\Override]
 	public function updateDocument(IIndex $index): IIndexDocument {
 		/** @psalm-var IIndexDocument */
 		$document = new IndexDocument(DeckProvider::DECK_PROVIDER_ID, $index->getDocumentId());
@@ -168,18 +180,21 @@ class DeckProvider implements IFullTextSearchProvider {
 	/**
 	 * @param IFullTextSearchPlatform $platform
 	 */
+	#[\Override]
 	public function onInitializingIndex(IFullTextSearchPlatform $platform) {
 	}
 
 	/**
 	 * @param IFullTextSearchPlatform $platform
 	 */
+	#[\Override]
 	public function onResettingIndex(IFullTextSearchPlatform $platform) {
 	}
 
 	/**
 	 * not used yet
 	 */
+	#[\Override]
 	public function unloadProvider() {
 	}
 
@@ -188,6 +203,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 *
 	 * @param ISearchRequest $request
 	 */
+	#[\Override]
 	public function improveSearchRequest(ISearchRequest $searchRequest) {
 	}
 
@@ -196,6 +212,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 *
 	 * @param ISearchResult $searchResult
 	 */
+	#[\Override]
 	public function improveSearchResult(ISearchResult $searchResult) {
 		foreach ($searchResult->getDocuments() as $document) {
 			try {

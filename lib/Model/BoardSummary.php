@@ -18,6 +18,7 @@ class BoardSummary extends Board {
 		$this->board = $board;
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
@@ -25,10 +26,12 @@ class BoardSummary extends Board {
 		];
 	}
 
+	#[\Override]
 	protected function getter(string $name): mixed {
 		return $this->board->getter($name);
 	}
 
+	#[\Override]
 	public function __call($methodName, $args) {
 		return $this->board->__call($methodName, $args);
 	}

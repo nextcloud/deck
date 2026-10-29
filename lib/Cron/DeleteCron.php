@@ -64,6 +64,7 @@ class DeleteCron extends TimedJob {
 	 * @param $argument
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
+	#[\Override]
 	protected function run($argument) {
 		$timeLimit = time() - $this->configService->getTrashRetention();
 

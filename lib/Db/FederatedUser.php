@@ -25,6 +25,7 @@ class FederatedUser extends RelationalObject {
 		return $this->cloudId->getId();
 	}
 
+	#[\Override]
 	public function getObjectSerialization(): array {
 		return [
 			'uid' => $this->cloudId->getId(),

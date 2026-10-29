@@ -23,18 +23,22 @@ class DeckTeamResourceProvider implements \OCP\Teams\ITeamResourceProvider {
 	) {
 	}
 
+	#[\Override]
 	public function getId(): string {
 		return Application::APP_ID;
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'Deck';
 	}
 
+	#[\Override]
 	public function getIconSvg(): string {
 		return file_get_contents(__DIR__ . '/../../img/deck-current.svg');
 	}
 
+	#[\Override]
 	public function getSharedWith($teamId): array {
 		$boards = $this->boardMapper->findAllByTeam($teamId);
 		return array_map(function (Board $board) {
@@ -49,10 +53,12 @@ class DeckTeamResourceProvider implements \OCP\Teams\ITeamResourceProvider {
 		}, $boards);
 	}
 
+	#[\Override]
 	public function isSharedWithTeam(string $teamId, string $resourceId): bool {
 		return $this->boardMapper->isSharedWithTeam((int)$resourceId, $teamId);
 	}
 
+	#[\Override]
 	public function getTeamsForResource(string $resourceId): array {
 		return $this->boardMapper->findTeamsForBoard((int)$resourceId);
 	}

@@ -33,6 +33,7 @@ final class TransferOwnership extends Command {
 		$this->questionHelper = $questionHelper;
 	}
 
+	#[\Override]
 	protected function configure() {
 		$this
 			->setName('deck:transfer-ownership')
@@ -61,6 +62,7 @@ final class TransferOwnership extends Command {
 		;
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$owner = $input->getArgument('owner');
 		$newOwner = $input->getArgument('newOwner');

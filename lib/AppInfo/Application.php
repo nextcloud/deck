@@ -106,6 +106,7 @@ class Application extends App implements IBootstrap {
 		});
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
 		$context->injectFn($this->registerCommentsEntity(...));
 		$context->injectFn($this->registerCollaborationResources(...));
@@ -126,6 +127,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn([$this, 'registerCloudFederationProviderManager']);
 	}
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		if ((@include_once __DIR__ . '/../../vendor/autoload.php') === false) {
 			throw new Exception('Cannot include autoload. Did you run install dependencies using composer?');

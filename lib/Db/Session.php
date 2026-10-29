@@ -23,6 +23,7 @@ class Session extends Entity implements \JsonSerializable {
 		$this->addType('lastContact', 'integer');
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,

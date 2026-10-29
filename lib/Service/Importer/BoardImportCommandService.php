@@ -59,6 +59,7 @@ class BoardImportCommandService extends BoardImportService {
 		return $this->output;
 	}
 
+	#[\Override]
 	protected function validateConfig(): void {
 		try {
 			$config = $this->getInput()->getOption('config');
@@ -108,6 +109,7 @@ class BoardImportCommandService extends BoardImportService {
 		$this->validateConfig();
 	}
 
+	#[\Override]
 	public function validateSystem(): void {
 		try {
 			parent::validateSystem();
@@ -129,6 +131,7 @@ class BoardImportCommandService extends BoardImportService {
 		return;
 	}
 
+	#[\Override]
 	protected function validateData(): void {
 		if (!$this->getImportSystem()->needValidateData()) {
 			return;
@@ -171,6 +174,7 @@ class BoardImportCommandService extends BoardImportService {
 		$this->validateData();
 	}
 
+	#[\Override]
 	public function bootstrap(): void {
 		$this->setSystem($this->getInput()->getOption('system'));
 		parent::bootstrap();
@@ -193,6 +197,7 @@ class BoardImportCommandService extends BoardImportService {
 		});
 	}
 
+	#[\Override]
 	public function import(): void {
 		$this->getOutput()->writeln('Starting import...');
 		$this->bootstrap();

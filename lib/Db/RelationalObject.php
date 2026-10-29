@@ -24,6 +24,7 @@ class RelationalObject implements JsonSerializable {
 		$this->object = $object;
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		return array_merge(
 			['primaryKey' => $this->primaryKey],
