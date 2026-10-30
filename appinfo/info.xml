@@ -47,6 +47,7 @@
         </live-migration>
     </repair-steps>
     <commands>
+t	<command>OCA\Deck\Command\ArchiveOldCards</command>
         <command>OCA\Deck\Command\UserExport</command>
         <command>OCA\Deck\Command\BoardImport</command>
         <command>OCA\Deck\Command\TransferOwnership</command>
