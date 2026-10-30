@@ -65,6 +65,8 @@ class CardApiController extends ApiController {
 	 * @params $type
 	 * @params $order
 	 * @params $description
+	 * @param string|null $duedate Due date, see docs/API.md#date for accepted formats, null or empty string to unset
+	 * @param string|null $startdate Start date, see docs/API.md#date for accepted formats, null or empty string to unset
 	 *
 	 * Get a specific card.
 	 */
@@ -84,6 +86,9 @@ class CardApiController extends ApiController {
 
 	/**
 	 * Update a card
+	 *
+	 * @param string|null $duedate Due date, see docs/API.md#date for accepted formats, null or empty string to unset
+	 * @param string|null $startdate Start date, see docs/API.md#date for accepted formats, null or empty string to unset
 	 */
 	#[NoAdminRequired]
 	#[CORS]

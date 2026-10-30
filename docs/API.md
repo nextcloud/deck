@@ -48,7 +48,19 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 
 ### Date
 
-Datetime values in request data need to be provided in ISO-8601. Example: 2020-01-20T09:52:43+00:00
+Datetime values in request data (`duedate`, `startdate`, `done`) need to be provided in one of the following formats:
+
+| Format                                    | Example                                                        |
+|-------------------------------------------|----------------------------------------------------------------|
+| RFC 3339 / ISO-8601 with timezone         | `2020-01-20T09:52:43+00:00`, `2020-01-20T09:52:43Z`             |
+| … with optional seconds and fraction (up to 9 digits) | `2020-01-20T09:52Z`, `2020-01-20T09:52:43.123456789+01:00` |
+| Date only                                 | `2020-01-20`                                                   |
+| Date and time without timezone            | `2020-01-20 09:52:43`                                          |
+
+Values without a timezone are interpreted in the server's timezone, so providing a timezone is recommended.
+`null` or an empty string unsets the value. Any other value is rejected with `400 Bad Request`, e.g. `duedate must be datetime`.
+
+Since Deck 2.0 these values are validated. Before that, anything PHP's `DateTime` could parse was accepted, including relative values like `+1 day` and ISO-8601 values without a timezone like `2020-01-20T09:52`.
 
 ## Headers
 
@@ -633,7 +645,8 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | type      | String  | Type of the card (for later use) use 'plain' for now |
 | order     | Integer | Order for sorting the stacks                         |
 | description | String  | _(optional)_ The markdown description of the card  |
-| duedate   | timestamp | _(optional)_ The duedate of the card or null       |
+| duedate   | timestamp | _(optional)_ The duedate of the card or null, see [Date](#date) for accepted formats |
+| startdate | timestamp | _(optional)_ The start date of the card or null, see [Date](#date) for accepted formats |
 
 #### Response
 
@@ -682,9 +695,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | type        | String          | Type of the card (for later use) use 'plain' for now                                                |
 | owner       | String          | The user that owns the card                                                                         |
 | order       | Integer         | Order for sorting the stacks                                                                        |
-| duedate     | timestamp       | The ISO-8601 formatted duedate of the card or null                                                  |
+| duedate     | timestamp       | The duedate of the card or null, see [Date](#date) for accepted formats                             |
+| startdate   | timestamp       | _(optional)_ The start date of the card or null, see [Date](#date) for accepted formats              |
 | archived    | bool            | Whether the card is archived or not                                                                 |
-| done        | timestamp\|null | The ISO-8601 formatted date when the card is marked as done (optional, null indicates undone state) |
+| done        | timestamp\|null | The date when the card is marked as done (optional, null indicates undone state), see [Date](#date) |
 
 
 ```

@@ -40,6 +40,10 @@ class CardOcsController extends OCSController {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * @param string|null $duedate Due date, see docs/API.md#date for accepted formats, null or empty string to unset
+	 * @param string|null $startdate Start date, see docs/API.md#date for accepted formats, null or empty string to unset
+	 */
 	#[NoAdminRequired]
 	#[PublicPage]
 	public function create(string $title, int $stackId, ?int $boardId = null, ?string $type = 'plain', ?string $owner = null, ?int $order = self::DEFAULT_ORDER, ?string $description = '', $duedate = null, $startdate = null, ?array $labels = [], ?array $users = [], ?string $color = null) {
@@ -118,6 +122,10 @@ class CardOcsController extends OCSController {
 		return new DataResponse($this->cardService->removeLabel($cardId, $labelId));
 	}
 
+	/**
+	 * @param string|null $duedate Due date, see docs/API.md#date for accepted formats, null or empty string to unset
+	 * @param string|null $startdate Start date, see docs/API.md#date for accepted formats, null or empty string to unset
+	 */
 	#[NoAdminRequired]
 	#[PublicPage]
 	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, ?int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
