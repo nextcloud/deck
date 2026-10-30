@@ -158,6 +158,13 @@ class BoardImporterTest extends \Test\TestCase {
 		$this->assertCount(2, Server::get(LabelMapper::class)->findAll($first['board_id']), 'no default labels');
 		$this->assertCount(2, Server::get(StackMapper::class)->findAll($first['board_id']));
 
+		$qb = $this->db->getQueryBuilder();
+		$qb->update('deck_boards')
+			->set('last_modified', $qb->createNamedParameter(1000, IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($first['board_id'], IQueryBuilder::PARAM_INT)))
+			->executeStatement();
+		Server::get(BoardMapper::class)->flushCache();
+
 		$again = $this->ensureBoard();
 		$this->assertFalse($again['created']);
 		$this->assertSame($first['board_id'], $again['board_id']);
@@ -165,6 +172,7 @@ class BoardImporterTest extends \Test\TestCase {
 		$this->assertSame($first['stacks'], $again['stacks']);
 		$this->assertSame([], $again['changed']);
 		$this->assertCount(2, Server::get(LabelMapper::class)->findAll($first['board_id']));
+		$this->assertSame(1000, Server::get(BoardMapper::class)->find($first['board_id'])->getLastModified(), 'a repeat writes nothing');
 	}
 
 	public function testEnsureBoardUpdatesWhatNobodyChangedAndKeepsDeckChanges(): void {
@@ -262,14 +270,14 @@ class BoardImporterTest extends \Test\TestCase {
 			->set('last_modified', $qb->createNamedParameter(1000, IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($first->cardId, IQueryBuilder::PARAM_INT)))
 			->executeStatement();
-		$rows = $this->rowCounts(['deck_cards', 'deck_assigned_users', 'deck_assigned_labels', 'share', 'deck_import_refs']);
+		$rows = $this->rowCounts(['deck_cards', 'deck_assigned_users', 'deck_assigned_labels', 'deck_import_refs']) + ['attachments' => $this->deckShareCount()];
 
 		[$second] = $this->importer->importCards(self::APP, $board['board_id'], [$card]);
 
 		$this->assertSame(ImportResult::STATUS_OK, $second->status);
 		$this->assertSame($first->cardId, $second->cardId);
 		$this->assertSame($first->sha256, $second->sha256);
-		$this->assertSame($rows, $this->rowCounts(['deck_cards', 'deck_assigned_users', 'deck_assigned_labels', 'share', 'deck_import_refs']));
+		$this->assertSame($rows, $this->rowCounts(['deck_cards', 'deck_assigned_users', 'deck_assigned_labels', 'deck_import_refs']) + ['attachments' => $this->deckShareCount()]);
 		$this->assertSame(1000, $this->cardMapper->find($first->cardId, false)->getLastModified(), 'the card was not written again');
 	}
 
@@ -340,6 +348,32 @@ class BoardImporterTest extends \Test\TestCase {
 		$this->assertSame(0, $this->cardMapper->find($first->cardId, false)->getDeletedAt());
 	}
 
+	public function testUnfinishedWriteIsCompletedByARepeat(): void {
+		$board = $this->ensureBoard();
+		$card = $this->card('task-1', ['files' => [$this->fileId]]);
+		[$first] = $this->importer->importCards(self::APP, $board['board_id'], [$card]);
+		// A write that stopped before its attachments: no source hash, no share
+		$qb = $this->db->getQueryBuilder();
+		$qb->update('deck_import_refs')
+			->set('source_hash', $qb->createNamedParameter(null))
+			->where($qb->expr()->eq('object_id', $qb->createNamedParameter($first->cardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('kind', $qb->createNamedParameter('card')))
+			->executeStatement();
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('share')
+			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_DECK, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('share_with', $qb->createNamedParameter((string)$first->cardId)))
+			->executeStatement();
+
+		[$stat] = $this->importer->statCards(self::APP, $board['board_id'], ['task-1'], true);
+		$this->assertFalse($stat->changed);
+		[$repeat] = $this->importer->importCards(self::APP, $board['board_id'], [$card]);
+
+		$this->assertSame(ImportResult::STATUS_OK, $repeat->status, (string)$repeat->errorMessage);
+		$this->assertSame($card->sha256, $repeat->sha256);
+		$this->assertCount(1, $this->deckShares($first->cardId));
+	}
+
 	public function testUnchangedCardStatsWithoutHash(): void {
 		$board = $this->ensureBoard();
 		[$first] = $this->importer->importCards(self::APP, $board['board_id'], [$this->card('task-1')]);
@@ -391,7 +425,7 @@ class BoardImporterTest extends \Test\TestCase {
 
 	public function testInvalidCardsAreRefusedAndWriteNothing(): void {
 		$board = $this->ensureBoard();
-		$rows = $this->rowCounts(['deck_cards', 'deck_import_refs', 'share']);
+		$rows = $this->rowCounts(['deck_cards', 'deck_import_refs']) + ['attachments' => $this->deckShareCount()];
 
 		$results = $this->importer->importCards(self::APP, $board['board_id'], [
 			$this->card('a', ['stackRef' => 'bucket-unknown']),
@@ -416,7 +450,7 @@ class BoardImporterTest extends \Test\TestCase {
 			ImportResult::ERROR_INVALID,
 			ImportResult::ERROR_INVALID,
 		], array_map(fn (ImportResult $r) => $r->errorCode, $results));
-		$this->assertSame($rows, $this->rowCounts(['deck_cards', 'deck_import_refs', 'share']), 'a failed card leaves nothing behind');
+		$this->assertSame($rows, $this->rowCounts(['deck_cards', 'deck_import_refs']) + ['attachments' => $this->deckShareCount()], 'a failed card leaves nothing behind');
 	}
 
 	public function testBoardsOfOthersAreRefused(): void {
@@ -479,6 +513,13 @@ class BoardImporterTest extends \Test\TestCase {
 		$this->assertTrue($acl(Acl::PERMISSION_TYPE_GROUP, self::GROUP)->getPermissionShare());
 		$this->assertNull($acl(Acl::PERMISSION_TYPE_USER, self::ALICE));
 		$this->assertNotNull($acl(Acl::PERMISSION_TYPE_USER, self::CAROL), 'a share somebody else made stays');
+
+		$aclMapper->delete($acl(Acl::PERMISSION_TYPE_GROUP, self::GROUP));
+		$results = $this->importer->setAccess(self::APP, $board['board_id'], [
+			new ImportAccess(ImportAccess::TYPE_GROUP, self::GROUP, true, true, false),
+		]);
+		$this->assertSame(ImportResult::ERROR_CHANGED, $results[0]->errorCode, 'a share removed in Deck is not made again');
+		$this->assertNull($acl(Acl::PERMISSION_TYPE_GROUP, self::GROUP));
 	}
 
 	/**
@@ -596,6 +637,17 @@ class BoardImporterTest extends \Test\TestCase {
 			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_DECK, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('share_with', $qb->createNamedParameter((string)$cardId)));
 		return $qb->executeQuery()->fetchAll();
+	}
+
+	/**
+	 * Card attachments; the per-user shares Deck adds when somebody's files are set up are not counted
+	 */
+	private function deckShareCount(): int {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select($qb->func()->count('*'))
+			->from('share')
+			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_DECK, IQueryBuilder::PARAM_INT)));
+		return (int)$qb->executeQuery()->fetchOne();
 	}
 
 	/**

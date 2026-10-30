@@ -44,12 +44,14 @@ use OCP\DB\Exception as DbException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OCP\Share\IManager as IShareManager;
 use OCP\Share\IShare;
+use Psr\Log\LoggerInterface;
 
 /**
  * The board import API, written on Deck's mappers
@@ -68,6 +70,8 @@ class BoardImporter implements IBoardImporter {
 	private const MAX_STACK_TITLE = 100;
 	private const MAX_LABEL_TITLE = 100;
 	private const MAX_LIST_LIMIT = 1000;
+	/** Deck's IDs are 32-bit integers */
+	private const MAX_DECK_ID = 2147483647;
 
 	public function __construct(
 		private IDBConnection $db,
@@ -90,6 +94,7 @@ class BoardImporter implements IBoardImporter {
 		private ResourceListener $resources,
 		private IEventDispatcher $eventDispatcher,
 		private ITimeFactory $timeFactory,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -118,10 +123,23 @@ class BoardImporter implements IBoardImporter {
 			];
 		}
 
-		return $this->retryOnUniqueViolation(fn () => $this->atomic(
+		$result = $this->retryOnUniqueViolation(fn () => $this->atomic(
 			fn () => $this->writeBoard($app, $ref, $ownerUid, $title, $color, $labels, $stacks),
 			$this->db,
 		));
+		if ($result['created']) {
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+				'Board %s of "%s" was imported by %s',
+				[
+					'boardId' => $result['board_id'],
+					'owner' => $ownerUid,
+					'importSystem' => $app,
+				],
+				false,
+				Operation::BoardImported->value,
+			));
+		}
+		return $result;
 	}
 
 	/**
@@ -133,6 +151,7 @@ class BoardImporter implements IBoardImporter {
 		$now = $this->timeFactory->getTime();
 		$changed = [];
 		$created = false;
+		$wrote = false;
 		$boardRef = $this->refMapper->findByRef($app, ImportRef::KIND_BOARD, 0, $ref);
 		if ($boardRef === null) {
 			$board = new Board();
@@ -145,6 +164,7 @@ class BoardImporter implements IBoardImporter {
 			$board = $this->boardMapper->insert($board);
 			$this->insertRef($app, ImportRef::KIND_BOARD, 0, $ref, $board->getId(), self::valuesHash($title, $color));
 			$created = true;
+			$wrote = true;
 		} else {
 			try {
 				$board = $this->boardMapper->find($boardRef->getObjectId(), false, false, true);
@@ -171,26 +191,17 @@ class BoardImporter implements IBoardImporter {
 				$board->setLastModified($now);
 				$this->boardMapper->update($board);
 				$this->updateRef($boardRef, self::valuesHash($title, $color));
+				$wrote = true;
 			}
 		}
 		$boardId = $board->getId();
 
-		[$labelIds, $labelsChanged] = $this->ensureLabels($app, $boardId, $labels);
-		[$stackIds, $stacksChanged] = $this->ensureStacks($app, $boardId, $stacks);
+		[$labelIds, $labelsChanged, $labelsWritten] = $this->ensureLabels($app, $boardId, $labels);
+		[$stackIds, $stacksChanged, $stacksWritten] = $this->ensureStacks($app, $boardId, $stacks);
 
-		$this->boardMapper->flushCache($boardId);
-		$this->changeHelper->boardChanged($boardId);
-		if ($created) {
-			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
-				'Board %s of "%s" was imported by %s',
-				[
-					'boardId' => $boardId,
-					'owner' => $ownerUid,
-					'importSystem' => $app,
-				],
-				false,
-				Operation::BoardImported->value,
-			));
+		if ($wrote || $labelsWritten || $stacksWritten) {
+			$this->boardMapper->flushCache($boardId);
+			$this->changeHelper->boardChanged($boardId);
 		}
 
 		return [
@@ -205,7 +216,7 @@ class BoardImporter implements IBoardImporter {
 
 	/**
 	 * @param list<ImportLabel> $labels
-	 * @return array{0: array<string, int>, 1: list<string>} the label IDs by ref and the refs whose Deck version was kept
+	 * @return array{0: array<string, int>, 1: list<string>, 2: bool} the label IDs by ref, the refs whose Deck version was kept and whether a label was written
 	 */
 	private function ensureLabels(string $app, int $boardId, array $labels): array {
 		$refs = $this->refMapper->findByRefs($app, ImportRef::KIND_LABEL, $boardId, array_map(fn (ImportLabel $label) => $label->ref, $labels));
@@ -216,6 +227,7 @@ class BoardImporter implements IBoardImporter {
 
 		$ids = [];
 		$changed = [];
+		$wrote = false;
 		foreach ($labels as $wanted) {
 			$labelRef = $refs[$wanted->ref] ?? null;
 			if ($labelRef === null) {
@@ -231,6 +243,7 @@ class BoardImporter implements IBoardImporter {
 					$this->insertRef($app, ImportRef::KIND_LABEL, $boardId, $wanted->ref, $adopted->getId(), '');
 					$ids[$wanted->ref] = $adopted->getId();
 					$changed[] = $wanted->ref;
+					$wrote = true;
 					continue;
 				}
 				$label = new Label();
@@ -241,6 +254,7 @@ class BoardImporter implements IBoardImporter {
 				$existing[$label->getId()] = $label;
 				$this->insertRef($app, ImportRef::KIND_LABEL, $boardId, $wanted->ref, $label->getId(), self::valuesHash($wanted->title, $wanted->color));
 				$ids[$wanted->ref] = $label->getId();
+				$wrote = true;
 				continue;
 			}
 
@@ -260,14 +274,15 @@ class BoardImporter implements IBoardImporter {
 				$label->setColor($wanted->color);
 				$this->labelMapper->update($label);
 				$this->updateRef($labelRef, $next);
+				$wrote = true;
 			}
 		}
-		return [$ids, $changed];
+		return [$ids, $changed, $wrote];
 	}
 
 	/**
 	 * @param list<ImportStack> $stacks
-	 * @return array{0: array<string, int>, 1: list<string>} the stack IDs by ref and the refs whose Deck version was kept
+	 * @return array{0: array<string, int>, 1: list<string>, 2: bool} the stack IDs by ref, the refs whose Deck version was kept and whether a stack was written
 	 */
 	private function ensureStacks(string $app, int $boardId, array $stacks): array {
 		$refs = $this->refMapper->findByRefs($app, ImportRef::KIND_STACK, $boardId, array_map(fn (ImportStack $stack) => $stack->ref, $stacks));
@@ -278,6 +293,7 @@ class BoardImporter implements IBoardImporter {
 
 		$ids = [];
 		$changed = [];
+		$wrote = false;
 		foreach ($stacks as $wanted) {
 			$stackRef = $refs[$wanted->ref] ?? null;
 			if ($stackRef === null) {
@@ -289,6 +305,7 @@ class BoardImporter implements IBoardImporter {
 				$stack = $this->stackMapper->insert($stack);
 				$this->insertRef($app, ImportRef::KIND_STACK, $boardId, $wanted->ref, $stack->getId(), self::valuesHash($wanted->title, $wanted->order));
 				$ids[$wanted->ref] = $stack->getId();
+				$wrote = true;
 				continue;
 			}
 
@@ -308,9 +325,10 @@ class BoardImporter implements IBoardImporter {
 				$stack->setLastModified($this->timeFactory->getTime());
 				$this->stackMapper->update($stack);
 				$this->updateRef($stackRef, $next);
+				$wrote = true;
 			}
 		}
-		return [$ids, $changed];
+		return [$ids, $changed, $wrote];
 	}
 
 	#[\Override]
@@ -324,15 +342,52 @@ class BoardImporter implements IBoardImporter {
 					throw EntryException::error(ImportResult::ERROR_INVALID, 'Not a card');
 				}
 				$this->checkCard($card, $context, $seen);
-				$results[] = $this->retryOnUniqueViolation(fn () => $this->atomic(
-					fn () => $this->writeCard($app, $context, $card),
-					$this->db,
-				));
+				$results[] = $this->importCard($app, $context, $card);
 			} catch (EntryException $e) {
 				$results[] = $e->result;
 			}
 		}
 		return $results;
+	}
+
+	/**
+	 * Writes the card with its labels and assignments in one transaction,
+	 * then its attachments: sharing a file runs the server's share and
+	 * mount listeners, which must not run inside a transaction (a failed
+	 * statement they recover from aborts it on PostgreSQL). Until the
+	 * attachments are written the reference has no source hash, so a
+	 * repeat completes the card.
+	 *
+	 * @throws EntryException
+	 */
+	private function importCard(string $app, BoardContext $context, ImportCard $card): ImportResult {
+		$cardRef = $this->refMapper->findByRef($app, ImportRef::KIND_CARD, $context->board->getId(), $card->ref);
+		$attached = $cardRef === null ? [] : $this->cardFiles($cardRef->getObjectId());
+		$files = $this->resolveFiles($context->board, array_values(array_diff($card->files, array_keys($attached))));
+
+		$write = $this->retryOnUniqueViolation(fn () => $this->atomic(
+			fn () => $this->writeCard($app, $context, $card),
+			$this->db,
+		));
+		if ($write instanceof ImportResult) {
+			return $write;
+		}
+		[$entity, $cardRef, $created] = $write;
+		$cardId = $entity->getId();
+
+		try {
+			$this->writeFiles($context->board, $cardId, $card->files, $files);
+		} catch (EntryException $e) {
+			$stored = $this->storedHash($context, $card->ref, $this->cardMapper->find($cardId, false));
+			$this->updateRef($cardRef, $stored);
+			throw new EntryException(new ImportResult(ImportResult::STATUS_ERROR, $cardId, $stored, $e->result->errorCode, $e->result->errorMessage));
+		}
+
+		$stored = $this->storedHash($context, $card->ref, $this->cardMapper->find($cardId, false));
+		$this->updateRef($cardRef, $stored, $card->sha256);
+		$this->changeHelper->cardChanged($cardId, false);
+		$this->fullTextSearch->handle($created ? new CardCreatedEvent($entity) : new CardUpdatedEvent($entity));
+		return ImportResult::ok($cardId, $stored);
 	}
 
 	/**
@@ -374,9 +429,12 @@ class BoardImporter implements IBoardImporter {
 	}
 
 	/**
+	 * Writes the card, its labels and assignments, or answers without a write
+	 *
+	 * @return ImportResult|array{0: Card, 1: ImportRef, 2: bool} the result, or the written card, its reference and whether it is new
 	 * @throws EntryException
 	 */
-	private function writeCard(string $app, BoardContext $context, ImportCard $card): ImportResult {
+	private function writeCard(string $app, BoardContext $context, ImportCard $card): ImportResult|array {
 		$boardId = $context->board->getId();
 		$cardRef = $this->refMapper->findByRef($app, ImportRef::KIND_CARD, $boardId, $card->ref);
 		if ($cardRef === null) {
@@ -385,11 +443,8 @@ class BoardImporter implements IBoardImporter {
 			}
 			$entity = $this->insertCard($context, $card);
 			$cardRef = $this->insertRef($app, ImportRef::KIND_CARD, $boardId, $card->ref, $entity->getId(), null);
-			$this->writeRelations($context, $entity->getId(), $card);
-			$stored = $this->storedHash($context, $card->ref, $this->cardMapper->find($entity->getId(), false));
-			$this->updateRef($cardRef, $stored, $card->sha256);
-			$this->cardWritten($entity, true);
-			return ImportResult::ok($entity->getId(), $stored);
+			$this->writeLabelsAndAssignees($context, $entity->getId(), $card);
+			return [$entity, $cardRef, true];
 		}
 
 		$entity = $this->findCard($cardRef->getObjectId());
@@ -409,18 +464,18 @@ class BoardImporter implements IBoardImporter {
 			if ($card->sha256 === $cardRef->getSourceHash()) {
 				return ImportResult::ok($entity->getId(), $current);
 			}
-			if ($card->mode === ImportCard::MODE_CREATE) {
+			if ($card->mode === ImportCard::MODE_CREATE && $cardRef->getSourceHash() !== null) {
 				throw EntryException::conflict(ImportResult::ERROR_EXISTS, 'The card exists with other content', $entity->getId(), $current);
 			}
 		}
 
 		$this->updateCard($context, $entity, $card);
-		$this->writeRelations($context, $entity->getId(), $card);
-		$stored = $this->storedHash($context, $card->ref, $this->cardMapper->find($entity->getId(), false));
+		$this->writeLabelsAndAssignees($context, $entity->getId(), $card);
 		$cardRef->setState(ImportRef::STATE_ACTIVE);
-		$this->updateRef($cardRef, $stored, $card->sha256);
-		$this->cardWritten($entity, false);
-		return ImportResult::ok($entity->getId(), $stored);
+		$cardRef->setSourceHash(null);
+		$cardRef->setUpdatedAt($this->timeFactory->getTime());
+		$this->refMapper->update($cardRef);
+		return [$entity, $cardRef, false];
 	}
 
 	private function insertCard(BoardContext $context, ImportCard $card): Card {
@@ -469,12 +524,7 @@ class BoardImporter implements IBoardImporter {
 		}
 	}
 
-	/**
-	 * Labels, assignments and file attachments
-	 *
-	 * @throws EntryException
-	 */
-	private function writeRelations(BoardContext $context, int $cardId, ImportCard $card): void {
+	private function writeLabelsAndAssignees(BoardContext $context, int $cardId, ImportCard $card): void {
 		$wantedLabels = array_map(fn (string $ref) => $context->labelIds[$ref], $card->labels);
 		$currentLabels = array_map(fn (Label $label) => $label->getId(), $this->labelMapper->findAssignedLabelsForCard($cardId));
 		foreach (array_diff($wantedLabels, $currentLabels) as $labelId) {
@@ -502,45 +552,76 @@ class BoardImporter implements IBoardImporter {
 		foreach ($currentAssignments as $assignment) {
 			$this->assignmentMapper->delete($assignment);
 		}
+	}
 
-		$currentFiles = $this->cardFiles($cardId);
-		foreach ($card->files as $fileId) {
-			if (isset($currentFiles[$fileId])) {
-				unset($currentFiles[$fileId]);
-				continue;
+	/**
+	 * Finds each file and the user who shares it with a card: its owner,
+	 * or the board owner for a file without one when they can see it
+	 *
+	 * @param list<int> $fileIds
+	 * @return array<int, array{0: Node, 1: string}> the file in the sharer's view and the sharer, by file ID
+	 * @throws EntryException
+	 */
+	private function resolveFiles(Board $board, array $fileIds): array {
+		$files = [];
+		foreach ($fileIds as $fileId) {
+			$sharer = null;
+			$node = null;
+			try {
+				$sharer = $this->rootFolder->getFirstNodeById($fileId)?->getOwner()?->getUID();
+				$node = $sharer === null ? null : $this->rootFolder->getUserFolder($sharer)->getFirstNodeById($fileId);
+				if ($node === null) {
+					$sharer = $board->getOwner();
+					$node = $this->rootFolder->getUserFolder($sharer)->getFirstNodeById($fileId);
+				}
+			} catch (\Exception) {
+				$node = null;
 			}
-			$this->attachFile($context->board, $cardId, $fileId);
+			if ($node === null || $sharer === null) {
+				throw EntryException::error(ImportResult::ERROR_FILE_UNAVAILABLE, 'File ' . $fileId . ' was not found');
+			}
+			if (!$node->isShareable()) {
+				throw EntryException::error(ImportResult::ERROR_FILE_UNAVAILABLE, 'File ' . $fileId . ' may not be shared');
+			}
+			$files[$fileId] = [$node, $sharer];
 		}
-		foreach ($currentFiles as $shareId) {
-			$this->shareManager->deleteShare($this->shareProvider->getShareById((string)$shareId));
+		return $files;
+	}
+
+	/**
+	 * Makes $fileIds the card's file attachments
+	 *
+	 * @param list<int> $fileIds
+	 * @param array<int, array{0: Node, 1: string}> $resolved the files that weren't attached yet
+	 * @throws EntryException
+	 */
+	private function writeFiles(Board $board, int $cardId, array $fileIds, array $resolved): void {
+		$attached = $this->cardFiles($cardId);
+		foreach ($fileIds as $fileId) {
+			if (!isset($attached[$fileId])) {
+				[$node, $sharer] = $resolved[$fileId] ?? $this->resolveFiles($board, [$fileId])[$fileId];
+				$this->attachFile($board, $cardId, $fileId, $node, $sharer);
+			}
+		}
+		foreach (array_diff_key($attached, array_flip($fileIds)) as $fileId => $shareId) {
+			try {
+				$this->shareManager->deleteShare($this->shareProvider->getShareById((string)$shareId));
+			} catch (\Exception $e) {
+				$this->logger->info('Imported file attachment could not be removed', ['exception' => $e, 'fileId' => $fileId, 'cardId' => $cardId]);
+				throw EntryException::error(ImportResult::ERROR_FILE_UNAVAILABLE, 'File ' . $fileId . ' could not be detached');
+			}
 		}
 	}
 
 	/**
-	 * Shares an existing file with the card as its owner, which makes it a
-	 * Deck attachment of type `file`
+	 * Shares an existing file with the card, which makes it a Deck
+	 * attachment of type `file`
 	 *
 	 * @throws EntryException
 	 */
-	private function attachFile(Board $board, int $cardId, int $fileId): void {
-		try {
-			$node = $this->rootFolder->getFirstNodeById($fileId);
-			$sharer = $node?->getOwner()?->getUID();
-			$userNode = $sharer === null ? null : $this->rootFolder->getUserFolder($sharer)->getFirstNodeById($fileId);
-			if ($userNode === null) {
-				// A file without an owner is shared by the board owner when they can see it
-				$sharer = $board->getOwner();
-				$userNode = $this->rootFolder->getUserFolder($sharer)->getFirstNodeById($fileId);
-			}
-		} catch (\Exception) {
-			$userNode = null;
-		}
-		if ($userNode === null || $sharer === null) {
-			throw EntryException::error(ImportResult::ERROR_FILE_UNAVAILABLE, 'File ' . $fileId . ' was not found');
-		}
-
+	private function attachFile(Board $board, int $cardId, int $fileId, Node $node, string $sharer): void {
 		$share = $this->shareManager->newShare();
-		$share->setNode($userNode);
+		$share->setNode($node);
 		$share->setShareType(IShare::TYPE_DECK);
 		$share->setSharedWith((string)$cardId);
 		$share->setPermissions(Constants::PERMISSION_READ);
@@ -553,7 +634,8 @@ class BoardImporter implements IBoardImporter {
 		try {
 			$this->shareManager->createShare($share);
 		} catch (\Exception $e) {
-			throw EntryException::error(ImportResult::ERROR_FILE_UNAVAILABLE, 'File ' . $fileId . ' could not be shared: ' . $e->getMessage());
+			$this->logger->info('Imported file attachment could not be shared', ['exception' => $e, 'fileId' => $fileId, 'cardId' => $cardId]);
+			throw EntryException::error(ImportResult::ERROR_FILE_UNAVAILABLE, 'File ' . $fileId . ' could not be shared');
 		} finally {
 			$this->permissionService->setUserId($previousUser);
 		}
@@ -607,13 +689,15 @@ class BoardImporter implements IBoardImporter {
 		);
 	}
 
+	/**
+	 * Whether somebody changed, archived or deleted a card since the importer wrote it
+	 */
 	private function changedInDeck(Card $card, string $currentHash, ImportRef $cardRef): bool {
-		return $currentHash !== $cardRef->getStoredHash() || $card->getArchived() || $card->getDeletedAt() > 0;
-	}
-
-	private function cardWritten(Card $card, bool $created): void {
-		$this->changeHelper->cardChanged($card->getId(), false);
-		$this->fullTextSearch->handle($created ? new CardCreatedEvent($card) : new CardUpdatedEvent($card));
+		if ($card->getArchived() || $card->getDeletedAt() > 0) {
+			return true;
+		}
+		// A write the importer didn't finish differs from its last hash by design
+		return $cardRef->getSourceHash() !== null && $currentHash !== $cardRef->getStoredHash();
 	}
 
 	#[\Override]
@@ -669,7 +753,11 @@ class BoardImporter implements IBoardImporter {
 		$results = [];
 		foreach ($refs as $ref) {
 			try {
-				$results[] = $this->atomic(fn () => $this->removeCard($app, $context, $ref), $this->db);
+				[$result, $removed] = $this->atomic(fn () => $this->removeCard($app, $context, $ref), $this->db);
+				if ($removed !== null) {
+					$this->fullTextSearch->handle(new CardDeletedEvent($removed));
+				}
+				$results[] = $result;
 			} catch (EntryException $e) {
 				$results[] = $e->result;
 			}
@@ -678,15 +766,16 @@ class BoardImporter implements IBoardImporter {
 	}
 
 	/**
+	 * @return array{0: ImportResult, 1: ?Card} the result and the card this call removed
 	 * @throws EntryException
 	 */
-	private function removeCard(string $app, BoardContext $context, string $ref): ImportResult {
+	private function removeCard(string $app, BoardContext $context, string $ref): array {
 		$cardRef = $this->refMapper->findByRef($app, ImportRef::KIND_CARD, $context->board->getId(), $ref);
 		if ($cardRef === null) {
 			throw EntryException::error(ImportResult::ERROR_NOT_FOUND, 'The card was not imported');
 		}
 		if ($cardRef->getState() === ImportRef::STATE_REMOVED) {
-			return ImportResult::ok($cardRef->getObjectId());
+			return [ImportResult::ok($cardRef->getObjectId()), null];
 		}
 		$card = $this->findCard($cardRef->getObjectId());
 		if ($card === null) {
@@ -702,14 +791,14 @@ class BoardImporter implements IBoardImporter {
 		$cardRef->setState(ImportRef::STATE_REMOVED);
 		$this->updateRef($cardRef, $current);
 		$this->changeHelper->cardChanged($card->getId(), false);
-		$this->fullTextSearch->handle(new CardDeletedEvent($card));
-		return ImportResult::ok($card->getId());
+		return [ImportResult::ok($card->getId()), $card];
 	}
 
 	#[\Override]
 	public function setAccess(string $app, int $boardId, array $acl): array {
 		$context = $this->context($app, $boardId);
 		$board = $context->board;
+		$this->markPastDueNotified($app, $boardId);
 		$managed = [];
 		foreach ($this->refMapper->findAllOfKind($app, ImportRef::KIND_ACL, $boardId) as $aclRef) {
 			$managed[$aclRef->getRef()] = $aclRef;
@@ -726,7 +815,11 @@ class BoardImporter implements IBoardImporter {
 					throw EntryException::error(ImportResult::ERROR_INVALID, 'The share appears twice');
 				}
 				$wanted[$access->ref()] = true;
-				$results[] = $this->atomic(fn () => $this->writeAccess($app, $board, $access, $managed[$access->ref()] ?? null), $this->db);
+				[$result, $change] = $this->atomic(fn () => $this->writeAccess($app, $board, $access, $managed[$access->ref()] ?? null), $this->db);
+				if ($change !== null) {
+					$this->accessChanged($change[0], $change[1]);
+				}
+				$results[] = $result;
 			} catch (EntryException $e) {
 				$results[] = $e->result;
 			}
@@ -734,27 +827,30 @@ class BoardImporter implements IBoardImporter {
 
 		foreach ($managed as $ref => $aclRef) {
 			if (!isset($wanted[$ref])) {
-				$this->atomic(fn () => $this->removeAccess($aclRef), $this->db);
+				$change = $this->atomic(fn () => $this->removeAccess($aclRef), $this->db);
+				if ($change !== null) {
+					$this->accessChanged($change[0], $change[1]);
+				}
 			}
 		}
 
-		$this->markPastDueNotified($app, $boardId);
 		$this->boardMapper->flushCache($boardId);
 		$this->changeHelper->boardChanged($boardId);
 		return $results;
 	}
 
 	/**
+	 * @return array{0: ImportResult, 1: ?array{0: AclCreatedEvent|AclUpdatedEvent, 1: Operation}} the result and the change to announce
 	 * @throws EntryException
 	 */
-	private function writeAccess(string $app, Board $board, ImportAccess $access, ?ImportRef $aclRef): ImportResult {
+	private function writeAccess(string $app, Board $board, ImportAccess $access, ?ImportRef $aclRef): array {
 		if ($access->type === ImportAccess::TYPE_USER) {
 			$type = Acl::PERMISSION_TYPE_USER;
 			if (!$this->userManager->userExists($access->id)) {
 				throw EntryException::error(ImportResult::ERROR_UNKNOWN_USER, 'The user does not exist');
 			}
 			if ($access->id === $board->getOwner()) {
-				return ImportResult::ok();
+				return [ImportResult::ok(), null];
 			}
 		} elseif ($access->type === ImportAccess::TYPE_GROUP) {
 			$type = Acl::PERMISSION_TYPE_GROUP;
@@ -785,8 +881,7 @@ class BoardImporter implements IBoardImporter {
 			$entity->setPermissionManage($access->manage);
 			$entity = $this->aclMapper->insert($entity);
 			$this->insertRef($app, ImportRef::KIND_ACL, $board->getId(), $access->ref(), $entity->getId(), $next);
-			$this->accessChanged(new AclCreatedEvent($entity), Operation::BoardShareCreated);
-			return ImportResult::ok();
+			return [ImportResult::ok(), [new AclCreatedEvent($entity), Operation::BoardShareCreated]];
 		}
 
 		if ($aclRef === null || $aclRef->getObjectId() !== $existing->getId()) {
@@ -802,29 +897,31 @@ class BoardImporter implements IBoardImporter {
 			$existing->setPermissionManage($access->manage);
 			$this->aclMapper->update($existing);
 			$this->updateRef($aclRef, $next);
-			$this->accessChanged(new AclUpdatedEvent($existing), Operation::BoardShareUpdated);
+			return [ImportResult::ok(), [new AclUpdatedEvent($existing), Operation::BoardShareUpdated]];
 		}
-		return ImportResult::ok();
+		return [ImportResult::ok(), null];
 	}
 
 	/**
 	 * Removes a share the importer made unless somebody changed it in Deck
+	 *
+	 * @return ?array{0: AclDeletedEvent, 1: Operation} the change to announce
 	 */
-	private function removeAccess(ImportRef $aclRef): void {
+	private function removeAccess(ImportRef $aclRef): ?array {
 		try {
 			/** @var Acl $existing */
 			$existing = $this->aclMapper->find($aclRef->getObjectId());
 		} catch (DoesNotExistException) {
 			$this->refMapper->delete($aclRef);
-			return;
+			return null;
 		}
 		$current = self::valuesHash($existing->getPermissionEdit(), $existing->getPermissionShare(), $existing->getPermissionManage());
 		if ($current !== $aclRef->getStoredHash()) {
-			return;
+			return null;
 		}
 		$this->aclMapper->delete($existing);
 		$this->refMapper->delete($aclRef);
-		$this->accessChanged(new AclDeletedEvent($existing), Operation::BoardShareDeleted);
+		return [new AclDeletedEvent($existing), Operation::BoardShareDeleted];
 	}
 
 	/**
@@ -889,6 +986,9 @@ class BoardImporter implements IBoardImporter {
 			$this->checkApp($app);
 		} catch (EntryException $e) {
 			throw new ImportException(ImportException::INVALID, $e->getMessage());
+		}
+		if ($boardId < 1 || $boardId > self::MAX_DECK_ID) {
+			throw new ImportException(ImportException::NOT_FOUND, 'The board does not exist');
 		}
 		$boardRef = $this->refMapper->findBoard($boardId);
 		try {
