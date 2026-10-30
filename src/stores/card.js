@@ -5,6 +5,7 @@
 
 import moment from 'moment'
 import { defineStore } from 'pinia'
+import { cardCreatedByAny } from '../helpers/cardFilters.js'
 import { CardApi } from '../services/CardApi.js'
 import { useBoardStore } from './board.js'
 import { useSettingsStore } from './settings.js'
@@ -20,7 +21,7 @@ export const useCardStore = defineStore('card', {
 	getters: {
 		cardsByStack(state) {
 			return (id) => state.cards.filter((card) => {
-				const { tags, users, due, unassigned, completed } = useBoardStore().filter
+				const { tags, users, creators, due, unassigned, completed } = useBoardStore().filter
 				if (completed === 'open' && card.done !== null) {
 					return false
 				}
@@ -47,6 +48,10 @@ export const useCardStore = defineStore('card', {
 					if (!anyUserMatch) {
 						return false
 					}
+				}
+
+				if (creators.length > 0 && !cardCreatedByAny(card, creators)) {
+					return false
 				}
 
 				if (unassigned && card.assignedUsers.length > 0) {
