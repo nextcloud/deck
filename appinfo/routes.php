@@ -138,6 +138,7 @@ return [
 	],
 	'ocs' => [
 		['name' => 'board_ocs#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
+		['name' => 'board_ocs#listForTeam', 'url' => '/api/v{apiVersion}/boards/team/{teamId}', 'verb' => 'GET'],
 		['name' => 'board_ocs#read', 'url' => '/api/v{apiVersion}/board/{boardId}', 'verb' => 'GET'],
 		['name' => 'stack_ocs#index', 'url' => '/api/v{apiVersion}/stacks/{boardId}', 'verb' => 'GET'],
 		['name' => 'board_ocs#create', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'POST'],

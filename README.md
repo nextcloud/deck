@@ -156,3 +156,15 @@ like `git config --global alias.ci 'commit -s'`. Now you can commit with
 
 [dcofile]: https://github.com/nextcloud/server/blob/master/contribute/developer-certificate-of-origin
 [applyalicense]: https://github.com/nextcloud/server/blob/master/contribute/HowToApplyALicense.md
+
+## Teams navigation integration
+
+Deck implements `OCP\Teams\ITeamAppProvider` and declares it through
+`IRegistrationContext::registerTeamAppProvider()`, without a registration event.
+Team-owned boards appear as external links,
+while boards personally shared to a team remain in its shared-resource list.
+The provider is PHP-only: it discovers active team boards, returns external links
+and a declarative creation action, and creates boards through Deck's existing
+service. It returns no browser module. Upgrade Deck and Circles together;
+older Deck versions no longer receive a hard-coded integration from Circles.
+Focused coverage: `tests/unit/Teams/TeamsProviderTest.php`.
