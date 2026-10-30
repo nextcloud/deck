@@ -107,6 +107,44 @@
 
 						<template #default>
 							<div class="filter">
+								<div v-if="displayViews.length" class="filter--saved-views">
+									<h3>{{ t('deck', 'Saved views') }}</h3>
+									<div v-for="view in displayViews" :key="view.id" class="filter--saved-view">
+										<NcButton
+											variant="tertiary"
+											class="filter--saved-view-name"
+											:title="view.isDefault
+												? t('deck', 'Apply default view {name}', { name: view.name })
+												: t('deck', 'Apply view {name}', { name: view.name })"
+											@click="view.isDefault ? applyDefaultView() : applyView(view)">
+											<template #icon>
+												<StarIcon v-if="view.isDefault" :size="18" decorative />
+												<BookmarkOutline v-else :size="18" decorative />
+											</template>
+											{{ view.name }}
+										</NcButton>
+										<NcButton
+											v-if="view.isDefault"
+											variant="tertiary"
+											:aria-label="t('deck', 'Remove default view')"
+											:title="t('deck', 'Remove default view')"
+											@click="removeDefaultView">
+											<template #icon>
+												<BookmarkOffOutline :size="18" decorative />
+											</template>
+										</NcButton>
+										<NcButton
+											v-if="!view.isDefault || view.isLocal"
+											variant="tertiary"
+											:aria-label="t('deck', 'Delete view {name}', { name: view.name })"
+											@click="removeView(view)">
+											<template #icon>
+												<TrashCanOutline :size="18" decorative />
+											</template>
+										</NcButton>
+									</div>
+								</div>
+
 								<h3>{{ t('deck', 'Filter by tag') }}</h3>
 								<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
 									<input
@@ -243,6 +281,23 @@
 									<label for="noDue">{{ t('deck', 'No due date') }}</label>
 								</div>
 
+								<div class="filter--save-view">
+									<NcTextField
+										v-model="newViewName"
+										:label="t('deck', 'View name')"
+										:placeholder="t('deck', 'Name for the saved view')"
+										@keyup.enter="saveView" />
+									<NcButton
+										:disabled="!isFilterActive || newViewName.trim() === ''"
+										:wide="true"
+										@click="saveView">
+										<template #icon>
+											<ContentSave :size="20" decorative />
+										</template>
+										{{ t('deck', 'Save view') }}
+									</NcButton>
+								</div>
+
 								<NcButton :disabled="!isFilterActive" :wide="true" @click="clearFilter">
 									{{ t('deck', 'Clear filter') }}
 								</NcButton>
@@ -322,11 +377,16 @@ import { mapActions, mapState, mapWritableState } from 'pinia'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
+import BookmarkOffOutline from 'vue-material-design-icons/BookmarkOffOutline.vue'
+import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue'
 import ChartGanttIcon from 'vue-material-design-icons/ChartGantt.vue'
+import ContentSave from 'vue-material-design-icons/ContentSave.vue'
 import FilterOffIcon from 'vue-material-design-icons/FilterOffOutline.vue'
 import FilterIcon from 'vue-material-design-icons/FilterOutline.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
 import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter.vue'
+import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import ViewColumnIcon from 'vue-material-design-icons/ViewColumn.vue'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import SessionList from './SessionList.vue'
@@ -352,6 +412,11 @@ export default {
 		ImageIcon,
 		FilterIcon,
 		FilterOffIcon,
+		BookmarkOutline,
+		BookmarkOffOutline,
+		ContentSave,
+		StarIcon,
+		TrashCanOutline,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
 		ViewColumnIcon,
@@ -402,6 +467,7 @@ export default {
 			stack: '',
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
+			newViewName: '',
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -414,6 +480,8 @@ export default {
 			'canManage',
 			'viewMode',
 			'showArchived',
+			'boardViews',
+			'allBoardViews',
 		]),
 
 		...mapState(useSettingsStore, {
@@ -447,6 +515,20 @@ export default {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 
+		displayViews() {
+			const defaultId = useSettingsStore().configByKey('defaultBoardView')
+			const defaultView = defaultId ? this.allBoardViews.find((view) => view.id === defaultId) : null
+			const isLocalDefault = defaultView && this.boardViews.some((view) => view.id === defaultView.id)
+			const localViews = this.boardViews.filter((view) => !defaultView || view.id !== defaultView.id)
+			if (!defaultView) {
+				return localViews.map((view) => ({ ...view, isDefault: false, isLocal: true }))
+			}
+			return [
+				{ ...defaultView, isDefault: true, isLocal: isLocalDefault },
+				...localViews.map((view) => ({ ...view, isDefault: false, isLocal: true })),
+			]
+		},
+
 		presentUsers() {
 			if (!this.board) {
 				return []
@@ -462,6 +544,10 @@ export default {
 		// traversing labels, acl and users on every unrelated board mutation.
 		'board.id': function() {
 			this.clearFilter()
+			this.newViewName = ''
+			if (this.board?.id) {
+				this.loadAllBoardViews().then(() => this.applyDefaultView())
+			}
 		},
 
 		pageTitle: {
@@ -490,7 +576,16 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useBoardStore, { setViewMode: 'setViewMode', toggleShowArchived: 'toggleShowArchived', setFilterInStore: 'setFilterInStore' }),
+		...mapActions(useBoardStore, {
+			setViewMode: 'setViewMode',
+			toggleShowArchived: 'toggleShowArchived',
+			setFilterInStore: 'setFilterInStore',
+			loadAllBoardViews: 'loadAllBoardViews',
+			createBoardView: 'createBoardView',
+			deleteBoardView: 'deleteBoardView',
+			applyBoardView: 'applyBoardView',
+		}),
+
 		...mapActions(useStackStore, ['createStack']),
 		...mapActions(useSettingsStore, {
 			setSearchQuery: 'setSearchQuery',
@@ -570,6 +665,59 @@ export default {
 			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
 			this.setFilterInStore({ ...filterReset })
 			this.filter = filterReset
+		},
+
+		applyView(view) {
+			this.applyBoardView(view)
+			this.filter = this.filterFromView(view)
+		},
+
+		applyDefaultView() {
+			if (!this.board) {
+				return
+			}
+			const defaultId = useSettingsStore().configByKey('defaultBoardView')
+			if (!defaultId) {
+				return
+			}
+			const view = this.allBoardViews.find((candidate) => candidate.id === defaultId)
+			if (!view) {
+				return
+			}
+			const boardLabelIds = this.board.labels?.map((label) => label.id) || []
+			const matchingTags = (view.filters?.tags || []).filter((tag) => boardLabelIds.includes(tag))
+			this.filter = this.filterFromView(view, matchingTags)
+			this.setFilterInStore({ ...this.filter })
+		},
+
+		filterFromView(view, tags = null) {
+			const filters = view.filters || {}
+			return {
+				tags: [...(tags ?? filters.tags ?? [])],
+				users: [...(filters.users || [])],
+				due: filters.due || '',
+				unassigned: filters.unassigned || false,
+				completed: filters.completed || 'both',
+			}
+		},
+
+		async removeDefaultView() {
+			await useSettingsStore().setConfig({ defaultBoardView: null })
+		},
+
+		async removeView(view) {
+			await this.deleteBoardView(view.boardId, view.id)
+			if (useSettingsStore().configByKey('defaultBoardView') === view.id) {
+				await useSettingsStore().setConfig({ defaultBoardView: null })
+			}
+		},
+
+		async saveView() {
+			if (!this.isFilterActive || this.newViewName.trim() === '' || !this.board) {
+				return
+			}
+			await this.createBoardView(this.board.id, this.newViewName.trim(), { ...this.filter })
+			this.newViewName = ''
 		},
 
 		clickShowAddCardModel() {
@@ -744,6 +892,30 @@ export default {
 	.filter h3 {
 		margin-top: 0px;
 		margin-bottom: 5px;
+	}
+
+	.filter--saved-views {
+		border-bottom: 1px solid var(--color-border);
+		margin-bottom: 8px;
+		padding-bottom: 4px;
+
+		.filter--saved-view {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+
+			.filter--saved-view-name {
+				flex-grow: 1;
+				justify-content: flex-start;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+	}
+
+	.filter--save-view {
+		margin-top: 8px;
 	}
 
 	.filter-button {
