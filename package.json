@@ -58,7 +58,7 @@
     "markdown-it-task-checkbox": "^1.0.6",
     "moment": "^2.31.0",
     "p-queue": "^9.3.0",
-    "pinia": "^4.0.3",
+    "pinia": "^4.1.0",
     "url-search-params-polyfill": "^8.2.5",
     "vue": "^3.5.43",
     "vue-at": "^3.0.0-alpha.3",
