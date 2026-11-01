@@ -109,7 +109,7 @@ OC.L10N.register(
     "No data was provided to create an attachment." : "Der blev ikke angivet data til at oprette en vedhæftet fil.",
     "Finished" : "Færdig",
     "To review" : "Til gennemgang",
-    "Action needed" : "Handling påkrævet",
+    "Action needed" : "Handling nødvendig",
     "Later" : "Senere",
     "copy" : "kopi",
     "Read more inside" : "Læs mere inde i kortet",
