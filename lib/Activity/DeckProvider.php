@@ -9,6 +9,7 @@ namespace OCA\Deck\Activity;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\CirclesService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\Comments\IComment;
@@ -38,7 +39,10 @@ class DeckProvider implements IProvider {
 	/** @var CardService */
 	private $cardService;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService) {
+	/** @var CirclesService */
+	private $circlesService;
+
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService, CirclesService $circlesService) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
@@ -47,6 +51,7 @@ class DeckProvider implements IProvider {
 		$this->l10nFactory = $l10n;
 		$this->config = $config;
 		$this->cardService = $cardService;
+		$this->circlesService = $circlesService;
 	}
 
 	/**
@@ -274,6 +279,17 @@ class DeckProvider implements IProvider {
 					'type' => 'user',
 					'id' => $subjectParams['acl']['participant'],
 					'name' => $user !== null ? $user->getDisplayName() : $subjectParams['acl']['participant']
+				];
+			} elseif ($subjectParams['acl']['type'] === Acl::PERMISSION_TYPE_CIRCLE) {
+				$circle = $this->circlesService->getCircle($subjectParams['acl']['participant']);
+
+				// suppressing psalm because $circle is typed as Circle|null but psalm doesnt know about the OCA class
+				// $circle->getName() will be defined when $circle is not null
+				/** @psalm-suppress UndefinedMethod */
+				$params['acl'] = [
+					'type' => 'highlight',
+					'id' => $subjectParams['acl']['participant'],
+					'name' => $circle ? $circle->getName() : $subjectParams['acl']['participant']
 				];
 			} else {
 				$params['acl'] = [
