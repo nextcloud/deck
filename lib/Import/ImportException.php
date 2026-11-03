@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace OCA\Deck\Import;
 
 /**
- * A call the importer refuses as a whole
+ * A call the importer or the reader refuses as a whole
  *
  * @since 2.0.0
  */
 class ImportException extends \Exception {
-	/** The board doesn't exist */
+	/** The board doesn't exist, or the person doesn't have it ({@see IBoardReader}) */
 	public const NOT_FOUND = 'not_found';
 	/** The importing app didn't create the board */
 	public const NOT_IMPORTER = 'not_importer';
