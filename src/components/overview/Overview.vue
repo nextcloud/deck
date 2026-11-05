@@ -7,6 +7,13 @@
 	<div class="overview-wrapper">
 		<Controls :overview-name="filterDisplayName" />
 
+		<div v-if="isValidFilter" class="overview-options">
+			<label>
+				<input type="checkbox" v-model="simpleListMode">
+				{{ t('deck', 'Simple list mode (prevents memory crashes on large boards)') }}
+			</label>
+		</div>
+
 		<div v-if="loading" key="loading" class="emptycontent">
 			<div class="icon icon-loading" />
 			<h2>{{ t('deck', 'Loading filtered view') }}</h2>
@@ -24,14 +31,30 @@
 				</div>
 				<div class="dashboard-column__list">
 					<template v-if="columnProps.sort === false">
-						<CardItem v-for="card in filterCards(columnProps.filter)"
-							:id="card.id"
-							:key="card.id" />
+						<template v-for="card in filterCards(columnProps.filter)">
+							<router-link v-if="simpleListMode" 
+								:key="'simple-' + card.id" 
+								:to="{ name: 'card', params: { id: card.boardId, cardId: card.id } }"
+								class="simple-card-link">
+								{{ card.title }}
+							</router-link>
+							<CardItem v-else
+								:id="card.id"
+								:key="card.id" />
+						</template>
 					</template>
 					<template v-else>
-						<CardItem v-for="card in sortCards(filterCards(columnProps.filter))"
-							:id="card.id"
-							:key="card.id" />
+						<template v-for="card in sortCards(filterCards(columnProps.filter))">
+							<router-link v-if="simpleListMode" 
+								:key="'simple-' + card.id" 
+								:to="{ name: 'card', params: { id: card.boardId, cardId: card.id } }"
+								class="simple-card-link">
+								{{ card.title }}
+							</router-link>
+							<CardItem v-else
+								:id="card.id"
+								:key="card.id" />
+						</template>
 					</template>
 				</div>
 			</div>
@@ -98,6 +121,7 @@ export default {
 		return {
 			loading: true,
 			columnPropsList: COLUMN_PROPS_LIST,
+			simpleListMode: true,
 		}
 	},
 	computed: {
@@ -155,6 +179,28 @@ export default {
 
 <style lang="scss" scoped>
 @import './../../css/variables.scss';
+
+.overview-options {
+	padding: 10px 20px;
+	background-color: var(--color-main-background);
+	z-index: 10;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.simple-card-link {
+	display: block;
+	padding: 12px;
+	margin-bottom: 8px;
+	background-color: var(--color-main-background);
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius);
+	color: var(--color-main-text);
+	text-decoration: none;
+	font-weight: bold;
+	&:hover {
+		background-color: var(--color-background-hover);
+	}
+}
 
 .overview-wrapper {
 	position: relative;

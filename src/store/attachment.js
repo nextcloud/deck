@@ -51,7 +51,7 @@ export default {
 		unshareAttachment(state, deletedAttachment) {
 			const existingIndex = state.attachments[deletedAttachment.cardId].findIndex(a => a.id === deletedAttachment.id && a.type === deletedAttachment.type)
 			if (existingIndex !== -1) {
-				state.attachments[deletedAttachment.cardId][existingIndex].deletedAt = -1
+				state.attachments[deletedAttachment.cardId].splice(existingIndex, 1)
 			}
 		},
 
