@@ -5,6 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.19.2
+
+### Fixed
+* fix(sharing): stop deleted boards from showing up in team resources by @grnd-alt in https://github.com/nextcloud/deck/pull/8627
+* fix(translation): translate default card description by @silverkszlo in https://github.com/nextcloud/deck/pull/8638
+* fix: limit server version to min 35.0.2 by @grnd-alt in https://github.com/nextcloud/deck/pull/8672
+
 ## 1.19.1
 
 ### Added
