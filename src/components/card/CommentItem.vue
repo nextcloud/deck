@@ -86,16 +86,16 @@
 </template>
 
 <script>
-import { useBoardStore } from '../../stores/board.js'
-import { mapState } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcActionButton, NcActions, NcAvatar, NcRichText, NcUserBubble } from '@nextcloud/vue'
 import md5 from 'blueimp-md5'
 import moment from 'moment'
+import { mapState } from 'pinia'
 import { h } from 'vue'
 import ReplyIcon from 'vue-material-design-icons/ReplyOutline.vue'
 import CommentForm from './CommentForm.vue'
 import relativeDate from '../../mixins/relativeDate.js'
+import { useBoardStore } from '../../stores/board.js'
 import { useCommentStore } from '../../stores/comment.js'
 
 // Vue 2's `{ functional: true, render(createElement, context) }` signature no
@@ -166,8 +166,9 @@ export default {
 
 	computed: {
 		...mapState(useBoardStore, {
-			currentBoard: state => state.currentBoard,
+			currentBoard: (state) => state.currentBoard,
 		}),
+
 		canEdit() {
 			return this.comment.actorId === getCurrentUser().uid
 		},
