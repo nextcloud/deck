@@ -219,7 +219,7 @@ class ExternalBoardService {
 		?bool $archived = null,
 		?OptionalNullableValue $done = null,
 		?string $startdate = null,
-		?string $color = null,
+		?OptionalNullableValue $color = null,
 	): array {
 		$this->configService->ensureFederationEnabled();
 		$this->permissionService->checkPermission($this->boardMapper, $localBoard->getId(), Acl::PERMISSION_EDIT, $this->userId, false, false);

@@ -406,7 +406,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 		$externalShare = $this->findRootExternalShare($share, $shareBy);
 
-		if (empty($externalShare)) {
+		if (!$externalShare) {
 			return;
 		}
 
@@ -414,7 +414,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		$this->externalShareManager->declineShare($externalShare, $user);
 	}
 
-	public function findRootExternalShare(IShare $share, string $ownerCloudId): ?ExternalShare {
+	public function findRootExternalShare(IShare $share, string $ownerCloudId): ExternalShare|false {
 		$node = $share->getNode();
 		$cloudId = $this->cloudIdManager->resolveCloudId($ownerCloudId);
 		$mountPoint = str_replace('/' . $share->getShareOwner() . '/files', '', $node->getPath());
@@ -432,7 +432,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		$cursor->closeCursor();
 
 		if ($data === false) {
-			return null;
+			return false;
 		}
 
 		$user = $this->userManager->get($data['user']);
@@ -1412,6 +1412,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		}
 
 		$externalShare = $this->externalShareManager->getShare((string)$data['id'], $user);
+
+		if ($externalShare === false) {
+			throw new ShareNotFound();
+		}
 
 		// Update mount point to be under /Deck
 		if (strpos($externalShare->getMountpoint(), '/Deck') !== 0) {

@@ -138,12 +138,41 @@ namespace OCA\Files_Sharing\Event{
 		}
 }
 
+namespace OCA\Files_Sharing\External {
+	use OCP\IUser;
+
+	class ExternalShare implements \JsonSerializable {
+		public function getId(): string {}
+		public function getName(): string {}
+		public function getMountpoint(): string {}
+		public function getRemote(): string {}
+		public function getOwner(): string {}
+		public function getUser(): string {}
+		public function getRefreshToken(): string {}
+		public function getAccessToken(): string|null {}
+		public function getAccessTokenExpires(): int|null {}
+		public function getPassword(): string|null {}
+		public function setMountpoint(string $mountPoint): void {}
+	}
+	class Mount {
+		public function getMountProvider(): string {}
+		public function getMountId(): int {}
+	}
+	class Manager {
+		public function getShare(string $id, ?IUser $user = null): ExternalShare|false {}
+		public function acceptShare(ExternalShare $externalShare, ?IUser $user = null): bool {}
+		public function declineShare(ExternalShare $externalShare, ?IUser $user = null): bool {}
+		public function getMount(array $data, ?IUser $user = null): Mount {}
+	}
+}
+
 namespace {
 
 	use OCP\IServerContainer;
 
 	class OC {
 		static $CLI = false;
+		static $SERVERROOT = '';
 		/** @var IServerContainer */
 		static $server;
 	}
