@@ -12,6 +12,7 @@ class SettingChanges extends SettingBase {
 	 * @return string Lowercase a-z and underscore only identifier
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getIdentifier(): string {
 		return 'deck';
 	}
@@ -20,6 +21,7 @@ class SettingChanges extends SettingBase {
 	 * @return string A translated string
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l->t('A <strong>board, list or card</strong> was changed');
 	}
@@ -30,6 +32,7 @@ class SettingChanges extends SettingBase {
 	 *             priority values. It is required to return a value between 0 and 100.
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getPriority(): int {
 		return 90;
 	}
@@ -38,6 +41,7 @@ class SettingChanges extends SettingBase {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function canChangeStream(): bool {
 		return true;
 	}
@@ -46,6 +50,7 @@ class SettingChanges extends SettingBase {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function isDefaultEnabledStream(): bool {
 		return true;
 	}
@@ -54,6 +59,7 @@ class SettingChanges extends SettingBase {
 	 * @return bool True when the option can be changed for the mail
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function canChangeMail(): bool {
 		return true;
 	}
@@ -62,6 +68,7 @@ class SettingChanges extends SettingBase {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function isDefaultEnabledMail(): bool {
 		return false;
 	}

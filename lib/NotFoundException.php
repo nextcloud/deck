@@ -12,6 +12,7 @@ class NotFoundException extends StatusException {
 		parent::__construct($message);
 	}
 
+	#[\Override]
 	public function getStatus() {
 		return 404;
 	}

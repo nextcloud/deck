@@ -73,6 +73,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function identifier() {
 		return 'deck';
 	}
@@ -80,6 +81,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function create(IShare $share) {
 		$cardId = (int)$share->getSharedWith();
 		$boardId = $this->cardMapper->findBoardId($cardId);
@@ -272,6 +274,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function update(IShare $share) {
 		$this->dbConnection->beginTransaction();
 		try {
@@ -336,6 +339,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function delete(IShare $share) {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->delete('share')
@@ -351,6 +355,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function deleteFromSelf(IShare $share, $recipient) {
 		// Check if there is a deck_user share
 		$qb = $this->dbConnection->getQueryBuilder();
@@ -398,6 +403,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function restore(IShare $share, string $recipient): IShare {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('permissions')
@@ -430,6 +436,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function move(IShare $share, $recipient) {
 		// Check if there is a deck user share
 		$qb = $this->dbConnection->getQueryBuilder();
@@ -481,6 +488,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @inheritDoc
 	 * @returns
 	 */
+	#[\Override]
 	public function getSharesInFolder($userId, Folder $node, $reshares, $shallow = true) {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
@@ -530,6 +538,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getSharesBy($userId, $shareType, $node, $reshares, $limit, $offset) {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
@@ -576,6 +585,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @inheritDoc
 	 * @throws ShareNotFound
 	 */
+	#[\Override]
 	public function getShareById($id, $recipientId = null) {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('s.*',
@@ -694,6 +704,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @param Node $path
 	 * @return IShare[]
 	 */
+	#[\Override]
 	public function getSharesByPath(Node $path): array {
 		$qb = $this->dbConnection->getQueryBuilder();
 
@@ -722,10 +733,12 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @param int $offset
 	 * @return IShare[]
 	 */
+	#[\Override]
 	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
 		return $this->_getSharedWith($userId, $limit, $offset, $node);
 	}
 
+	#[\Override]
 	public function getSharedWithByPath(
 		string $userId,
 		int $shareType,
@@ -936,6 +949,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @inheritDoc
 	 * @psalm-suppress InvalidReturnType Not returning anything
 	 */
+	#[\Override]
 	public function getShareByToken($token) {
 		throw new ShareNotFound();
 		/*$qb = $this->dbConnection->getQueryBuilder();
@@ -969,6 +983,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function userDeleted($uid, $shareType) {
 		// TODO: Implement userDeleted() method.
 	}
@@ -976,6 +991,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function groupDeleted($gid) {
 		// TODO: Implement groupDeleted() method.
 	}
@@ -983,6 +999,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function userDeletedFromGroup($uid, $gid) {
 		// TODO: Implement userDeletedFromGroup() method.
 	}
@@ -996,6 +1013,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @param bool $currentAccess If current access is required (like for removed shares that might get revived later)
 	 * @return array
 	 */
+	#[\Override]
 	public function getAccessList($nodes, $currentAccess) {
 		$ids = [];
 		foreach ($nodes as $node) {
@@ -1098,6 +1116,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @param IShare $parent
 	 * @return IShare[]
 	 */
+	#[\Override]
 	public function getChildren(IShare $parent): array {
 		$children = [];
 
@@ -1120,6 +1139,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getAllShares(): iterable {
 		$qb = $this->dbConnection->getQueryBuilder();
 
@@ -1200,6 +1220,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		return $shares;
 	}
 
+	#[\Override]
 	public function getUsersForShare(IShare $share): iterable {
 		if ($share->getShareType() === IShare::TYPE_DECK) {
 			$cardId = (int)$share->getSharedWith();

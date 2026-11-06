@@ -26,6 +26,7 @@ class Capabilities implements ICapability {
 	 * @return array{deck: array{version: string, canCreateBoards: bool, supportsDoneColumn:true, apiVersions: array<string>}}
 	 * @since 8.2.0
 	 */
+	#[\Override]
 	public function getCapabilities() {
 		return [
 			'deck' => [

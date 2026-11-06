@@ -106,6 +106,7 @@ class Application extends App implements IBootstrap {
 		});
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
 		$context->injectFn($this->registerCommentsEntity(...));
 		$context->injectFn($this->registerCollaborationResources(...));
@@ -126,6 +127,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn([$this, 'registerCloudFederationProviderManager']);
 	}
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		if (interface_exists(\OCP\Teams\ITeamAppProvider::class)) {
 			$context->registerTeamAppProvider(\OCA\Deck\Teams\TeamsProvider::class);

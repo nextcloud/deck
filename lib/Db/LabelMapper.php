@@ -57,6 +57,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $exists;
 	}
 
+	#[\Override]
 	public function delete(Entity $entity): Entity {
 		// delete assigned labels
 		$this->deleteLabelAssignments($entity->getId());
@@ -113,6 +114,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	#[\Override]
 	public function insert(Entity $entity): Entity {
 		if (!isset($entity->getUpdatedFields()['lastModified'])) {
 			$entity->setLastModified(time());
@@ -120,6 +122,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return parent::insert($entity);
 	}
 
+	#[\Override]
 	public function update(Entity $entity, bool $updateModified = true): Entity {
 		if ($updateModified) {
 			$entity->setLastModified(time());
@@ -166,6 +169,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	/**
 	 * @throws \OCP\DB\Exception
 	 */
+	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.id')
@@ -177,6 +181,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
+	#[\Override]
 	public function findBoardId(int $id): ?int {
 		try {
 			$entity = $this->find($id);

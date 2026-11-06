@@ -27,6 +27,7 @@ class SessionsCleanup extends TimedJob {
 		$this->setInterval(SessionService::SESSION_VALID_TIME);
 	}
 
+	#[\Override]
 	protected function run($argument) {
 		$this->logger->debug('Run cleanup job for deck sessions');
 

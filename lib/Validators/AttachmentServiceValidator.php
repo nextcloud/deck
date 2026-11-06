@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Deck\Validators;
 
 class AttachmentServiceValidator extends BaseValidator {
+	#[\Override]
 	public function rules() {
 		return [
 			'cardId' => ['numeric'],

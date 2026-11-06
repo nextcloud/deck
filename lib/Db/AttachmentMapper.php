@@ -39,6 +39,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws \OCP\DB\Exception
 	 */
+	#[\Override]
 	public function find(int $id): Attachment {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
@@ -128,6 +129,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	/**
 	 * Check if $userId is owner of Entity with $id
 	 */
+	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		try {
 			$attachment = $this->find($id);
@@ -144,6 +146,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @param $id int unique entity identifier
 	 * @return int|null id of Board
 	 */
+	#[\Override]
 	public function findBoardId(int $id): ?int {
 		try {
 			$attachment = $this->find($id);

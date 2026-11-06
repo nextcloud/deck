@@ -24,6 +24,7 @@ class CalendarToggle extends Command {
 		$this->config = $config;
 	}
 
+	#[\Override]
 	protected function configure() {
 		$this
 			->setName('deck:calendar-toggle')
@@ -42,6 +43,7 @@ class CalendarToggle extends Command {
 			);
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$enable = $input->getOption('on');
 		$disable = $input->getOption('off');

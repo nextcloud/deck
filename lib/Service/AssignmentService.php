@@ -8,6 +8,7 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -23,6 +24,7 @@ use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 
 class AssignmentService {
 	public function __construct(
@@ -87,6 +89,7 @@ class AssignmentService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->logAssignment($cardId, $card->getStackId(), $userId, $type, 'assigned to', Operation::CardAssignmentCreated);
 
 		return $assignment;
 	}
@@ -114,10 +117,30 @@ class AssignmentService {
 				$this->changeHelper->cardChanged($cardId);
 
 				$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+				$this->logAssignment($cardId, $card->getStackId(), $userId, $type, 'unassigned from', Operation::CardAssignmentDeleted);
 
 				return $assignment;
 			}
 		}
 		throw new NotFoundException('No assignment for ' . $userId . 'found.');
+	}
+
+	private function logAssignment(int $cardId, ?int $stackId, string $assignee, int $type, string $action, Operation $operation): void {
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'%s "%s" was ' . $action . ' card %s of stack %s',
+			[
+				'assigneeType' => match ($type) {
+					Assignment::TYPE_GROUP => 'group',
+					Assignment::TYPE_CIRCLE => 'team',
+					Assignment::TYPE_REMOTE => 'remote user',
+					default => 'user',
+				},
+				'assignee' => $assignee,
+				'cardId' => $cardId,
+				'stackId' => $stackId,
+			],
+			false,
+			$operation->value,
+		));
 	}
 }

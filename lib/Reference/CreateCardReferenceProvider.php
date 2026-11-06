@@ -25,6 +25,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getId(): string {
 		return 'create-new-deck-card';
 	}
@@ -32,6 +33,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getTitle(): string {
 		return $this->l10n->t('Create a new deck card');
 	}
@@ -39,6 +41,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getOrder(): int {
 		return 10;
 	}
@@ -46,6 +49,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getIconUrl(): string {
 		return $this->urlGenerator->getAbsoluteURL(
 			$this->urlGenerator->imagePath(Application::APP_ID, 'deck-dark.svg')
@@ -55,6 +59,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function matchReference(string $referenceText): bool {
 		return false;
 	}
@@ -62,6 +67,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function resolveReference(string $referenceText): ?IReference {
 		return null;
 	}
@@ -69,6 +75,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getCachePrefix(string $referenceId): string {
 		return $this->userId ?? '';
 	}
@@ -77,6 +84,7 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	 * We don't use the userId here but rather a reference unique id
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getCacheKey(string $referenceId): ?string {
 		return $referenceId;
 	}

@@ -24,6 +24,7 @@ class BoardImport extends Command {
 	/**
 	 * @return void
 	 */
+	#[\Override]
 	protected function configure() {
 		$allowedSystems = $this->boardImportCommandService->getAllowedImportSystems();
 		$names = array_map(function ($name) {
@@ -67,6 +68,7 @@ class BoardImport extends Command {
 	 *
 	 * @return int
 	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$this
 			->boardImportCommandService

@@ -45,6 +45,7 @@ class ResourceProviderCard implements IProvider {
 	 * @return string
 	 * @since 15.0.0
 	 */
+	#[\Override]
 	public function getType(): string {
 		return self::RESOURCE_TYPE;
 	}
@@ -56,6 +57,7 @@ class ResourceProviderCard implements IProvider {
 	 * @return array
 	 * @since 16.0.0
 	 */
+	#[\Override]
 	public function getResourceRichObject(IResource $resource): array {
 		try {
 			$card = $this->cardMapper->find($resource->getId());
@@ -88,6 +90,7 @@ class ResourceProviderCard implements IProvider {
 	 * @return bool
 	 * @since 16.0.0
 	 */
+	#[\Override]
 	public function canAccessResource(IResource $resource, ?IUser $user): bool {
 		if (!$user instanceof IUser || $resource->getType() !== self::RESOURCE_TYPE) {
 			return false;

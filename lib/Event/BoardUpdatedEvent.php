@@ -25,6 +25,7 @@ class BoardUpdatedEvent extends Event implements IWebhookCompatibleEvent {
 		return $this->boardId;
 	}
 
+	#[\Override]
 	public function getWebhookSerializable(): array {
 		return [
 			'boardId' => $this->boardId,

@@ -22,10 +22,12 @@ abstract class SettingBase extends ActivitySettings {
 		$this->l = $l;
 	}
 
+	#[\Override]
 	public function getGroupIdentifier() {
 		return 'deck';
 	}
 
+	#[\Override]
 	public function getGroupName() {
 		return $this->l->t('Deck');
 	}
@@ -34,6 +36,7 @@ abstract class SettingBase extends ActivitySettings {
 	 * @return string Lowercase a-z and underscore only identifier
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getIdentifier(): string {
 		return 'deck';
 	}
@@ -42,6 +45,7 @@ abstract class SettingBase extends ActivitySettings {
 	 * @return string A translated string
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l->t('Changes in the <strong>Deck app</strong>');
 	}
@@ -52,6 +56,7 @@ abstract class SettingBase extends ActivitySettings {
 	 *             priority values. It is required to return a value between 0 and 100.
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getPriority(): int {
 		return 90;
 	}
@@ -60,6 +65,7 @@ abstract class SettingBase extends ActivitySettings {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function canChangeStream(): bool {
 		return true;
 	}
@@ -68,6 +74,7 @@ abstract class SettingBase extends ActivitySettings {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function isDefaultEnabledStream(): bool {
 		return true;
 	}
@@ -76,6 +83,7 @@ abstract class SettingBase extends ActivitySettings {
 	 * @return bool True when the option can be changed for the mail
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function canChangeMail(): bool {
 		return true;
 	}
@@ -84,6 +92,7 @@ abstract class SettingBase extends ActivitySettings {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function isDefaultEnabledMail(): bool {
 		return false;
 	}

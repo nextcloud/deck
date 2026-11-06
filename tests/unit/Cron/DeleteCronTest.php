@@ -38,6 +38,9 @@ use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\IAttachmentService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -59,6 +62,9 @@ class DeleteCronTest extends TestCase {
 	private $stackMapper;
 	/** @var DeckShareProvider */
 	private $deckShareProvider;
+	private IEventDispatcher&MockObject $eventDispatcher;
+	/** @var list<CriticalActionPerformedEvent> */
+	private array $auditEvents = [];
 	/** @var DeleteCron */
 	protected $deleteCron;
 
@@ -72,6 +78,14 @@ class DeleteCronTest extends TestCase {
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->deckShareProvider = $this->createMock(DeckShareProvider::class);
+		$this->auditEvents = [];
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event): void {
+				if ($event instanceof CriticalActionPerformedEvent) {
+					$this->auditEvents[] = $event;
+				}
+			});
 		$this->deleteCron = new DeleteCron(
 			$this->timeFactory,
 			$this->configService,
@@ -81,6 +95,7 @@ class DeleteCronTest extends TestCase {
 			$this->attachmentMapper,
 			$this->stackMapper,
 			$this->deckShareProvider,
+			$this->eventDispatcher,
 		);
 	}
 
@@ -162,6 +177,10 @@ class DeleteCronTest extends TestCase {
 			);
 
 		$this->invokePrivate($this->deleteCron, 'run', [null]);
+
+		$this->assertCount(count($boards), $this->auditEvents);
+		$this->assertSame('deck.board.purged', $this->auditEvents[0]->getOperation());
+		$this->assertSame(['boardId' => 1, 'owner' => null], $this->auditEvents[0]->getParameters());
 	}
 
 	public function testDeleteCronInvalidAttachment() {

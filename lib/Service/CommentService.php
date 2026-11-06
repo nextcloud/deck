@@ -8,6 +8,7 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
@@ -18,7 +19,9 @@ use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\MessageTooLongException;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserManager;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 use OutOfBoundsException;
 use Psr\Log\LoggerInterface;
 
@@ -31,6 +34,7 @@ class CommentService {
 		private IUserManager $userManager,
 		private LoggerInterface $logger,
 		private ?string $userId,
+		private IEventDispatcher $eventDispatcher,
 	) {
 	}
 
@@ -115,6 +119,7 @@ class CommentService {
 			$comment->setVerb('comment');
 			$comment->setParentId((string)$replyTo);
 			$this->commentsManager->save($comment);
+			$this->logComment($cardId, $comment->getId(), 'added to', Operation::CommentCreated);
 			return new DataResponse($this->formatComment($comment, true));
 		} catch (\InvalidArgumentException $e) {
 			throw new BadRequestException('Invalid input values');
@@ -134,6 +139,7 @@ class CommentService {
 
 		$comment->setMessage($message);
 		$this->commentsManager->save($comment);
+		$this->logComment($cardId, $comment->getId(), 'edited on', Operation::CommentUpdated);
 		return new DataResponse($this->formatComment($comment));
 	}
 
@@ -152,6 +158,7 @@ class CommentService {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
 		$this->commentsManager->delete((string)$commentId);
+		$this->logComment($cardId, (string)$commentId, 'deleted from', Operation::CommentDeleted);
 		return new DataResponse([]);
 	}
 
@@ -190,5 +197,17 @@ class CommentService {
 		} catch (CommentNotFoundException $e) {
 		}
 		return $formattedComment;
+	}
+
+	/**
+	 * Only the fact is logged, never the comment text
+	 */
+	private function logComment(int $cardId, string $commentId, string $action, Operation $operation): void {
+		$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+			'Comment %s was ' . $action . ' card %s',
+			['commentId' => $commentId, 'cardId' => $cardId],
+			false,
+			$operation->value,
+		));
 	}
 }

@@ -17,6 +17,7 @@ class Circle extends RelationalObject {
 		parent::__construct($primaryKey, $circle);
 	}
 
+	#[\Override]
 	public function getObjectSerialization() {
 		return [
 			'uid' => $this->object->getUniqueId(),

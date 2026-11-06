@@ -27,14 +27,17 @@ class DeckProvider implements IProvider {
 	) {
 	}
 
+	#[\Override]
 	public function getId(): string {
 		return 'search-deck-card-board';
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return $this->l10n->t('Deck boards and cards');
 	}
 
+	#[\Override]
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		$cursor = $query->getCursor();
 		[$boardCursor, $cardCursor] = $this->parseCursor($cursor);
@@ -85,6 +88,7 @@ class DeckProvider implements IProvider {
 		);
 	}
 
+	#[\Override]
 	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'deck.Page.index') {
 			return -5;

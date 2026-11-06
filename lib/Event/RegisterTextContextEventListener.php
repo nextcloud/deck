@@ -20,6 +20,7 @@ class RegisterTextContextEventListener implements IEventListener {
 		private readonly TextContextProviderFactory $textContextProviderFactory,
 	) {
 	}
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!$event instanceof RegisterContextEvent) {
 			return;

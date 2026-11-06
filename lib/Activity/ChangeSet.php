@@ -53,6 +53,7 @@ class ChangeSet implements \JsonSerializable {
 		return $this->after;
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		return [
 			'before' => $this->getBefore(),

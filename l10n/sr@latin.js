@@ -44,6 +44,7 @@ OC.L10N.register(
     "Archive board" : "Arhiviraj tablu",
     "No notifications" : "Nema obaveštenja",
     "Delete board" : "Izbriši tablu",
+    "Export" : "Izvezi",
     "Close" : "Zatvori",
     "Due date" : "Rok",
     "Share" : "Podeli",

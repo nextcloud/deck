@@ -7,6 +7,7 @@
 
 namespace OCA\Deck\Cron;
 
+use OCA\Deck\AuditLog\Operation;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
@@ -18,6 +19,8 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Log\Audit\CriticalActionPerformedEvent;
 
 class DeleteCron extends TimedJob {
 
@@ -43,6 +46,7 @@ class DeleteCron extends TimedJob {
 		AttachmentMapper $attachmentMapper,
 		StackMapper $stackMapper,
 		DeckShareProvider $deckShareProvider,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct($time);
 		$this->boardMapper = $boardMapper;
@@ -60,12 +64,22 @@ class DeleteCron extends TimedJob {
 	 * @param $argument
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
+	#[\Override]
 	protected function run($argument) {
 		$timeLimit = time() - $this->configService->getTrashRetention();
 
 		$boards = $this->boardMapper->findToDelete($timeLimit);
 		foreach ($boards as $board) {
 			$this->boardMapper->delete($board);
+			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
+				'Board %s of "%s" was permanently deleted from the trash',
+				[
+					'boardId' => $board->getId(),
+					'owner' => $board->getOwner(),
+				],
+				false,
+				Operation::BoardPurged->value,
+			));
 		}
 
 		$cards = $this->cardMapper->findToDelete($timeLimit, 500);

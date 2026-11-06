@@ -23,6 +23,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		$this->request = $request;
 	}
 
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!($event instanceof BeforeTemplateRenderedEvent)) {
 			return;

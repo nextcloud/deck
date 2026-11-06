@@ -61,6 +61,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\Override]
 	public function getEstimatedExportSize(IUser $user): int|float {
 		return 0;
 	}
@@ -68,6 +69,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\Override]
 	public function export(
 		IUser $user,
 		IExportDestination $exportDestination,
@@ -93,6 +95,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\Override]
 	public function import(
 		IUser $user,
 		IImportSource $importSource,
@@ -251,6 +254,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\Override]
 	public function getId(): string {
 		return 'deck';
 	}
@@ -258,6 +262,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\Override]
 	public function getDisplayName(): string {
 		return $this->l10n->t('Deck');
 	}
@@ -265,6 +270,7 @@ class DeckMigrator implements IMigrator, ISizeEstimationMigrator {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\Override]
 	public function getDescription(): string {
 		return $this->l10n->t('All boards owned by you including stacks, cards, labels, assignments, and comments');
 	}

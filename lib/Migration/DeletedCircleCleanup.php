@@ -22,10 +22,12 @@ class DeletedCircleCleanup implements IRepairStep {
 		$this->circleService = $circlesService;
 	}
 
+	#[\Override]
 	public function getName() {
 		return 'Cleanup Deck ACL entries for circles which have been already deleted';
 	}
 
+	#[\Override]
 	public function run(IOutput $output) {
 		if (!$this->circleService->isCirclesEnabled()) {
 			return;

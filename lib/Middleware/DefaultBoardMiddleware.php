@@ -24,6 +24,7 @@ class DefaultBoardMiddleware extends Middleware {
 	) {
 	}
 
+	#[\Override]
 	public function beforeController($controller, $methodName) {
 		try {
 			if ($this->userId !== null && $this->defaultBoardService->checkFirstRun($this->userId) && $this->permissionService->canCreate()) {

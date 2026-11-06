@@ -26,6 +26,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @return string Lowercase a-z and underscore only identifier
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getIdentifier(): string {
 		return 'deck';
 	}
@@ -34,6 +35,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @return string A translated string
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l10n->t('Deck');
 	}
@@ -44,6 +46,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 *             priority values. It is required to return a value between 0 and 100.
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getPriority(): int {
 		return 90;
 	}
@@ -52,6 +55,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @return string Full URL to an icon, empty string when none is given
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getIcon(): string {
 		return $this->urlGenerator->imagePath('deck', 'deck-dark.svg');
 	}
@@ -61,6 +65,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @return string[] An array of allowed apps from which activities should be displayed
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function filterTypes($types): array {
 		return array_merge($types, ['deck_comment']);
 	}
@@ -69,6 +74,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @return string[] An array of allowed apps from which activities should be displayed
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function allowedApps(): array {
 		return ['deck'];
 	}

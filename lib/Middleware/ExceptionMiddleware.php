@@ -40,6 +40,7 @@ class ExceptionMiddleware extends Middleware {
 	 * @return JSONResponse
 	 * @throws \Exception
 	 */
+	#[\Override]
 	public function afterException($controller, $methodName, \Exception $exception) {
 		if (get_class($controller) === PageController::class) {
 			throw $exception;

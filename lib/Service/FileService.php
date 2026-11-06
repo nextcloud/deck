@@ -64,6 +64,7 @@ class FileService implements IAttachmentService {
 		return $folder;
 	}
 
+	#[\Override]
 	public function extendData(Attachment $attachment) {
 		try {
 			$file = $this->getFileForAttachment($attachment);
@@ -118,6 +119,7 @@ class FileService implements IAttachmentService {
 	 * @throws StatusException
 	 * @throws ConflictException
 	 */
+	#[\Override]
 	public function create(Attachment $attachment) {
 		$file = $this->getUploadedFile();
 		$folder = $this->getFolder($attachment);
@@ -145,6 +147,7 @@ class FileService implements IAttachmentService {
 	 *
 	 * @throws \Exception
 	 */
+	#[\Override]
 	public function update(Attachment $attachment) {
 		$file = $this->getUploadedFile();
 		$fileName = $file['name'];
@@ -167,6 +170,7 @@ class FileService implements IAttachmentService {
 	 * @param Attachment $attachment
 	 * @throws NotPermittedException
 	 */
+	#[\Override]
 	public function delete(Attachment $attachment) {
 		try {
 			$file = $this->getFileForAttachment($attachment);
@@ -202,6 +206,7 @@ class FileService implements IAttachmentService {
 	 * @return StreamResponse
 	 * @throws \Exception
 	 */
+	#[\Override]
 	public function display(Attachment $attachment) {
 		$file = $this->getFileFromRootFolder($attachment);
 		$response = new StreamResponse($file->fopen('rb'));
@@ -215,6 +220,7 @@ class FileService implements IAttachmentService {
 	 *
 	 * @return bool
 	 */
+	#[\Override]
 	public function allowUndo() {
 		return true;
 	}
@@ -224,6 +230,7 @@ class FileService implements IAttachmentService {
 	 *
 	 * @param Attachment $attachment
 	 */
+	#[\Override]
 	public function markAsDeleted(Attachment $attachment) {
 		$attachment->setDeletedAt(time());
 	}

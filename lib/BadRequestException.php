@@ -14,6 +14,7 @@ class BadRequestException extends StatusException {
 		parent::__construct($message);
 	}
 
+	#[\Override]
 	public function getStatus() {
 		return HTTP::STATUS_BAD_REQUEST;
 	}

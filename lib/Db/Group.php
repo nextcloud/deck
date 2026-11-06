@@ -15,6 +15,7 @@ class Group extends RelationalObject {
 		parent::__construct($primaryKey, $group);
 	}
 
+	#[\Override]
 	public function getObjectSerialization() {
 		return [
 			'uid' => $this->object->getGID(),

@@ -48,6 +48,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getId(): string {
 		return Application::APP_ID . '-ref-cards';
 	}
@@ -55,6 +56,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getTitle(): string {
 		return $this->l10n->t('Deck boards, cards and comments');
 	}
@@ -62,6 +64,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getOrder(): int {
 		return 10;
 	}
@@ -69,6 +72,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getIconUrl(): string {
 		return $this->urlGenerator->getAbsoluteURL(
 			$this->urlGenerator->imagePath(Application::APP_ID, 'deck-dark.svg')
@@ -78,6 +82,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getSupportedSearchProviderIds(): array {
 		return [
 			'search-deck-card-board',
@@ -88,6 +93,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function matchReference(string $referenceText): bool {
 		$start = $this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID);
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
@@ -106,6 +112,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
 			$ids = $this->getBoardCardId($referenceText);
@@ -205,6 +212,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		return null;
 	}
 
+	#[\Override]
 	public function getCachePrefix(string $referenceId): string {
 		$ids = $this->getBoardCardId($referenceId);
 		if ($ids !== null) {
@@ -215,6 +223,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		return $referenceId;
 	}
 
+	#[\Override]
 	public function getCacheKey(string $referenceId): ?string {
 		return $this->userId ?? '';
 	}

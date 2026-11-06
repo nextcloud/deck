@@ -111,10 +111,12 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 		}
 	}
 
+	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		return $this->cardMapper->isOwner($userId, $id);
 	}
 
+	#[\Override]
 	public function findBoardId(int $id): ?int {
 		return $this->cardMapper->findBoardId($id);
 	}
@@ -126,6 +128,7 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @return Assignment
 	 * @throws NotFoundException
 	 */
+	#[\Override]
 	public function insert(Entity $entity): Entity {
 		if (!($entity instanceof Assignment)) {
 			throw new \LogicException('Trying to insert a ' . get_class($entity) . ' in the assignment mapper');

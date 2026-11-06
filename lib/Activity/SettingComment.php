@@ -16,6 +16,7 @@ class SettingComment extends SettingBase {
 	 * @return string Lowercase a-z and underscore only identifier
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getIdentifier(): string {
 		return 'deck_comment';
 	}
@@ -24,6 +25,7 @@ class SettingComment extends SettingBase {
 	 * @return string A translated string
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l->t('A <strong>comment</strong> was created on a card');
 	}
@@ -32,6 +34,7 @@ class SettingComment extends SettingBase {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function canChangeStream(): bool {
 		return false;
 	}

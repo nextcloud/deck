@@ -35,6 +35,7 @@ class Notifier implements INotifier {
 	 * @return string
 	 * @since 17.0.0
 	 */
+	#[\Override]
 	public function getID(): string {
 		return 'deck';
 	}
@@ -45,6 +46,7 @@ class Notifier implements INotifier {
 	 * @return string
 	 * @since 17.0.0
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l10nFactory->get('deck')->t('Deck');
 	}
@@ -56,6 +58,7 @@ class Notifier implements INotifier {
 	 * @throws \InvalidArgumentException When the notification was not prepared by a notifier
 	 * @since 9.0.0
 	 */
+	#[\Override]
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		$l = $this->l10nFactory->get('deck', $languageCode);
 		if ($notification->getApp() !== 'deck' || $notification->getObjectType() === 'activity_notification') {

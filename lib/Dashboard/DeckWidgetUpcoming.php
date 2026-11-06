@@ -42,6 +42,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getId(): string {
 		return 'deck';
 	}
@@ -49,6 +50,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getTitle(): string {
 		return $this->l10n->t('Upcoming cards');
 	}
@@ -56,6 +58,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getOrder(): int {
 		return 20;
 	}
@@ -63,6 +66,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getIconClass(): string {
 		return 'icon-deck';
 	}
@@ -70,6 +74,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getIconUrl(): string {
 		return $this->urlGenerator->getAbsoluteURL(
 			$this->urlGenerator->imagePath(Application::APP_ID, 'deck-dark.svg')
@@ -79,6 +84,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getUrl(): ?string {
 		return $this->urlGenerator->getAbsoluteURL(
 			$this->urlGenerator->linkToRoute(Application::APP_ID . '.page.index')
@@ -88,6 +94,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function load(): void {
 		Util::addScript('deck', 'deck-dashboard');
 	}
@@ -95,6 +102,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getItems(string $userId, ?string $since = null, int $limit = 7): array {
 		$upcomingCards = $this->dashboardService->findUpcomingCards($userId);
 		$nowTimestamp = (new Datetime())->getTimestamp();
@@ -140,6 +148,7 @@ class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getWidgetButtons(string $userId): array {
 		return [
 			new WidgetButton(

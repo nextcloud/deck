@@ -45,10 +45,12 @@ class TrelloJsonService extends ABoardImportService {
 		$this->l10n = $l10n;
 	}
 
+	#[\Override]
 	public function bootstrap(): void {
 		$this->validateUsers();
 	}
 
+	#[\Override]
 	public function getJsonSchemaPath(): string {
 		return implode(DIRECTORY_SEPARATOR, [
 			__DIR__,
@@ -58,6 +60,7 @@ class TrelloJsonService extends ABoardImportService {
 		]);
 	}
 
+	#[\Override]
 	public function validateUsers(): void {
 		if (empty($this->getImportService()->getConfig('uidRelation'))) {
 			return;
@@ -82,6 +85,7 @@ class TrelloJsonService extends ABoardImportService {
 		}
 	}
 
+	#[\Override]
 	public function getCardAssignments(): array {
 		$assignments = [];
 		foreach ($this->getImportService()->getData()->cards as $trelloCard) {
@@ -99,6 +103,7 @@ class TrelloJsonService extends ABoardImportService {
 		return $assignments;
 	}
 
+	#[\Override]
 	public function getComments(): array {
 		$comments = [];
 		foreach ($this->getImportService()->getData()->cards as $trelloCard) {
@@ -163,6 +168,7 @@ class TrelloJsonService extends ABoardImportService {
 		return $comments;
 	}
 
+	#[\Override]
 	public function importAttachments(): void {
 	}
 
@@ -178,6 +184,7 @@ class TrelloJsonService extends ABoardImportService {
 		return $comments;
 	}
 
+	#[\Override]
 	public function getCardLabelAssignment(): array {
 		$cardsLabels = [];
 		foreach ($this->getImportService()->getData()->cards as $trelloCard) {
@@ -190,6 +197,7 @@ class TrelloJsonService extends ABoardImportService {
 		return $cardsLabels;
 	}
 
+	#[\Override]
 	public function getBoard(): Board {
 		$board = $this->getImportService()->getBoard();
 		if (empty($this->getImportService()->getData()->name)) {
@@ -204,6 +212,7 @@ class TrelloJsonService extends ABoardImportService {
 	/**
 	 * @return Label[]
 	 */
+	#[\Override]
 	public function getLabels(): array {
 		foreach ($this->getImportService()->getData()->labels as $trelloLabel) {
 			$label = new Label();
@@ -222,6 +231,7 @@ class TrelloJsonService extends ABoardImportService {
 	/**
 	 * @return Stack[]
 	 */
+	#[\Override]
 	public function getStacks(): array {
 		$return = [];
 		foreach ($this->getImportService()->getData()->lists as $order => $list) {
@@ -240,6 +250,7 @@ class TrelloJsonService extends ABoardImportService {
 	/**
 	 * @return Card[]
 	 */
+	#[\Override]
 	public function getCards(): array {
 		$checklists = [];
 		foreach ($this->getImportService()->getData()->checklists as $checklist) {
@@ -302,6 +313,7 @@ class TrelloJsonService extends ABoardImportService {
 	/**
 	 * @return Acl[]
 	 */
+	#[\Override]
 	public function getAclList(): array {
 		$return = [];
 		foreach ($this->members as $member) {
@@ -375,6 +387,7 @@ class TrelloJsonService extends ABoardImportService {
 		}
 	}
 
+	#[\Override]
 	public function getBoards(): array {
 		if ($this->getImportService()->getData()->boards) {
 			return $this->getImportService()->getData()->boards;

@@ -6,6 +6,7 @@
 /babel.config.js
 /.editorconfig
 /.eslint.config.mjs
+/eslint.config.mjs
 /.nextcloudignore
 /webpack.js
 /.codecov.yml
@@ -33,3 +34,10 @@
 /psalm.xml
 /relativeci.config.js
 /stylelint.config.js
+/vendor/bamarni
+/vendor/bin
+/vendor/**/bin
+/vendor/**/tests
+/vendor-bin
+/.tx
+/tsconfig.json

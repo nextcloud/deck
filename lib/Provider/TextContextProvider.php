@@ -35,18 +35,22 @@ class TextContextProvider implements IContext {
 		private readonly int $cardId,
 	) {
 	}
+	#[\Override]
 	public function getId(): int {
 		return $this->cardId;
 	}
 
+	#[\Override]
 	public function getType(): string {
 		return self::CONTEXT_TYPE;
 	}
 
+	#[\Override]
 	public function toString(): string {
 		return $this->getType() . ' (' . $this->getId() . ')';
 	}
 
+	#[\Override]
 	public function buildDocument(): Document {
 		$document = new Document();
 		$document->setContextType($this->getType());
@@ -60,6 +64,7 @@ class TextContextProvider implements IContext {
 		return $document;
 	}
 
+	#[\Override]
 	public function prepareSession(): SessionInfo {
 		$readonly = !$this->permissionService->checkPermission($this->cardMapper, $this->cardId, Acl::PERMISSION_EDIT, $this->userId);
 		return new SessionInfo(
@@ -69,10 +74,12 @@ class TextContextProvider implements IContext {
 		);
 	}
 
+	#[\Override]
 	public function isReadOnly(): bool {
 		return !$this->permissionService->checkPermission($this->cardMapper, $this->cardId, Acl::PERMISSION_EDIT, $this->userId);
 	}
 
+	#[\Override]
 	public function updateDocument(Document $document): void {
 		$document->setChecksum($this->computeChecksum());
 		$document->setLastSavedVersionTime($this->getLastModified());
@@ -101,6 +108,7 @@ class TextContextProvider implements IContext {
 		return (int)($card->getLastModified() ?: time());
 	}
 
+	#[\Override]
 	public function getFile(): ?File {
 		return null;
 	}
@@ -109,14 +117,17 @@ class TextContextProvider implements IContext {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
+	#[\Override]
 	public function loadContent(): ?string {
 		$card = $this->findCard();
 		return $card->getDescription();
 	}
 
+	#[\Override]
 	public function cleanup(): void {
 	}
 
+	#[\Override]
 	public function save(string $content, callable $afterSave): void {
 		$this->cardService->updateDescription($this->cardId, $content);
 		$afterSave();

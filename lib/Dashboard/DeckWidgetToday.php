@@ -27,6 +27,7 @@ class DeckWidgetToday implements IWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getId(): string {
 		return 'deckToday';
 	}
@@ -34,6 +35,7 @@ class DeckWidgetToday implements IWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getTitle(): string {
 		return $this->l10n->t('Cards due today');
 	}
@@ -41,6 +43,7 @@ class DeckWidgetToday implements IWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getOrder(): int {
 		return 20;
 	}
@@ -48,6 +51,7 @@ class DeckWidgetToday implements IWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getIconClass(): string {
 		return 'icon-deck';
 	}
@@ -55,6 +59,7 @@ class DeckWidgetToday implements IWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getUrl(): ?string {
 		return null;
 	}
@@ -62,6 +67,7 @@ class DeckWidgetToday implements IWidget {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function load(): void {
 		\OCP\Util::addScript('deck', 'deck-dashboard');
 	}

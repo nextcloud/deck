@@ -13,6 +13,7 @@ class SettingDescription extends SettingBase {
 	 * @return string Lowercase a-z and underscore only identifier
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getIdentifier(): string {
 		return 'deck_card_description';
 	}
@@ -21,6 +22,7 @@ class SettingDescription extends SettingBase {
 	 * @return string A translated string
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l->t('A <strong>card description</strong> has been changed');
 	}

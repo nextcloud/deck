@@ -22,6 +22,7 @@ class FederationMiddleware extends Middleware {
 	) {
 	}
 
+	#[\Override]
 	public function beforeController($controller, $methodName): void {
 		try {
 			$this->configService->ensureFederationEnabled();

@@ -38,6 +38,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws \OCP\DB\Exception
 	 */
+	#[\Override]
 	public function find(int $id): Stack {
 		if (isset($this->stackCache[(string)$id])) {
 			return $this->stackCache[(string)$id];
@@ -138,6 +139,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	#[\Override]
 	public function update(Entity $entity): Entity {
 		$result = parent::update($entity);
 		$this->stackCache[(string)$entity->getId()] = $result;
@@ -174,6 +176,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		}
 	}
 
+	#[\Override]
 	public function delete(Entity $entity): Entity {
 		// delete cards on stack
 		$this->cardMapper->deleteByStack($entity->getId());
@@ -184,6 +187,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	/**
 	 * @throws \OCP\DB\Exception
 	 */
+	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('s.id')
@@ -198,6 +202,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	/**
 	 * @throws \OCP\DB\Exception
 	 */
+	#[\Override]
 	public function findBoardId(int $id): ?int {
 		$result = $this->cache->get('findBoardId:' . $id);
 		if ($result !== null) {

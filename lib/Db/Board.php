@@ -74,6 +74,7 @@ class Board extends RelationalEntity {
 		$this->shared = -1;
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		$json = parent::jsonSerialize();
 		if ($this->shared === -1) {

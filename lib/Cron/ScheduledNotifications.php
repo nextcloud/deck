@@ -30,6 +30,7 @@ class ScheduledNotifications extends Job {
 	 * @param $argument
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
+	#[\Override]
 	public function run($argument) {
 		// Notify board owner and card creator about overdue cards
 		$cards = $this->cardMapper->findOverdue();

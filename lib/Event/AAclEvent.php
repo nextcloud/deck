@@ -30,6 +30,7 @@ abstract class AAclEvent extends Event implements IWebhookCompatibleEvent {
 		return $this->acl->getBoardId();
 	}
 
+	#[\Override]
 	public function getWebhookSerializable(): array {
 		return [
 			'acl' => $this->acl->jsonSerialize(),

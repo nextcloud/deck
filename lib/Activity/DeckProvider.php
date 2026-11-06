@@ -65,6 +65,7 @@ class DeckProvider implements IProvider {
 	 * @throws UnknownActivityException Should be thrown if your provider does not know this event
 	 * @since 11.0.0
 	 */
+	#[\Override]
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null): IEvent {
 		if ($event->getApp() !== 'deck') {
 			throw new UnknownActivityException();
