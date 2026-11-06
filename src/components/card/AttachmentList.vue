@@ -334,7 +334,7 @@ export default {
 		},
 
 		async checkAttachmentsReadiness() {
-			const attachments = this.attachments.filter(attachment => attachment.deletedAt === 0)
+			const attachments = this.attachments.filter((attachment) => attachment.deletedAt === 0)
 			const readinessById = {}
 			const readinessChecks = await Promise.all(attachments.map(async (attachment) => {
 				if (!attachment.extendedData.fileid) {

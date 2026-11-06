@@ -16,7 +16,7 @@
 			<li>
 				<NcAvatar :user="board.owner.uid" :isNoUser="board.owner.type !== 0" />
 				<span class="username">
-					{{ board.owner.type===6 ? board.owner.uid : board.owner.displayname }}
+					{{ board.owner.type === 6 ? board.owner.uid : board.owner.displayname }}
 					<span v-if="!isCurrentUser(board.owner.uid)" class="board-owner-label">
 						{{ t('deck', 'Board owner') }}
 					</span>
