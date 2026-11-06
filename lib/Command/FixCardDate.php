@@ -24,7 +24,7 @@ class FixCardDate extends Command {
 	protected function configure() {
 		$this
 			->setName('deck:fix-card-date')
-			->setDescription('Fixes the date fields of cards. In some DBs, the date fields may have been stored incorrectly, causing issues with date handling. This command will attempt to fix those dates.')
+			->setDescription('Fixes the date fields of cards. In some DBs, the date fields may have been stored incorrectly, causing issues with date handling. This command will attempt to fix those dates. If a date falls on Feb 29 and the corrected year is not a leap year, it is clamped to Feb 28.')
 			->addOption(
 				'default-year',
 				null,
@@ -128,13 +128,17 @@ class FixCardDate extends Command {
 	}
 
 	protected function fixDate(string $date, ?string $defaultYear): string {
-		$parts = explode('-', $date);
+		$parts = explode('-', $date, 2);
 		$year = $parts[0];
-		$fixedYear = $defaultYear;
-		if (!$defaultYear) {
-			$fixedYear = substr($year, 0, 4);
+		$rest = $parts[1] ?? '';
+		$fixedYear = $defaultYear ?: substr($year, 0, 4);
+
+		// Feb 29 does not exist in non-leap years, clamp to Feb 28.
+		if (str_starts_with($rest, '02-29') && !checkdate(2, 29, (int)$fixedYear)) {
+			$rest = '02-28' . substr($rest, 5);
 		}
-		return str_replace($year . '-', $fixedYear . '-', $date);
+
+		return $fixedYear . '-' . $rest;
 	}
 
 	protected function updateCardDate(int $cardId, string $field, string $newDate): void {
