@@ -95,8 +95,10 @@ import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
+import { getClient, getDefaultPropfind, getRootPath, resultToNode } from '@nextcloud/files/dav'
 import { loadState } from '@nextcloud/initial-state'
 import { generateOcsUrl, generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { canView, getViewer } from '@nextcloud/viewer'
 import { NcActionButton, NcActionLink, NcActions, NcButton } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
@@ -279,20 +281,37 @@ export default {
 			this.$refs.localAttachments.click()
 		},
 
-		showViewer(attachment) {
-			if (attachment.extendedData.fileid && window.OCA.Viewer.availableHandlers.map((handler) => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
-				// Hide the sidebar if opening card in modal to avoid wrong sidebar position calculating in Viewer app
-				const sidebar = document.querySelector('aside.app-sidebar')
-				if (sidebar && this.cardDetailsInModal) {
-					sidebar.style.display = 'none'
+		async fetchAttachmentNode(attachment) {
+			const result = await getClient().stat(getRootPath() + attachment.extendedData.path, {
+				details: true,
+				data: getDefaultPropfind(),
+			})
+			return resultToNode(result.data)
+		},
+
+		async showViewer(attachment) {
+			if (attachment.extendedData.fileid) {
+				let node = null
+				try {
+					node = await this.fetchAttachmentNode(attachment)
+				} catch (error) {
+					logger.error('Could not load the attachment file to open it in the viewer', { error })
 				}
-				const onClose = () => {
-					if (sidebar && sidebar.style.display === 'none') {
-						sidebar.style.display = ''
+
+				if (node && canView(node)) {
+					// Hide the sidebar if opening card in modal to avoid wrong sidebar position calculating in Viewer app
+					const sidebar = document.querySelector('aside.app-sidebar')
+					if (sidebar && this.cardDetailsInModal) {
+						sidebar.style.display = 'none'
 					}
+					const session = await getViewer().open([node], node)
+					session.addEventListener('close', () => {
+						if (sidebar && sidebar.style.display === 'none') {
+							sidebar.style.display = ''
+						}
+					}, { once: true })
+					return
 				}
-				window.OCA.Viewer.open({ path: attachment.extendedData.path, onClose })
-				return
 			}
 
 			if (attachment.extendedData.fileid) {
