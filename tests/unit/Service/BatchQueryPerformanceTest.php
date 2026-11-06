@@ -348,6 +348,7 @@ class BatchQueryPerformanceTest extends TestCase {
 			$this->createMock(IL10N::class),
 			$this->createMock(ActivityManager::class),
 			$this->createMock(AttachmentServiceValidator::class),
+			$this->createMock(IEventDispatcher::class),
 			$this->createMock(DeckShareProvider::class),
 			$this->createMock(ICloudIdManager::class),
 			$this->createMock(IJobList::class),

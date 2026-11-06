@@ -45,7 +45,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	 * Reason is not having access to the original filename because of early sanitization in the request lifecycle.
 	 */
 	private const SANITIZED_CHAR_MAPPING = [':' => '/'];
-	private const FEDERATED_ATTACHMENT_TARGET_PREFIX = 'deck-card-attachment-';
 
 	private IRequest $request;
 	private IRootFolder $rootFolder;
@@ -199,7 +198,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $attachment;
 	}
 
-	#[\Override]
 	private function ensureFederatedAttachmentShare(IShare $attachmentShare, Node $file, string $federatedCloudId): string {
 		if ($shareToken = $this->findFederatedAttachmentShareToken($file->getId(), $federatedCloudId)) {
 			return $shareToken;
@@ -244,6 +242,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $data['token'] ?? null;
 	}
 
+	#[\Override]
 	public function display(Attachment $attachment) {
 		// Problem: Folders
 		/** @psalm-suppress InvalidCatch */
