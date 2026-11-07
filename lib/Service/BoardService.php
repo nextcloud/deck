@@ -742,6 +742,7 @@ class BoardService {
 				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
 			}
 			$this->connection->commit();
+			$this->dispatchUserShareAccessUpdated([$newOwner, $previousOwner]);
 			$this->eventDispatcher->dispatchTyped(new CriticalActionPerformedEvent(
 				'Ownership of board %s was transferred from "%s" to "%s"',
 				[
@@ -766,6 +767,21 @@ class BoardService {
 			if ($board->getOwner() === $owner) {
 				yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent);
 			}
+		}
+	}
+
+	/**
+	 * Notify files_sharing that the Deck attachments the given users can access have changed
+	 * (otherwise they are mounted under the raw {DECK_PLACEHOLDER} target)
+	 *
+	 * @param list<string> $userIds
+	 */
+	private function dispatchUserShareAccessUpdated(array $userIds): void {
+		if (!class_exists(UserShareAccessUpdatedEvent::class)) {
+			return;
+		}
+		foreach (array_unique($userIds) as $userId) {
+			$this->eventDispatcher->dispatchTyped(new UserShareAccessUpdatedEvent(new LazyUser($userId, $this->userManager)));
 		}
 	}
 

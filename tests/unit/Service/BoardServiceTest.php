@@ -56,6 +56,7 @@ use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
+use OCA\Files_Sharing\Event\UserShareAccessUpdatedEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
@@ -776,5 +777,28 @@ class BoardServiceTest extends TestCase {
 		$this->assertSame('deck.board.ownership_transferred', $auditEvents[0]->getOperation());
 		$this->assertSame('Ownership of board %s was transferred from "%s" to "%s"', $auditEvents[0]->getLogMessage());
 		$this->assertSame(['boardId' => 7, 'previousOwner' => 'admin', 'newOwner' => 'newowner', 'changeContent' => true], $auditEvents[0]->getParameters());
+	}
+
+	public function testTransferBoardOwnershipUpdatesShareAccessOfBothOwners(): void {
+		if (!class_exists(UserShareAccessUpdatedEvent::class)) {
+			$this->markTestSkipped('files_sharing is not available');
+		}
+		$board = new Board();
+		$board->setId(7);
+		$board->setOwner('admin');
+		$this->boardMapper->method('find')->willReturn($board);
+		$updatedUsers = [];
+		$this->eventDispatcher->method('dispatchTyped')
+			->willReturnCallback(function (Event $event) use (&$updatedUsers): void {
+				if ($event instanceof UserShareAccessUpdatedEvent) {
+					foreach ($event->getUsers() as $user) {
+						$updatedUsers[] = $user->getUID();
+					}
+				}
+			});
+
+		$this->service->transferBoardOwnership(7, 'newowner', true);
+
+		$this->assertSame(['newowner', 'admin'], $updatedUsers);
 	}
 }
