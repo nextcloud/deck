@@ -49,6 +49,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\Event\AclCreatedEvent;
@@ -734,6 +735,43 @@ class BoardServiceTest extends TestCase {
 		$this->assertCount(1, $auditEvents);
 		$this->assertSame('deck.board.archived', $auditEvents[0]->getOperation());
 		$this->assertSame(['boardId' => 123], $auditEvents[0]->getParameters());
+	}
+
+	public function testCloneKeepsDoneColumn(): void {
+		$board = new Board();
+		$board->setId(1);
+		$board->setOwner('admin');
+		$board->setTitle('Board');
+		$board->setColor('ffffff');
+		$doneStack = new Stack();
+		$doneStack->setTitle('Done');
+		$doneStack->setOrder(1);
+		$doneStack->setIsDoneColumn(true);
+		$openStack = new Stack();
+		$openStack->setTitle('Open');
+		$openStack->setOrder(0);
+		$this->permissionService->method('canCreate')->willReturn(true);
+		$this->permissionService->method('findUsers')->willReturn(['admin' => 'admin']);
+		$this->boardMapper->method('find')->willReturn($board);
+		$this->boardMapper->method('insert')
+			->willReturnCallback(static function (Board $newBoard): Board {
+				$newBoard->setId(2);
+				return $newBoard;
+			});
+		$this->aclMapper->method('findAll')->willReturn([]);
+		$this->labelMapper->method('findAll')->willReturn([]);
+		$this->stackMapper->method('findAll')->willReturn([$doneStack, $openStack]);
+		$this->sessionMapper->method('findAllActive')->willReturn([]);
+		$inserted = [];
+		$this->stackMapper->method('insert')
+			->willReturnCallback(static function (Stack $stack) use (&$inserted): Stack {
+				$inserted[$stack->getTitle()] = $stack->getIsDoneColumn();
+				return $stack;
+			});
+
+		$this->service->clone(1, 'admin');
+
+		$this->assertSame(['Done' => true, 'Open' => false], $inserted);
 	}
 
 	public function testCloneLogsCriticalAction(): void {
