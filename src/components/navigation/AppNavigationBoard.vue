@@ -533,7 +533,7 @@ export default {
 					this.$router.push({ name: 'board', params: { id: newBoard.id } })
 				} catch (e) {
 					logger.error('Failed to clone board', { error: e })
-					OC.Notification.showTemporary(t('deck', 'An error occurred'))
+					showError(t('deck', 'An error occurred'))
 				}
 			}
 		},
