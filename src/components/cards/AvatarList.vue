@@ -14,21 +14,23 @@
 						</div>
 						<div v-for="user in firstUsers" :key="user.id">
 							<NcAvatar
-								v-if="user.type === 0"
+								v-if="user.participant.type === 0"
 								:user="user.participant.uid"
 								:displayName="user.participant.displayname"
 								:disableMenu="true"
 								:hideStatus="true"
 								:size="32" />
 							<NcAvatar
-								v-if="user.type === 6"
+								v-if="user.participant.type === 6"
 								:user="user.participant.uid"
-								:displayName="user.participant.displayname"
+								:displayName="user.participant.uid"
+								:tooltipMessage="user.participant.uid + ' ' + t('deck', '(remote)')"
 								:disableMenu="true"
 								:hideStatus="true"
+								:isNoUser="true"
 								:size="32" />
 							<NcAvatar
-								v-if="user.type === 1"
+								v-if="user.participant.type === 1"
 								:user="user.participant.uid"
 								:displayName="user.participant.displayname"
 								:tooltipMessage="user.participant.displayname + ' ' + t('deck', '(Group)')"
@@ -36,7 +38,7 @@
 								:disableMenu="true"
 								:size="32" />
 							<NcAvatar
-								v-if="user.type === 7"
+								v-if="user.participant.type === 7"
 								:user="user.participant.uid"
 								:displayName="user.participant.displayname"
 								:tooltipMessage="user.participant.displayname + ' ' + t('deck', '(Team)')"

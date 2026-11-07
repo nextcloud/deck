@@ -48,7 +48,7 @@ class StackOcsController extends OCSController {
 		} else {
 			$stack = $this->stackService->create($title, $boardId, $order);
 			return new DataResponse($stack);
-		};
+		}
 	}
 
 	#[NoAdminRequired]
@@ -88,6 +88,18 @@ class StackOcsController extends OCSController {
 			}
 		}
 		$stacks = $this->stackService->reorder($stackId, $order);
+		return new DataResponse($stacks);
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function getArchived(int $boardId): DataResponse {
+		$board = $this->boardService->find($boardId, false);
+		if ($board->getExternalId()) {
+			$stacks = $this->externalBoardService->getArchivedStacksFromRemote($board);
+			return new DataResponse($stacks);
+		}
+		$stacks = $this->stackService->findAllArchived($boardId);
 		return new DataResponse($stacks);
 	}
 
