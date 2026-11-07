@@ -14,7 +14,9 @@
 				v-model="startdate"
 				:placeholder="t('deck', 'Set a start date')"
 				:hideLabel="true"
-				type="datetime-local" />
+				type="datetime-local"
+				:min="minDate"
+				:max="maxDate" />
 			<NcActions
 				v-if="canEdit"
 				:forceName="!startdate"
@@ -58,6 +60,7 @@ import { defineComponent } from 'vue'
 import CalendarStart from 'vue-material-design-icons/CalendarArrowLeft.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import CardDetailEntry from './CardDetailEntry.vue'
+import { MAX_DATE, MIN_DATE } from '../../helpers/dateRange.js'
 import readableDate from '../../mixins/readableDate.js'
 
 export default defineComponent({
@@ -89,6 +92,14 @@ export default defineComponent({
 
 	emits: ['input'],
 	computed: {
+		minDate() {
+			return MIN_DATE
+		},
+
+		maxDate() {
+			return MAX_DATE
+		},
+
 		startdate: {
 			get() {
 				return this.card?.startdate ? new Date(this.card.startdate) : null
