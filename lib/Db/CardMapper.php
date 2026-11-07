@@ -361,7 +361,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'duedate', 'notified')
 			->from('deck_cards')
-			->where($qb->expr()->lt('duedate', $qb->createFunction('NOW()')))
+			->where($qb->expr()->lt('duedate', $this->dateTimeParameter($qb, $now)))
 			->andWhere($qb->expr()->eq('notified', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->isNull('done'))
