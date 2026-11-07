@@ -31,7 +31,7 @@ class TextContextProvider implements IContext {
 		private readonly CardService $cardService,
 		private readonly CardMapper $cardMapper,
 		private readonly PermissionService $permissionService,
-		private readonly string $userId,
+		private readonly ?string $userId,
 		private readonly int $cardId,
 	) {
 	}
