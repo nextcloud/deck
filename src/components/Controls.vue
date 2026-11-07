@@ -146,6 +146,22 @@
 										:hideStatus="true" /> {{ user.displayname }}</label>
 								</div>
 
+								<h3>{{ t('deck', 'Filter by creator') }}</h3>
+								<div v-for="user in board.users" :key="user.uid" class="filter--item">
+									<input
+										:id="'creator-' + user.uid"
+										v-model="filter.creators"
+										type="checkbox"
+										class="checkbox"
+										:value="user.uid"
+										@change="setFilter">
+									<label :for="'creator-' + user.uid"><NcAvatar
+										:user="user.uid"
+										:size="24"
+										:disableMenu="true"
+										:hideStatus="true" /> {{ user.displayname }}</label>
+								</div>
+
 								<h3>{{ t('deck', 'Filter by status') }}</h3>
 								<div class="filter--item">
 									<input
@@ -401,7 +417,7 @@ export default {
 			newStackTitle: '',
 			stack: '',
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
+			filter: { tags: [], users: [], creators: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -440,7 +456,7 @@ export default {
 		},
 
 		isFilterActive() {
-			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.completed !== 'both'
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.creators.length !== 0 || this.filter.due !== '' || this.filter.completed !== 'both'
 		},
 
 		labelsSorted() {
@@ -567,7 +583,7 @@ export default {
 		},
 
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
+			const filterReset = { tags: [], users: [], creators: [], due: '', unassigned: false, completed: 'both' }
 			this.setFilterInStore({ ...filterReset })
 			this.filter = filterReset
 		},
