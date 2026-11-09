@@ -147,7 +147,7 @@
 								</div>
 
 								<h3>{{ t('deck', 'Filter by creator') }}</h3>
-								<div v-for="user in board.users" :key="user.uid" class="filter--item">
+								<div v-for="user in cardCreators" :key="user.uid" class="filter--item">
 									<input
 										:id="'creator-' + user.uid"
 										v-model="filter.creators"
@@ -346,6 +346,7 @@ import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter
 import ViewColumnIcon from 'vue-material-design-icons/ViewColumn.vue'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import SessionList from './SessionList.vue'
+import { cardCreatorUsers } from '../helpers/cardFilters.js'
 import labelStyle from '../mixins/labelStyle.js'
 import { isNotifyPushEnabled } from '../sessions.js'
 import { useBoardStore } from '../stores/board.js'
@@ -439,7 +440,17 @@ export default {
 			showCardCover: (state) => state.showCardCover,
 		}),
 
-		...mapState(useCardStore, ['cardById']),
+		...mapState(useCardStore, ['cardById', 'cards']),
+		...mapState(useStackStore, ['stacksByBoard']),
+		cardCreators() {
+			if (!this.board) {
+				return []
+			}
+			const stackIds = new Set(this.stacksByBoard(this.board.id).map((stack) => stack.id))
+			const boardCards = this.cards.filter((card) => stackIds.has(card.stackId))
+			return cardCreatorUsers(boardCards, this.board.users)
+		},
+
 		...mapWritableState(useSettingsStore, ['searchQuery']),
 		pageTitle() {
 			if (!this.board?.title) {
