@@ -190,7 +190,7 @@ export default {
 			}
 		},
 		attachmentBasename() {
-			return (attachment) => attachment?.extendedData?.info.filename
+			return (attachment) => attachment?.extendedData?.info?.filename
 				?? (attachment?.name ?? attachment.data).replace(/\.[^/.]+$/, '')
 		},
 		attachmentExtension() {
