@@ -50,7 +50,7 @@ export const useCardStore = defineStore('card', {
 					}
 				}
 
-				if (creators.length > 0 && !cardCreatedByAny(card, creators)) {
+				if (creators.length > 0 && !cardCreatedByAny(card, creators, useBoardStore().currentBoard?.users)) {
 					return false
 				}
 
