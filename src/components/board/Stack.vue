@@ -121,7 +121,7 @@
 			nonDragAreaSelector=".dragDisabled"
 			:dragHandleSelector="dragHandleSelector"
 			data-dragscroll-enabled
-			:shouldAcceptDrop="() => canEdit"
+			:shouldAcceptDrop="(sourceOptions) => canEdit && sourceOptions.groupName === 'stack'"
 			@dragStart="draggingCard = true"
 			@dragEnd="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">

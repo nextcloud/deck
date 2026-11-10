@@ -64,7 +64,7 @@
 				class="board"
 				@mousedown="onMouseDown">
 				<Container
-					lockAxix="y"
+					lockAxis="x"
 					orientation="horizontal"
 					:dragHandleSelector="dragHandleSelector"
 					data-click-closes-sidebar="true"
