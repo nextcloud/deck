@@ -698,6 +698,7 @@ class BoardService {
 				$newStack->setOrder($stack->getOrder());
 			}
 			$newStack->setBoardId($newBoard->getId());
+			$newStack->setIsDoneColumn($stack->getIsDoneColumn());
 			$this->stackMapper->insert($newStack);
 		}
 
