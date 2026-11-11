@@ -8,6 +8,7 @@
 namespace OCA\Deck\Provider;
 
 use OC\Security\SecureRandom;
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\NoPermissionException;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class TextContextProviderTest extends TestCase {
 	private CardService&MockObject $cardService;
+	private PermissionService&MockObject $permissionService;
 	private TextContextProvider $provider;
 
 	protected function setUp(): void {
@@ -30,11 +32,12 @@ class TextContextProviderTest extends TestCase {
 			$this->markTestSkipped('Text app not available');
 		}
 		$this->cardService = $this->createMock(CardService::class);
+		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->provider = new TextContextProvider(
 			$this->createMock(SecureRandom::class),
 			$this->cardService,
 			$this->createMock(CardMapper::class),
-			$this->createMock(PermissionService::class),
+			$this->permissionService,
 			'admin',
 			5,
 		);
@@ -74,5 +77,25 @@ class TextContextProviderTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->provider->buildDocument();
+	}
+
+	public function testPrepareSessionWithEditPermission(): void {
+		$this->permissionService->expects($this->once())
+			->method('checkPermission')
+			->with($this->anything(), 5, Acl::PERMISSION_EDIT, 'admin')
+			->willReturn(true);
+
+		$sessionInfo = $this->provider->prepareSession();
+
+		$this->assertFalse($sessionInfo->readOnly);
+		$this->assertFalse($sessionInfo->canAttachFiles);
+		$this->assertNull($sessionInfo->lock);
+	}
+
+	public function testPrepareSessionWithoutEditPermission(): void {
+		$this->permissionService->method('checkPermission')
+			->willThrowException(new NoPermissionException('denied'));
+
+		$this->assertTrue($this->provider->prepareSession()->readOnly);
 	}
 }
