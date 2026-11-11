@@ -5,7 +5,10 @@
 
 <template>
 	<div>
-		<NcColorPicker v-model="editingCardColor" clearable @submit="updateCardColor">
+		<NcColorPicker v-model="editingCardColor"
+			clearable
+			advanced-fields
+			@submit="updateCardColor">
 			<NcActionButton @click="openColorPicker">
 				<template #icon>
 					<SelectColor :fill-color="cardColor" :size="20" decorative />
