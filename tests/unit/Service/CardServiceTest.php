@@ -333,6 +333,7 @@ class CardServiceTest extends TestCase {
 		$card->setDescription('A test description');
 		$card->setColor('FF0000');
 		$card->setDuedate(new \DateTime('2026-12-24 12:00:00'));
+		$card->setStartdate(new \DateTime('2026-12-20 09:00:00'));
 
 		$clonedCard = clone $card;
 		$clonedCard->setId(2);
@@ -417,6 +418,7 @@ class CardServiceTest extends TestCase {
 		$this->assertEquals('FF0000', $inserted[1]->getColor());
 		$this->assertEquals('A test description', $inserted[1]->getDescription());
 		$this->assertEquals($card->getDuedate(), $inserted[1]->getDuedate());
+		$this->assertEquals($card->getStartdate(), $inserted[1]->getStartdate());
 
 		$this->assertCount(1, $c->getLabels());
 		$this->assertEquals($label->getId(), $c->getLabels()[0]->getId());
