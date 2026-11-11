@@ -7,7 +7,7 @@
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
 			:class="{'compact': compactMode, 'current-card': currentCard, 'no-labels': !hasLabels, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
-			:style="{backgroundColor: color}"
+			:style="cardStyle"
 			tag="div"
 			:tabindex="0"
 			class="card"
@@ -196,6 +196,19 @@ export default {
 		},
 		color() {
 			return this.card.color ? '#' + this.card.color : null
+		},
+
+		cardStyle() {
+			if (!this.card.color) {
+				return {}
+			}
+			const textColor = this.textColor(this.card.color)
+			return {
+				backgroundColor: this.color,
+				color: textColor,
+				'--color-main-text': textColor,
+				'--color-text-maxcontrast': textColor,
+			}
 		},
 	},
 	watch: {
