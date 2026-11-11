@@ -17,6 +17,9 @@ const WEEK_SCALE = { unit: 'day', step: 7, columnWidth: 140 }
 // Day view: one column is 12 hours, snapping happens every hour
 const DAY_SCALE = { unit: 'hour', step: 12, columnWidth: 38 }
 
+/**
+ *
+ */
 function origin() {
 	return {
 		start: new Date(2026, 9, 30, 9, 30),

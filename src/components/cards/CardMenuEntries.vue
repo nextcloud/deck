@@ -5,10 +5,9 @@
 
 <template>
 	<div>
-		<NcColorPicker
-			v-model="editingCardColor"
+		<NcColorPicker v-model="editingCardColor"
 			clearable
-			advancedFields
+			advanced-fields
 			@submit="updateCardColor">
 			<NcActionButton @click="openColorPicker">
 				<template #icon>
