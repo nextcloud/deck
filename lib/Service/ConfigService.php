@@ -57,7 +57,8 @@ class ConfigService {
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
 			'cardIdBadge' => $this->isCardIdBadgeEnabled(),
-			'stackAddCardAtTop' => $this->isStackAddCardAtTopEnabled()
+			'stackAddCardAtTop' => $this->isStackAddCardAtTopEnabled(),
+			'defaultBoardView' => $this->getDefaultBoardView(),
 		];
 		if ($this->groupManager->isAdmin($userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -67,7 +68,7 @@ class ConfigService {
 	}
 
 	/**
-	 * @return bool|array{id: string, displayname: string}[]
+	 * @return bool|int|null|array{id: string, displayname: string}[]
 	 * @throws NoPermissionException
 	 */
 	public function get(string $key) {
@@ -95,8 +96,19 @@ class ConfigService {
 					return false;
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', false);
+			case 'defaultBoardView':
+				return $this->getDefaultBoardView();
 		}
 		return false;
+	}
+
+	public function getDefaultBoardView(): ?int {
+		$userId = $this->getUserId();
+		if ($userId === null) {
+			return null;
+		}
+		$value = $this->config->getUserValue($userId, Application::APP_ID, 'defaultBoardView', '');
+		return $value === '' ? null : (int)$value;
 	}
 
 	public function isCalendarEnabled(?int $boardId = null): bool {
@@ -210,6 +222,10 @@ class ConfigService {
 			case 'stackAddCardAtTop':
 				$this->config->setUserValue($userId, Application::APP_ID, 'stackAddCardAtTop', (string)$value);
 				$result = $value;
+				break;
+			case 'defaultBoardView':
+				$this->config->setUserValue($userId, Application::APP_ID, 'defaultBoardView', $value === null ? '' : (string)(int)$value);
+				$result = $value === null ? '' : $value;
 				break;
 			case 'board':
 				// extra check that user only send one of the allowed board settings and not something random
