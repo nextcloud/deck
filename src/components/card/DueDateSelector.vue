@@ -180,6 +180,9 @@ export default defineComponent({
 			},
 
 			set(val) {
+				if (!this.isValidDate(val)) {
+					return
+				}
 				this.$emit('input', val ? new Date(val) : null)
 			},
 		},
