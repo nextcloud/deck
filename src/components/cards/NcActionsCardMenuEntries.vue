@@ -9,6 +9,7 @@
 			v-if="canEdit"
 			v-model="editingCardColor"
 			clearable
+			advancedFields
 			@submit="updateCardColor">
 			<NcActionButton @click="openColorPicker">
 				<template #icon>

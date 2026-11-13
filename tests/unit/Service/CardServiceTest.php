@@ -331,14 +331,19 @@ class CardServiceTest extends TestCase {
 		$card->setOwner('admin');
 		$card->setStackId(12345);
 		$card->setDescription('A test description');
+		$card->setColor('FF0000');
 
 		$clonedCard = clone $card;
 		$clonedCard->setId(2);
 		$clonedCard->setStackId(1234);
 
+		$inserted = [];
 		$this->cardMapper->expects($this->exactly(2))
 			->method('insert')
-			->willReturn($card, $clonedCard);
+			->willReturnCallback(function (Card $entity) use (&$inserted, $card, $clonedCard) {
+				$inserted[] = $entity;
+				return count($inserted) === 1 ? $card : $clonedCard;
+			});
 
 		$this->cardMapper->expects($this->once())
 			->method('update')->willReturn($clonedCard);
@@ -408,6 +413,7 @@ class CardServiceTest extends TestCase {
 		$this->assertNotEquals($b->getStackId(), $c->getStackId());
 
 		$this->assertEquals('A test description', $c->getDescription());
+		$this->assertEquals('FF0000', $inserted[1]->getColor());
 
 		$this->assertCount(1, $c->getLabels());
 		$this->assertEquals($label->getId(), $c->getLabels()[0]->getId());
