@@ -25,7 +25,11 @@
 				label="title" />
 		</div>
 		<template #actions>
-			<NcButton :disabled="!isBoardAndStackChoosen" variant="secondary" @click="moveCard">
+			<NcButton
+				v-if="canMoveCard"
+				:disabled="!isBoardAndStackChoosen"
+				variant="secondary"
+				@click="moveCard">
 				{{ t('deck', 'Move card') }}
 			</NcButton>
 			<NcButton :disabled="!isBoardAndStackChoosen" variant="primary" @click="cloneCard">
@@ -62,7 +66,12 @@ export default {
 		...mapState(useStackStore, ['stackById']),
 		...mapState(useBoardStore, ['boardById', 'boards']),
 		activeBoards() {
-			return this.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
+			return this.boards.filter((item) => item.deletedAt === 0 && item.archived === false && item.permissions?.PERMISSION_EDIT)
+		},
+
+		canMoveCard() {
+			const boardId = this.card?.boardId ?? this.stackById(this.card?.stackId)?.boardId
+			return !!this.boardById(boardId)?.permissions?.PERMISSION_EDIT
 		},
 
 		isBoardAndStackChoosen() {
