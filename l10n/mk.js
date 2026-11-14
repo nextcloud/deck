@@ -247,7 +247,7 @@ OC.L10N.register(
     "(Team)" : "(Тим)",
     "(remote)" : "(далечински)",
     "Can edit" : "Може да уредува",
-    "Can share" : "Can share",
+    "Can share" : "Може да споделува",
     "Can manage" : "Може да ја менаџира",
     "Owner" : "Сопственик",
     "Delete" : "Избриши",
