@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { showError } from '@nextcloud/dialogs'
 import { defineStore } from 'pinia'
 import applyOrderToArray from '../helpers/applyOrderToArray.js'
 import logger from '../logger.js'
@@ -42,7 +43,7 @@ export const useStackStore = defineStore('stack', {
 			}
 			apiClient.reorderStack(stack.id, addedIndex, stack.boardId)
 				.catch((err) => {
-					OC.Notification.showTemporary('Failed to change order')
+					showError('Failed to change order')
 					logger.error('Failed to reorder stack', { error: err })
 
 					// restore old order
