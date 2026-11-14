@@ -66,9 +66,8 @@ class TextContextProvider implements IContext {
 
 	#[\Override]
 	public function prepareSession(): SessionInfo {
-		$readonly = !$this->permissionService->checkPermission($this->cardMapper, $this->cardId, Acl::PERMISSION_EDIT, $this->userId);
 		return new SessionInfo(
-			readOnly: $readonly,
+			readOnly: $this->isReadOnly(),
 			lock: null,
 			canAttachFiles: false,
 		);
@@ -76,7 +75,11 @@ class TextContextProvider implements IContext {
 
 	#[\Override]
 	public function isReadOnly(): bool {
-		return !$this->permissionService->checkPermission($this->cardMapper, $this->cardId, Acl::PERMISSION_EDIT, $this->userId);
+		try {
+			return !$this->permissionService->checkPermission($this->cardMapper, $this->cardId, Acl::PERMISSION_EDIT, $this->userId);
+		} catch (NoPermissionException|DoesNotExistException) {
+			return true;
+		}
 	}
 
 	#[\Override]
