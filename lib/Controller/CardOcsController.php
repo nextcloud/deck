@@ -120,7 +120,7 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, ?int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
+	public function update(int $id, string $title, int $stackId, string $type, int $order, string $description, $duedate, $deletedAt, int $boardId, array|string|null $owner = null, $archived = null, $startdate = null): DataResponse {
 		$done = array_key_exists('done', $this->request->getParams())
 			? new OptionalNullableValue($this->request->getParam('done', null))
 			: null;
@@ -150,7 +150,9 @@ class CardOcsController extends OCSController {
 					$duedate,
 					$deletedAt,
 					$archived,
-					$done
+					$done,
+					$startdate,
+					$color,
 				));
 			}
 		}
@@ -173,6 +175,18 @@ class CardOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
+	public function delete(int $cardId, ?int $boardId = null): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->deleteCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->delete($cardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
 	public function reorder(int $cardId, int $stackId, int $order, ?int $boardId): DataResponse {
 		if ($boardId) {
 			$board = $this->boardService->find($boardId, false);
@@ -181,6 +195,30 @@ class CardOcsController extends OCSController {
 			}
 		}
 		return new DataResponse($this->cardService->reorder($cardId, $stackId, $order));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function archive(int $cardId, int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->archiveCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->archive($cardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function unarchive(int $cardId, int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->unarchiveCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->unarchive($cardId));
 	}
 
 	#[NoAdminRequired]
@@ -205,5 +243,29 @@ class CardOcsController extends OCSController {
 			}
 		}
 		return new DataResponse($this->cardService->removeDependentCard($cardId, $dependentCardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function done(int $cardId, ?int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->setDoneCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->done($cardId));
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function undone(int $cardId, ?int $boardId): DataResponse {
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->setUndoneCardOnRemote($board, $cardId));
+			}
+		}
+		return new DataResponse($this->cardService->undone($cardId));
 	}
 }

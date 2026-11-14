@@ -21,7 +21,10 @@
 			<span>{{ subtitle }}</span>
 			<template v-if="cardOwner">
 				<span> ⸱ </span>
-				<NcUserBubble :user="cardOwner.uid" :displayName="cardOwner.displayName" />
+				<NcUserBubble
+					:user="cardOwner.isNoUser ? undefined : cardOwner.uid"
+					:displayName="cardOwner.displayName"
+					:isNoUser="cardOwner.isNoUser" />
 			</template>
 		</template>
 		<template #secondary-actions>
@@ -154,7 +157,8 @@ const cardOwner = computed(() => {
 	}
 	return {
 		uid: owner?.uid ?? (typeof owner === 'string' ? owner : null),
-		displayName: cardOwnerDisplayName.value,
+		displayName: owner?.type === 6 ? owner.uid : cardOwnerDisplayName.value,
+		isNoUser: owner?.type !== 0,
 	}
 })
 const modifiedTimestamp = computed(() => currentCard.value?.lastModified ? currentCard.value.lastModified * 1000 : null)

@@ -253,7 +253,7 @@ class PermissionService {
 		}
 		// check for users
 		foreach ($acls as $acl) {
-			if ($acl->getType() === Acl::PERMISSION_TYPE_USER && $acl->getParticipant() === $userId) {
+			if (in_array($acl->getType(), [Acl::PERMISSION_TYPE_USER, Acl::PERMISSION_TYPE_REMOTE]) && $acl->getParticipant() === $userId) {
 				return $acl->getPermission($permission);
 			}
 
