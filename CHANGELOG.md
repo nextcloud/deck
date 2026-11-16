@@ -5,6 +5,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.18.7
+### Changed
+* [stable34] build: remove unneeded directory from app archive by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8624
+* [stable34] ci: Add release relay job by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8645
+* [stable34] feat(cards): allow entering a HEX value in the card color picker by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8732
+
+### Fixed
+* [stable34] fix(sharing): stop deleted boards from showing up in team resources by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8628
+* [stable34] fix(translation): translate default card description by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8637
+* [stable34] Deck cards attachment fix: Prevent TypeError crash on undefined attachment info by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8716
+* [stable34] fix(cards): keep card color on clone and use contrasting text color by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8733
+* [stable34] fix(attachments): do not double close content stream by @backportbot[bot] in https://github.com/nextcloud/deck/pull/8737
+
 ## 1.18.6
 ### Changed
 * [stable34] enh(performance): get deck share permissions in one query by @grnd-alt in https://github.com/nextcloud/deck/pull/8391
