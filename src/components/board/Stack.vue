@@ -461,7 +461,7 @@ export default {
 			align-items: center;
 			cursor: inherit;
 			margin: 0;
-
+			font-size: inherit;
 			input[type=text] {
 				flex-grow: 1;
 			}
