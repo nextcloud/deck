@@ -5,7 +5,12 @@
 
 <template>
 	<div>
-		<NcColorPicker v-model="editingCardColor" clearable @submit="updateCardColor">
+		<NcColorPicker
+			v-if="canEdit"
+			v-model="editingCardColor"
+			clearable
+			advancedFields
+			@submit="updateCardColor">
 			<NcActionButton @click="openColorPicker">
 				<template #icon>
 					<SelectColor :fillColor="cardColor" :size="20" decorative />
@@ -54,7 +59,7 @@
 			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
 		</NcActionButton>
 		<NcActionButton
-			v-if="canEdit"
+			v-if="!card.archived"
 			:closeAfterClick="true"
 			@click="openCardMoveDialog">
 			<template #icon>
@@ -157,7 +162,7 @@ export default {
 		}),
 
 		canEdit() {
-			return !this.card.archived
+			return !this.card.archived && this.canEditBoard
 		},
 
 		isInDoneColumn() {

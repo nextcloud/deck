@@ -389,9 +389,21 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	#[\Override]
 	public function update(Attachment $attachment) {
 		$share = $this->getShareForAttachment($attachment);
-		$target = $share->getNode();
-		if (!($target instanceof File)) {
-			throw new StatusException('Target is not a file');
+
+		// Multiple mounts can expose the same file with different permissions.
+		$nodes = $this->rootFolder->getUserFolder($this->userId)->getById($share->getNodeId());
+		if ($nodes === []) {
+			throw new NotFoundException('File not found');
+		}
+		$target = null;
+		foreach ($nodes as $node) {
+			if ($node instanceof File && ($node->getPermissions() & Constants::PERMISSION_UPDATE) !== 0) {
+				$target = $node;
+				break;
+			}
+		}
+		if ($target === null) {
+			throw new NoPermissionException('The file is not writable for this user');
 		}
 		$file = $this->getUploadedFile();
 		$fileName = $file['name'];
@@ -402,7 +414,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			throw new StatusException('Could not read file');
 		}
 		$target->putContent($content);
-		fclose($content);
 
 		$attachment->setLastModified(time());
 		return $attachment;
