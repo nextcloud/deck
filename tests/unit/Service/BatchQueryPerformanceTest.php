@@ -167,6 +167,32 @@ class BatchQueryPerformanceTest extends TestCase {
 		$this->assertSame([], $this->attachmentService->countForCards([]));
 	}
 
+	public function testEnrichCardsSkipsReadMarkLookupWhenUserIsMissing(): void {
+		$cards = $this->buildCards(1, stackId: 1);
+		$stack = new Stack();
+		$stack->setId(1);
+		$stack->setBoardId(1);
+
+		$this->userManager->method('get')->willReturn(null);
+		$this->commentsManager->expects($this->once())
+			->method('getNumberOfCommentsForObject')
+			->with('deckCard', (string)$cards[0]->getId())
+			->willReturn(2);
+		$this->commentsManager->expects($this->never())->method('getReadMark');
+		$this->stackMapper->method('findByIds')->willReturn([1 => $stack]);
+		$this->attachmentServiceMock->method('countForCards')->willReturn([1 => 0]);
+		$this->labelMapper->method('findAssignedLabelsForCards')->willReturn([]);
+		$this->assignedUsersMapper->method('findIn')->willReturn([]);
+		$this->boardService->method('find')->willReturn($this->createMock(Board::class));
+		$this->referenceManager->method('extractReferences')->willReturn([]);
+
+		$result = $this->cardService->enrichCards($cards);
+
+		$this->assertCount(1, $result);
+		$this->assertSame(0, $result[0]->getCommentsUnread());
+		$this->assertSame(2, $result[0]->getCommentsCount());
+	}
+
 	/**
 	 * enrichCards() with 100 cards (one board's worth) must call
 	 * AttachmentService::countForCards() exactly once, passing all 100 IDs
