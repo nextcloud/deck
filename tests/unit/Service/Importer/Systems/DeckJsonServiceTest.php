@@ -109,6 +109,21 @@ class DeckJsonServiceTest extends \Test\TestCase {
 		$this->assertEquals('# Test description' . "\n\n" . 'Hello world', $card119->getDescription());
 	}
 
+	public function testGetStacksKeepsDoneColumn(): void {
+		$importService = $this->setUpImportService();
+		$importService->getData()->stacks = [
+			(object)['id' => 1, 'title' => 'Done', 'order' => 0, 'lastModified' => 0, 'isDoneColumn' => true],
+			(object)['id' => 2, 'title' => 'Open', 'order' => 1, 'lastModified' => 0, 'isDoneColumn' => false],
+			(object)['id' => 3, 'title' => 'Old export', 'order' => 2, 'lastModified' => 0],
+		];
+
+		$stacks = $this->service->getStacks();
+
+		$this->assertTrue($stacks[1]->getIsDoneColumn());
+		$this->assertFalse($stacks[2]->getIsDoneColumn());
+		$this->assertFalse($stacks[3]->getIsDoneColumn());
+	}
+
 	private function setUpImportService(): BoardImportService {
 		$importService = Server::get(BoardImportService::class);
 
