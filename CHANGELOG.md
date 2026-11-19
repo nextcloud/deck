@@ -5,6 +5,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.19.3
+
+### Added
+* feat(cards): allow entering a HEX value in the card color picker by @mejo- in https://github.com/nextcloud/deck/pull/8727
+
+### Fixed
+* fix(ui): filter card dnd by group name by @grnd-alt in https://github.com/nextcloud/deck/pull/8724
+* fix(cards): keep card color on clone and use contrasting text color by @mejo- in https://github.com/nextcloud/deck/pull/8726
+* fix(attachments): do not double close content stream by @grnd-alt in https://github.com/nextcloud/deck/pull/8735
+
 ## 1.19.2
 
 ### Fixed
