@@ -111,9 +111,9 @@
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
 			data-dragscroll-enabled
-			:should-accept-drop="() => canEdit"
-			@drag-start="draggingCard = true"
-			@drag-end="draggingCard = false"
+			:shouldAcceptDrop="(sourceOptions) => canEdit && sourceOptions.groupName === 'stack'"
+			@dragStart="draggingCard = true"
+			@dragEnd="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
 				<transition :appear="animate && !card.animated && (card.animated=true)"

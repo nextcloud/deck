@@ -58,7 +58,7 @@
 				ref="board"
 				class="board"
 				@mousedown="onMouseDown">
-				<Container lock-axix="y"
+				<Container lock-axis="x"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
 					data-click-closes-sidebar="true"
