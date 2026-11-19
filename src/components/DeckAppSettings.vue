@@ -19,6 +19,19 @@
 					data-cy="setting:add-card-at-top"
 					:label="t('deck', 'Add new cards at the top of a list')" />
 			</NcFormBox>
+			<NcFormBox>
+				<NcSelect
+					v-model="defaultBoardView"
+					openDirection="bottom"
+					:options="boardViewOptions"
+					:inputLabel="t('deck', 'Default view for all boards')"
+					label="label"
+					trackBy="id"
+					clearable />
+				<p class="settings-hint">
+					{{ t('deck', 'The selected view is applied automatically when you open any board.') }}
+				</p>
+			</NcFormBox>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="appearance-settings" :name="t('deck', 'Appearance')">
@@ -81,6 +94,7 @@ import { confirmPassword } from '@nextcloud/password-confirmation'
 import { generateOcsUrl } from '@nextcloud/router'
 import { NcSelect } from '@nextcloud/vue'
 import { useHotKey } from '@nextcloud/vue/composables/useHotKey'
+import { mapActions, mapState } from 'pinia'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import NcAppSettingsShortcutsSection from '@nextcloud/vue/components/NcAppSettingsShortcutsSection'
@@ -89,6 +103,7 @@ import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcHotkey from '@nextcloud/vue/components/NcHotkey'
 import NcHotkeyList from '@nextcloud/vue/components/NcHotkeyList'
 import logger from '../logger.js'
+import { useBoardStore } from '../stores/board.js'
 import { useSettingsStore } from '../stores/settings.js'
 
 import '@nextcloud/password-confirmation/style.css' // Required for dialog styles
@@ -123,8 +138,20 @@ export default {
 	},
 
 	computed: {
+		...mapState(useBoardStore, ['allBoardViews', 'boards']),
 		isAdmin() {
 			return !!getCurrentUser()?.isAdmin
+		},
+
+		boardViewOptions() {
+			return this.allBoardViews.map((view) => {
+				const board = this.boards.find((candidate) => candidate.id === view.boardId)
+				const boardTitle = board?.title || `#${view.boardId}`
+				return {
+					id: view.id,
+					label: `${view.name} (${boardTitle})`,
+				}
+			})
 		},
 
 		cardDetailsInModal: {
@@ -157,6 +184,20 @@ export default {
 			},
 		},
 
+		defaultBoardView: {
+			get() {
+				const id = useSettingsStore().configByKey('defaultBoardView')
+				if (!id) {
+					return null
+				}
+				return this.boardViewOptions.find((view) => view.id === id) || null
+			},
+
+			set(view) {
+				useSettingsStore().setConfig({ defaultBoardView: view ? view.id : null })
+			},
+		},
+
 		federationEnabled: {
 			get() {
 				const value = useSettingsStore().configByKey('federationEnabled')
@@ -182,6 +223,7 @@ export default {
 	},
 
 	beforeMount() {
+		this.loadAllBoardViews()
 		if (this.isAdmin) {
 			this.groupLimit = useSettingsStore().configByKey('groupLimit')
 			axios.get(generateOcsUrl('cloud/groups')).then((response) => {
@@ -207,6 +249,7 @@ export default {
 	},
 
 	methods: {
+		...mapActions(useBoardStore, ['loadAllBoardViews']),
 		onClose() {
 			this.$emit('close')
 		},
@@ -232,6 +275,12 @@ export default {
 .app-settings-section {
 	&#settings-section_admin-settings p {
 		margin-bottom: 20px;
+	}
+
+	.settings-hint {
+		margin: 0;
+		padding-inline-start: calc(var(--default-clickable-area) * 0.5);
+		color: var(--color-text-maxcontrast);
 	}
 }
 </style>
