@@ -13,6 +13,8 @@ use OCA\Deck\Db\CardMapper;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudIdManager;
+use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,6 +37,8 @@ class CommentServiceTest extends TestCase {
 			$this->createMock(CardMapper::class),
 			$this->createMock(IUserManager::class),
 			$this->createMock(LoggerInterface::class),
+			$this->createMock(ICloudIdManager::class),
+			$this->createMock(IURLGenerator::class),
 			'admin',
 			$this->eventDispatcher,
 		);

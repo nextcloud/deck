@@ -10,6 +10,10 @@ namespace OCA\Deck\Federation;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use OC\Http\Client\Response;
+use OCA\Deck\BadRequestException;
+use OCA\Deck\NoPermissionException;
+use OCA\Deck\NotFoundException;
+use OCA\Deck\StatusException;
 use OCP\AppFramework\Http;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
@@ -60,7 +64,7 @@ class DeckFederationProxy {
 
 	/**
 	 * @param 'get'|'post'|'put'|'delete' $verb
-	 * @throws \Exception
+	 * @throws \Exception|StatusException
 	 */
 	protected function request(
 		string $verb,
@@ -96,7 +100,18 @@ class DeckFederationProxy {
 
 			$clientException = new \Exception($e->getMessage(), $status, $e);
 			$this->logger->debug('Client error from remote', ['exception' => $clientException]);
-			return new Response($e->getResponse(), false);
+
+			switch ($status) {
+				case 400:
+					throw new BadRequestException($data['ocs']['meta']['message'] ?? 'Bad request');
+				case 401:
+				case 403:
+					throw new NoPermissionException($data['ocs']['meta']['message'] ?? 'No permission');
+				case 404:
+					throw new NotFoundException($data['ocs']['meta']['message'] ?? 'Not found');
+				default:
+					return new Response($e->getResponse(), false);
+			}
 		} catch (ServerException|\Throwable $e) {
 			$serverException = new \Exception($e->getMessage(), $e->getCode(), $e);
 			$this->logger->error('Could not reach remote', ['exception' => $serverException]);

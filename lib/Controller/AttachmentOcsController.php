@@ -9,10 +9,13 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\BadRequestException;
 use OCA\Deck\NotImplementedException;
 use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\ExternalBoardService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -23,6 +26,7 @@ class AttachmentOcsController extends OCSController {
 		IRequest $request,
 		private AttachmentService $attachmentService,
 		private BoardService $boardService,
+		private ExternalBoardService $externalBoardService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -37,17 +41,41 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[PublicPage]
 	public function getAll(int $cardId, ?int $boardId = null): DataResponse {
-		$this->ensureLocalBoard($boardId);
+		$board = $this->boardService->find($boardId, false);
+		if ($board->getExternalId()) {
+			return new DataResponse($this->externalBoardService->getAttachmentsFromRemote($board, $cardId));
+		}
 		$attachment = $this->attachmentService->findAll($cardId, true);
 		return new DataResponse($attachment);
 	}
 
 	#[NoAdminRequired]
 	public function create(int $cardId, string $type, string $data = '', ?int $boardId = null): DataResponse {
-		$this->ensureLocalBoard($boardId);
+		$board = $this->boardService->find($boardId, false);
+		if ($board->getExternalId()) {
+			return new DataResponse($this->externalBoardService->createAttachmentForRemote($board, $cardId));
+		}
 		$attachment = $this->attachmentService->create($cardId, $type, $data);
 		return new DataResponse($attachment);
+	}
+
+	#[NoAdminRequired]
+	#[PublicPage]
+	public function createRemote(int $cardId, string $token): DataResponse {
+		$this->attachmentService->acceptRemoteAttachment($cardId, $token);
+		return new DataResponse([]);
+	}
+
+	#[NoAdminRequired]
+	public function shareRemote(int $cardId, int $boardId, string $path): DataResponse {
+		$board = $this->boardService->find($boardId, false);
+		if (!$board->getExternalId()) {
+			throw new BadRequestException('board is not federated');
+		}
+		$token = $this->externalBoardService->shareAttachmentForRemote($board, $cardId, $path);
+		return new DataResponse(['token' => $token]);
 	}
 
 	#[NoAdminRequired]
@@ -58,8 +86,12 @@ class AttachmentOcsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
+	#[PublicPage]
 	public function delete(int $cardId, int $attachmentId, string $type = 'file', ?int $boardId = null): DataResponse {
-		$this->ensureLocalBoard($boardId);
+		$board = $this->boardService->find($boardId, false);
+		if ($board->getExternalId()) {
+			return new DataResponse($this->externalBoardService->deleteAttachmentOnRemote($board, $cardId, $attachmentId, $type));
+		}
 		$attachment = $this->attachmentService->delete($cardId, $attachmentId, $type);
 		return new DataResponse($attachment);
 	}

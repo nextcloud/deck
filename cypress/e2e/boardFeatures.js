@@ -187,7 +187,7 @@ describe('Board title editing', function() {
 			cy.login(user)
 			cy.visit(`/apps/deck/board/${board.id}`)
 
-			cy.intercept({ method: 'PUT', url: `**/apps/deck/boards/${board.id}` }).as('updateBoard')
+			cy.intercept({ method: 'PUT', url: `**/apps/deck/api/v1.0/boards/${board.id}` }).as('updateBoard')
 
 			cy.get(`.app-navigation__list .app-navigation-entry:contains("${originalTitle}")`)
 				.parent()
@@ -221,7 +221,7 @@ describe('Board title editing', function() {
 				cy.login(user)
 				cy.visit(`/apps/deck/board/${boardA.id}`)
 
-				cy.intercept({ method: 'PUT', url: `**/apps/deck/boards/${boardB.id}` }).as('updateBoardOther')
+				cy.intercept({ method: 'PUT', url: `**/apps/deck/api/v1.0/boards/${boardB.id}` }).as('updateBoardOther')
 
 				cy.get('.board-title h2').should('contain', boardATitle)
 

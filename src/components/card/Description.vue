@@ -83,6 +83,7 @@ import VueEasymde from 'vue-easymde'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import AttachmentList from './AttachmentList.vue'
 import logger from '../../logger.js'
+import { useBoardStore } from '../../stores/board.js'
 import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
@@ -155,11 +156,12 @@ export default {
 	},
 
 	computed: {
+		...mapState(useBoardStore, ['currentBoard']),
 		...mapState(useSettingsStore, ['hasCardSaveError']),
 
 		// Only persisted cards can have a collaborative Text session
 		collaborative() {
-			return this.textAppAvailable && !!this.card?.id
+			return this.textAppAvailable && !!this.card?.id && !this.currentBoard.externalId
 		},
 
 		mimetypeForAttachment() {
