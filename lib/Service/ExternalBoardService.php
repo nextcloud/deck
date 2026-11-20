@@ -98,7 +98,8 @@ class ExternalBoardService {
 					$assignment['participant'] = $this->localizeRemoteUser($localBoard, $assignment['participant']);
 					return $assignment;
 				}, $card['assignedUsers'] ?? []);
-				$stack['cards'][$j]['owner'] = $this->localizeRemoteUser($localBoard, $card['owner']);
+				$ownerId = is_string($card['owner']) ? $card['owner'] : $card['owner']['uid'];
+				$stack['cards'][$j]['owner'] = $this->localizeRemoteUser($localBoard, ['uid' => $ownerId]);
 			}
 			$stacks[$i] = $stack;
 		}
@@ -240,7 +241,7 @@ class ExternalBoardService {
 			'archived' => $archived,
 			'done' => $done->getValue() ?? null,
 			'startdate' => $startdate,
-			'color' => $color,
+			'color' => $color->getValue() ?? null,
 			'boardId' => $localBoard->getExternalId(),
 		];
 		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);

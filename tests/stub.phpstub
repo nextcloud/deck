@@ -155,14 +155,17 @@ namespace OCA\Files_Sharing\External {
 		public function setMountpoint(string $mountPoint): void {}
 	}
 	class Mount {
+		public function __construct($storage, $mountpoint, $options, $manager, IUser $user, $loader = null) {}
 		public function getMountProvider(): string {}
 		public function getMountId(): int {}
+	}
+	class MountProvider {
+		public const STORAGE = '';
 	}
 	class Manager {
 		public function getShare(string $id, ?IUser $user = null): ExternalShare|false {}
 		public function acceptShare(ExternalShare $externalShare, ?IUser $user = null): bool {}
 		public function declineShare(ExternalShare $externalShare, ?IUser $user = null): bool {}
-		public function getMount(array $data, ?IUser $user = null): Mount {}
 	}
 }
 

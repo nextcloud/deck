@@ -21,7 +21,8 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
 use OCA\Files_Sharing\External\ExternalShare;
 use OCA\Files_Sharing\External\Manager as ExternalShareManager;
-use OCA\Files_Sharing\External\Mount;
+use OCA\Files_Sharing\External\Mount as ExternalShareMount;
+use OCA\Files_Sharing\External\MountProvider as ExternalShareMountProvider;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -1436,7 +1437,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		return $externalShare;
 	}
 
-	public function mountExternalShare(ExternalShare $externalShare, IUser $user): Mount {
+	public function mountExternalShare(ExternalShare $externalShare, IUser $user): ExternalShareMount {
 		$options = [
 			'remote' => $externalShare->getRemote(),
 			'token' => $externalShare->getRefreshToken(),
@@ -1451,8 +1452,11 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			'manager' => $this->externalShareManager,
 			'certificateManager' => Server::get(ICertificateManager::class),
 			'discoveryService' => Server::get(IOCMDiscoveryService::class),
+			'recipient' => $user,
 		];
-		$mount = $this->externalShareManager->getMount($options, $user);
+
+		$mountPoint = '/' . $user->getUID() . '/files/' . ltrim($externalShare->getMountpoint(), '/');
+		$mount = new ExternalShareMount(ExternalShareMountProvider::STORAGE, $mountPoint, $options, $this->externalShareManager, $user);
 		$this->mountManager->addMount($mount);
 
 		$userFolder = $this->rootFolder->getUserFolder($user->getUID());
