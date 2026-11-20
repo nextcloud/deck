@@ -72,23 +72,8 @@ export default defineComponent({
 					...item,
 					id: item.type + ':' + item.uid,
 					user: item.primaryKey,
-					displayname: item.displayname,
-					icon: 'icon-user',
-					isNoUser: false,
-				}
-
-				if (item.type === 1) {
-					assignable.icon = 'icon-group'
-					assignable.isNoUser = true
-				}
-				if (item.type === 7) {
-					assignable.icon = 'icon-circles'
-					assignable.isNoUser = true
-				}
-				if (item.type === 6) {
-					assignable.isNoUser = true
-					assignable.icon = null
-					assignable.displayname = item.primaryKey
+					displayName: this.buildDisplayName(item.type, item.uid, item.displayname),
+					isNoUser: item.type !== 0,
 				}
 
 				return assignable
@@ -118,11 +103,24 @@ export default defineComponent({
 					id: item.participant.type + ':' + item.participant.uid,
 					isNoUser: item.participant.type !== 0,
 					user: item.participant.uid,
-					displayname: item.participant.type === 6 ? item.participant.uid : item.participant.displayname,
+					displayName: this.buildDisplayName(item.participant.type, item.participant.uid, item.participant.displayname),
 				}))
 			} else {
 				this.assignedUsers = []
 			}
+		},
+
+		buildDisplayName(type, uid, name) {
+			if (type === 1) {
+				return name + ' (' + t('deck', 'Group') + ')'
+			}
+			if (type === 7) {
+				return name + ' (' + t('deck', 'Team') + ')'
+			}
+			if (type === 6) {
+				return uid
+			}
+			return name
 		},
 
 		onUpdate(value) {
