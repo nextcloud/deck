@@ -30,7 +30,7 @@ jobs:
 
       - name: Get version matrix
         id: versions
-        uses: icewind1991/nextcloud-version-matrix@cd0211ffcef1065e2020cd579e4843b8746e7a58 # v1.0.0
+        uses: icewind1991/nextcloud-version-matrix@71959de73c244b11ecbf4503b87c41d65b0f64ae # v1.0.0
 
   php-lint:
     runs-on: ubuntu-latest
