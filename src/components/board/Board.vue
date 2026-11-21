@@ -582,6 +582,20 @@ export default {
 				height: auto;
 			}
 		}
+
+		// smooth-dnd wraps each lane in an overflow: hidden box, so the lanes must be
+		// as wide as their columns, otherwise the last columns get clipped.
+		&--swimlanes > &__stack-headers,
+		&--swimlanes > .smooth-dnd-container.vertical {
+			min-width: min-content;
+		}
+
+		// Header and lane columns must size the same way. contain: inline-size drops
+		// their content (long stack title, long card title) from the min-content width,
+		// so only min-width: 250px counts. Swimlane.vue sets it on the lane columns.
+		&--swimlanes &__stack-headers :deep(.stack-draggable-wrapper) {
+			contain: inline-size;
+		}
 	}
 
 	/**

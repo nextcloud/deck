@@ -122,6 +122,9 @@ export default {
 		height: auto;
 		flex: 0 1 $card-max-width;
 		min-width: $card-min-width;
+		// Ignore card content in the min-content width of the lane. An unbreakable card
+		// title would otherwise widen the lane past the header columns. Only min-width counts.
+		contain: inline-size;
 
 		:deep(.stack) {
 			display: flex;
@@ -148,5 +151,19 @@ export default {
 			}
 		}
 	}
+}
+</style>
+
+<style lang="scss">
+/*
+ * Not scoped, the lane ghost is a clone of the lane and smooth-dnd may move it to
+ * <body>. While dragging, the library sets pointer-events: auto on every
+ * .smooth-dnd-container (0,2,0), which beats its own ".smooth-dnd-ghost *" rule.
+ * document.elementFromPoint() at the ghost centre then hit a cloned card container,
+ * and no registered container sits above it, so the drop found no target.
+ * 0,3,0 wins without !important.
+ */
+.smooth-dnd-ghost .swimlane .smooth-dnd-container {
+	pointer-events: none;
 }
 </style>

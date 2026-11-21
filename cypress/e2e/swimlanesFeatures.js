@@ -87,7 +87,7 @@ function seedSwimlaneBoard() {
 					})
 					.then(() => mk('Ship feature').then((card) => assignLabel(card.id, ids.feature)))
 					.then(() => mk('Unlabeled work'))
-					.then(() => cy.wrap({ boardId }))
+					.then(() => cy.wrap({ boardId, todoId: ids.todo, featureId: ids.feature }))
 			})
 	})
 }
@@ -159,6 +159,8 @@ describe('Swimlane grouping, editor-only restriction', function() {
 
 describe('Swimlane grouping', function() {
 	let boardId
+	let todoId
+	let featureId
 
 	before(function() {
 		cy.createUser(user)
@@ -169,6 +171,8 @@ describe('Swimlane grouping', function() {
 		// logs in before every test anyway.
 		seedSwimlaneBoard().then((ctx) => {
 			boardId = ctx.boardId
+			todoId = ctx.todoId
+			featureId = ctx.featureId
 		})
 	})
 
@@ -320,6 +324,8 @@ describe('Swimlane grouping', function() {
 		return { clientX: rect.left + rect.width / 2, clientY: rect.top + offsetY }
 	}
 
+	// Does not cover the ghost bug: the ghost centre lands beside the cloned card
+	// containers here, so the drop works regardless. The next drag test covers it.
 	it('reorders lanes via the drag handle and keeps the order after reload', function() {
 		setModeViaMenu('Labels')
 		cy.get('.swimlane', { timeout: 8000 }).should('have.length.at.least', 4)
@@ -342,6 +348,183 @@ describe('Swimlane grouping', function() {
 		cy.get('.swimlane', { timeout: 10000 }).should('have.length.at.least', 4)
 		cy.get('.swimlane-header').eq(0).should('contain.text', 'Feature')
 		cy.get('.swimlane-header').eq(1).should('contain.text', 'Bug')
+	})
+
+	it('drops a dragged lane below another lane although the ghost centre sits over a card container', function() {
+		setModeViaMenu('Labels')
+		cy.get('.swimlane', { timeout: 8000 }).should('have.length.at.least', 4)
+		cy.get('.swimlane-header').eq(0).should('contain.text', 'Bug')
+		cy.get('.swimlane-header').eq(1).should('contain.text', 'Feature')
+
+		cy.intercept('POST', /\/config\/board(:|%3A)\d+(:|%3A)swimlaneLabelOrder/).as('saveLaneOrder')
+		cy.get('.swimlane-header__drag-handle').eq(0).then(($handle) => {
+			const lane = Cypress.$('.swimlane')[0].getBoundingClientRect()
+			const handle = $handle[0].getBoundingClientRect()
+			const board = Cypress.$('.board--swimlanes')[0].getBoundingClientRect()
+			expect(lane.bottom, 'lane fully visible').to.be.at.most(board.bottom)
+			const handleCentre = { x: handle.left + handle.width / 2, y: handle.top + handle.height / 2 }
+			const laneCentre = { x: lane.left + lane.width / 2, y: lane.top + lane.height / 2 }
+
+			// smooth-dnd picks the drop container with elementFromPoint at the
+			// centre of the ghost, and the ghost is a clone of the lane. The
+			// library CSS makes cloned card containers clickable, so the drag
+			// only works if that centre is over a card container of the lane.
+			const hit = $handle[0].ownerDocument.elementFromPoint(laneCentre.x, laneCentre.y)
+			const overCardContainer = Cypress.$('.swimlane').eq(0).find('.smooth-dnd-container').toArray()
+				.some((container) => container.contains(hit))
+			expect(overCardContainer, 'lane centre is over a card container').to.eq(true)
+
+			// The ghost centre keeps a fixed offset to the pointer, so aim the
+			// pointer such that the ghost centre ends in the lower half of the
+			// second lane, which means "drop after it"
+			const offset = { x: laneCentre.x - handleCentre.x, y: laneCentre.y - handleCentre.y }
+			dragWithMouse($handle, () => {
+				const second = Cypress.$('.swimlane')[1].getBoundingClientRect()
+				return {
+					clientX: second.left + second.width / 2 - offset.x,
+					clientY: second.top + second.height * 0.75 - offset.y,
+				}
+			})
+		})
+		cy.wait('@saveLaneOrder').its('response.statusCode').should('eq', 200)
+
+		cy.get('.swimlane-header').eq(0).should('contain.text', 'Feature')
+		cy.get('.swimlane-header').eq(1).should('contain.text', 'Bug')
+		cy.get('.swimlane-header').eq(2).should('contain.text', 'Backend')
+
+		cy.reload()
+		cy.get('.swimlane', { timeout: 10000 }).should('have.length.at.least', 4)
+		cy.get('.swimlane-header').eq(0).should('contain.text', 'Feature')
+		cy.get('.swimlane-header').eq(1).should('contain.text', 'Bug')
+	})
+
+	it('keeps the last column visible in a narrow viewport', function() {
+		cy.viewport(720, 900)
+		setModeViaMenu('Labels')
+		cy.get('.swimlane', { timeout: 8000 }).should('have.length.at.least', 4)
+		cy.get('.board--swimlanes').scrollTo('right', { ensureScrollable: false })
+
+		const headerLeft = () => {
+			const headers = Cypress.$('.board__stack-headers .stack-draggable-wrapper')
+			return headers[headers.length - 1].getBoundingClientRect().left
+		}
+		cy.get('.swimlane').each(($lane) => {
+			const stacks = $lane.find('.swimlane__stack')
+			// collapsed lanes render no columns
+			if (stacks.length === 0) {
+				return
+			}
+			const last = stacks[stacks.length - 1].getBoundingClientRect()
+			const wrapper = $lane.closest('.smooth-dnd-draggable-wrapper')[0].getBoundingClientRect()
+			// not clipped by the overflow: hidden wrapper smooth-dnd puts around each lane
+			expect(last.right, 'last column right edge').to.be.at.most(wrapper.right + 1)
+			// aligned with the header row
+			expect(last.left, 'last column left edge').to.be.closeTo(headerLeft(), 1)
+		})
+	})
+
+	// Unbreakable titles (card or stack) must not widen header or lane columns.
+	// What a test creates is removed in afterEach, so the other tests keep the
+	// seeded data only. Cookies are cleared first, see seedSwimlaneBoard.
+	describe('unbreakable titles', function() {
+		const api = `${baseUrl}/index.php/apps/deck/api/v1.0`
+		const auth = () => ({ user: user.userId, password: user.password })
+		let cleanupUrls = []
+
+		afterEach(function() {
+			const urls = cleanupUrls
+			cleanupUrls = []
+			if (urls.length === 0) {
+				return
+			}
+			cy.clearCookies()
+			for (let i = 0; i < urls.length; i++) {
+				cy.request({ method: 'DELETE', url: urls[i], auth: auth() })
+			}
+		})
+
+		const openLaneView = () => {
+			cy.login(user)
+			cy.viewport(720, 900)
+			cy.visit(`/apps/deck/board/${boardId}`)
+			cy.get('.stack', { timeout: 10000 }).should('have.length.at.least', 3)
+			setModeViaMenu('Labels')
+			cy.get('.swimlane', { timeout: 8000 }).should('have.length.at.least', 4)
+			cy.get('.board--swimlanes').scrollTo('right', { ensureScrollable: false })
+		}
+
+		// Header column i and lane column i start at the same x, in every lane
+		const expectColumnsAligned = () => {
+			cy.get('.swimlane').each(($lane) => {
+				const stacks = $lane.find('.swimlane__stack')
+				// collapsed lanes render no columns
+				if (stacks.length === 0) {
+					return
+				}
+				const headers = Cypress.$('.board__stack-headers .stack-draggable-wrapper')
+				expect(stacks.length, 'columns per lane').to.equal(headers.length)
+				for (let i = 0; i < stacks.length; i++) {
+					expect(stacks[i].getBoundingClientRect().left, 'column ' + i + ' left edge')
+						.to.be.closeTo(headers[i].getBoundingClientRect().left, 1)
+				}
+				const last = stacks[stacks.length - 1].getBoundingClientRect()
+				const wrapper = $lane.closest('.smooth-dnd-draggable-wrapper')[0].getBoundingClientRect()
+				expect(last.right, 'last column right edge').to.be.at.most(wrapper.right + 1)
+			})
+		}
+
+		it('keeps lane columns aligned with the header row when a card title is unbreakable', function() {
+			const title = 'W'.repeat(80)
+			cy.clearCookies()
+			cy.request({
+				method: 'POST',
+				url: `${api}/boards/${boardId}/stacks/${todoId}/cards`,
+				auth: auth(),
+				body: { title, description: '' },
+			}).then(({ body: card }) => {
+				cleanupUrls.push(`${api}/boards/${boardId}/stacks/${todoId}/cards/${card.id}`)
+				cy.clearCookies()
+				cy.request({
+					method: 'PUT',
+					url: `${api}/boards/${boardId}/stacks/${todoId}/cards/${card.id}/assignLabel`,
+					auth: auth(),
+					body: { labelId: featureId },
+				})
+			})
+
+			openLaneView()
+			cy.contains('.swimlane .card', title).should('exist')
+			expectColumnsAligned()
+
+			// The card stays inside its column and the column does not scroll sideways
+			cy.get('.swimlane').each(($lane) => {
+				$lane.find('.card').each((_, card) => {
+					const column = card.closest('.swimlane__stack')
+					expect(card.getBoundingClientRect().right, 'card right edge')
+						.to.be.at.most(column.getBoundingClientRect().right + 1)
+				})
+				$lane.find('.swimlane__stack .smooth-dnd-container.vertical').each((_, container) => {
+					expect(container.scrollWidth, 'card container scrollWidth')
+						.to.be.at.most(container.clientWidth)
+				})
+			})
+		})
+
+		it('keeps lane columns aligned with the header row when a stack title is unbreakable', function() {
+			cy.clearCookies()
+			cy.request({
+				method: 'POST',
+				url: `${api}/boards/${boardId}/stacks`,
+				auth: auth(),
+				body: { title: 'S'.repeat(40), order: 0 },
+			}).then(({ body: stack }) => {
+				cleanupUrls.push(`${api}/boards/${boardId}/stacks/${stack.id}`)
+			})
+
+			openLaneView()
+			cy.get('.board__stack-headers .stack-draggable-wrapper').should('have.length', 4)
+			expectColumnsAligned()
+		})
 	})
 
 	// Keep this test last, it changes the card's stack for good.
