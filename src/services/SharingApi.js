@@ -4,6 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
 import { generateOcsUrl } from '@nextcloud/router'
 import logger from '../logger.js'
 
@@ -18,7 +19,7 @@ async function createShare({ path, permissions, shareType, shareWith, publicUplo
 		return request
 	} catch (error) {
 		logger.error('Error while creating share', { error })
-		OC.Notification.showTemporary(t('files_sharing', 'Error creating the share'), { type: 'error' })
+		showError(t('files_sharing', 'Error creating the share'))
 		throw error
 	}
 }
