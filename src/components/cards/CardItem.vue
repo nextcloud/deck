@@ -147,7 +147,7 @@ export default {
 
 	computed: {
 		...mapState(useStackStore, ['stackById']),
-		...mapState(useCardStore, ['cardById']),
+		...mapState(useCardStore, ['cardById', 'cardLaneCount']),
 		...mapState(useBoardStore, {
 			showArchived: 'showArchived',
 			currentBoard: 'currentBoard',
@@ -203,6 +203,7 @@ export default {
 				|| this.card.description
 				|| this.card.attachmentCount > 0
 				|| this.card.assignedUsers.length > 0
+				|| this.cardLaneCount(this.card) > 0
 		},
 
 		idBadge() {

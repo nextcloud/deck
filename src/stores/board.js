@@ -7,11 +7,15 @@ import axios from '@nextcloud/axios'
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import { defineStore } from 'pinia'
+import { SWIMLANE_ORDER_KEY } from '../constants.js'
 import { BoardApi } from '../services/BoardApi.js'
 import { useCardStore } from './card.js'
+import { useSettingsStore } from './settings.js'
 import { useStackStore } from './stack.js'
 
 const apiClient = new BoardApi()
+// Write counter per config key, so a failed write does not undo a newer one.
+const swimlaneWrites = {}
 
 export const BOARD_FILTERS = {
 	ALL: '',
@@ -24,6 +28,8 @@ export const useBoardStore = defineStore('board', {
 		currentBoard: null,
 		showArchived: false,
 		viewModeByBoard: {},
+		swimlaneLabelOrder: {},
+		swimlaneUserOrder: {},
 		assignableUsers: [],
 		filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 		boardFilter: BOARD_FILTERS.ALL,
@@ -81,6 +87,9 @@ export const useBoardStore = defineStore('board', {
 		},
 		currentBoardLabels: (state) => {
 			return state.currentBoard ? state.currentBoard.labels : []
+		},
+		swimlaneMode: (state) => {
+			return state.currentBoard?.settings?.swimlaneMode || 'none'
 		},
 		canEdit: (state) => {
 			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_EDIT : false
@@ -150,12 +159,25 @@ export const useBoardStore = defineStore('board', {
 			const board = await apiClient.loadById(boardId)
 			this.setCurrentBoard(board)
 			this.setAssignableUsers(board.users)
+			this.readSwimlaneOrder(boardId, board)
+		},
+		// Shared board setting, read on every load so other members' reorders arrive.
+		readSwimlaneOrder(boardId, board) {
+			if (!board.settings) {
+				return
+			}
+			for (const type of Object.keys(SWIMLANE_ORDER_KEY)) {
+				try {
+					this[SWIMLANE_ORDER_KEY[type]][boardId] = JSON.parse(board.settings[SWIMLANE_ORDER_KEY[type]] || '[]')
+				} catch { /* ignore malformed saved order */ }
+			}
 		},
 		async refreshBoard(boardId) {
 			const board = await apiClient.loadById(boardId)
 			const etagHasChanged = board.ETag !== this.currentBoard?.ETag
 			this.setCurrentBoard(board)
 			this.setAssignableUsers(board.users)
+			this.readSwimlaneOrder(boardId, board)
 
 			if (etagHasChanged) {
 				useStackStore().loadStacks(boardId)
@@ -307,6 +329,44 @@ export const useBoardStore = defineStore('board', {
 			await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
 				newOwner,
 			})
+		},
+		// Optimistic update, rolled back if the server rejects the write.
+		async setSwimlaneMode({ boardId, mode }) {
+			const configKey = `board:${boardId}:swimlaneMode`
+			const write = (swimlaneWrites[configKey] || 0) + 1
+			swimlaneWrites[configKey] = write
+			// Only touch the board the write is for, the user may open another one meanwhile.
+			const isCurrent = () => this.currentBoard?.id === boardId && this.currentBoard.settings
+			const previous = this.currentBoard?.settings?.swimlaneMode || 'none'
+			if (isCurrent()) {
+				this.currentBoard.settings.swimlaneMode = mode
+			}
+			try {
+				await useSettingsStore().setConfig({ [configKey]: mode })
+			} catch (e) {
+				// Roll back only if no newer write started meanwhile.
+				if (swimlaneWrites[configKey] === write && isCurrent()) {
+					this.currentBoard.settings.swimlaneMode = previous
+				}
+				throw e
+			}
+		},
+		async setSwimlaneOrder({ boardId, type, order }) {
+			const key = SWIMLANE_ORDER_KEY[type]
+			const configKey = `board:${boardId}:${key}`
+			const write = (swimlaneWrites[configKey] || 0) + 1
+			swimlaneWrites[configKey] = write
+			const previous = this[key][boardId] ? [...this[key][boardId]] : []
+			this[key][boardId] = order
+			try {
+				await useSettingsStore().setConfig({ [configKey]: JSON.stringify(order) })
+			} catch (e) {
+				// Roll back only if no newer write started meanwhile.
+				if (swimlaneWrites[configKey] === write) {
+					this[key][boardId] = previous
+				}
+				throw e
+			}
 		},
 	},
 })

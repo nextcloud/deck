@@ -777,4 +777,144 @@ class BoardServiceTest extends TestCase {
 		$this->assertSame('Ownership of board %s was transferred from "%s" to "%s"', $auditEvents[0]->getLogMessage());
 		$this->assertSame(['boardId' => 7, 'previousOwner' => 'admin', 'newOwner' => 'newowner', 'changeContent' => true], $auditEvents[0]->getParameters());
 	}
+
+	public function testEnrichWithBoardSettingsReadsSwimlaneColumns(): void {
+		// The three swimlane settings are columns on the board, shared by every
+		// member, unlike notify-due and calendar, which are per user.
+		$board = new Board();
+		$board->setId(7);
+		$board->setSwimlaneMode('labels');
+		$board->setSwimlaneLabelOrder('[3,1]');
+		$board->setSwimlaneUserOrder('["alice"]');
+
+		$this->service->enrichWithBoardSettings($board);
+		$settings = $board->getSettings();
+
+		$this->assertSame('labels', $settings['swimlaneMode']);
+		$this->assertSame('[3,1]', $settings['swimlaneLabelOrder']);
+		$this->assertSame('["alice"]', $settings['swimlaneUserOrder']);
+	}
+
+	public function testEnrichWithBoardSettingsDefaultsSwimlaneToNone(): void {
+		// Null columns, which is every board that never used the feature. It
+		// has to default to the flat view rather than error.
+		$board = new Board();
+		$board->setId(8);
+
+		$this->service->enrichWithBoardSettings($board);
+		$settings = $board->getSettings();
+
+		$this->assertSame('none', $settings['swimlaneMode']);
+		$this->assertSame('[]', $settings['swimlaneLabelOrder']);
+		$this->assertSame('[]', $settings['swimlaneUserOrder']);
+	}
+
+	public function testSwimlaneColumnsStayOutOfTheBoardJson(): void {
+		// RelationalEntity serialises every protected property. The client
+		// reads these three under 'settings', so a second copy at the top
+		// level would change the shape of every board response.
+		$board = new Board();
+		$board->setId(9);
+		$board->setSwimlaneMode('labels');
+		$board->setSwimlaneLabelOrder('[1]');
+
+		$json = $board->jsonSerialize();
+
+		$this->assertArrayNotHasKey('swimlaneMode', $json);
+		$this->assertArrayNotHasKey('swimlaneLabelOrder', $json);
+		$this->assertArrayNotHasKey('swimlaneUserOrder', $json);
+	}
+
+	/**
+	 * The three settings with values the client is allowed to send.
+	 */
+	public static function dataSwimlaneSettingAccepted(): array {
+		return [
+			'mode none' => ['swimlaneMode', 'none'],
+			'mode labels' => ['swimlaneMode', 'labels'],
+			'mode assignees' => ['swimlaneMode', 'assignees'],
+			'empty label order' => ['swimlaneLabelOrder', '[]'],
+			'label ids' => ['swimlaneLabelOrder', '[3,1,2]'],
+			'catch-all lane' => ['swimlaneLabelOrder', '[3,"__none__"]'],
+			'user ids' => ['swimlaneUserOrder', '["admin","alice"]'],
+			'user order with catch-all' => ['swimlaneUserOrder', '["alice","__none__"]'],
+			'id of exactly 255 bytes' => ['swimlaneUserOrder', '["' . str_repeat('a', 251) . '@x.y"]'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataSwimlaneSettingAccepted
+	 */
+	public function testSetSwimlaneSettingWritesTheColumn(string $key, string $value): void {
+		$board = new Board();
+		$board->setId(5);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(5)
+			->willReturn($board);
+		// QBMapper writes only the fields a setter marked as updated, so the
+		// magic setter has to have run for this to persist anything at all.
+		$this->boardMapper->expects($this->once())
+			->method('update')
+			->with($this->callback(function (Board $written) use ($key, $value) {
+				// Entity::markFieldUpdated() keys the array by field name.
+				$this->assertArrayHasKey($key, $written->getUpdatedFields());
+				$this->assertSame($value, $written->{'get' . ucfirst($key)}());
+				return true;
+			}))
+			->willReturn($board);
+		// Shared board state: the ETag has to move, or REST clients keep a stale 304.
+		$this->changeHelper->expects($this->once())
+			->method('boardChanged')
+			->with(5);
+
+		$this->assertSame($value, $this->service->setSwimlaneSetting(5, $key, $value));
+	}
+
+	/**
+	 * Values the client must not get past, because every board member is
+	 * served them on board load.
+	 */
+	public static function dataSwimlaneSettingRejected(): array {
+		// 125 ids of 64 bytes, about 8.4 kB: over the 8192 byte limit, far below 1000 entries.
+		$longIds = [];
+		for ($i = 0; $i < 125; $i++) {
+			$longIds[] = str_pad((string)$i, 64, 'a');
+		}
+		$oversized = json_encode($longIds);
+
+		return [
+			'unknown mode' => ['swimlaneMode', 'sideways'],
+			'mode as number' => ['swimlaneMode', 1],
+			'order not json' => ['swimlaneLabelOrder', 'nope'],
+			'order is an object' => ['swimlaneLabelOrder', '{"a":1}'],
+			'order holds an object' => ['swimlaneLabelOrder', '[{"id":1}]'],
+			'order holds null' => ['swimlaneLabelOrder', '[1,null]'],
+			'order holds an empty id' => ['swimlaneLabelOrder', '["",1]'],
+			'order holds an overlong id' => ['swimlaneUserOrder', '["' . str_repeat('a', 256) . '"]'],
+			// 128 characters but 256 bytes, as raw UTF-8 the way the client sends it.
+			'order holds an id of 256 bytes in 128 characters' => ['swimlaneUserOrder', '["' . str_repeat("\u{e9}", 128) . '"]'],
+			'order oversized' => ['swimlaneUserOrder', $oversized],
+			'order too many entries' => ['swimlaneLabelOrder', '[' . str_repeat('1,', 1000) . '1]'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataSwimlaneSettingRejected
+	 */
+	public function testSetSwimlaneSettingRejectsMalformedValue(string $key, mixed $value): void {
+		$this->boardMapper->expects($this->never())->method('update');
+
+		$this->expectException(BadRequestException::class);
+		$this->service->setSwimlaneSetting(5, $key, $value);
+	}
+
+	public function testSetSwimlaneSettingRejectsAnotherSetting(): void {
+		// The controller routes by the same list, so a key that is not a
+		// swimlane setting must never reach a board column.
+		$this->boardMapper->expects($this->never())->method('update');
+
+		$this->expectException(BadRequestException::class);
+		$this->service->setSwimlaneSetting(5, 'notify-due', 'all');
+	}
 }

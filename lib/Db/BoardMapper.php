@@ -230,7 +230,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		// FIXME this used to be a UNION to get boards owned by $userId and the user shares in one single query
 		// Is it possible with the query builder?
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			// this does not work in MySQL/PostgreSQL
 			//->selectAlias('0', 'shared')
 			->from('deck_boards', 'b')
@@ -270,7 +270,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 		// shared with user
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			//->selectAlias('1', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -352,7 +352,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			return [];
 		}
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			//->selectAlias('2', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -408,7 +408,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		}
 
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			//->selectAlias('2', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))

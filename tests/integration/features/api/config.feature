@@ -76,3 +76,33 @@ Feature: OCS API - Config
     When sending "POST" to the OCS API endpoint "/config/board:<boardId>:notify-due" with body:
       | value | all |
     Then the response should have a status code "403"
+
+  Scenario: POST /api/v1.0/config/{key} - Swimlane settings are shared with board members
+    Given sending "POST" to the API endpoint "/boards" with body:
+      | title | Swimlane board |
+      | color | ff0000         |
+    And the response value "id" is stored as "boardId"
+    And sending "POST" to the API endpoint "/boards/<boardId>/acl" with body:
+      | type             | 0     |
+      | participant      | user1 |
+      | permissionEdit   | false |
+      | permissionShare  | false |
+      | permissionManage | false |
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneMode" with body:
+      | value | labels |
+    Then the response should have a status code "200"
+    And the response value "ocs.data" should be "labels"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneLabelOrder" with body:
+      | value | [2,1] |
+    Then the response should have a status code "200"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneMode" with body:
+      | value | columns |
+    Then the response should have a status code "400"
+    Given acting as user "user1"
+    When sending "GET" to the API endpoint "/boards/<boardId>"
+    Then the response value "settings.swimlaneMode" should be "labels"
+    And the response value "settings.swimlaneLabelOrder" should be "[2,1]"
+    And the response value "settings.swimlaneUserOrder" should be "[]"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneMode" with body:
+      | value | assignees |
+    Then the response should have a status code "403"

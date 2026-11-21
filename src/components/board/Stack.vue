@@ -13,6 +13,7 @@
 		}"
 		:data-cy-stack="stack.title">
 		<div
+			v-if="part !== 'cards'"
 			class="stack__header"
 			:class="{'stack__header--done-column': isDoneColumn}"
 			:aria-label="stack.title">
@@ -114,14 +115,15 @@
 			@created="handleCardCreated" />
 
 		<Container
+			v-if="part !== 'header'"
 			:getChildPayload="payloadForCard(stack.id)"
 			class="dnd-container"
-			groupName="stack"
+			:groupName="cardGroupName"
 			data-click-closes-sidebar="true"
 			nonDragAreaSelector=".dragDisabled"
 			:dragHandleSelector="dragHandleSelector"
 			data-dragscroll-enabled
-			:shouldAcceptDrop="(sourceOptions) => canEdit && sourceOptions.groupName === 'stack'"
+			:shouldAcceptDrop="(sourceOptions) => canEdit && sourceOptions.groupName === cardGroupName"
 			@dragStart="draggingCard = true"
 			@dragEnd="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
@@ -153,6 +155,7 @@ import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
 import CardItem from '../cards/CardItem.vue'
 import StackCardAdd from './StackCardAdd.vue'
+import laneDropOrder from '../../helpers/laneDropOrder.js'
 import logger from '../../logger.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useCardStore } from '../../stores/card.js'
@@ -190,6 +193,19 @@ export default {
 			type: Object,
 			default: undefined,
 		},
+
+		lane: {
+			type: Object,
+			default: null,
+		},
+
+		// The swimlane view splits a stack into a header row (Board.vue) and one card
+		// column per lane. 'all' renders both, 'header' only the header, 'cards' only the cards.
+		part: {
+			type: String,
+			default: 'all',
+			validator: (value) => ['all', 'header', 'cards'].includes(value),
+		},
 	},
 
 	data() {
@@ -203,6 +219,10 @@ export default {
 				total: 0,
 				current: null,
 			},
+
+			// Held so beforeUnmount can take the listener off window again.
+			autoscrollHandler: null,
+			autoscrollTimer: null,
 		}
 	},
 
@@ -216,6 +236,7 @@ export default {
 
 		...mapState(useCardStore, {
 			cardsByStackGetter: 'cardsByStack',
+			laneMap: 'cardsByStackAndLaneMap',
 		}),
 
 		...mapState(useSettingsStore, [
@@ -225,12 +246,13 @@ export default {
 		]),
 
 		cardsByStack() {
-			return this.cardsByStackGetter(this.stack.id).filter((card) => {
-				if (this.showArchived) {
-					return card.archived
-				}
-				return !card.archived
-			})
+			if (this.lane) {
+				// No entry means no cards. The map already filters archived cards.
+				const lanes = this.laneMap[this.stack.id]
+				return (lanes && lanes[this.lane.key]) || []
+			}
+			return this.cardsByStackGetter(this.stack.id)
+				.filter((card) => this.showArchived ? card.archived : !card.archived)
 		},
 
 		isDoneColumn() {
@@ -255,13 +277,32 @@ export default {
 			return useSettingsStore().configByKey('stackAddCardAtTop') === true
 		},
 
+		// The add field lives in the header row only, not once per lane.
 		canAddCard() {
-			return this.canEdit && !this.showArchived && !this.isArchived
+			return this.canEdit && !this.showArchived && !this.isArchived && this.part !== 'cards'
+		},
+
+		// One drop group per lane. A card dropped into another lane would jump back,
+		// since it keeps its labels. shouldAcceptDrop replaces smooth-dnd's group check.
+		cardGroupName() {
+			return this.lane ? 'stack-' + this.lane.key : 'stack'
 		},
 	},
 
 	mounted() {
 		this.setupAutoscrollOnDrag()
+	},
+
+	beforeUnmount() {
+		// Collapsing a lane unmounts its stacks, so the listener must be removed.
+		if (this.autoscrollHandler) {
+			window.removeEventListener('mousemove', this.autoscrollHandler)
+			this.autoscrollHandler = null
+		}
+		if (this.autoscrollTimer) {
+			clearInterval(this.autoscrollTimer)
+			this.autoscrollTimer = null
+		}
 	},
 
 	methods: {
@@ -288,16 +329,31 @@ export default {
 				if (addedIndex !== null && removedIndex === null) {
 					// move card to new stack
 					card.stackId = stackId
-					card.order = addedIndex
+					card.order = this.orderForDrop(card, removedIndex, addedIndex)
 					logger.debug('Move card to stack', { stackId: card.stackId, order: card.order })
 					await this.reorderCardInStore(card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
-					card.order = addedIndex
+					// Dropped where it started. orderForDrop would still shift it, so skip.
+					if (addedIndex === removedIndex) {
+						return
+					}
+					card.order = this.orderForDrop(card, removedIndex, addedIndex)
 					logger.debug('Move card in stack', { stackId: card.stackId, order: card.order })
 					await this.reorderCardInStore(card)
 				}
 			}
+		},
+
+		// smooth-dnd counts the lane's cards, the store the whole stack, so map the index.
+		orderForDrop(card, removedIndex, addedIndex) {
+			if (!this.lane) {
+				return addedIndex
+			}
+			// The server orders without archived cards.
+			const stackCards = this.cardsByStackGetter(this.stack.id)
+				.filter((stackCard) => this.showArchived ? stackCard.archived : !stackCard.archived)
+			return laneDropOrder(this.cardsByStack, stackCards, card, removedIndex, addedIndex)
 		},
 
 		payloadForCard(stackId) {
@@ -357,7 +413,6 @@ export default {
 		},
 
 		setupAutoscrollOnDrag() {
-			let timer
 			const autoscroll = (event) => {
 				const viewportX = event.clientX
 				const boardElement = document.querySelector('.board')
@@ -376,15 +431,19 @@ export default {
 					boardElement.scrollTo(scrollToX, boardElement.scrollTop)
 				}
 			}
-			window.addEventListener('mousemove', (e) => {
+			this.autoscrollHandler = (e) => {
 				if (!this.draggingCard) {
-					clearInterval(timer)
+					if (this.autoscrollTimer) {
+						clearInterval(this.autoscrollTimer)
+						this.autoscrollTimer = null
+					}
 					return
 				}
 
-				clearInterval(timer)
-				timer = window.setInterval(() => autoscroll(e), 25)
-			})
+				clearInterval(this.autoscrollTimer)
+				this.autoscrollTimer = window.setInterval(() => autoscroll(e), 25)
+			}
+			window.addEventListener('mousemove', this.autoscrollHandler)
 		},
 	},
 }
