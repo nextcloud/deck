@@ -438,8 +438,9 @@ class BoardService {
 	/**
 	 * Write one of the three swimlane settings onto the board.
 	 *
-	 * boardMapper->update writes only this field and fires no board events.
-	 * boardChanged still moves the ETag.
+	 * boardMapper->update writes only this field and fires no board events,
+	 * so this method moves the ETag via boardChanged and dispatches
+	 * BoardUpdatedEvent for the live update listener.
 	 *
 	 * @throws BadRequestException if the key is not a swimlane setting or the value is malformed
 	 * @throws DoesNotExistException if the board is gone
@@ -458,6 +459,7 @@ class BoardService {
 		};
 		$this->boardMapper->update($board);
 		$this->changeHelper->boardChanged($boardId);
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
 
 		return $value;
 	}

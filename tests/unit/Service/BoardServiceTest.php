@@ -53,6 +53,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
+use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
@@ -867,6 +868,14 @@ class BoardServiceTest extends TestCase {
 		$this->changeHelper->expects($this->once())
 			->method('boardChanged')
 			->with(5);
+		// Other open tabs only learn about the change through this event.
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				$this->assertInstanceOf(BoardUpdatedEvent::class, $event);
+				$this->assertSame(5, $event->getBoardId());
+				return true;
+			}));
 
 		$this->assertSame($value, $this->service->setSwimlaneSetting(5, $key, $value));
 	}
@@ -904,6 +913,7 @@ class BoardServiceTest extends TestCase {
 	 */
 	public function testSetSwimlaneSettingRejectsMalformedValue(string $key, mixed $value): void {
 		$this->boardMapper->expects($this->never())->method('update');
+		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
 
 		$this->expectException(BadRequestException::class);
 		$this->service->setSwimlaneSetting(5, $key, $value);
@@ -913,6 +923,7 @@ class BoardServiceTest extends TestCase {
 		// The controller routes by the same list, so a key that is not a
 		// swimlane setting must never reach a board column.
 		$this->boardMapper->expects($this->never())->method('update');
+		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
 
 		$this->expectException(BadRequestException::class);
 		$this->service->setSwimlaneSetting(5, 'notify-due', 'all');
