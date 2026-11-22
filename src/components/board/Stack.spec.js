@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals'
 import Stack from './Stack.vue'
 
 jest.mock('@nextcloud/dialogs', () => ({ showUndo: jest.fn() }), { virtual: true })
@@ -60,6 +60,44 @@ describe('drop order inside a lane', () => {
 	it('passes the index through without a lane', () => {
 		const stack = { lane: null, cardsByStack: [A, C], cardsByStackGetter: () => [A, B, C, D] }
 		expect(Stack.methods.orderForDrop.call(stack, C, 1, 0)).toBe(0)
+	})
+})
+
+describe('autoscroll listener', () => {
+	// Jest runs in the node environment, so window is a stub for the listener calls.
+	let fakeWindow
+	beforeEach(() => {
+		fakeWindow = { addEventListener: jest.fn(), removeEventListener: jest.fn(), setInterval: jest.fn() }
+		global.window = fakeWindow
+	})
+	afterEach(() => {
+		delete global.window
+	})
+
+	it('registers nothing until a drag starts and removes it on drag end', () => {
+		const stack = { draggingCard: false, autoscrollHandler: null, autoscrollTimer: null }
+		expect(fakeWindow.addEventListener).not.toHaveBeenCalled()
+
+		Stack.methods.startAutoscroll.call(stack)
+		Stack.methods.startAutoscroll.call(stack)
+		expect(stack.draggingCard).toBe(true)
+		expect(fakeWindow.addEventListener).toHaveBeenCalledTimes(1)
+		expect(fakeWindow.addEventListener).toHaveBeenCalledWith('mousemove', stack.autoscrollHandler)
+
+		const handler = stack.autoscrollHandler
+		Stack.methods.stopAutoscroll.call(stack)
+		expect(stack.draggingCard).toBe(false)
+		expect(stack.autoscrollHandler).toBeNull()
+		expect(fakeWindow.removeEventListener).toHaveBeenCalledWith('mousemove', handler)
+	})
+
+	it('clears a running timer on stop', () => {
+		const clear = jest.spyOn(global, 'clearInterval').mockImplementation(() => {})
+		const stack = { draggingCard: true, autoscrollHandler: null, autoscrollTimer: 42 }
+		Stack.methods.stopAutoscroll.call(stack)
+		expect(clear).toHaveBeenCalledWith(42)
+		expect(stack.autoscrollTimer).toBeNull()
+		clear.mockRestore()
 	})
 })
 

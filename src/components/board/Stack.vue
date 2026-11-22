@@ -124,8 +124,8 @@
 			:dragHandleSelector="dragHandleSelector"
 			data-dragscroll-enabled
 			:shouldAcceptDrop="(sourceOptions) => canEdit && sourceOptions.groupName === cardGroupName"
-			@dragStart="draggingCard = true"
-			@dragEnd="draggingCard = false"
+			@dragStart="startAutoscroll"
+			@dragEnd="stopAutoscroll"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
 				<transition
@@ -289,20 +289,9 @@ export default {
 		},
 	},
 
-	mounted() {
-		this.setupAutoscrollOnDrag()
-	},
-
 	beforeUnmount() {
-		// Collapsing a lane unmounts its stacks, so the listener must be removed.
-		if (this.autoscrollHandler) {
-			window.removeEventListener('mousemove', this.autoscrollHandler)
-			this.autoscrollHandler = null
-		}
-		if (this.autoscrollTimer) {
-			clearInterval(this.autoscrollTimer)
-			this.autoscrollTimer = null
-		}
+		// Collapsing a lane unmounts its stacks, so a running drag listener must be removed.
+		this.stopAutoscroll()
 	},
 
 	methods: {
@@ -412,7 +401,13 @@ export default {
 			})
 		},
 
-		setupAutoscrollOnDrag() {
+		// The mousemove listener exists only while a card of this stack is dragged.
+		// Every lane cell is a Stack, so a permanent listener per instance would add up.
+		startAutoscroll() {
+			this.draggingCard = true
+			if (this.autoscrollHandler) {
+				return
+			}
 			const autoscroll = (event) => {
 				const viewportX = event.clientX
 				const boardElement = document.querySelector('.board')
@@ -432,18 +427,22 @@ export default {
 				}
 			}
 			this.autoscrollHandler = (e) => {
-				if (!this.draggingCard) {
-					if (this.autoscrollTimer) {
-						clearInterval(this.autoscrollTimer)
-						this.autoscrollTimer = null
-					}
-					return
-				}
-
 				clearInterval(this.autoscrollTimer)
 				this.autoscrollTimer = window.setInterval(() => autoscroll(e), 25)
 			}
 			window.addEventListener('mousemove', this.autoscrollHandler)
+		},
+
+		stopAutoscroll() {
+			this.draggingCard = false
+			if (this.autoscrollHandler) {
+				window.removeEventListener('mousemove', this.autoscrollHandler)
+				this.autoscrollHandler = null
+			}
+			if (this.autoscrollTimer) {
+				clearInterval(this.autoscrollTimer)
+				this.autoscrollTimer = null
+			}
 		},
 	},
 }
