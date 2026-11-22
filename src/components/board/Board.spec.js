@@ -252,6 +252,7 @@ describe('onReorderLane', () => {
 		useBoardStore.mockReturnValue({ swimlaneLabelOrder: { 7: stored }, setSwimlaneOrder })
 		const board = {
 			canEdit: true,
+			isArchived: false,
 			swimlaneMode: 'labels',
 			board: { id: 7 },
 			$pinia: {},
@@ -270,6 +271,13 @@ describe('onReorderLane', () => {
 		const { board, setSwimlaneOrder } = laneContext([3, 1, 2])
 		Board.methods.onReorderLane.call(board, { removedIndex: 1, addedIndex: 0 })
 		expect(setSwimlaneOrder).toHaveBeenCalledWith({ boardId: 7, type: 'labels', order: [3, 2, 1] })
+	})
+
+	it('ignores a drag on an archived board', () => {
+		const { board, setSwimlaneOrder } = laneContext([])
+		board.isArchived = true
+		Board.methods.onReorderLane.call(board, { removedIndex: 1, addedIndex: 0 })
+		expect(setSwimlaneOrder).not.toHaveBeenCalled()
 	})
 })
 

@@ -35,6 +35,7 @@ use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\StatusException;
 use OCA\Deck\Validators\BoardServiceValidator;
 use OCA\Files_Sharing\Event\UserShareAccessUpdatedEvent;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -444,6 +445,7 @@ class BoardService {
 	 *
 	 * @throws BadRequestException if the key is not a swimlane setting or the value is malformed
 	 * @throws DoesNotExistException if the board is gone
+	 * @throws StatusException if the board is archived
 	 */
 	public function setSwimlaneSetting(int $boardId, string $key, mixed $value): mixed {
 		if (!in_array($key, self::SWIMLANE_SETTINGS, true)) {
@@ -452,6 +454,9 @@ class BoardService {
 		$this->validateSwimlaneValue($key, $value);
 
 		$board = $this->boardMapper->find($boardId);
+		if ($board->getArchived()) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		match ($key) {
 			'swimlaneMode' => $board->setSwimlaneMode((string)$value),
 			'swimlaneLabelOrder' => $board->setSwimlaneLabelOrder((string)$value),

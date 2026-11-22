@@ -306,7 +306,7 @@
 							name="swimlaneMode"
 							value="none"
 							:modelValue="swimlaneMode"
-							:disabled="!canEdit"
+							:disabled="!canEdit || isArchived"
 							@update:modelValue="setSwimlaneMode">
 							{{ t('deck', 'No grouping') }}
 						</NcActionRadio>
@@ -314,7 +314,7 @@
 							name="swimlaneMode"
 							value="labels"
 							:modelValue="swimlaneMode"
-							:disabled="!canEdit"
+							:disabled="!canEdit || isArchived"
 							@update:modelValue="setSwimlaneMode">
 							{{ t('deck', 'Labels') }}
 						</NcActionRadio>
@@ -322,7 +322,7 @@
 							name="swimlaneMode"
 							value="assignees"
 							:modelValue="swimlaneMode"
-							:disabled="!canEdit"
+							:disabled="!canEdit || isArchived"
 							@update:modelValue="setSwimlaneMode">
 							{{ t('deck', 'Assignees') }}
 						</NcActionRadio>
@@ -442,6 +442,7 @@ export default {
 		...mapState(useBoardStore, [
 			'canEdit',
 			'canManage',
+			'isArchived',
 			'viewMode',
 			'showArchived',
 			'swimlaneMode',
@@ -532,7 +533,7 @@ export default {
 		}),
 
 		setSwimlaneMode(mode) {
-			if (this.board?.id && this.canEdit) {
+			if (this.board?.id && this.canEdit && !this.isArchived) {
 				// Returned so a failed write reaches the global error handler.
 				return useBoardStore(this.$pinia).setSwimlaneMode({ boardId: this.board.id, mode })
 			}

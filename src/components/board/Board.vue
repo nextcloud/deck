@@ -114,7 +114,7 @@
 				</div>
 				<Container
 					orientation="vertical"
-					:dragHandleSelector="canEdit ? '.swimlane-header__drag-handle' : '.no-drag'"
+					:dragHandleSelector="canEdit && !isArchived ? '.swimlane-header__drag-handle' : '.no-drag'"
 					@drop="onReorderLane">
 					<!-- The catch-all lane has the same key in both modes, the type keeps them apart. -->
 					<Draggable
@@ -218,6 +218,7 @@ export default {
 			showArchived: 'showArchived',
 			canEdit: 'canEdit',
 			canManage: 'canManage',
+			isArchived: 'isArchived',
 			viewMode: 'viewMode',
 			swimlaneMode: 'swimlaneMode',
 		}),
@@ -417,7 +418,7 @@ export default {
 		},
 
 		onReorderLane({ removedIndex, addedIndex }) {
-			if (removedIndex === null || addedIndex === null || !this.canEdit) {
+			if (removedIndex === null || addedIndex === null || !this.canEdit || this.isArchived) {
 				return
 			}
 			const lanes = [...this.computedLanes]

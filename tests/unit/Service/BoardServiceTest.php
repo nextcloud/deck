@@ -56,6 +56,7 @@ use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\StatusException;
 use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -927,5 +928,21 @@ class BoardServiceTest extends TestCase {
 
 		$this->expectException(BadRequestException::class);
 		$this->service->setSwimlaneSetting(5, 'notify-due', 'all');
+	}
+
+	public function testSetSwimlaneSettingRejectsArchivedBoard(): void {
+		$board = new Board();
+		$board->setId(5);
+		$board->setArchived(true);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(5)
+			->willReturn($board);
+		$this->boardMapper->expects($this->never())->method('update');
+		$this->changeHelper->expects($this->never())->method('boardChanged');
+		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
+
+		$this->expectException(StatusException::class);
+		$this->service->setSwimlaneSetting(5, 'swimlaneMode', 'labels');
 	}
 }

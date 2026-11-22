@@ -5,6 +5,7 @@
 
 import { describe, expect, it, jest } from '@jest/globals'
 import Controls from './Controls.vue'
+import { useBoardStore } from '../stores/board.js'
 
 jest.mock('@nextcloud/auth', () => ({}))
 jest.mock('@nextcloud/event-bus', () => ({}))
@@ -19,7 +20,7 @@ jest.mock('../views/CreateNewCardCustomPicker.vue', () => ({}))
 jest.mock('./SessionList.vue', () => ({}))
 jest.mock('../mixins/labelStyle.js', () => ({}))
 jest.mock('../sessions.js', () => ({}))
-jest.mock('../stores/board.js', () => ({}))
+jest.mock('../stores/board.js', () => ({ useBoardStore: jest.fn() }))
 jest.mock('../stores/card.js', () => ({}))
 jest.mock('../stores/settings.js', () => ({}))
 jest.mock('../stores/stack.js', () => ({}))
@@ -68,5 +69,26 @@ describe('Controls page title', () => {
 
 	it('handles an unloaded board in the full app', () => {
 		expect(Controls.computed.pageTitle.call({ isFullApp: true, board: null })).toBe('')
+	})
+})
+
+describe('Controls setSwimlaneMode', () => {
+	function modeContext(overrides) {
+		const setSwimlaneMode = jest.fn()
+		useBoardStore.mockReturnValue({ setSwimlaneMode })
+		const context = { board: { id: 7 }, canEdit: true, isArchived: false, $pinia: {}, ...overrides }
+		return { context, setSwimlaneMode }
+	}
+
+	it('writes the mode on an editable board', () => {
+		const { context, setSwimlaneMode } = modeContext({})
+		Controls.methods.setSwimlaneMode.call(context, 'labels')
+		expect(setSwimlaneMode).toHaveBeenCalledWith({ boardId: 7, mode: 'labels' })
+	})
+
+	it('does not write the mode on an archived board', () => {
+		const { context, setSwimlaneMode } = modeContext({ isArchived: true })
+		Controls.methods.setSwimlaneMode.call(context, 'labels')
+		expect(setSwimlaneMode).not.toHaveBeenCalled()
 	})
 })

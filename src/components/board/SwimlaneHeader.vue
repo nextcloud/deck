@@ -42,7 +42,7 @@
 
 		<!-- The catch-all lane is always last, so it gets no drag handle. -->
 		<span
-			v-if="canEdit && !collapsed && !isCatchAll"
+			v-if="canEdit && !isArchived && !collapsed && !isCatchAll"
 			class="swimlane-header__drag-handle"
 			role="button"
 			:aria-label="t('deck', 'Drag to reorder {lane}', { lane: lane.title }, undefined, { escape: false })"
@@ -92,7 +92,7 @@ export default {
 
 	emits: ['toggle'],
 	computed: {
-		...mapState(useBoardStore, ['canEdit']),
+		...mapState(useBoardStore, ['canEdit', 'isArchived']),
 		isCatchAll() {
 			return this.lane.key === SWIMLANE_NONE_KEY
 		},
