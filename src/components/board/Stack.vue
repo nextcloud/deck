@@ -401,7 +401,8 @@ export default {
 			})
 		},
 
-		// The mousemove listener exists only while a card of this stack is dragged.
+		// smooth-dnd sends dragStart and dragEnd to every container, so the listener
+		// exists only while any drag runs on the board.
 		// Every lane cell is a Stack, so a permanent listener per instance would add up.
 		startAutoscroll() {
 			this.draggingCard = true

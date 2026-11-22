@@ -76,7 +76,8 @@ describe('autoscroll listener', () => {
 
 	it('registers nothing until a drag starts and removes it on drag end', () => {
 		const stack = { draggingCard: false, autoscrollHandler: null, autoscrollTimer: null }
-		expect(fakeWindow.addEventListener).not.toHaveBeenCalled()
+		// A mounted hook would bring back the permanent listener per instance
+		expect(Stack.mounted).toBeUndefined()
 
 		Stack.methods.startAutoscroll.call(stack)
 		Stack.methods.startAutoscroll.call(stack)
