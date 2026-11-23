@@ -21,6 +21,7 @@ class FixCardDate extends Command {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure() {
 		$this
 			->setName('deck:fix-card-date')
@@ -43,6 +44,7 @@ class FixCardDate extends Command {
 	/**
 	 * @throws Exception
 	 */
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$isDryRun = (bool)$input->getOption('dry-run');
 		$defaultYear = $input->getOption('default-year');
