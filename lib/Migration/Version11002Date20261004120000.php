@@ -37,7 +37,7 @@ class Version11002Date20261004120000 extends SimpleMigrationStep {
 			]);
 		}
 
-		// text, an order may hold 8192 bytes and Oracle caps varchar at 4000.
+		// text, an order may hold 32768 bytes and Oracle caps varchar at 4000.
 		// No default, MySQL rejects one on TEXT. Null is read as '[]'.
 		foreach (['swimlane_label_order', 'swimlane_user_order'] as $column) {
 			if (!$table->hasColumn($column)) {

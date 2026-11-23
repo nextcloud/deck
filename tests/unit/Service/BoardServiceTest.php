@@ -68,6 +68,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class BoardServiceTest extends TestCase {
@@ -118,6 +119,9 @@ class BoardServiceTest extends TestCase {
 	/** @var CirclesService|MockObject */
 	private $circlesService;
 
+	/** @var LoggerInterface|MockObject */
+	private $logger;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
@@ -140,6 +144,7 @@ class BoardServiceTest extends TestCase {
 		$this->sessionMapper = $this->createMock(SessionMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->circlesService = $this->createMock(CirclesService::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -167,6 +172,7 @@ class BoardServiceTest extends TestCase {
 			$this->createMock(SecureRandom::class),
 			$this->createMock(ConfigService::class),
 			$this->circlesService,
+			$this->logger,
 			$this->userId
 		);
 
@@ -337,6 +343,7 @@ class BoardServiceTest extends TestCase {
 				$this->createMock(SecureRandom::class),
 				$this->createMock(ConfigService::class),
 				$this->circlesService,
+				$this->logger,
 				$this->userId,
 			])
 			->onlyMethods(['create', 'addAcl', 'find'])
@@ -853,9 +860,21 @@ class BoardServiceTest extends TestCase {
 			'remote user with port' => ['swimlaneUserOrder', '["6:bob@cloud.example:8443"]', '["6:bob@cloud.example:8443"]'],
 			'circle' => ['swimlaneUserOrder', '["7:' . str_repeat('c', 31) . '"]', '["7:' . str_repeat('c', 31) . '"]'],
 			'ids differing only in case' => ['swimlaneUserOrder', '["0:Ann","0:ann"]', '["0:Ann","0:ann"]'],
-			'entry of exactly 255 bytes' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 249) . '@x.y"]', '["0:' . str_repeat('a', 249) . '@x.y"]'],
-			'entry of exactly 255 bytes in multibyte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{e9}", 126) . 'a"]', '["0:' . str_repeat("\u{e9}", 126) . 'a"]'],
+			'participant of exactly 64 characters' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 64) . '"]', '["0:' . str_repeat('a', 64) . '"]'],
+			// 256 bytes, the 64 characters are what counts.
+			'participant of 64 four-byte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{1F600}", 64) . '"]', '["0:' . str_repeat("\u{1F600}", 64) . '"]'],
+			'participant that is the string zero' => ['swimlaneUserOrder', '["0:0"]', '["0:0"]'],
 		];
+	}
+
+	/**
+	 * The participant rule of the swimlane order is the one of the real validator.
+	 */
+	private function useRealValidator(): void {
+		$this->boardServiceValidator->method('check')
+			->willReturnCallback(function (array $data): void {
+				(new BoardServiceValidator())->check($data);
+			});
 	}
 
 	/**
@@ -885,6 +904,7 @@ class BoardServiceTest extends TestCase {
 	 * @dataProvider dataSwimlaneSettingLegacyDropped
 	 */
 	public function testSetSwimlaneSettingWritesTheColumn(string $key, string $value, string $stored): void {
+		$this->useRealValidator();
 		$board = new Board();
 		$board->setId(5);
 		if ($key === 'swimlaneLabelOrder') {
@@ -939,20 +959,21 @@ class BoardServiceTest extends TestCase {
 	 * served them on board load.
 	 */
 	public static function dataSwimlaneSettingRejected(): array {
-		// 300 distinct valid entries of about 250 bytes, about 75 kB: over every
-		// byte limit this branch has, far below 1000 entries.
+		// 600 distinct valid entries, 62 characters each, about 40 kB: over the byte
+		// limit and below 1000 entries, so only the size rejects it.
 		$longIds = [];
-		for ($i = 0; $i < 300; $i++) {
-			$longIds[] = '0:' . str_pad((string)$i, 248, 'a');
+		for ($i = 0; $i < 600; $i++) {
+			$longIds[] = '0:' . str_pad((string)$i, 62, 'a');
 		}
 		$oversized = json_encode($longIds);
 
-		// 30 distinct entries of 238 raw bytes are 7.2 kB, under the limit. Each U+2028
-		// is 3 bytes raw and 6 bytes as the escape json_encode writes, so the stored
-		// string would be 14 kB. The flag keeps the character raw in the vector.
+		// 120 distinct entries, each with 64 characters. Each U+2028 is 3 bytes raw
+		// and 6 bytes as the escape json_encode writes, so the vector is 22.9 kB raw
+		// and the stored string would be 44.9 kB, over the limit. The flag keeps the
+		// character raw in the vector.
 		$lineSeparators = [];
-		for ($i = 0; $i < 30; $i++) {
-			$lineSeparators[] = '0:' . str_repeat("\u{2028}", 78) . str_pad((string)$i, 2, '0', STR_PAD_LEFT);
+		for ($i = 0; $i < 120; $i++) {
+			$lineSeparators[] = '0:' . str_repeat("\u{2028}", 61) . str_pad((string)$i, 3, '0', STR_PAD_LEFT);
 		}
 		$growsWhenEncoded = json_encode($lineSeparators, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS);
 
@@ -974,10 +995,9 @@ class BoardServiceTest extends TestCase {
 			'user entry with a duplicate' => ['swimlaneUserOrder', '["0:a","0:a"]'],
 			'user order with a duplicate catch-all' => ['swimlaneUserOrder', '["__none__","__none__"]'],
 			'user order with a nested array' => ['swimlaneUserOrder', '[["0:a"]]'],
-			'order holds an overlong id' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 254) . '"]'],
-			// 256 bytes in 129 characters, as raw UTF-8 the way the client sends it.
-			'order holds an id of 256 bytes in multibyte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{e9}", 127) . '"]'],
-			'order of 7.2 kB that grows past the limit when encoded' => ['swimlaneUserOrder', $growsWhenEncoded],
+			'participant of 65 characters' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 65) . '"]'],
+			'participant of 65 four-byte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{1F600}", 65) . '"]'],
+			'order of 22.9 kB that grows past the limit when encoded' => ['swimlaneUserOrder', $growsWhenEncoded],
 			'order oversized' => ['swimlaneUserOrder', $oversized],
 			'order too many entries' => ['swimlaneLabelOrder', '[' . implode(',', range(1, 1001)) . ']'],
 		];
@@ -987,6 +1007,7 @@ class BoardServiceTest extends TestCase {
 	 * @dataProvider dataSwimlaneSettingRejected
 	 */
 	public function testSetSwimlaneSettingRejectsMalformedValue(string $key, mixed $value): void {
+		$this->useRealValidator();
 		$this->boardMapper->expects($this->never())->method('update');
 		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
 
@@ -1011,6 +1032,93 @@ class BoardServiceTest extends TestCase {
 	 */
 	public function testSwimlaneAssigneeKey(int $type, string $participant, string $expected): void {
 		$this->assertSame($expected, BoardService::swimlaneAssigneeKey($type, $participant));
+	}
+
+	private static function userOrder(int $entries, int $idLength = 3): string {
+		$order = [];
+		for ($i = 0; $i < $entries; $i++) {
+			$order[] = '0:' . str_pad((string)$i, $idLength, 'u');
+		}
+		return json_encode($order);
+	}
+
+	private static function labelOrder(int $entries): string {
+		return json_encode(range(1, $entries));
+	}
+
+	public static function dataSwimlaneOrderWarning(): array {
+		return [
+			'790 to 800 entries' => [self::userOrder(790), self::userOrder(800), true],
+			'null to 800 entries' => [null, self::userOrder(800), true],
+			'800 to 810 entries' => [self::userOrder(800), self::userOrder(810), false],
+			'810 to 700 entries' => [self::userOrder(810), self::userOrder(700), false],
+			// 900 entries are at 90 percent already, the bytes rise from 69 to 85 percent.
+			'bytes cross, entries were over before' => [self::userOrder(900, 20), self::userOrder(900, 26), false],
+			// 400 entries of 64 characters are 26.8 kB, 82 percent of the bytes and 40 percent of the entries.
+			'bytes alone cross' => [self::userOrder(400, 8), self::userOrder(400, 62), true],
+			'old value is not json' => ['nope', self::userOrder(800), true],
+			'old value is a number' => ['5', self::userOrder(800), true],
+			// The label branch has to read the label column. Only the 800 to 810 vector catches a wrong getter, because the user column is empty and 790 to 800 warns either way.
+			'label order, 790 to 800 entries' => [self::labelOrder(790), self::labelOrder(800), true, 'swimlaneLabelOrder'],
+			'label order, 800 to 810 entries' => [self::labelOrder(800), self::labelOrder(810), false, 'swimlaneLabelOrder'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataSwimlaneOrderWarning
+	 */
+	public function testSetSwimlaneSettingWarnsWhenTheOrderNearsItsLimit(?string $previous, string $value, bool $warns, string $key = 'swimlaneUserOrder'): void {
+		$this->useRealValidator();
+		$board = new Board();
+		$board->setId(5);
+		if ($key === 'swimlaneLabelOrder') {
+			$board->setSwimlaneLabelOrder($previous);
+			// Every id of the vector is a label of the board, so none is dropped.
+			$labels = [];
+			foreach (json_decode($value, true) as $id) {
+				$label = new Label();
+				$label->setId($id);
+				$labels[] = $label;
+			}
+			$this->labelMapper->method('findAll')->willReturn($labels);
+		} else {
+			$board->setSwimlaneUserOrder($previous);
+		}
+		$this->boardMapper->method('find')->willReturn($board);
+		$this->boardMapper->method('update')->willReturn($board);
+		if ($warns) {
+			$entries = count(json_decode($value, true));
+			$this->logger->expects($this->once())
+				->method('warning')
+				->with(
+					'Swimlane order of board 5 passed 80% of its limit',
+					$this->callback(function (array $context) use ($value, $entries, $key) {
+						// Only ids and numbers, no entry and no user.
+						$this->assertEqualsCanonicalizing(['boardId', 'setting', 'bytes', 'entries', 'maxBytes', 'maxEntries'], array_keys($context));
+						$this->assertSame(5, $context['boardId']);
+						$this->assertSame($key, $context['setting']);
+						$this->assertSame(strlen($value), $context['bytes']);
+						$this->assertSame($entries, $context['entries']);
+						$this->assertSame(32768, $context['maxBytes']);
+						$this->assertSame(1000, $context['maxEntries']);
+						return true;
+					})
+				);
+		} else {
+			$this->logger->expects($this->never())->method('warning');
+		}
+
+		$this->service->setSwimlaneSetting(5, $key, $value);
+	}
+
+	public function testSetSwimlaneSettingNamesTheParticipantLimit(): void {
+		$this->useRealValidator();
+		$this->boardMapper->expects($this->never())->method('update');
+
+		$this->expectException(BadRequestException::class);
+		// Upstream text, it ends with a space.
+		$this->expectExceptionMessage('participant cannot be longer than 64 characters');
+		$this->service->setSwimlaneSetting(5, 'swimlaneUserOrder', '["0:' . str_repeat('a', 65) . '"]');
 	}
 
 	public function testSetSwimlaneSettingRejectsAnotherSetting(): void {

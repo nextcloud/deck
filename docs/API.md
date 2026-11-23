@@ -1179,8 +1179,8 @@ Deck stores user and app configuration values globally and per board. The GET en
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
 | swimlaneMode | `none`, `labels` or `assignees`. Shared by everyone with access to the board, needs edit permission |
-| swimlaneLabelOrder | JSON string holding an array of label ids (integers) in lane order. Shared, needs edit permission. May contain `"__none__"` for the lane of cards without a label. Ids of labels that are not on the board are dropped, and so are string entries such as `"label-1"` or `"12"`. At most 8192 bytes, 1000 entries, no duplicates |
-| swimlaneUserOrder | JSON string holding an array of `"<type>:<participant>"` entries in lane order, for example `["0:admin","1:Sales/EU"]`. The type is a participant type (0, 1, 6 or 7), so a user and a group with the same id stay apart. Shared, needs edit permission. May contain `"__none__"` for the lane of unassigned cards. At most 8192 bytes, 1000 entries, 255 bytes per entry, no duplicates. Entries without a valid type, such as a bare user id, are dropped |
+| swimlaneLabelOrder | JSON string holding an array of label ids (integers) in lane order. Shared, needs edit permission. May contain `"__none__"` for the lane of cards without a label. Ids of labels that are not on the board are dropped, and so are string entries such as `"label-1"` or `"12"`. At most 32768 bytes, 1000 entries, no duplicates |
+| swimlaneUserOrder | JSON string holding an array of `"<type>:<participant>"` entries in lane order, for example `["0:admin","1:Sales/EU"]`. The type is a participant type (0, 1, 6 or 7), so a user and a group with the same id stay apart. Shared, needs edit permission. May contain `"__none__"` for the lane of unassigned cards. At most 32768 bytes, 1000 entries, participant id up to 64 characters, no duplicates. Entries without a valid type, such as a bare user id, are dropped |
 
 For the swimlane settings the response holds the value as stored. Orders come back as compact JSON, so the answer can differ from what was sent when entries were dropped.
 

@@ -55,19 +55,17 @@ use OCP\Security\ISecureRandom;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 class BoardService {
 	/** Settings stored as columns on the board, shared by every member. */
 	public const SWIMLANE_SETTINGS = ['swimlaneMode', 'swimlaneLabelOrder', 'swimlaneUserOrder'];
 
 	// Every member is served the stored order, so cap it.
-	private const MAX_SWIMLANE_ORDER_BYTES = 8192;
+	private const MAX_SWIMLANE_ORDER_BYTES = 32768;
 	private const MAX_SWIMLANE_ORDER_ENTRIES = 1000;
-	// Participant ids have at most 64 characters, the columns are varchar(64).
-	// SQLite does not enforce that and other backends may return longer ids.
-	// 255 bytes covers all ordinary ids. A multibyte id close to 64 characters
-	// can still exceed it.
-	private const MAX_SWIMLANE_ENTRY_BYTES = 255;
+	// An order that reaches this share of either limit is logged once.
+	private const SWIMLANE_ORDER_WARN_PERCENT = 80;
 	// Catch-all lane for cards without a label or an assignee.
 	private const SWIMLANE_NONE_ENTRY = '__none__';
 
@@ -100,6 +98,7 @@ class BoardService {
 		private ISecureRandom $random,
 		private ConfigService $configService,
 		private CirclesService $circlesService,
+		private LoggerInterface $logger,
 		private ?string $userId,
 	) {
 	}
@@ -466,6 +465,12 @@ class BoardService {
 		if ($key === 'swimlaneLabelOrder') {
 			$stored = $this->dropUnknownLabels($boardId, $stored);
 		}
+		// Read before the setter overwrites it.
+		$previous = match ($key) {
+			'swimlaneLabelOrder' => $board->getSwimlaneLabelOrder(),
+			'swimlaneUserOrder' => $board->getSwimlaneUserOrder(),
+			default => null,
+		};
 		match ($key) {
 			'swimlaneMode' => $board->setSwimlaneMode($stored),
 			'swimlaneLabelOrder' => $board->setSwimlaneLabelOrder($stored),
@@ -474,8 +479,50 @@ class BoardService {
 		$this->boardMapper->update($board);
 		$this->changeHelper->boardChanged($boardId);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
+		if ($key !== 'swimlaneMode') {
+			$this->warnWhenSwimlaneOrderNearsLimit($boardId, $key, $previous, $stored);
+		}
 
 		return $stored;
+	}
+
+	/**
+	 * Log once when an order grows past the warning share of a limit. Only the
+	 * setting name and numbers go into the log, never an entry.
+	 */
+	private function warnWhenSwimlaneOrderNearsLimit(int $boardId, string $key, ?string $previous, string $stored): void {
+		[$oldBytes, $oldEntries] = $this->swimlaneOrderSize($previous);
+		[$bytes, $entries] = $this->swimlaneOrderSize($stored);
+		if ($this->isNearSwimlaneLimit($oldBytes, $oldEntries) || !$this->isNearSwimlaneLimit($bytes, $entries)) {
+			return;
+		}
+		$this->logger->warning('Swimlane order of board ' . $boardId . ' passed ' . self::SWIMLANE_ORDER_WARN_PERCENT . '% of its limit', [
+			'boardId' => $boardId,
+			'setting' => $key,
+			'bytes' => $bytes,
+			'entries' => $entries,
+			'maxBytes' => self::MAX_SWIMLANE_ORDER_BYTES,
+			'maxEntries' => self::MAX_SWIMLANE_ORDER_ENTRIES,
+		]);
+	}
+
+	/**
+	 * Bytes and entries of a stored order. Null and empty count as zero, a value
+	 * that is no list counts its bytes and no entries.
+	 *
+	 * @return array{int, int}
+	 */
+	private function swimlaneOrderSize(?string $order): array {
+		if ($order === null || $order === '') {
+			return [0, 0];
+		}
+		$decoded = json_decode($order, true);
+		return [strlen($order), is_array($decoded) ? count($decoded) : 0];
+	}
+
+	private function isNearSwimlaneLimit(int $bytes, int $entries): bool {
+		return $bytes * 100 >= self::MAX_SWIMLANE_ORDER_BYTES * self::SWIMLANE_ORDER_WARN_PERCENT
+			|| $entries * 100 >= self::MAX_SWIMLANE_ORDER_ENTRIES * self::SWIMLANE_ORDER_WARN_PERCENT;
 	}
 
 	/**
@@ -557,7 +604,7 @@ class BoardService {
 						throw new BadRequestException('Swimlane label order entries must be label ids or "__none__"');
 					}
 				} else {
-					if (!is_string($entry) || strlen($entry) > self::MAX_SWIMLANE_ENTRY_BYTES) {
+					if (!is_string($entry)) {
 						throw new BadRequestException('Swimlane user order entries must be "<type>:<participant>" or "__none__"');
 					}
 					// The type is digits only, so the first colon splits it from the participant.
@@ -566,9 +613,8 @@ class BoardService {
 					if (count($parts) !== 2 || !in_array($parts[0], $participantTypes, true)) {
 						continue;
 					}
-					if ($parts[1] === '') {
-						throw new BadRequestException('Swimlane user order entries must be "<type>:<participant>" or "__none__"');
-					}
+					// Same rule as when a board is shared: not empty, at most 64 characters.
+					$this->boardServiceValidator->check(['participant' => $parts[1]]);
 				}
 			}
 			// Checked after the type, so no entry here is a numeric string.
