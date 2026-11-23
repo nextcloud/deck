@@ -63,8 +63,13 @@ class BoardService {
 	// Every member is served the stored order, so cap it.
 	private const MAX_SWIMLANE_ORDER_BYTES = 8192;
 	private const MAX_SWIMLANE_ORDER_ENTRIES = 1000;
-	// Federated user ids are full cloud ids (user@host), so allow 255.
-	private const MAX_SWIMLANE_LANE_ID_LENGTH = 255;
+	// Participant ids have at most 64 characters, the columns are varchar(64).
+	// SQLite does not enforce that and other backends may return longer ids.
+	// 255 bytes covers all ordinary ids. A multibyte id close to 64 characters
+	// can still exceed it.
+	private const MAX_SWIMLANE_ENTRY_BYTES = 255;
+	// Catch-all lane for cards without a label or an assignee.
+	private const SWIMLANE_NONE_ENTRY = '__none__';
 
 	private ?array $boardsCacheFull = null;
 	private ?array $boardsCachePartial = null;
@@ -480,22 +485,60 @@ class BoardService {
 			return;
 		}
 
-		// swimlaneLabelOrder / swimlaneUserOrder: JSON array of lane ids
-		// (label ids, user ids or the '__none__' catch-all lane).
+		// swimlaneLabelOrder: JSON array of label ids and the '__none__' catch-all lane.
+		// swimlaneUserOrder: JSON array of "<type>:<participant>" and '__none__'.
 		if (!is_string($value) || strlen($value) > self::MAX_SWIMLANE_ORDER_BYTES) {
 			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
 		}
-		$order = json_decode($value, true);
+		try {
+			// Depth 2 allows the list and its scalar entries, nested arrays fail to parse.
+			$order = json_decode($value, true, 2, JSON_THROW_ON_ERROR);
+		} catch (\JsonException $e) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
 		if (!is_array($order) || !array_is_list($order) || count($order) > self::MAX_SWIMLANE_ORDER_ENTRIES) {
 			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
 		}
-		foreach ($order as $laneId) {
-			$isIntId = is_int($laneId);
-			$isStringId = is_string($laneId) && $laneId !== '' && strlen($laneId) <= self::MAX_SWIMLANE_LANE_ID_LENGTH;
-			if (!$isIntId && !$isStringId) {
-				throw new BadRequestException('Swimlane order entries must be label ids, user ids or "__none__"');
+
+		$isLabelOrder = $key === 'swimlaneLabelOrder';
+		$participantTypes = [
+			(string)Acl::PERMISSION_TYPE_USER,
+			(string)Acl::PERMISSION_TYPE_GROUP,
+			(string)Acl::PERMISSION_TYPE_REMOTE,
+			(string)Acl::PERMISSION_TYPE_CIRCLE,
+		];
+		$seen = [];
+		foreach ($order as $entry) {
+			if ($entry !== self::SWIMLANE_NONE_ENTRY) {
+				if ($isLabelOrder) {
+					if (!is_int($entry) || $entry <= 0) {
+						throw new BadRequestException('Swimlane label order entries must be label ids or "__none__"');
+					}
+				} else {
+					if (!is_string($entry) || strlen($entry) > self::MAX_SWIMLANE_ENTRY_BYTES) {
+						throw new BadRequestException('Swimlane user order entries must be "<type>:<participant>" or "__none__"');
+					}
+					// The type is digits only, so the first colon splits it from the participant.
+					$parts = explode(':', $entry, 2);
+					if (count($parts) !== 2 || $parts[1] === '' || !in_array($parts[0], $participantTypes, true)) {
+						throw new BadRequestException('Swimlane user order entries must be "<type>:<participant>" or "__none__"');
+					}
+				}
 			}
+			// Checked after the type, so no entry here is a numeric string.
+			if (isset($seen[$entry])) {
+				throw new BadRequestException('Swimlane order must not contain duplicates');
+			}
+			$seen[$entry] = true;
 		}
+	}
+
+	/**
+	 * Entry of an assignee lane in swimlaneUserOrder. The type keeps a user
+	 * and a group with the same id apart.
+	 */
+	public static function swimlaneAssigneeKey(int $type, string $participant): string {
+		return $type . ':' . $participant;
 	}
 
 	public function enrichWithBoardSettings(Board $board): void {

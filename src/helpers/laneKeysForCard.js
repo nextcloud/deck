@@ -6,6 +6,28 @@
 import { SWIMLANE_NONE_KEY } from '../constants.js'
 
 /**
+ * The stored lane entry of a label, its id.
+ *
+ * @param {object} label the label
+ * @return {number}
+ */
+export function labelLaneKey(label) {
+	return label.id
+}
+
+/**
+ * The stored lane entry of an assignee, "<type>:<uid>". The type keeps a user
+ * and a group with the same uid apart. The server checks the same format.
+ *
+ * @param {number} type the participant type of the assignment
+ * @param {string} uid the participant uid
+ * @return {string}
+ */
+export function assigneeLaneKey(type, uid) {
+	return type + ':' + uid
+}
+
+/**
  * The lane keys of a card. The only place that decides where a card goes.
  *
  * Assignee keys carry the participant type, a user and a group can share a uid.
@@ -13,7 +35,7 @@ import { SWIMLANE_NONE_KEY } from '../constants.js'
  *
  * @param {object} card the card to place
  * @param {string} mode 'labels' or 'assignees'
- * @return {string[]} lane keys, never empty
+ * @return {Array<number|string>} lane keys, never empty
  */
 export default function laneKeysForCard(card, mode) {
 	const keys = []
@@ -23,7 +45,7 @@ export default function laneKeysForCard(card, mode) {
 			return keys
 		}
 		for (const label of card.labels) {
-			keys.push('label-' + label.id)
+			keys.push(labelLaneKey(label))
 		}
 		return keys
 	}
@@ -31,7 +53,7 @@ export default function laneKeysForCard(card, mode) {
 		for (const user of card.assignedUsers) {
 			const uid = user?.participant?.uid
 			if (uid) {
-				keys.push('assignee-' + user.type + '-' + uid)
+				keys.push(assigneeLaneKey(user.type, uid))
 			}
 		}
 	}

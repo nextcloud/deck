@@ -106,3 +106,15 @@ Feature: OCS API - Config
     When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneMode" with body:
       | value | assignees |
     Then the response should have a status code "403"
+
+  Scenario: POST /api/v1.0/config/{key} - Swimlane user order keeps a user and a group of the same id apart
+    Given sending "POST" to the API endpoint "/boards" with body:
+      | title | Swimlane order board |
+      | color | ff0000               |
+    And the response value "id" is stored as "boardId"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneUserOrder" with body:
+      | value | ["0:user1","1:user1"] |
+    Then the response should have a status code "200"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneUserOrder" with body:
+      | value | ["user1"] |
+    Then the response should have a status code "400"

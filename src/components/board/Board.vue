@@ -157,6 +157,7 @@ import Stack from './Stack.vue'
 import Swimlane from './Swimlane.vue'
 import { SWIMLANE_NONE_KEY, SWIMLANE_ORDER_KEY } from '../../constants.js'
 import { showError } from '../../helpers/errors.js'
+import { assigneeLaneKey, labelLaneKey } from '../../helpers/laneKeysForCard.js'
 import mergeVisibleOrder from '../../helpers/mergeVisibleOrder.js'
 import logger from '../../logger.js'
 import { createSession } from '../../sessions.js'
@@ -285,12 +286,12 @@ export default {
 			const order = savedOrder || []
 			// Lanes missing from the saved order rank behind all saved ones.
 			const rank = (lane) => {
-				const index = order.indexOf(lane.id)
+				const index = order.indexOf(lane.key)
 				return index === -1 ? order.length : index
 			}
 			const byId = (a, b) => typeof a.id === 'number' && typeof b.id === 'number' ? a.id - b.id : String(a.id).localeCompare(String(b.id))
 			// A user and a group can share a uid, the key carries the type.
-			lanes.sort((a, b) => rank(a) - rank(b) || byId(a, b) || a.key.localeCompare(b.key))
+			lanes.sort((a, b) => rank(a) - rank(b) || byId(a, b) || String(a.key).localeCompare(String(b.key)))
 
 			if (hasNoValue) {
 				const noValueTitle = this.swimlaneMode === 'labels'
@@ -367,16 +368,16 @@ export default {
 		// fallback. Assignees come from the card, a removed participant can still be on cards.
 		keyToLane(key, cards) {
 			if (this.swimlaneMode === 'labels') {
-				const id = key.slice('label-'.length)
+				// The map keys are strings, the lane keys of labels are numbers.
 				const boardLabels = this.board.labels || []
 				for (const label of boardLabels) {
-					if (String(label.id) === id) {
+					if (String(labelLaneKey(label)) === key) {
 						return this.labelToLane(label)
 					}
 				}
 				for (const card of cards) {
 					for (const label of (card.labels || [])) {
-						if (String(label.id) === id) {
+						if (String(labelLaneKey(label)) === key) {
 							return this.labelToLane(label)
 						}
 					}
@@ -386,7 +387,7 @@ export default {
 			for (const card of cards) {
 				for (const user of (card.assignedUsers || [])) {
 					const uid = user?.participant?.uid
-					if (uid && 'assignee-' + user.type + '-' + uid === key) {
+					if (uid && assigneeLaneKey(user.type, uid) === key) {
 						return this.userToLane(user)
 					}
 				}
@@ -396,7 +397,7 @@ export default {
 
 		labelToLane(label) {
 			return {
-				key: 'label-' + label.id,
+				key: labelLaneKey(label),
 				id: label.id,
 				type: 'label',
 				title: label.title,
@@ -408,7 +409,7 @@ export default {
 			const uid = user.participant.uid
 			return {
 				// The type is part of the key, a user and a group can share a uid.
-				key: 'assignee-' + user.type + '-' + uid,
+				key: assigneeLaneKey(user.type, uid),
 				id: uid,
 				type: 'assignee',
 				participantType: user.type,
@@ -417,7 +418,7 @@ export default {
 			}
 		},
 
-		onReorderLane({ removedIndex, addedIndex }) {
+		async onReorderLane({ removedIndex, addedIndex }) {
 			if (removedIndex === null || addedIndex === null || !this.canEdit || this.isArchived) {
 				return
 			}
@@ -425,15 +426,20 @@ export default {
 			const [moved] = lanes.splice(removedIndex, 1)
 			lanes.splice(addedIndex, 0, moved)
 			// The catch-all lane is always last and has no place in the stored order.
-			const visible = lanes.map((l) => l.id).filter((id) => id !== SWIMLANE_NONE_KEY)
+			const visible = lanes.map((l) => l.key).filter((key) => key !== SWIMLANE_NONE_KEY)
 			const type = this.swimlaneMode
 			// Only lanes with a visible card are on screen, so merge into the stored order.
 			const stored = useBoardStore(this.$pinia)[SWIMLANE_ORDER_KEY[type]][this.board.id]
-			return useBoardStore(this.$pinia).setSwimlaneOrder({
-				boardId: this.board.id,
-				type,
-				order: mergeVisibleOrder(stored, visible),
-			})
+			try {
+				await useBoardStore(this.$pinia).setSwimlaneOrder({
+					boardId: this.board.id,
+					type,
+					order: mergeVisibleOrder(stored, visible),
+				})
+			} catch (e) {
+				// The store has rolled the order back, so the lane jumps back.
+				showError(e)
+			}
 		},
 
 		async fetchData() {

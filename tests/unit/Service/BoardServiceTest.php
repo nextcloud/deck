@@ -838,9 +838,16 @@ class BoardServiceTest extends TestCase {
 			'empty label order' => ['swimlaneLabelOrder', '[]'],
 			'label ids' => ['swimlaneLabelOrder', '[3,1,2]'],
 			'catch-all lane' => ['swimlaneLabelOrder', '[3,"__none__"]'],
-			'user ids' => ['swimlaneUserOrder', '["admin","alice"]'],
-			'user order with catch-all' => ['swimlaneUserOrder', '["alice","__none__"]'],
-			'id of exactly 255 bytes' => ['swimlaneUserOrder', '["' . str_repeat('a', 251) . '@x.y"]'],
+			'user ids' => ['swimlaneUserOrder', '["0:admin","0:alice"]'],
+			'user and group of the same id' => ['swimlaneUserOrder', '["0:admin","1:admin"]'],
+			'user order with catch-all' => ['swimlaneUserOrder', '["0:alice","__none__"]'],
+			'group with slash' => ['swimlaneUserOrder', '["1:Sales/EU"]'],
+			'group with colon and quote' => ['swimlaneUserOrder', '["1:a:b\"c"]'],
+			'remote user with port' => ['swimlaneUserOrder', '["6:bob@cloud.example:8443"]'],
+			'circle' => ['swimlaneUserOrder', '["7:' . str_repeat('c', 31) . '"]'],
+			'ids differing only in case' => ['swimlaneUserOrder', '["0:Ann","0:ann"]'],
+			'entry of exactly 255 bytes' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 249) . '@x.y"]'],
+			'entry of exactly 255 bytes in multibyte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{e9}", 126) . 'a"]'],
 		];
 	}
 
@@ -886,10 +893,11 @@ class BoardServiceTest extends TestCase {
 	 * served them on board load.
 	 */
 	public static function dataSwimlaneSettingRejected(): array {
-		// 125 ids of 64 bytes, about 8.4 kB: over the 8192 byte limit, far below 1000 entries.
+		// 300 distinct valid entries of about 250 bytes, about 75 kB: over every
+		// byte limit this branch has, far below 1000 entries.
 		$longIds = [];
-		for ($i = 0; $i < 125; $i++) {
-			$longIds[] = str_pad((string)$i, 64, 'a');
+		for ($i = 0; $i < 300; $i++) {
+			$longIds[] = '0:' . str_pad((string)$i, 248, 'a');
 		}
 		$oversized = json_encode($longIds);
 
@@ -901,11 +909,29 @@ class BoardServiceTest extends TestCase {
 			'order holds an object' => ['swimlaneLabelOrder', '[{"id":1}]'],
 			'order holds null' => ['swimlaneLabelOrder', '[1,null]'],
 			'order holds an empty id' => ['swimlaneLabelOrder', '["",1]'],
-			'order holds an overlong id' => ['swimlaneUserOrder', '["' . str_repeat('a', 256) . '"]'],
-			// 128 characters but 256 bytes, as raw UTF-8 the way the client sends it.
-			'order holds an id of 256 bytes in 128 characters' => ['swimlaneUserOrder', '["' . str_repeat("\u{e9}", 128) . '"]'],
+			'label as a string' => ['swimlaneLabelOrder', '["label-1"]'],
+			'label id as a numeric string' => ['swimlaneLabelOrder', '["12"]'],
+			'label id zero' => ['swimlaneLabelOrder', '[0]'],
+			'label id negative' => ['swimlaneLabelOrder', '[-1]'],
+			'label id as a float' => ['swimlaneLabelOrder', '[1.5]'],
+			'label order with a user entry' => ['swimlaneLabelOrder', '["0:admin"]'],
+			'label order with a duplicate' => ['swimlaneLabelOrder', '[3,3]'],
+			'label order with a nested array' => ['swimlaneLabelOrder', '[[3]]'],
+			'order is a scalar' => ['swimlaneLabelOrder', '1'],
+			'user entry without a type' => ['swimlaneUserOrder', '["admin"]'],
+			'user entry with an empty participant' => ['swimlaneUserOrder', '["0:"]'],
+			'user entry with an unknown type' => ['swimlaneUserOrder', '["2:x"]'],
+			'user entry with a padded type' => ['swimlaneUserOrder', '["00:x"]'],
+			'user entry with a signed type' => ['swimlaneUserOrder', '["+1:x"]'],
+			'user entry as a number' => ['swimlaneUserOrder', '[0]'],
+			'user entry with a duplicate' => ['swimlaneUserOrder', '["0:a","0:a"]'],
+			'user order with a duplicate catch-all' => ['swimlaneUserOrder', '["__none__","__none__"]'],
+			'user order with a nested array' => ['swimlaneUserOrder', '[["0:a"]]'],
+			'order holds an overlong id' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 254) . '"]'],
+			// 256 bytes in 129 characters, as raw UTF-8 the way the client sends it.
+			'order holds an id of 256 bytes in multibyte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{e9}", 127) . '"]'],
 			'order oversized' => ['swimlaneUserOrder', $oversized],
-			'order too many entries' => ['swimlaneLabelOrder', '[' . str_repeat('1,', 1000) . '1]'],
+			'order too many entries' => ['swimlaneLabelOrder', '[' . implode(',', range(1, 1001)) . ']'],
 		];
 	}
 
@@ -918,6 +944,25 @@ class BoardServiceTest extends TestCase {
 
 		$this->expectException(BadRequestException::class);
 		$this->service->setSwimlaneSetting(5, $key, $value);
+	}
+
+	/**
+	 * Shared with the client, see laneKeysForCard.spec.js.
+	 */
+	public static function dataSwimlaneAssigneeKey(): array {
+		return [
+			'user' => [0, 'admin', '0:admin'],
+			'group with slash' => [1, 'Sales/EU', '1:Sales/EU'],
+			'remote user with port' => [6, 'bob@cloud.example:8443', '6:bob@cloud.example:8443'],
+			'group with colon and quote' => [1, 'a:b"c', '1:a:b"c'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataSwimlaneAssigneeKey
+	 */
+	public function testSwimlaneAssigneeKey(int $type, string $participant, string $expected): void {
+		$this->assertSame($expected, BoardService::swimlaneAssigneeKey($type, $participant));
 	}
 
 	public function testSetSwimlaneSettingRejectsAnotherSetting(): void {

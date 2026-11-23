@@ -43,7 +43,7 @@ describe('drop order inside a lane', () => {
 
 	function laneContext(showArchived = false) {
 		return {
-			lane: { key: 'label-1' },
+			lane: { key: 1 },
 			stack: { id: 1 },
 			showArchived,
 			cardsByStack: [A, C],

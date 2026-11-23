@@ -417,6 +417,7 @@ A 403 response might be returned if the users ability to create new boards has b
 ##### Supported participant types:
 - 0 User
 - 1 Group
+- 6 Remote user
 - 7 Circle
 
 #### Response
@@ -1178,8 +1179,8 @@ Deck stores user and app configuration values globally and per board. The GET en
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
 | swimlaneMode | `none`, `labels` or `assignees`. Shared by everyone with access to the board, needs edit permission |
-| swimlaneLabelOrder | JSON string holding an array of label ids in lane order. Shared, needs edit permission. May contain `"__none__"` for the lane of cards without a label. At most 8192 bytes, 1000 entries, 255 bytes per id |
-| swimlaneUserOrder | JSON string holding an array of participant uids (without type) in lane order. Shared, needs edit permission. May contain `"__none__"` for the lane of unassigned cards. At most 8192 bytes, 1000 entries, 255 bytes per id |
+| swimlaneLabelOrder | JSON string holding an array of label ids (integers) in lane order. Shared, needs edit permission. May contain `"__none__"` for the lane of cards without a label. At most 8192 bytes, 1000 entries, no duplicates |
+| swimlaneUserOrder | JSON string holding an array of `"<type>:<participant>"` entries in lane order, for example `["0:admin","1:Sales/EU"]`. The type is a participant type (0, 1, 6 or 7), so a user and a group with the same id stay apart. Shared, needs edit permission. May contain `"__none__"` for the lane of unassigned cards. At most 8192 bytes, 1000 entries, 255 bytes per entry, no duplicates |
 
 #### Example request
 

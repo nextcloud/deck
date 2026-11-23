@@ -42,6 +42,12 @@ describe('mergeVisibleOrder', () => {
 		expect(mergeVisibleOrder(['a', 'gone', 'b'], ['b', 'a'])).toEqual(['b', 'gone', 'a'])
 	})
 
+	// Label lanes are stored as numbers. 12 and "12" are different entries, so
+	// the stored "12" keeps its slot and the visible 12 and 7 are filled in behind it.
+	it('treats 12 and "12" as different entries', () => {
+		expect(mergeVisibleOrder(['12', 7], [12, 7])).toEqual(['12', 12, 7])
+	})
+
 	it('does not mutate the stored array', () => {
 		const stored = ['a', 'b', 'c']
 		mergeVisibleOrder(stored, ['c', 'a'])

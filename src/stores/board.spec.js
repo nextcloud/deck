@@ -59,7 +59,7 @@ describe('setSwimlaneOrder', () => {
 		const store = makeStore()
 		setConfig.mockRejectedValue(new Error('403'))
 
-		await expect(setSwimlaneOrder.call(store, { boardId: 5, type: 'assignees', order: ['bob'] })).rejects.toThrow()
+		await expect(setSwimlaneOrder.call(store, { boardId: 5, type: 'assignees', order: ['0:bob'] })).rejects.toThrow()
 		expect(store.swimlaneUserOrder[5]).toEqual([])
 	})
 
@@ -119,10 +119,10 @@ describe('setSwimlaneMode', () => {
 describe('readSwimlaneOrder', () => {
 	it('skips a malformed order and still reads the other one', () => {
 		const store = makeStore()
-		readSwimlaneOrder.call(store, 4, { settings: { swimlaneLabelOrder: '[2,1', swimlaneUserOrder: '["bob"]' } })
+		readSwimlaneOrder.call(store, 4, { settings: { swimlaneLabelOrder: '[2,1', swimlaneUserOrder: '["0:bob"]' } })
 
 		expect(store.swimlaneLabelOrder[4]).toBeUndefined()
-		expect(store.swimlaneUserOrder[4]).toEqual(['bob'])
+		expect(store.swimlaneUserOrder[4]).toEqual(['0:bob'])
 	})
 
 	it('reads a missing order as empty', () => {

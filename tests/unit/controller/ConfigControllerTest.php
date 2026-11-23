@@ -49,7 +49,7 @@ class ConfigControllerTest extends TestCase {
 		return [
 			'mode' => ['board:5:swimlaneMode', 'swimlaneMode', 'labels'],
 			'label order' => ['board:5:swimlaneLabelOrder', 'swimlaneLabelOrder', '[2,1]'],
-			'user order' => ['board:5:swimlaneUserOrder', 'swimlaneUserOrder', '["bob"]'],
+			'user order' => ['board:5:swimlaneUserOrder', 'swimlaneUserOrder', '["0:bob"]'],
 			'leading zero' => ['board:05:swimlaneMode', 'swimlaneMode', 'assignees'],
 		];
 	}

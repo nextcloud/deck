@@ -256,7 +256,7 @@ describe('onReorderLane', () => {
 			swimlaneMode: 'labels',
 			board: { id: 7 },
 			$pinia: {},
-			computedLanes: [{ id: 1 }, { id: 2 }, { id: '__none__' }],
+			computedLanes: [{ key: 1, id: 1 }, { key: 2, id: 2 }, { key: '__none__', id: '__none__' }],
 		}
 		return { board, setSwimlaneOrder }
 	}
@@ -271,6 +271,35 @@ describe('onReorderLane', () => {
 		const { board, setSwimlaneOrder } = laneContext([3, 1, 2])
 		Board.methods.onReorderLane.call(board, { removedIndex: 1, addedIndex: 0 })
 		expect(setSwimlaneOrder).toHaveBeenCalledWith({ boardId: 7, type: 'labels', order: [3, 2, 1] })
+	})
+
+	// The ids differ from the keys on purpose, the stored order must hold the keys.
+	it('stores the keys of person lanes', () => {
+		const setSwimlaneOrder = jest.fn()
+		useBoardStore.mockReturnValue({ swimlaneUserOrder: { 7: [] }, setSwimlaneOrder })
+		const board = {
+			canEdit: true,
+			isArchived: false,
+			swimlaneMode: 'assignees',
+			board: { id: 7 },
+			$pinia: {},
+			computedLanes: [
+				{ key: '0:bob', id: 'bob' },
+				{ key: '1:admin', id: 'admin' },
+				{ key: '__none__', id: '__none__' },
+			],
+		}
+		Board.methods.onReorderLane.call(board, { removedIndex: 1, addedIndex: 0 })
+		expect(setSwimlaneOrder).toHaveBeenCalledWith({ boardId: 7, type: 'assignees', order: ['1:admin', '0:bob'] })
+	})
+
+	it('shows the error of a rejected save and does not rethrow', async () => {
+		const { board, setSwimlaneOrder } = laneContext([])
+		const error = new Error('400')
+		setSwimlaneOrder.mockRejectedValue(error)
+		showError.mockClear()
+		await expect(Board.methods.onReorderLane.call(board, { removedIndex: 1, addedIndex: 0 })).resolves.toBeUndefined()
+		expect(showError).toHaveBeenCalledWith(error)
 	})
 
 	it('ignores a drag on an archived board', () => {
@@ -290,8 +319,8 @@ describe('computedLanes order', () => {
 	function laneContext(stackOrder, savedOrder) {
 		const card = { assignedUsers: [user(0, 'admin'), user(1, 'admin'), user(0, 'bob')] }
 		const map = {
-			1: { 'assignee-1-admin': [card], 'assignee-0-admin': [card] },
-			2: { 'assignee-0-bob': [card], 'assignee-0-admin': [card] },
+			1: { '1:admin': [card], '0:admin': [card] },
+			2: { '0:bob': [card], '0:admin': [card] },
 		}
 		useCardStore.mockReturnValue({ cardsByStackAndLaneMap: map })
 		useBoardStore.mockReturnValue({ swimlaneUserOrder: { 7: savedOrder } })
@@ -311,7 +340,7 @@ describe('computedLanes order', () => {
 	}
 
 	it('sorts lanes sharing a uid the same way for any card order', () => {
-		const expected = ['assignee-0-admin', 'assignee-1-admin', 'assignee-0-bob']
+		const expected = ['0:admin', '1:admin', '0:bob']
 		expect(keys(laneContext([1, 2]))).toEqual(expected)
 		expect(keys(laneContext([2, 1]))).toEqual(expected)
 	})
@@ -320,7 +349,7 @@ describe('computedLanes order', () => {
 		global.t = (app, text) => text
 		const card = {}
 		useCardStore.mockReturnValue({
-			cardsByStackAndLaneMap: { 1: { __none__: [card], 'label-10': [card], 'label-9': [card] } },
+			cardsByStackAndLaneMap: { 1: { __none__: [card], 10: [card], 9: [card] } },
 		})
 		useBoardStore.mockReturnValue({ swimlaneLabelOrder: { 7: undefined } })
 		const board = {
@@ -331,11 +360,35 @@ describe('computedLanes order', () => {
 			labelToLane: Board.methods.labelToLane,
 		}
 		board.keyToLane = Board.methods.keyToLane.bind(board)
-		expect(keys(board)).toEqual(['label-9', 'label-10', '__none__'])
+		expect(keys(board)).toEqual([9, 10, '__none__'])
+		// The map keys are strings, the stored order holds numbers.
+		expect(typeof keys(board)[0]).toBe('number')
+		delete global.t
+	})
+
+	it('finds a label that is only on the card', () => {
+		global.t = (app, text) => text
+		const card = { labels: [{ id: 5, title: 'gone', color: 'fff' }] }
+		useCardStore.mockReturnValue({ cardsByStackAndLaneMap: { 1: { 5: [card] } } })
+		useBoardStore.mockReturnValue({ swimlaneLabelOrder: { 7: undefined } })
+		const board = {
+			swimlaneMode: 'labels',
+			board: { id: 7, labels: [] },
+			stacks: [{ id: 1 }],
+			$pinia: {},
+			labelToLane: Board.methods.labelToLane,
+		}
+		board.keyToLane = Board.methods.keyToLane.bind(board)
+		expect(keys(board)).toEqual([5])
 		delete global.t
 	})
 
 	it('puts the saved order before the id order', () => {
-		expect(keys(laneContext([1, 2], ['bob']))).toEqual(['assignee-0-bob', 'assignee-0-admin', 'assignee-1-admin'])
+		expect(keys(laneContext([1, 2], ['0:bob']))).toEqual(['0:bob', '0:admin', '1:admin'])
+	})
+
+	// A bare uid used to match the user and the group alike.
+	it('keeps a group and a user of the same uid as two lanes', () => {
+		expect(keys(laneContext([1, 2], ['1:admin', '0:admin']))).toEqual(['1:admin', '0:admin', '0:bob'])
 	})
 })

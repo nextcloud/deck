@@ -8,9 +8,9 @@
  * take the slots they already had, hidden lanes (filtered or empty) keep
  * theirs. Unknown ids stay, the lane sort ignores them.
  *
- * @param {Array|undefined} stored the order as it is saved for the board
- * @param {Array} visible the reordered ids of the lanes on screen
- * @return {Array} the order to save
+ * @param {Array<number|string>|undefined} stored the order as it is saved for the board
+ * @param {Array<number|string>} visible the reordered lane keys on screen
+ * @return {Array<number|string>} the order to save
  */
 export default function mergeVisibleOrder(stored, visible) {
 	if (!stored || stored.length === 0) {
