@@ -448,41 +448,78 @@ class BoardService {
 	 * so this method moves the ETag via boardChanged and dispatches
 	 * BoardUpdatedEvent for the live update listener.
 	 *
+	 * @return string the value as stored, orders in their canonical encoding
 	 * @throws BadRequestException if the key is not a swimlane setting or the value is malformed
 	 * @throws DoesNotExistException if the board is gone
 	 * @throws StatusException if the board is archived
 	 */
-	public function setSwimlaneSetting(int $boardId, string $key, mixed $value): mixed {
+	public function setSwimlaneSetting(int $boardId, string $key, mixed $value): string {
 		if (!in_array($key, self::SWIMLANE_SETTINGS, true)) {
 			throw new BadRequestException('Not a swimlane setting: ' . $key);
 		}
-		$this->validateSwimlaneValue($key, $value);
+		$stored = $this->normalizeSwimlaneValue($key, $value);
 
 		$board = $this->boardMapper->find($boardId);
 		if ($board->getArchived()) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
+		if ($key === 'swimlaneLabelOrder') {
+			$stored = $this->dropUnknownLabels($boardId, $stored);
+		}
 		match ($key) {
-			'swimlaneMode' => $board->setSwimlaneMode((string)$value),
-			'swimlaneLabelOrder' => $board->setSwimlaneLabelOrder((string)$value),
-			'swimlaneUserOrder' => $board->setSwimlaneUserOrder((string)$value),
+			'swimlaneMode' => $board->setSwimlaneMode($stored),
+			'swimlaneLabelOrder' => $board->setSwimlaneLabelOrder($stored),
+			'swimlaneUserOrder' => $board->setSwimlaneUserOrder($stored),
 		};
 		$this->boardMapper->update($board);
 		$this->changeHelper->boardChanged($boardId);
 		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
 
-		return $value;
+		return $stored;
 	}
 
 	/**
-	 * Every member is served these values, so reject malformed ones.
+	 * Remove label ids that are not on the board. A deleted label stays in the
+	 * client's order on purpose, so it disappears here with the next save.
 	 */
-	private function validateSwimlaneValue(string $key, mixed $value): void {
+	private function dropUnknownLabels(int $boardId, string $encodedOrder): string {
+		$known = [];
+		foreach ($this->labelMapper->findAll($boardId) as $label) {
+			$known[$label->getId()] = true;
+		}
+		$kept = [];
+		foreach (json_decode($encodedOrder, true) as $entry) {
+			if ($entry === self::SWIMLANE_NONE_ENTRY || isset($known[$entry])) {
+				$kept[] = $entry;
+			}
+		}
+		return $this->encodeSwimlaneOrder($kept);
+	}
+
+	/**
+	 * Canonical encoding of a stored order. The size is checked on the result,
+	 * json_encode can make an entry longer (U+2028 grows from 3 to 6 bytes).
+	 *
+	 * @param list<int|string> $order
+	 */
+	private function encodeSwimlaneOrder(array $order): string {
+		$encoded = json_encode($order, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+		if (strlen($encoded) > self::MAX_SWIMLANE_ORDER_BYTES) {
+			throw new BadRequestException('Swimlane order is too large');
+		}
+		return $encoded;
+	}
+
+	/**
+	 * Every member is served these values, so reject malformed ones. Entries
+	 * in the format of earlier builds are dropped, so the lane loses its position once.
+	 */
+	private function normalizeSwimlaneValue(string $key, mixed $value): string {
 		if ($key === 'swimlaneMode') {
 			if (!in_array($value, ['none', 'labels', 'assignees'], true)) {
 				throw new BadRequestException('Swimlane mode must be one of: none, labels, assignees');
 			}
-			return;
+			return $value;
 		}
 
 		// swimlaneLabelOrder: JSON array of label ids and the '__none__' catch-all lane.
@@ -508,9 +545,14 @@ class BoardService {
 			(string)Acl::PERMISSION_TYPE_CIRCLE,
 		];
 		$seen = [];
+		$kept = [];
 		foreach ($order as $entry) {
 			if ($entry !== self::SWIMLANE_NONE_ENTRY) {
 				if ($isLabelOrder) {
+					// A string is the format of an earlier build, drop it.
+					if (is_string($entry)) {
+						continue;
+					}
 					if (!is_int($entry) || $entry <= 0) {
 						throw new BadRequestException('Swimlane label order entries must be label ids or "__none__"');
 					}
@@ -520,7 +562,11 @@ class BoardService {
 					}
 					// The type is digits only, so the first colon splits it from the participant.
 					$parts = explode(':', $entry, 2);
-					if (count($parts) !== 2 || $parts[1] === '' || !in_array($parts[0], $participantTypes, true)) {
+					// Without a valid type this is the format of an earlier build, drop it.
+					if (count($parts) !== 2 || !in_array($parts[0], $participantTypes, true)) {
+						continue;
+					}
+					if ($parts[1] === '') {
 						throw new BadRequestException('Swimlane user order entries must be "<type>:<participant>" or "__none__"');
 					}
 				}
@@ -530,7 +576,9 @@ class BoardService {
 				throw new BadRequestException('Swimlane order must not contain duplicates');
 			}
 			$seen[$entry] = true;
+			$kept[] = $entry;
 		}
+		return $this->encodeSwimlaneOrder($kept);
 	}
 
 	/**

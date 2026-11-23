@@ -82,6 +82,8 @@ Feature: OCS API - Config
       | title | Swimlane board |
       | color | ff0000         |
     And the response value "id" is stored as "boardId"
+    And the response value "labels.0.id" is stored as "label0"
+    And the response value "labels.1.id" is stored as "label1"
     And sending "POST" to the API endpoint "/boards/<boardId>/acl" with body:
       | type             | 0     |
       | participant      | user1 |
@@ -93,15 +95,16 @@ Feature: OCS API - Config
     Then the response should have a status code "200"
     And the response value "ocs.data" should be "labels"
     When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneLabelOrder" with body:
-      | value | [2,1] |
+      | value | [<label1>,<label0>] |
     Then the response should have a status code "200"
+    And the response value "ocs.data" should be "[<label1>,<label0>]"
     When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneMode" with body:
       | value | columns |
     Then the response should have a status code "400"
     Given acting as user "user1"
     When sending "GET" to the API endpoint "/boards/<boardId>"
     Then the response value "settings.swimlaneMode" should be "labels"
-    And the response value "settings.swimlaneLabelOrder" should be "[2,1]"
+    And the response value "settings.swimlaneLabelOrder" should be "[<label1>,<label0>]"
     And the response value "settings.swimlaneUserOrder" should be "[]"
     When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneMode" with body:
       | value | assignees |
@@ -117,4 +120,21 @@ Feature: OCS API - Config
     Then the response should have a status code "200"
     When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneUserOrder" with body:
       | value | ["user1"] |
-    Then the response should have a status code "400"
+    # An entry of an earlier build is dropped and the rest is stored.
+    Then the response should have a status code "200"
+
+  Scenario: POST /api/v1.0/config/{key} - Swimlane label order is stored canonical and without deleted labels
+    Given sending "POST" to the API endpoint "/boards" with body:
+      | title | Swimlane label board |
+      | color | ff0000               |
+    And the response value "id" is stored as "boardId"
+    And the response value "labels.0.id" is stored as "label0"
+    And the response value "labels.1.id" is stored as "label1"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneLabelOrder" with body:
+      | value | [<label0>,99999999] |
+    Then the response should have a status code "200"
+    And the response value "ocs.data" should be "[<label0>]"
+    When sending "POST" to the OCS API endpoint "/config/board:<boardId>:swimlaneLabelOrder" with body:
+      | value | [ <label1>, <label0> ] |
+    Then the response should have a status code "200"
+    And the response value "ocs.data" should be "[<label1>,<label0>]"

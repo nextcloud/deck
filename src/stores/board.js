@@ -358,14 +358,31 @@ export const useBoardStore = defineStore('board', {
 			swimlaneWrites[configKey] = write
 			const previous = this[key][boardId] ? [...this[key][boardId]] : []
 			this[key][boardId] = order
+			let saved
 			try {
-				await useSettingsStore().setConfig({ [configKey]: JSON.stringify(order) })
+				const result = await useSettingsStore().setConfig({ [configKey]: JSON.stringify(order) })
+				saved = result?.[configKey]
 			} catch (e) {
 				// Roll back only if no newer write started meanwhile.
 				if (swimlaneWrites[configKey] === write) {
 					this[key][boardId] = previous
 				}
 				throw e
+			}
+			// The server answers with the order it stored. It drops entries it
+			// cannot keep, so take that list unless a newer write started. An
+			// answer that is not a list keeps the optimistic order, the write itself worked.
+			if (swimlaneWrites[configKey] !== write || typeof saved !== 'string') {
+				return
+			}
+			let parsed = null
+			try {
+				parsed = JSON.parse(saved)
+			} catch {
+				// Not JSON, the optimistic order stays.
+			}
+			if (Array.isArray(parsed)) {
+				this[key][boardId] = parsed
 			}
 		},
 	},

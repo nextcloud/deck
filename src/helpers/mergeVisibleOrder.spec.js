@@ -35,9 +35,9 @@ describe('mergeVisibleOrder', () => {
 		expect(mergeVisibleOrder(['a', 'b', 'c'], ['a', 'd', 'b'])).toEqual(['a', 'd', 'c', 'b'])
 	})
 
-	// A label that was deleted, or an assignee removed from every card, keeps
-	// its stored slot. The lane sort skips an id it cannot resolve, and the
-	// position applies again if the lane comes back.
+	// The helper removes nothing. A stale id keeps its slot here and the lane
+	// sort skips an id it cannot resolve. The server drops ids of deleted
+	// labels when the order is saved.
 	it('keeps a stale id in place', () => {
 		expect(mergeVisibleOrder(['a', 'gone', 'b'], ['b', 'a'])).toEqual(['b', 'gone', 'a'])
 	})

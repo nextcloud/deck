@@ -72,11 +72,63 @@ describe('setSwimlaneOrder', () => {
 		const older = setSwimlaneOrder.call(store, { boardId: 6, type: 'labels', order: [2, 1] })
 		const newer = setSwimlaneOrder.call(store, { boardId: 6, type: 'labels', order: [3, 2, 1] })
 		first.reject(new Error('network'))
-		second.resolve()
+		second.resolve({ 'board:6:swimlaneLabelOrder': '[3,2,1]' })
 
 		await expect(older).rejects.toThrow('network')
 		await newer
 		expect(store.swimlaneLabelOrder[6]).toEqual([3, 2, 1])
+	})
+
+	it('takes the order the server stored', async () => {
+		const store = makeStore()
+		// The server dropped the label that is gone.
+		setConfig.mockResolvedValue({ 'board:4:swimlaneLabelOrder': '[3]' })
+
+		await setSwimlaneOrder.call(store, { boardId: 4, type: 'labels', order: [3, 99] })
+
+		expect(setConfig).toHaveBeenCalledWith({ 'board:4:swimlaneLabelOrder': '[3,99]' })
+		expect(store.swimlaneLabelOrder[4]).toEqual([3])
+	})
+
+	it('takes the stored user order from its own key', async () => {
+		const store = makeStore()
+		setConfig.mockResolvedValue({ 'board:4:swimlaneUserOrder': '["0:bob"]' })
+
+		await setSwimlaneOrder.call(store, { boardId: 4, type: 'assignees', order: ['bob', '0:bob'] })
+
+		expect(store.swimlaneUserOrder[4]).toEqual(['0:bob'])
+	})
+
+	it('does not apply the answer of an older write over a newer one', async () => {
+		const store = makeStore()
+		const first = deferred()
+		const second = deferred()
+		setConfig.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise)
+
+		const older = setSwimlaneOrder.call(store, { boardId: 7, type: 'labels', order: [2, 1] })
+		const newer = setSwimlaneOrder.call(store, { boardId: 7, type: 'labels', order: [3, 2, 1] })
+		first.resolve({ 'board:7:swimlaneLabelOrder': '[2,1]' })
+		await older
+		expect(store.swimlaneLabelOrder[7]).toEqual([3, 2, 1])
+
+		second.resolve({ 'board:7:swimlaneLabelOrder': '[3,1]' })
+		await newer
+		expect(store.swimlaneLabelOrder[7]).toEqual([3, 1])
+	})
+
+	it.each([
+		['no answer', undefined],
+		['an answer without the key', {}],
+		['a value that is not a string', { 'board:4:swimlaneLabelOrder': 5 }],
+		['a value that is not JSON', { 'board:4:swimlaneLabelOrder': '[3' }],
+		['a value that is not a list', { 'board:4:swimlaneLabelOrder': '{"a":1}' }],
+	])('keeps the order it sent for %s and does not throw', async (name, answer) => {
+		const store = makeStore()
+		store.swimlaneLabelOrder[4] = [1, 2]
+		setConfig.mockResolvedValue(answer)
+
+		await expect(setSwimlaneOrder.call(store, { boardId: 4, type: 'labels', order: [2, 1] })).resolves.toBeUndefined()
+		expect(store.swimlaneLabelOrder[4]).toEqual([2, 1])
 	})
 })
 

@@ -77,18 +77,27 @@ export const useSettingsStore = defineStore('settings', {
 					this.config[key] = value
 			}
 		},
+		/**
+		 * @param {object} config values by config key
+		 * @return {Promise<object>} the answer of the server by config key, for
+		 * the swimlane orders that is the list as stored. The local copy keeps
+		 * the sent value, other settings answer with something else (groupLimit).
+		 */
 		async setConfig(config) {
+			const answers = {}
 			for (const [key, value] of Object.entries(config)) {
 				try {
-					await axios.post(generateOcsUrl(`apps/deck/api/v1.0/config/${key}`), {
+					const response = await axios.post(generateOcsUrl(`apps/deck/api/v1.0/config/${key}`), {
 						value,
 					})
+					answers[key] = response?.data?.ocs?.data
 					this.setConfigLocal({ key, value })
 				} catch (e) {
 					logger.error('Error while saving config', { key, error: e })
 					throw e
 				}
 			}
+			return answers
 		},
 		toggleShortcutLock(lock) {
 			this.shortcutLock = lock

@@ -46,6 +46,7 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
@@ -832,31 +833,75 @@ class BoardServiceTest extends TestCase {
 	 */
 	public static function dataSwimlaneSettingAccepted(): array {
 		return [
-			'mode none' => ['swimlaneMode', 'none'],
-			'mode labels' => ['swimlaneMode', 'labels'],
-			'mode assignees' => ['swimlaneMode', 'assignees'],
-			'empty label order' => ['swimlaneLabelOrder', '[]'],
-			'label ids' => ['swimlaneLabelOrder', '[3,1,2]'],
-			'catch-all lane' => ['swimlaneLabelOrder', '[3,"__none__"]'],
-			'user ids' => ['swimlaneUserOrder', '["0:admin","0:alice"]'],
-			'user and group of the same id' => ['swimlaneUserOrder', '["0:admin","1:admin"]'],
-			'user order with catch-all' => ['swimlaneUserOrder', '["0:alice","__none__"]'],
-			'group with slash' => ['swimlaneUserOrder', '["1:Sales/EU"]'],
-			'group with colon and quote' => ['swimlaneUserOrder', '["1:a:b\"c"]'],
-			'remote user with port' => ['swimlaneUserOrder', '["6:bob@cloud.example:8443"]'],
-			'circle' => ['swimlaneUserOrder', '["7:' . str_repeat('c', 31) . '"]'],
-			'ids differing only in case' => ['swimlaneUserOrder', '["0:Ann","0:ann"]'],
-			'entry of exactly 255 bytes' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 249) . '@x.y"]'],
-			'entry of exactly 255 bytes in multibyte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{e9}", 126) . 'a"]'],
+			'mode none' => ['swimlaneMode', 'none', 'none'],
+			'mode labels' => ['swimlaneMode', 'labels', 'labels'],
+			'mode assignees' => ['swimlaneMode', 'assignees', 'assignees'],
+			'empty label order' => ['swimlaneLabelOrder', '[]', '[]'],
+			'label ids' => ['swimlaneLabelOrder', '[3,1,2]', '[3,1,2]'],
+			'catch-all lane' => ['swimlaneLabelOrder', '[3,"__none__"]', '[3,"__none__"]'],
+			'label order with spaces is stored canonical' => ['swimlaneLabelOrder', '[ 2, 1 ]', '[2,1]'],
+			'label id of a deleted label is dropped' => ['swimlaneLabelOrder', '[3,99,1]', '[3,1]'],
+			'only unknown label ids' => ['swimlaneLabelOrder', '[98,99]', '[]'],
+			'catch-all lane survives unknown label ids' => ['swimlaneLabelOrder', '[99,"__none__",2]', '["__none__",2]'],
+			'user ids' => ['swimlaneUserOrder', '["0:admin","0:alice"]', '["0:admin","0:alice"]'],
+			'user and group of the same id' => ['swimlaneUserOrder', '["0:admin","1:admin"]', '["0:admin","1:admin"]'],
+			'user order with catch-all' => ['swimlaneUserOrder', '["0:alice","__none__"]', '["0:alice","__none__"]'],
+			'user order with spaces is stored canonical' => ['swimlaneUserOrder', '[ "0:alice" , "__none__" ]', '["0:alice","__none__"]'],
+			'group with slash stays unescaped' => ['swimlaneUserOrder', '["1:Sales/EU"]', '["1:Sales/EU"]'],
+			'unicode escape is stored as the character' => ['swimlaneUserOrder', '["0:caf\u00e9"]', "[\"0:caf\u{e9}\"]"],
+			'group with colon and quote' => ['swimlaneUserOrder', '["1:a:b\"c"]', '["1:a:b\"c"]'],
+			'remote user with port' => ['swimlaneUserOrder', '["6:bob@cloud.example:8443"]', '["6:bob@cloud.example:8443"]'],
+			'circle' => ['swimlaneUserOrder', '["7:' . str_repeat('c', 31) . '"]', '["7:' . str_repeat('c', 31) . '"]'],
+			'ids differing only in case' => ['swimlaneUserOrder', '["0:Ann","0:ann"]', '["0:Ann","0:ann"]'],
+			'entry of exactly 255 bytes' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 249) . '@x.y"]', '["0:' . str_repeat('a', 249) . '@x.y"]'],
+			'entry of exactly 255 bytes in multibyte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{e9}", 126) . 'a"]', '["0:' . str_repeat("\u{e9}", 126) . 'a"]'],
+		];
+	}
+
+	/**
+	 * Entries in the format of earlier builds. The server drops them and
+	 * stores the rest, so a saved order never holds a key the client
+	 * cannot place.
+	 */
+	public static function dataSwimlaneSettingLegacyDropped(): array {
+		return [
+			'bare user id' => ['swimlaneUserOrder', '["admin"]', '[]'],
+			'bare ids next to typed entries' => ['swimlaneUserOrder', '["admin","0:admin","2:x","00:x","+1:x"]', '["0:admin"]'],
+			'catch-all lane survives' => ['swimlaneUserOrder', '["alice","__none__"]', '["__none__"]'],
+			'label as a string' => ['swimlaneLabelOrder', '["label-1",3,"12"]', '[3]'],
+			'label id as a numeric string' => ['swimlaneLabelOrder', '["12"]', '[]'],
+			// The string is dropped, so it is no duplicate of the integer 3.
+			'numeric string next to the same integer' => ['swimlaneLabelOrder', '["3",3]', '[3]'],
+			'user entry in a label order' => ['swimlaneLabelOrder', '["0:admin"]', '[]'],
+			'empty string in a label order' => ['swimlaneLabelOrder', '["",1]', '[1]'],
+			'empty string in a user order' => ['swimlaneUserOrder', '["","0:a"]', '["0:a"]'],
+			// Duplicates are counted after the drop, so two dropped copies are no duplicate.
+			'dropped duplicate' => ['swimlaneUserOrder', '["a","a","0:a"]', '["0:a"]'],
 		];
 	}
 
 	/**
 	 * @dataProvider dataSwimlaneSettingAccepted
+	 * @dataProvider dataSwimlaneSettingLegacyDropped
 	 */
-	public function testSetSwimlaneSettingWritesTheColumn(string $key, string $value): void {
+	public function testSetSwimlaneSettingWritesTheColumn(string $key, string $value, string $stored): void {
 		$board = new Board();
 		$board->setId(5);
+		if ($key === 'swimlaneLabelOrder') {
+			// The board has the labels 1 to 3, other ids are gone.
+			$labels = [];
+			foreach ([1, 2, 3] as $id) {
+				$label = new Label();
+				$label->setId($id);
+				$labels[] = $label;
+			}
+			$this->labelMapper->expects($this->once())
+				->method('findAll')
+				->with(5)
+				->willReturn($labels);
+		} else {
+			$this->labelMapper->expects($this->never())->method('findAll');
+		}
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->with(5)
@@ -865,10 +910,10 @@ class BoardServiceTest extends TestCase {
 		// magic setter has to have run for this to persist anything at all.
 		$this->boardMapper->expects($this->once())
 			->method('update')
-			->with($this->callback(function (Board $written) use ($key, $value) {
+			->with($this->callback(function (Board $written) use ($key, $stored) {
 				// Entity::markFieldUpdated() keys the array by field name.
 				$this->assertArrayHasKey($key, $written->getUpdatedFields());
-				$this->assertSame($value, $written->{'get' . ucfirst($key)}());
+				$this->assertSame($stored, $written->{'get' . ucfirst($key)}());
 				return true;
 			}))
 			->willReturn($board);
@@ -885,7 +930,8 @@ class BoardServiceTest extends TestCase {
 				return true;
 			}));
 
-		$this->assertSame($value, $this->service->setSwimlaneSetting(5, $key, $value));
+		// The answer is what is stored, the client takes it as the new order.
+		$this->assertSame($stored, $this->service->setSwimlaneSetting(5, $key, $value));
 	}
 
 	/**
@@ -901,6 +947,15 @@ class BoardServiceTest extends TestCase {
 		}
 		$oversized = json_encode($longIds);
 
+		// 30 distinct entries of 238 raw bytes are 7.2 kB, under the limit. Each U+2028
+		// is 3 bytes raw and 6 bytes as the escape json_encode writes, so the stored
+		// string would be 14 kB. The flag keeps the character raw in the vector.
+		$lineSeparators = [];
+		for ($i = 0; $i < 30; $i++) {
+			$lineSeparators[] = '0:' . str_repeat("\u{2028}", 78) . str_pad((string)$i, 2, '0', STR_PAD_LEFT);
+		}
+		$growsWhenEncoded = json_encode($lineSeparators, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS);
+
 		return [
 			'unknown mode' => ['swimlaneMode', 'sideways'],
 			'mode as number' => ['swimlaneMode', 1],
@@ -908,21 +963,13 @@ class BoardServiceTest extends TestCase {
 			'order is an object' => ['swimlaneLabelOrder', '{"a":1}'],
 			'order holds an object' => ['swimlaneLabelOrder', '[{"id":1}]'],
 			'order holds null' => ['swimlaneLabelOrder', '[1,null]'],
-			'order holds an empty id' => ['swimlaneLabelOrder', '["",1]'],
-			'label as a string' => ['swimlaneLabelOrder', '["label-1"]'],
-			'label id as a numeric string' => ['swimlaneLabelOrder', '["12"]'],
 			'label id zero' => ['swimlaneLabelOrder', '[0]'],
 			'label id negative' => ['swimlaneLabelOrder', '[-1]'],
 			'label id as a float' => ['swimlaneLabelOrder', '[1.5]'],
-			'label order with a user entry' => ['swimlaneLabelOrder', '["0:admin"]'],
 			'label order with a duplicate' => ['swimlaneLabelOrder', '[3,3]'],
 			'label order with a nested array' => ['swimlaneLabelOrder', '[[3]]'],
 			'order is a scalar' => ['swimlaneLabelOrder', '1'],
-			'user entry without a type' => ['swimlaneUserOrder', '["admin"]'],
 			'user entry with an empty participant' => ['swimlaneUserOrder', '["0:"]'],
-			'user entry with an unknown type' => ['swimlaneUserOrder', '["2:x"]'],
-			'user entry with a padded type' => ['swimlaneUserOrder', '["00:x"]'],
-			'user entry with a signed type' => ['swimlaneUserOrder', '["+1:x"]'],
 			'user entry as a number' => ['swimlaneUserOrder', '[0]'],
 			'user entry with a duplicate' => ['swimlaneUserOrder', '["0:a","0:a"]'],
 			'user order with a duplicate catch-all' => ['swimlaneUserOrder', '["__none__","__none__"]'],
@@ -930,6 +977,7 @@ class BoardServiceTest extends TestCase {
 			'order holds an overlong id' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 254) . '"]'],
 			// 256 bytes in 129 characters, as raw UTF-8 the way the client sends it.
 			'order holds an id of 256 bytes in multibyte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{e9}", 127) . '"]'],
+			'order of 7.2 kB that grows past the limit when encoded' => ['swimlaneUserOrder', $growsWhenEncoded],
 			'order oversized' => ['swimlaneUserOrder', $oversized],
 			'order too many entries' => ['swimlaneLabelOrder', '[' . implode(',', range(1, 1001)) . ']'],
 		];

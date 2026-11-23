@@ -64,13 +64,14 @@ class ConfigControllerTest extends TestCase {
 		$this->boardService->expects($this->once())
 			->method('setSwimlaneSetting')
 			->with(5, $setting, $value)
-			->willReturn($value);
+			// The service stores a canonical form, the answer has to be that one.
+			->willReturn($value . ' stored');
 		$this->configService->expects($this->never())->method('set');
 
 		$response = $this->controller->setValue($key, $value);
 
 		$this->assertInstanceOf(DataResponse::class, $response);
-		$this->assertSame($value, $response->getData());
+		$this->assertSame($value . ' stored', $response->getData());
 	}
 
 	public function testNoEditPermissionWritesNothing(): void {

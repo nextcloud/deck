@@ -195,6 +195,13 @@ describe('Swimlane grouping', function() {
 			headers: { 'OCS-APIRequest': 'true' },
 			body: { value: '[]' },
 		})
+		cy.request({
+			method: 'POST',
+			url: `${baseUrl}/ocs/v2.php/apps/deck/api/v1.0/config/board:${boardId}:swimlaneUserOrder?format=json`,
+			auth: { user: user.userId, password: user.password },
+			headers: { 'OCS-APIRequest': 'true' },
+			body: { value: '[]' },
+		})
 		cy.login(user)
 		cy.visit(`/apps/deck/board/${boardId}`)
 		cy.get('.stack', { timeout: 10000 }).should('have.length', 3)
@@ -337,7 +344,12 @@ describe('Swimlane grouping', function() {
 		cy.get('.swimlane-header__drag-handle').eq(1).then(($handle) => {
 			dragWithMouse($handle, () => pointIn('.swimlane-header:eq(0)', 2))
 		})
-		cy.wait('@saveLaneOrder').its('response.statusCode').should('eq', 200)
+		cy.wait('@saveLaneOrder').then(({ request, response }) => {
+			expect(response.statusCode).to.eq(200)
+			// Format check only. The answer is a string with the order, all three labels exist, so nothing is dropped
+			// and the compact JSON the client sends is already canonical. The dropping is covered by PHPUnit and Behat.
+			expect(response.body.ocs.data).to.eq(request.body.value)
+		})
 
 		cy.get('.swimlane-header').eq(0).should('contain.text', 'Feature')
 		cy.get('.swimlane-header').eq(1).should('contain.text', 'Bug')
