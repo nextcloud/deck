@@ -64,6 +64,9 @@ class BoardService {
 	// Every member is served the stored order, so cap it.
 	private const MAX_SWIMLANE_ORDER_BYTES = 32768;
 	private const MAX_SWIMLANE_ORDER_ENTRIES = 1000;
+	// A user order may arrive this many times over the limit. It is cut down to
+	// the entries that belong to the board, the rest of the request is refused.
+	private const SWIMLANE_USER_ORDER_INPUT_FACTOR = 2;
 	// An order that reaches this share of either limit is logged once.
 	private const SWIMLANE_ORDER_WARN_PERCENT = 80;
 	// Catch-all lane for cards without a label or an assignee.
@@ -488,8 +491,9 @@ class BoardService {
 	}
 
 	/**
-	 * Encode an order and store it. The only place that encodes, so the size
-	 * limit is checked once on the stored value.
+	 * Encode an order and store it. The only place that encodes and checks the
+	 * size limit. A user order over the limit loses the entries that have
+	 * nothing to do with the board first, a label order is refused.
 	 *
 	 * @param list<int|string> $list
 	 * @return string the canonical encoding that was stored
@@ -497,8 +501,87 @@ class BoardService {
 	 */
 	private function writeSwimlaneSetting(Board $board, string $key, array $list): string {
 		$stored = $this->encodeSwimlaneOrder($list);
+		$entries = count($list);
+		if (!$this->swimlaneOrderFits($stored, $entries) && $key === 'swimlaneUserOrder') {
+			$list = $this->dropUnrelatedParticipants($board, $list);
+			$bytesBefore = strlen($stored);
+			$stored = $this->encodeSwimlaneOrder($list);
+			$fits = $this->swimlaneOrderFits($stored, count($list));
+			$this->logSwimlaneOrderCutDown($board->getId(), $fits, $entries - count($list), [$bytesBefore, $entries], [strlen($stored), count($list)]);
+		}
+		if (!$this->swimlaneOrderFits($stored, count($list))) {
+			throw new BadRequestException('Swimlane order is too large');
+		}
 		$this->persistSwimlaneSetting($board, $key, $stored);
 		return $stored;
+	}
+
+	private function swimlaneOrderFits(string $encoded, int $entries): bool {
+		return strlen($encoded) <= self::MAX_SWIMLANE_ORDER_BYTES && $entries <= self::MAX_SWIMLANE_ORDER_ENTRIES;
+	}
+
+	/**
+	 * Keep the lane for cards without an assignee and every entry of a
+	 * participant that is on the board. That is anyone assigned to a card
+	 * (archived and deleted cards too), anyone it is shared with and the
+	 * owner. The order of the rest does not change.
+	 *
+	 * @param list<int|string> $list
+	 * @return list<int|string>
+	 */
+	private function dropUnrelatedParticipants(Board $board, array $list): array {
+		$related = [];
+		$participants = $this->assignedUsersMapper->findParticipantsOnBoard($board->getId());
+		foreach ($this->aclMapper->findAll($board->getId()) as $acl) {
+			$participants[] = ['type' => $acl->getType(), 'participant' => $acl->getParticipant()];
+		}
+		if ($board->getOwner() !== null) {
+			$participants[] = ['type' => Acl::PERMISSION_TYPE_USER, 'participant' => $board->getOwner()];
+		}
+		foreach ($participants as $row) {
+			$related[self::swimlaneAssigneeKey($row['type'], $row['participant'])] = true;
+			if ($row['type'] === Acl::PERMISSION_TYPE_USER) {
+				// The client builds the key from the user's own spelling of the id,
+				// which can differ from the stored one in case.
+				$user = $this->userManager->get($row['participant']);
+				if ($user !== null) {
+					$related[self::swimlaneAssigneeKey(Acl::PERMISSION_TYPE_USER, $user->getUID())] = true;
+				}
+			}
+		}
+		$kept = [];
+		foreach ($list as $entry) {
+			if ($entry === self::SWIMLANE_NONE_ENTRY || isset($related[$entry])) {
+				$kept[] = $entry;
+			}
+		}
+		return $kept;
+	}
+
+	/**
+	 * Log that a user order was cut down. A cut that makes it fit goes on info,
+	 * as an editor can trigger it with every request, and one that does not
+	 * goes on warning. Only the board id and numbers, never an entry.
+	 *
+	 * @param array{int, int} $before bytes and entries before
+	 * @param array{int, int} $after bytes and entries after
+	 */
+	private function logSwimlaneOrderCutDown(int $boardId, bool $fits, int $removed, array $before, array $after): void {
+		$context = [
+			'boardId' => $boardId,
+			'removed' => $removed,
+			'bytesBefore' => $before[0],
+			'entriesBefore' => $before[1],
+			'bytesAfter' => $after[0],
+			'entriesAfter' => $after[1],
+			'maxBytes' => self::MAX_SWIMLANE_ORDER_BYTES,
+			'maxEntries' => self::MAX_SWIMLANE_ORDER_ENTRIES,
+		];
+		if ($fits) {
+			$this->logger->info('Swimlane user order of board ' . $boardId . ' was over its limit, unrelated entries were dropped', $context);
+		} else {
+			$this->logger->warning('Swimlane user order of board ' . $boardId . ' is still over its limit after dropping unrelated entries', $context);
+		}
 	}
 
 	/**
@@ -578,17 +661,14 @@ class BoardService {
 	}
 
 	/**
-	 * Canonical encoding of a stored order. The size is checked on the result,
-	 * json_encode can make an entry longer (U+2028 grows from 3 to 6 bytes).
+	 * Canonical encoding of a stored order. The size is checked on the result
+	 * by writeSwimlaneSetting, json_encode can make an entry longer (U+2028
+	 * grows from 3 to 6 bytes).
 	 *
 	 * @param list<int|string> $order
 	 */
 	private function encodeSwimlaneOrder(array $order): string {
-		$encoded = json_encode($order, self::SWIMLANE_JSON_FLAGS | JSON_THROW_ON_ERROR);
-		if (strlen($encoded) > self::MAX_SWIMLANE_ORDER_BYTES) {
-			throw new BadRequestException('Swimlane order is too large');
-		}
-		return $encoded;
+		return json_encode($order, self::SWIMLANE_JSON_FLAGS | JSON_THROW_ON_ERROR);
 	}
 
 	private function validateSwimlaneMode(mixed $value): string {
@@ -607,7 +687,9 @@ class BoardService {
 	private function normalizeSwimlaneValue(string $key, mixed $value): array {
 		// swimlaneLabelOrder: JSON array of label ids and the '__none__' catch-all lane.
 		// swimlaneUserOrder: JSON array of "<type>:<participant>" and '__none__'.
-		if (!is_string($value) || strlen($value) > self::MAX_SWIMLANE_ORDER_BYTES) {
+		// A user order may be larger than the limit, the stored one is cut down later.
+		$inputFactor = $key === 'swimlaneUserOrder' ? self::SWIMLANE_USER_ORDER_INPUT_FACTOR : 1;
+		if (!is_string($value) || strlen($value) > self::MAX_SWIMLANE_ORDER_BYTES * $inputFactor) {
 			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
 		}
 		try {
@@ -616,7 +698,7 @@ class BoardService {
 		} catch (\JsonException $e) {
 			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
 		}
-		if (!is_array($order) || !array_is_list($order) || count($order) > self::MAX_SWIMLANE_ORDER_ENTRIES) {
+		if (!is_array($order) || !array_is_list($order) || count($order) > self::MAX_SWIMLANE_ORDER_ENTRIES * $inputFactor) {
 			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
 		}
 

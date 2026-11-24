@@ -960,23 +960,19 @@ class BoardServiceTest extends TestCase {
 	 * served them on board load.
 	 */
 	public static function dataSwimlaneSettingRejected(): array {
-		// 600 distinct valid entries, 62 characters each, about 40 kB: over the byte
-		// limit and below 1000 entries, so only the size rejects it.
-		$longIds = [];
-		for ($i = 0; $i < 600; $i++) {
-			$longIds[] = '0:' . str_pad((string)$i, 62, 'a');
+		// 1500 entries of 49 bytes are 73.5 kB, over twice the limit of 32768 bytes.
+		$twiceTheLimit = [];
+		for ($i = 0; $i < 1500; $i++) {
+			$twiceTheLimit[] = '0:' . str_pad((string)$i, 44, 'a');
 		}
-		$oversized = json_encode($longIds);
+		// 2001 short entries, over twice the entry limit and well under the byte limit.
+		$twiceTheEntries = [];
+		for ($i = 0; $i <= 2000; $i++) {
+			$twiceTheEntries[] = '0:u' . $i;
+		}
 
-		// 120 distinct entries, each with 64 characters. Each U+2028 is 3 bytes raw
-		// and 6 bytes as the escape json_encode writes, so the vector is 22.9 kB raw
-		// and the stored string would be 44.9 kB, over the limit. The flag keeps the
-		// character raw in the vector.
-		$lineSeparators = [];
-		for ($i = 0; $i < 120; $i++) {
-			$lineSeparators[] = '0:' . str_repeat("\u{2028}", 61) . str_pad((string)$i, 3, '0', STR_PAD_LEFT);
-		}
-		$growsWhenEncoded = json_encode($lineSeparators, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS);
+		// One byte over twice the limit, padded with the whitespace JSON ignores.
+		$oneByteOver = str_pad('["0:a"]', 65537, ' ');
 
 		return [
 			'unknown mode' => ['swimlaneMode', 'sideways'],
@@ -998,9 +994,11 @@ class BoardServiceTest extends TestCase {
 			'user order with a nested array' => ['swimlaneUserOrder', '[["0:a"]]'],
 			'participant of 65 characters' => ['swimlaneUserOrder', '["0:' . str_repeat('a', 65) . '"]'],
 			'participant of 65 four-byte characters' => ['swimlaneUserOrder', '["0:' . str_repeat("\u{1F600}", 65) . '"]'],
-			'order of 22.9 kB that grows past the limit when encoded' => ['swimlaneUserOrder', $growsWhenEncoded],
-			'order oversized' => ['swimlaneUserOrder', $oversized],
-			'order too many entries' => ['swimlaneLabelOrder', '[' . implode(',', range(1, 1001)) . ']'],
+			'user order over twice the byte limit' => ['swimlaneUserOrder', json_encode($twiceTheLimit)],
+			'user order over twice the entry limit' => ['swimlaneUserOrder', json_encode($twiceTheEntries)],
+			'user order of 65537 bytes' => ['swimlaneUserOrder', $oneByteOver],
+			// Only a user order may arrive over the limit, a label order is refused as it is.
+			'label order too many entries' => ['swimlaneLabelOrder', '[' . implode(',', range(1, 1001)) . ']'],
 		];
 	}
 
@@ -1011,6 +1009,10 @@ class BoardServiceTest extends TestCase {
 		$this->useRealValidator();
 		$this->boardMapper->expects($this->never())->method('update');
 		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
+		// Refused as sent, so no participant is looked up and nothing is logged.
+		$this->assignedUsersMapper->expects($this->never())->method('findParticipantsOnBoard');
+		$this->logger->expects($this->never())->method('warning');
+		$this->logger->expects($this->never())->method('info');
 		// A real board, so a value that only fails after find is rejected on purpose.
 		$board = new Board();
 		$board->setId(5);
@@ -1019,6 +1021,261 @@ class BoardServiceTest extends TestCase {
 
 		$this->expectException(BadRequestException::class);
 		$this->service->setSwimlaneSetting(5, $key, $value);
+	}
+
+	/**
+	 * The board a full user order is saved on. Its owner is `owner`.
+	 */
+	private function boardForTheValve(): Board {
+		$board = new Board();
+		$board->setId(5);
+		$board->setOwner('owner');
+		$board->setArchived(false);
+		$this->boardMapper->method('find')->willReturn($board);
+		$this->boardMapper->method('update')->willReturn($board);
+		return $board;
+	}
+
+	/**
+	 * Filler entries that belong to nobody on the board, 62 characters each,
+	 * so 500 of them are 33.5 kB and fill the order alone.
+	 *
+	 * @return list<string>
+	 */
+	private static function unrelatedEntries(int $count): array {
+		$entries = [];
+		for ($i = 0; $i < $count; $i++) {
+			$entries[] = '0:' . str_pad('filler' . $i, 62, 'x');
+		}
+		return $entries;
+	}
+
+	/**
+	 * Names the participants of the board by entry, in the type:participant form.
+	 *
+	 * @param list<string> $entries
+	 */
+	private function assignParticipants(array $entries): void {
+		$rows = [];
+		foreach ($entries as $entry) {
+			[$type, $participant] = explode(':', $entry, 2);
+			$rows[] = ['type' => (int)$type, 'participant' => $participant];
+		}
+		$this->assignedUsersMapper->method('findParticipantsOnBoard')->with(5)->willReturn($rows);
+	}
+
+	private function aclEntry(int $type, string $participant): Acl {
+		$acl = new Acl();
+		$acl->setType($type);
+		$acl->setParticipant($participant);
+		return $acl;
+	}
+
+	public function testSetSwimlaneSettingDropsUnrelatedEntriesFromAFullUserOrder(): void {
+		$this->useRealValidator();
+		$this->boardForTheValve();
+		// Between the limit and twice the limit, so only the valve lets it pass.
+		$fillers = self::unrelatedEntries(500);
+		$order = array_merge(
+			array_slice($fillers, 0, 100),
+			['0:owner', '__none__'],
+			array_slice($fillers, 100, 100),
+			// Shared with a group, nobody is assigned from it. The team is assigned.
+			['1:Sales/EU', '7:abc123'],
+			array_slice($fillers, 200, 100),
+			// The assignment says Admin, the client builds the lane from the user's own id.
+			['0:admin', '6:bob@cloud.example:8443'],
+			array_slice($fillers, 300, 100),
+			// Same name as an assigned user but another type, and a user who is not on the board.
+			// Carol is shared as Carol and sits in the order as carol.
+			['1:ann', '0:stranger', '0:carol', '0:ann'],
+			array_slice($fillers, 400, 100),
+		);
+		$value = json_encode($order);
+		$this->assertGreaterThan(32768, strlen($value));
+		$this->assertLessThan(65536, strlen($value));
+
+		// The rows come in another order than the lanes.
+		$this->assignParticipants(['6:bob@cloud.example:8443', '0:ann', '0:Admin', '7:abc123']);
+		$this->aclMapper->method('findAll')->with(5)->willReturn([
+			$this->aclEntry(Acl::PERMISSION_TYPE_GROUP, 'Sales/EU'),
+			$this->aclEntry(Acl::PERMISSION_TYPE_USER, 'Carol'),
+		]);
+		$ownSpelling = ['Admin' => 'admin', 'Carol' => 'carol'];
+		$this->userManager->method('get')->willReturnCallback(function (string $uid) use ($ownSpelling): ?IUser {
+			if (!isset($ownSpelling[$uid])) {
+				return null;
+			}
+			$user = $this->createMock(IUser::class);
+			$user->method('getUID')->willReturn($ownSpelling[$uid]);
+			return $user;
+		});
+		$kept = '["0:owner","__none__","1:Sales/EU","7:abc123","0:admin","6:bob@cloud.example:8443","0:carol","0:ann"]';
+		$this->logger->expects($this->never())->method('warning');
+		$this->logger->expects($this->once())
+			->method('info')
+			->with(
+				'Swimlane user order of board 5 was over its limit, unrelated entries were dropped',
+				$this->callback(function (array $context) use ($order, $kept) {
+					$this->assertEqualsCanonicalizing(['boardId', 'removed', 'bytesBefore', 'entriesBefore', 'bytesAfter', 'entriesAfter', 'maxBytes', 'maxEntries'], array_keys($context));
+					$this->assertSame(5, $context['boardId']);
+					$this->assertSame(500 + 10 - 8, $context['removed']);
+					// The stored encoding does not escape the slash of the group.
+					$this->assertSame(strlen(json_encode($order, JSON_UNESCAPED_SLASHES)), $context['bytesBefore']);
+					$this->assertSame(510, $context['entriesBefore']);
+					$this->assertSame(strlen($kept), $context['bytesAfter']);
+					$this->assertSame(8, $context['entriesAfter']);
+					$this->assertSame(32768, $context['maxBytes']);
+					$this->assertSame(1000, $context['maxEntries']);
+					return true;
+				})
+			);
+
+		$this->assertSame($kept, $this->service->setSwimlaneSetting(5, 'swimlaneUserOrder', $value));
+	}
+
+	public function testSetSwimlaneSettingDropsUnrelatedEntriesOverTheEntryLimit(): void {
+		$this->useRealValidator();
+		$this->boardForTheValve();
+		// 1200 short entries are 14 kB, over the entry limit only.
+		$order = [];
+		for ($i = 0; $i < 1200; $i++) {
+			$order[] = '0:u' . $i;
+		}
+		$this->assignParticipants(['0:u7', '0:u1100']);
+		$this->aclMapper->method('findAll')->willReturn([]);
+		$this->logger->expects($this->once())->method('info');
+		$this->logger->expects($this->never())->method('warning');
+
+		$this->assertSame('["0:u7","0:u1100"]', $this->service->setSwimlaneSetting(5, 'swimlaneUserOrder', json_encode($order)));
+	}
+
+	/**
+	 * The input limit is twice the stored one and includes the limit itself.
+	 */
+	public static function dataValveInputBoundary(): array {
+		// Exactly 2000 entries, one of them belongs to the board.
+		$entries = [];
+		for ($i = 0; $i < 2000; $i++) {
+			$entries[] = '0:u' . $i;
+		}
+		$twoThousand = json_encode($entries);
+
+		// Exactly 65536 bytes, padded with the whitespace JSON ignores.
+		$fillers = array_merge(['0:owner'], self::unrelatedEntries(970));
+		$exactBytes = str_pad(json_encode($fillers), 65536, ' ');
+		self::assertSame(65536, strlen($exactBytes));
+		self::assertSame(2000, count($entries));
+
+		return [
+			'2000 entries' => [$twoThousand, ['0:u5'], '["0:u5"]'],
+			'65536 bytes' => [$exactBytes, ['0:owner'], '["0:owner"]'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataValveInputBoundary
+	 * @param list<string> $related
+	 */
+	public function testSetSwimlaneSettingTakesAUserOrderOfExactlyTwiceTheLimit(string $value, array $related, string $stored): void {
+		$this->useRealValidator();
+		$this->boardForTheValve();
+		$this->assignParticipants($related);
+		$this->aclMapper->method('findAll')->willReturn([]);
+		$this->logger->expects($this->once())->method('info');
+		$this->logger->expects($this->never())->method('warning');
+
+		$this->assertSame($stored, $this->service->setSwimlaneSetting(5, 'swimlaneUserOrder', $value));
+	}
+
+	public function testSetSwimlaneSettingKeepsUnrelatedEntriesWhileTheOrderFits(): void {
+		$this->useRealValidator();
+		$this->boardForTheValve();
+		// Nothing is looked up and nothing is dropped when the order fits.
+		$this->assignedUsersMapper->expects($this->never())->method('findParticipantsOnBoard');
+		$this->aclMapper->expects($this->never())->method('findAll');
+		$this->userManager->expects($this->never())->method('get');
+		$order = ['0:stranger', '1:nobody', '__none__'];
+
+		$this->assertSame(json_encode($order), $this->service->setSwimlaneSetting(5, 'swimlaneUserOrder', json_encode($order)));
+	}
+
+	/**
+	 * Orders that the valve cannot save, because the entries that belong to
+	 * the board are over the limit on their own.
+	 */
+	public static function dataSwimlaneUserOrderStaysTooLarge(): array {
+		// 600 distinct entries, 62 characters each, 40.2 kB: over the byte limit and below 1000 entries.
+		$longIds = [];
+		for ($i = 0; $i < 600; $i++) {
+			$longIds[] = '0:' . str_pad((string)$i, 62, 'a');
+		}
+		// 120 distinct entries, each with 64 characters. Each U+2028 is 3 bytes raw
+		// and 6 bytes as the escape json_encode writes, so the vector is 22.9 kB raw
+		// and the stored string would be 44.9 kB, over the limit. The flag keeps the
+		// character raw in the vector.
+		$lineSeparators = [];
+		for ($i = 0; $i < 120; $i++) {
+			$lineSeparators[] = '0:' . str_repeat("\u{2028}", 61) . str_pad((string)$i, 3, '0', STR_PAD_LEFT);
+		}
+		$tooMany = [];
+		for ($i = 0; $i < 1001; $i++) {
+			$tooMany[] = '0:u' . $i;
+		}
+		return [
+			'40 kB, all on the board' => [json_encode($longIds)],
+			'22.9 kB that grows past the limit when encoded, all on the board' => [json_encode($lineSeparators, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS)],
+			'1001 entries, all on the board' => [json_encode($tooMany)],
+		];
+	}
+
+	/**
+	 * @dataProvider dataSwimlaneUserOrderStaysTooLarge
+	 */
+	public function testSetSwimlaneSettingRefusesAUserOrderThatStaysTooLarge(string $value): void {
+		$this->useRealValidator();
+		$this->boardForTheValve();
+		// Every entry of the order is a participant of the board.
+		$this->assignParticipants(json_decode($value, true));
+		$this->aclMapper->method('findAll')->willReturn([]);
+		$this->boardMapper->expects($this->never())->method('update');
+		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
+		$this->logger->expects($this->never())->method('info');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with(
+				'Swimlane user order of board 5 is still over its limit after dropping unrelated entries',
+				$this->callback(function (array $context) {
+					$this->assertEqualsCanonicalizing(['boardId', 'removed', 'bytesBefore', 'entriesBefore', 'bytesAfter', 'entriesAfter', 'maxBytes', 'maxEntries'], array_keys($context));
+					$this->assertSame(0, $context['removed']);
+					return true;
+				})
+			);
+
+		$this->expectException(BadRequestException::class);
+		$this->service->setSwimlaneSetting(5, 'swimlaneUserOrder', $value);
+	}
+
+	public function testSetSwimlaneSettingRefusesAnOverlongLabelOrderBeforeTheValve(): void {
+		$this->useRealValidator();
+		$this->boardForTheValve();
+		// The label list has no 2x input allowance, so 1001 entries stop in the
+		// validation. This makes sure a label order never runs into the valve,
+		// which would drop every label id because none of them is a participant.
+		// All 1000 ids are labels of the board and the catch-all makes it 1001 entries.
+		$ids = range(1, 1000);
+		$labels = [];
+		foreach ($ids as $id) {
+			$label = new Label();
+			$label->setId($id);
+			$labels[] = $label;
+		}
+		$this->labelMapper->method('findAll')->willReturn($labels);
+		$this->assignedUsersMapper->expects($this->never())->method('findParticipantsOnBoard');
+		$this->boardMapper->expects($this->never())->method('update');
+
+		$this->expectException(BadRequestException::class);
+		$this->service->setSwimlaneSetting(5, 'swimlaneLabelOrder', json_encode(array_merge($ids, ['__none__'])));
 	}
 
 	/**
