@@ -4,7 +4,7 @@ site_name: Nextcloud Deck
 theme:
     name: readthedocs
 extra_css: [extra.css]
-pages:
+nav:
     - Home: index.md
     - User documentation: User_documentation_en.md
     - Markdown composing: Markdown.md
