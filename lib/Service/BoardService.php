@@ -492,7 +492,7 @@ class BoardService {
 
 	/**
 	 * Encode an order and store it. The only place that encodes and checks the
-	 * size limit. A user order over the limit loses the entries that have
+	 * stored size. A user order over the limit loses the entries that have
 	 * nothing to do with the board first, a label order is refused.
 	 *
 	 * @param list<int|string> $list
