@@ -208,7 +208,10 @@ export const useBoardStore = defineStore('board', {
 					continue
 				}
 				try {
-					this[SWIMLANE_ORDER_KEY[type]][boardId] = JSON.parse(board.settings[SWIMLANE_ORDER_KEY[type]] || '[]')
+					const parsed = JSON.parse(board.settings[SWIMLANE_ORDER_KEY[type]] || '[]')
+					if (Array.isArray(parsed)) {
+						this[SWIMLANE_ORDER_KEY[type]][boardId] = parsed
+					}
 				} catch { /* ignore malformed saved order */ }
 			}
 		},

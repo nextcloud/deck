@@ -199,6 +199,23 @@ describe('readSwimlaneSettings', () => {
 		expect(store.swimlaneUserOrder[4]).toEqual(['0:bob'])
 	})
 
+	it('skips an order that is valid JSON but not a list', () => {
+		const store = makeStore()
+		readSwimlaneSettings.call(store, 4, { settings: { swimlaneLabelOrder: '{"a":1}', swimlaneUserOrder: 'null' } })
+
+		expect(store.swimlaneLabelOrder[4]).toBeUndefined()
+		expect(store.swimlaneUserOrder[4]).toBeUndefined()
+	})
+
+	it('keeps the previous order when the new one is not a list', () => {
+		const store = makeStore()
+		readSwimlaneSettings.call(store, 4, { settings: { swimlaneLabelOrder: '[2,1]', swimlaneUserOrder: '["0:bob"]' } })
+		readSwimlaneSettings.call(store, 4, { settings: { swimlaneLabelOrder: '{"a":1}', swimlaneUserOrder: '7' } })
+
+		expect(store.swimlaneLabelOrder[4]).toEqual([2, 1])
+		expect(store.swimlaneUserOrder[4]).toEqual(['0:bob'])
+	})
+
 	it('reads a missing order as empty', () => {
 		const store = makeStore()
 		readSwimlaneSettings.call(store, 4, { settings: { swimlaneMode: 'labels' } })

@@ -48,6 +48,11 @@ describe('mergeVisibleOrder', () => {
 		expect(mergeVisibleOrder(['12', 7], [12, 7])).toEqual(['12', 12, 7])
 	})
 
+	it('drops repeated entries of the stored order', () => {
+		expect(mergeVisibleOrder([5, 5, 1], [1])).toEqual([5, 1])
+		expect(mergeVisibleOrder([1, 1], [1])).toEqual([1])
+	})
+
 	it('does not mutate the stored array', () => {
 		const stored = ['a', 'b', 'c']
 		mergeVisibleOrder(stored, ['c', 'a'])

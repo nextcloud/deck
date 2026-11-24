@@ -6,7 +6,8 @@
 /**
  * Write the reordered visible lanes back into the stored order. Visible ids
  * take the slots they already had, hidden lanes (filtered or empty) keep
- * theirs. Unknown ids stay, the lane sort ignores them.
+ * theirs. Unknown ids stay, the lane sort ignores them. Repeated entries in
+ * the stored order are dropped, the server refuses duplicates.
  *
  * @param {Array<number|string>|undefined} stored the order as it is saved for the board
  * @param {Array<number|string>} visible the reordered lane keys on screen
@@ -18,8 +19,13 @@ export default function mergeVisibleOrder(stored, visible) {
 	}
 	const visibleIds = new Set(visible)
 	const order = []
+	const seen = new Set()
 	let next = 0
 	for (const id of stored) {
+		if (seen.has(id)) {
+			continue
+		}
+		seen.add(id)
 		if (visibleIds.has(id) && next < visible.length) {
 			order.push(visible[next])
 			next += 1
