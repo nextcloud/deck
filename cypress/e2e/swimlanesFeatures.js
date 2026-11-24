@@ -28,11 +28,11 @@ function seedSwimlaneBoard() {
 	}).then(({ body: board }) => {
 		const boardId = board.id
 
-		const stackReq = (title) => cy.request({
+		const stackReq = (title, order) => cy.request({
 			method: 'POST',
 			url: `${api}/boards/${boardId}/stacks`,
 			auth,
-			body: { title, order: 0 },
+			body: { title, order },
 		})
 		const labelReq = (title, color) => cy.request({
 			method: 'POST',
@@ -44,10 +44,10 @@ function seedSwimlaneBoard() {
 		// Cypress chainables are not promises, so the requests are chained
 		// sequentially instead of via Promise.all
 		const ids = {}
-		return stackReq('Todo').then(({ body }) => {
+		return stackReq('Todo', 0).then(({ body }) => {
 			ids.todo = body.id
-		}).then(() => stackReq('Doing'))
-			.then(() => stackReq('Done'))
+		}).then(() => stackReq('Doing', 1))
+			.then(() => stackReq('Done', 2))
 			.then(() => labelReq('Bug', 'ff0000'))
 			.then((label) => {
 				ids.bug = label.id
