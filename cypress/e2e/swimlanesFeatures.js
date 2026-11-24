@@ -528,7 +528,7 @@ describe('Swimlane grouping', function() {
 				method: 'POST',
 				url: `${api}/boards/${boardId}/stacks`,
 				auth: auth(),
-				body: { title: 'S'.repeat(40), order: 0 },
+				body: { title: 'S'.repeat(40), order: 3 },
 			}).then(({ body: stack }) => {
 				cleanupUrls.push(`${api}/boards/${boardId}/stacks/${stack.id}`)
 			})
@@ -539,7 +539,8 @@ describe('Swimlane grouping', function() {
 		})
 	})
 
-	// Keep this test last, it changes the card's stack for good.
+	// Keep this the last test of this suite, it changes the card's stack for good.
+	// Mocha runs the nested suite above after it, its tests do not check card positions.
 	it('moves a card between stacks inside a lane', function() {
 		setModeViaMenu('Labels')
 		cy.get('.swimlane', { timeout: 8000 }).should('have.length.at.least', 4)
