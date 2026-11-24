@@ -625,6 +625,33 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * Ids of the boards whose user order may contain an entry, deleted boards
+	 * included. The match is a substring of the stored text, so the result can
+	 * hold boards where the entry only occurs inside a longer one. The caller
+	 * checks the decoded order.
+	 *
+	 * @param string $encodedEntry the entry as JSON string, quotes included
+	 * @return list<int>
+	 */
+	public function findIdsWithSwimlaneUserOrderEntry(string $encodedEntry): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id')
+			->from($this->getTableName())
+			->where($qb->expr()->like(
+				'swimlane_user_order',
+				$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($encodedEntry) . '%', IQueryBuilder::PARAM_STR)
+			))
+			->orderBy('id');
+		$result = $qb->executeQuery();
+		$ids = [];
+		foreach ($result->fetchAll(\PDO::FETCH_COLUMN) as $id) {
+			$ids[] = (int)$id;
+		}
+		$result->closeCursor();
+		return $ids;
+	}
+
+	/**
 	 * Reset cache for a given board or a given user
 	 */
 	public function flushCache(?int $boardId = null, ?string $userId = null) {

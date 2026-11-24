@@ -14,6 +14,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CirclesService;
 use OCA\Deck\Service\TeamBoardService;
 use OCP\EventDispatcher\Event;
@@ -29,6 +30,7 @@ class ParticipantCleanupListener implements IEventListener {
 		private BoardMapper $boardMapper,
 		private CirclesService $circlesService,
 		private TeamBoardService $teamBoardService,
+		private BoardService $boardService,
 	) {
 	}
 
@@ -83,5 +85,7 @@ class ParticipantCleanupListener implements IEventListener {
 		foreach ($assignments as $assignment) {
 			$this->assignmentMapper->delete($assignment);
 		}
+
+		$this->boardService->removeSwimlaneUserKey($type, $participant);
 	}
 }

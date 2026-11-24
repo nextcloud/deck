@@ -68,6 +68,8 @@ class BoardService {
 	private const SWIMLANE_ORDER_WARN_PERCENT = 80;
 	// Catch-all lane for cards without a label or an assignee.
 	private const SWIMLANE_NONE_ENTRY = '__none__';
+	// How a stored order is encoded. Searching for an entry has to use the same flags.
+	private const SWIMLANE_JSON_FLAGS = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
 
 	private ?array $boardsCacheFull = null;
 	private ?array $boardsCachePartial = null;
@@ -443,10 +445,6 @@ class BoardService {
 	/**
 	 * Write one of the three swimlane settings onto the board.
 	 *
-	 * boardMapper->update writes only this field and fires no board events,
-	 * so this method moves the ETag via boardChanged and dispatches
-	 * BoardUpdatedEvent for the live update listener.
-	 *
 	 * @return string the value as stored, orders in their canonical encoding
 	 * @throws BadRequestException if the key is not a swimlane setting or the value is malformed
 	 * @throws DoesNotExistException if the board is gone
@@ -456,34 +454,67 @@ class BoardService {
 		if (!in_array($key, self::SWIMLANE_SETTINGS, true)) {
 			throw new BadRequestException('Not a swimlane setting: ' . $key);
 		}
-		$stored = $this->normalizeSwimlaneValue($key, $value);
+		// The mode is a plain string, the two orders are lists.
+		if ($key === 'swimlaneMode') {
+			$mode = $this->validateSwimlaneMode($value);
+			$board = $this->findBoardForSwimlaneSetting($boardId);
+			$this->persistSwimlaneSetting($board, $key, $mode);
+			return $mode;
+		}
+		$list = $this->normalizeSwimlaneValue($key, $value);
 
+		$board = $this->findBoardForSwimlaneSetting($boardId);
+		if ($key === 'swimlaneLabelOrder') {
+			$list = $this->dropUnknownLabels($boardId, $list);
+		}
+		// Read before the setter overwrites it.
+		$previous = $key === 'swimlaneLabelOrder' ? $board->getSwimlaneLabelOrder() : $board->getSwimlaneUserOrder();
+		$stored = $this->writeSwimlaneSetting($board, $key, $list);
+		$this->warnWhenSwimlaneOrderNearsLimit($boardId, $key, $previous, $stored);
+
+		return $stored;
+	}
+
+	/**
+	 * @throws DoesNotExistException if the board is gone
+	 * @throws StatusException if the board is archived
+	 */
+	private function findBoardForSwimlaneSetting(int $boardId): Board {
 		$board = $this->boardMapper->find($boardId);
 		if ($board->getArchived()) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
-		if ($key === 'swimlaneLabelOrder') {
-			$stored = $this->dropUnknownLabels($boardId, $stored);
-		}
-		// Read before the setter overwrites it.
-		$previous = match ($key) {
-			'swimlaneLabelOrder' => $board->getSwimlaneLabelOrder(),
-			'swimlaneUserOrder' => $board->getSwimlaneUserOrder(),
-			default => null,
-		};
+		return $board;
+	}
+
+	/**
+	 * Encode an order and store it. The only place that encodes, so the size
+	 * limit is checked once on the stored value.
+	 *
+	 * @param list<int|string> $list
+	 * @return string the canonical encoding that was stored
+	 * @throws BadRequestException if the encoded order is too large
+	 */
+	private function writeSwimlaneSetting(Board $board, string $key, array $list): string {
+		$stored = $this->encodeSwimlaneOrder($list);
+		$this->persistSwimlaneSetting($board, $key, $stored);
+		return $stored;
+	}
+
+	/**
+	 * Set one swimlane column, move the ETag and dispatch BoardUpdatedEvent.
+	 * boardMapper->update writes only the changed field and fires no board
+	 * events, so this method calls boardChanged and dispatches the event.
+	 */
+	private function persistSwimlaneSetting(Board $board, string $key, string $stored): void {
 		match ($key) {
 			'swimlaneMode' => $board->setSwimlaneMode($stored),
 			'swimlaneLabelOrder' => $board->setSwimlaneLabelOrder($stored),
 			'swimlaneUserOrder' => $board->setSwimlaneUserOrder($stored),
 		};
 		$this->boardMapper->update($board);
-		$this->changeHelper->boardChanged($boardId);
-		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
-		if ($key !== 'swimlaneMode') {
-			$this->warnWhenSwimlaneOrderNearsLimit($boardId, $key, $previous, $stored);
-		}
-
-		return $stored;
+		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($board->getId()));
 	}
 
 	/**
@@ -528,19 +559,22 @@ class BoardService {
 	/**
 	 * Remove label ids that are not on the board. A deleted label stays in the
 	 * client's order on purpose, so it disappears here with the next save.
+	 *
+	 * @param list<int|string> $order
+	 * @return list<int|string>
 	 */
-	private function dropUnknownLabels(int $boardId, string $encodedOrder): string {
+	private function dropUnknownLabels(int $boardId, array $order): array {
 		$known = [];
 		foreach ($this->labelMapper->findAll($boardId) as $label) {
 			$known[$label->getId()] = true;
 		}
 		$kept = [];
-		foreach (json_decode($encodedOrder, true) as $entry) {
+		foreach ($order as $entry) {
 			if ($entry === self::SWIMLANE_NONE_ENTRY || isset($known[$entry])) {
 				$kept[] = $entry;
 			}
 		}
-		return $this->encodeSwimlaneOrder($kept);
+		return $kept;
 	}
 
 	/**
@@ -550,25 +584,27 @@ class BoardService {
 	 * @param list<int|string> $order
 	 */
 	private function encodeSwimlaneOrder(array $order): string {
-		$encoded = json_encode($order, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+		$encoded = json_encode($order, self::SWIMLANE_JSON_FLAGS | JSON_THROW_ON_ERROR);
 		if (strlen($encoded) > self::MAX_SWIMLANE_ORDER_BYTES) {
 			throw new BadRequestException('Swimlane order is too large');
 		}
 		return $encoded;
 	}
 
+	private function validateSwimlaneMode(mixed $value): string {
+		if (!in_array($value, ['none', 'labels', 'assignees'], true)) {
+			throw new BadRequestException('Swimlane mode must be one of: none, labels, assignees');
+		}
+		return $value;
+	}
+
 	/**
 	 * Every member is served these values, so reject malformed ones. Entries
 	 * in the format of earlier builds are dropped, so the lane loses its position once.
+	 *
+	 * @return list<int|string> the order without legacy entries, not yet encoded
 	 */
-	private function normalizeSwimlaneValue(string $key, mixed $value): string {
-		if ($key === 'swimlaneMode') {
-			if (!in_array($value, ['none', 'labels', 'assignees'], true)) {
-				throw new BadRequestException('Swimlane mode must be one of: none, labels, assignees');
-			}
-			return $value;
-		}
-
+	private function normalizeSwimlaneValue(string $key, mixed $value): array {
 		// swimlaneLabelOrder: JSON array of label ids and the '__none__' catch-all lane.
 		// swimlaneUserOrder: JSON array of "<type>:<participant>" and '__none__'.
 		if (!is_string($value) || strlen($value) > self::MAX_SWIMLANE_ORDER_BYTES) {
@@ -624,7 +660,63 @@ class BoardService {
 			$seen[$entry] = true;
 			$kept[] = $entry;
 		}
-		return $this->encodeSwimlaneOrder($kept);
+		return $kept;
+	}
+
+	/**
+	 * Remove a deleted user, group or team from the user order of every board.
+	 * A board that fails to update is logged and the next one is processed.
+	 */
+	public function removeSwimlaneUserKey(int $type, string $participant): void {
+		$entry = self::swimlaneAssigneeKey($type, $participant);
+		// Same encoding as the stored value, so the search finds the entry.
+		$needle = json_encode($entry, self::SWIMLANE_JSON_FLAGS);
+		if ($needle === false) {
+			// Invalid UTF-8 cannot be encoded, so no stored order holds this entry.
+			return;
+		}
+		foreach ($this->boardMapper->findIdsWithSwimlaneUserOrderEntry($needle) as $boardId) {
+			try {
+				$this->dropSwimlaneUserEntry($boardId, $entry);
+			} catch (DoesNotExistException) {
+				// Removed since the search.
+			} catch (\Throwable $e) {
+				$this->logger->warning('Could not remove a deleted participant from the swimlane order of board ' . $boardId, [
+					'boardId' => $boardId,
+					'exception' => $e,
+				]);
+			}
+		}
+	}
+
+	/**
+	 * Works on archived and deleted boards too. The search is a substring
+	 * match, so the entry is compared exactly here.
+	 *
+	 * @throws DoesNotExistException if the board is gone
+	 */
+	private function dropSwimlaneUserEntry(int $boardId, string $entry): void {
+		// Another request may have changed the board since it was cached.
+		$this->boardMapper->flushCache($boardId);
+		$board = $this->boardMapper->find($boardId, false, false, true);
+		$stored = $board->getSwimlaneUserOrder();
+		if ($stored === null) {
+			return;
+		}
+		$order = json_decode($stored, true);
+		if (!is_array($order)) {
+			return;
+		}
+		$kept = [];
+		foreach ($order as $item) {
+			if ($item !== $entry) {
+				$kept[] = $item;
+			}
+		}
+		if (count($kept) === count($order)) {
+			return;
+		}
+		$this->writeSwimlaneSetting($board, 'swimlaneUserOrder', $kept);
 	}
 
 	/**

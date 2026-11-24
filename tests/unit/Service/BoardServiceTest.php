@@ -59,6 +59,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\BoardServiceValidator;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
@@ -1010,6 +1011,11 @@ class BoardServiceTest extends TestCase {
 		$this->useRealValidator();
 		$this->boardMapper->expects($this->never())->method('update');
 		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
+		// A real board, so a value that only fails after find is rejected on purpose.
+		$board = new Board();
+		$board->setId(5);
+		$board->setArchived(false);
+		$this->boardMapper->method('find')->willReturn($board);
 
 		$this->expectException(BadRequestException::class);
 		$this->service->setSwimlaneSetting(5, $key, $value);
@@ -1145,5 +1151,150 @@ class BoardServiceTest extends TestCase {
 
 		$this->expectException(StatusException::class);
 		$this->service->setSwimlaneSetting(5, 'swimlaneMode', 'labels');
+	}
+
+	private function boardWithSwimlaneOrders(int $id, ?string $userOrder, ?string $labelOrder = null): Board {
+		$board = new Board();
+		$board->setId($id);
+		$board->setSwimlaneUserOrder($userOrder);
+		$board->setSwimlaneLabelOrder($labelOrder);
+		return $board;
+	}
+
+	/**
+	 * Lets the mapper serve the given boards. A value that is a Throwable is
+	 * thrown instead. Every call of flushCache and find lands in $calls.
+	 *
+	 * @param array<int, Board|\Throwable> $boards
+	 * @param list<string> $calls
+	 */
+	private function serveSwimlaneBoards(array $boards, array &$calls): void {
+		$this->boardMapper->method('flushCache')
+			->willReturnCallback(function (?int $boardId = null) use (&$calls): void {
+				$calls[] = 'flush ' . $boardId;
+			});
+		$this->boardMapper->method('find')
+			->willReturnCallback(function (int $id, bool $withLabels = false, bool $withAcl = false, bool $allowDeleted = false) use ($boards, &$calls): Board {
+				$calls[] = 'find ' . $id . ($allowDeleted ? ' withDeleted' : '');
+				if ($boards[$id] instanceof \Throwable) {
+					throw $boards[$id];
+				}
+				return $boards[$id];
+			});
+	}
+
+	public function testRemoveSwimlaneUserKeyDropsOnlyTheExactEntry(): void {
+		$board = $this->boardWithSwimlaneOrders(5, '["0:ann","1:ann","__none__","0:Ann"]', '[2,"__none__"]');
+		$calls = [];
+		$this->serveSwimlaneBoards([5 => $board], $calls);
+		$this->boardMapper->expects($this->once())
+			->method('findIdsWithSwimlaneUserOrderEntry')
+			->with('"0:ann"')
+			->willReturn([5]);
+		$this->boardMapper->expects($this->once())->method('update')->with($board);
+		$this->changeHelper->expects($this->once())->method('boardChanged')->with(5);
+		$this->eventDispatcher->expects($this->once())->method('dispatchTyped');
+		$this->labelMapper->expects($this->never())->method('findAll');
+
+		$this->service->removeSwimlaneUserKey(Acl::PERMISSION_TYPE_USER, 'ann');
+
+		$this->assertSame('["1:ann","__none__","0:Ann"]', $board->getSwimlaneUserOrder());
+		// The label order is not touched.
+		$this->assertSame('[2,"__none__"]', $board->getSwimlaneLabelOrder());
+		// The cache is dropped before the read, deleted boards count too.
+		$this->assertSame(['flush 5', 'find 5 withDeleted'], $calls);
+	}
+
+	public static function dataSwimlaneSearchNeedle(): array {
+		return [
+			'plain id' => [Acl::PERMISSION_TYPE_USER, 'ann', '"0:ann"'],
+			// The stored text does not escape a slash, the search must not either.
+			'slash' => [Acl::PERMISSION_TYPE_GROUP, 'Sales/EU', '"1:Sales/EU"'],
+			'non-ascii' => [Acl::PERMISSION_TYPE_USER, 'Zoë', '"0:Zoë"'],
+			'quote' => [Acl::PERMISSION_TYPE_CIRCLE, 'a"b', '"7:a\"b"'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataSwimlaneSearchNeedle
+	 */
+	public function testRemoveSwimlaneUserKeySearchesTheStoredEncoding(int $type, string $participant, string $needle): void {
+		$this->boardMapper->expects($this->once())
+			->method('findIdsWithSwimlaneUserOrderEntry')
+			->with($needle)
+			->willReturn([]);
+
+		$this->service->removeSwimlaneUserKey($type, $participant);
+	}
+
+	public function testRemoveSwimlaneUserKeyWritesNothingWhenTheEntryIsOnlyPartOfAnother(): void {
+		// The group id contains the text of the user entry, so the search
+		// finds this board although the list has no such entry.
+		$board = $this->boardWithSwimlaneOrders(5, '["1:x\"0:ann","__none__"]');
+		$calls = [];
+		$this->serveSwimlaneBoards([5 => $board], $calls);
+		$this->boardMapper->method('findIdsWithSwimlaneUserOrderEntry')->willReturn([5]);
+		$this->boardMapper->expects($this->never())->method('update');
+		$this->changeHelper->expects($this->never())->method('boardChanged');
+		$this->eventDispatcher->expects($this->never())->method('dispatchTyped');
+
+		$this->service->removeSwimlaneUserKey(Acl::PERMISSION_TYPE_USER, 'ann');
+
+		$this->assertSame('["1:x\"0:ann","__none__"]', $board->getSwimlaneUserOrder());
+	}
+
+	public function testRemoveSwimlaneUserKeySkipsABoardWithoutAnOrder(): void {
+		$calls = [];
+		$this->serveSwimlaneBoards([5 => $this->boardWithSwimlaneOrders(5, null)], $calls);
+		$this->boardMapper->method('findIdsWithSwimlaneUserOrderEntry')->willReturn([5]);
+		$this->boardMapper->expects($this->never())->method('update');
+		// Skipped, a missing order is no failure.
+		$this->logger->expects($this->never())->method('warning');
+
+		$this->service->removeSwimlaneUserKey(Acl::PERMISSION_TYPE_USER, 'ann');
+	}
+
+	public function testRemoveSwimlaneUserKeySkipsABoardThatIsGone(): void {
+		$other = $this->boardWithSwimlaneOrders(6, '["0:ann"]');
+		$calls = [];
+		$this->serveSwimlaneBoards([5 => new DoesNotExistException('gone'), 6 => $other], $calls);
+		$this->boardMapper->method('findIdsWithSwimlaneUserOrderEntry')->willReturn([5, 6]);
+		// A board deleted in between is no reason to log.
+		$this->logger->expects($this->never())->method('warning');
+		$this->boardMapper->expects($this->once())->method('update')->with($other);
+
+		$this->service->removeSwimlaneUserKey(Acl::PERMISSION_TYPE_USER, 'ann');
+
+		$this->assertSame('[]', $other->getSwimlaneUserOrder());
+	}
+
+	public function testRemoveSwimlaneUserKeyLogsAFailingBoardAndGoesOn(): void {
+		$failure = new \RuntimeException('database is gone');
+		$other = $this->boardWithSwimlaneOrders(6, '["0:ann"]');
+		$calls = [];
+		$this->serveSwimlaneBoards([5 => $failure, 6 => $other], $calls);
+		$this->boardMapper->method('findIdsWithSwimlaneUserOrderEntry')->willReturn([5, 6]);
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with(
+				$this->callback(function (string $message): bool {
+					// The board is named, the deleted participant is not.
+					$this->assertStringContainsString('board 5', $message);
+					$this->assertStringNotContainsString('ann', $message);
+					return true;
+				}),
+				$this->callback(function (array $context) use ($failure): bool {
+					$this->assertEqualsCanonicalizing(['boardId', 'exception'], array_keys($context));
+					$this->assertSame(5, $context['boardId']);
+					$this->assertSame($failure, $context['exception']);
+					return true;
+				})
+			);
+		$this->boardMapper->expects($this->once())->method('update')->with($other);
+
+		// Nothing reaches the caller, the user deletion goes on.
+		$this->service->removeSwimlaneUserKey(Acl::PERMISSION_TYPE_USER, 'ann');
+
+		$this->assertSame('[]', $other->getSwimlaneUserOrder());
 	}
 }
