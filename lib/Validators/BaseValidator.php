@@ -11,6 +11,7 @@ namespace OCA\Deck\Validators;
 
 use Exception;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Model\OptionalNullableValue;
 
 abstract class BaseValidator {
 
@@ -31,9 +32,22 @@ abstract class BaseValidator {
 
 		foreach ($data as $field => $value) {
 			$field_rule = $rules[$field];
+			$isOptional = is_array($field_rule) && in_array('optional', $field_rule, true);
+
+			if ($isOptional) {
+				if ($value instanceof OptionalNullableValue) {
+					$value = $value->getValue();
+				}
+				if ($value === null || $value === '') {
+					continue;
+				}
+			}
 
 			if (is_array($field_rule)) {
 				foreach ($field_rule as $rule) {
+					if ($rule === 'optional') {
+						continue;
+					}
 					// The format for specifying validation rules and parameters follows an
 					// easy {rule}:{parameters} formatting convention. For instance the
 					// rule "Max:3" states that the value may only be three letters.
@@ -41,12 +55,12 @@ abstract class BaseValidator {
 						[$rule, $parameter] = explode(':', $rule, 2);
 						if (!$this->{$rule}($value, $parameter)) {
 							throw new BadRequestException(
-								$this->getErrorMessage($rule, $field, $parameter));
+								$this->getErrorMessage($rule, $field, $parameter, $isOptional));
 						}
 					} else {
 						if (!$this->{$rule}($value)) {
 							throw new BadRequestException(
-								$field . ' must be provided and must be ' . str_replace('_', ' ', $rule));
+								$this->getErrorMessage($rule, $field, null, $isOptional));
 						}
 					}
 				}
@@ -136,6 +150,61 @@ abstract class BaseValidator {
 	}
 
 	/**
+	 * @throws Exception
+	 */
+	private function datetime(mixed $value): bool {
+		if (!is_string($value) || $value === '') {
+			return false;
+		}
+
+		// Java/Android commonly send ISO_OFFSET_DATE_TIME and ISO_INSTANT.
+		if (preg_match('/^(?<date>\d{4}-\d{2}-\d{2})T(?<hour>\d{2}):(?<minute>\d{2})(?::(?<second>\d{2})(?:\.(?<fraction>\d{1,9}))?)?(?<timezone>Z|[+\-]\d{2}:\d{2})$/', $value, $matches)) {
+			$second = ($matches['second'] ?? '') !== '' ? $matches['second'] : '00';
+			$fraction = $matches['fraction'] ?? '';
+
+			if ($fraction !== '') {
+				// PHP supports microseconds, so normalize Java nanoseconds to 6 digits.
+				$fraction = str_pad(substr($fraction, 0, 6), 6, '0');
+			} else {
+				$fraction = '000000';
+			}
+
+			$timezone = $matches['timezone'] === 'Z' ? '+00:00' : $matches['timezone'];
+			$normalizedValue = sprintf(
+				'%sT%s:%s:%s.%s%s',
+				$matches['date'],
+				$matches['hour'],
+				$matches['minute'],
+				$second,
+				$fraction,
+				$timezone
+			);
+
+			$datetime = \DateTime::createFromFormat('Y-m-d\TH:i:s.uP', $normalizedValue);
+			if ($datetime && $datetime->format('Y-m-d\TH:i:s.uP') === $normalizedValue) {
+				return true;
+			}
+		}
+
+		$allowedFormats = [
+			'Y-m-d',
+			'Y-m-d H:i:s',
+			'Y-m-d\TH:i:sP',
+			'Y-m-d\TH:i:s\Z',
+			'Y-m-d\TH:i:s.v\Z',
+		];
+
+		foreach ($allowedFormats as $format) {
+			$datetime = \DateTime::createFromFormat($format, $value);
+			if ($datetime && $datetime->format($format) === $value) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the size of an attribute.
 	 *
 	 * @param mixed $value
@@ -159,11 +228,15 @@ abstract class BaseValidator {
 	 * @param $parameter
 	 * @return string
 	 */
-	protected function getErrorMessage(string $rule, $field, $parameter = null): string {
+	protected function getErrorMessage(string $rule, $field, $parameter = null, $isOptional = false): string {
 		if (in_array($rule, ['max', 'min'], true)) {
 			return $rule === 'max'
 			? $field . ' cannot be longer than ' . $parameter . ' characters '
 			: $field . ' must be at least ' . $parameter . ' characters long ';
+		}
+
+		if ($isOptional) {
+			return $field . ' must be ' . str_replace('_', ' ', $rule);
 		}
 
 		return $field . ' must be provided and must be ' . str_replace('_', ' ', $rule);
