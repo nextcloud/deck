@@ -9,7 +9,7 @@ export default {
 	computed: {
 		relativeDate() {
 			return (timestamp) => {
-				return useFormatRelativeTime(timestamp)
+				return useFormatRelativeTime(timestamp, { ignoreSeconds: true, relativeTime: 'short' })
 			}
 		},
 	},

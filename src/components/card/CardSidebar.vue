@@ -160,8 +160,8 @@ const cardOwner = computed(() => {
 const modifiedTimestamp = computed(() => currentCard.value?.lastModified ? currentCard.value.lastModified * 1000 : null)
 const createdTimestamp = computed(() => currentCard.value?.createdAt ? currentCard.value.createdAt * 1000 : null)
 
-const modifiedDate = useFormatRelativeTime(modifiedTimestamp)
-const createdDate = useFormatRelativeTime(createdTimestamp)
+const modifiedDate = useFormatRelativeTime(modifiedTimestamp, { ignoreSeconds: true, relativeTime: 'short' })
+const createdDate = useFormatRelativeTime(createdTimestamp, { ignoreSeconds: true, relativeTime: 'short' })
 const modifiedDateAbsolute = useFormatTime(modifiedTimestamp)
 const createdDateAbsolute = useFormatTime(createdTimestamp)
 
