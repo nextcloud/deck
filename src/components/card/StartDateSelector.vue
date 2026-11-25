@@ -83,6 +83,9 @@ export default defineComponent({
 				return this.card?.startdate ? new Date(this.card.startdate) : null
 			},
 			set(val) {
+				if (!this.isValidDate(val)) {
+					return
+				}
 				this.$emit('input', val ? new Date(val) : null)
 			},
 		},

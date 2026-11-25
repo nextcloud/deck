@@ -188,7 +188,7 @@ class CardService {
 	 * @throws BadrequestException
 	 */
 	public function create(string $title, int $stackId, string $type, int $order, string $owner, string $description = '', $duedate = null, $startdate = null, ?string $color = null): Card {
-		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner'));
+		$this->cardServiceValidator->check(compact('title', 'stackId', 'type', 'order', 'owner', 'startdate', 'duedate'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->stackMapper, $stackId)) {
@@ -201,8 +201,8 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDescription($description);
-		$card->setDuedate($duedate);
-		$card->setStartdate($startdate);
+		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
+		$card->setStartdate($startdate ? new \DateTime($startdate) : null);
 		$card->setColor($color);
 		$card = $this->cardMapper->insert($card);
 
@@ -247,7 +247,7 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function update(int $id, string $title, int $stackId, string $type, string $owner, string $description = '', int $order = 0, ?string $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?OptionalNullableValue $done = null, ?string $startdate = null, ?string $color = null): Card {
-		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
+		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order', 'startdate', 'duedate', 'done'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
