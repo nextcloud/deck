@@ -17,6 +17,7 @@ use OCA\Deck\Db\User;
 use OCA\Deck\Federation\DeckFederationProxy;
 use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\RemoteShareHelper;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Federation\ICloudIdManager;
 use OCP\IURLGenerator;
@@ -32,6 +33,7 @@ class ExternalBoardService {
 		private BoardMapper $boardMapper,
 		private IURLGenerator $urlGenerator,
 		private DeckShareProvider $deckShareProvider,
+		private RemoteShareHelper $remoteShareHelper,
 		private FilesAppService $filesAppService,
 		private ?string $userId,
 	) {
@@ -613,7 +615,9 @@ class ExternalBoardService {
 				if ($createdByUser instanceof User) {
 					$file = $this->deckShareProvider->getLocalFile($attachment['extendedData']['shareToken']);
 				} else {
-					$file = $this->deckShareProvider->getRemoteFile($attachment['extendedData']['shareToken'], $ownerCloudId->getRemote());
+					$file = $this->userId === null
+						? null
+						: $this->remoteShareHelper->getRemoteFile($attachment['extendedData']['shareToken'], $ownerCloudId->getRemote(), $this->userId);
 				}
 
 				if (empty($file)) {
@@ -657,6 +661,7 @@ class ExternalBoardService {
 			'boardId' => $localBoard->getExternalId(),
 			'cardId' => $cardId,
 			'token' => $fileShareToken,
+			'userId' => $ownerCloudId->getUser(),
 		]);
 		return $this->proxy->getOcsData($resp);
 	}
@@ -677,6 +682,7 @@ class ExternalBoardService {
 			'boardId' => $localBoard->getExternalId(),
 			'cardId' => $cardId,
 			'token' => $fileShareToken,
+			'userId' => $ownerCloudId->getUser(),
 		]);
 		return $this->proxy->getOcsData($resp);
 	}

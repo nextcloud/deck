@@ -58,6 +58,7 @@ class FilesAppServiceTest extends TestCase {
 			$this->createMock(\OCP\IDBConnection::class),
 			$this->filenameValidator,
 			$this->createMock(\OCP\Federation\ICloudIdManager::class),
+			$this->createMock(\OCA\Deck\Sharing\RemoteShareHelper::class),
 			'admin'
 		);
 	}

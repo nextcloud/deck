@@ -132,6 +132,13 @@ namespace OCA\Circles {
 	}
 }
 
+namespace OCA\Files_Sharing\BackgroundJob {
+	use OCP\BackgroundJob\QueuedJob;
+	class ExternalShareScanJob extends QueuedJob {
+		public function __construct($time) {}
+	}
+}
+
 namespace OCA\Files_Sharing\Event{
 	class UserShareAccessUpdatedEvent extends \OCP\EventDispatcher\Event{
 			public function __construct($user){}
@@ -158,6 +165,7 @@ namespace OCA\Files_Sharing\External {
 		public function __construct($storage, $mountpoint, $options, $manager, IUser $user, $loader = null) {}
 		public function getMountProvider(): string {}
 		public function getMountId(): int {}
+		public function getMountPoint(): string {}
 	}
 	class MountProvider {
 		public const STORAGE = '';
@@ -166,6 +174,7 @@ namespace OCA\Files_Sharing\External {
 		public function getShare(string $id, ?IUser $user = null): ExternalShare|false {}
 		public function acceptShare(ExternalShare $externalShare, ?IUser $user = null): bool {}
 		public function declineShare(ExternalShare $externalShare, ?IUser $user = null): bool {}
+		public function setMountPoint(IUser $user, string $source, string $target): bool {}
 	}
 }
 

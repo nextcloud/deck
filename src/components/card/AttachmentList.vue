@@ -107,6 +107,8 @@ import { useAttachmentStore } from '../../stores/attachment.js'
 import { useBoardStore } from '../../stores/board.js'
 import { useSettingsStore } from '../../stores/settings.js'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
+const ATTACHMENTS_POLLING_INTERVAL_MS = 5000
+const MAX_ATTACHMENTS_POLLING_ATTEMPTS = 12
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
 	.setMultiSelect(false)
@@ -153,6 +155,7 @@ export default {
 			maxUploadSize: maxUploadSizeState,
 			attachmentReadyById: {},
 			attachmentsPollingIntervalId: null,
+			attachmentsPollingAttempts: 0,
 			isRefreshingAttachments: false,
 		}
 	},
@@ -319,9 +322,20 @@ export default {
 				return
 			}
 
+			this.attachmentsPollingAttempts = 0
 			this.attachmentsPollingIntervalId = window.setInterval(() => {
+				if (this.attachmentsPollingAttempts >= MAX_ATTACHMENTS_POLLING_ATTEMPTS) {
+					logger.debug('Stop attachment polling after max attempts', {
+						cardId: this.cardId,
+						attempts: this.attachmentsPollingAttempts,
+					})
+					this.stopAttachmentsPolling()
+					return
+				}
+
+				this.attachmentsPollingAttempts += 1
 				this.refreshAttachmentsAndReadiness()
-			}, 5000)
+			}, ATTACHMENTS_POLLING_INTERVAL_MS)
 		},
 
 		stopAttachmentsPolling() {
@@ -331,6 +345,7 @@ export default {
 
 			window.clearInterval(this.attachmentsPollingIntervalId)
 			this.attachmentsPollingIntervalId = null
+			this.attachmentsPollingAttempts = 0
 		},
 
 		async checkAttachmentsReadiness() {
@@ -352,6 +367,11 @@ export default {
 
 			const hasPendingAttachments = readinessChecks.some(([, isReady]) => !isReady)
 			if (hasPendingAttachments) {
+				if (this.attachmentsPollingAttempts >= MAX_ATTACHMENTS_POLLING_ATTEMPTS) {
+					this.stopAttachmentsPolling()
+					return
+				}
+
 				this.startAttachmentsPolling()
 				return
 			}

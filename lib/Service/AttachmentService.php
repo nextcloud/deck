@@ -21,7 +21,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\RemoteShareHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Db\IMapperException;
@@ -52,7 +52,7 @@ class AttachmentService {
 		private readonly ActivityManager $activityManager,
 		private readonly AttachmentServiceValidator $attachmentServiceValidator,
 		private readonly IEventDispatcher $eventDispatcher,
-		private readonly DeckShareProvider $deckShareProvider,
+		private readonly RemoteShareHelper $remoteShareHelper,
 		private readonly ICloudIdManager $cloudIdManager,
 		private readonly IJobList $jobList,
 	) {
@@ -217,15 +217,16 @@ class AttachmentService {
 		return $attachment;
 	}
 
-	public function acceptRemoteAttachment(int $cardId, string $token): void {
+	public function acceptRemoteAttachment(int $cardId, string $token, $receiverUserId): void {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT, $receiverUserId);
 
 		$userId = $this->permissionService->getUserId();
 		if (!$this->cloudIdManager->isValidCloudId($userId)) {
 			throw new NoPermissionException('Only federated user is allowed');
 		}
 
-		$externalShare = $this->deckShareProvider->ensureAcceptRemoteShare($token, $this->cloudIdManager->resolveCloudId($userId)->getRemote());
+		$externalShare = $this->remoteShareHelper->ensureAcceptRemoteShare($token, $this->cloudIdManager->resolveCloudId($userId)->getRemote(), $receiverUserId);
 		$this->jobList->add(ScanFederatedAttachment::class, [
 			'cardId' => $cardId,
 			'shareId' => $externalShare->getId(),

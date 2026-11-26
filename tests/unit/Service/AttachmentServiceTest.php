@@ -37,7 +37,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\RemoteShareHelper;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Http\Response;
 use OCP\BackgroundJob\IJobList;
@@ -108,10 +108,8 @@ class AttachmentServiceTest extends TestCase {
 	private IEventDispatcher&MockObject $eventDispatcher;
 	/** @var list<CriticalActionPerformedEvent> */
 	private array $auditEvents = [];
-	/**
-	 * @var DeckShareProvider
-	 */
-	private $deckShareProvider;
+	/** @var RemoteShareHelper|MockObject */
+	private $remoteShareHelper;
 	/**
 	 * @var ICloudIdManager|MockObject
 	 */
@@ -138,7 +136,7 @@ class AttachmentServiceTest extends TestCase {
 		$this->application = $this->createMock(Application::class);
 		$this->attachmentCacheHelper = $this->createMock(AttachmentCacheHelper::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
-		$this->deckShareProvider = $this->createMock(DeckShareProvider::class);
+		$this->remoteShareHelper = $this->createMock(RemoteShareHelper::class);
 		$this->cloudIdManager = $this->createMock(ICloudIdManager::class);
 		$this->jobList = $this->createMock(IJobList::class);
 
@@ -179,7 +177,7 @@ class AttachmentServiceTest extends TestCase {
 			$this->activityManager,
 			$this->attachmentServiceValidator,
 			$this->eventDispatcher,
-			$this->deckShareProvider,
+			$this->remoteShareHelper,
 			$this->cloudIdManager,
 			$this->jobList,
 		);
@@ -221,7 +219,7 @@ class AttachmentServiceTest extends TestCase {
 			$this->activityManager,
 			$this->attachmentServiceValidator,
 			$this->eventDispatcher,
-			$this->deckShareProvider,
+			$this->remoteShareHelper,
 			$this->cloudIdManager,
 			$this->jobList,
 		);
@@ -263,7 +261,7 @@ class AttachmentServiceTest extends TestCase {
 			$this->activityManager,
 			$this->attachmentServiceValidator,
 			$this->eventDispatcher,
-			$this->deckShareProvider,
+			$this->remoteShareHelper,
 			$this->cloudIdManager,
 			$this->jobList,
 		);

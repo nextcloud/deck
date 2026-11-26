@@ -15,6 +15,7 @@ use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\RemoteShareHelper;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
@@ -61,6 +62,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	private IDBConnection $connection;
 	private IFilenameValidator $filenameValidator;
 	private ICloudIdManager $cloudIdManager;
+	private RemoteShareHelper $remoteShareHelper;
 
 	public function __construct(
 		IRequest $request,
@@ -77,6 +79,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		IDBConnection $connection,
 		IFilenameValidator $filenameValidator,
 		ICloudIdManager $cloudIdManager,
+		RemoteShareHelper $remoteShareHelper,
 		?string $userId,
 	) {
 		$this->request = $request;
@@ -94,6 +97,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$this->connection = $connection;
 		$this->filenameValidator = $filenameValidator;
 		$this->cloudIdManager = $cloudIdManager;
+		$this->remoteShareHelper = $remoteShareHelper;
 	}
 
 	#[\Override]
@@ -163,7 +167,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$requestUserId = $this->permissionService->getUserId();
 		if ($this->cloudIdManager->isValidCloudId($requestUserId)) {
 			if ($share->getSharedBy() === $requestUserId) {
-				$externalShare = $this->shareProvider->findRootExternalShare($share, $requestUserId);
+				$externalShare = $this->remoteShareHelper->findRootExternalShare($share, $requestUserId);
 				$attachment->setExtendedData([
 					'data' => $node->getName(),
 					'shareToken' => $externalShare ? $externalShare->getRefreshToken() : null,

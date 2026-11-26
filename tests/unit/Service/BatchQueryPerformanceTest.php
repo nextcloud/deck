@@ -37,7 +37,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
-use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\RemoteShareHelper;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCA\Deck\Validators\CardServiceValidator;
 use OCP\BackgroundJob\IJobList;
@@ -349,7 +349,7 @@ class BatchQueryPerformanceTest extends TestCase {
 			$this->createMock(ActivityManager::class),
 			$this->createMock(AttachmentServiceValidator::class),
 			$this->createMock(IEventDispatcher::class),
-			$this->createMock(DeckShareProvider::class),
+			$this->createMock(RemoteShareHelper::class),
 			$this->createMock(ICloudIdManager::class),
 			$this->createMock(IJobList::class),
 		);

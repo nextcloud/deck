@@ -43,9 +43,11 @@ class AttachmentOcsController extends OCSController {
 	#[NoAdminRequired]
 	#[PublicPage]
 	public function getAll(int $cardId, ?int $boardId = null): DataResponse {
-		$board = $this->boardService->find($boardId, false);
-		if ($board->getExternalId()) {
-			return new DataResponse($this->externalBoardService->getAttachmentsFromRemote($board, $cardId));
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->getAttachmentsFromRemote($board, $cardId));
+			}
 		}
 		$attachment = $this->attachmentService->findAll($cardId, true);
 		return new DataResponse($attachment);
@@ -53,9 +55,11 @@ class AttachmentOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	public function create(int $cardId, string $type, string $data = '', ?int $boardId = null): DataResponse {
-		$board = $this->boardService->find($boardId, false);
-		if ($board->getExternalId()) {
-			return new DataResponse($this->externalBoardService->createAttachmentForRemote($board, $cardId));
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->createAttachmentForRemote($board, $cardId));
+			}
 		}
 		$attachment = $this->attachmentService->create($cardId, $type, $data);
 		return new DataResponse($attachment);
@@ -63,8 +67,8 @@ class AttachmentOcsController extends OCSController {
 
 	#[NoAdminRequired]
 	#[PublicPage]
-	public function createRemote(int $cardId, string $token): DataResponse {
-		$this->attachmentService->acceptRemoteAttachment($cardId, $token);
+	public function createRemote(int $cardId, string $token, string $userId): DataResponse {
+		$this->attachmentService->acceptRemoteAttachment($cardId, $token, $userId);
 		return new DataResponse([]);
 	}
 
@@ -88,9 +92,11 @@ class AttachmentOcsController extends OCSController {
 	#[NoAdminRequired]
 	#[PublicPage]
 	public function delete(int $cardId, int $attachmentId, string $type = 'file', ?int $boardId = null): DataResponse {
-		$board = $this->boardService->find($boardId, false);
-		if ($board->getExternalId()) {
-			return new DataResponse($this->externalBoardService->deleteAttachmentOnRemote($board, $cardId, $attachmentId, $type));
+		if ($boardId) {
+			$board = $this->boardService->find($boardId, false);
+			if ($board->getExternalId()) {
+				return new DataResponse($this->externalBoardService->deleteAttachmentOnRemote($board, $cardId, $attachmentId, $type));
+			}
 		}
 		$attachment = $this->attachmentService->delete($cardId, $attachmentId, $type);
 		return new DataResponse($attachment);
