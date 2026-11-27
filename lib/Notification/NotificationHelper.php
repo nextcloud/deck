@@ -186,7 +186,7 @@ class NotificationHelper {
 		$boardUsers = $this->permissionService->findUsers($boardId);
 
 		foreach ($mentions as $mention) {
-			if (($mention['type'] ?? 'users') !== 'users') {
+			if (($mention['type'] ?? 'user') !== 'user') {
 				// skip non-user mentions
 				continue;
 			}
