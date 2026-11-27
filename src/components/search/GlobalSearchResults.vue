@@ -27,7 +27,10 @@
 				<!-- Sentinel at the end of the list: the scroll container is the
 					horizontal .search-wrapper, so we let the directive observe the
 					visibility of this element instead of its own scroll position. -->
-				<div v-v-infinite-scroll="[infiniteHandler, { canLoadMore }]" class="search-wrapper__sentinel" />
+				<div
+					:ref="setSentinel"
+					v-v-infinite-scroll="[infiniteHandler, { canLoadMore }]"
+					class="search-wrapper__sentinel" />
 			</div>
 		</template>
 		<template v-else>
@@ -87,6 +90,7 @@ export default {
 			loading: false,
 			cursor: null,
 			hasMore: true,
+			sentinel: null,
 		}
 	},
 
@@ -133,8 +137,14 @@ export default {
 			this.setSearchQuery('')
 		},
 
-		canLoadMore() {
-			return this.hasMore
+		setSentinel(el) {
+			this.sentinel = el
+		},
+
+		// vInfiniteScroll keeps re-checking after its sentinel is unmounted mid-load
+		// (vueuse/vueuse#5732), so only the sentinel that is still mounted may load more.
+		canLoadMore(el) {
+			return this.hasMore && el === this.sentinel
 		},
 
 		async infiniteHandler() {
