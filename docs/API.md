@@ -2,12 +2,22 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
+The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Deck's data models and their relations, please have a look at the [data structure](structure.md) documentation.
+
+## API selection
+
+Deck exposes two HTTP APIs:
+
+- Prefer the OCS API at `/ocs/v2.php/apps/deck/api/v1.0/` for all integrations and newly written clients. This is the canonical API used by the Deck web UI and the server-side access points in the app code.
+- The legacy app API at `/index.php/apps/deck/api/v1.0/` still exists for backwards compatibility and is kept available, but it is not the recommended integration path for new projects.
+
+Use the OCS routes for all new integrations. The legacy `/index.php/apps/deck/api/v1.0/` endpoints still work for backwards compatibility, but they are not the preferred API contract for clients.
 
 # Prerequisites
 
-- All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`. This does not apply to the endpoint for uploading attachments, which consumes `multipart/form-data`.
-- The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
+- OCS requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json` unless otherwise specified.
+- The preferred OCS API base URL is `https://nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/`
+- The legacy API base URL is `https://nextcloud.local/index.php/apps/deck/api/v1.0/`
 - All request parameters are required, unless otherwise specified
 
 ## Naming
@@ -1113,453 +1123,135 @@ Make a request to see the json schema of system
 
 # OCS API
 
-The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`.
-This has the benefit that both the web UI as well as external integrations can use the same API.
+The OCS endpoints under `/ocs/v2.php/apps/deck/api/v1.0/` are the supported Deck API. The legacy app API under `/index.php/apps/deck/api/v1.0/` still exists for backwards compatibility, but new integrations should use the OCS routes.
+
+All OCS responses follow the standard OCS envelope:
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {}
+  }
+}
+```
+
+The value of `ocs.data` is the actual API payload for the request.
+
+## Boards
+
+Relative to the OCS base path `/ocs/v2.php/apps/deck/api/v1.0/`:
+
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| GET | `/boards` | none | `array<Board>` |
+| GET | `/board/{boardId}` | `boardId: int` | `Board` or federated board payload |
+| POST | `/boards` | `title: string`, `color: string` | `Board` |
+| POST | `/boards/team` | `title: string`, `teamId: string`, `color?: string` | `Board` |
+| POST | `/boards/{boardId}/acl` | `boardId: int`, `type: int`, `participant: string`, `permissionEdit: bool`, `permissionShare: bool`, `permissionManage: bool`, `remote?: string` | ACL object |
+
+Notes:
+- `boardId` is the Deck board identifier.
+- Board responses include permissions and settings when available.
+- External or federated boards use the same Deck object shape, but their data may be proxied from the remote instance.
+
+## Stacks
+
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| GET | `/stacks/{boardId}` | `boardId: int` | `array<Stack>` |
+| POST | `/stacks` | `title: string`, `boardId: int`, `order: int = 0` | `Stack` |
+| PUT | `/stacks/{stackId}/done` | `stackId: int`, `boardId: int`, `isDone: bool` | empty success payload |
+| DELETE | `/stacks/{stackId}/{boardId}` | `stackId: int`, `boardId?: int` | delete result |
+| PUT | `/stacks/{stackId}/reorder` | `stackId: int`, `order: int`, `boardId?: int` | `array<Stack>` |
+
+Notes:
+- `order` is the visual ordering value for the stack.
+- Stack creation defaults to `order = 0` unless a different value is supplied.
+
+## Cards
+
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| POST | `/cards` | `title: string`, `stackId: int`, `boardId?: int`, `type?: string` (`plain` by default), `owner?: string`, `order?: int` (`999` by default), `description?: string`, `duedate?: mixed`, `startdate?: mixed`, `labels?: array`, `users?: array`, `color?: string` | `Card` |
+| PUT | `/cards/{cardId}` | `cardId: int`, `title: string`, `stackId: int`, `type: string`, `order: int`, `description: string`, `duedate`, `deletedAt`, `boardId?: int`, `owner?: string\|array`, `archived?: mixed`, `startdate?: mixed` | `Card` |
+| POST | `/cards/{cardId}/label/{labelId}` | `boardId?: int`, `cardId: int`, `labelId: int` | `Card` / assignment result |
+| DELETE | `/cards/{cardId}/label/{labelId}` | `boardId?: int`, `cardId: int`, `labelId: int` | `Card` / assignment result |
+| POST | `/cards/{cardId}/assign` | `boardId?: int`, `cardId: int`, `userId: string`, `type: int = 0` | assignment payload |
+| PUT | `/cards/{cardId}/unassign` | `boardId?: int`, `cardId: int`, `userId: string`, `type: int = 0` | assignment payload |
+| PUT | `/cards/{cardId}/reorder` | `cardId: int`, `stackId: int`, `order: int`, `boardId?: int` | `Card` |
+| POST | `/cards/{cardId}/dependentCards/{dependentCardId}` | `cardId: int`, `dependentCardId: int`, `boardId?: int` | `Card` |
+| DELETE | `/cards/{cardId}/dependentCards/{dependentCardId}` | `cardId: int`, `dependentCardId: int`, `boardId?: int` | `Card` |
+
+Notes:
+- `type` is the card type and defaults to `plain`.
+- `done` and `color` are optional update fields and may be set to `null`.
+- Assignments and label links are typically handled via the dedicated assign/remove endpoints rather than the card create request.
+
+## Attachments
+
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| GET | `/cards/{cardId}/attachments` | `cardId: int`, `boardId?: int` | `array<Attachment>` |
+| POST | `/cards/{cardId}/attachment` | `cardId: int`, `type: string`, `data?: string`, `boardId?: int` | `Attachment` |
+| PUT | `/cards/{cardId}/attachments/{attachmentId}` | `cardId: int`, `attachmentId: int`, `data: string`, `type: string = file`, `boardId?: int` | `Attachment` |
+| DELETE | `/cards/{cardId}/attachments/{type}:{attachmentId}` | `cardId: int`, `attachmentId: int`, `type: string = file`, `boardId?: int` | delete result |
+| PUT | `/cards/{cardId}/attachments/{attachmentId}/restore` | `cardId: int`, `attachmentId: int`, `type: string = file`, `boardId?: int` | `Attachment` |
+
+Notes:
+- `type` is the attachment storage type, for example `file` or the legacy `deck_file` value.
+- Attachment operations are only supported for local boards in the current controller implementation.
 
 ## Config
 
-Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints.
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| GET | `/config` | none | `array<string, mixed>` |
+| POST | `/config/{key}` | `key: string`, `value: mixed` | stored value or `404` if the key does not exist |
 
-### GET /api/v1.0/config - Fetch app configuration values
+The config payload contains global values and also board-specific values when the key is prefixed as `board:{boardId}:...`.
 
-#### Response
-
-| Config key | Description |
-| --- | --- |
-| calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) |
-| cardDetailsInModal | Determines if the bigger view is used (boolean) |
-| cardIdBadge | Determines if the ID badges are displayed on cards (boolean) |
-| groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|
-
-```
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": {
-      "calendar": true,
-      "cardDetailsInModal": true,
-      "cardIdBadge": true,
-      "groupLimit": [
-        {
-          "id": "admin",
-          "displayname": "admin"
-        }
-      ]
-    }
-  }
-}
-
-```
-
-### POST /api/v1.0/config/{id}/{key} - Set a config value
-
-
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| id    | Integer | The id of the board                      |
-| key     | String | The config key to set, prefixed with `board:{boardId}:` for board specific settings |
-| value    | String | The value that should be stored for the config key |
-
-##### Board configuration
-
-| Key | Value |
-| --- | ----- |
-| notify-due | `off`, `assigned` or `all` |
-| calendar | Boolean |
-| cardDetailsInModal | Boolean |
-| cardIdBadge | Boolean |
-
-#### Example request
-
-```
-curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar' -H 'Accept: application/json' -H "Content-Type: application/json" -H 'OCS-APIRequest: true' --data-raw '{"value":false}'
-
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": false
-  }
-}
-
-```
+Examples of supported keys:
+- `calendar`
+- `cardDetailsInModal`
+- `cardIdBadge`
+- `notify-due` for board settings
 
 ## Comments
 
-### GET /cards/{cardId}/comments - List comments
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| GET | `/cards/{cardId}/comments` | `cardId: int`, `limit: int = 20`, `offset: int = 0` | `array<Comment>` |
+| POST | `/cards/{cardId}/comments` | `cardId: int`, `message: string`, `parentId: int = 0` | `Comment` |
+| PUT | `/cards/{cardId}/comments/{commentId}` | `cardId: int`, `commentId: int`, `message: string` | `Comment` |
+| DELETE | `/cards/{cardId}/comments/{commentId}` | `cardId: int`, `commentId: int` | delete result |
 
-#### Request parameters
+Notes:
+- comments support mentions and optional replies via `parentId`.
+- comment responses include `mentions`, and replies also include a nested `replyTo` object.
 
-string $cardId, int $limit = 20, int $offset = 0
+## Search and overview
 
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| cardId    | Integer | The id of the card                      |
-| limit     | Integer | The maximum number of comments that should be returned, defaults to 20 |
-| offset    | Integer | The start offset used for pagination, defaults to 0 |
-
-```
-curl 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
-    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
-```
-
-#### Response
-
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
-
-##### 200 Success
-
-```
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": [
-      {
-        "id": 175,
-        "objectId": 12,
-        "message": "This is a comment with a mention to  @alice",
-        "actorId": "admin",
-        "actorType": "users",
-        "actorDisplayName": "Administrator",
-        "creationDateTime": "2020-03-10T10:23:07+00:00",
-        "mentions": [
-          {
-            "mentionId": "alice",
-            "mentionType": "user",
-            "mentionDisplayName": "alice"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-In case a comment is marked as a reply to another comment object, the parent comment will be added as `replyTo` entry to the response. Only the next parent node is added, nested replies are not exposed directly.
-
-```json
-[
-  {
-    "id": 175,
-    "objectId": 12,
-    "message": "This is a comment with a mention to  @alice",
-    "actorId": "admin",
-    "actorType": "users",
-    "actorDisplayName": "Administrator",
-    "creationDateTime": "2020-03-10T10:23:07+00:00",
-    "mentions": [
-      {
-        "mentionId": "alice",
-        "mentionType": "user",
-        "mentionDisplayName": "alice"
-      }
-    ],
-    "replyTo": {
-     "id": 175,
-     "objectId": 12,
-     "message": "This is a comment with a mention to  @alice",
-     "actorId": "admin",
-     "actorType": "users",
-     "actorDisplayName": "Administrator",
-     "creationDateTime": "2020-03-10T10:23:07+00:00",
-     "mentions": [
-       {
-         "mentionId": "alice",
-         "mentionType": "user",
-         "mentionDisplayName": "alice"
-       }
-     ]
-   }
-  }
-]
-```
-
-
-### POST /cards/{cardId}/comments - Create a new comment
-
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| cardId    | Integer | The id of the card                      |
-| message     | String | The message of the comment, maximum length is limited to 1000 characters |
-| parentId    | Integer | _(optional)_ The start offset used for pagination, defaults to null |
-
-Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
-
-```
-curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
-    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
-    -H 'Content-Type: application/json;charset=utf-8'
-    --data '{"message":"My message to @bob","parentId":null}'
-```
-
-#### Response
-
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
-
-##### 200 Success
-
-```
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": {
-      "id": "177",
-      "objectId": "13",
-      "message": "My message to @bob",
-      "actorId": "admin",
-      "actorType": "users",
-      "actorDisplayName": "Administrator",
-      "creationDateTime": "2020-03-10T10:30:17+00:00",
-      "mentions": [
-        {
-          "mentionId": "bob",
-          "mentionType": "user",
-          "mentionDisplayName": "bob"
-        }
-      ]
-    }
-  }
-}
-```
-
-##### 400 Bad request
-
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
-
-##### 404 Not found
-
-A not found response might be returned if:
-- The card for the given cardId could not be found
-- The parent comment could not be found
-
-
-### PUT /cards/{cardId}/comments/{commentId} - Update a comment
-
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| cardId    | Integer | The id of the card                      |
-| commentId    | Integer | The id of the comment                      |
-| message     | String | The message of the comment, maximum length is limited to 1000 characters |
-
-Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
-
-Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
-
-```
-curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
-    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
-    -H 'Content-Type: application/json;charset=utf-8'
-    --data '{"message":"My message"}'
-```
-
-#### Response
-
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
-
-##### 200 Success
-
-```
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": {
-      "id": "177",
-      "objectId": "13",
-      "message": "My message",
-      "actorId": "admin",
-      "actorType": "users",
-      "actorDisplayName": "Administrator",
-      "creationDateTime": "2020-03-10T10:30:17+00:00",
-      "mentions": []
-    }
-  }
-}
-```
-
-##### 400 Bad request
-
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
-
-##### 404 Not found
-
-A not found response might be returned if:
-- The card for the given cardId could not be found
-- The comment could not be found
-
-### DELETE /cards/{cardId}/comments/{commentId} - Delete a comment
-
-#### Request parameters
-
-| Parameter | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| cardId    | Integer | The id of the card                      |
-| commentId    | Integer | The id of the comment                      |
-
-Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
-
-```
-curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
-    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
-    -H 'Content-Type: application/json;charset=utf-8'
-```
-
-#### Response
-
-A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
-
-##### 200 Success
-
-```
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": []
-  }
-}
-```
-
-##### 400 Bad request
-
-A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
-
-##### 404 Not found
-
-A not found response might be returned if:
-- The card for the given cardId could not be found
-- The comment could not be found
-
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| GET | `/search` | `term: string`, `limit?: int`, `cursor?: int` | `array<CardDetails>` with `relatedBoard` and `relatedStack` |
+| GET | `/overview/upcoming` | none | upcoming cards for the current user |
 
 ## Sessions
 
-### PUT /session/create - creates a new session
+| Method | Route | Parameters | Response |
+| --- | --- | --- | --- |
+| PUT | `/session/create` | `boardId: int` | `{ token: string }` |
+| POST | `/session/sync` | `boardId: int`, `token: string` | empty array or `404` if the token is invalid/expired |
+| POST | `/session/close` | `boardId: int`, `token?: string` | empty success payload |
 
-#### Request parameters
+Notes:
+- the session endpoint requires a valid board read permission before the session can be created or synced.
+- `sync` returns `404` when the token is invalid or expired.
+- `close` accepts an optional token and exits cleanly when it is not supplied.
 
-| Parameter | Type    | Description                                          |
-| --------- | ------- | ---------------------------------------------------- |
-| boardId   | Integer | The id of the opened board |
-
-```
-curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
-    -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
-    -H 'Content-Type: application/json;charset=utf-8' \
-    --data '{"boardId":1}'
-```
-
-#### Response
-
-##### 200 Success
-
-```json
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": {
-      "token": "+zcJHf4rC6dobVSbuNa3delkCSfTW8OvYWTyLFvSpIv80FjtgLIj0ARlxspsazNQ"
-    }
-  }
-}
-```
-
-
-### POST /session/sync - notifies the server, that the session is still open
-
-#### Request body
-
-| Parameter | Type    | Description                                          |
-| --------- | ------- | ---------------------------------------------------- |
-| boardId   | Integer | The id of the opened board |
-| token     | String  | The session token from the /sessions/create response |
-
-
-```
-curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
-    -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
-    -H 'Content-Type: application/json;charset=utf-8' \
-    --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
-```
-
-#### Response
-
-##### 200 Success
-```json
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": []
-  }
-}
-```
-
-##### 404 Not Found
-the provided token is invalid or expired
-
-
-### POST /session/close - closes the session
-
-#### Request body
-
-| Parameter | Type    | Description                                          |
-| --------- | ------- | ---------------------------------------------------- |
-| boardId   | Integer | The id of the opened board                           |
-| token     | String  | The session token from the /sessions/create response |
-
-```
-curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/close' \
-    -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
-    -H 'Content-Type: application/json;charset=utf-8' \
-    --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
-```
-
-#### Response
-
-##### 200 Success
-```json
-{
-  "ocs": {
-    "meta": {
-      "status": "ok",
-      "statuscode": 200,
-      "message": "OK"
-    },
-    "data": []
-  }
-}
-```
+The config endpoints are already summarized above. The global config is exposed via `GET /config`, and board-scoped values are written via `POST /config/{key}` with a JSON body like `{ "value": false }`. Keys such as `board:{boardId}:calendar` are resolved in the controller/service layer exactly as implemented in `ConfigController` and `ConfigService`.
