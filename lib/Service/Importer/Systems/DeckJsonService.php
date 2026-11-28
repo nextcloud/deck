@@ -271,6 +271,7 @@ class DeckJsonService extends ABoardImportService {
 				$stack->setBoardId($this->getImportService()->getBoard()->getId());
 				$stack->setOrder($source->order);
 				$stack->setLastModified($source->lastModified);
+				$stack->setIsDoneColumn($source->isDoneColumn ?? false);
 				$return[$source->id] = $stack;
 			}
 
