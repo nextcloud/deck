@@ -11,6 +11,7 @@ namespace OCA\Deck\Event;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Card;
+use OCA\Deck\Db\Label;
 use OCP\EventDispatcher\IWebhookCompatibleEvent;
 use Test\TestCase;
 
@@ -28,6 +29,22 @@ class WebhookCompatibleEventsTest extends TestCase {
 		$this->assertArrayHasKey('card', $payload);
 		$this->assertSame(42, $payload['card']['id']);
 		$this->assertSame('Test card', $payload['card']['title']);
+	}
+
+	public function testCardEventSerializesNestedEntitiesAsArrays(): void {
+		$label = new Label();
+		$label->setId(5);
+		$label->setTitle('Urgent');
+		$card = new Card();
+		$card->setId(42);
+		$card->setLabels([$label]);
+
+		$payload = (new CardUpdatedEvent($card))->getWebhookSerializable();
+
+		// webhook_listeners' eventFilter walks the payload as arrays (#8245)
+		$this->assertIsArray($payload['card']['labels'][0]);
+		$this->assertSame(5, $payload['card']['labels'][0]['id']);
+		$this->assertSame('Urgent', $payload['card']['labels'][0]['title']);
 	}
 
 	public function testAclEventIsWebhookCompatible(): void {
