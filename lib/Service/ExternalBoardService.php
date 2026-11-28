@@ -172,9 +172,11 @@ class ExternalBoardService {
 			'duedate' => $duedate,
 			'deletedAt' => $deletedAt,
 			'archived' => $archived,
-			'done' => $done->getValue() ?? null,
 			'boardId' => $localBoard->getExternalId(),
 		];
+		if ($done !== null) {
+			$params['done'] = $done->getValue();
+		}
 		$resp = $this->proxy->put($participantCloudId->getId(), $shareToken, $url, $params);
 		return $this->proxy->getOcsData($resp);
 	}
@@ -228,7 +230,6 @@ class ExternalBoardService {
 
 		$ownerCloudId = $this->cloudIdManager->resolveCloudId($localBoard->getOwner());
 		[$resolvedUserId, $resolvedType] = $this->resolveUserIdForRemote($userId, $ownerCloudId);
-
 		$shareToken = $localBoard->getShareToken();
 		$url = $ownerCloudId->getRemote() . '/ocs/v2.php/apps/deck/api/v1.0/cards/' . $cardId . '/unassign';
 		$resp = $this->proxy->put($ownerCloudId->getId(), $shareToken, $url, [
@@ -272,7 +273,7 @@ class ExternalBoardService {
 			'boardId' => $localBoard->getExternalId(),
 			'order' => $order,
 		];
-		$resp = $this->proxy->post($participantCloudId->getId(), $shareToken, $url, $params);
+		$resp = $this->proxy->post($participantCloudId->getId(),$shareToken, $url, $params);
 		$stack = $this->proxy->getOcsData($resp);
 		return $this->localizeRemoteStacks([$stack], $localBoard)[0];
 	}
