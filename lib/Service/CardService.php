@@ -360,6 +360,8 @@ class CardService {
 			}
 			$board->setLabels($boardLabels);
 			$this->boardMapper->update($board);
+			// labels were re-mapped to the new board above; refresh before dispatching
+			$card->setLabels($this->labelMapper->findAssignedLabelsForCard($card->getId()));
 			$this->changeHelper->boardChanged($board->getId());
 		}
 
@@ -759,7 +761,8 @@ class CardService {
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		// $card was loaded before the change; re-read so listeners/webhooks see the new label set
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($this->cardMapper->find($cardId), $card));
 		return $card;
 	}
 
@@ -787,7 +790,8 @@ class CardService {
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		// $card was loaded before the change; re-read so listeners/webhooks see the new label set
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($this->cardMapper->find($cardId), $card));
 		return $card;
 	}
 

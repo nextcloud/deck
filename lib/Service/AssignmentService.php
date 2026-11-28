@@ -88,6 +88,7 @@ class AssignmentService {
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
 
+		$card->setAssignedUsers($this->assignedUsersMapper->findAll($cardId));
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 		$this->logAssignment($cardId, $card->getStackId(), $userId, $type, 'assigned to', Operation::CardAssignmentCreated);
 
@@ -116,6 +117,7 @@ class AssignmentService {
 				}
 				$this->changeHelper->cardChanged($cardId);
 
+				$card->setAssignedUsers($this->assignedUsersMapper->findAll($cardId));
 				$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 				$this->logAssignment($cardId, $card->getStackId(), $userId, $type, 'unassigned from', Operation::CardAssignmentDeleted);
 
