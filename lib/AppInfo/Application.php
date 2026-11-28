@@ -29,6 +29,8 @@ use OCA\Deck\Event\RegisterTextContextEventListener;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Federation\DeckFederationProvider;
+use OCA\Deck\Import\BoardImporter;
+use OCA\Deck\Import\IBoardImporter;
 use OCA\Deck\Listeners\AclCreatedRemovedListener;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\CommentEventListener;
@@ -137,6 +139,8 @@ class Application extends App implements IBootstrap {
 		$context->registerMiddleWare(FederationMiddleware::class);
 		$context->registerMiddleWare(ExceptionMiddleware::class);
 		$context->registerMiddleWare(DefaultBoardMiddleware::class);
+
+		$context->registerServiceAlias(IBoardImporter::class, BoardImporter::class);
 
 		$context->registerService('databaseType', static function (ContainerInterface $c) {
 			return $c->get(IConfig::class)->getSystemValue('dbtype', 'sqlite');

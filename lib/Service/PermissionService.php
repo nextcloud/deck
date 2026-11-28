@@ -395,9 +395,9 @@ class PermissionService {
 	/**
 	 * Set a different user than the current one, e.g. when no user is available in occ
 	 *
-	 * @param string $userId
+	 * @param ?string $userId null for no user
 	 */
-	public function setUserId(string $userId): void {
+	public function setUserId(?string $userId): void {
 		$this->userId = $userId;
 		$this->permissionCache->clear();
 	}
