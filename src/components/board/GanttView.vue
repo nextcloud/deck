@@ -229,25 +229,25 @@ export default {
 					} else {
 						// gantt renders everything at once so large date ranges cause performance issues on render
 						// therefore we limit the timeframe of visible tasks
-						const duedate = new Date(card.duedate)
+						const filterDate = new Date(card.duedate || card.startdate)
 						switch (this.currentViewMode) {
 							case 'Hour':
-								if (duedate < new Date() - 2 * 24 * 3600 * 1000) {
+								if (filterDate < new Date() - 2 * 24 * 3600 * 1000) {
 									return
 								}
 								break
 							case 'Day':
-								if (duedate < new Date() - 30 * 24 * 3600 * 1000) {
+								if (filterDate < new Date() - 30 * 24 * 3600 * 1000) {
 									return
 								}
 								break
 							case 'Week':
-								if (duedate < new Date() - 90 * 24 * 3600 * 1000) {
+								if (filterDate < new Date() - 90 * 24 * 3600 * 1000) {
 									return
 								}
 								break
 							case 'Month':
-								if (duedate < new Date() - 365 * 24 * 3600 * 1000) {
+								if (filterDate < new Date() - 365 * 24 * 3600 * 1000) {
 									return
 								}
 								break
