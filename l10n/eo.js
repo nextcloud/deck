@@ -14,9 +14,7 @@ OC.L10N.register(
     "You have renamed the board {before} to {board}" : "Vi alinomis la tabulon {before} al {board}",
     "{user} has renamed the board {before} to {board}" : "{user} alinomis la tabulon {before} al {board}",
     "You have archived the board {board}" : "Vi enarĥivigis la tabulon {board}",
-    "{user} has archived the board {before}" : "{user} enarĥivigis la tabulon {before}",
     "You have unarchived the board {board}" : "Vi elarĥivigis la tabulon {board}",
-    "{user} has unarchived the board {before}" : "{user} elarĥivigis la tabulon {before}",
     "You have renamed the card {before} to {card}" : "Vi alinomis la karton {before} al {card}",
     "{user} has renamed the card {before} to {card}" : "{user} alinomis la karton {before} al {card}",
     "You have removed the due date of card {card}" : "Vi forigis la limdaton el karto {card}",
@@ -127,6 +125,8 @@ OC.L10N.register(
     "Modified" : "Modifita",
     "Error creating the share" : "Eraro dum kreo de la kunhavigo",
     "Share" : "Kunhavigi",
+    "{user} has archived the board {before}" : "{user} enarĥivigis la tabulon {before}",
+    "{user} has unarchived the board {before}" : "{user} elarĥivigis la tabulon {before}",
     "seconds ago" : "antaŭ kelkaj sekundoj"
 },
 "nplurals=2; plural=(n != 1);");
