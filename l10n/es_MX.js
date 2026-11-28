@@ -14,9 +14,7 @@ OC.L10N.register(
     "You have renamed the board {before} to {board}" : "Renombró el tablero {before} a {board}",
     "{user} has renamed the board {before} to {board}" : "{user} renombró el tablero {before} a {board}",
     "You have archived the board {board}" : "Archivó el tablero {board}",
-    "{user} has archived the board {before}" : "{user} archivó el tablero {before}",
     "You have unarchived the board {board}" : "Desarchivó el tablero {board}",
-    "{user} has unarchived the board {before}" : "{user} desarchivó el tablero {before}",
     "You have created a new list {stack} on board {board}" : "Creó una nueva lista {stack} en el tablero {board}",
     "{user} has created a new list {stack} on board {board}" : "{user} creó una nueva lista {stack} en el tablero {board}",
     "You have renamed list {before} to {stack} on board {board}" : "Renombró la lista {before} a {stack} en el tablero {board}",
@@ -190,6 +188,8 @@ OC.L10N.register(
     "Modified" : "Modificado",
     "Error creating the share" : "Error creando el recurso compartido",
     "Share" : "Compartir",
+    "{user} has archived the board {before}" : "{user} archivó el tablero {before}",
+    "{user} has unarchived the board {before}" : "{user} desarchivó el tablero {before}",
     "No participants found" : "No se encontraron participantes",
     "seconds ago" : "hace segundos"
 },
