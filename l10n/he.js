@@ -14,9 +14,7 @@ OC.L10N.register(
     "You have renamed the board {before} to {board}" : "שינית את שם הלוח {before} לשם {board}",
     "{user} has renamed the board {before} to {board}" : "השם של הלוח {before} השתנה לשם {board} על ידי {user}",
     "You have archived the board {board}" : "העברת את הלוח {board} לארכיון",
-    "{user} has archived the board {before}" : "הארכיון {before} הועבר לארכיון על ידי {user}",
     "You have unarchived the board {board}" : "הוצאת את הלוח {board} מהארכיון",
-    "{user} has unarchived the board {before}" : "הלוח {before} הוצא מהארכיון על ידי {user}",
     "You have created a new list {stack} on board {board}" : "יצרת רשימה חדשה {stack} על הלוח {board}",
     "{user} has created a new list {stack} on board {board}" : "{user} יצר רשימה חדשה {stack} על הלוח {board}",
     "You have renamed list {before} to {stack} on board {board}" : "שינית את שם הרשימה {לפני} ל- {stack} על הלוח {board}",
@@ -264,6 +262,8 @@ OC.L10N.register(
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
+    "{user} has archived the board {before}" : "הארכיון {before} הועבר לארכיון על ידי {user}",
+    "{user} has unarchived the board {before}" : "הלוח {before} הוצא מהארכיון על ידי {user}",
     "No participants found" : "לא נמצאו משתתפים",
     "Write a description …" : "כתוב תיאור ...",
     "seconds ago" : "לפני מספר שניות"
