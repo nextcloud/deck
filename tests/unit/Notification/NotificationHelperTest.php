@@ -482,8 +482,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$comment->expects($this->once())
 			->method('getMentions')
 			->willReturn([
-				['id' => 'user1', 'type' => 'users'],
-				['id' => 'user2', 'type' => 'users'],
+				['id' => 'user1', 'type' => 'user'],
+				['id' => 'user2', 'type' => 'user'],
 			]);
 		$card = new Card();
 		$card->setId(123);
@@ -543,8 +543,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$comment->expects($this->once())
 			->method('getMentions')
 			->willReturn([
-				['id' => 'admin', 'type' => 'users'],
-				['id' => 'user1', 'type' => 'users'],
+				['id' => 'admin', 'type' => 'user'],
+				['id' => 'user1', 'type' => 'user'],
 			]);
 		$card = new Card();
 		$card->setId(123);
@@ -665,8 +665,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$comment->expects($this->once())
 			->method('getMentions')
 			->willReturn([
-				['id' => 'user1', 'type' => 'users'],
-				['id' => 'outsider', 'type' => 'users'],
+				['id' => 'user1', 'type' => 'user'],
+				['id' => 'outsider', 'type' => 'user'],
 			]);
 
 		$card = new Card();
