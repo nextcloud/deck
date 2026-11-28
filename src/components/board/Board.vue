@@ -58,7 +58,7 @@
 				:board="board"
 				:stacks="stacks" />
 			<div
-				v-else-if="!isEmpty && !loading"
+				v-else-if="!isEmpty && !loading && swimlaneMode === 'none'"
 				key="board"
 				ref="board"
 				class="board"
@@ -78,6 +78,52 @@
 						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
 						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
+					</Draggable>
+				</Container>
+			</div>
+			<div
+				v-else
+				key="board-swimlanes"
+				ref="board"
+				role="region"
+				:aria-label="t('deck', 'Board grouped by {mode}', { mode: swimlaneModeLabel })"
+				class="board board--swimlanes"
+				@mousedown="onMouseDown">
+				<div class="board__stack-headers">
+					<Container
+						lockAxis="x"
+						orientation="horizontal"
+						:dragHandleSelector="dragHandleSelector"
+						data-click-closes-sidebar="true"
+						@dragStart="draggingStack = true"
+						@dragEnd="draggingStack = false"
+						@drop="onDropStack">
+						<Draggable
+							v-for="stack in stacks"
+							:key="stack.id"
+							data-click-closes-sidebar="true"
+							data-dragscroll-enabled
+							class="stack-draggable-wrapper">
+							<Stack
+								:stack="stack"
+								:dragging="draggingStack"
+								part="header"
+								data-click-closes-sidebar="true" />
+						</Draggable>
+					</Container>
+				</div>
+				<Container
+					orientation="vertical"
+					:dragHandleSelector="canEdit && !isArchived ? '.swimlane-header__drag-handle' : '.no-drag'"
+					@drop="onReorderLane">
+					<!-- The catch-all lane has the same key in both modes, the type keeps them apart. -->
+					<Draggable
+						v-for="lane in computedLanes"
+						:key="lane.type + '-' + lane.key">
+						<Swimlane
+							:lane="lane"
+							:stacks="stacks"
+							:boardId="board.id" />
 					</Draggable>
 				</Container>
 			</div>
@@ -108,7 +154,11 @@ import DeckIcon from '../icons/DeckIcon.vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import GanttView from './GanttView.vue'
 import Stack from './Stack.vue'
+import Swimlane from './Swimlane.vue'
+import { SWIMLANE_NONE_KEY, SWIMLANE_ORDER_KEY } from '../../constants.js'
 import { showError } from '../../helpers/errors.js'
+import { assigneeLaneKey, labelLaneKey } from '../../helpers/laneKeysForCard.js'
+import mergeVisibleOrder from '../../helpers/mergeVisibleOrder.js'
 import logger from '../../logger.js'
 import { createSession } from '../../sessions.js'
 import { useBoardStore } from '../../stores/board.js'
@@ -125,6 +175,7 @@ export default {
 		Draggable,
 		Stack,
 		GanttView,
+		Swimlane,
 		NcEmptyContent,
 		NcModal,
 		NcTextField,
@@ -168,7 +219,9 @@ export default {
 			showArchived: 'showArchived',
 			canEdit: 'canEdit',
 			canManage: 'canManage',
+			isArchived: 'isArchived',
 			viewMode: 'viewMode',
+			swimlaneMode: 'swimlaneMode',
 		}),
 
 		...mapState(useSettingsStore, ['isFullApp']),
@@ -189,6 +242,71 @@ export default {
 
 		isEmpty() {
 			return this.stacks.length === 0
+		},
+
+		// The raw mode key would end up untranslated in the region label.
+		swimlaneModeLabel() {
+			return this.swimlaneMode === 'labels' ? t('deck', 'Labels') : t('deck', 'Assignees')
+		},
+
+		computedLanes() {
+			if (this.swimlaneMode === 'none' || !this.board) {
+				return []
+			}
+			// The lane map is the single place that decides which lanes a card is in.
+			const map = useCardStore(this.$pinia).cardsByStackAndLaneMap
+			const lanes = []
+			const seen = new Set()
+			let hasNoValue = false
+
+			for (const stack of this.stacks) {
+				const buckets = map[stack.id]
+				if (!buckets) {
+					continue
+				}
+				for (const key of Object.keys(buckets)) {
+					if (key === SWIMLANE_NONE_KEY) {
+						hasNoValue = true
+						continue
+					}
+					if (seen.has(key)) {
+						continue
+					}
+					seen.add(key)
+					const lane = this.keyToLane(key, buckets[key])
+					if (lane) {
+						lanes.push(lane)
+					}
+				}
+			}
+
+			const savedOrder = useBoardStore(this.$pinia)[SWIMLANE_ORDER_KEY[this.swimlaneMode]][this.board.id]
+
+			// Saved order first, the rest by id, so lanes do not move when cards do.
+			const order = savedOrder || []
+			// Lanes missing from the saved order rank behind all saved ones.
+			const rank = (lane) => {
+				const index = order.indexOf(lane.key)
+				return index === -1 ? order.length : index
+			}
+			const byId = (a, b) => typeof a.id === 'number' && typeof b.id === 'number' ? a.id - b.id : String(a.id).localeCompare(String(b.id))
+			// A user and a group can share a uid, the key carries the type.
+			lanes.sort((a, b) => rank(a) - rank(b) || byId(a, b) || String(a.key).localeCompare(String(b.key)))
+
+			if (hasNoValue) {
+				const noValueTitle = this.swimlaneMode === 'labels'
+					? t('deck', 'No label')
+					: t('deck', 'Unassigned')
+				lanes.push({
+					key: SWIMLANE_NONE_KEY,
+					id: SWIMLANE_NONE_KEY,
+					type: this.swimlaneMode === 'labels' ? 'label' : 'assignee',
+					title: noValueTitle,
+					color: null,
+				})
+			}
+
+			return lanes
 		},
 	},
 
@@ -244,6 +362,84 @@ export default {
 				})
 			}
 			return this.sessionClosing ?? Promise.resolve()
+		},
+
+		// Labels come from the board so renames show, with the copy on the card as
+		// fallback. Assignees come from the card, a removed participant can still be on cards.
+		keyToLane(key, cards) {
+			if (this.swimlaneMode === 'labels') {
+				// The map keys are strings, the lane keys of labels are numbers.
+				const boardLabels = this.board.labels || []
+				for (const label of boardLabels) {
+					if (String(labelLaneKey(label)) === key) {
+						return this.labelToLane(label)
+					}
+				}
+				for (const card of cards) {
+					for (const label of (card.labels || [])) {
+						if (String(labelLaneKey(label)) === key) {
+							return this.labelToLane(label)
+						}
+					}
+				}
+				return null
+			}
+			for (const card of cards) {
+				for (const user of (card.assignedUsers || [])) {
+					const uid = user?.participant?.uid
+					if (uid && assigneeLaneKey(user.type, uid) === key) {
+						return this.userToLane(user)
+					}
+				}
+			}
+			return null
+		},
+
+		labelToLane(label) {
+			return {
+				key: labelLaneKey(label),
+				id: label.id,
+				type: 'label',
+				title: label.title,
+				color: label.color,
+			}
+		},
+
+		userToLane(user) {
+			const uid = user.participant.uid
+			return {
+				// The type is part of the key, a user and a group can share a uid.
+				key: assigneeLaneKey(user.type, uid),
+				id: uid,
+				type: 'assignee',
+				participantType: user.type,
+				uid,
+				title: user.participant.displayname,
+			}
+		},
+
+		async onReorderLane({ removedIndex, addedIndex }) {
+			if (removedIndex === null || addedIndex === null || !this.canEdit || this.isArchived) {
+				return
+			}
+			const lanes = [...this.computedLanes]
+			const [moved] = lanes.splice(removedIndex, 1)
+			lanes.splice(addedIndex, 0, moved)
+			// The catch-all lane is always last and has no place in the stored order.
+			const visible = lanes.map((l) => l.key).filter((key) => key !== SWIMLANE_NONE_KEY)
+			const type = this.swimlaneMode
+			// Only lanes with a visible card are on screen, so merge into the stored order.
+			const stored = useBoardStore(this.$pinia)[SWIMLANE_ORDER_KEY[type]][this.board.id]
+			try {
+				await useBoardStore(this.$pinia).setSwimlaneOrder({
+					boardId: this.board.id,
+					type,
+					order: mergeVisibleOrder(stored, visible),
+				})
+			} catch (e) {
+				// The store has rolled the order back, so the lane jumps back.
+				showError(e)
+			}
 		},
 
 		async fetchData() {
@@ -376,6 +572,37 @@ export default {
 		overflow-x: auto;
 		flex-grow: 1;
 		scrollbar-gutter: stable;
+
+		&--swimlanes {
+			overflow-y: auto;
+			overflow-x: auto;
+			padding: 0;
+		}
+
+		&__stack-headers {
+			position: sticky;
+			top: 0;
+			z-index: 150;
+			background-color: var(--color-main-background);
+
+			.smooth-dnd-container.horizontal {
+				height: auto;
+			}
+		}
+
+		// smooth-dnd wraps each lane in an overflow: hidden box, so the lanes must be
+		// as wide as their columns, otherwise the last columns get clipped.
+		&--swimlanes > &__stack-headers,
+		&--swimlanes > .smooth-dnd-container.vertical {
+			min-width: min-content;
+		}
+
+		// Header and lane columns must size the same way. contain: inline-size drops
+		// their content (long stack title, long card title) from the min-content width,
+		// so only min-width: 250px counts. Swimlane.vue sets it on the lane columns.
+		&--swimlanes &__stack-headers :deep(.stack-draggable-wrapper) {
+			contain: inline-size;
+		}
 	}
 
 	/**

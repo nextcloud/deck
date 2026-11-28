@@ -170,7 +170,10 @@ Returns an array of board items
         "lastModified": 1586269585,
         "settings": {
             "notify-due": "off",
-            "calendar": true
+            "calendar": true,
+            "swimlaneMode": "none",
+            "swimlaneLabelOrder": "[]",
+            "swimlaneUserOrder": "[]"
         }
     }
 ]
@@ -414,6 +417,7 @@ A 403 response might be returned if the users ability to create new boards has b
 ##### Supported participant types:
 - 0 User
 - 1 Group
+- 6 Remote user
 - 7 Circle
 
 #### Response
@@ -1174,6 +1178,11 @@ Deck stores user and app configuration values globally and per board. The GET en
 | calendar | Boolean |
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
+| swimlaneMode | `none`, `labels` or `assignees`. Shared by everyone with access to the board, needs edit permission. Not allowed on archived boards (500) |
+| swimlaneLabelOrder | JSON string holding an array of label ids (integers) in lane order. Shared, needs edit permission. Not allowed on archived boards (500). May contain `"__none__"` for the lane of cards without a label. Ids of labels that are not on the board are dropped, and so are string entries such as `"label-1"` or `"12"`. At most 32768 bytes, 1000 entries, no duplicates |
+| swimlaneUserOrder | JSON string holding an array of `"<type>:<participant>"` entries in lane order, for example `["0:admin","1:Sales/EU"]`. The type is a participant type (0, 1, 6 or 7), so a user and a group with the same id stay apart. Shared, needs edit permission. Not allowed on archived boards (500). May contain `"__none__"` for the lane of unassigned cards. At most 32768 bytes, 1000 entries, participant id up to 64 characters, no duplicates. Entries without a valid type, such as a bare user id, are dropped. A request of up to twice the byte and entry limit is accepted. If the order is over the limit, entries of participants who are not assigned to a card, not shared with the board and not the owner are dropped, and only a still too large order gets a 400 |
+
+For the swimlane settings the response holds the value as stored. Orders come back as compact JSON, so the answer can differ from what was sent, for example in whitespace or when entries were dropped.
 
 #### Example request
 

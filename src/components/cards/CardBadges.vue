@@ -34,6 +34,14 @@
 					<AttachmentIcon :size="16" />
 					<span>{{ card.attachmentCount }}</span>
 				</div>
+
+				<div
+					v-if="laneCount > 0"
+					class="icon-badge icon-badge--lanes"
+					:title="n('deck', 'In {count} lane', 'In {count} lanes', laneCount, { count: laneCount })">
+					<ArrowTopRightThinIcon :size="16" />
+					<span>{{ laneCount }}</span>
+				</div>
 			</div>
 		</div>
 
@@ -46,6 +54,7 @@
 </template>
 
 <script>
+import ArrowTopRightThinIcon from 'vue-material-design-icons/ArrowTopRightThin.vue'
 import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import CommentUnreadIcon from 'vue-material-design-icons/CommentAccountOutline.vue'
 import CommentIcon from 'vue-material-design-icons/CommentOutline.vue'
@@ -54,6 +63,7 @@ import TextIcon from 'vue-material-design-icons/Text.vue'
 import NcAvatarList from './AvatarList.vue'
 import CardId from './badges/CardId.vue'
 import DueDate from './badges/DueDate.vue'
+import { useCardStore } from '../../stores/card.js'
 import { useSettingsStore } from '../../stores/settings.js'
 
 export default {
@@ -67,6 +77,7 @@ export default {
 		CommentIcon,
 		CommentUnreadIcon,
 		CardId,
+		ArrowTopRightThinIcon,
 	},
 
 	props: {
@@ -77,6 +88,10 @@ export default {
 	},
 
 	computed: {
+		laneCount() {
+			return useCardStore(this.$pinia).cardLaneCount(this.card)
+		},
+
 		checkListCount() {
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
 		},
@@ -128,6 +143,10 @@ export default {
 			span,
 			&:deep(span) {
 				padding: 2px;
+			}
+
+			&--lanes {
+				opacity: 0.7;
 			}
 		}
 	}

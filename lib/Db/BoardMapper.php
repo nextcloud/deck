@@ -230,7 +230,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		// FIXME this used to be a UNION to get boards owned by $userId and the user shares in one single query
 		// Is it possible with the query builder?
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			// this does not work in MySQL/PostgreSQL
 			//->selectAlias('0', 'shared')
 			->from('deck_boards', 'b')
@@ -270,7 +270,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 		// shared with user
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			//->selectAlias('1', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -352,7 +352,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			return [];
 		}
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			//->selectAlias('2', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -408,7 +408,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		}
 
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified', 'external_id', 'share_token', 'swimlane_mode', 'swimlane_label_order', 'swimlane_user_order')
 			//->selectAlias('2', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -622,6 +622,33 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			$qb->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
 		}
 		$qb->executeStatement();
+	}
+
+	/**
+	 * Ids of the boards whose user order may contain an entry, deleted boards
+	 * included. The match is a substring of the stored text, so the result can
+	 * hold boards where the entry only occurs inside a longer one. The caller
+	 * checks the decoded order.
+	 *
+	 * @param string $encodedEntry the entry as JSON string, quotes included
+	 * @return list<int>
+	 */
+	public function findIdsWithSwimlaneUserOrderEntry(string $encodedEntry): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id')
+			->from($this->getTableName())
+			->where($qb->expr()->like(
+				'swimlane_user_order',
+				$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($encodedEntry) . '%', IQueryBuilder::PARAM_STR)
+			))
+			->orderBy('id');
+		$result = $qb->executeQuery();
+		$ids = [];
+		foreach ($result->fetchAll(\PDO::FETCH_COLUMN) as $id) {
+			$ids[] = (int)$id;
+		}
+		$result->closeCursor();
+		return $ids;
 	}
 
 	/**

@@ -13,4 +13,7 @@ namespace OCA\Circles\Model;
  * Minimal stand-in for unit tests when the Circles app is not installed.
  */
 class Circle {
+	public function getSingleId(): string {
+		return '';
+	}
 }

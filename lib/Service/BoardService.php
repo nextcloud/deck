@@ -35,6 +35,7 @@ use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\StatusException;
 use OCA\Deck\Validators\BoardServiceValidator;
 use OCA\Files_Sharing\Event\UserShareAccessUpdatedEvent;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -54,8 +55,25 @@ use OCP\Security\ISecureRandom;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 class BoardService {
+	/** Settings stored as columns on the board, shared by every member. */
+	public const SWIMLANE_SETTINGS = ['swimlaneMode', 'swimlaneLabelOrder', 'swimlaneUserOrder'];
+
+	// Every member is served the stored order, so cap it.
+	private const MAX_SWIMLANE_ORDER_BYTES = 32768;
+	private const MAX_SWIMLANE_ORDER_ENTRIES = 1000;
+	// A user order may arrive this many times over the limit. It is cut down to
+	// the entries that belong to the board, the rest of the request is refused.
+	private const SWIMLANE_USER_ORDER_INPUT_FACTOR = 2;
+	// An order that reaches this share of either limit is logged once.
+	private const SWIMLANE_ORDER_WARN_PERCENT = 80;
+	// Catch-all lane for cards without a label or an assignee.
+	private const SWIMLANE_NONE_ENTRY = '__none__';
+	// How a stored order is encoded. Searching for an entry has to use the same flags.
+	private const SWIMLANE_JSON_FLAGS = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+
 	private ?array $boardsCacheFull = null;
 	private ?array $boardsCachePartial = null;
 
@@ -85,6 +103,7 @@ class BoardService {
 		private ISecureRandom $random,
 		private ConfigService $configService,
 		private CirclesService $circlesService,
+		private LoggerInterface $logger,
 		private ?string $userId,
 	) {
 	}
@@ -426,11 +445,380 @@ class BoardService {
 		return [$edit, $share, $manage];
 	}
 
+	/**
+	 * Write one of the three swimlane settings onto the board.
+	 *
+	 * @return string the value as stored, orders in their canonical encoding
+	 * @throws BadRequestException if the key is not a swimlane setting or the value is malformed
+	 * @throws DoesNotExistException if the board is gone
+	 * @throws StatusException if the board is archived
+	 */
+	public function setSwimlaneSetting(int $boardId, string $key, mixed $value): string {
+		if (!in_array($key, self::SWIMLANE_SETTINGS, true)) {
+			throw new BadRequestException('Not a swimlane setting: ' . $key);
+		}
+		// The mode is a plain string, the two orders are lists.
+		if ($key === 'swimlaneMode') {
+			$mode = $this->validateSwimlaneMode($value);
+			$board = $this->findBoardForSwimlaneSetting($boardId);
+			$this->persistSwimlaneSetting($board, $key, $mode);
+			return $mode;
+		}
+		$list = $this->normalizeSwimlaneValue($key, $value);
+
+		$board = $this->findBoardForSwimlaneSetting($boardId);
+		if ($key === 'swimlaneLabelOrder') {
+			$list = $this->dropUnknownLabels($boardId, $list);
+		}
+		// Read before the setter overwrites it.
+		$previous = $key === 'swimlaneLabelOrder' ? $board->getSwimlaneLabelOrder() : $board->getSwimlaneUserOrder();
+		$stored = $this->writeSwimlaneSetting($board, $key, $list);
+		$this->warnWhenSwimlaneOrderNearsLimit($boardId, $key, $previous, $stored);
+
+		return $stored;
+	}
+
+	/**
+	 * @throws DoesNotExistException if the board is gone
+	 * @throws StatusException if the board is archived
+	 */
+	private function findBoardForSwimlaneSetting(int $boardId): Board {
+		$board = $this->boardMapper->find($boardId);
+		if ($board->getArchived()) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+		return $board;
+	}
+
+	/**
+	 * Encode an order and store it. The only place that encodes and checks the
+	 * stored size. A user order over the limit loses the entries that have
+	 * nothing to do with the board first, a label order is refused.
+	 *
+	 * @param list<int|string> $list
+	 * @return string the canonical encoding that was stored
+	 * @throws BadRequestException if the encoded order is too large
+	 */
+	private function writeSwimlaneSetting(Board $board, string $key, array $list): string {
+		$stored = $this->encodeSwimlaneOrder($list);
+		$entries = count($list);
+		if (!$this->swimlaneOrderFits($stored, $entries) && $key === 'swimlaneUserOrder') {
+			$list = $this->dropUnrelatedParticipants($board, $list);
+			$bytesBefore = strlen($stored);
+			$stored = $this->encodeSwimlaneOrder($list);
+			$fits = $this->swimlaneOrderFits($stored, count($list));
+			$this->logSwimlaneOrderCutDown($board->getId(), $fits, $entries - count($list), [$bytesBefore, $entries], [strlen($stored), count($list)]);
+		}
+		if (!$this->swimlaneOrderFits($stored, count($list))) {
+			throw new BadRequestException('Swimlane order is too large');
+		}
+		$this->persistSwimlaneSetting($board, $key, $stored);
+		return $stored;
+	}
+
+	private function swimlaneOrderFits(string $encoded, int $entries): bool {
+		return strlen($encoded) <= self::MAX_SWIMLANE_ORDER_BYTES && $entries <= self::MAX_SWIMLANE_ORDER_ENTRIES;
+	}
+
+	/**
+	 * Keep the lane for cards without an assignee and every entry of a
+	 * participant that is on the board. That is anyone assigned to a card
+	 * (archived and deleted cards too), anyone it is shared with and the
+	 * owner. The order of the rest does not change.
+	 *
+	 * @param list<int|string> $list
+	 * @return list<int|string>
+	 */
+	private function dropUnrelatedParticipants(Board $board, array $list): array {
+		$related = [];
+		$participants = $this->assignedUsersMapper->findParticipantsOnBoard($board->getId());
+		foreach ($this->aclMapper->findAll($board->getId()) as $acl) {
+			$participants[] = ['type' => $acl->getType(), 'participant' => $acl->getParticipant()];
+		}
+		if ($board->getOwner() !== null) {
+			$participants[] = ['type' => Acl::PERMISSION_TYPE_USER, 'participant' => $board->getOwner()];
+		}
+		foreach ($participants as $row) {
+			$related[self::swimlaneAssigneeKey($row['type'], $row['participant'])] = true;
+			if ($row['type'] === Acl::PERMISSION_TYPE_USER) {
+				// The client builds the key from the user's own spelling of the id,
+				// which can differ from the stored one in case.
+				$user = $this->userManager->get($row['participant']);
+				if ($user !== null) {
+					$related[self::swimlaneAssigneeKey(Acl::PERMISSION_TYPE_USER, $user->getUID())] = true;
+				}
+			}
+		}
+		$kept = [];
+		foreach ($list as $entry) {
+			if ($entry === self::SWIMLANE_NONE_ENTRY || isset($related[$entry])) {
+				$kept[] = $entry;
+			}
+		}
+		return $kept;
+	}
+
+	/**
+	 * Log that a user order was cut down. A cut that makes it fit goes on info,
+	 * as an editor can trigger it with every request, and one that does not
+	 * goes on warning. Only the board id and numbers, never an entry.
+	 *
+	 * @param array{int, int} $before bytes and entries before
+	 * @param array{int, int} $after bytes and entries after
+	 */
+	private function logSwimlaneOrderCutDown(int $boardId, bool $fits, int $removed, array $before, array $after): void {
+		$context = [
+			'boardId' => $boardId,
+			'removed' => $removed,
+			'bytesBefore' => $before[0],
+			'entriesBefore' => $before[1],
+			'bytesAfter' => $after[0],
+			'entriesAfter' => $after[1],
+			'maxBytes' => self::MAX_SWIMLANE_ORDER_BYTES,
+			'maxEntries' => self::MAX_SWIMLANE_ORDER_ENTRIES,
+		];
+		if ($fits) {
+			$this->logger->info('Swimlane user order of board ' . $boardId . ' was over its limit, unrelated entries were dropped', $context);
+		} else {
+			$this->logger->warning('Swimlane user order of board ' . $boardId . ' is still over its limit after dropping unrelated entries', $context);
+		}
+	}
+
+	/**
+	 * Set one swimlane column, move the ETag and dispatch BoardUpdatedEvent.
+	 * boardMapper->update writes only the changed field and fires no board
+	 * events, so this method calls boardChanged and dispatches the event.
+	 */
+	private function persistSwimlaneSetting(Board $board, string $key, string $stored): void {
+		match ($key) {
+			'swimlaneMode' => $board->setSwimlaneMode($stored),
+			'swimlaneLabelOrder' => $board->setSwimlaneLabelOrder($stored),
+			'swimlaneUserOrder' => $board->setSwimlaneUserOrder($stored),
+		};
+		$this->boardMapper->update($board);
+		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($board->getId()));
+	}
+
+	/**
+	 * Log once when an order grows past the warning share of a limit. Only the
+	 * setting name and numbers go into the log, never an entry.
+	 */
+	private function warnWhenSwimlaneOrderNearsLimit(int $boardId, string $key, ?string $previous, string $stored): void {
+		[$oldBytes, $oldEntries] = $this->swimlaneOrderSize($previous);
+		[$bytes, $entries] = $this->swimlaneOrderSize($stored);
+		if ($this->isNearSwimlaneLimit($oldBytes, $oldEntries) || !$this->isNearSwimlaneLimit($bytes, $entries)) {
+			return;
+		}
+		$this->logger->warning('Swimlane order of board ' . $boardId . ' passed ' . self::SWIMLANE_ORDER_WARN_PERCENT . '% of its limit', [
+			'boardId' => $boardId,
+			'setting' => $key,
+			'bytes' => $bytes,
+			'entries' => $entries,
+			'maxBytes' => self::MAX_SWIMLANE_ORDER_BYTES,
+			'maxEntries' => self::MAX_SWIMLANE_ORDER_ENTRIES,
+		]);
+	}
+
+	/**
+	 * Bytes and entries of a stored order. Null and empty count as zero, a value
+	 * that is no list counts its bytes and no entries.
+	 *
+	 * @return array{int, int}
+	 */
+	private function swimlaneOrderSize(?string $order): array {
+		if ($order === null || $order === '') {
+			return [0, 0];
+		}
+		$decoded = json_decode($order, true);
+		return [strlen($order), is_array($decoded) ? count($decoded) : 0];
+	}
+
+	private function isNearSwimlaneLimit(int $bytes, int $entries): bool {
+		return $bytes * 100 >= self::MAX_SWIMLANE_ORDER_BYTES * self::SWIMLANE_ORDER_WARN_PERCENT
+			|| $entries * 100 >= self::MAX_SWIMLANE_ORDER_ENTRIES * self::SWIMLANE_ORDER_WARN_PERCENT;
+	}
+
+	/**
+	 * Remove label ids that are not on the board. A deleted label stays in the
+	 * client's order on purpose, so it disappears here with the next save.
+	 *
+	 * @param list<int|string> $order
+	 * @return list<int|string>
+	 */
+	private function dropUnknownLabels(int $boardId, array $order): array {
+		$known = [];
+		foreach ($this->labelMapper->findAll($boardId) as $label) {
+			$known[$label->getId()] = true;
+		}
+		$kept = [];
+		foreach ($order as $entry) {
+			if ($entry === self::SWIMLANE_NONE_ENTRY || isset($known[$entry])) {
+				$kept[] = $entry;
+			}
+		}
+		return $kept;
+	}
+
+	/**
+	 * Canonical encoding of a stored order. The size is checked on the result
+	 * by writeSwimlaneSetting, json_encode can make an entry longer (U+2028
+	 * grows from 3 to 6 bytes).
+	 *
+	 * @param list<int|string> $order
+	 */
+	private function encodeSwimlaneOrder(array $order): string {
+		return json_encode($order, self::SWIMLANE_JSON_FLAGS | JSON_THROW_ON_ERROR);
+	}
+
+	private function validateSwimlaneMode(mixed $value): string {
+		if (!in_array($value, ['none', 'labels', 'assignees'], true)) {
+			throw new BadRequestException('Swimlane mode must be one of: none, labels, assignees');
+		}
+		return $value;
+	}
+
+	/**
+	 * Every member is served these values, so reject malformed ones. Entries
+	 * in the format of earlier builds are dropped, so the lane loses its position once.
+	 *
+	 * @return list<int|string> the order without legacy entries, not yet encoded
+	 */
+	private function normalizeSwimlaneValue(string $key, mixed $value): array {
+		// swimlaneLabelOrder: JSON array of label ids and the '__none__' catch-all lane.
+		// swimlaneUserOrder: JSON array of "<type>:<participant>" and '__none__'.
+		// A user order may be larger than the limit, the stored one is cut down later.
+		$inputFactor = $key === 'swimlaneUserOrder' ? self::SWIMLANE_USER_ORDER_INPUT_FACTOR : 1;
+		if (!is_string($value) || strlen($value) > self::MAX_SWIMLANE_ORDER_BYTES * $inputFactor) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
+		try {
+			// Depth 2 allows the list and its scalar entries, nested arrays fail to parse.
+			$order = json_decode($value, true, 2, JSON_THROW_ON_ERROR);
+		} catch (\JsonException $e) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
+		if (!is_array($order) || !array_is_list($order) || count($order) > self::MAX_SWIMLANE_ORDER_ENTRIES * $inputFactor) {
+			throw new BadRequestException('Swimlane order must be a JSON array of lane ids');
+		}
+
+		$isLabelOrder = $key === 'swimlaneLabelOrder';
+		$participantTypes = [
+			(string)Acl::PERMISSION_TYPE_USER,
+			(string)Acl::PERMISSION_TYPE_GROUP,
+			(string)Acl::PERMISSION_TYPE_REMOTE,
+			(string)Acl::PERMISSION_TYPE_CIRCLE,
+		];
+		$seen = [];
+		$kept = [];
+		foreach ($order as $entry) {
+			if ($entry !== self::SWIMLANE_NONE_ENTRY) {
+				if ($isLabelOrder) {
+					// A string is the format of an earlier build, drop it.
+					if (is_string($entry)) {
+						continue;
+					}
+					if (!is_int($entry) || $entry <= 0) {
+						throw new BadRequestException('Swimlane label order entries must be label ids or "__none__"');
+					}
+				} else {
+					if (!is_string($entry)) {
+						throw new BadRequestException('Swimlane user order entries must be "<type>:<participant>" or "__none__"');
+					}
+					// The type is digits only, so the first colon splits it from the participant.
+					$parts = explode(':', $entry, 2);
+					// Without a valid type this is the format of an earlier build, drop it.
+					if (count($parts) !== 2 || !in_array($parts[0], $participantTypes, true)) {
+						continue;
+					}
+					// Same rule as when a board is shared: not empty, at most 64 characters.
+					$this->boardServiceValidator->check(['participant' => $parts[1]]);
+				}
+			}
+			// Checked after the type, so no entry here is a numeric string.
+			if (isset($seen[$entry])) {
+				throw new BadRequestException('Swimlane order must not contain duplicates');
+			}
+			$seen[$entry] = true;
+			$kept[] = $entry;
+		}
+		return $kept;
+	}
+
+	/**
+	 * Remove a deleted user, group or team from the user order of every board.
+	 * A board that fails to update is logged and the next one is processed.
+	 */
+	public function removeSwimlaneUserKey(int $type, string $participant): void {
+		$entry = self::swimlaneAssigneeKey($type, $participant);
+		// Same encoding as the stored value, so the search finds the entry.
+		$needle = json_encode($entry, self::SWIMLANE_JSON_FLAGS);
+		if ($needle === false) {
+			// Invalid UTF-8 cannot be encoded, so no stored order holds this entry.
+			return;
+		}
+		foreach ($this->boardMapper->findIdsWithSwimlaneUserOrderEntry($needle) as $boardId) {
+			try {
+				$this->dropSwimlaneUserEntry($boardId, $entry);
+			} catch (DoesNotExistException) {
+				// Removed since the search.
+			} catch (\Throwable $e) {
+				$this->logger->warning('Could not remove a deleted participant from the swimlane order of board ' . $boardId, [
+					'boardId' => $boardId,
+					'exception' => $e,
+				]);
+			}
+		}
+	}
+
+	/**
+	 * Works on archived and deleted boards too. The search is a substring
+	 * match, so the entry is compared exactly here.
+	 *
+	 * @throws DoesNotExistException if the board is gone
+	 */
+	private function dropSwimlaneUserEntry(int $boardId, string $entry): void {
+		// Another request may have changed the board since it was cached.
+		$this->boardMapper->flushCache($boardId);
+		$board = $this->boardMapper->find($boardId, false, false, true);
+		$stored = $board->getSwimlaneUserOrder();
+		if ($stored === null) {
+			return;
+		}
+		$order = json_decode($stored, true);
+		if (!is_array($order)) {
+			return;
+		}
+		$kept = [];
+		foreach ($order as $item) {
+			if ($item !== $entry) {
+				$kept[] = $item;
+			}
+		}
+		if (count($kept) === count($order)) {
+			return;
+		}
+		$this->writeSwimlaneSetting($board, 'swimlaneUserOrder', $kept);
+	}
+
+	/**
+	 * Entry of an assignee lane in swimlaneUserOrder. The type keeps a user
+	 * and a group with the same id apart.
+	 */
+	public static function swimlaneAssigneeKey(int $type, string $participant): string {
+		return $type . ':' . $participant;
+	}
+
 	public function enrichWithBoardSettings(Board $board): void {
 		$globalCalendarConfig = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
+		$boardId = $board->getId();
 		$settings = [
-			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
-			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':calendar', $globalCalendarConfig),
+			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
+			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $globalCalendarConfig),
+			// Shared by every member. Null until someone changes them.
+			'swimlaneMode' => $board->getSwimlaneMode() ?? 'none',
+			'swimlaneLabelOrder' => $board->getSwimlaneLabelOrder() ?? '[]',
+			'swimlaneUserOrder' => $board->getSwimlaneUserOrder() ?? '[]',
 		];
 		$board->setSettings($settings);
 	}

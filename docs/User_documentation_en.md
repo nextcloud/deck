@@ -203,3 +203,17 @@ Individual boards can be transferred by adding the id of the board to the comman
 ```bash
 php occ deck:transfer-ownership previousOwner newOwner 123
 ```
+
+### 12. Group cards into swimlanes
+In the board view, open the board menu in the top bar and pick an entry under **Group by**:
+
+- **No grouping** shows the usual columns.
+- **Labels** adds one row per label. Cards without a label land in **No label**.
+- **Assignees** adds one row per assigned user, group or circle. Cards without an assignee land in **Unassigned**.
+
+Every row keeps all stacks as columns, so a card stays in its stack and only moves between rows.
+
+- A card with several labels or assignees appears in each matching row. A small badge on the card shows how many rows it appears in. It is still one card, so editing it changes every copy.
+- A card can only be dragged inside its own row, between stacks or within a stack. To move it to another row, change its labels or assignees.
+- Drag a row header to reorder the rows. Use the arrow on the header to collapse or expand a row.
+- The grouping and the row order belong to the board. Everyone with access sees the same layout, and only users who can edit the board can change it.

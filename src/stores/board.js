@@ -7,11 +7,47 @@ import axios from '@nextcloud/axios'
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import { defineStore } from 'pinia'
+import { SWIMLANE_ORDER_KEY } from '../constants.js'
 import { BoardApi } from '../services/BoardApi.js'
 import { useCardStore } from './card.js'
+import { useSettingsStore } from './settings.js'
 import { useStackStore } from './stack.js'
 
 const apiClient = new BoardApi()
+// Write state per swimlane config key. `last` counts started writes, so a failed
+// write does not undo a newer one. `pending` counts writes still in flight.
+const swimlaneWrites = {}
+
+function swimlaneConfigKey(boardId, key) {
+	return `board:${boardId}:${key}`
+}
+
+function swimlaneWriteState(configKey) {
+	if (!swimlaneWrites[configKey]) {
+		swimlaneWrites[configKey] = { last: 0, pending: 0 }
+	}
+	return swimlaneWrites[configKey]
+}
+
+// Write state of every swimlane setting of a board, taken before a load starts.
+function snapshotSwimlaneWrites(boardId) {
+	const snapshot = {}
+	for (const key of ['swimlaneMode', ...Object.values(SWIMLANE_ORDER_KEY)]) {
+		const configKey = swimlaneConfigKey(boardId, key)
+		snapshot[configKey] = { ...swimlaneWriteState(configKey) }
+	}
+	return snapshot
+}
+
+// A load must not overwrite a setting whose write was open when the load started,
+// or started while it ran. The answer may predate that write.
+function isSwimlaneWriteProtected(snapshot, configKey) {
+	const before = snapshot?.[configKey]
+	if (!before) {
+		return false
+	}
+	return before.pending > 0 || swimlaneWriteState(configKey).last !== before.last
+}
 
 export const BOARD_FILTERS = {
 	ALL: '',
@@ -24,6 +60,8 @@ export const useBoardStore = defineStore('board', {
 		currentBoard: null,
 		showArchived: false,
 		viewModeByBoard: {},
+		swimlaneLabelOrder: {},
+		swimlaneUserOrder: {},
 		assignableUsers: [],
 		filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 		boardFilter: BOARD_FILTERS.ALL,
@@ -81,6 +119,9 @@ export const useBoardStore = defineStore('board', {
 		},
 		currentBoardLabels: (state) => {
 			return state.currentBoard ? state.currentBoard.labels : []
+		},
+		swimlaneMode: (state) => {
+			return state.currentBoard?.settings?.swimlaneMode || 'none'
 		},
 		canEdit: (state) => {
 			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_EDIT : false
@@ -150,10 +191,36 @@ export const useBoardStore = defineStore('board', {
 			const board = await apiClient.loadById(boardId)
 			this.setCurrentBoard(board)
 			this.setAssignableUsers(board.users)
+			this.readSwimlaneSettings(boardId, board)
+		},
+		// Shared board settings, read on every load so other members' changes arrive.
+		// refreshBoard passes a snapshot. Settings with a write open at the snapshot or started since keep the local value.
+		readSwimlaneSettings(boardId, board, snapshot) {
+			if (!board.settings) {
+				return
+			}
+			if (isSwimlaneWriteProtected(snapshot, swimlaneConfigKey(boardId, 'swimlaneMode'))
+				&& this.currentBoard?.id === boardId && this.currentBoard.settings) {
+				board.settings.swimlaneMode = this.currentBoard.settings.swimlaneMode
+			}
+			for (const type of Object.keys(SWIMLANE_ORDER_KEY)) {
+				if (isSwimlaneWriteProtected(snapshot, swimlaneConfigKey(boardId, SWIMLANE_ORDER_KEY[type]))) {
+					continue
+				}
+				try {
+					const parsed = JSON.parse(board.settings[SWIMLANE_ORDER_KEY[type]] || '[]')
+					if (Array.isArray(parsed)) {
+						this[SWIMLANE_ORDER_KEY[type]][boardId] = parsed
+					}
+				} catch { /* ignore malformed saved order */ }
+			}
 		},
 		async refreshBoard(boardId) {
+			const snapshot = snapshotSwimlaneWrites(boardId)
 			const board = await apiClient.loadById(boardId)
 			const etagHasChanged = board.ETag !== this.currentBoard?.ETag
+			// Before setCurrentBoard, so the kept mode lands in the new board object.
+			this.readSwimlaneSettings(boardId, board, snapshot)
 			this.setCurrentBoard(board)
 			this.setAssignableUsers(board.users)
 
@@ -307,6 +374,67 @@ export const useBoardStore = defineStore('board', {
 			await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
 				newOwner,
 			})
+		},
+		// Optimistic update, rolled back if the server rejects the write.
+		async setSwimlaneMode({ boardId, mode }) {
+			const configKey = swimlaneConfigKey(boardId, 'swimlaneMode')
+			const state = swimlaneWriteState(configKey)
+			const write = ++state.last
+			// Only touch the board the write is for, the user may open another one meanwhile.
+			const isCurrent = () => this.currentBoard?.id === boardId && this.currentBoard.settings
+			const previous = this.currentBoard?.settings?.swimlaneMode || 'none'
+			if (isCurrent()) {
+				this.currentBoard.settings.swimlaneMode = mode
+			}
+			state.pending++
+			try {
+				await useSettingsStore().setConfig({ [configKey]: mode })
+			} catch (e) {
+				// Roll back only if no newer write started meanwhile.
+				if (state.last === write && isCurrent()) {
+					this.currentBoard.settings.swimlaneMode = previous
+				}
+				throw e
+			} finally {
+				state.pending--
+			}
+		},
+		async setSwimlaneOrder({ boardId, type, order }) {
+			const key = SWIMLANE_ORDER_KEY[type]
+			const configKey = swimlaneConfigKey(boardId, key)
+			const state = swimlaneWriteState(configKey)
+			const write = ++state.last
+			const previous = this[key][boardId] ? [...this[key][boardId]] : []
+			this[key][boardId] = order
+			let saved
+			state.pending++
+			try {
+				const result = await useSettingsStore().setConfig({ [configKey]: JSON.stringify(order) })
+				saved = result?.[configKey]
+			} catch (e) {
+				// Roll back only if no newer write started meanwhile.
+				if (state.last === write) {
+					this[key][boardId] = previous
+				}
+				throw e
+			} finally {
+				state.pending--
+			}
+			// The server answers with the order it stored. It drops entries it
+			// cannot keep, so take that list unless a newer write started. An
+			// answer that is not a list keeps the optimistic order, the write itself worked.
+			if (state.last !== write || typeof saved !== 'string') {
+				return
+			}
+			let parsed = null
+			try {
+				parsed = JSON.parse(saved)
+			} catch {
+				// Not JSON, the optimistic order stays.
+			}
+			if (Array.isArray(parsed)) {
+				this[key][boardId] = parsed
+			}
 		},
 	},
 })

@@ -238,6 +238,49 @@ class AssignmentMapperTest extends \Test\TestCase {
 		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER4));
 	}
 
+	/**
+	 * @covers ::findParticipantsOnBoard
+	 */
+	public function testFindParticipantsOnBoard() {
+		$other = $this->boardService->create('Other', self::TEST_USER1, '000000');
+		$otherStack = $this->stackService->create('Stack', $other->getId(), 1);
+		$otherCard = $this->cardService->create('Card', $otherStack->getId(), 'text', 0, self::TEST_USER1);
+		$this->boardService->addAcl($other->getId(), Acl::PERMISSION_TYPE_USER, self::TEST_USER4, true, true, true);
+		try {
+			$first = $this->cards[0]->getId();
+			$second = $this->cards[1]->getId();
+			// The same user on two cards counts once.
+			$this->assignmentService->assignUser($first, self::TEST_USER1);
+			$this->assignmentService->assignUser($second, self::TEST_USER1);
+			$this->assignmentService->assignUser($first, self::TEST_USER2);
+			$this->assignmentService->assignUser($second, 'group3', Assignment::TYPE_GROUP);
+			// Another board, so this user is not in the result.
+			$this->assignmentService->assignUser($otherCard->getId(), self::TEST_USER4);
+			// Archived and deleted cards still give their assignees a lane.
+			$this->cardService->archive($first);
+			$this->cardService->delete($second);
+
+			$participants = $this->assignedUsersMapper->findParticipantsOnBoard($this->board->getId());
+
+			$found = [];
+			foreach ($participants as $row) {
+				$this->assertSame(['type', 'participant'], array_keys($row));
+				$this->assertIsInt($row['type']);
+				$found[] = $row['type'] . ':' . $row['participant'];
+			}
+			sort($found);
+			$expected = [
+				Assignment::TYPE_USER . ':' . self::TEST_USER1,
+				Assignment::TYPE_USER . ':' . self::TEST_USER2,
+				Assignment::TYPE_GROUP . ':group3',
+			];
+			sort($expected);
+			$this->assertSame($expected, $found);
+		} finally {
+			$this->boardService->deleteForce($other->getId());
+		}
+	}
+
 	public function tearDown(): void {
 		$this->boardService->deleteForce($this->board->getId());
 		parent::tearDown();

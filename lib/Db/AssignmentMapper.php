@@ -111,6 +111,30 @@ class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 		}
 	}
 
+	/**
+	 * Everyone assigned to a card of the board, once. Archived and deleted
+	 * cards count, as their assignees still get a lane.
+	 *
+	 * @return list<array{type: int, participant: string}>
+	 */
+	public function findParticipantsOnBoard(int $boardId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->selectDistinct(['a.type', 'a.participant'])
+			->from('deck_assigned_users', 'a')
+			->innerJoin('a', 'deck_cards', 'c', 'c.id = a.card_id')
+			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
+
+		$result = $qb->executeQuery();
+		$participants = [];
+		while ($row = $result->fetch()) {
+			// Some backends return the type as a string.
+			$participants[] = ['type' => (int)$row['type'], 'participant' => (string)$row['participant']];
+		}
+		$result->closeCursor();
+		return $participants;
+	}
+
 	#[\Override]
 	public function isOwner(string $userId, int $id): bool {
 		return $this->cardMapper->isOwner($userId, $id);

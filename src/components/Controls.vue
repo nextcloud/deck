@@ -299,6 +299,34 @@
 						</template>
 						{{ showCardCover ? t('deck', 'Hide card cover images') : t('deck', 'Show card cover images') }}
 					</NcActionButton>
+					<template v-if="viewMode === 'kanban'">
+						<NcActionSeparator />
+						<NcActionCaption :name="t('deck', 'Group by')" />
+						<NcActionRadio
+							name="swimlaneMode"
+							value="none"
+							:modelValue="swimlaneMode"
+							:disabled="!canEdit || isArchived"
+							@update:modelValue="setSwimlaneMode">
+							{{ t('deck', 'No grouping') }}
+						</NcActionRadio>
+						<NcActionRadio
+							name="swimlaneMode"
+							value="labels"
+							:modelValue="swimlaneMode"
+							:disabled="!canEdit || isArchived"
+							@update:modelValue="setSwimlaneMode">
+							{{ t('deck', 'Labels') }}
+						</NcActionRadio>
+						<NcActionRadio
+							name="swimlaneMode"
+							value="assignees"
+							:modelValue="swimlaneMode"
+							:disabled="!canEdit || isArchived"
+							@update:modelValue="setSwimlaneMode">
+							{{ t('deck', 'Assignees') }}
+						</NcActionRadio>
+					</template>
 				</NcActions>
 				<!-- FIXME: NcActionRouter currently doesn't work as an inline action -->
 				<NcActions v-if="isFullApp">
@@ -316,7 +344,7 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActionButton, NcActions, NcActionSeparator, NcAvatar, NcButton, NcModal, NcPopover, NcTextField } from '@nextcloud/vue'
+import { NcActionButton, NcActionCaption, NcActionRadio, NcActions, NcActionSeparator, NcAvatar, NcButton, NcModal, NcPopover, NcTextField } from '@nextcloud/vue'
 import { vOnClickOutside } from '@vueuse/components'
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
@@ -344,6 +372,8 @@ export default {
 		NcModal,
 		NcActions,
 		NcActionButton,
+		NcActionCaption,
+		NcActionRadio,
 		NcButton,
 		NcPopover,
 		NcTextField,
@@ -412,8 +442,10 @@ export default {
 		...mapState(useBoardStore, [
 			'canEdit',
 			'canManage',
+			'isArchived',
 			'viewMode',
 			'showArchived',
+			'swimlaneMode',
 		]),
 
 		...mapState(useSettingsStore, {
@@ -499,6 +531,13 @@ export default {
 			toggleCompact: 'toggleCompactMode',
 			toggleCardCover: 'toggleShowCardCover',
 		}),
+
+		setSwimlaneMode(mode) {
+			if (this.board?.id && this.canEdit && !this.isArchived) {
+				// Returned so a failed write reaches the global error handler.
+				return useBoardStore(this.$pinia).setSwimlaneMode({ boardId: this.board.id, mode })
+			}
+		},
 
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
