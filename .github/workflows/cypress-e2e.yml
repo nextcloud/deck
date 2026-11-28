@@ -110,7 +110,7 @@ jobs:
           curl -v http://localhost:8081/index.php/login
 
       - name: Cypress run
-        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v7.4.6
+        uses: cypress-io/github-action@0ed14f5d30c4ad6e5e8ffb6f57dbb69150137a3f # v7.4.10
         with:
           build: npm run dev
           record: false
