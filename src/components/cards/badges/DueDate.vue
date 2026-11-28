@@ -62,7 +62,7 @@ const overdue = computed(() => {
 
 const dueTimestamp = computed(() => card.done ? card.done : card.duedate)
 
-const relativeDate = useFormatRelativeTime(dueTimestamp)
+const relativeDate = useFormatRelativeTime(dueTimestamp, { ignoreSeconds: true, relativeTime: 'short' })
 const absoluteDate = useFormatTime(
 	computed(() => new Date(dueTimestamp.value)),
 	{ format: { dateStyle: 'full', timeStyle: 'short' } },
