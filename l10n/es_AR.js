@@ -14,9 +14,7 @@ OC.L10N.register(
     "You have renamed the board {before} to {board}" : "Has renombrado el tablero {before} como {board}",
     "{user} has renamed the board {before} to {board}" : "{user} ha renombrado el tablero {before} como {board}",
     "You have archived the board {board}" : "Has archivado el tablero {board}",
-    "{user} has archived the board {before}" : "{user} ha archivado el tablero {board}",
     "You have unarchived the board {board}" : "Has desarchivado el tablero {board}",
-    "{user} has unarchived the board {before}" : "{user} ha desarchivado el tablero {before}",
     "You have created a new list {stack} on board {board}" : "Has creado una nueva lista {stack} del tablero {board}",
     "{user} has created a new list {stack} on board {board}" : "{user} ha creado una nueva lista {stack} del tablero {board}",
     "You have renamed list {before} to {stack} on board {board}" : "Has renombrado la lista {before} a {stack} del tablero {board}",
@@ -113,6 +111,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir con una tarjeta del Tablero",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
     "Share" : "Compartir",
+    "{user} has archived the board {before}" : "{user} ha archivado el tablero {board}",
+    "{user} has unarchived the board {before}" : "{user} ha desarchivado el tablero {before}",
     "seconds ago" : "segundos",
     "Creating the new card …" : "Creando una nueva tarjeta …"
 },
