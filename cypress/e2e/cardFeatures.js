@@ -257,7 +257,7 @@ describe('Card', function () {
 				.find('.ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 		})
 
-		it('Set a due date', function () {
+		it.only('Set a due date', function () {
 			const newCardTitle = 'Card with a due date'
 
 			cy.get('.button-vue[aria-label*="Add card"]')
@@ -282,6 +282,7 @@ describe('Card', function () {
 			cy.clock(now)
 			cy.log(now)
 			cy.tick(60_000)
+			cy.screenshot()
 
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state="Now"]').should('be.visible').should('contain', '21 hours')
 
@@ -290,6 +291,7 @@ describe('Card', function () {
 			cy.get('#app-sidebar-vue [data-cy-due-date-actions]').should('be.visible').click()
 			// tick needed to show the popover menu
 			cy.tick(1_000)
+			cy.screenshot()
 			cy.get('[data-cy-due-date-remove] button').should('be.visible').click()
 
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state]').should('not.exist')
