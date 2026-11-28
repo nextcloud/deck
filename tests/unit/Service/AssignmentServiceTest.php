@@ -29,8 +29,10 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\AssignmentServiceValidator;
@@ -42,6 +44,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class AssignmentServiceTest extends TestCase {
+
+	/** @var list<?array> assignedUsers of each dispatched CardUpdatedEvent, captured at dispatch time */
+	private array $dispatchedAssignedUsers = [];
 
 	/**
 	 * @var MockObject|PermissionService
@@ -122,15 +127,15 @@ class AssignmentServiceTest extends TestCase {
 	}
 
 	public function testAssignUser() {
-		$assignments = [];
-		$this->assignedUsersMapper->expects($this->once())
-			->method('findAll')
-			->with(123)
-			->willReturn($assignments);
 		$assignment = new Assignment();
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
 		$assignment->setType(Assignment::TYPE_USER);
+		$this->assignedUsersMapper->expects($this->exactly(2))
+			->method('findAll')
+			->with(123)
+			->willReturnOnConsecutiveCalls([], [$assignment]);
+		$this->cardMapper->method('find')->with(123)->willReturn(new Card());
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
 			->willReturn(1);
@@ -150,6 +155,7 @@ class AssignmentServiceTest extends TestCase {
 		$this->assertEquals($assignment, $actual);
 		$this->assertSame(['deck.card_assignment.created'], $this->getAuditOperations($auditEvents));
 		$this->assertSame(['assigneeType' => 'user', 'assignee' => 'admin', 'cardId' => 123, 'stackId' => null], $auditEvents[0]->getParameters());
+		$this->assertSame([[$assignment]], $this->dispatchedAssignedUsers);
 	}
 
 	public function testAssignUserNoParticipant() {
@@ -200,13 +206,11 @@ class AssignmentServiceTest extends TestCase {
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
 		$assignment->setType(Assignment::TYPE_USER);
-		$assignments = [
-			$assignment
-		];
-		$this->assignedUsersMapper->expects($this->once())
+		$this->assignedUsersMapper->expects($this->exactly(2))
 			->method('findAll')
 			->with(123)
-			->willReturn($assignments);
+			->willReturnOnConsecutiveCalls([$assignment], []);
+		$this->cardMapper->method('find')->with(123)->willReturn(new Card());
 		$this->assignedUsersMapper->expects($this->once())
 			->method('delete')
 			->with($assignment)
@@ -215,6 +219,7 @@ class AssignmentServiceTest extends TestCase {
 		$actual = $this->assignmentService->unassignUser(123, 'admin');
 		$this->assertEquals($assignment, $actual);
 		$this->assertSame(['deck.card_assignment.deleted'], $this->getAuditOperations($auditEvents));
+		$this->assertSame([[]], $this->dispatchedAssignedUsers);
 	}
 
 	public function testUnassignUserNotExisting() {
@@ -243,6 +248,9 @@ class AssignmentServiceTest extends TestCase {
 			->willReturnCallback(function (Event $event) use ($auditEvents): void {
 				if ($event instanceof CriticalActionPerformedEvent) {
 					$auditEvents[] = $event;
+				}
+				if ($event instanceof CardUpdatedEvent) {
+					$this->dispatchedAssignedUsers[] = $event->getCard()->getAssignedUsers();
 				}
 			});
 		return $auditEvents;

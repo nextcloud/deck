@@ -348,9 +348,10 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('update')->willReturn($clonedCard);
 
-		$this->cardMapper->expects($this->exactly(3))
+		// origin card, then assignLabel() reads the clone before and after the change, then the final re-read
+		$this->cardMapper->expects($this->exactly(4))
 			->method('find')
-			->willReturn($card, $clonedCard, $clonedCard);
+			->willReturn($card, $clonedCard, $clonedCard, $clonedCard);
 
 		$this->cardMapper->expects($this->any())
 			->method('findBoardId')
@@ -728,8 +729,16 @@ class CardServiceTest extends TestCase {
 		$card->setId(123);
 		$label = new Label();
 		$label->setBoardId(1);
-		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$cardAfter = new Card();
+		$cardAfter->setId(123);
+		$cardAfter->setLabels([$label]);
+		$this->cardMapper->expects($this->exactly(2))->method('find')->with(123)
+			->willReturnOnConsecutiveCalls($card, $cardAfter);
 		$this->cardMapper->expects($this->once())->method('assignLabel');
+		$this->eventDispatcher->expects($this->once())->method('dispatchTyped')
+			->with($this->callback(fn ($event) => $event instanceof CardUpdatedEvent
+				&& $event->getCard() === $cardAfter
+				&& $event->getCardBefore() === $card));
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
 			->willReturn(1);
@@ -754,8 +763,16 @@ class CardServiceTest extends TestCase {
 		$card->setId(123);
 		$label = new Label();
 		$label->setBoardId(1);
-		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$cardAfter = new Card();
+		$cardAfter->setId(123);
+		$cardAfter->setLabels([]);
+		$this->cardMapper->expects($this->exactly(2))->method('find')->with(123)
+			->willReturnOnConsecutiveCalls($card, $cardAfter);
 		$this->cardMapper->expects($this->once())->method('removeLabel');
+		$this->eventDispatcher->expects($this->once())->method('dispatchTyped')
+			->with($this->callback(fn ($event) => $event instanceof CardUpdatedEvent
+				&& $event->getCard() === $cardAfter
+				&& $event->getCardBefore() === $card));
 		$this->labelMapper->expects($this->once())
 			->method('find')
 			->willReturn($label);
