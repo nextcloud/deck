@@ -25,7 +25,7 @@ export const useBoardStore = defineStore('board', {
 		showArchived: false,
 		viewModeByBoard: {},
 		assignableUsers: [],
-		filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
+		filter: { tags: [], users: [], creators: [], due: '', unassigned: false, completed: 'both' },
 		boardFilter: BOARD_FILTERS.ALL,
 		boards: loadState('deck', 'initialBoards', {}),
 	}),
@@ -145,7 +145,7 @@ export const useBoardStore = defineStore('board', {
 			localStorage.setItem(`deck.viewMode.${this.currentBoard.id}`, mode)
 		},
 		async loadBoardById(boardId) {
-			this.filter = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
+			this.filter = { tags: [], users: [], creators: [], due: '', unassigned: false, completed: 'both' }
 			this.setCurrentBoard(null)
 			const board = await apiClient.loadById(boardId)
 			this.setCurrentBoard(board)

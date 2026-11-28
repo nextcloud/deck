@@ -146,6 +146,32 @@
 										:hideStatus="true" /> {{ user.displayname }}</label>
 								</div>
 
+								<h3>{{ t('deck', 'Filter by creator') }}</h3>
+								<div v-for="user in cardCreators" :key="user.uid" class="filter--item">
+									<input
+										:id="'creator-' + user.uid"
+										v-model="filter.creators"
+										type="checkbox"
+										class="checkbox"
+										:value="user.uid"
+										@change="setFilter">
+									<label :for="'creator-' + user.uid"><NcAvatar
+										:user="user.uid"
+										:size="24"
+										:disableMenu="true"
+										:hideStatus="true" /> {{ user.displayname }}</label>
+								</div>
+								<div v-if="hasDeletedCreators" class="filter--item">
+									<input
+										id="creator-deleted"
+										v-model="filter.creators"
+										type="checkbox"
+										class="checkbox"
+										:value="DELETED_CREATORS"
+										@change="setFilter">
+									<label for="creator-deleted"><AccountOffIcon :size="24" class="filter--deleted-icon" /> {{ t('deck', 'Deleted users') }}</label>
+								</div>
+
 								<h3>{{ t('deck', 'Filter by status') }}</h3>
 								<div class="filter--item">
 									<input
@@ -319,6 +345,7 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcActionButton, NcActions, NcActionSeparator, NcAvatar, NcButton, NcModal, NcPopover, NcTextField } from '@nextcloud/vue'
 import { vOnClickOutside } from '@vueuse/components'
 import { mapActions, mapState, mapWritableState } from 'pinia'
+import AccountOffIcon from 'vue-material-design-icons/AccountOffOutline.vue'
 import ArchiveIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
@@ -330,6 +357,7 @@ import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter
 import ViewColumnIcon from 'vue-material-design-icons/ViewColumn.vue'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 import SessionList from './SessionList.vue'
+import { cardCreatorUsers, DELETED_CREATORS, isCreatorDeleted } from '../helpers/cardFilters.js'
 import labelStyle from '../mixins/labelStyle.js'
 import { isNotifyPushEnabled } from '../sessions.js'
 import { useBoardStore } from '../stores/board.js'
@@ -341,6 +369,7 @@ export default {
 	name: 'Controls',
 	components: {
 		CreateNewCardCustomPicker,
+		AccountOffIcon,
 		NcModal,
 		NcActions,
 		NcActionButton,
@@ -398,10 +427,11 @@ export default {
 
 	data() {
 		return {
+			DELETED_CREATORS,
 			newStackTitle: '',
 			stack: '',
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
+			filter: { tags: [], users: [], creators: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -423,7 +453,24 @@ export default {
 			showCardCover: (state) => state.showCardCover,
 		}),
 
-		...mapState(useCardStore, ['cardById']),
+		...mapState(useCardStore, ['cardById', 'cards']),
+		...mapState(useStackStore, ['stacksByBoard']),
+		boardCards() {
+			if (!this.board) {
+				return []
+			}
+			const stackIds = new Set(this.stacksByBoard(this.board.id).map((stack) => stack.id))
+			return this.cards.filter((card) => stackIds.has(card.stackId))
+		},
+
+		cardCreators() {
+			return cardCreatorUsers(this.boardCards, this.board?.users)
+		},
+
+		hasDeletedCreators() {
+			return this.boardCards.some((card) => isCreatorDeleted(card, this.board.users))
+		},
+
 		...mapWritableState(useSettingsStore, ['searchQuery']),
 		pageTitle() {
 			if (!this.isFullApp || !this.board?.title) {
@@ -440,7 +487,7 @@ export default {
 		},
 
 		isFilterActive() {
-			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.completed !== 'both'
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.creators.length !== 0 || this.filter.due !== '' || this.filter.completed !== 'both'
 		},
 
 		labelsSorted() {
@@ -567,7 +614,7 @@ export default {
 		},
 
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '', unassigned: false, completed: 'both' }
+			const filterReset = { tags: [], users: [], creators: [], due: '', unassigned: false, completed: 'both' }
 			this.setFilterInStore({ ...filterReset })
 			this.filter = filterReset
 		},
@@ -722,6 +769,12 @@ export default {
 			display: block;
 			padding: var(--default-grid-baseline) 0;
 			.avatardiv {
+				vertical-align: middle;
+				margin-bottom: 2px;
+				margin-inline-end: 3px;
+			}
+			.filter--deleted-icon {
+				display: inline-flex;
 				vertical-align: middle;
 				margin-bottom: 2px;
 				margin-inline-end: 3px;
