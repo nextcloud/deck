@@ -172,4 +172,12 @@ class CardTest extends TestCase {
 			'color' => 'ffffff',
 		], (new CardDetails($card))->jsonSerialize());
 	}
+
+	public function testCardDetailsForwardsUpdatedFields(): void {
+		$card = $this->createCard();
+		$card->resetUpdatedFields();
+		$details = new CardDetails($card);
+		$details->setDescription('changed');
+		$this->assertEquals(['description' => true], $details->getUpdatedFields());
+	}
 }
