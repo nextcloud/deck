@@ -34,13 +34,13 @@ class UserTest extends \Test\TestCase {
 		$user->expects($this->any())
 			->method('getUID')
 			->willReturn('myuser');
+		$user->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('myuser displayname');
 		$userManager = $this->createMock(IUserManager::class);
 		$userManager->expects($this->any())
 			->method('get')
 			->willReturn($user);
-		$userManager->expects($this->any())
-			->method('getDisplayName')
-			->willReturn('myuser displayname');
 		$userRelationalObject = new User('myuser', $userManager);
 		$expected = [
 			'uid' => 'myuser',
@@ -56,13 +56,13 @@ class UserTest extends \Test\TestCase {
 		$user->expects($this->any())
 			->method('getUID')
 			->willReturn('myuser');
+		$user->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('myuser displayname');
 		$userManager = $this->createMock(IUserManager::class);
 		$userManager->expects($this->any())
 			->method('get')
 			->willReturn($user);
-		$userManager->expects($this->any())
-			->method('getDisplayName')
-			->willReturn('myuser displayname');
 		$userRelationalObject = new User('myuser', $userManager);
 		$expected = [
 			'uid' => 'myuser',
@@ -71,5 +71,30 @@ class UserTest extends \Test\TestCase {
 			'type' => 0,
 		];
 		$this->assertEquals($expected, $userRelationalObject->jsonSerialize());
+	}
+
+	public function testIgnoresAccountPropertyScope() {
+		// Regression: IUserManager::getDisplayName() returns the UID when the
+		// requesting user is not allowed to see the target user's display name
+		// (account-property visibility scope). Serialization must use the IUser
+		// directly so collaborators on the same board always see real names.
+		/** @var IUser $user */
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->any())
+			->method('getUID')
+			->willReturn('WBE32');
+		$user->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('Pedro Jota');
+		$userManager = $this->createMock(IUserManager::class);
+		$userManager->expects($this->any())
+			->method('get')
+			->willReturn($user);
+		$userManager->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('WBE32');
+		$userRelationalObject = new User('WBE32', $userManager);
+		$serialized = $userRelationalObject->getObjectSerialization();
+		$this->assertSame('Pedro Jota', $serialized['displayname']);
 	}
 }
