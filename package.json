@@ -85,7 +85,7 @@
     "@nextcloud/webpack-vue-config": "^7.1.0",
     "@relative-ci/agent": "^4.3.1",
     "@vue/compiler-sfc": "^3.5.44",
-    "@vue/test-utils": "^2.5.1",
+    "@vue/test-utils": "^2.6.0",
     "@vue/tsconfig": "^0.9.1",
     "@vue/vue3-jest": "^29.2.6",
     "cypress": "^16.3.0",
