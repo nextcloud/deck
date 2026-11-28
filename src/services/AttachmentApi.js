@@ -40,6 +40,19 @@ export class AttachmentApi {
 		return response.data.ocs.data
 	}
 
+	async shareFileToRemoteBoard({ cardId, formData, onUploadProgress, boardId }) {
+		const response = await axios({
+			method: 'POST',
+			url: this.ocsUrl(`/cards/${cardId}/share-attachment`),
+			params: {
+				boardId: boardId ?? null,
+			},
+			data: formData,
+			onUploadProgress,
+		})
+		return response.data.ocs.data
+	}
+
 	async updateAttachment({ cardId, attachment, formData, boardId }) {
 		const response = await axios({
 			method: 'POST',

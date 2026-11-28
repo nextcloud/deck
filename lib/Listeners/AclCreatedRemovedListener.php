@@ -11,6 +11,7 @@ use OCA\Circles\Model\Member;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Service\CirclesService;
+use OCA\Deck\Sharing\RemoteShareHelper;
 use OCA\Files_Sharing\Event\UserShareAccessUpdatedEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -23,6 +24,7 @@ use OCP\Share\IShare;
 class AclCreatedRemovedListener implements IEventListener {
 	public function __construct(
 		private CirclesService $circlesService,
+		private RemoteShareHelper $remoteShareHelper,
 		private IGroupManager $groupManager,
 		private IEventDispatcher $eventDispatcher,
 		private IUserManager $userManager,
@@ -58,6 +60,11 @@ class AclCreatedRemovedListener implements IEventListener {
 				foreach ($members as $member) {
 					$user = $this->userManager->get($member->getUserId());
 					$this->eventDispatcher->dispatchTyped(new UserShareAccessUpdatedEvent($user));
+				}
+				break;
+			case IShare::TYPE_REMOTE:
+				if ($event instanceof AclDeletedEvent) {
+					$this->remoteShareHelper->cleanupRemoteSharesForAclDeletion($acl->getBoardId(), $acl->getParticipant());
 				}
 				break;
 			default:

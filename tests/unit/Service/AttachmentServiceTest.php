@@ -37,10 +37,13 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Sharing\RemoteShareHelper;
 use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Http\Response;
+use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Federation\ICloudIdManager;
 use OCP\IL10N;
 use OCP\IUserManager;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
@@ -105,6 +108,16 @@ class AttachmentServiceTest extends TestCase {
 	private IEventDispatcher&MockObject $eventDispatcher;
 	/** @var list<CriticalActionPerformedEvent> */
 	private array $auditEvents = [];
+	/** @var RemoteShareHelper|MockObject */
+	private $remoteShareHelper;
+	/**
+	 * @var ICloudIdManager|MockObject
+	 */
+	private $cloudIdManager;
+	/**
+	 * @var IJobList|MockObject
+	 */
+	private $jobList;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -123,6 +136,9 @@ class AttachmentServiceTest extends TestCase {
 		$this->application = $this->createMock(Application::class);
 		$this->attachmentCacheHelper = $this->createMock(AttachmentCacheHelper::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
+		$this->remoteShareHelper = $this->createMock(RemoteShareHelper::class);
+		$this->cloudIdManager = $this->createMock(ICloudIdManager::class);
+		$this->jobList = $this->createMock(IJobList::class);
 
 		$this->appContainer->expects($this->exactly(2))
 			->method('get')
@@ -161,6 +177,9 @@ class AttachmentServiceTest extends TestCase {
 			$this->activityManager,
 			$this->attachmentServiceValidator,
 			$this->eventDispatcher,
+			$this->remoteShareHelper,
+			$this->cloudIdManager,
+			$this->jobList,
 		);
 	}
 
@@ -186,7 +205,24 @@ class AttachmentServiceTest extends TestCase {
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
-		$attachmentService = new AttachmentService($this->configService, $this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager, $this->attachmentServiceValidator, $this->eventDispatcher);
+		$attachmentService = new AttachmentService(
+			$this->configService,
+			$this->attachmentMapper,
+			$this->cardMapper,
+			$this->userManager,
+			$this->changeHelper,
+			$this->permissionService,
+			$application,
+			$this->attachmentCacheHelper,
+			$this->userId,
+			$this->l10n,
+			$this->activityManager,
+			$this->attachmentServiceValidator,
+			$this->eventDispatcher,
+			$this->remoteShareHelper,
+			$this->cloudIdManager,
+			$this->jobList,
+		);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$this->assertEquals($fileServiceMock, $attachmentService->getService('deck_file'));
 		$this->assertEquals(MyAttachmentService::class, get_class($attachmentService->getService('custom')));
@@ -211,7 +247,24 @@ class AttachmentServiceTest extends TestCase {
 			->method('getContainer')
 			->willReturn($appContainer);
 
-		$attachmentService = new AttachmentService($this->configService, $this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager, $this->attachmentServiceValidator, $this->eventDispatcher);
+		$attachmentService = new AttachmentService(
+			$this->configService,
+			$this->attachmentMapper,
+			$this->cardMapper,
+			$this->userManager,
+			$this->changeHelper,
+			$this->permissionService,
+			$application,
+			$this->attachmentCacheHelper,
+			$this->userId,
+			$this->l10n,
+			$this->activityManager,
+			$this->attachmentServiceValidator,
+			$this->eventDispatcher,
+			$this->remoteShareHelper,
+			$this->cloudIdManager,
+			$this->jobList,
+		);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$attachmentService->getService('deck_file_invalid');
 	}

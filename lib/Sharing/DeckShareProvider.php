@@ -14,6 +14,7 @@ use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\FederatedUser;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
@@ -23,12 +24,13 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\IDBConnection;
 use OCP\IL10N;
+use OCP\IPreview;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IAttributes;
@@ -62,6 +64,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		private IL10N $l,
 		private ITimeFactory $timeFactory,
 		private IMimeTypeLoader $mimeTypeLoader,
+		private IRootFolder $rootFolder,
+		private IPreview $preview,
+		private RemoteShareHelper $remoteShareHelper,
 		private ?string $userId = null,
 	) {
 	}
@@ -91,7 +96,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		}
 
 		try {
-			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_EDIT);
+			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_EDIT, $share->getSharedBy());
 		} catch (NoPermissionException $e) {
 			$valid = false;
 		}
@@ -341,6 +346,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 */
 	#[\Override]
 	public function delete(IShare $share) {
+		$this->deleteRemoteShares($share);
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->delete('share')
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($share->getId())));
@@ -349,7 +355,26 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 
 		$qb->executeStatement();
 
+		$this->remoteShareHelper->deleteExternalShare($share);
 		$this->attachmentCacheHelper->clearAttachmentCount((int)$share->getSharedWith());
+	}
+
+	private function deleteRemoteShares(IShare $share) {
+		$qb = $this->dbConnection->getQueryBuilder();
+		$qb->select('id', 'token')
+			->from('share')
+			->where($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())))
+			->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_REMOTE)));
+		$stmt = $qb->executeQuery();
+
+		while ($row = $stmt->fetchAssociative()) {
+			try {
+				$remoteShare = $this->shareManager->getShareByToken((string)$row['token']);
+				$this->shareManager->deleteShare($remoteShare);
+			} catch (\Exception $e) {
+				continue;
+			}
+		}
 	}
 
 	/**
@@ -883,7 +908,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 	 * @param int $offset
 	 * @return IShare[]
 	 */
-	public function getSharedWithByType(int $cardId, int $shareType, $limit, $offset): array {
+	public function getSharedWithByType(int $cardId, int $shareType, $limit, $offset, ?string $userId = null): array {
 		/** @var IShare[] $shares */
 		$shares = [];
 
@@ -926,7 +951,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 		}
 		$cursor->closeCursor();
 
-		return $this->resolveSharesForRecipient($shares, $this->userId);
+		return $this->resolveSharesForRecipient($shares, $userId ?? $this->userId);
 	}
 
 	public function isAccessibleResult(array $data): bool {
@@ -1230,10 +1255,41 @@ class DeckShareProvider implements \OCP\Share\IShareProvider, IPartialShareProvi
 			}
 
 			foreach ($this->permissionService->findUsers($boardId) as $user) {
+				if ($user instanceof FederatedUser) {
+					continue;
+				}
 				yield $user->getUserObject();
 			}
 		}
 
 		return [];
 	}
+
+	public function getLocalFile(string $shareToken): ?array {
+		try {
+			$share = $this->shareManager->getShareByToken($shareToken);
+		} catch (ShareNotFound $e) {
+			return null;
+		}
+
+		$userFolder = $this->rootFolder->getUserFolder($share->getSharedBy());
+		$node = $share->getNode();
+		$files = $userFolder->getById($node->getId());
+
+		if (count($files) === 0) {
+			return null;
+		}
+
+		$file = array_shift($files);
+
+		return [
+			'path' => $userFolder->getRelativePath($file->getPath()),
+			'fileid' => $file->getId(),
+			'filesize' => $file->getSize(),
+			'mimetype' => $file->getMimeType(),
+			'info' => pathinfo($file->getName()),
+			'hasPreview' => $this->preview->isAvailable($file),
+		];
+	}
+
 }
